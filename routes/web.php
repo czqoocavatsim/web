@@ -150,6 +150,17 @@ Route::group(['middleware' => 'auth'], function () {
     //Dashboard
     Route::get('/dashboard', 'DashboardController@index')->name('dashboard.index');
     Route::post('/dashboard', 'UserController@changeAvatar')->name('users.changeavatar');
+    Route::get('/users/resetavatar', 'UserController@resetAvatar')->name('users.resetavatar');\
+    Route::get('/users/defaultavatar/{id}', function ($id) {
+       $user = \App\User::whereId($id)->firstOrFail();
+       if ($user->isAvatarDefault())
+       {
+           return "true";
+       }
+       return "false";
+    });
+
+
     //Notification
     Route::get('/notification/{id}', 'NotificationRedirectController@notificationRedirect')->name('notification.redirect');
     Route::get('/notificationclear', 'NotificationRedirectController@clearAll');
@@ -188,6 +199,9 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('/dashboard/application/list', 'ApplicationsController@viewApplications')->name('application.list');
     Route::get('/dashboard/application/{application_id}', 'ApplicationsController@viewApplication')->name('application.view');
     Route::get('/dashboard/application/{application_id}/withdraw', 'ApplicationsController@withdrawApplication');
+    //"Me"
+    Route::get('/dashboard/me/editbiography', 'UserController@editBioIndex')->name('me.editbioindex');
+    Route::post('/dashboard/me/editbiography', 'UserController@editBio')->name('me.editbio');
 
     //Training
     Route::get('/dashboard/training', 'TrainingController@index')->name('training.index');

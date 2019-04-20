@@ -144,9 +144,9 @@
                                     <h5 style="font-weight: bold;">{{ Auth::user()->fname }}&nbsp;{{ Auth::user()->lname }}&nbsp;{{ Auth::user()->id }}</h5>
                                     <h6>
                                         @if (Auth::user()->permissions == 4)
-                                            Director (Executive)
+                                            Executive
                                         @elseif (Auth::user()->permissions == 3)
-                                            Director
+                                            Staff
                                         @elseif (Auth::user()->permissions == 2)
                                             Instructor
                                         @elseif (Auth::user()->permissions == 1)
@@ -158,6 +158,8 @@
                                         {{Auth::user()->staffProfile->position}}
                                         @endif
                                     </h6>
+                                    <br/>
+
                                     <div class="text-center">
                                         <img src="{{Auth::user()->avatar}}" style="width: 125px; height: 125px; margin-bottom: 10px; border-radius: 50%;">
                                     </div>

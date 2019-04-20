@@ -17,7 +17,7 @@ class User extends Authenticatable
      * @var array
      */
     protected $fillable = [
-        'id', 'fname', 'lname', 'email', 'rating', 'division', 'permissions', 'init', 'gdpr_subscribed_emails', 'avatar'
+        'id', 'fname', 'lname', 'email', 'rating', 'division', 'permissions', 'init', 'gdpr_subscribed_emails', 'avatar', 'bio'
     ];
 
     /**
@@ -87,6 +87,15 @@ class User extends Authenticatable
         }
 
         abort(500);
+    }
+
+    public function isAvatarDefault()
+    {
+        if ($this->avatar === "https://www.drupal.org/files/profile_default.png")
+        {
+            return true;
+        }
+        return false;
     }
 
     /*public function hasRole($role)

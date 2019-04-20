@@ -105,9 +105,12 @@
                                 @elseif (Auth::user()->permissions == 2)
                                     <li>Status: Instructor</li>
                                 @elseif (Auth::user()->permissions == 3)
-                                    <li>Status: Director</li>
+                                    <li>Status: Staff</li>
                                 @elseif (Auth::user()->permissions == 4)
-                                    <li>Status: Director (Executive ZQO1/2)</li>
+                                    <li>Status: Executive</li>
+                                @endif
+                                @if(Auth::user()->staffProfile)
+                                <li>Staff Role: {{Auth::user()->staffProfile->position}}</li>
                                 @endif
                             </ul>
                         </div>
@@ -118,12 +121,15 @@
                             </div>
                             <br/>
                             <a role="button" data-toggle="modal" data-target="#changeAvatar" class="btn btn-sm btn-block btn-outline-primary"  href="#">Change</a>
-                            <!--TODO: add delete-->
+                            @if (!Auth::user()->isAvatarDefault())
+                                <a role="button" class="btn btn-sm btn-block btn-outline-danger"  href="{{route('users.resetavatar')}}">Reset</a>
+                            @endif
                         </div>
                     </div>
                     <br/>
                 </div>
                 <div class="list-group-flush">
+                    <a href="#" class="list-group-item list-group-item-action" data-target="#viewBio" data-toggle="modal"><i class="fa fa-address-card"></i>&nbsp;View Biography</a>
                     <a href="{{url('dashboard/data/')}}" class="list-group-item list-group-item-action"><i class="fa fa-file-download"></i>&nbsp;&nbsp;Download All Data</a>
                     <a href="{{url('/dashboard/data/remove')}}" class="list-group-item list-group-item-action"><i class="fa fa-user-slash"></i>&nbsp;Request Removal</a>
                     <a href="{{url('/dashboard/emailpref')}}" class="list-group-item list-group-item-action"><i class="fa fa-envelope"></i> Manage Email Preferences</a>
@@ -153,7 +159,7 @@
             @endif
         </div>
         <div class="col">
-            <h4>CZQO Certification</h4>
+            <h4>CZQO Certification & Training</h4>
             <div class="card">
                 <div class="card-body">
                     <h5 class="card-title">Certification status</h5>
@@ -311,6 +317,30 @@
                 </form>
             </div>
             <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Dismiss</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="viewBio" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLongTitle">View your biography</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                @if (Auth::user()->bio)
+                    {{Auth::user()->bio}}
+                @else
+                    You have no biography.
+                @endif
+            </div>
+            <div class="modal-footer">
+                <a href="{{route('me.editbioindex')}}" class="btn btn-primary" role="button">Edit Biography</a>
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Dismiss</button>
             </div>
         </div>

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\CoreSettings;
 use App\Ticket;
 use App\User;
 use App\UserNote;
@@ -80,7 +81,7 @@ class GDPRController extends Controller
 
     public function removeData()
     {
-        if (Auth::user()->permissions >= 2)
+        if (Auth::user()->permissions >= 5)
         {
             return view ('dashboard.data.remove', ['canremove' => 'false']);
         }
@@ -130,23 +131,11 @@ class GDPRController extends Controller
         //Get delete method selected
         $method = $request->get('deleteMethod');
 
-        //Get all Level 4 users
-        $admins = User::where('permissions', '==', '4')->get();
-
-        //Email them all with the same shit
-        foreach ($admins as $admin)
-        {
-            $data = [];
-            $data['adminName'] = $admin->fname . $admin->lname;
-            $data['requestUser'] = $user->id;
-            $data['method'] = $method;
-            Mail::to($admin->email)->send(new GDPRRequestEmail($data));
-        }
         $data = [];
-        $data['adminName'] = 'cool girl';
         $data['requestUser'] = $user->id;
         $data['method'] = $method;
-        Mail::to('lieselta@gmail.com')->send(new GDPRRequestEmail($data));
+        Mail::to(CoreSettings::whereId(1)->firstOrFail()->emailwebmaster)->send(new GDPRRequestEmail($data));
+
         return redirect()->route('dashboard.index')->with('success', 'Request submitted. You will remain logged in until the data removal has been processed by our staff.');
     }
 }

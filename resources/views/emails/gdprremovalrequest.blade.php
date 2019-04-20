@@ -7,7 +7,7 @@
 
 @section('to')
 
-    <strong>Dear {{$data['adminName']}},</strong>
+    <strong>Hello,</strong>
 @stop
 
 @section('content')

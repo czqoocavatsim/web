@@ -13,6 +13,7 @@ use Flash;
 use Illuminate\Support\Facades\Storage;
 use Mail;
 use App\User;
+use mofodojodino\ProfanityFilter\Check;
 
 class UserController extends Controller
 {
@@ -175,9 +176,54 @@ class UserController extends Controller
         return redirect()->route('dashboard.index')->with('success', 'Avatar changed!');
     }
 
+    public function resetAvatar()
+    {
+        $user = Auth::user();
+        if ($user->isAvatarDefault())
+        {
+            abort(403, 'Your avatar is already the default avatar.');
+        }
+
+        $user->avatar = "https://www.drupal.org/files/profile_default.png";
+        $user->save();
+        return redirect()->back()->with('success', 'Avatar reset!');
+    }
+
     public function searchUsers(Request $request)
     {
             $output = User::where('id', $request->get('search'))->get();
             return $output;
+    }
+
+    public function editBioIndex()
+    {
+        return view('dashboard.me.editbio');
+    }
+
+    public function editBio(Request $request)
+    {
+        $this->validate($request, [
+            'bio' => 'sometimes|max:5000'
+        ]);
+
+        //Get user
+        $user = Auth::user();
+
+        //Get input
+        $input = $request->get('bio');
+
+        //Run through profanity filter
+        $check = new Check();
+        if ($check->hasProfanity($input))
+        {
+            return redirect()->back()->withInput()->with('error', 'Profanity was detected in your input, please remove it.');
+        }
+
+        //No swear words.. give them the new bio
+        $user->bio = $input;
+        $user->save();
+
+        //Redirect
+        return redirect()->back()->with('success', 'Biography saved!');
     }
 }
