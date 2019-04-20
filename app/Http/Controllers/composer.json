@@ -1,0 +1,5 @@
+{
+    "require": {
+        "wohali/oauth2-discord-new": "^1.0"
+    }
+}

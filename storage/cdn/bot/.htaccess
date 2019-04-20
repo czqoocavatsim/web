@@ -1,0 +1,4 @@
+AuthType Basic
+AuthName "Bot directory"
+AuthUserFile "/home/czqovatcan/.htpasswds/public_html/cdn/bot/passwd"
+require valid-user

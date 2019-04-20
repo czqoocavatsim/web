@@ -1,0 +1,171 @@
+/*!
+ * Start Bootstrap - Modern Business HTML Template (http://startbootstrap.com)
+ * Code licensed under the Apache License v2.0.
+ * For details, see http://www.apache.org/licenses/LICENSE-2.0.
+ */
+
+/* Global Styles */
+* {
+    margin: 0;
+}
+
+@import url('https://fonts.googleapis.com/css?family=Open+Sans');
+html {
+	position: relative;
+	min-height: 100%;
+}
+
+
+
+.tool .selectors a {
+	cursor: pointer;
+	user-select: none; }
+  .tool .selectors .selected {
+	color: #4286f4;
+	font-weight: bolder;
+	transition-duration: 0.1s; }
+  .tool table input[type='text'] {
+	padding: 5px;
+	font-family: 'Open Sans';
+	font-size: 15px;
+	transition-duration: 0.1s;
+	border: 1px solid #9c9c9c; }
+  .tool table input[type='text']:active {
+	border: 1px solid #4286f4; }
+  .tool .generate {
+	box-shadow: 0 0.5px 1px 0 rgba(0, 0, 0, 0.2), 0 1px 1px 0 rgba(0, 0, 0, 0.19);
+	padding: 5px;
+	background: #4286f4;
+	color: white;
+	border: none;
+	font-family: 'Open Sans';
+	font-size: 17px;
+	margin-top: 10px;
+	width: 290px;
+	transition-duration: 0.1s;
+	margin-bottom: 10px; }
+  .tool .generate:hover {
+	background: #2a4166; }
+  .tool .generate:active {
+	background: #142033; }
+  .tool .card {
+	margin-top: 5px;
+	padding: 10px;
+	background: #eaeaea;
+	box-shadow: 0 0.5px 1px 0 rgba(0, 0, 0, 0.2), 0 1px 1px 0 rgba(0, 0, 0, 0.19);
+	max-width: 310px;
+	min-width: 290px; }
+  .tool .error {
+	background: #890101;
+	color: white; }
+
+	.roster table {
+		box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+		border-collapse: collapse;
+		width: 100%; }
+		.roster table th, .roster table td {
+			padding: 5px;
+			text-align: center; }
+		.roster table .name {
+			text-align: left;
+			width: 35%; }
+		.roster table th {
+			font-family: 'Open Sans';
+			font-weight: bold; }
+		.roster table thead {
+			background: #eaeaea; }
+		.roster table .active {
+			background: lightgreen; }
+		.roster table .ctp {
+			background: indigo;
+			color: white; }
+		.roster table .inactive {
+			background: lightcoral; }
+		.roster table .training {
+			background: lightgoldenrodyellow; }
+		.roster table .instructor {
+			background: cyan; }
+		.roster table .not-certified {
+			color: red; }
+	
+
+#banner-image
+		{
+			background: url('../img/radar.png') repeat;
+			background-position: center;
+			height:200px;
+			position: relative;
+		}
+		#logo
+		{
+			background: url('../img/Banner.png') center no-repeat;
+			z-index: 2;
+			top: 0;
+			left: 0;
+			position: relative;
+			height: 200px;
+		}
+
+body {
+    margin-bottom: 200px;
+}
+/* 404 Page Styles */
+
+.top20 {
+	margin-top: 20px;
+}
+.error-404 {
+    font-size: 100px;
+}
+
+/* Footer Styles */
+.footer
+{	
+	width: 100%;
+	margin-top: 20px;
+	padding: 20px 0;
+	height: 75px;
+}
+
+/* Responsive Styles */
+
+@media(max-width:991px) {
+    .customer-img,
+    .img-related {
+        margin-bottom: 30px;
+    }
+}
+
+@media(max-width:767px) {
+    .img-portfolio {
+        margin-bottom: 15px;
+    }
+
+    header.carousel .carousel {
+        height: 70%;
+    }
+}
+
+/* 
+    --blue: #2780E3;
+    --indigo: #6610f2;
+    --purple: #613d7c;
+    --pink: #e83e8c;
+    --red: #FF0039;
+    --orange: #f0ad4e;
+    --yellow: #FF7518;
+    --green: #3FB618;
+    --teal: #20c997;
+    --cyan: #9954BB;
+    --white: #fff;
+    --gray: #868e96;
+    --gray-dark: #373a3c;
+    --primary: #2780E3;
+    --secondary: #373a3c;
+    --success: #3FB618;
+    --info: #9954BB;
+    --warning: #FF7518;
+    --danger: #FF0039;
+    --light: #f8f9fa;
+		--dark: #373a3c;
+*/
