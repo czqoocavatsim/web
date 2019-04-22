@@ -39,11 +39,7 @@ class DatabaseSeeder extends Seeder
             'fname' => 'System',
             'lname' => 'User',
             'email' => 'no-reply@czqo.vatcan.ca',
-            'rating' => 'System',
-            'division' => 'System',
             'permissions' => 4,
-            'deleted' => 0,
-            'init' => 1
         ]);
 
         DB::table('users')->insert([
@@ -51,11 +47,7 @@ class DatabaseSeeder extends Seeder
             'fname' => 'Roster',
             'lname' => 'Placeholder',
             'email' => 'no-reply@czqo.vatcan.ca',
-            'rating' => 'System',
-            'division' => 'System',
             'permissions' => 1,
-            'deleted' => 0,
-            'init' => 1
         ]);
 
         DB::table('staff_member')->insert([

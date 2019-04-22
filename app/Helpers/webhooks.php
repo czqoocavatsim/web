@@ -7,8 +7,6 @@
  */
 function createNewsMessage(\App\News $article)
 {
-    $testUrl = "https://discordapp.com/api/webhooks/551060828955213844/_fz2k48aZ48CiqlpO7idro1fhyEkw-r0NxO8WglTVtQX8bVfLlnyERNXDZzy2D3tg_lX";
-    $url = "https://discordapp.com/api/webhooks/551068319537430529/hhABeY7kX0sJQd5XZbh6z-2d3kI77UNA_8E5Ii_1cx6v802dH2qOmzlVt1GLKZSajnpw";
 
     $hookObject = json_encode([
         /*
@@ -76,7 +74,7 @@ function createNewsMessage(\App\News $article)
     $ch = curl_init();
 
     curl_setopt_array( $ch, [
-        CURLOPT_URL => $testUrl,
+        CURLOPT_URL => config('discord.news_webhook'),
         CURLOPT_POST => true,
         CURLOPT_POSTFIELDS => $hookObject,
         CURLOPT_HTTPHEADER => [

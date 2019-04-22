@@ -14,6 +14,14 @@
             <div class="alert alert-info">Oops, no users. lmao</div>
         @else
             <p>Returned {{count($users)}} records</p>
+            <select id="filterSelect" class="custom-select">
+                <option default hidden>Select filter...</option>
+                <option value="0">Guests</option>
+                <option value="1">CZQO Controllers</option>
+                <option value="2">Training Staff</option>
+                <option value="3">Staff</option>
+                <option value="4">Executive</option>
+            </select>
             <table id="dataTable" class="table table-hover">
                 <thead>
                 <tr>
@@ -66,6 +74,18 @@
             $('#dataTable').DataTable( {
                 "order": [[ 3, "desc" ]]
             } );
+
+            $("#filterSelect").change(function(){
+                var selectedOption = $(this).children("option:selected").val();
+                var table = $('#dataTable').DataTable();
+                var filteredData = table
+                    .columns([3])
+                    .data()
+                    .flatten()
+                    .filter(function (value, index) {
+                        return value == selectedOption ? true : false;
+                    });
+            });
         } );
     </script>
 @stop

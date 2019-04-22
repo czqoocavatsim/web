@@ -260,6 +260,13 @@ Route::group(['middleware' => 'auth'], function () {
         //Minutes
         Route::get('/meetingminutes/{id}', 'NewsController@minutesDelete')->name('meetingminutes.delete');
         Route::post('/meetingminutes', 'NewsController@minutesUpload')->name('meetingminutes.upload');
+        //Network
+        //positions
+        Route::get('/dashboard/network/positions', 'NetworkController@positionsIndex')->name('network.positions.index');
+        Route::post('/dashboard/network/positions', 'NetworkController@addPosition')->name('network.positions.add');
+        Route::get('/dashboard/network/position/{id}', 'NetworkController@viewPosition')->name('network.positions.view');
+        Route::post('/dashboard/network/position/{id}', 'NetworkController@editPosition')->name('network.positions.edit');
+        Route::post('/dashboard/network/position/{id}/del', 'NetworkController@deletePosition')->name('network.positions.delete');
         //Audit Log and settings, and policy creation
         Route::group(['middleware' => 'executive'], function () {
             Route::get('/dashboard/auditlog', 'AuditLogController@index')->name('auditlog');

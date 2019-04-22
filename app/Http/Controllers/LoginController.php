@@ -61,11 +61,26 @@ class LoginController extends Controller
         $this->sso->validate(session('key'), session('secret'), $get->input('oauth_verifier'), function ($user, $request) {
             session()->forget('key');
             session()->forget('secret');
-            User::updateOrCreate(['id' => $user->id], ['email' => $user->email, 'fname' => $user->name_first, 'lname' => $user->name_last, 'rating' => $user->rating->short, 'division' => $user->division->code]);
+            User::updateOrCreate(['id' => $user->id], [
+                'email' => $user->email,
+                'fname' => $user->name_first,
+                'lname' => $user->name_last,
+                'rating_id' => $user->rating->id,
+                'rating_short' => $user->rating->short,
+                'rating_long' => $user->rating->long,
+                'rating_GRP' => $user->rating->GRP,
+                'reg_date' => $user->reg_date,
+                'region_code' => $user->region->code,
+                'region_name' => $user->region->name,
+                'division_code' => $user->division->code,
+                'division_name' => $user->division->name,
+                'subdivision_code' => $user->subdivision->code,
+                'subdivision_name' => $user->subdivision->name
+            ]);
             $user = User::find($user->id);
             Auth::login($user, true);
         });
-        return redirect('/');
+        return redirect('/dashboard')->with('success', 'Logged in!');
     }
 
     /**

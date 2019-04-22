@@ -60,44 +60,14 @@
                         <div class="col">
                             <h5 class="card-title">{{ Auth::user()->fname }}&nbsp;{{ Auth::user()->lname }}&nbsp;({{ Auth::user()->id }})</h5>
                             <h6 class="card-subtitle mb-2 text-muted">
-                                @switch (Auth::user()->rating)
-                                @case('INA')
-                                Inactive (INA)
-                                @break
-                                @case('OBS')
-                                Pilot/Observer (OBS)
-                                @break
-                                @case('S1')
-                                Ground Controller (S1)
-                                @break
-                                @case('S2')
-                                Tower Controller (S2)
-                                @break
-                                @case('S3')
-                                TMA Controller (S3)
-                                @break
-                                @case('C1')
-                                Enroute Controller (C1)
-                                @break
-                                @case('C3')
-                                Senior Controller (C3)
-                                @break
-                                @case('I1')
-                                Instructor (I1)
-                                @break
-                                @case('I3')
-                                Senior Instructor (I3)
-                                @break
-                                @case('SUP')
-                                Supervisor (SUP)
-                                @break
-                                @case('ADM')
-                                Administrator (ADM)
-                                @break
-                                @endswitch
+                                {{Auth::user()->rating_GRP}} ({{Auth::user()->rating_short}})
                             </h6>
                             <ul>
-                                <li>Division: {{ Auth::user()->division }}</li>
+                                <li>Region: {{ Auth::user()->region_name }}</li>
+                                <li>Division: {{ Auth::user()->division_name }}</li>
+                                @if (Auth::user()->subdivision_name)
+                                <li>vACC/ARTCC: {{ Auth::user()->subdivision_name }}</li>
+                                @endif
                                 @if (Auth::user()->permissions == 0)
                                     <li>Status: Not Certified/Guest</li>
                                 @elseif (Auth::user()->permissions == 1)
@@ -154,6 +124,16 @@
                     </div>
                     <div class="list-group-flush">
                         <a href="{{url('/dashboard/users')}}" class="list-group-item list-group-item-action"><i class="fa fa-users-cog"></i>&nbsp;View All Users</a>
+                    </div>
+                </div>
+                <br/>
+                <h4 class="display-6">Network</h4>
+                <div class="card">
+                    <div class="list-group-flush">
+                        <a href="#" class="list-group-item list-group-item-action"><i class="fa fa-chart-line"></i>&nbsp;Network Activity</a>
+                        <a href="#" class="list-group-item list-group-item-action"><i class="fa fa-broadcast-tower"></i>&nbsp;Positions</a>
+                        <a href="#" class="list-group-item list-group-item-action"><i class="fa fa-flag"></i>&nbsp;Network Log</a>
+
                     </div>
                 </div>
             @endif
