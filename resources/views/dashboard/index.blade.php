@@ -131,7 +131,7 @@
                 <div class="card">
                     <div class="list-group-flush">
                         <a href="#" class="list-group-item list-group-item-action"><i class="fa fa-chart-line"></i>&nbsp;Network Activity</a>
-                        <a href="#" class="list-group-item list-group-item-action"><i class="fa fa-broadcast-tower"></i>&nbsp;Positions</a>
+                        <a href="{{route('network.positions.index')}}" class="list-group-item list-group-item-action"><i class="fa fa-broadcast-tower"></i>&nbsp;Positions</a>
                         <a href="#" class="list-group-item list-group-item-action"><i class="fa fa-flag"></i>&nbsp;Network Log</a>
 
                     </div>
