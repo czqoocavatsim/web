@@ -65,7 +65,7 @@
                             @else
                                 <a class="dropdown-item {{ Request::is('dashboard/application') ? 'active' : '' }}" href="{{url ('/dashboard/application/')}}">Apply for CZQO</a>
                             @endif
-                            <a class="dropdown-item {{ Request::is('sector-files') ? 'active' : '' }}" href="{{url ('/sector-files')}}">Sector Files</a>
+                            <a class="dropdown-item {{ Request::is('atcresources') ? 'active' : '' }}" href="{{route('atcresources.index')}}">ATC Resources</a>
                         </div>
                     </li>
                     <li class="nav-item dropdown">

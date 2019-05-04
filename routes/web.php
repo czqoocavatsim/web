@@ -15,7 +15,7 @@
 Route::get('/', 'HomeController@view');
 Route::get('/roster', 'RosterController@showPublic');
 Route::get('/staff', 'StaffListController@index')->name('staff');
-Route::view('/sector-files', 'sector-files');
+Route::get('/atcresources', 'AtcResourcesController@index')->name('atcresources.index');
 Route::view('/pilots', 'pilots.index');
 Route::view('/pilots/oceanic-clearance', 'pilots.oceanic-clearance');
 Route::post('/pilots/oceanic-clearance', 'PilotToolsController@generateOceanicController')->name('pilots.generateclearance');
