@@ -22,4 +22,8 @@ class Instructor extends Model
     public function students(){
         return $this->hasMany('App\Student');
     }
+
+    public function sessions(){
+        return $this->hasMany('App\InstructingSession');
+    }
 }

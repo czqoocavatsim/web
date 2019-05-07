@@ -21,5 +21,9 @@ class Student extends Model
     public function getApplicationAttribute(){
         return Application::whereId($this->accepted_application)->firstOrFail();
     }
+
+    public function instructingSessions(){
+        return $this->hasMany('App\InstructingSession');
+    }
 }
 

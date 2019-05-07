@@ -6,6 +6,7 @@
             <li class="nav-item">
                 <a class="nav-link {{ Request::is('dashboard/training') ? 'active' : '' }}" href="{{route('training.index')}}">Home</a>
             </li>
+            @if (Auth::user()->instructorProfile !== null)
             <li class="nav-item">
                 <a class="nav-link {{ Request::is('dashboard/training/instructors/*') || Request::is('dashboard/training/instructors') ? 'active' : '' }}" href="{{route('training.instructors')}}">Instructors</a>
             </li>
@@ -17,6 +18,10 @@
                 <a class="dropdown-item" href="#">Terminated/On Hold</a>
                 </div>
             </li>
+            <li>
+                <a class="nav-link {{Request::is(route('training.instructingsessions.index')) ? 'active' : ''}}" href="{{route('training.instructingsessions.index')}}">Instructing Sessions</a>
+            </li>
+            @endif
             @if (Auth::user()->permissions >= 3)
             <li class="nav-item">
                 <a class="nav-link {{ Request::is('dashboard/training/applications/*') || Request::is('dashboard/training/applications') ? 'active' : '' }}" href="{{route('training.applications')}}">

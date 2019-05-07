@@ -14,7 +14,7 @@
         <div class="row">
             <div class="col">
                 <h5>Personal Details</h5>
-                <div class="card h-100">                    
+                <div class="card">                    
                     <div class="card-body">
                         <div class="row">
                             <div class="col">
@@ -88,7 +88,7 @@
             </div>
             <div class="col">
                 <h5>Primary Info</h5>
-                <div class="card h-100">
+                <div class="card">
                     <div class="card-body">
                         <h5>Training Status</h5>
                         @if ($student->status == 0)
@@ -143,7 +143,7 @@
         <div class="row">
             <div class="col">
                 <h5>Actions</h5>
-                <div class="card h-100">
+                <div class="card">
                     <div class="card-body">
                         <h6>Change Status</h6>
                         <form action="{{route('training.students.setstatus', $student->id)}}" method="POST">
@@ -186,6 +186,15 @@
                 </div>
             </div>
             <div class="col">
+                <h5>Instructing Sessions</h5>
+                <div class="card">
+                    <div class="card-body">
+                        @if (count($student->instructingSessions) >= 1)
+                        @else
+                        None found!
+                        @endif
+                    </div>
+                </div>
             </div>
         </div>
     </div>

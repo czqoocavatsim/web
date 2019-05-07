@@ -205,11 +205,15 @@ Route::group(['middleware' => 'auth'], function () {
 
     //Training
     Route::get('/dashboard/training', 'TrainingController@index')->name('training.index');
-    Route::get('/dashboard/training/instructors', 'TrainingController@instructorsIndex')->name('training.instructors');
-    Route::get('/dashboard/training/students/current', 'TrainingController@currentStudents')->name('training.students.current');
-    Route::get('/dashboard/training/students/{id}', 'TrainingController@viewStudent')->name('training.students.view');
-    Route::post('/dashboard/training/students/{id}/assigninstructor', 'TrainingController@assignInstructorToStudent')->name('training.students.assigninstructor');
-    Route::post('/dashboard/training/students/{id}/setstatus', 'TrainingController@changeStudentStatus')->name('training.students.setstatus');
+    Route::group(['middleware' => 'instructor'], function () {
+        Route::get('/dashboard/training/sessions', 'TrainingController@instructingSessionsIndex')->name('training.instructingsessions.index');
+        Route::get('/dashboard/training/sessions/{id}', 'TrainingController@viewInstructingSession')->name('training.instructingsessions.viewsession');
+        Route::get('/dashboard/training/instructors', 'TrainingController@instructorsIndex')->name('training.instructors');
+        Route::get('/dashboard/training/students/current', 'TrainingController@currentStudents')->name('training.students.current');
+        Route::get('/dashboard/training/students/{id}', 'TrainingController@viewStudent')->name('training.students.view');
+        Route::post('/dashboard/training/students/{id}/assigninstructor', 'TrainingController@assignInstructorToStudent')->name('training.students.assigninstructor');
+        Route::post('/dashboard/training/students/{id}/setstatus', 'TrainingController@changeStudentStatus')->name('training.students.setstatus');
+    });
     //News
     Route::group(['middleware' => 'director'], function () {
         //News

@@ -9,7 +9,7 @@
 @section('content')
 <style>
     #topjumbo {
-        background-image:url('https://cdn.discordapp.com/attachments/292398393375064066/538868929964277760/unknown.png');
+        /*background-image:url('https://cdn.discordapp.com/attachments/292398393375064066/538868929964277760/unknown.png');*/   
         position: relative;
         color: black;
         background-position: center;
@@ -28,7 +28,38 @@
 <div id="topjumbo" class="jumbotron jumbotron-fluid bg-primary text-white">
     <div id=""></div>
     <div class="text-center">
-        <h1 style="text-shadow: 0px 0px 0px;">{{Auth::user()->fname}} {{Auth::user()->lname}} {{Auth::user()->id}}</h1>
+        <h1 style="text-shadow: 0px 0px 0px;">
+            <?php
+            function randomArrayVar($array)
+            {
+                if (!is_array($array)){
+                return $array;
+                }
+                return $array[array_rand($array)];
+            }
+                
+            //list of grettings as arary
+            
+            $greeting= array(
+                "aloha"=>"Aloha",
+                "ahoy"=>"Ahoy",
+                "bonjour"=>"Bonjour",
+                "gday"=>"G'day",
+                "hello"=>"Hello",
+                "hey"=>"Hey",
+                "hi"=>"Hi",
+                "hola"=>"Hola",
+                "howdy"=>"Howdy",
+                "salutations"=>"Salutations",
+                "sup"=>"Sup",
+                "whatsup"=>"What's up",
+                "yo"=>"Yo");
+
+            //echo greeting
+            echo (randomArrayVar($greeting));
+            ?> 
+            {{Auth::user()->fullName('FLC')}}!
+        </h1>
     </div>
 </div>
 <div class="container" style="margin-top: 20px;">

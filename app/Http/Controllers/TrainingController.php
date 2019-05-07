@@ -7,6 +7,7 @@ use Auth;
 use Flash;
 use Calendar;
 use Mail;
+use Carbon\Carbon;
 use App\{InstructingSession,
     Mail\ApplicationAcceptedStaffEmail,
     Mail\ApplicationDeniedUserEmail,
@@ -193,6 +194,37 @@ class TrainingController extends Controller
                 return redirect()->back()->with('success', 'Status set!');
                 break;  
         }
+    }
+
+    public function instructingSessionsIndex()
+    {
+        $sessions = InstructingSession::all();
+        $upcomingSessions = [];
+        foreach ($sessions as $session)
+        {
+            $start = Carbon::parse($session->start_time);
+            //a week from now
+            $afrn = Carbon::now()->addDays(12);
+            if ($afrn->greaterThan($start))
+            {
+                $session->date = Carbon::parse($session->start_time)->toDateString();
+                $session->start_time = Carbon::parse($session->start_time)->toTimeString();
+                $session->end_time = Carbon::parse($session->end_time)->toTimeString();
+                array_push($upcomingSessions, $session);
+            }
+        }
+        $cal_events = [];
+        foreach ($sessions as $session)
+        {
+            $cal_events[] = \Calendar::event(
+                $session->student->user->fullName('FLC').' | '.$session->type, false,
+                $session->start_time, $session->end_time, $session->id,
+                [
+                    'url' => route('training.instructingsessions.viewsession', $session->id)
+                ]);
+        }
+        $calendar = \Calendar::addEvents($cal_events);
+        return view('dashboard.training.instructingsessions.index', compact('upcomingSessions', 'sessions', 'calendar'));
     }
 
     public function viewAllApplications()
