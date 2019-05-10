@@ -6,7 +6,7 @@
             <li class="nav-item">
                 <a class="nav-link {{ Request::is('dashboard/training') ? 'active' : '' }}" href="{{route('training.index')}}">Home</a>
             </li>
-            @if (Auth::user()->instructorProfile !== null)
+            @if (Auth::user()->instructorProfile !== null || Auth::user()->permissions >= 4)
             <li class="nav-item">
                 <a class="nav-link {{ Request::is('dashboard/training/instructors/*') || Request::is('dashboard/training/instructors') ? 'active' : '' }}" href="{{route('training.instructors')}}">Instructors</a>
             </li>

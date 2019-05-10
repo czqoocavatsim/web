@@ -208,6 +208,8 @@ Route::group(['middleware' => 'auth'], function () {
     Route::group(['middleware' => 'instructor'], function () {
         Route::get('/dashboard/training/sessions', 'TrainingController@instructingSessionsIndex')->name('training.instructingsessions.index');
         Route::get('/dashboard/training/sessions/{id}', 'TrainingController@viewInstructingSession')->name('training.instructingsessions.viewsession');
+        Route::view('/dashboard/training/sessions/create', 'dashboard.training.instructingsessions.create')->name('training.instructingsessions.createsessionindex');
+        Route::get('/dashboard/training/sessions/create', 'TrainingController@createInstructingSession')->name('training.instructingsessions.createsession');
         Route::get('/dashboard/training/instructors', 'TrainingController@instructorsIndex')->name('training.instructors');
         Route::get('/dashboard/training/students/current', 'TrainingController@currentStudents')->name('training.students.current');
         Route::get('/dashboard/training/students/{id}', 'TrainingController@viewStudent')->name('training.students.view');

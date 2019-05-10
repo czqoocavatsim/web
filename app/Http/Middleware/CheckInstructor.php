@@ -17,7 +17,7 @@ class CheckInstructor
     {
         if (Auth::check())
         {
-            if (Auth::user()->permissions >= 2)
+            if (Auth::user()->permissions >= 4 || Auth::user()->instructorProfile !== null)
             {
                 return $next($request);
             }

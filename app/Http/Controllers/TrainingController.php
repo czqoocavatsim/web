@@ -227,6 +227,18 @@ class TrainingController extends Controller
         return view('dashboard.training.instructingsessions.index', compact('upcomingSessions', 'sessions', 'calendar'));
     }
 
+    public function createInstructingSession(Request $request)
+    {
+        $this->validate($request, [
+            'student_cid' => 'required',
+            'type' => 'required',
+            'start_time' => 'required',
+            'end_time' => 'required'
+        ]);
+
+        
+    }
+
     public function viewAllApplications()
     {
         $applicationsPending = Application::where('status', 0)->get();
@@ -291,8 +303,8 @@ class TrainingController extends Controller
                 'cid' => $application->user->id,
                 'user_id' => $application->user->id,
                 'full_name' => $application->user->fullName('FL'),
-                'rating' => $application->user->rating,
-                'division' => $application->user->division,
+                'rating' => $application->user->rating_short,
+                'division' => $application->user->division_code,
                 'status' => 'training',
                 'active' => 1
             ]);

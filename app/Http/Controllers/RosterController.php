@@ -105,8 +105,8 @@ class RosterController extends Controller
                 'cid' => $request->get('cid'),
                 'user_id' => $potentialUser->id,
                 'full_name' => $potentialUser->fname.' '.$potentialUser->lname,
-                'rating' => $potentialUser->rating,
-                'division' => $potentialUser->division,
+                'rating' => $potentialUser->rating_short,
+                'division' => $potentialUser->division_code,
                 'status' => $request->get('status'),
                 'active' => $request->get('active')
             ]);
