@@ -26,7 +26,7 @@
         height: 100%;
     }
 </style>
-<div id="topjumbo" class="jumbotron jumbotron-fluid bg-primary text-white">
+<div id="topjumbo" class="jumbotron jumbotron-fluid text-white" style="background-color: #1B7BC8 !important;">
     <div id=""></div>
     <div class="text-center">
         <h1 style="text-shadow: 0px 0px 0px;">

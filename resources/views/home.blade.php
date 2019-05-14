@@ -13,24 +13,15 @@
             position: relative;
             color: white;
             background-position: center;
-        }
-
-        #jumbopattern {
-            background-image: url('{{ URL::to('/') }}/img/worn-dots.png');
-            background-repeat: repeat;
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
+            background-color: #707070;
+            background-blend-mode: multiply;
         }
     </style>
 
     <div id="topjumbo" class="jumbotron jumbotron-fluid" >
-        {{-- <div id="jumbopattern"></div> --}}
-        <div class="container">
-          <h1 class="display-3">Gander Oceanic FIR</h1>
-          <h3 class="display-6">Cool, calm and collected oceanic control services in the North Atlantic.</h3>
+        <div class="container" style="z-index: 99;">
+          <h1 class="display-3" style="z-index: 99;">Gander Oceanic FIR</h1>
+          <h3 class="display-6" style="z-index: 99;">Cool, calm and collected oceanic control services in the North Atlantic.</h3>
         </div>
     </div>
     <div class="container" style="margin-top: 20px;" >

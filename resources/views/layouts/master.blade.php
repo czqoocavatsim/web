@@ -42,23 +42,24 @@
         <script src="{{URL::to('/')}}/js/bootstrap.min.js"></script>
         @section('navbarprim')
         <!--Navigation bar-->
-        <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
-            <div class="container">
-            <div class="form-inline my-2 my-lg-0">
-                <a href="/" class="pull-left"><img style="max-width: 310px;" src="{{ asset('img/Banner.png') }}"></a>
-                <script src="/js/bootstrap.min.js"></script>
+        <div class="container-fluid pt-3 pb-3 bg-primary">
+            <div class="container text-center">
+                <a href="/" class="pull-left"><img style="max-width: 310px; height: 30px;" src="{{ asset('img/Banner.png') }}"></a>
             </div>
+        </div>
+        <nav style="min-height: 40px; background-color: #1B7BC8 !important" class="navbar navbar-expand-md navbar-dark bg-primary p-0">
+            <div class="container">
             <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarColor01" aria-controls="navbarColor01" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
             </button>
-            <div style="margin-left: 10px;" class="collapse navbar-collapse" id="navbarColor01">
-                <ul class="navbar-nav mr-auto">
+            <div  class="collapse navbar-collapse m-0 p-0" id="navbarColor01">
+                <ul class="navbar-nav mr-auto m-0 p-0">
                     <li class="nav-item">
-                        <a class="nav-link {{ Request::is('roster')  ? 'active' : '' }}" href="{{ url('/roster') }}" aria-expanded="false">Roster</a>
+                        <a class="nav-link py-0 {{ Request::is('roster')  ? 'active' : '' }}" href="{{ url('/roster') }}" aria-expanded="false">Roster</a>
                     </li>
 
                     <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle {{ Request::is('dashboard/application') || Request::is('sector-files') ? 'active' : '' }}" style="cursor:pointer" id="dropdown01" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">ATC</a>
+                        <a class="nav-link py-0 dropdown-toggle {{ Request::is('dashboard/application') || Request::is('sector-files') ? 'active' : '' }}" style="cursor:pointer" id="dropdown01" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">ATC</a>
                         <div class="dropdown-menu" aria-labelledby="dropdown01">
                             @if (Auth::check() && Auth::user()->permissions >= 1)
                                 <a class="dropdown-item {{ Request::is('dashboard/application/list') ? 'active' : '' }}" href="{{url ('/dashboard/application/list')}}">Your Applications</a>
@@ -69,7 +70,7 @@
                         </div>
                     </li>
                     <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle {{ Request::is('pilots/oceanic-clearance') || Request::is('pilots/position-report') || Request::is('pilots/vatsim-resources') || Request::is('pilots/tutorial') || Request::is('pilots/tracks') ? 'active' : '' }}" style="cursor:pointer" id="dropdown01" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Pilots</a>
+                        <a class="nav-link py-0 dropdown-toggle {{ Request::is('pilots/oceanic-clearance') || Request::is('pilots/position-report') || Request::is('pilots/vatsim-resources') || Request::is('pilots/tutorial') || Request::is('pilots/tracks') ? 'active' : '' }}" style="cursor:pointer" id="dropdown01" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Pilots</a>
                         <div class="dropdown-menu" aria-labelledby="dropdown01">
                             <a class="dropdown-item {{ Request::is('pilots/oceanic-clearance') ? 'active' : '' }}" href="{{url('/pilots/oceanic-clearance')}}">Oceanic Clearance Generator</a>
                             <a class="dropdown-item {{ Request::is('pilots/position-report') ? 'active' : '' }}" href="{{url('/pilots/position-report')}}">Position Report Generator</a>
@@ -79,26 +80,29 @@
                         </div>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link {{ Request::is('staff') ? 'active' : '' }}" href="{{url ('/staff')}}" aria-expanded="false">Staff</a>
+                        <a class="nav-link py-0 {{ Request::is('staff') ? 'active' : '' }}" href="{{url ('/staff')}}" aria-expanded="false">Staff</a>
                     </li>
                     <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle {{ Request::is('policies') || Request::is('meetingminutes') ? 'active' : ''}}" style="cursor:pointer" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Publications</a>
+                        <a class="nav-link dropdown-toggle py-0 {{ Request::is('policies') || Request::is('meetingminutes') ? 'active' : ''}}" style="cursor:pointer" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Publications</a>
                         <div class="dropdown-menu" aria-labelledby="dropdown01">
                             <a class="dropdown-item {{ Request::is('policies') ? 'active' : '' }}" href="{{route('policies')}}">Policies</a>
                             <a class="dropdown-item {{ Request::is('meetingminutes') ? 'active' : '' }}" href="{{route('meetingminutes')}}">Meeting Minutes</a>
                         </div>
                     </li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link py-0" href="https://vatcan.ca" target="_blank">VATCAN</a>
+                    </li>
                 </ul>
                 <form class="form-inline my-2 my-lg-0">
                     @unless (Auth::check())
-                        <a class="btn btn-primary shadow-none" href="{{URL('/login')}}" role="button">
+                        <a class="btn shadow-none text-white" href="{{URL('/login')}}" role="button">
                             <i class="fa fa-user"></i>&nbsp;
-                            Login With SSO
+                            Login
                         </a>
                     @endunless
                     @auth
                         <div class="dropdown">
-                            <a role="button" id="notificationMenu" href="#" class="btn btn-primary shadow-none" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            <a role="button" id="notificationMenu" href="#" class="btn shadow-none" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                 @if (count(Auth::user()->notifications) >= 1)
                                     <i class="fa fa-bell" style="color: yellow;"></i>
                                     {{count(Auth::user()->notifications)}}
@@ -127,11 +131,11 @@
                                 </div>
                             </div>
                         </div>
-                        <a class="btn btn-primary shadow-none {{ Request::is('dashboard') || Request::is('dashboard/*') ? 'active' : '' }}" href="{{URL('/dashboard')}}" role="button">
+                        <a class="btn shadow-none {{ Request::is('dashboard') || Request::is('dashboard/*') ? 'active' : '' }}" href="{{URL('/dashboard')}}" role="button">
                             <i class="fa fa-tachometer-alt" style="color: white;"></i>
                         </a>
                         <div class="dropdown">
-                            <a class="btn btn-primary shadow-none dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            <a class="text-white pl-2 shadow-none dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                 {{ Auth::user()->fname }}&nbsp;{{ Auth::user()->lname }}&nbsp;{{ Auth::user()->id }}
                             </a>
                             <div class="dropdown-menu pb-0">
