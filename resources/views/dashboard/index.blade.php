@@ -13,6 +13,7 @@
         position: relative;
         color: black;
         background-position: center;
+        height: 50px;
     }
 
     #jumbopattern {
@@ -58,7 +59,7 @@
             //echo greeting
             echo (randomArrayVar($greeting));
             ?> 
-            {{Auth::user()->fullName('FLC')}}!
+            {{Auth::user()->fname}}!
         </h1>
     </div>
 </div>
