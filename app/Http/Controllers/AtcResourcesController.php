@@ -17,32 +17,26 @@ class AtcResourcesController extends Controller
     {
         $this->validate($request, [
             'title' => 'required',
-            'description' => 'required'
+            'description' => 'required',
+            'url' => 'required|url',
         ]);
 
         $resource = new AtcResource();
         $resource->title = $request->get('title');
         $resource->description = $request->get('description');
-        if ($request->file('file'))
-        {
-            $uploadedFile = $request->file('file');
-            $filename = $uploadedFile->getClientOriginalName();
-            Storage::disk('local')->putFileAs(
-                'public/files/atcresources/',
-                $uploadedFile,
-                $filename
-            );
-            $resource->url = Storage::url('public/files/atcreosurces/'.$filename);
-        }
-        else if ($request->get('link'))
-        {
-            $resource->url = $request->get('link');
-        }
-        else
-        {
-            return redirect()->back()->withInput()->with('error', 'Neither a file or link was provided');
-        }
+        $resource->url = $request->get('url');
 
-        return $resource;
+        $resource->save();
+
+        return redirect()->route('atcresources.index')->with('success', 'Resource uploaded!');
+    }
+
+    public function deleteResource($id)
+    {
+        $resource = AtcResource::whereId($id)->firstOrFail();
+
+        $resource->delete();
+
+        return redirect()->back()->with('info', 'Resource deleted.');
     }
 }

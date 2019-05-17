@@ -208,6 +208,12 @@ class NewsController extends Controller
         return view('publicarticle', compact('article'));
     }
 
+    public function viewPublicAll()
+    {
+        $news = News::all()->sortByDesc('id');
+        return view('publicnews', compact('news'));
+    }
+
     public function addCarousel(Request $request)
     {
         $validateddata = $request->validate([

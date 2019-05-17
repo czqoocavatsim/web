@@ -25,8 +25,8 @@ class HomeController extends Controller
         }
 
         //News
-        $news = News::where('type', '!=', 'Certification')->get()->sortByDesc('id');
-        $promotions = News::where('type', 'Certification')->get()->sortByDesc('id');
+        $news = News::where('type', '!=', 'Certification')->take(5)->get()->sortByDesc('id');
+        $promotions = News::where('type', 'Certification')->take(5)->get()->sortByDesc('id');
         $carouselItems = CarouselItem::all();
         $arrContextOptions=array(
             "ssl"=>array(

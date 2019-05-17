@@ -16,8 +16,8 @@
             <div class="row">
                 <div class="col"><b>{{$resource->title}}</b></div>
                 <div class="col-sm-4">
-                    <a href="#" data-toggle="modal" data-target="#detailsModal{{$resource->id}}"><i class="fa fa-info-circle"></i>&nbsp;View Details</a>&nbsp;&nbsp;
-                    <a href="{{$resource->url}}" target="_blank"><i class="fa fa-download"></i>&nbsp;Download</a>
+                    <a href="#" data-toggle="modal" data-target="#detailsModal{{$resource->id}}"><i class="fa fa-info-circle"></i>&nbsp Details</a>&nbsp;&nbsp;
+                    <a href="{{$resource->url}}" target="_blank"><i class="fa fa-eye"></i>&nbsp;View Resource</a>
                 </div>
             </div>
         </div>
@@ -35,8 +35,10 @@
                         {!!html_entity_decode($resource->description)!!}
                     </div>
                     <div class="modal-footer">
-                        <a href="#" role="button" class="btn btn-danger">Delete File</a>
-                        <a href="{{$resource->url}}" role="button" class="btn btn-success">Download File</a>
+                        @if (Auth::check() && Auth::user()->permissions >= 3)
+                        <a href="{{route('atcresources.delete', $resource->id)}}" role="button" class="btn btn-danger">Delete</a>
+                        @endif
+                        <a href="{{$resource->url}}" role="button" class="btn btn-success">View</a>
                         <button type="button" class="btn btn-secondary" data-dismiss="modal">Dismiss</button>
                     </div>
                 </div>
@@ -46,7 +48,7 @@
     </div>
     <br/>
     @if (Auth::check() && Auth::user()->permissions >= 3)    
-    <form method="POST">
+    <form method="POST" action="{{route('atcresources.upload')}}">
         @csrf
         <h5>Add resource</h5>
         <div class="form-group">
@@ -65,18 +67,12 @@
             </script>
         </div>
         <div class="form-group">
-            <label>File</label>
-            <input type="file" class="form-control-file" name="file">
-        </div>
-        <div class="m-1" style="text-align: center">
-            OR
-        </div>
-        <div class="form-group">
-            <label>Link (URL)</label>
-            <input type="url" class="form-control" name="link">
+            <label>URL (Google Drive or Dropbox preferred)</label>
+            <input type="url" class="form-control" name="url">
         </div>
         <br/>
-        <input type="submit" class="btn btn-sm btn-block btn-success">
+        <input value="Submit" type="submit" class="btn btn-sm btn-block btn-success">
+    </form>
     @endif
 </div>
 @stop

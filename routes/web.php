@@ -67,7 +67,8 @@ Route::get('/testwebhook', function () {
 });
 
 //Public news articles
-Route::get('/news/{id}', 'NewsController@viewPublicArticle');
+Route::get('/news/{id}', 'NewsController@viewPublicArticle')->name('news.articlepublic');
+Route::get('/news/', 'NewsController@viewPublicAll')->name('news.allpublic');
 
 //Webmaster tasks
 Route::view('/nickxenophonssabest', 'webmaster');
@@ -218,6 +219,9 @@ Route::group(['middleware' => 'auth'], function () {
     });
     //News
     Route::group(['middleware' => 'director'], function () {
+        //ATC Resources
+        Route::post('/atcresources', 'AtcResourcesController@uploadResource')->name('atcresources.upload');
+        Route::get('/atcresources/delete/{id}', 'AtcResourcesController@deleteResource')->name('atcresources.delete');
         //News
         Route::get('/dashboard/news', 'NewsController@home')->name('news.home');
         Route::get('/dashboard/news/article/{id}', 'NewsController@viewArticle');

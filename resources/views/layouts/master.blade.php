@@ -32,6 +32,52 @@
         <script src="//cdnjs.cloudflare.com/ajax/libs/fullcalendar/2.2.7/fullcalendar.min.js"></script>
         <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/fullcalendar/2.2.7/fullcalendar.min.css"/>
     </head>
+    <style>
+        .dropdown-menu {
+            animation-duration: 0.3s;
+            animation-name: slideIn;
+            -webkit-animation-name: slideIn;
+            -webkit-animation-duration: 0.3s;
+            animation-fill-mode: both;
+            -webkit-animation-fill-mode: both;
+        }
+
+        @keyframes slideIn {
+            0% {
+                transform: translateY(1rem);
+                opacity: 0;
+            }
+            100% {
+                transform:translateY(0rem);
+                opacity: 1;
+            }
+            0% {
+                transform: translateY(1rem);
+                opacity: 0;
+            }
+        }
+
+        @-webkit-keyframes slideIn {
+            0% {
+                -webkit-transform: transform;
+                -webkit-opacity: 0;
+            }
+            100% {
+                -webkit-transform: translateY(0);
+                -webkit-opacity: 1;
+            }
+            0% {
+                -webkit-transform: translateY(1rem);
+                -webkit-opacity: 0;
+            }
+        }
+
+        .slideIn {
+            -webkit-animation-name: slideIn;
+            animation-name: slideIn;
+        }
+
+    </style>
     <body>
          <!-- Bootstrap core JavaScript
         ================================================== -->
@@ -55,9 +101,10 @@
             <div  class="collapse navbar-collapse m-0 p-0" id="navbarColor01">
                 <ul class="navbar-nav mr-auto m-0 p-0">
                     <li class="nav-item">
-                        <a class="nav-link py-0 {{ Request::is('roster')  ? 'active' : '' }}" href="{{ url('/roster') }}" aria-expanded="false">Roster</a>
+                        <a class="nav-link py-0" href="{{url('/')}}">
+                            Home
+                        </a>
                     </li>
-
                     <li class="nav-item dropdown">
                         <a class="nav-link py-0 dropdown-toggle {{ Request::is('dashboard/application') || Request::is('sector-files') ? 'active' : '' }}" style="cursor:pointer" id="dropdown01" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">ATC</a>
                         <div class="dropdown-menu" aria-labelledby="dropdown01">
@@ -87,6 +134,7 @@
                         <div class="dropdown-menu" aria-labelledby="dropdown01">
                             <a class="dropdown-item {{ Request::is('policies') ? 'active' : '' }}" href="{{route('policies')}}">Policies</a>
                             <a class="dropdown-item {{ Request::is('meetingminutes') ? 'active' : '' }}" href="{{route('meetingminutes')}}">Meeting Minutes</a>
+                            <a class="dropdown-item {{ Request::is('news') ? 'active' : '' }}" href="{{route('news.allpublic')}}">News</a>
                         </div>
                     </li>
                     <li class="nav-item dropdown">
@@ -102,7 +150,7 @@
                     @endunless
                     @auth
                         <div class="dropdown">
-                            <a role="button" id="notificationMenu" href="#" class="btn shadow-none" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            <a role="button" id="notificationMenu" href="#" class="btn text-white shadow-none" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                 @if (count(Auth::user()->notifications) >= 1)
                                     <i class="fa fa-bell" style="color: yellow;"></i>
                                     {{count(Auth::user()->notifications)}}
