@@ -14,6 +14,7 @@ use Illuminate\Support\Facades\Storage;
 use Mail;
 use App\User;
 use mofodojodino\ProfanityFilter\Check;
+use RestCord\Interfaces\AuditLog;
 
 class UserController extends Controller
 {
@@ -72,6 +73,63 @@ class UserController extends Controller
         $user = User::where('id', $id)->firstOrFail();
 
         return view('dashboard.users.edituser', compact('user'));
+    }
+
+    public function changeUsersAvatar(Request $request)
+    {
+        $this->validate($request, [
+            'file' => 'required',
+            'user_id' => 'required'
+        ]);
+        $editUser = Auth::user();
+        $user = User::whereId($request->get('user_id'))->firstOrFail();
+        $uploadedFile = $request->file('file');
+        $filename = $uploadedFile->getClientOriginalName();
+        Storage::disk('local')->putFileAs(
+            'public/files/avatars/' . $user->id . '/'. $editUser->id,
+            $uploadedFile,
+            $filename
+        );
+        $user->avatar = Storage::url('public/files/avatars/'.$user->id.'/'.$editUser->id.'/'.$filename);
+        $user->save();
+        AuditLogEntry::insert($editUser, 'Changed user avatar', $user, 0);
+        return redirect()->back()->with('success', 'Avatar changed!');
+    }
+
+    public function resetUsersAvatar(Request $request)
+    {
+        $this->validate($request, [
+            'user_id' => 'required'
+        ]);
+        $editUser = Auth::user();
+        $user = User::whereId($request->get('user_id'))->firstOrFail();
+        if ($user->isAvatarDefault())
+        {
+            abort(403, 'The avatar is already the default avatar.');
+        }
+
+        $user->avatar = "https://www.drupal.org/files/profile_default.png";
+        $user->save();
+        AuditLogEntry::insert($editUser, 'Reset user avatar', $user, 0);
+        return redirect()->back()->with('success', 'Avatar reset!');
+    }
+
+    public function resetUsersBio (Request $request)
+    {
+        $this->validate($request, [
+            'user_id' => 'required'
+        ]);
+
+        $editUser = Auth::user();
+        $user = User::whereId($request->get('user_id'))->firstOrFail();
+
+        $user->bio = null;
+        $user->save();
+
+        AuditLogEntry::insert($editUser, 'Reset user bio', $user, 0);
+
+        //Redirect
+        return redirect()->back()->with('success', 'Biography reset!');
     }
 
     public function storeEditUser(Request $request, $id)

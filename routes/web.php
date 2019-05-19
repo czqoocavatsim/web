@@ -251,6 +251,9 @@ Route::group(['middleware' => 'auth'], function () {
         Route::post('/dashboard/users/{id}', 'UserController@createUserNote')->name('users.createnote');
         Route::get('/dashboard/users/{user_id}/note/{note_id}/delete', 'UserController@deleteUserNote')->name('users.deletenote');
         Route::group(['middleware' => 'executive'], function () {
+            Route::post('/dsahboard/users/func/avatarchange', 'UserController@changeUsersAvatar')->name('users.changeusersavatar');
+            Route::post('/dashboard/users/func/avatarreset', 'UserController@resetUsersAvatar')->name('users.resetusersavatar');
+            Route::post('/dsahboard/users/func/bioreset', 'UserController@resetUsersBio')->name('users.resetusersbio');
             Route::get('/dashboard/users/{id}/delete', 'UserController@deleteUser');
             Route::get('/dashboard/users/{id}/edit', 'UserController@editUser')->name('users.edit.create');
             Route::post('/dashboard/users/{id}/edit', 'UserController@storeEditUser')->name('users.edit.store');

@@ -26,7 +26,7 @@
         height: 100%;
     }
 </style>
-<div id="topjumbo" class="jumbotron jumbotron-fluid text-white" style="background-color: #1B7BC8 !important;">
+<div id="topjumbo" class="jumbotron jumbotron-fluid text-white mb-0" style="background-color: #1B7BC8 !important;">
     <div id=""></div>
     <div class="text-center">
         <h1 style="text-shadow: 0px 0px 0px;">
@@ -63,8 +63,15 @@
         </h1>
     </div>
 </div>
+@if (Auth::user()->userSinceInDays() < 7)
+<div class="jumbotron jumbotron-fluid m-0 p-2" style="" >
+    <h3 class="text-center m-0 p-0">
+        <a data-step="10" data-intro="And there it is! Enjoy your time here. If you have any other enquires, please make a ticket to the Webmaster and she will be happy to answer any questions you have. :)" href="javascript:void(0);" onclick="javascript:introJs().setOption('showProgress', true).start();">I need help!</a>
+    </h3>
+</div>
+@endif
 <div class="container" style="margin-top: 20px;">
-    <h2>Dashboard</h2>
+    <h2 data-step="1" data-intro="Welcome to the CZQO Dashboard! This is your central hub for all things Gander. Here you can interact with our FIR, and manage your account.">Dashboard</h2>
     <br class="my-2">
     <div class="row">
         <div class="col">
@@ -86,10 +93,10 @@
                 </div><br/>
             @endif
             <h4 class="display-6">Your Data</h4>
-            <div class="card">
+            <div data-step="2" data-intro="Here is where you manage and view the data we store on you and your CZQO profile." class="card">
                 <div class="card-body">
                     <div class="row">
-                        <div class="col">
+                        <div class="col" data-step="3" data-intro="Here is an overview of your profile, including your CZQO roles.">
                             <h5 class="card-title">{{ Auth::user()->fname }}&nbsp;{{ Auth::user()->lname }}&nbsp;({{ Auth::user()->id }})</h5>
                             <h6 class="card-subtitle mb-2 text-muted">
                                 {{Auth::user()->rating_GRP}} ({{Auth::user()->rating_short}})
@@ -116,7 +123,7 @@
                                 @endif
                             </ul>
                         </div>
-                        <div class="col">
+                        <div data-step="4" data-intro="You can change your avatar here. Your avatar is available when people view your account. This will likely only be staff members, unless you sign up for an event or similar activity." class="col">
                             <h5 class="card-title">Avatar</h5>
                             <div class="text-center">
                                 <img src="{{Auth::user()->avatar}}" style="width: 125px; height: 125px; margin-bottom: 10px; border-radius: 50%;">
@@ -130,7 +137,7 @@
                     </div>
                     <br/>
                 </div>
-                <div class="list-group-flush">
+                <div class="list-group-flush" data-step="5" data-intro="This is where you can manage your biography, and manage your data preferences.">
                     <a href="#" class="list-group-item list-group-item-action" data-target="#viewBio" data-toggle="modal"><i class="fa fa-address-card"></i>&nbsp;View Biography</a>
                     <a href="{{url('dashboard/data/')}}" class="list-group-item list-group-item-action"><i class="fa fa-file-download"></i>&nbsp;&nbsp;Download All Data</a>
                     <a href="{{url('/dashboard/data/remove')}}" class="list-group-item list-group-item-action"><i class="fa fa-user-slash"></i>&nbsp;Request Removal</a>
@@ -172,7 +179,7 @@
         </div>
         <div class="col">
             <h4>CZQO Certification & Training</h4>
-            <div class="card">
+            <div class="card" data-step="6" data-intro="Here you can view your certification status within CZQO.">
                 <div class="card-body">
                     <h5 class="card-title">Certification status</h5>
                     <h3 class="card-text">
@@ -217,14 +224,14 @@
                         @endif
                     </h3>
                 </div>
-                <div class="list-group-flush">
+                <div class="list-group-flush" >
                     @if (Auth::user()->permissions >= 2)
-                    <a href="{{url('/dashboard/training')}}" target="" class="list-group-item list-group-item-action">
+                    <a data-step="7" data-intro="Access CZQO training resources here." href="{{url('/dashboard/training')}}" target="" class="list-group-item list-group-item-action">
                         <i class="fa fa-graduation-cap"></i>
                         Training and Resources
                     </a>
                     @endif
-                    <a target="" href="{{route('application.list')}}" class="list-group-item list-group-item-action">
+                    <a data-step="8" data-intro="View your CZQO controller applications here." target="" href="{{route('application.list')}}" class="list-group-item list-group-item-action">
                         <i class="fa fa-file-contract"></i>&nbsp;
                         Your Applications
                     </a>
@@ -232,7 +239,7 @@
             </div>
             <br/>
             <h4 class="display-6">Tickets</h4>
-            <div class="card">
+            <div data-step="9" data-intro="If you have any enquires or issues for the staff, feel free to make a ticket via the ticketing system." class="card">
                 <div class="card-body">
                     @if (count($openTickets) < 1)
                         No open tickets.
@@ -287,6 +294,8 @@
             @endif
         </div>
     </div>
+    <br/>
+    <a href="javascript:void(0);" onclick="javascript:introJs().setOption('showProgress', true).start();">View the tutorial</a>
 </div>
 <!-- Modal -->
 <div class="modal fade" id="betaModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
@@ -357,6 +366,7 @@
             </div>
         </div>
     </div>
+
 </div>
 
 <script>

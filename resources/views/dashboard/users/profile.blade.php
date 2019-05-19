@@ -11,133 +11,169 @@
         <a href="{{url('dashboard/users/')}}"><i class="fa fa-left-arrow"></i>Back To All Users</a>
         <h2>View User {{ $user->id }}</h2>
         <h5>{{ $user->fname }}&nbsp;{{ $user->lname }}</h5>
-        @if ($user->id == 1)
-            <div class="alert alert-info">
-                <h4 class="alert-heading">System User</h4>
-                <p>
-                    This is the System User account which is used for automatic actions that require a user account recorded, and as the target account on all actions that do not involve another user.
-                </p>
+        <div class="row">
+            <div class="col">
+                @if ($user->id == 1 || $user->id == 2)
+                    <div class="alert alert-info">
+                        <h4 class="alert-heading">System User</h4>
+                        <p>
+                            This a System User account which is used for automatic actions that require a user account recorded, and as the target account on all actions that do not involve another user.
+                        </p>
+                    </div>
+                @endif
+                <br/>
+                <table class="table">
+                    <thead>
+                    <tr>
+                        <th scope="col">Attribute</th>
+                        <th scope="col">Value</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    @if (Auth::user()->permissions > 3)
+                        <tr>
+                            <th scope="row">Email</th>
+                            <td>
+                                <a href="mailto:{{$user->email}}">
+                                    {{ $user->email }}
+                                </a>
+                            </td>
+                        </tr>
+                    @endif
+                    <tr>
+                        <th scope="row">Rating</th>
+                        <td>
+                            {{$user->rating_GRP}} ({{$user->rating_short}})
+                        </td>
+                    </tr>
+                    <tr>
+                        <th scope="row">Region</th>
+                        <td>{{ $user->region_name }} ({{$user->region_code}})</td>
+                    </tr>
+                    <tr>
+                        <th scope="row">Division</th>
+                        <td>{{ $user->division_name }} ({{$user->division_code}})</td>
+                    </tr>
+                    <tr>
+                        <th scope="row">Subdivision</th>
+                        <td>{{ $user->subdivision_name }} ({{$user->subdivision_code}})</td>
+                    </tr>
+                    <tr>
+                        <th scope="row">Permissions</th>
+                        <td>
+                            @if ($user->permissions == 0)
+                                Guest (0)
+                            @elseif ($user->permissions == 1)
+                                Controller (1)
+                            @elseif ($user->permissions == 2)
+                                Instructor/Mentor (2)
+                            @elseif ($user->permissions == 3)
+                                Director (Non-Executive) (3)
+                            @elseif ($user->permissions == 4)
+                                Director (Executive) (4)
+                            @else
+                                Not Found
+                            @endif
+                        </td>
+                    </tr>
+                    <tr>
+                        <th scope="row">Staff Member</th>
+                        <td>
+                            @if ($user->staffProfile)
+                                {{$user->staffProfile->position}}
+                            @else
+                                No
+                            @endif
+                        </td>
+                    </tr>
+                    <tr>
+                        <th scope="row">Instructor</th>
+                        <td>
+                            @if ($user->instructorProfile)
+                                <a href="#">
+                                    {{$user->instructorProfile->qualification}}
+                                </a>
+                            @else
+                                No
+                            @endif
+                        </td>
+                    </tr>
+                    <tr>
+                        <th scope="row">Student</th>
+                        <td>
+                            @if ($user->studentProfile)
+                                <a href="{{route('training.students.view', $user->studentProfile->id)}}">
+                                    @if ($user->studentProfile->status == 0)
+                                        Open
+                                    @elseif ($user->studentProfile->status == 3)
+                                        On Hold
+                                    @elseif ($user->studentProfile->status == 1)
+                                        Completed
+                                    @else
+                                        Closed
+                                    @endif
+                                </a>
+                            @else
+                                No
+                            @endif
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
             </div>
-        @endif
-        <br/>
-        <table class="table">
-            <thead>
-            <tr>
-                <th scope="col">Attribute</th>
-                <th scope="col">Value</th>
-            </tr>
-            </thead>
-            <tbody>
-            @if (Auth::user()->permissions > 3)
-                <tr>
-                    <th scope="row">Email</th>
-                    <td>
-                        {{ $user->email }}
-                    </td>
-                </tr>
-            @endif
-            <tr>
-                <th scope="row">Rating</th>
-                <td>
-                    @switch (Auth::user()->rating)
-                        @case('INA')
-                        Inactive (INA)
-                        @break
-                        @case('OBS')
-                        Pilot/Observer (OBS)
-                        @break
-                        @case('S1')
-                        Ground Controller (S1)
-                        @break
-                        @case('S2')
-                        Tower Controller (S2)
-                        @break
-                        @case('S3')
-                        TMA Controller (S3)
-                        @break
-                        @case('C1')
-                        Enroute Controller (C1)
-                        @break
-                        @case('C3')
-                        Senior Controller (C3)
-                        @break
-                        @case('I1')
-                        Instructor (I1)
-                        @break
-                        @case('I3')
-                        Senior Instructor (I3)
-                        @break
-                        @case('SUP')
-                        Supervisor (SUP)
-                        @break
-                        @case('ADM')
-                        Administrator (ADM)
-                        @break
-                    @endswitch
-                </td>
-            </tr>
-            <tr>
-                <th scope="row">Division</th>
-                <td>{{ $user->division }}</td>
-            </tr>
-            <tr>
-                <th scope="row">Permissions</th>
-                <td>
-                    @if ($user->permissions == 0)
-                        Guest (0)
-                    @elseif ($user->permissions == 1)
-                        Controller (1)
-                    @elseif ($user->permissions == 2)
-                        Instructor/Mentor (2)
-                    @elseif ($user->permissions == 3)
-                        Director (Non-Executive) (3)
-                    @elseif ($user->permissions == 4)
-                        Director (Executive) (4)
-                    @else
-                        Not Found
-                    @endif
-                </td>
-            </tr>
-            <tr>
-                <th scope="row">Staff Member</th>
-                <td>
-                    ???
-                </td>
-            </tr>
-            <tr>
-                <th scope="row">Instructor</th>
-                <td>
-                    @if ($user->instructorProfile)
-                    <a href="#">
-                        {{$user->instructorProfile->qualification}}
-                    </a>
-                    @else
-                    No
-                    @endif
-                </td>
-            </tr>
-            <tr>
-                <th scope="row">Student</th>
-                <td>
-                    @if ($user->studentProfile)
-                    <a href="{{route('training.students.view', $user->studentProfile->id)}}">
-                        @if ($user->studentProfile->status == 0)
-                            Open
-                        @elseif ($user->studentProfile->status == 3)
-                            On Hold
-                        @elseif ($user->studentProfile->status == 1)
-                            Completed
-                        @else 
-                            Closed
-                        @endif
-                    </a>
-                    @else
-                    No
-                    @endif
-                </td>
-            </tr>
-            </tbody>
-        </table>
+            <div class="col">
+                <h5 class="card-title">Avatar</h5>
+                <div class="text-center">
+                    <img src="{{$user->avatar}}" style="width: 125px; height: 125px; margin-bottom: 10px; border-radius: 50%;">
+                </div>
+                <br/>
+                @if (Auth::user()->permissions >= 4)
+                <a role="button" data-toggle="modal" data-target="#changeAvatar" class="btn btn-sm btn-block btn-outline-primary"  href="#">Change</a>
+                <div class="modal fade" id="changeAvatar" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+                    <div class="modal-dialog modal-dialog-centered" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="exampleModalLongTitle">Change avatar</h5>
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                            <div class="modal-body">
+                                <p>Please ensure the avatar complies with the VATSIM Code of Conduct. This avatar will be visible to staff members, and if the user is a staff member, on the staff page.</p>
+                                <form method="post" action="{{route('users.changeusersavatar')}}" enctype="multipart/form-data" class="" id="">
+                                    @csrf
+                                    <input type="file" name="file" class="form-control-file">
+                                    <input type="hidden" name="user_id" value="{{$user->id}}">
+                                    <br/>
+                                    <input type="submit" class="btn btn-success" value="Upload">
+                                </form>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Dismiss</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                @if (!$user->isAvatarDefault())
+                    <form class="mt-1" action="{{route('users.resetusersavatar')}}" method="POST">
+                        @csrf
+                        <input type="hidden" name="user_id" value="{{$user->id}}">
+                        <input type="submit" value="Reset Avatar" class="btn btn-sm btn-block btn-outline-danger">
+                    </form>
+                @endif
+                @endif
+                <br/>
+                <h5>Biography</h5>
+                <p class="border p-1">{!! html_entity_decode($user->bio) !!}</p>
+                @if (Auth::user()->permissions >= 4)
+                    <form class="mt-1" action="{{route('users.resetusersbio')}}" method="POST">
+                        @csrf
+                        <input type="hidden" name="user_id" value="{{$user->id}}">
+                        <input type="submit" value="Reset Biography" class="btn btn-sm btn-block btn-outline-danger">
+                    </form>
+                @endif
+            </div>
+        </div>
         <br/>
         @if (Auth::user()->permissions >= 3)
             <h4>Applications</h4>
