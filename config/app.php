@@ -54,6 +54,8 @@ return [
 
     'url' => env('APP_URL', 'http://localhost'),
 
+    'webmasterkey' => env('WEBMASTER_KEY', false),
+
     /*
     |--------------------------------------------------------------------------
     | Application Timezone

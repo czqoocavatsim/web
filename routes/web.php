@@ -71,17 +71,39 @@ Route::get('/news/{id}', 'NewsController@viewPublicArticle')->name('news.article
 Route::get('/news/', 'NewsController@viewPublicAll')->name('news.allpublic');
 
 //Webmaster tasks
-Route::view('/nickxenophonssabest', 'webmaster');
-Route::get('/nickxenophonssabest/cache', function () {
+Route::get('/nickxenophonssabest', function (\Illuminate\Http\Request $request) {
+    $input = $request->query('key');
+    $key = \Illuminate\Support\Facades\Config::get('app.webmasterkey');
+    if (strtolower($input) === $key) {
+        return view('webmaster');
+    }
+    abort(403);
+});
+Route::get('/nickxenophonssabest/cache', function (\Illuminate\Http\Request $request) {
+    $input = $request->query('key');
+    $key = \Illuminate\Support\Facades\Config::get('app.webmasterkey');
+    if (!strtolower($input) !== $key) {
+        abort(403);
+    }
     Artisan::call('config:clear');
     Artisan::call('config:cache');
     return('Cache cleared.');
 });
-Route::get('/nickxenophonssabest/migrate', function () {
+Route::get('/nickxenophonssabest/migrate', function (\Illuminate\Http\Request $request) {
+    $input = $request->query('key');
+    $key = \Illuminate\Support\Facades\Config::get('app.webmasterkey');
+    if (!strtolower($input) !== $key) {
+        abort(403);
+    }
     Artisan::call('migrate');
     return('Migration completed.');
 });
-Route::get('/nickxenophonssabest/seed', function () {
+Route::get('/nickxenophonssabest/seed', function (\Illuminate\Http\Request $request) {
+    $input = $request->query('key');
+    $key = \Illuminate\Support\Facades\Config::get('app.webmasterkey');
+    if (strtolower($input) !== $key) {
+        abort(403);
+    }
     Artisan::call('db:seed');
     return('Seed completed.');
 });
