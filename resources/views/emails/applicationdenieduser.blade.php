@@ -10,7 +10,7 @@
 @stop
 
 @section('content')
-    <p>Your application for Gander Oceanic has been denied by {{$application->processed_by->fname}} {{$application->processed_by->lname}} {{$application->processed_by->id}} at {{$application->processed_at}} (Zulu).</p>
+    <p>Your application for Gander Oceanic has been denied by {{$application->processed_by->fullName('FLC')}} at {{$application->processed_at}} (Zulu).</p>
     <b>Staff Comments:</b>
     <p>
         @if (!$application->staff_comment)

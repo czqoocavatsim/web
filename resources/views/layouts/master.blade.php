@@ -107,6 +107,11 @@
                             Home
                         </a>
                     </li>
+                    <li class="nav-item">
+                        <a class="nav-link py-0 {{ Request::is('roster/*') || Request::is('roster') ? 'active' : '' }}" href="{{route('roster.public')}}">
+                            Roster
+                        </a>
+                    </li>
                     <li class="nav-item dropdown">
                         <a class="nav-link py-0 dropdown-toggle {{ Request::is('dashboard/application') || Request::is('sector-files') ? 'active' : '' }}" style="cursor:pointer" id="dropdown01" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">ATC</a>
                         <div class="dropdown-menu" aria-labelledby="dropdown01">
@@ -186,11 +191,11 @@
                         </a>
                         <div class="dropdown">
                             <a class="text-white pl-2 shadow-none dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                {{ Auth::user()->fname }}&nbsp;{{ Auth::user()->lname }}&nbsp;{{ Auth::user()->id }}
+                                {{Auth::user()->fullName('FLC')}}
                             </a>
                             <div class="dropdown-menu pb-0">
                                 <div class="container text-center">
-                                    <h5 style="font-weight: bold;">{{ Auth::user()->fname }}&nbsp;{{ Auth::user()->lname }}&nbsp;{{ Auth::user()->id }}</h5>
+                                    <h5 style="font-weight: bold;">{{Auth::user()->fullName('FLC')}}</h5>
                                     <h6>
                                         @if (Auth::user()->permissions == 4)
                                             Executive

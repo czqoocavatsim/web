@@ -36,7 +36,7 @@
                 <tr>
                     <th scope="row">{{$controller->cid}}</th>
                     <td>
-                        {{$controller->full_name}}
+                        {{$controller->user->fullName('FL')}}
                         @if ($controller->user_id == 2)
                             <i title="Not linked to a user account." class="fas fa-unlink"></i>
                         @endif

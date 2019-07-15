@@ -284,4 +284,39 @@ class UserController extends Controller
         //Redirect
         return redirect()->back()->with('success', 'Biography saved!');
     }
+
+    public function changeDisplayName(Request $request)
+    {
+        $this->validate($request, [
+            'display_fname' => 'required',
+            'format' => 'required'
+        ]);
+
+        //Get user
+        $user = Auth::user();
+
+        //Run through profanity filter
+        $check = new Check();
+        if ($check->hasProfanity($request->get('display_fname')))
+        {
+            return redirect()->back()->withInput()->with('error', 'Profanity was detected in your display name. Please remove it');
+        }
+
+        //No swear words... give them the new name!
+        $user->display_fname = $request->get('display_fname');
+        if ($request->get('format') == "showall") {
+            $user->display_last_name = true;
+            $user->display_cid_only = false;
+        } elseif ($request->get('format') == "showfirstcid") {
+            $user->display_last_name = false;
+            $user->display_cid_only = false;
+        } else {
+            $user->display_last_name = false;
+            $user->display_cid_only = true;
+        }
+        $user->save();
+
+        //Redirect
+        return redirect()->back()->with('success', 'Display name saved!');
+    }
 }

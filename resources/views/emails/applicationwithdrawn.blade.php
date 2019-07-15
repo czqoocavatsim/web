@@ -14,7 +14,7 @@
     <b>Details</b>
     <ul>
         <li>Application ID: {{$application->application_id}}</li>
-        <li>Full Name: {{$application->user->fname}} {{$application->user->lname}}</li>
+        <li>Name: {{$application->user->fullName('FLC')}}</li>
         <li>Rating/Division: {{$application->user->rating}}/{{$application->user->division}}</li>
     </ul>
     <hr>

@@ -29,38 +29,38 @@ class Kernel extends ConsoleKernel
      */
     protected function schedule(Schedule $schedule)
     {
-        $schedule->call(function (){
-            AuditLogEntry::insert(User::find(1), "Application  accepted and controller added to roster, status training", User::find(1), 0);
-            error_log('Some message here.');
-            //Record controller sessions
-            $logFile = __DIR__.'/vendor/skymeyer/vatsimphp/app/logs/pilots.log';
-            $vatsim = new \Vatsimphp\VatsimData();
-            $vatsim->setConfig('cacheOnly', false);
-            $vatsim->setConfig('logFile', $logFile);
-            if (!$vatsim->loadData()) {
-                log('No VATSIM data ('.Carbon::now().')');
-            } else {
-                $positions = VatsimPosition::all();
-                foreach ($positions as $position) {
-                    $controllers = $vatsim->searchCallsign($position->callsign);
-                    foreach ($controllers as $controller) {
-                        $sessionFound = false;
-                        $sessions = VatsimSession::where('status', 0)->get();
-                        foreach ($sessions as $s) {
-                            if ($s->position === $position) $sessionFound = true;
-                        }
-                        $session = new VatsimSession([
-                            'controller' => 1,
-                            'vatsim_cid' => $controller['cid'],
-                            'position' => $position->id,
-                            'session_start' => date('Y-m-d H:i:s'),
-                            'session_end' => date('Y-m-d H:i:s')
-                        ]);
-                        $session->save();
-                    }
-                }
-            }
-        })->everyMinute();
+//        $schedule->call(function (){
+//            AuditLogEntry::insert(User::find(1), "Application  accepted and controller added to roster, status training", User::find(1), 0);
+//            error_log('Some message here.');
+//            //Record controller sessions
+//            $logFile = __DIR__.'/vendor/skymeyer/vatsimphp/app/logs/pilots.log';
+//            $vatsim = new \Vatsimphp\VatsimData();
+//            $vatsim->setConfig('cacheOnly', false);
+//            $vatsim->setConfig('logFile', $logFile);
+//            if (!$vatsim->loadData()) {
+//                log('No VATSIM data ('.Carbon::now().')');
+//            } else {
+//                $positions = VatsimPosition::all();
+//                foreach ($positions as $position) {
+//                    $controllers = $vatsim->searchCallsign($position->callsign);
+//                    foreach ($controllers as $controller) {
+//                        $sessionFound = false;
+//                        $sessions = VatsimSession::where('status', 0)->get();
+//                        foreach ($sessions as $s) {
+//                            if ($s->position === $position) $sessionFound = true;
+//                        }
+//                        $session = new VatsimSession([
+//                            'controller' => 1,
+//                            'vatsim_cid' => $controller['cid'],
+//                            'position' => $position->id,
+//                            'session_start' => date('Y-m-d H:i:s'),
+//                            'session_end' => date('Y-m-d H:i:s')
+//                        ]);
+//                        $session->save();
+//                    }
+//                }
+//            }
+//        })->everyMinute();
     }
 
     /**

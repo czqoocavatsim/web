@@ -15,5 +15,5 @@ Dear {{$data['receivingname']}},
 @stop
 
 @section('end')
-From {{$data['fname']}} {{$data['lname']}}
+From {{$data['name']}}
 @stop

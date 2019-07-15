@@ -12,4 +12,9 @@ class RosterMember extends Model
         'cid', 'user_id', 'full_name', 'rating', 'division', 'status', 'active'
     ];
 
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
+
 }

@@ -19,7 +19,7 @@
             <tbody>
                 <tr>
                     <th scope="col">Author</th>
-                    <td>{{App\User::find($article->user_id)->fname}} {{App\User::find($article->user_id)->lname}} {{App\User::find($article->user_id)->id}}</td>
+                    <td>{{App\User::find($article->user_id)->fullName('FLC')}}</td>
                 </tr>
                 <tr>
                     <th scope="col">Published</th>

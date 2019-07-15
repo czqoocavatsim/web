@@ -6,7 +6,7 @@
 
 @section('to')
 
-    <strong>Hi {{$controller->full_name}},</strong>
+    <strong>Hi there,</strong>
 @stop
 
 @section('content')

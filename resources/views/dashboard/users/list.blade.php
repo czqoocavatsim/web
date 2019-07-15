@@ -39,7 +39,7 @@
                     @else
                     <tr>
                         <th scope="row">{{$user->id}}</th>
-                        <td>{{$user->fname}} {{$user->lname}}</td>
+                        <td>{{$user->fullName('FL')}}</td>
                         <td>{{$user->rating}}</td>
                         <td>
                             @if ($user->permissions == 0)

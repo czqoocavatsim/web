@@ -33,7 +33,7 @@ class RosterController extends Controller
         $controller = new RosterMember([
             'cid' => $user->id,
             'user_id' => $user->id,
-            'full_name' => $user->fname.' '.$user->lname,
+            'full_name' => $user->fullName('FL'),
             'rating' => $user->rating,
             'division' => $user->division
         ]);
@@ -104,7 +104,7 @@ class RosterController extends Controller
             $controller = new RosterMember([
                 'cid' => $request->get('cid'),
                 'user_id' => $potentialUser->id,
-                'full_name' => $potentialUser->fname.' '.$potentialUser->lname,
+                'full_name' => $potentialUser->fullName('FL'),
                 'rating' => $potentialUser->rating_short,
                 'division' => $potentialUser->division_code,
                 'status' => $request->get('status'),

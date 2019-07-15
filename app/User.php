@@ -2,6 +2,7 @@
 
 namespace App;
 
+use App\Http\Controllers\RosterController;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Foundation\Auth\User as Authenticatable;
@@ -19,7 +20,7 @@ class User extends Authenticatable
     protected $fillable = [
         'id', 'fname', 'lname', 'email', 'rating_id', 'rating_short', 'rating_long', 'rating_GRP',
         'reg_date', 'region_code', 'region_name', 'division_code', 'division_name',
-        'subdivision_code', 'subdivision_name', 'permissions', 'init', 'gdpr_subscribed_emails', 'avatar', 'bio'
+        'subdivision_code', 'subdivision_name', 'permissions', 'init', 'gdpr_subscribed_emails', 'avatar', 'bio', 'display_cid_only', 'display_fname', 'display_last_name'
     ];
 
     /**
@@ -61,6 +62,11 @@ class User extends Authenticatable
         return $this->hasOne(StaffMember::class);
     }
 
+    public function rosterProfile()
+    {
+        return $this->hasOne(RosterMember::class);
+    }
+
     public function notifications()
     {
         return $this->hasMany(UserNotification::class);
@@ -82,10 +88,29 @@ class User extends Authenticatable
 
     public function fullName($format)
     {
+        //display name check
+        if ($this->display_cid_only == true) {
+            return strval($this->id);
+        }
+
         if ($format == "FLC") {
-            return $this->fname.' '.$this->lname.' '.$this->id;
+
+            if($this->display_last_name == true) {
+                return $this->display_fname.' '.$this->lname.' '.$this->id;
+            } else {
+                return $this->display_fname.' '.$this->id;
+            }
+
         } elseif ($format === "FL") {
-            return $this->fname.' '.$this->lname;
+            if($this->display_last_name == true) {
+                return $this->display_fname . ' ' . $this->lname;
+            } else {
+                return $this->display_fname;
+            }
+
+        } else if ($format === "F") {
+
+            return $this->display_fname;
         }
 
         abort(500);

@@ -10,7 +10,10 @@
     <div class="container" style="margin-top: 20px;">
         <a href="{{url('dashboard/users/')}}"><i class="fa fa-left-arrow"></i>Back To All Users</a>
         <h2>View User {{ $user->id }}</h2>
-        <h5>{{ $user->fname }}&nbsp;{{ $user->lname }}</h5>
+        <h5>{{ $user->fullName('FL')}}</h5>
+        @if ($user->fname !== $user->display_fname || $user->display_last_name != false || $user->display_cid_only == true)
+            <small>Note: this user's display name does not match their CERT name.</small>
+        @endif
         <div class="row">
             <div class="col">
                 @if ($user->id == 1 || $user->id == 2)
@@ -233,7 +236,7 @@
                         @if ($note->confidential == 1)
                             @if (Auth::user()->permissions == 4)
                                 <div class="list-group-item">
-                                    <h5>{{$note->timestamp}} by {{\App\User::find($note->author)->fname}} {{\App\User::find($note->author)->lname}} {{\App\User::find($note->author)->id}}</h5>
+                                    <h5>{{$note->timestamp}} by {{\App\User::find($note->author)->fullName('FLC')}}</h5>
                                     <div class="badge badge-danger">Confidential</div>
                                     <p style="word-break: break-all;">
                                         {{$note->content}}
@@ -243,7 +246,7 @@
                             @endif
                         @else
                             <div class="list-group-item">
-                                <h5>{{$note->timestamp}} by {{\App\User::find($note->author)->fname}} {{\App\User::find($note->author)->lname}} {{\App\User::find($note->author)->id}}</h5>
+                                <h5>{{$note->timestamp}} by {{\App\User::find($note->author)->fullName('FLC')}}</h5>
                                 <p style="word-break: break-all;">
                                     {{$note->content}}
                                 </p>
@@ -276,7 +279,7 @@
                         <tr>
                             <th scope="row">{{$entry->time}}</th>
                             <td>
-                                {{App\User::find($entry->user_id)->fname}} {{App\User::find($entry->user_id)->lname}} {{App\User::find($entry->user_id)->id}}
+                                {{App\User::find($entry->user_id)->fullName('FLC')}}
                             </td>
                             <td>
                                 {{$entry->action}}
