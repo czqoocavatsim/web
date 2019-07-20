@@ -33,7 +33,7 @@
                 Feedback
             @endif
             <br/>
-            Submitted by {{App\User::find($ticket->user_id)->fname}} {{App\User::find($ticket->user_id)->lname}} {{App\User::find($ticket->user_id)->id}} at {{$ticket->submission_time}}<br/>
+            Submitted by {{App\User::find($ticket->user_id)->fullName('FLC')}} at {{$ticket->submission_time}}<br/>
             Last updated at {{$ticket->updated_at}}
         </p>
         <h5>Message</h5>
@@ -48,7 +48,7 @@
             <div class="list-group">
                 @foreach ($replies as $reply)
                     <div class="list-group-item" @if ($reply->user_id == 1) style="background-color: #bfe0fb;" @endif">
-                        <h6>{{App\User::find($reply->user_id)->fname}} {{App\User::find($reply->user_id)->lname}} {{App\User::find($reply->user_id)->id}} at {{$reply->submission_time}}</h6>
+                        <h6>{{App\User::find($reply->user_id)->fullName('FLC')}} at {{$reply->submission_time}}</h6>
                         <div id="replyContent{{$reply->id}}" class="text">
                             {!! html_entity_decode($reply->message) !!}
                         </div>

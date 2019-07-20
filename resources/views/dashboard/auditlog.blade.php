@@ -29,10 +29,10 @@
                     <tr>
                         <th scope="row">{{$entry->time}}</th>
                         <td>
-                            {{App\User::find($entry->user_id)->fname}} {{App\User::find($entry->user_id)->lname}} {{App\User::find($entry->user_id)->id}}
+                            {{App\User::find($entry->user_id)->fullName('FLC')}}
                         </td>
                         <td>
-                            {{App\User::find($entry->affected_id)->fname}} {{App\User::find($entry->affected_id)->lname}} {{App\User::find($entry->affected_id)->id}}
+                            {{App\User::find($entry->user_id)->fullName('FLC')}}
                         <td>
                             {{$entry->action}}
                             &nbsp;

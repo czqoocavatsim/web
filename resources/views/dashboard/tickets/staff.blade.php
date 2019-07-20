@@ -46,7 +46,7 @@
                         @foreach ($openTickets as $ticket)
                             <tr>
                             <th scope="row">#{{$ticket->ticket_id}}</th>
-                            <td>{{App\User::find($ticket->user_id)->fname}} {{App\User::find($ticket->user_id)->lname}} {{App\User::find($ticket->user_id)->id}}</td>
+                            <td>{{App\User::find($ticket->user_id)->fullName('FLC')}}</td>
                             <td>{{$ticket->title}}</td>
                             <td>{{count($ticket->replies)}}</td>
                             <td>{{$ticket->submission_time}}</td>
@@ -79,7 +79,7 @@
                         @foreach ($closedTickets as $ticket)
                             <tr>
                             <th scope="row">#{{$ticket->ticket_id}}</th>
-                            <td>{{App\User::find($ticket->user_id)->fname}} {{App\User::find($ticket->user_id)->lname}} {{App\User::find($ticket->user_id)->id}}</td>
+                            <td>{{App\User::find($ticket->user_id)->fullName('FLC')}}</td>
                             <td>{{$ticket->title}}</td>
                             <td>{{count($ticket->replies)}}</td>
                             <td>{{$ticket->submission_time}}</td>
@@ -112,7 +112,7 @@
                         @foreach ($onHoldTickets as $ticket)
                             <tr>
                             <th scope="row">#{{$ticket->ticket_id}}</th>
-                            <td>{{App\User::find($ticket->user_id)->fname}} {{App\User::find($ticket->user_id)->lname}} {{App\User::find($ticket->user_id)->id}}</td>
+                            <td>{{App\User::find($ticket->user_id)->fullName('FLC')}}</td>
                             <td>{{$ticket->title}}</td>
                             <td>{{count($ticket->replies)}}</td>
                             <td>{{$ticket->submission_time}}</td>

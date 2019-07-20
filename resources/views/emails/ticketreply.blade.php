@@ -11,7 +11,7 @@
 
 @section('content')
     <a href="https://czqo.vatcan.ca/dashboard/users/{{$ticketReply->user_id}}">
-        {{\App\User::find($ticketReply->user_id)->fname}} {{\App\User::find($ticketReply->user_id)->lname}} {{\App\User::find($ticketReply->user_id)->id}}
+        {{\App\User::find($ticketReply->user_id)->fullName('FLC')}}
     </a> has replied to your ticket. View it <a href="https://czqo.vatcan.ca/dashboard/tickets/{{$ticket->ticket_id}}">here.</a>
 @stop
 

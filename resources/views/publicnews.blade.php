@@ -17,7 +17,7 @@
                         <h5 class="mb-1">{{$article->title}}</h5>
                         <small>Published {{$article->date}}</small>
                     </div>
-                    <h6>{{App\User::find($article->user_id)->fname}} {{App\User::find($article->user_id)->lname}} {{App\User::find($article->user_id)->id}}</h6>
+                    <h6>{{App\User::find($article->user_id)->fullName('FLC')}}</h6>
                 </a>
             @endforeach
         </ul>

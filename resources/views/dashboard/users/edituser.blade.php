@@ -11,7 +11,7 @@
         {!! Form::open(['route' => ['users.edit.store', $user->id]]) !!}
         <a href="{{url('dashboard/users/'.$user->id)}}"><i class="fa fa-left-arrow"></i>Back To User Profile</a>
         <h2>Edit User {{ $user->id }}</h2>
-        <h5>{{ $user->fname }}&nbsp;{{ $user->lname }}</h5>
+        <h5>{{ $user->fullName('FL')}}</h5>
         <br/>
         <table class="table">
             <thead>

@@ -15,18 +15,20 @@
         <div class="col-md-8">
             <h2>Oceanic Clearance Generator</h2>
             <br/>
+            <form method="POST" action="{{route('pilots.generateclearance')}}">
+            @csrf
             <div class="form-row">
                 <div class="form-group col">
                     <label>Callsign</label>
-                    <input id="callsignB" onblur="this.value = this.value.toUpperCase()" type="text" class="form-control" placeholder="UAE203">
+                    <input name="callsign" onblur="this.value = this.value.toUpperCase()" type="text" class="form-control" placeholder="UAE203">
                 </div>
                 <div class="form-group col">
                     <label>Flight Level</label>
-                    <input id="flightLevelB" onblur="this.value = this.value.toUpperCase()" maxlength="5" type="text" class="form-control" placeholder="390">
+                    <input name="flightLevel" onblur="this.value = this.value.toUpperCase()" maxlength="5" type="text" class="form-control" placeholder="390">
                 </div>
                 <div class="form-group col">
                     <label>Mach Speed</label>
-                    <input id="machB" maxlength="4" onblur="this.value = this.value.toUpperCase()" type="text" class="form-control" placeholder=".85">
+                    <input name="mach" maxlength="4" onblur="this.value = this.value.toUpperCase()" type="text" class="form-control" placeholder=".85">
                 </div>
             </div>
             <h4>Routing</h4>
@@ -42,13 +44,13 @@
                 <div id="natRoutePanel" class="col" style="display:block;">
                     <div class="form-group">
                         <label>What is your NAT track letter?</label>
-                        <input onblur="this.value = this.value.toUpperCase()" id="natB" maxlength="2" type="text" class="form-control" placeholder="A">
+                        <input onblur="this.value = this.value.toUpperCase()" name="nat" maxlength="2" type="text" class="form-control" placeholder="A">
                     </div>
                 </div>
                 <div id="randomRoutePanel" class="col" style="display:none;">
                     <div class="form-group">
                         <label>What is your route?</label>
-                        <textarea onblur="this.value = this.value.toUpperCase()" id="routeB" class="form-control"></textarea>
+                        <textarea onblur="this.value = this.value.toUpperCase()" name="route" class="form-control"></textarea>
                     </div>
                 </div>
             </div>
@@ -56,29 +58,23 @@
             <div class="form-row">
                 <div class="form-group col">
                     <label>Entry fix</label>
-                    <input onblur="this.value = this.value.toUpperCase()" id="entryB" type="text" class="form-control" placeholder="ELSIR">
+                    <input onblur="this.value = this.value.toUpperCase()" name="entry" type="text" class="form-control" placeholder="ELSIR">
                     <small class="text-muted">(estimating)</small>
                 </div>
                 <div class="form-group col">
                     <label>Estimating At Time</label>
-                    <input onblur="this.value = this.value.toUpperCase()" id="timeB" type="text" maxlength="4" class="form-control" placeholder="1302">
+                    <input onblur="this.value = this.value.toUpperCase()" name="time" type="text" maxlength="4" class="form-control" placeholder="1302">
                     <small class="text-muted">Time crossing fix</small>
                 </div>
                 <div class="form-group col">
                     <label>TMI</label>
-                    <input onblur="this.value = this.value.toUpperCase()" id="tmiB" type="text" maxlength="3" class="form-control" placeholder="104">
+                    <input onblur="this.value = this.value.toUpperCase()" name="tmi" type="text" maxlength="3" class="form-control" placeholder="104">
                 </div>
             </div>
             <div class="form-row">
-                <button type="button" onclick="generate()" class="btn btn-primary">Submit</button>
+                <input type="submit" class="btn btn-primary" value="Submit"></button>
             </div><br/>
-            <div id="errorA" class="alert alert-dismissible  alert-danger" role="alert" style="display:none;">
-                <h4 id="errorHeading" class="alert-heading">Please fill the following fields:</h4>
-                <p id="errorContent"></p>
-                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
+            </form>
             <p class="border" id="results" style="padding: 1rem;">No results yet.</p>
         </div>
     </div>

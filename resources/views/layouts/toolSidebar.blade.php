@@ -15,9 +15,9 @@
     <a href="https://www.vatsim.net/pilots/resources" target="_blank" class="list-group-item list-group-item-action {{ Request::is('pilots/vatsim-resources') ? 'active' : '' }}">
         VATSIM Resources
     </a>
-    <a href="{{url('/pilots/tutorial')}}" class="list-group-item list-group-item-action {{ Request::is('pilots/tutorial') ? 'active' : '' }}">
+    {{--<a href="{{url('/pilots/tutorial')}}" class="list-group-item list-group-item-action {{ Request::is('pilots/tutorial') ? 'active' : '' }}">
         Oceanic Tutorial
-    </a>
+    </a>--}}
     <a href="{{url('/pilots/tracks')}}" class="list-group-item list-group-item-action {{ Request::is('pilots/tracks') ? 'active' : '' }}">
         NAT Tracks
     </a>
@@ -35,7 +35,7 @@
         </button>
         </div>
         <div class="modal-body">
-            <ul class="list-group list-group-flush">
+            <ul class="list-group-flush">
                 <li class="list-group-item">
                     Tools home: <a href="https://vats.im/czqotools">vats.im/czqotools</a>
                     &nbsp;

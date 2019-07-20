@@ -13,7 +13,7 @@
 
 //Public views
 Route::get('/', 'HomeController@view');
-Route::get('/roster', 'RosterController@showPublic');
+Route::get('/roster', 'RosterController@showPublic')->name('roster.public');
 Route::get('/staff', 'StaffListController@index')->name('staff');
 Route::get('/atcresources', 'AtcResourcesController@index')->name('atcresources.index');
 Route::view('/pilots', 'pilots.index');
@@ -173,7 +173,8 @@ Route::group(['middleware' => 'auth'], function () {
     //Dashboard
     Route::get('/dashboard', 'DashboardController@index')->name('dashboard.index');
     Route::post('/dashboard', 'UserController@changeAvatar')->name('users.changeavatar');
-    Route::get('/users/resetavatar', 'UserController@resetAvatar')->name('users.resetavatar');\
+    Route::get('/users/resetavatar', 'UserController@resetAvatar')->name('users.resetavatar');
+    Route::post('/users/changedisplayname', 'UserController@changeDisplayName')->name('users.changedisplayname');
     Route::get('/users/defaultavatar/{id}', function ($id) {
        $user = \App\User::whereId($id)->firstOrFail();
        if ($user->isAvatarDefault())

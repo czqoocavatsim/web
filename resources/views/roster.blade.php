@@ -26,7 +26,7 @@
                 <tr>
                     <th scope="row">{{$controller->cid}}</th>
                     <td>
-                        {{$controller->full_name}}
+                        {{$controller->user->fullName('FL')}}
                     </td>
                     <td>
                         {{$controller->rating}}

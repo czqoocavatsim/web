@@ -40,6 +40,7 @@ class DatabaseSeeder extends Seeder
             'lname' => 'User',
             'email' => 'no-reply@czqo.vatcan.ca',
             'permissions' => 4,
+            'display_fname' => 'System'
         ]);
 
         DB::table('users')->insert([
@@ -48,6 +49,7 @@ class DatabaseSeeder extends Seeder
             'lname' => 'Placeholder',
             'email' => 'no-reply@czqo.vatcan.ca',
             'permissions' => 1,
+            'display_fname' => 'Roster'
         ]);
 
         DB::table('staff_member')->insert([

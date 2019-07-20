@@ -75,7 +75,8 @@ class LoginController extends Controller
                 'division_code' => $user->division->code,
                 'division_name' => $user->division->name,
                 'subdivision_code' => $user->subdivision->code,
-                'subdivision_name' => $user->subdivision->name
+                'subdivision_name' => $user->subdivision->name,
+                'display_fname' => $user->name_first
             ]);
             $user = User::find($user->id);
             Auth::login($user, true);

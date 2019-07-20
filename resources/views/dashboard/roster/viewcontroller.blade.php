@@ -10,7 +10,7 @@
     <div class="container" style="margin-top: 20px;">
         <a href="{{url('dashboard/roster/')}}"><i class="fa fa-left-chevron"></i>Back To Roster</a>
         <h2>View Controller {{ $controller->cid }}</h2>
-        <h5>{{ $controller->full_name }}</h5>
+        <h5>{{ $controller->user->fullName('FL') }}</h5>
         @if ($controller->user_id == 2)
             <div class="alert alert-info">
                 <h4 class="alert-heading">Controller not linked to a user</h4>

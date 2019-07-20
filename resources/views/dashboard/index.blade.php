@@ -59,7 +59,7 @@
             //echo greeting
             echo (randomArrayVar($greeting));
             ?> 
-            {{Auth::user()->fname}}!
+            {{Auth::user()->fullName('F')}}!
         </h1>
     </div>
 </div>
@@ -96,8 +96,12 @@
             <div data-step="2" data-intro="Here is where you manage and view the data we store on you and your CZQO profile." class="card">
                 <div class="card-body">
                     <div class="row">
-                        <div class="col" data-step="3" data-intro="Here is an overview of your profile, including your CZQO roles.">
-                            <h5 class="card-title">{{ Auth::user()->fname }}&nbsp;{{ Auth::user()->lname }}&nbsp;({{ Auth::user()->id }})</h5>
+                        <div class="col" data-step="3" data-intro="Here is an overview of your profile, including your CZQO roles. You can change the way your name is displayed by clicking on your name, at the top of the panel. (CoC A4(b))">
+                            <h5 class="card-title">
+                                <a href="" data-toggle="modal" data-target="#changeDisplayNameModal" class="text-dark">
+                                    {{ Auth::user()->fullName('FLC') }}
+                                </a>
+                            </h5>
                             <h6 class="card-subtitle mb-2 text-muted">
                                 {{Auth::user()->rating_GRP}} ({{Auth::user()->rating_short}})
                             </h6>
@@ -369,7 +373,51 @@
 
 </div>
 
-<script>
-       //$('#changeAvatar').modal('show')
-    </script>
+<div class="modal fade" id="changeDisplayNameModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLongTitle">Change your display name</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form method="POST" action="{{route('users.changedisplayname')}}">
+                    @csrf
+                    <div class="form-group">
+                        <label>Display first name</label>
+                        <input type="text" class="form-control" value="{{Auth::user()->display_fname}}" name="display_fname" id="input_display_fname">
+                        <br/>
+                        <a class="btn btn-sm" role="button" onclick="resetToCertFirstName()">Reset to CERT first name</a>
+                        <script>
+                            function resetToCertFirstName() {
+                                $("#input_display_fname").val("{{Auth::user()->fname}}")
+                            }
+                        </script>
+                    </div>
+                    <div class="form-group">
+                        <label>Format</label>
+                        <select name="format" class="custom-select">
+                            <option value="showall">Show first name, last name, and CID (e.g. 1st Test 1300001)</option>
+                            <option value="showfirstcid">Show first name and CID (e.g. 1st 1300001)</option>
+                            <option value="showcid">Show CID only (e.g. 1300001)</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <input type="submit" class="btn btn-outline-success" value="Save Changes">
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Dismiss</button>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+{{--<script>
+    $('#changeDisplayNameModal').modal('show')
+    </script>--}}
 @stop
