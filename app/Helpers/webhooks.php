@@ -44,7 +44,7 @@ function createNewsMessage(\App\News $article)
                 "description" => "",
 
                 // The URL of where your title will be a link to
-                "url" => url('news/'.$article->id),
+                "url" => url('news/'.$article->slug),
 
                 "timestamp" => date('Y-m-d H:i:s'),
 
