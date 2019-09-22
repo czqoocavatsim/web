@@ -14,6 +14,7 @@ use Illuminate\Support\Facades\Mail;
 use App\AuditLogEntry;
 use App\MeetingMinutes;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Str;
 
 class NewsController extends Controller
 {
@@ -49,6 +50,7 @@ class NewsController extends Controller
             'date' => date('Y-m-d'),
             'type' => $request->get('type'),
             'user_id' => Auth::user()->id,
+            'slug' => strtolower(Str::slug($request->get('title')))
         ]);
 
         $news->save();
@@ -199,7 +201,7 @@ class NewsController extends Controller
         }
     }
 
-    public function viewPublicArticle($id)
+    public function viewPublicArticleInt($id)
     {
         $article = News::where('id', $id)->firstOrFail();
         if ($article->archived == 1) {
@@ -207,6 +209,16 @@ class NewsController extends Controller
         }
         return view('publicarticle', compact('article'));
     }
+
+    public function viewPublicArticle($slug)
+    {
+        $article = News::where('slug', $slug)->firstOrFail();
+        if ($article->archived == 1) {
+            abort(403);
+        }
+        return view('publicarticle', compact('article'));
+    }
+
 
     public function viewPublicAll()
     {

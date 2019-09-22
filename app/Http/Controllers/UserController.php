@@ -7,6 +7,7 @@ use App\Notifications\PermissionsChanged;
 use App\UserNote;
 use App\UserNotification;
 use function GuzzleHttp\Promise\all;
+use function GuzzleHttp\Psr7\str;
 use Illuminate\Http\Request;
 use Auth;
 use Flash;
@@ -249,8 +250,19 @@ class UserController extends Controller
 
     public function searchUsers(Request $request)
     {
-            $output = User::where('id', $request->get('search'))->get();
-            return $output;
+        if ($request->ajax != false) {
+            abort(400, 'AJAX requests only');
+        }
+        $query = strtolower($request->get('query'));
+        $users = User::
+            where('id', 'LIKE', "%{$query}%")->
+            orWhere('display_fname', 'LIKE', "%{$query}")->
+            orWhere('lname', 'LIKE', "%{$query}%")->get();
+        if (count($users) > 0) {
+            return Response($users);
+        } else {
+            return Response('n/a');
+        }
     }
 
     public function editBioIndex()
@@ -318,5 +330,11 @@ class UserController extends Controller
 
         //Redirect
         return redirect()->back()->with('success', 'Display name saved!');
+    }
+
+    public function viewUserProfilePublic($id)
+    {
+        $user = User::whereId($id)->firstOrFail();
+        return view('dashboard.me.publicuserprofile', compact('user'));
     }
 }

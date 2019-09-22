@@ -29,7 +29,7 @@
             <div class="col-6">
                 <h3>Welcome to Gander Oceanic!</h3>
                 <p>Welcome to the Gander Oceanic FIR! With our team of talented controllers we operate the Gander FIR in the north-western atlantic. For years we have prided ourselves in providing the coolest, calmest and most collected oceanic services to pilots flying all across the North Atlantic. From assisting new pilots in their oceanic endeavours, to providing services in Cross the Pond twice a year, this is where the magic happens! I extend my warmest welcome to visitors and controllers, young and old and hope that you enjoy the bountiful resources on the site and the incredible services by our oceanic controllers. Please contact us if you have any queries, questions or concerns!</p>
-                <h5><b>- Andrew Ogden, Director Oceanic Operations</b></h5>
+                <h5><b>- Andrew Ogden, FIR Chief</b></h5>
                 <br class="my-0">
                 @if (count($news) < 1)
                 @else
@@ -38,7 +38,7 @@
                     @foreach ($news as $article)
                         @if ($article->archived == 1)
                         @else
-                            <a href="{{route('news.articlepublic', $article->id)}}" class="list-group-item list-group-item-action flex-column align-items-start">
+                            <a href="{{route('news.articlepublic', $article->slug)}}" class="list-group-item list-group-item-action flex-column align-items-start">
                                 <div class="d-flex w-100 justify-content-between">
                                     <h5 class="mb-1">{{$article->title}}</h5>
                                     <small>Published {{$article->date}}</small>
@@ -145,7 +145,7 @@
                     @foreach ($vatcanNewsJson as $article)
                         <a target="_blank" href="https://www.vatcan.ca/forums/index.php?topic={{$article['id']}}" class="list-group-item list-group-item-action flex-column align-items-start">
                             <div class="d-flex w-100 justify-content-between">
-                                <h5 class="mb-1">{{$article['subject']}}</h5>
+                                <h5 class="mb-1">{!! html_entity_decode($article['subject']) !!}</h5>
                                 <small>Published {{$article['date']}}</small>
                             </div>
                             <p class="mb-1"></p>

@@ -60,6 +60,9 @@ Route::prefix('api')->group(function () {
    Route::get('settings', function() {
        return \App\CoreSettings::all()->toJson(JSON_PRETTY_PRINT);
    });
+   Route::get('ctpsignups', function() {
+       return \App\CtpSignUp::all()->toJson(JSON_PRETTY_PRINT);
+   })->middleware('director');
 });
 
 Route::get('/testwebhook', function () {
@@ -67,7 +70,8 @@ Route::get('/testwebhook', function () {
 });
 
 //Public news articles
-Route::get('/news/{id}', 'NewsController@viewPublicArticle')->name('news.articlepublic');
+Route::get('/news/{id}', 'NewsController@viewPublicArticleInt')->name('news.articlepublic')->where('id', '[0-9]+');
+Route::get('/news/{slug}', 'NewsController@viewPublicArticle')->name('news.articlepublic');
 Route::get('/news/', 'NewsController@viewPublicAll')->name('news.allpublic');
 
 //Webmaster tasks
@@ -184,6 +188,9 @@ Route::group(['middleware' => 'auth'], function () {
        return "false";
     });
 
+    //CTP
+    Route::post('/dashboard/ctp/signup/post', 'DashboardController@ctpSignUp')->name('ctp.signup.post');
+
 
     //Notification
     Route::get('/notification/{id}', 'NotificationRedirectController@notificationRedirect')->name('notification.redirect');
@@ -226,6 +233,7 @@ Route::group(['middleware' => 'auth'], function () {
     //"Me"
     Route::get('/dashboard/me/editbiography', 'UserController@editBioIndex')->name('me.editbioindex');
     Route::post('/dashboard/me/editbiography', 'UserController@editBio')->name('me.editbio');
+    Route::get('/dashboard/me/user/{id}', 'UserController@viewUserProfilePublic')->name('me.profile.public');
 
     //Training
     Route::get('/dashboard/training', 'TrainingController@index')->name('training.index');
@@ -242,6 +250,12 @@ Route::group(['middleware' => 'auth'], function () {
     });
     //News
     Route::group(['middleware' => 'director'], function () {
+        Route::get('/dashboard/ctp/signups', function (){
+            $signups = \App\CtpSignUp::all();
+            foreach ($signups as $s) {
+                echo $s.'<br/>';
+            }
+        })->name('ctp.signup.list');
         //ATC Resources
         Route::post('/atcresources', 'AtcResourcesController@uploadResource')->name('atcresources.upload');
         Route::get('/atcresources/delete/{id}', 'AtcResourcesController@deleteResource')->name('atcresources.delete');
@@ -269,14 +283,14 @@ Route::group(['middleware' => 'auth'], function () {
         Route::get('/dashboard/roster/{cid}/delete', 'RosterController@deleteController')->name('roster.deletecontroller');
         //Users
         Route::get('/dashboard/users/', 'UserController@viewAllUsers')->middleware('director')->name('users.viewall');
-        Route::get('/dashboard/users/search', 'UserController@searchUsers')->name('users.search');
+        Route::post('/dashboard/users/search/ajax', 'UserController@searchUsers')->name('users.search.ajax');
         Route::get('/dashboard/users/{id}', 'UserController@viewUserProfile')->name('users.viewprofile');
         Route::post('/dashboard/users/{id}', 'UserController@createUserNote')->name('users.createnote');
         Route::get('/dashboard/users/{user_id}/note/{note_id}/delete', 'UserController@deleteUserNote')->name('users.deletenote');
         Route::group(['middleware' => 'executive'], function () {
-            Route::post('/dsahboard/users/func/avatarchange', 'UserController@changeUsersAvatar')->name('users.changeusersavatar');
+            Route::post('/dashboard/users/func/avatarchange', 'UserController@changeUsersAvatar')->name('users.changeusersavatar');
             Route::post('/dashboard/users/func/avatarreset', 'UserController@resetUsersAvatar')->name('users.resetusersavatar');
-            Route::post('/dsahboard/users/func/bioreset', 'UserController@resetUsersBio')->name('users.resetusersbio');
+            Route::post('/dashboard/users/func/bioreset', 'UserController@resetUsersBio')->name('users.resetusersbio');
             Route::get('/dashboard/users/{id}/delete', 'UserController@deleteUser');
             Route::get('/dashboard/users/{id}/edit', 'UserController@editUser')->name('users.edit.create');
             Route::post('/dashboard/users/{id}/edit', 'UserController@storeEditUser')->name('users.edit.store');

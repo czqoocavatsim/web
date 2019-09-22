@@ -1,36 +1,68 @@
-<html>
+<!DOCTYPE HTML>
+<html lang="en">
     <head>
+        <!--
+        {{App\CoreSettings::where('id', 1)->firstOrFail()->sys_name}}
+        {{App\CoreSettings::where('id', 1)->firstOrFail()->release}} ({{App\CoreSettings::where('id', 1)->firstOrFail()->sys_build}})
+        Built on Bootstrap 4 and Laravel 5
+
+        Written by Liesel Downes
+
+          sSSs. sSSSSSs   sSSSs     sSSSs
+         S           s   S     S   S     S
+        S           s   S       S S       S
+        S          s    S       S S       S
+        S         s     S       S S       S
+         S       s       S   s S   S     S
+          "sss' sSSSSSs   "sss"ss   "sss"
+
+        For Flight Simulation Use Only - Not To Be Used For Real World Navigation. All content on this web site may not be shared, copied, reproduced or used in any way without prior express written consent of Gander Oceanic. © Copyright {{App\CoreSettings::where('id', 1)->firstOrFail()->copyright_year}} Gander Oceanic, All Rights Reserved.
+
+        Taking a peek under the hood, and like what you see? Want to help out? Send Liesel an email!
+        -->
         <!--Metadata-->
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <!--Rich Preview Meta-->
-        <title>CZQO Gander Oceanic FIR</title>
-        <meta name="description" content="Website for the VATSIM Gander Oceanic FIR">
-        <meta name="theme-color" content="#3c75d1">
-        <meta name="og:title" content="CZQO VATSIM">
-        <meta name="og:description" content="Gander Oceanic FIR">
-        <meta name="og:image" content="{{ asset('favicon.ico') }}">
         <link rel="shortcut icon" href="{{ asset('favicon.ico') }}" type="image/x-icon">
-        <!--Bootstrap-->
+        <meta name="csrf-token" content="{{ csrf_token() }}">
+        <!--Rich Preview Meta-->
+        <title>@yield('title'.' - ', 'Gander Oceanic VATSIM')</title>
+        <meta name="description" content="@yield('description', '')">
+        <meta name="theme-color" content="#000000">
+        <meta name="og:title" content="@yield('title'.' - ', 'Gander Oceanic VATSIM')">
+        <meta name="og:description" content="@yield('description', '')">
+        <meta name="og:image" content="@yield('image',asset('favicon.ico'))">
+        <link rel="shortcut icon" href="{{ asset('favicon.ico') }}" type="image/x-icon">
+        <!-- Font Awesome -->
+        <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.2/css/all.css">
+        <!-- Bootstrap core CSS -->
         <link href="https://stackpath.bootstrapcdn.com/bootswatch/4.1.3/materia/bootstrap.min.css" rel="stylesheet" integrity="sha384-5bFGNjwF8onKXzNbIcKR8ABhxicw+SC1sjTh6vhSbIbtVgUuVTm2qBZ4AaHc7Xr9" crossorigin="anonymous">
+        <!-- JQuery -->
+        <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+        <!-- Bootstrap tooltips -->
+        <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.4/umd/popper.min.js"></script>
+        <!-- Bootstrap core JavaScript -->
+        <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.3.1/js/bootstrap.min.js"></script>
+        <!--CZQO specific CSS-->
         <link href="{{ asset('css/structure.css') }}" rel="stylesheet">
         <link href="{{ asset('css/czqo.css') }}" rel="stylesheet">
-        <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha256-3edrmyuQ0w65f8gfBsqowzjJe2iM6n0nKciPUp8y+7E=" crossorigin="anonymous"></script>
-        <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
-        <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.5.0/css/all.css" integrity="sha384-B4dIYHKNBt8Bc12p+WXckhzcICo0wtJAoU8YZTY5qE0Id1GSseTk6S+L3BlXeVIU" crossorigin="anonymous">
+        <!--Leaflet-->
         <link rel="stylesheet" href="https://unpkg.com/leaflet@1.4.0/dist/leaflet.css" integrity="sha512-puBpdR0798OZvTTbP4A8Ix/l+A4dHDD0DGqYW6RQ+9jxkRFclaxxQb/SJAWZfWAkuyeQUytO7+7N4QKrDh+drA==" crossorigin=""/>
         <script src="https://unpkg.com/leaflet@1.4.0/dist/leaflet.js" integrity="sha512-QVftwZFqvtRNi0ZyCtsznlKSWOStnDORoefr1enyq5mVL4tmKB3S/EnC3rRJcxCPavG10IcrVGSmPh6Qw5lwrg==" crossorigin=""></script>
+        <!--TinyMCE-->
         <script src='https://cloud.tinymce.com/5/tinymce.min.js?apiKey=k2zv68a3b4m423op71lnifx4a9lm0a2ee96o58zafhrdnddb'></script>
+        <!--DataTables-->
         <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/v/bs4/dt-1.10.18/datatables.min.css"/>
-        <link href="{{asset('css/jquery.cssemoticons.css')}}" media="screen" rel="stylesheet" type="text/css" />
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/dropzone/5.5.1/dropzone.js" integrity="sha256-awEOL+kdrMJU/HUksRrTVHc6GA25FvDEIJ4KaEsFfG4=" crossorigin="anonymous"></script>
-        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/dropzone/5.5.1/dropzone.css" integrity="sha256-0Z6mOrdLEtgqvj7tidYQnCYWG3G2GAIpatAWKhDx+VM=" crossorigin="anonymous" />
-        <script src="{{asset('/js/jquery.cssemoticons.js')}}" type="text/javascript"></script>
         <script type="text/javascript" src="https://cdn.datatables.net/v/bs4/dt-1.10.18/datatables.min.js"></script>
+        <!--CSS Emoticons-->
+        <link href="{{asset('css/jquery.cssemoticons.css')}}" media="screen" rel="stylesheet" type="text/css" />
+        <script src="{{asset('/js/jquery.cssemoticons.js')}}" type="text/javascript"></script>
+        <!--Fullcalendar-->
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fullcalendar/core@4.0.2/main.css">
         <script src="//cdnjs.cloudflare.com/ajax/libs/moment.js/2.9.0/moment.min.js"></script>
         <script src="//cdnjs.cloudflare.com/ajax/libs/fullcalendar/2.2.7/fullcalendar.min.js"></script>
         <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/fullcalendar/2.2.7/fullcalendar.min.css"/>
+        <!--IntroJS-->
         <link rel="stylesheet" href="{{asset('introjs/introjs.min.css')}}">
         <script src="{{asset('introjs/intro.min.js')}}"></script>
     </head>
@@ -78,16 +110,8 @@
             -webkit-animation-name: slideIn;
             animation-name: slideIn;
         }
-
     </style>
     <body>
-         <!-- Bootstrap core JavaScript
-        ================================================== -->
-        <!-- Placed at the end of the document so the pages load faster -->
-
-        <script>window.jQuery || document.write('<script src="../../../../assets/js/vendor/jquery-slim.min.js"><\/script>')</script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.4/popper.min.js"></script>
-        <script src="{{URL::to('/')}}/js/bootstrap.min.js"></script>
         @section('navbarprim')
         <!--Navigation bar-->
         <div class="container-fluid pt-3 pb-3 bg-primary">
@@ -150,14 +174,14 @@
                 </ul>
                 <form class="form-inline my-2 my-lg-0">
                     @unless (Auth::check())
-                        <a class="btn shadow-none text-white" href="{{URL('/login')}}" role="button">
+                        <a class="btn shadow-none text-white p-0 m-0" href="{{URL('/login')}}" role="button">
                             <i class="fa fa-user"></i>&nbsp;
                             Login
                         </a>
                     @endunless
                     @auth
-                        <div class="dropdown">
-                            <a role="button" id="notificationMenu" href="#" class="btn text-white shadow-none" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        <div class="dropdown p-0">
+                            <a role="button" id="notificationMenu" href="#" class="btn text-white p-0 m-0 shadow-none" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                 @if (count(Auth::user()->notifications) >= 1)
                                     <i class="fa fa-bell" style="color: yellow;"></i>
                                     {{count(Auth::user()->notifications)}}
@@ -234,7 +258,7 @@
                                                 Webmail
                                             </a>--}}
                                         @endif
-                                        <a class="btn btn-outline-danger" href="{{ URL('/logout') }}">
+                                        <a class="btn btn-danger text-white" href="{{ URL('/logout') }}">
                                             <i class="fa fa-key"></i>&nbsp;Logout
                                         </a>
                                     </div>
@@ -286,7 +310,7 @@
         @show
         @yield('content')
         <!-- Footer -->
-        <footer class="footer bg-light navbar-dark" style="margin-top: 20px;">
+        <footer class="footer" style="margin-top: 20px;">
             <div class="container">
                 <div class="row">
                     <div class="col-md-12" style="font-size: 12px;">

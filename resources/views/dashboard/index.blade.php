@@ -9,7 +9,7 @@
 @section('content')
 <style>
     #topjumbo {
-        /*background-image:url('https://cdn.discordapp.com/attachments/292398393375064066/538868929964277760/unknown.png');*/   
+        /*background-image:url('https://cdn.discordapp.com/attachments/292398393375064066/538868929964277760/unknown.png');*/
         position: relative;
         color: black;
         background-position: center;
@@ -38,9 +38,9 @@
                 }
                 return $array[array_rand($array)];
             }
-                
+
             //list of grettings as arary
-            
+
             $greeting= array(
                 "aloha"=>"Aloha",
                 "ahoy"=>"Ahoy",
@@ -58,7 +58,7 @@
 
             //echo greeting
             echo (randomArrayVar($greeting));
-            ?> 
+            ?>
             {{Auth::user()->fullName('F')}}!
         </h1>
     </div>
@@ -72,6 +72,15 @@
 @endif
 <div class="container" style="margin-top: 20px;">
     <h2 data-step="1" data-intro="Welcome to the CZQO Dashboard! This is your central hub for all things Gander. Here you can interact with our FIR, and manage your account.">Dashboard</h2>
+    @if (Auth::user()->rating_id >= 5)
+    <blockquote class="blockquote bq-primary">
+        <p class="bq-title">Cross the Pond Eastbound 2019</p>
+        <p>Are you available to control for CTP Eastbound 2019? Fill out the CZQO sign-up form to control either Gander or Shanwick Oceanic for the event!
+            <br/>
+            <a href="#" role="button" class="btn btn-primary" data-toggle="modal" data-target="#ctpSignUpModal">Sign Up</a>
+        </p>
+    </blockquote>
+    @endif
     <br class="my-2">
     <div class="row">
         <div class="col">
@@ -154,16 +163,45 @@
                 <div class="card">
                     <div class="card-body">
                         <div class="input-group mb-3">
-                            <input id="searchUsersQuery" type="text" class="form-control" placeholder="Search with VATSIM CID">
-                            <div class="input-group-append">
-                                <button class="btn btn-success" onclick="search()">Go</button>
-                            </div>
-                            <script>
-                                function search() {
-                                    window.location.href = "/dashboard/users/search/" + document.getElementById('searchUsersQuery').value;
-                                }
-                            </script>
+                            <input id="searchUsersQuery" type="text" class="form-control" placeholder="Search for a user">
                         </div>
+                        <p id="userSearchResultsStatus"></p>
+                        <div class="list-group" id="userSearchResultsList">
+                        </div>
+                        <script type="text/javascript">
+                            $('#searchUsersQuery').on('keydown', function(){
+                               value = $(this).val();
+                               if (value === '') {
+                                   return;
+                               }
+                                $("#userSearchResultsList").html('');
+                               $.ajax({
+                                   type: 'post',
+                                   headers: {
+                                       'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                                   },
+                                   url: '{{route('users.search.ajax')}}',
+                                   data: {'query': value},
+                                   success: function(data) {
+                                       console.log(data);
+                                       if (data === 'n/a') {
+                                           $('#userSearchResultsStatus').text('No results found! Try searching something else.');
+                                           return;
+                                       }
+                                       $('#userSearchResultsStatus').text(data.length + ' results found.');
+                                       for (i = 0; i < data.length; i++) {
+                                           user = data[i];
+                                           row = `<a class='list-group-item list-group-item-action' href='/dashboard/users/${user.id}'>${user.display_fname} ${user.lname} ${user.id}</a>`;
+                                           $("#userSearchResultsList").append(row)
+                                       }
+                                   },
+                                   error: function(error) {
+                                       console.log(error);
+
+                                   }
+                               })
+                            });
+                        </script>
                     </div>
                     <div class="list-group-flush">
                         <a href="{{url('/dashboard/users')}}" class="list-group-item list-group-item-action"><i class="fa fa-users-cog"></i>&nbsp;View All Users</a>
@@ -186,47 +224,61 @@
             <div class="card" data-step="6" data-intro="Here you can view your certification status within CZQO.">
                 <div class="card-body">
                     <h5 class="card-title">Certification status</h5>
-                    <h3 class="card-text">
+                    <h5 class="card-text">
                         @if ($certification == "certified")
-                            <span class="badge badge-success">
+                            <h3>
+                            <span class="badge  badge-success">
                                 <i class="fa fa-check"></i>&nbsp;
                                 CZQO Certified
                             </span>
+                            </h3>
                         @elseif ($certification == "not_certified")
+                            <h3>
                             <span class="badge badge-danger">
                                 <i class="fa fa-times"></i>&nbsp;
                                 Not Certified
                             </span>
+                            </h3>
                         @elseif ($certification == "training")
+                            <h3>
                             <span class="badge badge-warning">
                                 <i class="fa fa-book-open"></i>&nbsp;
                                 In Training
                             </span>
+                            </h3>
                         @elseif ($certification == "instructor")
+                            <h3>
                             <span class="badge badge-info">
                                 <i class="fa fa-chalkboard-teacher"></i>&nbsp;
                                 CZQO Instructor
                             </span>
+                            </h3>
                         @else
+                            <h3>
                             <span class="badge badge-dark">
                                 <i class="fa fa-question"></i>&nbsp;
                                 Unknown
                             </span>
+                            </h3>
                         @endif
                         @if ($active == 0)
+                            <h3>
                             <span class="badge badge-danger">
                                 <i class="fa fa-times"></i>&nbsp;
                                 Inactive
                             </span>
+                            </h3>
                         @elseif ($active == 1)
+                            <h3>
                             <span class="badge badge-success">
                                 <i class="fa fa-check"></i>&nbsp;
                                 Active
                             </span>
+                            </h3>
                         @else
 
                         @endif
-                    </h3>
+                    </h5>
                 </div>
                 <div class="list-group-flush" >
                     @if (Auth::user()->permissions >= 2)
@@ -389,7 +441,7 @@
                         <label>Display first name</label>
                         <input type="text" class="form-control" value="{{Auth::user()->display_fname}}" name="display_fname" id="input_display_fname">
                         <br/>
-                        <a class="btn btn-sm" role="button" onclick="resetToCertFirstName()">Reset to CERT first name</a>
+                        <a class="btn btn-outline-light btn-sm" role="button" onclick="resetToCertFirstName()"><span style="color: #000">Reset to CERT first name</span></a>
                         <script>
                             function resetToCertFirstName() {
                                 $("#input_display_fname").val("{{Auth::user()->fname}}")
@@ -399,9 +451,9 @@
                     <div class="form-group">
                         <label>Format</label>
                         <select name="format" class="custom-select">
-                            <option value="showall">Show first name, last name, and CID (e.g. 1st Test 1300001)</option>
-                            <option value="showfirstcid">Show first name and CID (e.g. 1st 1300001)</option>
-                            <option value="showcid">Show CID only (e.g. 1300001)</option>
+                            <option value="showall">Show first name, last name, and CID (e.g. {{Auth::user()->display_fname}} {{Auth::user()->lname}} {{Auth::id()}})</option>
+                            <option value="showfirstcid">Show first name and CID (e.g. {{Auth::user()->display_fname}} {{Auth::id()}})</option>
+                            <option value="showcid">Show CID only (e.g. {{Auth::id()}})</option>
                         </select>
                     </div>
                     <div class="form-group">
@@ -417,7 +469,50 @@
 
 </div>
 
-{{--<script>
-    $('#changeDisplayNameModal').modal('show')
-    </script>--}}
+<div class="modal fade" id="ctpSignUpModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLongTitle">Cross the Pond October 2019 Sign-up</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <form action="{{route('ctp.signup.post')}}" method="POST">
+                @csrf
+            <div class="modal-body">
+                <p>
+                    If you wish to control Gander/Shanwick Oceanic for <a href="https://ctp.vatsim.net/">Cross the Pond Eastbound 2019</a>, you can sign up here!
+                </p>
+                <h5 class="font-weight-bold">Requirements</h5>
+                <ul class="ml-3" style="list-style: disc">
+                    <li>Be a C1 rated controller or above</li>
+                    <li>A suitable amount of hours as a C1 (50+)</li>
+                    <li>You <b>do not</b> have to be a Gander or Shanwick certified controller</li>
+                </ul>
+                <h5 class="font-weight-bold">Availability</h5>
+                <p>Are you available to control CTP Eastbound on 26 October?</p>
+                <select name="availability" id="" class="form-control">
+                    <option value="yes">Yes</option>
+                    <option value="no">No</option>
+                    <option value="standby">As a standby controller</option>
+                </select>
+                <h5 class="mt-2 font-weight-bold">Times</h5>
+                <p>What times are you available (in zulu)? If left blank, we will assume you are available for the entire event.</p>
+                <input maxlength="191" name="times" class="form-control" type="text" placeholder="e.g. Between 1100z and 2000z">
+                <p class="mt-2">By pressing the "Confirm" button below, you agree to be available to control for the periods you have typed above. If you are no longer available, please contact the FIR Chief ASAP.</p>
+            </div>
+            <div class="modal-footer">
+                <input type="submit" class="btn btn-primary" value="Confirm">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Dismiss</button>
+            </div>
+            </form>
+        </div>
+    </div>
+
+</div>
+
+<script>
+    //$('#ctpSignUpModal').modal('show')
+    </script>
 @stop
