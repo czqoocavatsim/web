@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\CoreSettings;
 use App\Mail\NewTicketMail;
 use App\Mail\NewTicketReplyMail;
 use App\Ticket;
@@ -68,19 +69,19 @@ class TicketsController extends Controller
 
         if ($ticket->department == 'firchief')
         {
-            Mail::to('firchief@czqo.vatcan.ca')->send(new NewTicketMail($ticket));
+            Mail::to(CoreSettings::where('id', 1)->firstOrFail()->emailfirchief)->cc(CoreSettings::whereId(1)->firstOrFail()->emailwebmaster)->send(new NewTicketMail($ticket));
         }
         elseif ($ticket->department == "chiefinstructor")
         {
-            Mail::to('chiefinstructor@czqo.vatcan.ca')->send(new NewTicketMail($ticket));
+            Mail::to(CoreSettings::where('id', 1)->firstOrFail()->emailcinstructor)->cc(CoreSettings::whereId(1)->firstOrFail()->emailwebmaster)->send(new NewTicketMail($ticket));
         }
         elseif ($ticket->department == "webmaster")
         {
-            //Mail::to('webmaster@czqo.vatcan.ca')->send(new NewTicketMail($ticket));
+            Mail::to(CoreSettings::whereId(1)->firstOrFail()->emailwebmaster)->send(new NewTicketMail($ticket));
         }
         else
         {
-            Mail::to('firchief@czqo.vatcan.ca')->cc('chiefinstructor@czqo.vatcan.ca')->send(new NewTicketMail($ticket));
+            Mail::to(CoreSettings::where('id', 1)->firstOrFail()->emailfirchief)->cc(CoreSettings::whereId(1)->firstOrFail()->emailcinstructor)->cc(CoreSettings::whereId(1)->firstOrFail()->emailwebmaster)->send(new NewTicketMail($ticket));
         }
 
         return redirect()->route('tickets.index')->with('success', 'Ticket '.$ticket->ticket_id.' created! A staff member will respond soon.');
@@ -161,7 +162,7 @@ class TicketsController extends Controller
             $notification->save();
         }
 
-        Mail::to(User::find($ticket->user_id))->send(new NewTicketReplyMail($ticketReply, $ticket));
+        Mail::to($ticket->user->email)->send(new NewTicketReplyMail($ticketReply, $ticket));
 
         return redirect()->route('tickets.viewticket', $ticket->ticket_id)->with('success', 'Reply sent.');
     }

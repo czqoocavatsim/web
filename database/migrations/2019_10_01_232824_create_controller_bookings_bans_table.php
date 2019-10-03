@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateATCBookingsTable extends Migration
+class CreateControllerBookingsBansTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,8 +13,12 @@ class CreateATCBookingsTable extends Migration
      */
     public function up()
     {
-        Schema::create('a_t_c_bookings', function (Blueprint $table) {
+        Schema::create('controller_bookings_bans', function (Blueprint $table) {
             $table->increments('id');
+            $table->integer('user_id')->unsigned();
+            $table->foreign('user_id')->references('id')->on('users');
+            $table->text('reason')->nullable();
+            $table->dateTime('timestamp');
             $table->timestamps();
         });
     }
@@ -26,6 +30,6 @@ class CreateATCBookingsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('a_t_c_bookings');
+        Schema::dropIfExists('controller_bookings_bans');
     }
 }

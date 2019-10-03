@@ -41,7 +41,7 @@ class CoreSettingsController extends Controller
         $settings->emaildepfirchief = $request->get('emaildepfirchief');
         $settings->emailcinstructor = $request->get('emailcinstructor');
         $settings->emaileventc = $request->get('emaileventc');
-        $settings->emailfacilitye = $request->get('email_acilitye');
+        $settings->emailfacilitye = $request->get('emailfacilitye');
         $settings->emailwebmaster = $request->get('emailwebmaster');
         $settings->save();
         $entry = new AuditLogEntry([

@@ -24,7 +24,8 @@ Route::view('/pilots/tracks', 'pilots.tracks');
 Route::view('/pilots/tutorial', 'pilots.tutorial');
 Route::get('/policies', 'PoliciesController@index')->name('policies');
 Route::get('/meetingminutes', 'NewsController@minutesIndex')->name('meetingminutes');
-Route::view('/privacy', 'privacy');
+Route::get('/bookings', 'ControllerBookingsController@index')->name('controllerbookings');
+Route::view('/privacy', 'privacy')->middleware('bookingban');
 Route::view('/changelog', 'changelog');
 Route::view('/emailtest', 'emails.announcement');
 

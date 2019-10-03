@@ -99,6 +99,15 @@
                         <i class="fa fa-file"></i>
                         Phraseology Sheet
                     </a>
+                    <div class="list-group-item"><small><b>CONTROLLER BOOKINGS</b></small></div>
+                    <a target="_blank" href="https://docs.google.com/document/d/1AYVSvTnP-q_cdRS7dwHfLUaXamBzm-Jv71XWWqngi1Q/edit?usp=sharing" class="list-group-item list-group-item-action">
+                        <i class="fa fa-clock"></i>
+                        Make a Booking
+                    </a>
+                    <a target="_blank" href="https://docs.google.com/document/d/1AYVSvTnP-q_cdRS7dwHfLUaXamBzm-Jv71XWWqngi1Q/edit?usp=sharing" class="list-group-item list-group-item-action">
+                        <i class="fa fa-calendar"></i>
+                        View Bookings
+                    </a>
                 </div><br/>
             @endif
             <h4 class="display-6">Your Data</h4>

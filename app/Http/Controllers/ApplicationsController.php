@@ -72,9 +72,8 @@ class ApplicationsController extends Controller
         $application->save();
 
         //Send new application email to staff
-        //Mail::to(CoreSettings::where('id', 1)->firstOrFail()->emailfirchief)->cc(CoreSettings::where('id', 1)->firstOrFail()->emaildepfirchief)->send(new ApplicationStartedStaffEmail($application));
-        //Mail::to('lieselta@gmail.com')->send(new ApplicationStartedStaffEmail($application));
-        
+        Mail::to(CoreSettings::where('id', 1)->firstOrFail()->emailfirchief)->cc(CoreSettings::where('id', 1)->firstOrFail()->emaildepfirchief)->send(new ApplicationStartedStaffEmail($application));
+
         //Return user to the applications detail page
         return redirect()->route('application.view', $application->application_id)->with('success', 'Application submitted! It should be processed within 72 hours. If you do not get a response, please send a ticket to the FIR Chief');
     }

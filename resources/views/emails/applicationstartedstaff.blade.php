@@ -15,7 +15,7 @@
     <ul>
         <li>Application ID: {{$application->application_id}}</li>
         <li>Name: {{$application->user->fullName('FLC')}}</li>
-        <li>Rating/Division: {{$application->user->rating}}/{{$application->user->division}}</li>
+        <li>Rating/Division: {{$application->user->rating_GRP}}/{{$application->user->division_name}}</li>
     </ul>
     <b>Applicant Statement</b>
     <p>

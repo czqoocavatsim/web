@@ -2,7 +2,7 @@
 
 
 @section('error')
-Error 403 - Forbidded
+Error 403 - Forbidden
 @stop
 
 @section('message')

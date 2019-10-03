@@ -2,6 +2,7 @@
 
 namespace App\Http;
 
+use App\Http\Middleware\BookingBanMiddleware;
 use Illuminate\Foundation\Http\Kernel as HttpKernel;
 
 class Kernel extends HttpKernel
@@ -66,6 +67,7 @@ class Kernel extends HttpKernel
         'certified' => \App\Http\Middleware\CheckCertified::class,
         'notcertified' => \App\Http\Middleware\CheckNotCertified::class,
         'privacy' => \App\Http\Middleware\CheckPrivacy::class,
+        'bookingban' => \App\Http\Middleware\BookingBanMiddleware::class,
     ];
 
     /**

@@ -125,6 +125,22 @@ class User extends Authenticatable
         return false;
     }
 
+    public function certified()
+    {
+        if ($this->rosterProfile()) {
+            return true;
+        }
+        return false;
+    }
+
+    public function bookingBanned()
+    {
+        if (ControllerBookingsBan::where('user_id', $this->id)->first()) {
+            return true;
+        }
+        return false;
+    }
+
     /*public function hasRole($role)
     {
         return User::where('role', $role)->get();

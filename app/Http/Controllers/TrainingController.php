@@ -333,10 +333,10 @@ class TrainingController extends Controller
         AuditLogEntry::insert(Auth::user(), "Application #".$application->application_id.' accepted and controller added to roster, status training', $application->user, 0);
 
         //Notify staff
-        //Mail::to(CoreSettings::where('id', 1)->firstOrFail()->emailcinstructor)->send(new ApplicationAcceptedStaffEmail($application));
+        Mail::to(CoreSettings::where('id', 1)->firstOrFail()->emailcinstructor)->send(new ApplicationAcceptedStaffEmail($application));
 
         //Notify user
-        //Mail::to($application->user->email)->send(new ApplicationAcceptedUserEmail($application));
+        Mail::to($application->user->email)->send(new ApplicationAcceptedUserEmail($application));
         UserNotification::send($application->user, 'Your application has been accepted, congratulations!', route('application.view', $application->application_id));
 
         //Return user to applications details page
@@ -364,7 +364,7 @@ class TrainingController extends Controller
         AuditLogEntry::insert(Auth::user(), "Application #".$application->application_id.' denied', $application->user, 0);
  
         //Notify user
-        //Mail::to($application->user->email)->send(new ApplicationDeniedUserEmail($application));
+        Mail::to($application->user->email)->send(new ApplicationDeniedUserEmail($application));
         UserNotification::send($application->user, 'Your application has been denied', route('application.view', $application->application_id));
 
         //Return user to applications details page

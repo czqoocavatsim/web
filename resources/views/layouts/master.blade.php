@@ -137,6 +137,9 @@
                             Roster
                         </a>
                     </li>
+                    <li class="nav-item">
+                        <a href="{{route('controllerbookings')}}" class="nav-link py-0 {{ Request::is('bookings/*') || Request::is('bookings') ? 'active' : '' }}">Bookings</a>
+                    </li>
                     <li class="nav-item dropdown">
                         <a class="nav-link py-0 dropdown-toggle {{ Request::is('dashboard/application') || Request::is('sector-files') ? 'active' : '' }}" style="cursor:pointer" id="dropdown01" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">ATC</a>
                         <div class="dropdown-menu" aria-labelledby="dropdown01">
