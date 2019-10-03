@@ -14,7 +14,7 @@
         @if ($applicationsPending)
             <ul class="nav nav-tabs" id="myTab" role="tablist">
                 <li class="nav-item">
-                    <a class="nav-link active" id="home-tab" data-toggle="tab" href="#home" role="tab" aria-controls="home" aria-selected="true">Pending                 
+                    <a class="nav-link active" id="home-tab" data-toggle="tab" href="#home" role="tab" aria-controls="home" aria-selected="true">Pending
                         @if ($applicationsPending)
                         <span class="badge-pill badge-primary">{{count($applicationsPending)}}</span>
                         @endif
@@ -35,7 +35,7 @@
                             <p>No applications.</p>
                         @else
                             <br/>
-                            <table id="dataTable" class="table table-hover">
+                            <table id="dataTablePending" class="table table-hover">
                                 <thead>
                                 <tr>
                                     <th scope="col">ID</th>
@@ -67,7 +67,7 @@
                             <p>No applications.</p>
                         @else
                             <br/>
-                            <table id="dataTable" class="table table-hover">
+                            <table id="dataTableAccepted" class="table table-hover">
                                 <thead>
                                 <tr>
                                     <th scope="col">ID</th>
@@ -99,7 +99,7 @@
                             <p>No applications.</p>
                         @else
                             <br/>
-                            <table id="dataTable" class="table table-hover">
+                            <table id="dataTableDenied" class="table table-hover">
                                 <thead>
                                 <tr>
                                     <th scope="col">ID</th>
@@ -130,4 +130,17 @@
         @endif
         <br/>
     </div>
+    <script>
+        $(document).ready(function() {
+            $('#dataTablePending').DataTable( {
+                "order": [[ 2, "desc" ]]
+            } );
+            $('#dataTableAccepted').DataTable( {
+                "order": [[ 2, "desc" ]]
+            } );
+            $('#dataTableDenied').DataTable( {
+                "order": [[ 2, "desc" ]]
+            } );
+        } );
+    </script>
 @stop
