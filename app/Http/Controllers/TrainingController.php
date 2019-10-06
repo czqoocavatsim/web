@@ -2,55 +2,52 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
+use App\Application;
+use App\AuditLogEntry;
+use App\CoreSettings;
+use App\InstructingSession;
+use App\Instructor;
+use App\Mail\ApplicationAcceptedStaffEmail;
+use App\Mail\ApplicationAcceptedUserEmail;
+use App\Mail\ApplicationDeniedUserEmail;
+use App\Mail\ApplicationStartedStaffEmail;
+use App\Mail\ApplicationStartedUserEmail;
+use App\Mail\ApplicationWithdrawnEmail;
+use App\RosterMember;
+use App\Student;
+use App\User;
+use App\UserNotification;
 use Auth;
-use Flash;
 use Calendar;
-use Mail;
 use Carbon\Carbon;
-use App\{InstructingSession,
-    Mail\ApplicationAcceptedStaffEmail,
-    Mail\ApplicationDeniedUserEmail,
-    Mail\ApplicationStartedUserEmail,
-    RosterMember,
-    Mail\ApplicationWithdrawnEmail,
-    AuditLogEntry,
-    User,
-    Application,
-    Mail\ApplicationStartedStaffEmail,
-    Mail\ApplicationAcceptedUserEmail,
-    CoreSettings,
-    UserNotification,
-    Instructor,
-    Student};
+use Flash;
+use Illuminate\Http\Request;
+use Mail;
 
 class TrainingController extends Controller
 {
     public function index()
     {
         //Check if user is an instructor or director+
-        if (Auth::user()->permissions >= 2)
-        {
+        if (Auth::user()->permissions >= 2) {
             $yourStudents = null;
             if (Auth::user()->instructorProfile) {
                 $yourStudents = Auth::user()->instructorProfile->students;
             }
             $sessions = InstructingSession::all();
             $cal_events = [];
-            foreach ($sessions as $session)
-            {
+            foreach ($sessions as $session) {
                 $cal_events[] = \Calendar::event(
                     $session->student->user->fullName('FLC').' | '.$session->type, false,
                     $session->start_time, $session->end_time, $session->id,
                     [
-                        'url' => 'https://google.com'
+                        'url' => 'https://google.com',
                     ]);
             }
             $calendar = \Calendar::addEvents($cal_events);
+
             return view('dashboard.training.indexinstructor', compact('yourStudents', 'calendar'));
-        }
-        else 
-        {
+        } else {
             return view('dashboard.training.indexstudent');
         }
     }
@@ -58,6 +55,7 @@ class TrainingController extends Controller
     public function instructorsIndex()
     {
         $instructors = Instructor::all();
+
         return view('dashboard.training.instructors.index', compact('instructors'));
     }
 
@@ -66,23 +64,20 @@ class TrainingController extends Controller
         //Check if the CID entered is a user
         $user = User::whereId($request->get('cid'))->first();
 
-        if ($user)
-        {
-            if (Instructor::where('user_id', $user->id)->first())
-            {
+        if ($user) {
+            if (Instructor::where('user_id', $user->id)->first()) {
                 return redirect()->back()->withInput()->with('error', 'This person is already an instructor.');
             }
             $instructor = new Instructor([
                 'user_id' => $user->id,
                 'qualification' => $request->get('qualification'),
-                'email' => $request->get('email')
+                'email' => $request->get('email'),
             ]);
             $instructor->save();
             AuditLogEntry::insert(Auth::user(), 'Added instructor '.$instructor->user->id.' ('.$instructor->id.')', User::find(1), 0);
+
             return redirect()->route('training.instructors')->with('success', 'Instructor added!');
-        }
-        else
-        {
+        } else {
             return redirect()->route('training.instructors')->with('error', 'Invalid CID!');
         }
     }
@@ -91,6 +86,7 @@ class TrainingController extends Controller
     {
         $students = Student::whereStatus(0)->get();
         $instructors = Instructor::all();
+
         return view('dashboard.training.students.current', compact('students', 'instructors'));
     }
 
@@ -98,6 +94,7 @@ class TrainingController extends Controller
     {
         $student = Student::whereId($id)->firstOrFail();
         $instructors = Instructor::all();
+
         return view('dashboard.training.students.viewstudent', compact('student', 'instructors'));
     }
 
@@ -112,14 +109,13 @@ class TrainingController extends Controller
         $student = Student::whereId($id)->firstOrFail();
 
         //If its an unassign or not
-        if ($request->get('instructor') == 'unassign')
-        {
-            if ($student->instructor)
-            {
+        if ($request->get('instructor') == 'unassign') {
+            if ($student->instructor) {
                 UserNotification::send($student->instructor->user, 'You have been unassigned from '.$student->user->fullName('FLC').'.', route('training.students.view', $student->id));
             }
             $student->instructor_id = null;
             $student->save();
+
             return redirect()->back()->with('success', 'Instructor unassigned.');
         }
 
@@ -127,14 +123,12 @@ class TrainingController extends Controller
         $instructor = Instructor::whereId($request->get('instructor'))->firstOrFail();
 
         //what if they're already assigned??
-        if ($student->instructor !== null && $student->instructor == $instructor)
-        {
+        if ($student->instructor !== null && $student->instructor == $instructor) {
             return back()->with('error', 'This instructor is already assigned.');
         }
 
         //notify old instructor if they exist
-        if ($student->instructor)
-        {
+        if ($student->instructor) {
             UserNotification::send($student->instructor->user, 'You have been unassigned from '.$student->user->fullName('FLC').'.', route('training.students.view', $student->id));
         }
 
@@ -144,13 +138,13 @@ class TrainingController extends Controller
 
         //Notify them
         UserNotification::send($instructor->user, 'You have been assign to '.$student->user->fullName('FLC').'.', route('training.students.view', $student->id));
-    
+
         //return
         return redirect()->back()->with('success', 'Instructor assigned.');
     }
 
     public function changeStudentStatus(Request $request, $id)
-    {  
+    {
         //Validate
         $this->validate($request, [
             'status' => 'required|not_in:0',
@@ -160,17 +154,21 @@ class TrainingController extends Controller
         $student = Student::whereId($id)->firstOrFail();
 
         //Assign new status
-        switch ($request->get('status'))
-        {
+        switch ($request->get('status')) {
             case '1':
-                if ($student->status == 0) { return redirect()->back()->with('error', 'The student is already on this status'); }
+                if ($student->status == 0) {
+                    return redirect()->back()->with('error', 'The student is already on this status');
+                }
                 $student->status = 0;
                 $student->save();
                 UserNotification::send($student->user, 'Your training status has been changed. View it here.', 'https://google.com');
+
                 return redirect()->back()->with('success', 'Status set!');
                 break;
             case '2':
-                if ($student->status == 1) { return redirect()->back()->with('error', 'The student is already on this status'); }
+                if ($student->status == 1) {
+                    return redirect()->back()->with('error', 'The student is already on this status');
+                }
                 $student->status = 1;
                 $student->save();
                 UserNotification::send($student->user, 'Your training status has been changed. View it here.', 'https://google.com');
@@ -178,7 +176,9 @@ class TrainingController extends Controller
                 return redirect()->back()->with('success', 'Status set!');
                 break;
             case '3':
-                if ($student->status == 2) { return redirect()->back()->with('error', 'The student is already on this status'); }
+                if ($student->status == 2) {
+                    return redirect()->back()->with('error', 'The student is already on this status');
+                }
                 $student->status = 2;
                 $student->save();
                 UserNotification::send($student->user, 'Your training status has been changed. View it here.', 'https://google.com');
@@ -186,13 +186,15 @@ class TrainingController extends Controller
                 return redirect()->back()->with('success', 'Status set!');
                 break;
             case '4':
-                if ($student->status == 3) { return redirect()->back()->with('error', 'The student is already on this status'); }
+                if ($student->status == 3) {
+                    return redirect()->back()->with('error', 'The student is already on this status');
+                }
                 $student->status = 3;
                 $student->save();
                 UserNotification::send($student->user, 'Your training status has been changed. View it here.', 'https://google.com');
 
                 return redirect()->back()->with('success', 'Status set!');
-                break;  
+                break;
         }
     }
 
@@ -200,13 +202,11 @@ class TrainingController extends Controller
     {
         $sessions = InstructingSession::all();
         $upcomingSessions = [];
-        foreach ($sessions as $session)
-        {
+        foreach ($sessions as $session) {
             $start = Carbon::parse($session->start_time);
             //a week from now
             $afrn = Carbon::now()->addDays(12);
-            if ($afrn->greaterThan($start))
-            {
+            if ($afrn->greaterThan($start)) {
                 $session->date = Carbon::parse($session->start_time)->toDateString();
                 $session->start_time = Carbon::parse($session->start_time)->toTimeString();
                 $session->end_time = Carbon::parse($session->end_time)->toTimeString();
@@ -214,16 +214,16 @@ class TrainingController extends Controller
             }
         }
         $cal_events = [];
-        foreach ($sessions as $session)
-        {
+        foreach ($sessions as $session) {
             $cal_events[] = \Calendar::event(
                 $session->student->user->fullName('FLC').' | '.$session->type, false,
                 $session->start_time, $session->end_time, $session->id,
                 [
-                    'url' => route('training.instructingsessions.viewsession', $session->id)
+                    'url' => route('training.instructingsessions.viewsession', $session->id),
                 ]);
         }
         $calendar = \Calendar::addEvents($cal_events);
+
         return view('dashboard.training.instructingsessions.index', compact('upcomingSessions', 'sessions', 'calendar'));
     }
 
@@ -233,10 +233,8 @@ class TrainingController extends Controller
             'student_cid' => 'required',
             'type' => 'required',
             'start_time' => 'required',
-            'end_time' => 'required'
+            'end_time' => 'required',
         ]);
-
-        
     }
 
     public function viewAllApplications()
@@ -244,12 +242,14 @@ class TrainingController extends Controller
         $applicationsPending = Application::where('status', 0)->get();
         $applicationsAccepted = Application::where('status', 2)->get();
         $applicationsDenied = Application::where('status', 1)->get();
+
         return view('dashboard.training.applications.viewall', compact('applicationsAccepted', 'applicationsDenied', 'applicationsPending'));
     }
 
     public function viewApplication($application_id)
     {
         $application = Application::where('application_id', $application_id)->firstOrFail();
+
         return view('dashboard.training.applications.viewapplication', compact('application'));
     }
 
@@ -277,9 +277,8 @@ class TrainingController extends Controller
         $application = Application::where('application_id', $application_id)->firstOrFail();
 
         //Check if someone is being dumb
-        if ($application->status != 0)
-        {
-            abort(403, "You cannot accept an already processed application!");
+        if ($application->status != 0) {
+            abort(403, 'You cannot accept an already processed application!');
         }
 
         //Set application to accepted status and set processed
@@ -289,15 +288,12 @@ class TrainingController extends Controller
         $application->save();
 
         //Is user already on roster before adding them?
-        if (RosterMember::where('cid', $application->user->id)->first())
-        {
+        if (RosterMember::where('cid', $application->user->id)->first()) {
             $controller = RosterMember::where('cid', $application->user->id)->first();
-            $controller->status = "training";
+            $controller->status = 'training';
             $controller->active = 1;
             $controller->save();
-        } 
-        else 
-        {
+        } else {
             //Add user to roster
             $controller = new RosterMember([
                 'cid' => $application->user->id,
@@ -306,31 +302,28 @@ class TrainingController extends Controller
                 'rating' => $application->user->rating_short,
                 'division' => $application->user->division_code,
                 'status' => 'training',
-                'active' => 1
+                'active' => 1,
             ]);
-            $controller->save(); 
+            $controller->save();
         }
-        
+
         //Is user already a student somehow?
-        if (Student::where('user_id', $application->user->id)->first())
-        {
+        if (Student::where('user_id', $application->user->id)->first()) {
             $student = Student::where('user_id', $application->user->id)->first();
             $student->status = 0;
             $student->last_status_change = date('Y-m-d H:i:s');
-            $student->accepted_application = $application->id;  
+            $student->accepted_application = $application->id;
             $student->save();
-        }
-        else
-        {
+        } else {
             $student = new Student([
                 'user_id' => $application->user->id,
-                'accepted_application' => $application->id
+                'accepted_application' => $application->id,
             ]);
             $student->save();
         }
 
         //Audit log
-        AuditLogEntry::insert(Auth::user(), "Application #".$application->application_id.' accepted and controller added to roster, status training', $application->user, 0);
+        AuditLogEntry::insert(Auth::user(), 'Application #'.$application->application_id.' accepted and controller added to roster, status training', $application->user, 0);
 
         //Notify staff
         Mail::to(CoreSettings::where('id', 1)->firstOrFail()->emailcinstructor)->send(new ApplicationAcceptedStaffEmail($application));
@@ -349,9 +342,8 @@ class TrainingController extends Controller
         $application = Application::where('application_id', $application_id)->firstOrFail();
 
         //Check if someone is being dumb
-        if ($application->status != 0)
-        {
-            abort(403, "You cannot accept an already processed application!");
+        if ($application->status != 0) {
+            abort(403, 'You cannot accept an already processed application!');
         }
 
         //Set application to denied status and set processed
@@ -361,8 +353,8 @@ class TrainingController extends Controller
         $application->save();
 
         //Audit log
-        AuditLogEntry::insert(Auth::user(), "Application #".$application->application_id.' denied', $application->user, 0);
- 
+        AuditLogEntry::insert(Auth::user(), 'Application #'.$application->application_id.' denied', $application->user, 0);
+
         //Notify user
         Mail::to($application->user->email)->send(new ApplicationDeniedUserEmail($application));
         UserNotification::send($application->user, 'Your application has been denied', route('application.view', $application->application_id));

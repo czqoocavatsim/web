@@ -33,41 +33,40 @@ Route::view('/emailtest', 'emails.announcement');
 Route::get('/login', 'LoginController@login')->middleware('guest')->name('login');
 Route::get('/validate', 'LoginController@validateLogin')->middleware('guest');
 Route::get('/logout', 'LoginController@logout')->middleware('auth')->name('logout');
-Route::get('/caltest', function(){
+Route::get('/caltest', function () {
     return Spatie\GoogleCalendar\Event::get();
-    });
+});
 //Api
 Route::prefix('api')->group(function () {
-   Route::get('news/all', function () {
-       return \App\News::all();
-   });
-   Route::get('news/promotions', function () {
-       return \App\News::where('type', 'Certification')->get();
-   });
-   Route::get('news/articles', function () {
+    Route::get('news/all', function () {
+        return \App\News::all();
+    });
+    Route::get('news/promotions', function () {
+        return \App\News::where('type', 'Certification')->get();
+    });
+    Route::get('news/articles', function () {
         return \App\News::where('type', '!=', 'Certification')->get();
-   });
-   Route::get('users/{id}/vnas', function ($id) {
-       if (\App\User::find($id) != null)
-       {
-           if (\App\User::find($id)->permissions >= 1)
-           {
-               return("true");
-           }
-           return ("false");
-       }
-       return ("false");
-   });
-   Route::get('settings', function() {
-       return \App\CoreSettings::all()->toJson(JSON_PRETTY_PRINT);
-   });
-   Route::get('ctpsignups', function() {
-       return \App\CtpSignUp::all()->toJson(JSON_PRETTY_PRINT);
-   })->middleware('director');
+    });
+    Route::get('users/{id}/vnas', function ($id) {
+        if (\App\User::find($id) != null) {
+            if (\App\User::find($id)->permissions >= 1) {
+                return 'true';
+            }
+
+            return 'false';
+        }
+
+        return 'false';
+    });
+    Route::get('settings', function () {
+        return \App\CoreSettings::all()->toJson(JSON_PRETTY_PRINT);
+    });
+    Route::get('ctpsignups', function () {
+        return \App\CtpSignUp::all()->toJson(JSON_PRETTY_PRINT);
+    })->middleware('director');
 });
 
 Route::get('/testwebhook', function () {
-
 });
 
 //Public news articles
@@ -76,7 +75,7 @@ Route::get('/news/{slug}', 'NewsController@viewPublicArticle')->name('news.artic
 Route::get('/news/', 'NewsController@viewPublicAll')->name('news.allpublic');
 
 //Webmaster tasks
-Route::get('/nickxenophonssabest', function (\Illuminate\Http\Request $request) {
+Route::get('/nickxenophonssabest', function (Illuminate\Http\Request $request) {
     $input = $request->query('key');
     $key = \Illuminate\Support\Facades\Config::get('app.webmasterkey');
     if (strtolower($input) === $key) {
@@ -84,89 +83,97 @@ Route::get('/nickxenophonssabest', function (\Illuminate\Http\Request $request) 
     }
     abort(403);
 });
-Route::get('/nickxenophonssabest/cache', function (\Illuminate\Http\Request $request) {
+Route::get('/nickxenophonssabest/cache', function (Illuminate\Http\Request $request) {
     $input = $request->query('key');
     $key = \Illuminate\Support\Facades\Config::get('app.webmasterkey');
-    if (!strtolower($input) !== $key) {
+    if (! strtolower($input) !== $key) {
         abort(403);
     }
     Artisan::call('config:clear');
     Artisan::call('config:cache');
-    return('Cache cleared.');
+
+    return 'Cache cleared.';
 });
-Route::get('/nickxenophonssabest/migrate', function (\Illuminate\Http\Request $request) {
+Route::get('/nickxenophonssabest/migrate', function (Illuminate\Http\Request $request) {
     $input = $request->query('key');
     $key = \Illuminate\Support\Facades\Config::get('app.webmasterkey');
-    if (!strtolower($input) !== $key) {
+    if (! strtolower($input) !== $key) {
         abort(403);
     }
     Artisan::call('migrate');
-    return('Migration completed.');
+
+    return 'Migration completed.';
 });
-Route::get('/nickxenophonssabest/seed', function (\Illuminate\Http\Request $request) {
+Route::get('/nickxenophonssabest/seed', function (Illuminate\Http\Request $request) {
     $input = $request->query('key');
     $key = \Illuminate\Support\Facades\Config::get('app.webmasterkey');
     if (strtolower($input) !== $key) {
         abort(403);
     }
     Artisan::call('db:seed');
-    return('Seed completed.');
+
+    return 'Seed completed.';
 });
 Route::get('/newapplicationemail', function () {
     $application = new \App\Application();
-    $application->application_id = "SAUSAGES";
+    $application->application_id = 'SAUSAGES';
     $application->user = \App\User::where('id', 1300012)->firstOrFail();
     $application->submitted_at = date('Y-m-d H:i:s');
     $application->applicant_statement = '<p>Thhis is a <em>asdasd</em>test.</p>';
+
     return view('emails.applicationstartedstaff', compact('application'));
 });
 Route::get('/withdrawnapplicationemail', function () {
     $application = new \App\Application();
-    $application->application_id = "SAUSAGES";
+    $application->application_id = 'SAUSAGES';
     $application->user = \App\User::where('id', 1300012)->firstOrFail();
     $application->submitted_at = date('Y-m-d H:i:s');
     $application->applicant_statement = '<p>Thhis is a <em>asdasd</em>test.</p>';
     $application->status = 3;
     $application->processed_at = date('Y-m-d H:i:s');
     $application->processed_by = \App\User::where('id', 1300012)->firstOrFail();
+
     return view('emails.applicationwithdrawn', compact('application'));
 });
 Route::get('/acceptedapplicationuseremail', function () {
     $application = new \App\Application();
-    $application->application_id = "SAUSAGES";
+    $application->application_id = 'SAUSAGES';
     $application->user = \App\User::where('id', 1300012)->firstOrFail();
     $application->submitted_at = date('Y-m-d H:i:s');
     $application->applicant_statement = '<p>Thhis is a <em>asdasd</em>test.</p>';
     $application->status = 3;
-    $application->staff_comment = "";
+    $application->staff_comment = '';
     $application->processed_at = date('Y-m-d H:i:s');
     $application->processed_by = \App\User::where('id', 1300012)->firstOrFail();
+
     return view('emails.applicationaccepteduser', compact('application'));
 });
 Route::get('/acceptedapplicationstaffemail', function () {
     $application = new \App\Application();
-    $application->application_id = "SAUSAGES";
+    $application->application_id = 'SAUSAGES';
     $application->user = \App\User::where('id', 1300012)->firstOrFail();
     $application->submitted_at = date('Y-m-d H:i:s');
     $application->applicant_statement = '<p>Thhis is a <em>asdasd</em>test.</p>';
     $application->status = 3;
     $application->processed_at = date('Y-m-d H:i:s');
-    $application->staff_comment = "Sausages";
+    $application->staff_comment = 'Sausages';
 
     $application->processed_by = \App\User::where('id', 1300012)->firstOrFail();
+
     return view('emails.applicationacceptedstaff', compact('application'));
 });
 Route::get('/deniedapplicationuseremail', function () {
     $application = new \App\Application();
-    $application->application_id = "SAUSAGES";
+    $application->application_id = 'SAUSAGES';
     $application->user = \App\User::where('id', 1300012)->firstOrFail();
     $application->submitted_at = date('Y-m-d H:i:s');
     $application->applicant_statement = '<p>Thhis is a <em>asdasd</em>test.</p>';
     $application->status = 3;
     $application->processed_at = date('Y-m-d H:i:s');
-    $application->staff_comment = "Sausages";
+    $application->staff_comment = 'Sausages';
 
     $application->processed_by = \App\User::where('id', 1300012)->firstOrFail();
+
     return view('emails.applicationdenieduser', compact('application'));
 });
 
@@ -181,17 +188,16 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('/users/resetavatar', 'UserController@resetAvatar')->name('users.resetavatar');
     Route::post('/users/changedisplayname', 'UserController@changeDisplayName')->name('users.changedisplayname');
     Route::get('/users/defaultavatar/{id}', function ($id) {
-       $user = \App\User::whereId($id)->firstOrFail();
-       if ($user->isAvatarDefault())
-       {
-           return "true";
-       }
-       return "false";
+        $user = \App\User::whereId($id)->firstOrFail();
+        if ($user->isAvatarDefault()) {
+            return 'true';
+        }
+
+        return 'false';
     });
 
     //CTP
     Route::post('/dashboard/ctp/signup/post', 'DashboardController@ctpSignUp')->name('ctp.signup.post');
-
 
     //Notification
     Route::get('/notification/{id}', 'NotificationRedirectController@notificationRedirect')->name('notification.redirect');
@@ -251,7 +257,7 @@ Route::group(['middleware' => 'auth'], function () {
     });
     //News
     Route::group(['middleware' => 'director'], function () {
-        Route::get('/dashboard/ctp/signups', function (){
+        Route::get('/dashboard/ctp/signups', function () {
             $signups = \App\CtpSignUp::all();
             foreach ($signups as $s) {
                 echo $s.'<br/>';

@@ -2,28 +2,27 @@
 
 namespace App\Http\Controllers;
 
+use App\AuditLogEntry;
+use App\Mail\EmailAnnouncementEmail;
+use App\News;
+use App\Policy;
+use App\User;
+use Auth;
 use function GuzzleHttp\Promise\queue;
 use Illuminate\Http\Request;
-use App\Policy;
-use Auth;
-use App\News;
-use App\User;
 use Mail;
-use App\Mail\EmailAnnouncementEmail;
-use App\AuditLogEntry;
 
 class PoliciesController extends Controller
 {
     public function index()
     {
-        if (Auth::check() == false || Auth::user()->permissions < 2)
-        {
+        if (Auth::check() == false || Auth::user()->permissions < 2) {
             $policies = Policy::where('staff_only', '0')->get();
+
             return view('policies', compact('policies'));
-        }
-        else
-        {
+        } else {
             $policies = Policy::all();
+
             return view('policies', compact('policies'));
         }
     }
@@ -36,11 +35,10 @@ class PoliciesController extends Controller
             'link' => 'required',
             'embed' => 'required',
             'staff_only' => 'required',
-            'email' => 'required'
+            'email' => 'required',
         ]);
 
-        if ($request->get('staff_only') == 1 && $request->get('email') != 'none')
-        {
+        if ($request->get('staff_only') == 1 && $request->get('email') != 'none') {
             return redirect()->route('policies')->with('error', 'A private policy cannot be released publicly via email or a news article.')->withInput();
         }
 
@@ -51,15 +49,14 @@ class PoliciesController extends Controller
             'embed' => $request->get('embed'),
             'staff_only' => $request->get('staff_only'),
             'author' => Auth::user()->id,
-            'releaseDate' => date('Y-m-d')
+            'releaseDate' => date('Y-m-d'),
         ]);
 
         $policy->save();
 
-        if ($request->get('email') == "all")
-        {
+        if ($request->get('email') == 'all') {
             $news = new News([
-                'title' => 'New Policy: ' . $policy->name,
+                'title' => 'New Policy: '.$policy->name,
                 'content' => "The '".$policy->name."' policy for CZQO has been released. Read it on the policies page.",
                 'date' => date('Y-m-d'),
                 'type' => 'Email',
@@ -67,23 +64,20 @@ class PoliciesController extends Controller
             ]);
             $news->save();
             $users = User::all();
-            foreach ($users as $user)
-            {
+            foreach ($users as $user) {
                 $data = [];
                 $data['content'] = $news->content;
                 $data['title'] = $news->title;
                 $data['fname'] = Auth::user()->fname;
                 $data['lname'] = Auth::user()->lname;
                 $data['receivingname'] = $user->fname;
-                Mail::to($user->email)->send(new EmailAnnouncementEmail($data), function($message) use ($data){
-                    $message->subject('Gander News: ' . $data['title']);
+                Mail::to($user->email)->send(new EmailAnnouncementEmail($data), function ($message) use ($data) {
+                    $message->subject('Gander News: '.$data['title']);
                 });
             }
-        }
-        else if ($request->get('email') == "emailcert")
-        {
+        } elseif ($request->get('email') == 'emailcert') {
             $news = new News([
-                'title' => 'New Policy: ' . $policy->name,
+                'title' => 'New Policy: '.$policy->name,
                 'content' => "The '".$policy->name."' policy for CZQO has been released. Read it on the policies page.",
                 'date' => date('Y-m-d'),
                 'type' => 'CertifiedOnly',
@@ -91,26 +85,22 @@ class PoliciesController extends Controller
             ]);
             $news->save();
             $users = User::all();
-            foreach ($users as $user)
-            {
-                if ($user->permissions >= 1)
-                {
+            foreach ($users as $user) {
+                if ($user->permissions >= 1) {
                     $data = [];
                     $data['content'] = $news->content;
                     $data['title'] = $news->title;
                     $data['fname'] = Auth::user()->fname;
                     $data['lname'] = Auth::user()->lname;
                     $data['receivingname'] = $user->fname;
-                    Mail::to($user->email)->send(new EmailAnnouncementEmail($data), function($message) use ($data){
-                        $message->subject('Gander Controller News: ' . $data['title']);
+                    Mail::to($user->email)->send(new EmailAnnouncementEmail($data), function ($message) use ($data) {
+                        $message->subject('Gander Controller News: '.$data['title']);
                     });
                 }
             }
-        }
-        else if ($request->get('email') == "newsonly")
-        {
+        } elseif ($request->get('email') == 'newsonly') {
             $news = new News([
-                'title' => 'New Policy: ' . $policy->name,
+                'title' => 'New Policy: '.$policy->name,
                 'content' => "The '".$policy->name."' policy for CZQO has been released. Read it on the policies page.",
                 'date' => date('Y-m-d'),
                 'type' => 'NoEmail',
@@ -121,12 +111,13 @@ class PoliciesController extends Controller
         $entry = new AuditLogEntry([
             'user_id' => Auth::user()->id,
             'affected_id' => 1,
-            'action' => 'CREATE POLICY ' . '(' . $policy->id . ')',
+            'action' => 'CREATE POLICY '.'('.$policy->id.')',
             'time' => date('Y-m-d H:i:s'),
-            'private' => 0
+            'private' => 0,
         ]);
         $entry->save();
-        return redirect()->route('policies')->with('success', 'Policy ' . $policy->name . ' added!');
+
+        return redirect()->route('policies')->with('success', 'Policy '.$policy->name.' added!');
     }
 
     public function deletePolicy($id)
@@ -135,12 +126,13 @@ class PoliciesController extends Controller
         $entry = new AuditLogEntry([
             'user_id' => Auth::user()->id,
             'affected_id' => 1,
-            'action' => 'DELETE POLICY '. $policy->name . '(' . $policy->id . ')',
+            'action' => 'DELETE POLICY '.$policy->name.'('.$policy->id.')',
             'time' => date('Y-m-d H:i:s'),
-            'private' => 0
+            'private' => 0,
         ]);
         $entry->save();
         $policy->delete();
+
         return redirect()->route('policies')->with('success', 'Policy deleted.');
     }
 }

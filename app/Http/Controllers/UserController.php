@@ -4,16 +4,16 @@ namespace App\Http\Controllers;
 
 use App\AuditLogEntry;
 use App\Notifications\PermissionsChanged;
+use App\User;
 use App\UserNote;
 use App\UserNotification;
+use Auth;
+use Flash;
 use function GuzzleHttp\Promise\all;
 use function GuzzleHttp\Psr7\str;
 use Illuminate\Http\Request;
-use Auth;
-use Flash;
 use Illuminate\Support\Facades\Storage;
 use Mail;
-use App\User;
 use mofodojodino\ProfanityFilter\Check;
 use RestCord\Interfaces\AuditLog;
 
@@ -24,12 +24,14 @@ class UserController extends Controller
         $user = Auth::user();
         $user->init = 1;
         $user->save();
+
         return redirect('/dashboard')->with('success', 'Welcome to CZQO, '.$user->fname.'! We are glad to have you on board.');
     }
 
     public function viewAllUsers()
     {
         $users = User::all()->sortBy('id');
+
         return view('dashboard.users.list', compact('users'));
     }
 
@@ -38,8 +40,9 @@ class UserController extends Controller
         $user = User::where('id', $id)->firstOrFail();
         $xml = [];
         //$xml['return'] = file_get_contents('https://cert.vatsim.net/cert/vatsimnet/idstatus.php?cid=' . $user->id);
-        $xml['return'] = "sausage";
+        $xml['return'] = 'sausage';
         $auditLog = AuditLogEntry::where('affected_id', $id)->get();
+
         return view('dashboard.users.profile', compact('user', 'xml', 'auditLog'));
     }
 
@@ -55,17 +58,18 @@ class UserController extends Controller
             'affected_id' => $user->id,
             'action' => 'DELETE USER',
             'time' => date('Y-m-d H:i:s'),
-            'private' => 0
+            'private' => 0,
         ]);
         $entry->save();
-        $user->fname = "Deleted";
-        $user->lname = "User";
-        $user->email = "no-reply@czqo.vatcan.ca";
-        $user->rating = "Deleted";
-        $user->division = "Deleted";
+        $user->fname = 'Deleted';
+        $user->lname = 'User';
+        $user->email = 'no-reply@czqo.vatcan.ca';
+        $user->rating = 'Deleted';
+        $user->division = 'Deleted';
         $user->permissions = 0;
         $user->deleted = 1;
         $user->save();
+
         return redirect()->route('users.viewall')->with('info', 'User deleted.');
     }
 
@@ -80,45 +84,46 @@ class UserController extends Controller
     {
         $this->validate($request, [
             'file' => 'required',
-            'user_id' => 'required'
+            'user_id' => 'required',
         ]);
         $editUser = Auth::user();
         $user = User::whereId($request->get('user_id'))->firstOrFail();
         $uploadedFile = $request->file('file');
         $filename = $uploadedFile->getClientOriginalName();
         Storage::disk('local')->putFileAs(
-            'public/files/avatars/' . $user->id . '/'. $editUser->id,
+            'public/files/avatars/'.$user->id.'/'.$editUser->id,
             $uploadedFile,
             $filename
         );
         $user->avatar = Storage::url('public/files/avatars/'.$user->id.'/'.$editUser->id.'/'.$filename);
         $user->save();
         AuditLogEntry::insert($editUser, 'Changed user avatar', $user, 0);
+
         return redirect()->back()->with('success', 'Avatar changed!');
     }
 
     public function resetUsersAvatar(Request $request)
     {
         $this->validate($request, [
-            'user_id' => 'required'
+            'user_id' => 'required',
         ]);
         $editUser = Auth::user();
         $user = User::whereId($request->get('user_id'))->firstOrFail();
-        if ($user->isAvatarDefault())
-        {
+        if ($user->isAvatarDefault()) {
             abort(403, 'The avatar is already the default avatar.');
         }
 
-        $user->avatar = "https://www.drupal.org/files/profile_default.png";
+        $user->avatar = 'https://www.drupal.org/files/profile_default.png';
         $user->save();
         AuditLogEntry::insert($editUser, 'Reset user avatar', $user, 0);
+
         return redirect()->back()->with('success', 'Avatar reset!');
     }
 
-    public function resetUsersBio (Request $request)
+    public function resetUsersBio(Request $request)
     {
         $this->validate($request, [
-            'user_id' => 'required'
+            'user_id' => 'required',
         ]);
 
         $editUser = Auth::user();
@@ -144,30 +149,31 @@ class UserController extends Controller
             'action' => 'EDIT USER',
             'affected_id' => $user->id,
             'time' => date('Y-m-d H:i:s'),
-            'private' => 0
+            'private' => 0,
         ]);
         $entry->save();
-        if ($prevPermissions != $user->permissions){
+        if ($prevPermissions != $user->permissions) {
             $notification = new UserNotification([
                 'user_id' => $user->id,
                 'content' => 'Your permissions have been updated.',
                 'link' => '/dashboard',
-                'dateTime' => date('Y-m-d H:i:s')
+                'dateTime' => date('Y-m-d H:i:s'),
             ]);
             $notification->save();
         }
+
         return redirect()->route('users.viewprofile', $user->id)->with('success', 'User edited!');
     }
 
     public function emailCreate($id)
     {
         $user = User::where('id', $id)->firstOrFail();
+
         return view('dashboard.users.email', compact('user'));
     }
 
     public function emailStore(Request $request)
     {
-
     }
 
     public function createUserNote(Request $request, $id)
@@ -181,11 +187,10 @@ class UserController extends Controller
             'user_id' => $user->id,
             'author' => Auth::user()->id,
             'content' => $request->get('content'),
-            'timestamp' => date('Y-m-d H:i:s')
+            'timestamp' => date('Y-m-d H:i:s'),
         ]);
 
-        if ($request->get('confidential') == "on")
-        {
+        if ($request->get('confidential') == 'on') {
             $note->confidential = 1;
         }
 
@@ -204,10 +209,9 @@ class UserController extends Controller
             'action' => 'DELETE USER NOTE '.$note->id,
             'affected_id' => $user->id,
             'time' => date('Y-m-d H:i:s'),
-            'private' => 0
+            'private' => 0,
         ]);
-        if ($note->confidential == 1)
-        {
+        if ($note->confidential == 1) {
             $entry->private = 1;
         }
         $entry->save();
@@ -220,31 +224,32 @@ class UserController extends Controller
     public function changeAvatar(Request $request)
     {
         $this->validate($request, [
-            'file' => 'required'
+            'file' => 'required',
         ]);
         $user = Auth::user();
         $uploadedFile = $request->file('file');
         $filename = $uploadedFile->getClientOriginalName();
         Storage::disk('local')->putFileAs(
-            'public/files/avatars/' . $user->id,
+            'public/files/avatars/'.$user->id,
             $uploadedFile,
             $filename
         );
         $user->avatar = Storage::url('public/files/avatars/'.$user->id.'/'.$filename);
         $user->save();
+
         return redirect()->route('dashboard.index')->with('success', 'Avatar changed!');
     }
 
     public function resetAvatar()
     {
         $user = Auth::user();
-        if ($user->isAvatarDefault())
-        {
+        if ($user->isAvatarDefault()) {
             abort(403, 'Your avatar is already the default avatar.');
         }
 
-        $user->avatar = "https://www.drupal.org/files/profile_default.png";
+        $user->avatar = 'https://www.drupal.org/files/profile_default.png';
         $user->save();
+
         return redirect()->back()->with('success', 'Avatar reset!');
     }
 
@@ -273,7 +278,7 @@ class UserController extends Controller
     public function editBio(Request $request)
     {
         $this->validate($request, [
-            'bio' => 'sometimes|max:5000'
+            'bio' => 'sometimes|max:5000',
         ]);
 
         //Get user
@@ -284,8 +289,7 @@ class UserController extends Controller
 
         //Run through profanity filter
         $check = new Check();
-        if ($check->hasProfanity($input))
-        {
+        if ($check->hasProfanity($input)) {
             return redirect()->back()->withInput()->with('error', 'Profanity was detected in your input, please remove it.');
         }
 
@@ -301,7 +305,7 @@ class UserController extends Controller
     {
         $this->validate($request, [
             'display_fname' => 'required',
-            'format' => 'required'
+            'format' => 'required',
         ]);
 
         //Get user
@@ -309,17 +313,16 @@ class UserController extends Controller
 
         //Run through profanity filter
         $check = new Check();
-        if ($check->hasProfanity($request->get('display_fname')))
-        {
+        if ($check->hasProfanity($request->get('display_fname'))) {
             return redirect()->back()->withInput()->with('error', 'Profanity was detected in your display name. Please remove it');
         }
 
         //No swear words... give them the new name!
         $user->display_fname = $request->get('display_fname');
-        if ($request->get('format') == "showall") {
+        if ($request->get('format') == 'showall') {
             $user->display_last_name = true;
             $user->display_cid_only = false;
-        } elseif ($request->get('format') == "showfirstcid") {
+        } elseif ($request->get('format') == 'showfirstcid') {
             $user->display_last_name = false;
             $user->display_cid_only = false;
         } else {
@@ -335,6 +338,7 @@ class UserController extends Controller
     public function viewUserProfilePublic($id)
     {
         $user = User::whereId($id)->firstOrFail();
+
         return view('dashboard.me.publicuserprofile', compact('user'));
     }
 }

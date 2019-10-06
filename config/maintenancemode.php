@@ -2,21 +2,21 @@
 
 return [
 
-    /**
+    /*
      * The view to show to users when maintenance mode is currently enabled
      *
      * @var string
      */
     'view' => 'maintenancemode::app-down',
 
-    /**
+    /*
      * Include CSS styles with the optional notification view
      *
      * @var boolean
      */
     'notification-styles' => true,
 
-    /**
+    /*
      * Configuration values for injecting variables into the views
      *
      * Variables available:
@@ -28,7 +28,7 @@ return [
      */
     'inject' => [
 
-        /**
+        /*
          * Make variables accessible in all views
          *
          * If set to false, only the maintenance page will have access to these variables
@@ -37,7 +37,7 @@ return [
          */
         'global' => true,
 
-        /**
+        /*
          * Prefix the variables to prevent name collisions
          *
          * @var string
@@ -45,14 +45,14 @@ return [
         'prefix' => 'MaintenanceMode',
     ],
 
-    /**
+    /*
      * The path to the language file to use
      *
      * @var string
      */
     'language-path' => 'maintenancemode::defaults',
 
-    /**
+    /*
      * An array of IP address that will never see the maintenance page
      *
      * To be used in conjunction with the IPWhitelist exemption class
@@ -61,7 +61,7 @@ return [
      */
     'exempt-ips' => [],
 
-    /**
+    /*
      * Use proxies to get the user's IP address
      *
      * See: http://symfony.com/doc/current/components/http_foundation/trusting_proxies.html
@@ -70,7 +70,7 @@ return [
      */
     'exempt-ips-proxy' => false,
 
-    /**
+    /*
      * An array of environments that will never show the maintenance page
      *
      * To be used in conjunction with the EnvironmentWhitelist exemption class
@@ -79,7 +79,7 @@ return [
      */
     'exempt-environments' => ['local'],
 
-    /**
+    /*
      * A list of exemption classes to execute
      *
      * Each of these classes should extend

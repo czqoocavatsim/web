@@ -2,12 +2,12 @@
 
 namespace App\Http\Controllers;
 
-use App\StaffMember;
-use Illuminate\Http\Request;
 use App\AuditLogEntry;
-use Auth;
 use App\Instructor;
+use App\StaffMember;
 use App\User;
+use Auth;
+use Illuminate\Http\Request;
 
 class StaffListController extends Controller
 {
@@ -15,12 +15,14 @@ class StaffListController extends Controller
     {
         $staff = StaffMember::all();
         $instructors = Instructor::all();
+
         return view('staff', compact('staff', 'instructors'));
     }
 
     public function editIndex()
     {
         $staff = StaffMember::all();
+
         return view('dashboard.staff.index', compact('staff'));
     }
 
@@ -31,8 +33,7 @@ class StaffListController extends Controller
 
         //Check user given is a user
         $user = User::whereId($request->get('cid'))->first();
-        if (!$user)
-        {
+        if (! $user) {
             return redirect()->back()->withInput()->with('error', 'CID for staff member '.$staff->shortform.' invalid!');
         }
 

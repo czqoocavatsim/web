@@ -2,17 +2,17 @@
 
 namespace App\Http\Controllers;
 
+use App\AuditLogEntry;
 use App\CarouselItem;
 use App\CoreSettings;
 use App\DiscordWebhook;
-use Illuminate\Http\Request;
-use Auth;
+use App\Mail\EmailAnnouncementEmail;
+use App\MeetingMinutes;
 use App\News;
 use App\User;
-use App\Mail\EmailAnnouncementEmail;
+use Auth;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Mail;
-use App\AuditLogEntry;
-use App\MeetingMinutes;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 
@@ -24,6 +24,7 @@ class NewsController extends Controller
         $news = News::where('type', '!=', 'Certification')->get()->sortByDesc('id')->take('3');
         $promotions = News::where('type', 'Certification')->get()->sortByDesc('id')->take('5');
         $carouselItems = CarouselItem::all();
+
         return view('dashboard.news.home', compact('news', 'promotions', 'carouselItems'));
     }
 
@@ -41,7 +42,7 @@ class NewsController extends Controller
     {
         $validateddata = $request->validate([
             'title' => 'required',
-            'content' => 'required'
+            'content' => 'required',
         ]);
 
         $news = new News([
@@ -50,12 +51,12 @@ class NewsController extends Controller
             'date' => date('Y-m-d'),
             'type' => $request->get('type'),
             'user_id' => Auth::user()->id,
-            'slug' => strtolower(Str::slug($request->get('title')))
+            'slug' => strtolower(Str::slug($request->get('title'))),
         ]);
 
         $news->save();
 
-        if ($news->type == "Email") {
+        if ($news->type == 'Email') {
             $users = User::all();
             foreach ($users as $user) {
                 if ($user->gdpr_subscribed_emails == 0) {
@@ -68,10 +69,10 @@ class NewsController extends Controller
                 $data['lname'] = Auth::user()->lname;
                 $data['receivingname'] = $user->fname;
                 Mail::to($user->email)->send(new EmailAnnouncementEmail($data), function ($message) use ($data) {
-                    $message->subject('Gander News: ' . $data['title']);
+                    $message->subject('Gander News: '.$data['title']);
                 });
             }
-        } elseif ($news->type == "CertifiedOnly") {
+        } elseif ($news->type == 'CertifiedOnly') {
             $users = User::all();
             foreach ($users as $user) {
                 if ($user->gdpr_subscribed_emails == 0) {
@@ -85,7 +86,7 @@ class NewsController extends Controller
                     $data['lname'] = Auth::user()->lname;
                     $data['receivingname'] = $user->fname;
                     Mail::to($user->email)->send(new EmailAnnouncementEmail($data), function ($message) use ($data) {
-                        $message->subject('Gander Controller News: ' . $data['title']);
+                        $message->subject('Gander Controller News: '.$data['title']);
                     });
                 }
             }
@@ -93,7 +94,7 @@ class NewsController extends Controller
 
         createNewsMessage($news);
 
-        return redirect()->route('news.home')->with('success', 'Article ' . $news->title . ' saved and published!');
+        return redirect()->route('news.home')->with('success', 'Article '.$news->title.' saved and published!');
     }
 
     public function setSiteBanner(Request $request)
@@ -115,7 +116,7 @@ class NewsController extends Controller
             'affected_id' => 1,
             'action' => 'ADJUST SITE BANNER',
             'time' => date('Y-m-d H:i:s'),
-            'private' => 0
+            'private' => 0,
         ]);
         $entry->save();
 
@@ -125,7 +126,7 @@ class NewsController extends Controller
     public function removeSiteBanner()
     {
         $coreSettings = CoreSettings::where('id', 1)->firstOrFail();
-        $coreSettings->banner = "";
+        $coreSettings->banner = '';
         $coreSettings->save();
 
         $entry = new AuditLogEntry([
@@ -133,7 +134,7 @@ class NewsController extends Controller
             'affected_id' => 1,
             'action' => 'REMOVE SITE BANNER',
             'time' => date('Y-m-d H:i:s'),
-            'private' => 0
+            'private' => 0,
         ]);
         $entry->save();
 
@@ -153,49 +154,52 @@ class NewsController extends Controller
         $entry = new AuditLogEntry([
             'user_id' => Auth::user()->id,
             'affected_id' => 1,
-            'action' => 'DELETE ARTICLE ' . $article->id,
+            'action' => 'DELETE ARTICLE '.$article->id,
             'time' => date('Y-m-d H:i:s'),
-            'private' => 0
+            'private' => 0,
         ]);
         $entry->save();
         $article->delete();
-        return redirect()->route('news.home')->with('success', 'Article ' . $article->title . ' deleted!');
+
+        return redirect()->route('news.home')->with('success', 'Article '.$article->title.' deleted!');
     }
 
     public function viewArticle($id)
     {
         $article = News::where('id', $id)->firstOrFail();
+
         return view('dashboard.news.view', compact('article'));
     }
-
 
     public function archiveArticle($id, $mode)
     {
         $article = News::where('id', $id)->firstOrFail();
-        if ($mode == "true") {
+        if ($mode == 'true') {
             $article->archived = 1;
             $article->save();
             $entry = new AuditLogEntry([
                 'user_id' => Auth::user()->id,
                 'affected_id' => 1,
-                'action' => 'ARCHIVE ARTICLE ' . $article->id,
+                'action' => 'ARCHIVE ARTICLE '.$article->id,
                 'time' => date('Y-m-d H:i:s'),
-                'private' => 0
+                'private' => 0,
             ]);
             $entry->save();
-            return view('dashboard.news.view', compact('article'))->with('sucess', 'Article ' . $article->title . ' archived.');
-        } elseif ($mode == "false") {
+
+            return view('dashboard.news.view', compact('article'))->with('sucess', 'Article '.$article->title.' archived.');
+        } elseif ($mode == 'false') {
             $article->archived = 0;
             $article->save();
             $entry = new AuditLogEntry([
                 'user_id' => Auth::user()->id,
                 'affected_id' => 1,
-                'action' => 'UNARCHIVE ARTICLE ' . $article->id,
+                'action' => 'UNARCHIVE ARTICLE '.$article->id,
                 'time' => date('Y-m-d H:i:s'),
-                'private' => 0
+                'private' => 0,
             ]);
             $entry->save();
-            return view('dashboard.news.view', compact('article'))->with('sucess', 'Article ' . $article->title . ' unarchived.');
+
+            return view('dashboard.news.view', compact('article'))->with('sucess', 'Article '.$article->title.' unarchived.');
         } else {
             abort(400, 'Bad URL syntax');
         }
@@ -207,6 +211,7 @@ class NewsController extends Controller
         if ($article->archived == 1) {
             abort(403);
         }
+
         return view('publicarticle', compact('article'));
     }
 
@@ -216,13 +221,14 @@ class NewsController extends Controller
         if ($article->archived == 1) {
             abort(403);
         }
+
         return view('publicarticle', compact('article'));
     }
-
 
     public function viewPublicAll()
     {
         $news = News::all()->sortByDesc('id');
+
         return view('publicnews', compact('news'));
     }
 
@@ -231,13 +237,13 @@ class NewsController extends Controller
         $validateddata = $request->validate([
             'image_url' => 'required|url',
             'caption' => 'nullable|max:50',
-            'caption_url' => 'nullable|url'
+            'caption_url' => 'nullable|url',
         ]);
 
         $item = new CarouselItem([
             'image_url' => $request->get('image_url'),
             'caption' => $request->get('caption'),
-            'caption_url' => $request->get('caption_url')
+            'caption_url' => $request->get('caption_url'),
         ]);
 
         $item->save();
@@ -249,12 +255,14 @@ class NewsController extends Controller
     {
         $item = CarouselItem::where('id', $id)->firstOrFail();
         $item->delete();
+
         return redirect()->route('news.home')->with('success', 'Carousel item deleted!');
     }
 
     public function minutesIndex()
     {
         $minutes = MeetingMinutes::all();
+
         return view('dashboard.news.meetingminutes', compact('minutes'));
     }
 
@@ -263,6 +271,7 @@ class NewsController extends Controller
         $minutes = MeetingMinutes::whereId($id)->firstOrFail();
         AuditLogEntry::insert(Auth::user(), 'Deleted meeting minutes '.$minutes->title, User::find(1), 0);
         $minutes->delete();
+
         return redirect()->back()->with('info', 'Deleted item');
     }
 
@@ -270,7 +279,7 @@ class NewsController extends Controller
     {
         $this->validate($request, [
             'title' => 'required',
-            'file' => 'required'
+            'file' => 'required',
         ]);
 
         $file = $request->file('file');
@@ -284,7 +293,7 @@ class NewsController extends Controller
         $minutes = new MeetingMinutes([
             'user_id' => Auth::id(),
             'title' => $request->get('title'),
-            'link' => Storage::url('public/files/minutes/'.$fileName)
+            'link' => Storage::url('public/files/minutes/'.$fileName),
         ]);
 
         $minutes->save();

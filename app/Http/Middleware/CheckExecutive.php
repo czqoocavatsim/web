@@ -4,6 +4,7 @@ namespace App\Http\Middleware;
 
 use Closure;
 use Illuminate\Support\Facades\Auth;
+
 class CheckExecutive
 {
     /**
@@ -15,10 +16,8 @@ class CheckExecutive
      */
     public function handle($request, Closure $next)
     {
-        if (Auth::check())
-        {
-            if (Auth::user()->permissions >= 4)
-            {
+        if (Auth::check()) {
+            if (Auth::user()->permissions >= 4) {
                 return $next($request);
             }
         }

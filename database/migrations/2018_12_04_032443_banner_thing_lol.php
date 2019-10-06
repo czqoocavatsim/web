@@ -1,8 +1,8 @@
 <?php
 
-use Illuminate\Support\Facades\Schema;
-use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
 
 class BannerThingLol extends Migration
 {
@@ -13,7 +13,7 @@ class BannerThingLol extends Migration
      */
     public function up()
     {
-        Schema::table('core_info', function($table) {
+        Schema::table('core_info', function ($table) {
             $table->text('banner');
         });
     }
@@ -25,7 +25,7 @@ class BannerThingLol extends Migration
      */
     public function down()
     {
-        Schema::table('core_info', function($table) {
+        Schema::table('core_info', function ($table) {
             $table->dropColumn('banner');
         });
     }

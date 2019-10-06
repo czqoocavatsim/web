@@ -16,12 +16,14 @@ class NetworkController extends Controller
     public function positionsIndex()
     {
         $positions = VatsimPosition::all();
+
         return view('dashboard.network.positions.index', compact('positions'));
     }
 
     public function viewPosition($id)
     {
         $position = VatsimPosition::whereId($id)->firstOrFail();
+
         return view('dashboard.network.positions.view', compact('position'));
     }
 
@@ -29,12 +31,11 @@ class NetworkController extends Controller
     {
         $this->validate($request, [
             'callsign' => 'required|max:10',
-            'type' => 'sometimes|min:3|max:20'
+            'type' => 'sometimes|min:3|max:20',
         ]);
 
         //Does the position already exist?
-        if (VatsimPosition::where('callsign', $request->get('callsign'))->first())
-        {
+        if (VatsimPosition::where('callsign', $request->get('callsign'))->first()) {
             return redirect()->back()->withInput()->with('error', 'Callsign already used');
         }
 
@@ -42,11 +43,11 @@ class NetworkController extends Controller
         $position = new VatsimPosition();
         $position->callsign = strtoupper($request->get('callsign'));
         $position->type = $request->get('type');
-        if ($request->get('staff_only') == 'yes')
-        {
+        if ($request->get('staff_only') == 'yes') {
             $position->staff_only = 1;
+        } else {
+            $position->staff_only = 0;
         }
-        else { $position->staff_only = 0; }
         $position->save();
 
         //Redirect
@@ -71,8 +72,7 @@ class NetworkController extends Controller
         ]);
 
         //Does the position already exist?
-        if (VatsimPosition::whereId($id)->first())
-        {
+        if (VatsimPosition::whereId($id)->first()) {
             abort(400, 'Position not found');
         }
 
@@ -80,11 +80,11 @@ class NetworkController extends Controller
         $position = VatsimPosition::whereId($id)->firstOrFail();
         $position->callsign = strtoupper($request->get('callsign'));
         $position->type = $request->get('type');
-        if ($request->get('staff_only') == 'yes')
-        {
+        if ($request->get('staff_only') == 'yes') {
             $position->staff_only = 1;
+        } else {
+            $position->staff_only = 0;
         }
-        else { $position->staff_only = 0; }
         $position->save();
 
         //Redirect
@@ -94,6 +94,7 @@ class NetworkController extends Controller
     public function logIndex()
     {
         $log = NetworkLog::all();
+
         return view('dashboard.network.log.index', compact('log'));
     }
 }

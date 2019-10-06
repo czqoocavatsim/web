@@ -26,7 +26,7 @@ class FeedbackFormRequest extends FormRequest
         return [
             'name'    => 'required',
             'email'   => 'required|email',
-            'msg'     => 'required'
+            'msg'     => 'required',
         ];
     }
 }

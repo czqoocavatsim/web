@@ -1,8 +1,8 @@
 <?php
 
-use Illuminate\Support\Facades\Schema;
-use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
 
 class Fixtherosterbitch extends Migration
 {
@@ -13,7 +13,7 @@ class Fixtherosterbitch extends Migration
      */
     public function up()
     {
-        Schema::table('roster', function($table) {
+        Schema::table('roster', function ($table) {
             $table->text('rating');
         });
     }
@@ -25,7 +25,7 @@ class Fixtherosterbitch extends Migration
      */
     public function down()
     {
-        Schema::table('roster', function($table) {
+        Schema::table('roster', function ($table) {
             $table->dropColumn('rating');
         });
     }

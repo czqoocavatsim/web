@@ -1,8 +1,9 @@
 <?php
 
 namespace App\Http\Middleware;
-use Illuminate\Support\Facades\Auth;
+
 use Closure;
+use Illuminate\Support\Facades\Auth;
 
 class CheckDirector
 {
@@ -15,10 +16,8 @@ class CheckDirector
      */
     public function handle($request, Closure $next)
     {
-        if (Auth::check())
-        {
-            if (Auth::user()->permissions >= 3)
-            {
+        if (Auth::check()) {
+            if (Auth::user()->permissions >= 3) {
                 return $next($request);
             }
         }

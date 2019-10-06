@@ -3,9 +3,9 @@
 namespace App\Mail;
 
 use Illuminate\Bus\Queueable;
+use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Mail\Mailable;
 use Illuminate\Queue\SerializesModels;
-use Illuminate\Contracts\Queue\ShouldQueue;
 
 class GDPRRequestEmail extends Mailable
 {
@@ -17,6 +17,7 @@ class GDPRRequestEmail extends Mailable
      * @return void
      */
     public $data;
+
     public function __construct($data)
     {
         $this->data = $data;
@@ -31,7 +32,7 @@ class GDPRRequestEmail extends Mailable
     {
         return $this
             ->to(config('mail.from.address'))
-            ->subject("IMPORTANT: GDPR REMOVAL REQUEST")
+            ->subject('IMPORTANT: GDPR REMOVAL REQUEST')
             ->view('emails.gdprremovalrequest');
     }
 }

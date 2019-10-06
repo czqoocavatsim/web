@@ -11,7 +11,6 @@
 |
 */
 
-
 //Standard site routes
 
 Route::get('/', 'HomeController@view');
@@ -42,7 +41,6 @@ Route::get('/pilots/tracks', function () {
     return view('pilots.tracks');
 });
 
-
 Route::get('/pilots/vatsim-resources', function () {
     return view('pilots.vatsim-resources');
 });
@@ -51,9 +49,7 @@ Route::get('/publications', function () {
     return view('publications');
 });
 
-Route::group(['middleware' => 'auth'], function()
-{
-
+Route::group(['middleware' => 'auth'], function () {
     Route::get('/dashboard/feedback', 'FeedbackController@create')->name('feedback.create');
 
     Route::get('/dashboard/feedback/submitted', 'FeedbackController@submitted')->name('feedback.submitted');
@@ -66,25 +62,23 @@ Route::group(['middleware' => 'auth'], function()
     Route::get('/dashboard/data/submitted', 'GDPRController@submitted')->name('data.submitted');
     Route::post('/dashboard/data', 'GDPRController@store')->name('data.store');
 
-    Route::get('/dashboard', function (){
+    Route::get('/dashboard', function () {
         return view('dashboard/home');
     });
 
-
-
-    Route::get('/dashboard/roster', function (){
+    Route::get('/dashboard/roster', function () {
         return view('dashboard/roster/view');
     });
 
-    Route::get('/dashboard/roster/add', function (){
+    Route::get('/dashboard/roster/add', function () {
         return view('dashboard/roster/add');
     });
 
-    Route::get('/dashboard/roster/edit', function (){
+    Route::get('/dashboard/roster/edit', function () {
         return view('dashboard/roster/edit');
     });
 
-    Route::get('/dashboard/roster/autoupdate', function (){
+    Route::get('/dashboard/roster/autoupdate', function () {
         return view('dashboard/roster/autoupdate');
     });
 
@@ -99,28 +93,21 @@ Route::group(['middleware' => 'auth'], function()
     Route::get('/dashboard/users/{id}/email', 'UserController@emailStore')->name('users.email.store');
 });
 
-
-
-Route::get('/sausages', function (){
+Route::get('/sausages', function () {
     return view('sausages');
 });
 
-Route::get('/privacy', function (){
+Route::get('/privacy', function () {
     return view('privacy');
 });
 
-
-
-
-Route::get('/errors/alreadyapplied', function (){
+Route::get('/errors/alreadyapplied', function () {
     return view('errors/alreadyapplied');
 });
 
-Route::get('/emails/feedback', function (){
+Route::get('/emails/feedback', function () {
     return view('emails/feedback');
 });
-
-
 
 Route::get('/sparkpost', function () {
     Mail::send('emails.feedback', [], function ($message) {
@@ -131,18 +118,14 @@ Route::get('/sparkpost', function () {
     });
 });
 
-
-Route::group(['middleware' => 'auth'], function()
-{
+Route::group(['middleware' => 'auth'], function () {
     Route::get('/discord/sso', ['as'=>'senddiscord', 'uses'=>'DiscordController@senddiscord']);
     Route::get('/discord/process', ['as'=>'process', 'uses'=>'DiscordController@process']);
     Route::get('/discord/assignperms', ['as'=>'assignperms', 'uses'=>'DiscordController@assignperms']);
 });
-
 
 Route::get('/login', 'LoginController@login')->middleware('guest')->name('login');
 
 Route::get('/validate', 'LoginController@validateLogin')->middleware('guest');
 
 Route::get('/logout', 'LoginController@logout')->middleware('auth')->name('logout');
-
