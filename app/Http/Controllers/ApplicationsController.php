@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Support\Str;
 use App\Application;
 use App\AuditLogEntry;
 use App\CoreSettings;
@@ -18,6 +17,7 @@ use App\UserNotification;
 use Auth;
 use Flash;
 use Illuminate\Http\Request;
+use Illuminate\Support\Str;
 use Mail;
 
 class ApplicationsController extends Controller
