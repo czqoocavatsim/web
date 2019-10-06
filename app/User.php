@@ -77,6 +77,11 @@ class User extends Authenticatable
         return $this->hasMany(UserNote::class);
     }
 
+    public function bookingBanObj()
+    {
+        return $this->hasOne(ControllerBookingsBan::class);
+    }
+
     public function userSinceInDays(){
 
         $created = $this->created_at;

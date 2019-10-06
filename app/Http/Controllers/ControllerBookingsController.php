@@ -8,7 +8,7 @@ use Illuminate\Http\Request;
 
 class ControllerBookingsController extends Controller
 {
-    public function index()
+    public function indexPublic()
     {
         $bookings = ControllerBooking::all()->sortBy('start_time');
         $upcomingBookings = [];
@@ -27,3 +27,4 @@ class ControllerBookingsController extends Controller
         return view('controllerbookings', compact('bookings', 'upcomingBookings'));
     }
 }
+
