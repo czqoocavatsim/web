@@ -2,11 +2,15 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="db89b0d0-6910-4027-938c-5281ecb280f6" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/.idea/discord.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/discord.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/discord.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Http/Controllers/DiscordController.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/Http/Controllers/ControllerBookingsController.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Controllers/ControllerBookingsController.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/Http/Controllers/UserController.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Controllers/UserController.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/Http/Controllers/vendor/skymeyer/vatsimphp/app/logs/pilots.log" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Controllers/vendor/skymeyer/vatsimphp/app/logs/pilots.log" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/resources/views/dashboard/training/applications/viewall.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/resources/views/dashboard/training/applications/viewall.blade.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/User.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/User.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/resources/views/dashboard/users/profile.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/resources/views/dashboard/users/profile.blade.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/resources/views/layouts/master.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/resources/views/layouts/master.blade.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/routes/web.php" beforeDir="false" afterPath="$PROJECT_DIR$/routes/web.php" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -164,7 +168,7 @@
     <property name="nodejs_interpreter_path.stuck_in_default_project" value="undefined stuck path" />
     <property name="nodejs_npm_path_reset_for_default_project" value="true" />
     <property name="nodejs_package_manager_path" value="yarn" />
-    <property name="settings.editor.selected.configurable" value="reference.settingsdialog.IDE.editor.colors.Color Scheme Font" />
+    <property name="settings.editor.selected.configurable" value="preferences.pluginManager" />
   </component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
@@ -267,6 +271,8 @@
       <workItem from="1569963209900" duration="11362000" />
       <workItem from="1570106794346" duration="396000" />
       <workItem from="1570107333712" duration="5246000" />
+      <workItem from="1570227828647" duration="8521000" />
+      <workItem from="1570331611227" duration="2419000" />
     </task>
     <servers />
   </component>

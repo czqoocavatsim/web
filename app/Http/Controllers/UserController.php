@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\AuditLogEntry;
+use App\ControllerBookingsBan;
 use App\Notifications\PermissionsChanged;
 use App\User;
 use App\UserNote;
@@ -340,5 +341,34 @@ class UserController extends Controller
         $user = User::whereId($id)->firstOrFail();
 
         return view('dashboard.me.publicuserprofile', compact('user'));
+    }
+
+    public function createBookingBan(Request $request, $id)
+    {
+        //Validate and get user
+        $this->validate($request, [
+           'reason' => 'required'
+        ]);
+        $user = User::whereId($id)->firstOrFail();
+
+        //Is the user banned?
+        if ($user->bookingBan())
+        {
+            abort(403, 'This user is already banned.');
+        }
+
+        //No... let's create a ban
+        $ban = new ControllerBookingsBan;
+        $ban->reason = $request->get(Auth::user()->fullName('FLC').' at '.date('Y-m-d H:i:s').' '.$request->get('reason'));
+        $ban->user_id = $user->id;
+        $ban->timestamp = date('Y-m-d H:i:s');
+        $ban->save();
+
+        //Notify them
+    }
+
+    public function removeBookingBan(Request $request, $id)
+    {
+
     }
 }

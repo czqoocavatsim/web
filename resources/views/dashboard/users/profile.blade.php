@@ -121,6 +121,25 @@
                             @endif
                         </td>
                     </tr>
+                    <tr>
+                        <th scope="row">Booking Banned</th>
+                        <td>
+                            @if ($user->bookingBanned())
+                                Yes
+                                @if (Auth::user()->permissions >= 4)
+                                <a href="#" data-toggle="modal" data-target="#bookingUnban">(Unban)</a>
+                                <p>
+                                    {{$user->bookingBanObj->reason}}
+                                </p>
+                                @endif
+                            @else
+                                No
+                                @if (Auth::user()->permissions >= 4)
+                                <a href="#" data-toggle="modal" data-target="#bookingBan">(Ban)</a>
+                                @endif
+                            @endif
+                        </td>
+                    </tr>
                     </tbody>
                 </table>
             </div>
@@ -149,6 +168,54 @@
                                     <input type="hidden" name="user_id" value="{{$user->id}}">
                                     <br/>
                                     <input type="submit" class="btn btn-success" value="Upload">
+                                </form>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Dismiss</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal fade" id="bookingBan" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+                    <div class="modal-dialog modal-dialog-centered" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="exampleModalLongTitle">Place booking ban on {{$user->fullName("FLC")}}</h5>
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                            <div class="modal-body">
+                                <p>A booking ban will prevent the user from placing controller bookings or booking slots during events. Note that your name and the reason given will be visible to the user.</p>
+                                <form method="post" action="{{route('users.bookingban.create', $user->id)}}" enctype="multipart/form-data" class="" id="">
+                                    @csrf
+                                    <input type="text" class="form-control" name="reason" placeholder="Reason for ban...">
+                                    <br/>
+                                    <input type="submit" class="btn btn-danger" value="Submit">
+                                </form>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Dismiss</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal fade" id="bookingUnban" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+                    <div class="modal-dialog modal-dialog-centered" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="exampleModalLongTitle">Remove booking ban from {{$user->fullName("FLC")}}</h5>
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                            <div class="modal-body">
+                                <p>Note that your name and the reason given will be visible to the user.</p>
+                                <form method="post" action="{{route('users.bookingban.remove', $user->id)}}" enctype="multipart/form-data" class="" id="">
+                                    @csrf
+                                    <input type="text" class="form-control" name="reason" placeholder="Reason for unban...">
+                                    <br/>
+                                    <input type="submit" class="btn btn-outline" value="Submit">
                                 </form>
                             </div>
                             <div class="modal-footer">

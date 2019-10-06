@@ -24,7 +24,7 @@ Route::view('/pilots/tracks', 'pilots.tracks');
 Route::view('/pilots/tutorial', 'pilots.tutorial');
 Route::get('/policies', 'PoliciesController@index')->name('policies');
 Route::get('/meetingminutes', 'NewsController@minutesIndex')->name('meetingminutes');
-Route::get('/bookings', 'ControllerBookingsController@index')->name('controllerbookings');
+Route::get('/bookings', 'ControllerBookingsController@indexPublic')->name('controllerbookings.public');
 Route::view('/privacy', 'privacy')->middleware('bookingban');
 Route::view('/changelog', 'changelog');
 Route::view('/emailtest', 'emails.announcement');
@@ -241,7 +241,12 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('/dashboard/me/editbiography', 'UserController@editBioIndex')->name('me.editbioindex');
     Route::post('/dashboard/me/editbiography', 'UserController@editBio')->name('me.editbio');
     Route::get('/dashboard/me/user/{id}', 'UserController@viewUserProfilePublic')->name('me.profile.public');
-
+    //Bookings
+    Route::group(['middleware' => 'certified'], function () {
+        Route::get('/dashboard/bookings', 'ControllerBookingsController@index')->name('controllerbookings.index');
+        Route::get('/dashboard/bookings/create', 'ControllerBookingsController@create')->name('controllerbookings.create');
+        Route::post('/dashboard/bookings/create', 'ControllerBookingsController@createPost')->name('controllerbookings.create.post');
+    });
     //Training
     Route::get('/dashboard/training', 'TrainingController@index')->name('training.index');
     Route::group(['middleware' => 'instructor'], function () {
@@ -301,6 +306,8 @@ Route::group(['middleware' => 'auth'], function () {
             Route::get('/dashboard/users/{id}/delete', 'UserController@deleteUser');
             Route::get('/dashboard/users/{id}/edit', 'UserController@editUser')->name('users.edit.create');
             Route::post('/dashboard/users/{id}/edit', 'UserController@storeEditUser')->name('users.edit.store');
+            Route::post('/dashboard/users/{id}/bookingban/create', 'UserController@createBookingBan')->name('users.bookingban.create');
+            Route::post('/dashboard/users/{id}/bookingban/remove', 'UserController@removeBookingBan')->name('users.bookingban.remove');
         });
         Route::get('/dashboard/users/{id}/email', 'UserController@emailCreate')->name('users.email.create');
         Route::get('/dashboard/users/{id}/email', 'UserController@emailStore')->name('users.email.store');

@@ -138,7 +138,7 @@
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a href="{{route('controllerbookings')}}" class="nav-link py-0 {{ Request::is('bookings/*') || Request::is('bookings') ? 'active' : '' }}">Bookings</a>
+                        <a href="{{route('controllerbookings.public')}}" class="nav-link py-0 {{ Request::is('bookings/*') || Request::is('bookings') ? 'active' : '' }}">Bookings</a>
                     </li>
                     <li class="nav-item dropdown">
                         <a class="nav-link py-0 dropdown-toggle {{ Request::is('dashboard/application') || Request::is('sector-files') ? 'active' : '' }}" style="cursor:pointer" id="dropdown01" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">ATC</a>
@@ -157,7 +157,7 @@
                             <a class="dropdown-item {{ Request::is('pilots/oceanic-clearance') ? 'active' : '' }}" href="{{url('/pilots/oceanic-clearance')}}">Oceanic Clearance Generator</a>
                             <a class="dropdown-item {{ Request::is('pilots/position-report') ? 'active' : '' }}" href="{{url('/pilots/position-report')}}">Position Report Generator</a>
                             <a class="dropdown-item" href="https://www.vatsim.net/pilots/resources" target="_blank">VATSIM Resources</a>
-                            <a class="dropdown-item {{ Request::is('pilots/tutorial') ? 'active' : '' }}" href="{{url('/pilots/tutorial')}}">Oceanic Tutorial</a>
+{{--                            <a class="dropdown-item {{ Request::is('pilots/tutorial') ? 'active' : '' }}" href="{{url('/pilots/tutorial')}}">Oceanic Tutorial</a>--}}
                             <a class="dropdown-item {{ Request::is('pilots/tracks') ? 'active' : ''}}" href="{{url('/pilots/tracks')}}">NAT Tracks</a>
                         </div>
                     </li>
