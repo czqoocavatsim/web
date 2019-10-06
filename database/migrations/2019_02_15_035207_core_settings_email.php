@@ -1,8 +1,8 @@
 <?php
 
-use Illuminate\Support\Facades\Schema;
-use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
 
 class CoreSettingsEmail extends Migration
 {
@@ -13,7 +13,7 @@ class CoreSettingsEmail extends Migration
      */
     public function up()
     {
-        Schema::table('core_info', function($table) {
+        Schema::table('core_info', function ($table) {
             $table->text('emailfirchief');
             $table->text('emaildepfirchief');
             $table->text('emailcinstructor');
@@ -30,7 +30,7 @@ class CoreSettingsEmail extends Migration
      */
     public function down()
     {
-        Schema::table('core_info', function($table) {
+        Schema::table('core_info', function ($table) {
             $table->dropColumn('emailfirchief');
             $table->dropColumn('emaildepfirchief');
             $table->dropColumn('emailcinstructor');

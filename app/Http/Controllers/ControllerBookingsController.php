@@ -13,8 +13,7 @@ class ControllerBookingsController extends Controller
         $bookings = ControllerBooking::all()->sortBy('start_time');
         $upcomingBookings = [];
         $iterations = 0;
-        foreach ($bookings as $b)
-        {
+        foreach ($bookings as $b) {
             $iterations++;
             if ($iterations > 10) {
                 exit;
@@ -24,6 +23,7 @@ class ControllerBookingsController extends Controller
                 array_push($upcomingBookings, $b);
             }
         }
+
         return view('controllerbookings', compact('bookings', 'upcomingBookings'));
     }
 }

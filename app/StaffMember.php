@@ -6,10 +6,10 @@ use Illuminate\Database\Eloquent\Model;
 
 class StaffMember extends Model
 {
-    protected $table = "staff_member";
+    protected $table = 'staff_member';
 
     protected $fillable = [
-        'user_id', 'position', 'group', 'description', 'email'
+        'user_id', 'position', 'group', 'description', 'email',
     ];
 
     public function user()

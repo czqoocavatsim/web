@@ -3,9 +3,9 @@
 namespace App\Mail;
 
 use Illuminate\Bus\Queueable;
+use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Mail\Mailable;
 use Illuminate\Queue\SerializesModels;
-use Illuminate\Contracts\Queue\ShouldQueue;
 
 class ApplicationStartedUserEmail extends Mailable
 {
@@ -16,7 +16,6 @@ class ApplicationStartedUserEmail extends Mailable
      *
      * @return void
      */
-
     public function __construct()
     {
     }

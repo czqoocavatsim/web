@@ -25,7 +25,7 @@ class NewsCreateRequest extends FormRequest
     {
         return [
             'title' => 'required',
-            'content' => 'required'
+            'content' => 'required',
         ];
     }
 }

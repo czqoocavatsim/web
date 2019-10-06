@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 class ReservedBookingSlot extends Model
 {
     protected $fillable = [
-        'user_id', 'position_id', 'start_time', 'end_time', 'notes', 'permission_exemption'
+        'user_id', 'position_id', 'start_time', 'end_time', 'notes', 'permission_exemption',
     ];
 
     public function user()

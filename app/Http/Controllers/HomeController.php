@@ -3,10 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\CarouselItem;
-use App\Ticket;
-use Illuminate\Http\Request;
 use App\News;
+use App\Ticket;
 use Auth;
+use Illuminate\Http\Request;
 
 class HomeController extends Controller
 {
@@ -28,16 +28,16 @@ class HomeController extends Controller
         $news = News::orderBy('id', 'desc')->where('type', '!=', 'Certification')->take(5)->get();
         $promotions = News::orderBy('id', 'desc')->where('type', 'Certification')->take(5)->get();
         $carouselItems = CarouselItem::all();
-        $arrContextOptions=array(
-            "ssl"=>array(
-                "verify_peer"=>false,
-                "verify_peer_name"=>false,
-            ),
-        );
+        $arrContextOptions = [
+            'ssl'=>[
+                'verify_peer'=>false,
+                'verify_peer_name'=>false,
+            ],
+        ];
         $vatcanNews = file_get_contents('http://www.vatcan.ca/ajax/news', false, stream_context_create($arrContextOptions));
         $vatcanNewsJsonFull = \GuzzleHttp\json_decode($vatcanNews, true);
         $vatcanNewsJson = array_splice($vatcanNewsJsonFull, 5);
+
         return view('home', compact('ganderControllers', 'shanwickControllers', 'news', 'vatcanNewsJson', 'promotions', 'carouselItems'));
     }
-
 }

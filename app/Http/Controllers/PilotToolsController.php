@@ -14,11 +14,10 @@ class PilotToolsController extends Controller
             'mach' => 'required',
             'entry' => 'required',
             'time' => 'required',
-            'tmi' => 'required'
+            'tmi' => 'required',
         ]);
 
         //Check if either NAT or route is filled
-        
 
         return redirect()->route('pilots.oceanic-clearance')->with('success', 'Clearance generated!');
     }

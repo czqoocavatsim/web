@@ -3,9 +3,9 @@
 namespace App\Mail;
 
 use Illuminate\Bus\Queueable;
+use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Mail\Mailable;
 use Illuminate\Queue\SerializesModels;
-use Illuminate\Contracts\Queue\ShouldQueue;
 
 class GDPRDataEmail extends Mailable
 {
@@ -32,7 +32,7 @@ class GDPRDataEmail extends Mailable
     {
         return $this
             ->to(config('mail.from.address'))
-            ->subject("CZQO Data GDPR Request")
+            ->subject('CZQO Data GDPR Request')
             ->view('emails.GDPRdata');
     }
 }

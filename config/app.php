@@ -164,7 +164,7 @@ return [
         App\Providers\EventServiceProvider::class,
         App\Providers\RouteServiceProvider::class,
         MisterPhilip\MaintenanceMode\MaintenanceModeServiceProvider::class,
-        MisterPhilip\MaintenanceMode\MaintenanceCommandServiceProvider::class
+        MisterPhilip\MaintenanceMode\MaintenanceCommandServiceProvider::class,
     ],
 
     /*

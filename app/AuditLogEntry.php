@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 class AuditLogEntry extends Model
 {
     protected $fillable = [
-        'user_id', 'action', 'affected_id', 'time', 'private'
+        'user_id', 'action', 'affected_id', 'time', 'private',
     ];
 
     public static function insert(User $user, $message, User $affected_user, $private)

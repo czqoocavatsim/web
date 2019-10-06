@@ -5,9 +5,9 @@ namespace App;
 use Illuminate\Database\Eloquent\Model;
 
 class Instructor extends Model
-{ 
+{
     protected $fillable = [
-        'user_id', 'qualification', 'email'
+        'user_id', 'qualification', 'email',
     ];
 
     /*
@@ -15,15 +15,18 @@ class Instructor extends Model
      *
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
-    public function user(){
+    public function user()
+    {
         return $this->belongsTo('App\User');
     }
 
-    public function students(){
+    public function students()
+    {
         return $this->hasMany('App\Student');
     }
 
-    public function sessions(){
+    public function sessions()
+    {
         return $this->hasMany('App\InstructingSession');
     }
 }

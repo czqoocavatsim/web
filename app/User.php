@@ -3,9 +3,9 @@
 namespace App;
 
 use App\Http\Controllers\RosterController;
-use Illuminate\Notifications\Notifiable;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Foundation\Auth\User as Authenticatable;
+use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Carbon;
 
 class User extends Authenticatable
@@ -20,7 +20,7 @@ class User extends Authenticatable
     protected $fillable = [
         'id', 'fname', 'lname', 'email', 'rating_id', 'rating_short', 'rating_long', 'rating_GRP',
         'reg_date', 'region_code', 'region_name', 'division_code', 'division_name',
-        'subdivision_code', 'subdivision_name', 'permissions', 'init', 'gdpr_subscribed_emails', 'avatar', 'bio', 'display_cid_only', 'display_fname', 'display_last_name'
+        'subdivision_code', 'subdivision_name', 'permissions', 'init', 'gdpr_subscribed_emails', 'avatar', 'bio', 'display_cid_only', 'display_fname', 'display_last_name',
     ];
 
     /**
@@ -33,7 +33,7 @@ class User extends Authenticatable
     ];
 
     /**
-     * Return articles that the user has written
+     * Return articles that the user has written.
      *
      * @return \Illuminate\Database\Eloquent\Relations\HasMany
      */
@@ -77,8 +77,8 @@ class User extends Authenticatable
         return $this->hasMany(UserNote::class);
     }
 
-    public function userSinceInDays(){
-
+    public function userSinceInDays()
+    {
         $created = $this->created_at;
         $now = Carbon::now();
         $difference = $created->diff($now)->days;
@@ -93,23 +93,19 @@ class User extends Authenticatable
             return strval($this->id);
         }
 
-        if ($format == "FLC") {
-
-            if($this->display_last_name == true) {
+        if ($format == 'FLC') {
+            if ($this->display_last_name == true) {
                 return $this->display_fname.' '.$this->lname.' '.$this->id;
             } else {
                 return $this->display_fname.' '.$this->id;
             }
-
-        } elseif ($format === "FL") {
-            if($this->display_last_name == true) {
-                return $this->display_fname . ' ' . $this->lname;
+        } elseif ($format === 'FL') {
+            if ($this->display_last_name == true) {
+                return $this->display_fname.' '.$this->lname;
             } else {
                 return $this->display_fname;
             }
-
-        } else if ($format === "F") {
-
+        } elseif ($format === 'F') {
             return $this->display_fname;
         }
 
@@ -118,10 +114,10 @@ class User extends Authenticatable
 
     public function isAvatarDefault()
     {
-        if ($this->avatar === "https://www.drupal.org/files/profile_default.png")
-        {
+        if ($this->avatar === 'https://www.drupal.org/files/profile_default.png') {
             return true;
         }
+
         return false;
     }
 
@@ -130,6 +126,7 @@ class User extends Authenticatable
         if ($this->rosterProfile()) {
             return true;
         }
+
         return false;
     }
 
@@ -138,6 +135,7 @@ class User extends Authenticatable
         if (ControllerBookingsBan::where('user_id', $this->id)->first()) {
             return true;
         }
+
         return false;
     }
 
