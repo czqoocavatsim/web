@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use Illuminate\Support\Str;
 use App\Application;
 use App\AuditLogEntry;
 use App\CoreSettings;
@@ -60,7 +61,7 @@ class ApplicationsController extends Controller
 
         //Create model and save it
         $application = new Application();
-        $application->application_id = str_random(8);
+        $application->application_id = Str::random(8);
         $application->user_id = Auth::id();
         $application->submitted_at = date('Y-m-d H:i:s');
         $application->applicant_statement = $request->get('applicant_statement');

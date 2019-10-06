@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use Illuminate\Support\Str;
 use App\CoreSettings;
 use App\Mail\NewTicketMail;
 use App\Mail\NewTicketReplyMail;
@@ -56,7 +57,7 @@ class TicketsController extends Controller
 
         $ticket = new Ticket([
             'user_id' => Auth::user()->id,
-            'ticket_id' => str_random(6),
+            'ticket_id' => Str::random(6),
             'department' => $request->get('department'),
             'title' => $request->get('title'),
             'message' => $request->get('message'),
