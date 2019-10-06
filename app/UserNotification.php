@@ -13,7 +13,7 @@ class UserNotification extends Model
 
     public function user()
     {
-        return $this->belongsTo('App\User');
+        return $this->belongsTo(\App\User::class);
     }
 
     public static function send(User $user, $content, $link)

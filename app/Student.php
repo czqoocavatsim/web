@@ -12,12 +12,12 @@ class Student extends Model
 
     public function user()
     {
-        return $this->belongsTo('App\User');
+        return $this->belongsTo(\App\User::class);
     }
 
     public function instructor()
     {
-        return $this->belongsTo('App\Instructor');
+        return $this->belongsTo(\App\Instructor::class);
     }
 
     public function getApplicationAttribute()
@@ -27,6 +27,6 @@ class Student extends Model
 
     public function instructingSessions()
     {
-        return $this->hasMany('App\InstructingSession');
+        return $this->hasMany(\App\InstructingSession::class);
     }
 }

@@ -12,11 +12,11 @@ class InstructingSession extends Model
 
     public function student()
     {
-        return $this->belongsTo('App\Student');
+        return $this->belongsTo(\App\Student::class);
     }
 
     public function instructor()
     {
-        return $this->belongsTo('App\Instructor');
+        return $this->belongsTo(\App\Instructor::class);
     }
 }

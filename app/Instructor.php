@@ -17,16 +17,16 @@ class Instructor extends Model
      */
     public function user()
     {
-        return $this->belongsTo('App\User');
+        return $this->belongsTo(\App\User::class);
     }
 
     public function students()
     {
-        return $this->hasMany('App\Student');
+        return $this->hasMany(\App\Student::class);
     }
 
     public function sessions()
     {
-        return $this->hasMany('App\InstructingSession');
+        return $this->hasMany(\App\InstructingSession::class);
     }
 }
