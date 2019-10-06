@@ -3,15 +3,15 @@
 namespace App\Http\Controllers;
 
 use App\CoreSettings;
+use App\Mail\GDPRDataEmail;
+use App\Mail\GDPRRequestEmail;
 use App\Ticket;
 use App\User;
 use App\UserNote;
+use Auth;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
-use App\Mail\GDPRDataEmail;
-use Auth;
 use Mail;
-use App\Mail\GDPRRequestEmail;
 use PDF;
 
 class GDPRController extends Controller
@@ -34,24 +34,24 @@ class GDPRController extends Controller
     public function subscribeEmails()
     {
         $user = Auth::user();
-        if ($user->gdpr_subscribed_emails == 1)
-        {
+        if ($user->gdpr_subscribed_emails == 1) {
             abort(403, 'You need to unsubscribe first.');
         }
         $user->gdpr_subscribed_emails = 1;
         $user->save();
+
         return redirect()->route('dashboard.emailpref')->with('success', 'You are subscribed!');
     }
 
     public function unsubscribeEmails()
     {
         $user = Auth::user();
-        if ($user->gdpr_subscribed_emails == 0)
-        {
+        if ($user->gdpr_subscribed_emails == 0) {
             abort(403, 'You need to subscribe first.');
         }
         $user->gdpr_subscribed_emails = 0;
         $user->save();
+
         return redirect()->route('dashboard.emailpref')->with('success', 'You are unsubscribed!');
     }
 
@@ -65,7 +65,7 @@ class GDPRController extends Controller
         $data['fname'] = Auth::user()->fname;
         $data['lname'] = Auth::user()->lname;
         $content = "Gander Oceanic FIR User Data \n";
-        $content .= "For User ".Auth::user()->id." as of ".date('Y-m-d H:i:i')."\n";
+        $content .= 'For User '.Auth::user()->id.' as of '.date('Y-m-d H:i:i')."\n";
         $content .= "GENERAL USER DATA \n -------------------------------------\n";
         $content .= Auth::user()->toJson(JSON_PRETTY_PRINT);
         $content .= "\n CONTROLLER APPLICATIONS \n -------------------------------------\n";
@@ -81,11 +81,11 @@ class GDPRController extends Controller
 
     public function removeData()
     {
-        if (Auth::user()->permissions >= 5)
-        {
-            return view ('dashboard.data.remove', ['canremove' => 'false']);
+        if (Auth::user()->permissions >= 5) {
+            return view('dashboard.data.remove', ['canremove' => 'false']);
         }
-        return view ('dashboard.data.remove', ['canremove' => 'true']);
+
+        return view('dashboard.data.remove', ['canremove' => 'true']);
     }
 
     public function downloadData()
@@ -104,9 +104,9 @@ class GDPRController extends Controller
         $tickets = Ticket::where('user_id', Auth::id())->get();
         //return view('dashboard.data.datadownloadpdf', compact('basicData', 'userNotes', 'applications', 'studentProfile', 'instructorProfile', 'tickets'));
         $pdf = PDF::loadView('dashboard.data.datadownloadpdf', compact('basicData', 'userNotes', 'applications', 'studentProfile', 'instructorProfile', 'tickets'));
+
         return $pdf->download(Auth::id().' '.Carbon::now().'.pdf');
     }
-
 
     ///
     /// Remove user data under GDPR notification to director and webmaster
@@ -115,7 +115,7 @@ class GDPRController extends Controller
         //Validate form
         $vaildatedData = $request->validate([
             'email' => 'required',
-            'deleteMethod' => 'required'
+            'deleteMethod' => 'required',
         ]);
 
         //Get current user
@@ -123,8 +123,7 @@ class GDPRController extends Controller
 
         //Verify email address entered
         $email = $request->get('email');
-        if (strtolower($user->email) != strtolower($email))
-        {
+        if (strtolower($user->email) != strtolower($email)) {
             return redirect('dashboard/data/remove')->with('error', 'Incorrect email provided. Please try again with your CERT email')->withInput();
         }
 

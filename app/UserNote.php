@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 class UserNote extends Model
 {
     protected $fillable = [
-        'user_id', 'author', 'content', 'confidential', 'timestamp'
+        'user_id', 'author', 'content', 'confidential', 'timestamp',
     ];
 
     public function user()

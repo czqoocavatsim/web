@@ -9,6 +9,6 @@ $factory->define(App\News::class, function (Faker $faker) {
         'date' => $faker->date('Y-m-d'),
         'type' => 'Email',
         'user_id' => 1300012,
-        'archived' => 0
+        'archived' => 0,
     ];
 });

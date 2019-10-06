@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 class ControllerBookingsBan extends Model
 {
     protected $fillable = [
-        'user_id', 'reason', 'timestamp'
+        'user_id', 'reason', 'timestamp',
     ];
 
     public function user()

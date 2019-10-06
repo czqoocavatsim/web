@@ -21,7 +21,7 @@ return [
      * The secret key for your organisation (provided by VATSIM)
      * Do not give this to anyone else or display it to your users. It must be kept server-side
      */
-    'secret' => env('SSO_SECRET','04i_~ruVUE.1-do1--sc'),
+    'secret' => env('SSO_SECRET', '04i_~ruVUE.1-do1--sc'),
 
     /*
      * The signing method you are using to encrypt your request signature.
@@ -71,6 +71,6 @@ O0gQ0RDS3gD8C5XHvy5vryYjUOB10rUn9A2xLQw4sqKv2suHvIhc0Eit
     'additionalConfig' => [
         'allow_suspended' => false,
         'allow_inactive' => false,
-    ]
+    ],
 
 ];

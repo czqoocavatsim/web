@@ -2,11 +2,11 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
-use Auth;
-use Mail;
-use App\User;
 use App\Mail\EmailAnnouncementEmail;
+use App\User;
+use Auth;
+use Illuminate\Http\Request;
+use Mail;
 
 class EmailAnnouncementController extends Controller
 {
@@ -26,14 +26,12 @@ class EmailAnnouncementController extends Controller
             'msg' => 'required',
         ]);
 
-
         $users = User::all();
 
-        foreach ($users as $user)
-        {
+        foreach ($users as $user) {
             $data = [];
             $data['content'] = $request->get('msg');
-            $data['title'] = "FIR Announcement";
+            $data['title'] = 'FIR Announcement';
             $data['fname'] = Auth::user()->fname;
             $data['lname'] = Auth::user()->lname;
             $data['receivingname'] = $user->fname;

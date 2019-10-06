@@ -2,19 +2,20 @@
 
 namespace App\Mail;
 
-use App\TicketReply;
 use App\Ticket;
+use App\TicketReply;
 use App\User;
 use Illuminate\Bus\Queueable;
+use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Mail\Mailable;
 use Illuminate\Queue\SerializesModels;
-use Illuminate\Contracts\Queue\ShouldQueue;
 
 class NewTicketReplyMail extends Mailable
 {
     use Queueable, SerializesModels;
     public $ticketReply;
     public $ticket;
+
     /**
      * Create a new message instance.
      *

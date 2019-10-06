@@ -16,10 +16,8 @@ class CheckCertified
      */
     public function handle($request, Closure $next)
     {
-        if (Auth::check())
-        {
-            if (Auth::user()->permissions >= 1)
-            {
+        if (Auth::check()) {
+            if (Auth::user()->permissions >= 1) {
                 return $next($request);
             }
         }

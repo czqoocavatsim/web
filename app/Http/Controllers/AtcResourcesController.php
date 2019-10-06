@@ -2,14 +2,15 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
 use App\AtcResource;
+use Illuminate\Http\Request;
 
 class AtcResourcesController extends Controller
 {
     public function index()
     {
         $resources = AtcResource::all();
+
         return view('atcresources', compact('resources'));
     }
 

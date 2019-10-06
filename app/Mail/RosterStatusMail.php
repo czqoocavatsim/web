@@ -4,9 +4,9 @@ namespace App\Mail;
 
 use App\RosterMember;
 use Illuminate\Bus\Queueable;
+use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Mail\Mailable;
 use Illuminate\Queue\SerializesModels;
-use Illuminate\Contracts\Queue\ShouldQueue;
 
 class RosterStatusMail extends Mailable
 {
@@ -18,6 +18,7 @@ class RosterStatusMail extends Mailable
      * @return void
      */
     public $controller;
+
     public function __construct(RosterMember $controller)
     {
         $this->controller = $controller;

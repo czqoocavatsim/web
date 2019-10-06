@@ -2,13 +2,13 @@
 
 namespace App\Console;
 
+use App\AuditLogEntry;
+use App\User;
+use App\VatsimPosition;
 use App\VatsimSession;
 use Carbon\Carbon;
 use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Foundation\Console\Kernel as ConsoleKernel;
-use App\User;
-use App\AuditLogEntry;
-use App\VatsimPosition;
 
 class Kernel extends ConsoleKernel
 {

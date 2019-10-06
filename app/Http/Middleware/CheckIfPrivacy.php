@@ -15,13 +15,12 @@ class CheckIfPrivacy
      */
     public function handle($request, Closure $next)
     {
-        if (Auth::check())
-        {
-            if (Auth::user()->init == 0)
-            {
+        if (Auth::check()) {
+            if (Auth::user()->init == 0) {
                 return $next($request);
             }
         }
+
         return ('/')->with('error', 'Please accept the CZQO privacy policy.');
     }
 }

@@ -8,10 +8,12 @@ class UserNotification extends Model
 {
     protected $table = 'notifications';
     protected $fillable = [
-        'user_id', 'content', 'link', 'dateTime'
+        'user_id', 'content', 'link', 'dateTime',
     ];
-    public function user(){
-        return $this->belongsTo('App\User');
+
+    public function user()
+    {
+        return $this->belongsTo(\App\User::class);
     }
 
     public static function send(User $user, $content, $link)

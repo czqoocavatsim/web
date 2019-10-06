@@ -2,19 +2,20 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
-use App\CoreSettings;
-use App\User;
 use App\AuditLogEntry;
+use App\CoreSettings;
 use App\Notifications\MaintenanceNotification;
-use Auth;
+use App\User;
 use Artisan;
+use Auth;
+use Illuminate\Http\Request;
 
 class CoreSettingsController extends Controller
 {
     public function index()
     {
         $settings = CoreSettings::where('id', 1)->firstOrFail();
+
         return view('dashboard.coresettings', compact('settings'));
     }
 
@@ -49,9 +50,10 @@ class CoreSettingsController extends Controller
             'affected_id' => 1,
             'action' => 'CHANGED CORE SETTINGS',
             'time' => date('Y-m-d H:i:s'),
-            'private' => 0
+            'private' => 0,
         ]);
         $entry->save();
+
         return redirect()->route('coresettings')->with('success', 'Saved settings');
     }
 
@@ -65,10 +67,11 @@ class CoreSettingsController extends Controller
             'affected_id' => 1,
             'action' => 'ENTER MAINTENANCE MODE',
             'time' => date('Y-m-d H:i:s'),
-            'private' => 0
+            'private' => 0,
         ]);
         $entry->save();
         Artisan::call('down', ['--message' => 'The CZQO website is down for maintenance. If you require assistance, please contact us at info@czqo.vatcan.ca', '--retry' => 30]);
+
         return redirect()->route('coresettings')->with('success', 'Maintenance mode enabled.');
     }
 }

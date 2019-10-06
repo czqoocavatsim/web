@@ -4,6 +4,7 @@ namespace App\Http\Middleware;
 
 use Closure;
 use Illuminate\Support\Facades\Auth;
+
 class CheckInstructor
 {
     /**
@@ -15,10 +16,8 @@ class CheckInstructor
      */
     public function handle($request, Closure $next)
     {
-        if (Auth::check())
-        {
-            if (Auth::user()->permissions >= 4 || Auth::user()->instructorProfile !== null)
-            {
+        if (Auth::check()) {
+            if (Auth::user()->permissions >= 4 || Auth::user()->instructorProfile !== null) {
                 return $next($request);
             }
         }

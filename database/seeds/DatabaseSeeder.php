@@ -31,7 +31,7 @@ class DatabaseSeeder extends Seeder
             'emailcinstructor' => 'webmaster@czqo.vatcan.ca',
             'emaileventc' => 'webmaster@czqo.vatcan.ca',
             'emailfacilitye' => 'webmaster@czqo.vatcan.ca',
-            'emailwebmaster' => 'webmaster@czqo.vatcan.ca'
+            'emailwebmaster' => 'webmaster@czqo.vatcan.ca',
         ]);
 
         DB::table('users')->insert([
@@ -40,7 +40,7 @@ class DatabaseSeeder extends Seeder
             'lname' => 'User',
             'email' => 'no-reply@czqo.vatcan.ca',
             'permissions' => 4,
-            'display_fname' => 'System'
+            'display_fname' => 'System',
         ]);
 
         DB::table('users')->insert([
@@ -49,7 +49,7 @@ class DatabaseSeeder extends Seeder
             'lname' => 'Placeholder',
             'email' => 'no-reply@czqo.vatcan.ca',
             'permissions' => 1,
-            'display_fname' => 'Roster'
+            'display_fname' => 'Roster',
         ]);
 
         DB::table('staff_member')->insert([

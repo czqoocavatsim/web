@@ -2,22 +2,23 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
+use App\Application;
+use App\AuditLogEntry;
+use App\CoreSettings;
+use App\Mail\ApplicationAcceptedStaffEmail;
+use App\Mail\ApplicationAcceptedUserEmail;
+use App\Mail\ApplicationDeniedUserEmail;
+use App\Mail\ApplicationStartedStaffEmail;
+use App\Mail\ApplicationStartedUserEmail;
+use App\Mail\ApplicationWithdrawnEmail;
+use App\RosterMember;
+use App\User;
+use App\UserNotification;
 use Auth;
 use Flash;
+use Illuminate\Http\Request;
+use Illuminate\Support\Str;
 use Mail;
-use App\{Mail\ApplicationAcceptedStaffEmail,
-    Mail\ApplicationDeniedUserEmail,
-    Mail\ApplicationStartedUserEmail,
-    RosterMember,
-    Mail\ApplicationWithdrawnEmail,
-    AuditLogEntry,
-    User,
-    Application,
-    Mail\ApplicationStartedStaffEmail,
-    Mail\ApplicationAcceptedUserEmail,
-    CoreSettings,
-    UserNotification};
 
 class ApplicationsController extends Controller
 {
@@ -34,18 +35,13 @@ class ApplicationsController extends Controller
         $existingApplication = Application::where('user_id', Auth::id())->where('status', 0)->first();
 
         //Redirects
-        if (in_array($rating, $ratings))
-        {
+        if (in_array($rating, $ratings)) {
             //user is in a prohibited rating
             return view('dashboard.application.start')->with('allowed', 'false');
-        }
-        else if ($existingApplication != null)
-        {
+        } elseif ($existingApplication != null) {
             //user already has an application
             return view('dashboard.application.start')->with('allowed', 'pendingApplication');
-        }
-        else
-        {
+        } else {
             //hooray they can apply
             return view('dashboard.application.start')->with('allowed', 'true');
         }
@@ -65,7 +61,7 @@ class ApplicationsController extends Controller
 
         //Create model and save it
         $application = new Application();
-        $application->application_id = str_random(8);
+        $application->application_id = Str::random(8);
         $application->user_id = Auth::id();
         $application->submitted_at = date('Y-m-d H:i:s');
         $application->applicant_statement = $request->get('applicant_statement');
@@ -84,13 +80,10 @@ class ApplicationsController extends Controller
         $application = Application::where('application_id', $application_id)->firstOrFail();
 
         //Check if someone is being dumb
-        if ($application->user != Auth::user())
-        {
+        if ($application->user != Auth::user()) {
             abort(403);
-        }
-        else if ($application->status != 0)
-        {
-            abort(403, "You cannot withdraw an already withdrawn or processed application!");
+        } elseif ($application->status != 0) {
+            abort(403, 'You cannot withdraw an already withdrawn or processed application!');
         }
 
         //Set application to withdrawn status and set processed
@@ -111,8 +104,7 @@ class ApplicationsController extends Controller
         //Find application from URL params
         $application = Application::where('application_id', $application_id)->firstOrFail();
 
-        if ($application->user != Auth::user())
-        {
+        if ($application->user != Auth::user()) {
             abort(403);
         }
 
