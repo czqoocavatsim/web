@@ -1,19 +1,32 @@
 @extends('layouts.email')
 
-
 @section('title')
-FIR Announcement
+    <b>{{$news->title}}</b>
 @stop
 
 @section('to')
 
-Dear {{$data['receivingname']}},
+    <strong>Hi there,</strong>
 @stop
 
 @section('content')
-    {!!html_entity_decode($data['content'])!!}
+    <p>
+        {!! html_entity_decode($news->content) !!}
+    </p>
+    <hr>
+    <br/>
+    View this news article on the website <a href="{{route('news.articlepublic', $news->slug)}}">here.</a>
 @stop
 
 @section('end')
-From {{$data['name']}}
+    <p>
+        Sent by {{\App\User::find($news->user_id)->fullName('FLC')}}
+        <br/>
+        @if ($news->type == 'CertifiedOnly')
+            You received this email because you are a certified Gander controller according to our records.
+        @else
+            You received this email because you have an account on the Gander Oceanic website.
+        @endif
+    </p>
+    <b>Gander Oceanic Core</b>
 @stop

@@ -148,13 +148,11 @@ return [
         Illuminate\Translation\TranslationServiceProvider::class,
         Illuminate\Validation\ValidationServiceProvider::class,
         Illuminate\View\ViewServiceProvider::class,
-        Spatie\GoogleCalendar\GoogleCalendarServiceProvider::class,
 
         /*
          * Package Service Providers...
          */
         Barryvdh\DomPDF\ServiceProvider::class,
-        \MaddHatter\LaravelFullcalendar\ServiceProvider::class,
         /*
          * Application Service Providers...
          */
@@ -163,8 +161,6 @@ return [
         // App\Providers\BroadcastServiceProvider::class,
         App\Providers\EventServiceProvider::class,
         App\Providers\RouteServiceProvider::class,
-        MisterPhilip\MaintenanceMode\MaintenanceModeServiceProvider::class,
-        MisterPhilip\MaintenanceMode\MaintenanceCommandServiceProvider::class,
     ],
 
     /*

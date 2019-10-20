@@ -62,15 +62,7 @@ class NewsController extends Controller
                 if ($user->gdpr_subscribed_emails == 0) {
                     continue;
                 }
-                $data = [];
-                $data['content'] = $news->content;
-                $data['title'] = $news->title;
-                $data['fname'] = Auth::user()->fname;
-                $data['lname'] = Auth::user()->lname;
-                $data['receivingname'] = $user->fname;
-                Mail::to($user->email)->send(new EmailAnnouncementEmail($data), function ($message) use ($data) {
-                    $message->subject('Gander News: '.$data['title']);
-                });
+                Mail::to($user->email)->send(new EmailAnnouncementEmail($news));
             }
         } elseif ($news->type == 'CertifiedOnly') {
             $users = User::all();
@@ -79,15 +71,7 @@ class NewsController extends Controller
                     continue;
                 }
                 if ($user->permissions >= 1) {
-                    $data = [];
-                    $data['content'] = $news->content;
-                    $data['title'] = $news->title;
-                    $data['fname'] = Auth::user()->fname;
-                    $data['lname'] = Auth::user()->lname;
-                    $data['receivingname'] = $user->fname;
-                    Mail::to($user->email)->send(new EmailAnnouncementEmail($data), function ($message) use ($data) {
-                        $message->subject('Gander Controller News: '.$data['title']);
-                    });
+                    Mail::to($user->email)->send(new EmailAnnouncementEmail($news));
                 }
             }
         }

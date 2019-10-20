@@ -2,6 +2,7 @@
 
 namespace App\Mail;
 
+use App\News;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Mail\Mailable;
@@ -16,11 +17,11 @@ class EmailAnnouncementEmail extends Mailable
      *
      * @return void
      */
-    public $data;
+    public $news;
 
-    public function __construct($data)
+    public function __construct(News $news)
     {
-        $this->data = $data;
+        $this->news = $news;
     }
 
     /**
@@ -32,7 +33,7 @@ class EmailAnnouncementEmail extends Mailable
     {
         return $this
             ->to(config('mail.from.address'))
-            ->subject('Gander News: '.$this->data['title'])
+            ->subject('Gander News: '.$this->news->title)
             ->view('emails.announcement');
     }
 }

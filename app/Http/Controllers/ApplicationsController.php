@@ -29,7 +29,7 @@ class ApplicationsController extends Controller
     {
         //Get user's rating and array of prohibited ratings
         $ratings = ['INA', 'OBS', 'S1', 'S2', 'S3'];
-        $rating = Auth::user()->rating;
+        $rating = Auth::user()->rating_short;
 
         //Is there an existing application?
         $existingApplication = Application::where('user_id', Auth::id())->where('status', 0)->first();
