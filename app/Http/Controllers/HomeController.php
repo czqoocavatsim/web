@@ -25,8 +25,8 @@ class HomeController extends Controller
         }
 
         //News
-        $news = News::orderBy('id', 'desc')->where('type', '!=', 'Certification')->take(5)->get();
-        $promotions = News::orderBy('id', 'desc')->where('type', 'Certification')->take(5)->get();
+        $news = News::all();
+        $promotions = News::all();
         $carouselItems = CarouselItem::all();
         $arrContextOptions = [
             'ssl'=>[
@@ -38,6 +38,6 @@ class HomeController extends Controller
         $vatcanNewsJsonFull = \GuzzleHttp\json_decode($vatcanNews, true);
         $vatcanNewsJson = array_splice($vatcanNewsJsonFull, 5);
 
-        return view('home', compact('ganderControllers', 'shanwickControllers', 'news', 'vatcanNewsJson', 'promotions', 'carouselItems'));
+        return view('index', compact('ganderControllers', 'shanwickControllers', 'news', 'vatcanNewsJson', 'promotions', 'carouselItems'));
     }
 }

@@ -2,12 +2,13 @@
 
 namespace App;
 
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
 
 class News extends Model
 {
     protected $fillable = [
-        'title', 'content', 'date', 'type', 'user_id', 'archived', 'slug', 'main_image_url',
+        'id', 'title', 'user_id', 'show_author', 'image', 'content', 'summary', 'published', 'edited', 'visible', 'email_level', 'certification'
     ];
 
     /*
@@ -18,5 +19,15 @@ class News extends Model
     public function user()
     {
         return $this->belongsTo(\App\User::class);
+    }
+
+    public function published_pretty()
+    {
+        return Carbon::create($this->published)->toDayDateTimeString();
+    }
+
+    public function edited_pretty()
+    {
+        return Carbon::create($this->edited)->toDayDateTimeString();
     }
 }

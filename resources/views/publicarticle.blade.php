@@ -6,6 +6,9 @@
 
 @stop
 
+@section('title', $article->title.' - ')
+@section('description', \App\User::find($article->user_id)->fullName('FLC').' - ')
+
 @section('content')
     <style>
         .article-container {

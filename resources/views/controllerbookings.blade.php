@@ -11,6 +11,7 @@
         <h2>Controller Bookings</h2>
         <div class="row">
             <div class="col-md-8">
+                <input type="date" class="flatpickr">
                 <h4>Upcoming</h4>
                 @foreach($upcomingBookings as $b)
                     <div class="list-group">

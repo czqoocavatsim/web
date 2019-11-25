@@ -6,6 +6,8 @@
 
 @stop
 
+@section('title', 'News - ')
+
 @section('content')
     <div class="container" style="margin-top: 20px;">
         <h1>CZQO News</h1>

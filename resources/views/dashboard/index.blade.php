@@ -1,78 +1,48 @@
 @extends('layouts.master')
-
-@section('navbarprim')
-
-    @parent
-
-@stop
-
 @section('content')
-<style>
-    #topjumbo {
-        /*background-image:url('https://cdn.discordapp.com/attachments/292398393375064066/538868929964277760/unknown.png');*/
-        position: relative;
-        color: black;
-        background-position: center;
-        height: 50px;
-    }
+<div class="card card-image" style="background-image: url({{asset('img/787.png')}}); background-size: cover; background-position-y: center;">
+    <div class="text-white text-left rgba-stylish-strong py-3 px-4">
+        <div class="container">
+            <div class="py-5">
+                <h1 class="h1 my-4 py-2" style="font-size: 3em;">
+                    <?php
+                    function randomArrayVar($array)
+                    {
+                        if (!is_array($array)){
+                            return $array;
+                        }
+                        return $array[array_rand($array)];
+                    }
 
-    #jumbopattern {
-        background-image: url('{{ asset('img/worn-dots.png') }}');
-        background-repeat: repeat;
-        position: absolute;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-    }
-</style>
-<div id="topjumbo" class="jumbotron jumbotron-fluid text-white mb-0" style="background-color: #1B7BC8 !important;">
-    <div id=""></div>
-    <div class="text-center">
-        <h1 style="text-shadow: 0px 0px 0px;">
-            <?php
-            function randomArrayVar($array)
-            {
-                if (!is_array($array)){
-                return $array;
-                }
-                return $array[array_rand($array)];
-            }
+                    //list of grettings as arary
 
-            //list of grettings as arary
+                    $greeting= array(
+                        "aloha"=>"Aloha",
+                        "ahoy"=>"Ahoy",
+                        "bonjour"=>"Bonjour",
+                        "gday"=>"G'day",
+                        "hello"=>"Hello",
+                        "hey"=>"Hey",
+                        "hi"=>"Hi",
+                        "hola"=>"Hola",
+                        "howdy"=>"Howdy",
+                        "salutations"=>"Salutations",
+                        "sup"=>"Sup",
+                        "whatsup"=>"What's up",
+                        "yo"=>"Yo");
 
-            $greeting= array(
-                "aloha"=>"Aloha",
-                "ahoy"=>"Ahoy",
-                "bonjour"=>"Bonjour",
-                "gday"=>"G'day",
-                "hello"=>"Hello",
-                "hey"=>"Hey",
-                "hi"=>"Hi",
-                "hola"=>"Hola",
-                "howdy"=>"Howdy",
-                "salutations"=>"Salutations",
-                "sup"=>"Sup",
-                "whatsup"=>"What's up",
-                "yo"=>"Yo");
-
-            //echo greeting
-            echo (randomArrayVar($greeting));
-            ?>
-            {{Auth::user()->fullName('F')}}!
-        </h1>
+                    //echo greeting
+                    echo (randomArrayVar($greeting));
+                    ?>
+                    {{Auth::user()->fullName('F')}}!
+                </h1>
+            </div>
+        </div>
     </div>
 </div>
-@if (Auth::user()->userSinceInDays() < 7)
-<div class="jumbotron jumbotron-fluid m-0 p-2" style="" >
-    <h3 class="text-center m-0 p-0">
-        <a data-step="10" data-intro="And there it is! Enjoy your time here. If you have any other enquires, please make a ticket to the Webmaster and she will be happy to answer any questions you have. :)" href="javascript:void(0);" onclick="javascript:introJs().setOption('showProgress', true).start();">I need help!</a>
-    </h3>
-</div>
-@endif
-<div class="container" style="margin-top: 20px;">
+<div class="container py-4">
     <h2 data-step="1" data-intro="Welcome to the CZQO Dashboard! This is your central hub for all things Gander. Here you can interact with our FIR, and manage your account.">Dashboard</h2>
-    @if (Auth::user()->rating_id >= 5)
+    {{--@if (Auth::user()->rating_id >= 5)
     <blockquote class="blockquote bq-primary">
         <p class="bq-title">Cross the Pond Eastbound 2019</p>
         <p>Are you available to control for CTP Eastbound 2019? Fill out the CZQO sign-up form to control either Gander or Shanwick Oceanic for the event!
@@ -80,7 +50,7 @@
             <a href="#" role="button" class="btn btn-primary" data-toggle="modal" data-target="#ctpSignUpModal">Sign Up</a>
         </p>
     </blockquote>
-    @endif
+    @endif--}}
     <br class="my-2">
     <div class="row">
         <div class="col">
@@ -151,9 +121,9 @@
                                 <img src="{{Auth::user()->avatar}}" style="width: 125px; height: 125px; margin-bottom: 10px; border-radius: 50%;">
                             </div>
                             <br/>
-                            <a role="button" data-toggle="modal" data-target="#changeAvatar" class="btn btn-sm btn-block btn-outline-primary"  href="#">Change</a>
+                            <a role="button" data-toggle="modal" data-target="#changeAvatar" class="btn btn-sm btn-block btn-outline"  href="#">Change</a>
                             @if (!Auth::user()->isAvatarDefault())
-                                <a role="button" class="btn btn-sm btn-block btn-outline-danger"  href="{{route('users.resetavatar')}}">Reset</a>
+                                <a role="button" class="btn btn-sm btn-block btn-outline mt-2"  href="{{route('users.resetavatar')}}">Reset</a>
                             @endif
                         </div>
                     </div>
@@ -319,8 +289,8 @@
                             </h5>
                             <div class="list-group bg-info">
                                 @foreach ($openTickets as $ticket)
-                                    <a href="{{url('/dashboard/tickets/'.$ticket->ticket_id)}}" class="list-group-item list-group-item-action bg-info">{{$ticket->title}}<br/>
-                                        <small>Last updated {{$ticket->updated_at}}</small>
+                                    <a href="{{url('/dashboard/tickets/'.$ticket->ticket_id)}}" class="list-group-item list-group-item-action purple">{{$ticket->title}}<br/>
+                                        <small title="{{$ticket->updated_at}} (GMT+0, Zulu)">Last updated {{$ticket->updated_at_pretty()}}</small>
                                     </a>
                                 @endforeach
                             </div>

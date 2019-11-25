@@ -76,7 +76,9 @@ class NewsController extends Controller
             }
         }
 
-        createNewsMessage($news);
+        if ($news->type != "Certification") {
+            createNewsMessage($news);
+        }
 
         return redirect()->route('news.home')->with('success', 'Article '.$news->title.' saved and published!');
     }
@@ -211,7 +213,7 @@ class NewsController extends Controller
 
     public function viewPublicAll()
     {
-        $news = News::all()->sortByDesc('id');
+        $news = News::where('type', '!=', 'certification')->get()->sortByDesc('id');
 
         return view('publicnews', compact('news'));
     }

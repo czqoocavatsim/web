@@ -6,6 +6,8 @@
 
 @stop
 
+@section('title', 'Staff - ')
+
 @section('content')
 <style>
     .staff_img_container {
@@ -84,7 +86,7 @@
                     @else
                         <div class="staff_img_container">
                             <div class="staff_img_object">
-                                <img src="{{$member->user->avatar}}">
+                                <img style="height: 125px;" src="{{$member->user->avatar}}">
                                 <div class="img_overlay">
                                     <div class="img_overlay_text">
                                         <a href="#" data-toggle="modal" data-target="#viewStaffBio{{$member->id}}">View Bio</a>
@@ -111,7 +113,7 @@
                 <div style="text-align: center;">
                     <div class="staff_img_container">
                         <div class="staff_img_object">
-                            <img src="{{$instructor->user->avatar}}">
+                            <img style="height: 125px;" src="{{$instructor->user->avatar}}">
                             <div class="img_overlay">
                                 <div class="img_overlay_text">
                                     <a href="#" data-toggle="modal" data-target="#viewInstructorBio{{$instructor->id}}">View Bio</a>

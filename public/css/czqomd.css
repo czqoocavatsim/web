@@ -1,0 +1,30 @@
+@import url('https://fonts.googleapis.com/css?family=Nunito&display=swap');
+
+* {
+    font-family: 'Nunito', 'Lato', 'Segoe UI', 'Arial', sans-serif;
+}
+
+body, html {
+    height: 100vh;
+}
+
+#czqoHeaderLight, .page-footer {
+    background-color: rgb(249, 249, 249);
+}
+
+#czqoHeaderImg {
+    width: 225px;
+    margin-bottom: 4px;
+    height: 100%;
+}
+@media (max-width: 768px) {
+    #czqoHeaderImg {
+        margin-left: 10px;
+    }
+}
+.jumbotron {
+    border-radius: 0;
+}
+.dropdown-menu .dropdown-item {
+    padding-left: 15px !important;
+}

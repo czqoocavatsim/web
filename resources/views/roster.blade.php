@@ -6,6 +6,9 @@
 
 @stop
 
+@section('title', 'ATC Roster - ')
+@section('description', "Gander Oceanic's Oceanic Controller Roster")
+
 @section('content')
 <div class="container" style="margin-top: 20px;">
         <h2>Controller Roster</h2>
@@ -62,7 +65,7 @@
                     @endif
                 </tr>
             @endforeach
-            </tbody>   
+            </tbody>
         </table>
     <script>
         $(document).ready(function() {

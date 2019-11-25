@@ -6,6 +6,8 @@
 
 @stop
 
+@section('title', 'ATC Resources - ')
+
 @section('content')
 <div class="container" style="margin-top: 20px;">
     <h2>ATC Resources</h2>
@@ -47,7 +49,7 @@
         @endforeach
     </div>
     <br/>
-    @if (Auth::check() && Auth::user()->permissions >= 3)    
+    @if (Auth::check() && Auth::user()->permissions >= 3)
     <form method="POST" action="{{route('atcresources.upload')}}">
         @csrf
         <h5>Add resource</h5>

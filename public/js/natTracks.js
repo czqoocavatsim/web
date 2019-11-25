@@ -3,7 +3,7 @@ var map = L.map('map').setView([50.198470, -32.708], 3);
 L.tileLayer('https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token={accessToken}', {
     attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors, <a href="https://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery © <a href="https://www.mapbox.com/">Mapbox</a>',
     maxZoom: 18,
-    id: 'mapbox.dark',
+    id: 'mapbox.light',
     accessToken: 'pk.eyJ1IjoiZWx0ZWNocm9uIiwiYSI6ImNqOTlydHR4czB4NG8ycWxzYXNla2pmOXcifQ.hBI3z2L84aiEDfp5H946_Q'
 }).addTo(map);
 
@@ -42,14 +42,14 @@ for (track in apiJson) {
             fixArray.push([apiJson[track].route.nodes[n].lat, apiJson[track].route.nodes[n].lon]);
         }
         let polyline = new L.Polyline(fixArray, {
-            color: 'aqua',
+            color: '#1c5fc9',
             weight: 2,
             opacity: 1,
             smoothFactor: 1
         });
         if (apiJson[track].route.eastLevels.length == 0) {
             polyline.setStyle({
-                color: 'yellow'
+                color: '#c92d1c'
             });
         }
         polyline.addTo(map);
@@ -121,7 +121,7 @@ function createMarker(node, trackId, colour) {
         iconUrl: 'https://nesa.com.au/wp-content/uploads/2017/05/Dot-points-1.png',
         iconSize: [10, 10],
         iconAnchor: [2,4]
-    }); 
+    });
     let marker = L.marker([node.lat, node.lon], {icon: markerIcon}).addTo(map);
     marker.bindPopup("<b>"+node.ident+"</b><br/>"+node.type+"<br/>"+node.lat+" "+node.lon);
 }

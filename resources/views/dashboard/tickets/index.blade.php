@@ -9,14 +9,11 @@
 @section('content')
     <div class="container" style="margin-top: 20px;">
         <h2>Your Tickets</h2>
-        <nav class="navbar navbar-light bg-light">
+        <div class="mb-2">
             <div class="btn-group btn-group-sm" role="group" aria-label="Basic example">
-                <button data-toggle="modal" data-target="#startTicketModal" type="button" class="btn btn-outline-success btn-sm">Start A Ticket</button>
+                <button data-toggle="modal" data-target="#startTicketModal" type="button" class="btn btn-outline btn-sm">Start A Ticket</button>
             </div>
-            <form class="form-inline">
-                <input class="form-control form-control-sm" placeholder="Search for a ticket.." type="search" disabled>
-            </form>
-        </nav>
+        </div>
         <ul class="nav nav-tabs" id="myTab" role="tablist">
             <li class="nav-item">
                 <a class="nav-link active" id="home-tab" data-toggle="tab" href="#home" role="tab" aria-controls="home" aria-selected="true">Open Tickets</a>
@@ -29,7 +26,7 @@
             </li>
         </ul>
         <div class="tab-content" id="myTabContent">
-            <div class="tab-pane fade show active" id="home" role="tabpanel" aria-labelledby="home-tab">
+            <div class="tab-pane fade show active pt-2" id="home" role="tabpanel" aria-labelledby="home-tab">
                 @if (count($openTickets) < 1)
                     No open tickets.
                 @else
@@ -47,7 +44,7 @@
                     @endforeach
                 @endif
             </div>
-            <div class="tab-pane fade" id="profile" role="tabpanel" aria-labelledby="profile-tab">
+            <div class="tab-pane fade pt-2" id="profile" role="tabpanel" aria-labelledby="profile-tab">
                 @if (count($closedTickets) < 1)
                     No closed tickets.
                 @else
@@ -65,7 +62,7 @@
                     @endforeach
                 @endif
             </div>
-            <div class="tab-pane fade" id="contact" role="tabpanel" aria-labelledby="contact-tab">
+            <div class="tab-pane fade pt-2" id="contact" role="tabpanel" aria-labelledby="contact-tab">
                 @if (count($onHoldTickets) < 1)
                     No on hold tickets.
                 @else
@@ -96,8 +93,8 @@
                         <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
+                {!! Form::open(['route' => 'tickets.startticket']) !!}
                 <div class="modal-body">
-                    {!! Form::open(['route' => 'tickets.startticket']) !!}
                     <div class="form-group">
                         <label for="recipient-name" class="col-form-label">Department</label>
                         {!! Form::select('department', ['firchief' => 'FIR Chief', 'chiefinstructor' => 'Chief Instructor', 'webmaster' => 'Webmaster', 'feedback' => 'Controller Feedback/Other'], ['placeholder' => 'Please choose one..'], ['class' => 'form-control']) !!}
@@ -106,23 +103,20 @@
                         <label for="recipient-name" class="col-form-label">Title</label>
                         {!! Form::text('title', null, ['class' => 'form-control']) !!}
                     </div>
-                    <script>
-                        tinymce.init({
-                            selector: '#createTicketMessage',
-                            plugins: 'link media table',
-                            menubar: 'edit insert format'
-                        });
-                    </script>
                     <div class="form-group">
                         <label for="recipient-name" class="col-form-label">Message</label>
                         {!! Form::textarea('message', null, ['class' => 'form-control', 'id' => 'createTicketMessage']) !!}
+                        <small>Minimum 25 characters</small>
+                        <script>
+                            var simplemde = new SimpleMDE({ element: document.getElementById("createTicketMessage") });
+                        </script>
                     </div>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
                     {!! Form::submit('Submit', ['class' => 'btn btn-primary']) !!}
-                    {!! Form::close() !!}
                 </div>
+                {!! Form::close() !!}
             </div>
         </div>
     </div>

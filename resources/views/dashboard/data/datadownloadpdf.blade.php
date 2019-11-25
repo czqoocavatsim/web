@@ -3,13 +3,9 @@
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
     <style>
-
-        body {
-            margin: 1em;
-        }
-
         table {
             border-collapse: collapse;
+            width: 100%;
         }
 
         table, th, td {
@@ -18,99 +14,33 @@
     </style>
 </head>
 <body>
-<h2>Gander Oceanic FIR // Data for {{$basicData->fullName('FLC')}}</h2>
-<h4>Requested at {{\Carbon\Carbon::now()}} Zulu time via the Gander Oceanic Core website.</h4>
-<hr/>
-<h4>Basic User Data</h4>
+<p>Gander Oceanic FIR https://czqo.vatcan.ca</p>
+<h2>{{Auth::user()->fullName('FLC')}}</h2>
+<h5>Data as of {{\Carbon\Carbon::now()}}.</h5>
+<div style="border: 1px solid; padding: 10px;">
+    This data has been gathered at the request of {{Auth::user()->fullName('FLC')}} in accordance with the Gander Oceanic FIR privacy policy. For more information, please visit https://czqo.vatcan.ca/privacy.
+</div>
+<h5>Basic Data</h5>
 <table>
-    <thead>
-    <th>Item</th>
-    <th>Value</th>
-    </thead>
+    <thead><td>Attribute</td><td>Data</td></thead>
     <tbody>
-        <tr>
-            <td>VATSIM CID (User ID)</td>
-            <td>{{$basicData->id}}</td>
-        </tr>
-        <tr>
-            <td>Full Name</td>
-            <td>{{$basicData->fullName('FL')}}</td>
-        </tr>
-        <tr>
-            <td>Email Address</td>
-            <td>{{$basicData->email}}</td>
-        </tr>
-        <tr>
-            <td>VATSIM GRP Rating</td>
-            <td>{{$basicData->rating}}</td>
-        </tr>
-        <tr>
-            <td>VATSIM Division</td>
-            <td>{{$basicData->division}}</td>
-        </tr>
-        <tr>
-            <td>Permission level</td>
-            <td>{{$basicData->permissions}}</td>
-        </tr>
-        <tr>
-            <td>User Created At</td>
-            <td>{{$basicData->created_at}}</td>
-        </tr>
-        <tr>
-            <td>User Last Updated At</td>
-            <td>{{$basicData->updated_at}}</td>
-        </tr>
-        <tr>
-            <td>GDPR Subscription Status (0 = no, 1 = yes)</td>
-            <td>{{$basicData->gdpr_subscribed_emails}}</td>
-        </tr>
-        <tr>
-            <td>Avatar</td>
-            <td>{{$basicData->avatar}}</td>
-        </tr>
-    </tbody>
-</table>
-<br>
-<h4>User Notes</h4>
-<table>
-    <thead>
-    <th>Date/Time</th>
-    <th>Content</th>
-    </thead>
-    <tbody>
-    @foreach($userNotes as $note)
-    <tr>
-        <td>{{$note->content}}</td>
-        <td>{{$note->timestamp}}</td>
-    </tr>
-    @endforeach
-    </tbody>
-</table>
-<br>
-<h4>Controller Applications</h4>
-<small>Status help: 0 = pending; 1 = denied; 2 = accepted; 3 = withdrawn</small>
-<table>
-    <thead>
-    <th>Application ID</th>
-    <th>Status</th>
-    <th>Submitted at</th>
-    <th>Processed at</th>
-    <th>Processed by</th>
-    <th>Applicant statement</th>
-    <th>Staff comment</th>
-    </thead>
-    <tbody>
-    @foreach($applications as $application)
-        <tr>
-            <td>{{$application->application_id}}</td>
-            <td>{{$application->status}}</td>
-            <td>{{$application->submitted_at}}</td>
-            <td>{{$application->processed_at}}</td>
-            <td>{{$application->processed_by}}</td>
-            <td>{{$application->applicant_statement}}</td>
-            <td>{{$application->staff_comment}}</td>
-        </tr>
-    @endforeach
+    <tr><td>First Name</td><td>{{Auth::user()->fname}}</td></tr>
+    <tr><td>Last Name</td><td>{{Auth::user()->lname}}</td></tr>
+    <tr><td>CID</td><td>{{Auth::user()->id}}</td></tr>
+    <tr><td>Displayed First Name</td><td>{{Auth::user()->display_fname}}</td></tr>
+    <tr><td>Display Last Name</td><td>@if (Auth::user()->display_last_name)True @else False @endif</td></tr>
+    <tr><td>Display CID Only</td><td>@if (Auth::user()->display_cid_only)True @else False @endif</td></tr>
+    <tr><td>Email</td><td>{{Auth::user()->email}}</td></tr>
+    <tr><td>Rating</td><td>{{Auth::user()->rating_GRP}} ({{Auth::user()->rating_id}}, {{Auth::user()->rating_short}}, {{Auth::user()->rating_long}})</td></tr>
+    <tr><td>VATSIM Registration Date</td><td>{{Auth::user()->reg_date}}</td></tr>
+    <tr><td>Region</td><td>{{Auth::user()->region_name}} ({{Auth::user()->region_code}})</td></tr>
+    <tr><td>Division</td><td>{{Auth::user()->division_name}} ({{Auth::user()->division_code}})</td></tr>
+    <tr><td>Subdivision</td><td>{{Auth::user()->subdivision_name}} ({{Auth::user()->subdivision_code}})</td></tr>
+    <tr><td>Permissions</td><td>{{Auth::user()->permissions}}</td></tr>
+    <tr><td>Accepted privacy policy</td><td>{{Auth::user()->init}}</td></tr>
+    <tr><td>Subscribed to emails</td><td>{{Auth::user()->gdpr_subscribed_emails}}</td></tr>
+    <tr><td>Avatar</td><td>{{Auth::user()->avatar}}</td></tr>
+    <tr><td>Biography</td><td>{{Auth::user()->biography}}</td></tr>
     </tbody>
 </table>
 </body>

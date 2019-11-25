@@ -6,6 +6,8 @@
 
 @stop
 
+@section('title', 'Policies - ')
+
 @section('content')
     <div class="container" style="margin-top: 20px;">
         <h2>Policies</h2>

@@ -2,7 +2,9 @@
 
 namespace App;
 
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\HtmlString;
 
 class TicketReply extends Model
 {
@@ -20,5 +22,15 @@ class TicketReply extends Model
     public function user()
     {
         return $this->belongsTo(User::class);
+    }
+
+    public function html()
+    {
+        return new HtmlString(app(\Parsedown::class)->text($this->message));
+    }
+
+    public function submission_time_pretty()
+    {
+        return Carbon::create($this->submission_time)->toDayDateTimeString().' Zulu';
     }
 }

@@ -12,7 +12,7 @@
 */
 
 //Public views
-Route::get('/', 'HomeController@view');
+Route::get('/', 'HomeController@view')->name('index');
 Route::get('/roster', 'RosterController@showPublic')->name('roster.public');
 Route::get('/staff', 'StaffListController@index')->name('staff');
 Route::get('/atcresources', 'AtcResourcesController@index')->name('atcresources.index');
@@ -25,8 +25,8 @@ Route::view('/pilots/tutorial', 'pilots.tutorial');
 Route::get('/policies', 'PoliciesController@index')->name('policies');
 Route::get('/meetingminutes', 'NewsController@minutesIndex')->name('meetingminutes');
 Route::get('/bookings', 'ControllerBookingsController@indexPublic')->name('controllerbookings.public');
-Route::view('/privacy', 'privacy')->middleware('bookingban');
-Route::view('/changelog', 'changelog');
+Route::view('/privacy', 'privacy')->name('privacy');
+Route::view('/changelog', 'changelog')->name('changelog');
 Route::view('/emailtest', 'emails.announcement');
 
 //Authentication

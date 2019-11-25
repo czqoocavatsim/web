@@ -27,7 +27,7 @@
                 <div id="map" style="height: 300px;">
                     Loading...
                 </div>
-                <b>Orange = Westbound, Blue = Eastbound</b>
+                <b>Red = Westbound, Blue = Eastbound</b>
                 <table class="table table-responsive table-striped">
                     <thead>
                     <tr>
