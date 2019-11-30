@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "0e191c512d4fdc8428ebf3eaa200f857",
+    "content-hash": "dc5d0b15c3d445a2f7349af4cff62986",
     "packages": [
         {
             "name": "barryvdh/laravel-dompdf",
@@ -1478,6 +1478,61 @@
                 "storage"
             ],
             "time": "2019-10-16T21:01:05+00:00"
+        },
+        {
+            "name": "misterphilip/maintenance-mode",
+            "version": "2.0.1",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/MisterPhilip/maintenance-mode.git",
+                "reference": "13ddc22036078edef6f4e5d68b7fb73956451b66"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/MisterPhilip/maintenance-mode/zipball/13ddc22036078edef6f4e5d68b7fb73956451b66",
+                "reference": "13ddc22036078edef6f4e5d68b7fb73956451b66",
+                "shasum": ""
+            },
+            "require": {
+                "illuminate/support": ">=5.5",
+                "nesbot/carbon": "^1.24 || ^2.0",
+                "php": ">=7.0.0"
+            },
+            "type": "library",
+            "extra": {
+                "laravel": {
+                    "providers": [
+                        "MisterPhilip\\MaintenanceMode\\MaintenanceModeServiceProvider",
+                        "MisterPhilip\\MaintenanceMode\\MaintenanceCommandServiceProvider"
+                    ]
+                }
+            },
+            "autoload": {
+                "psr-0": {
+                    "MisterPhilip\\MaintenanceMode": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Philip Lawrence",
+                    "email": "philip@misterphilip.com",
+                    "homepage": "http://misterphilip.com"
+                }
+            ],
+            "description": "An enhanced drop-in replacement for Laravel's maintenance mode",
+            "keywords": [
+                "l5",
+                "l6",
+                "laravel",
+                "laravel5",
+                "laravel6",
+                "maintenance"
+            ],
+            "time": "2019-09-06T07:59:28+00:00"
         },
         {
             "name": "mofodojodino/profanity-filter",

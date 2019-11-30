@@ -74,9 +74,12 @@
         <!--SimpleMDE-->
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/simplemde/latest/simplemde.min.css">
         <script src="https://cdn.jsdelivr.net/simplemde/latest/simplemde.min.js"></script>
+        <!--Dropzone-->
+        <script src="{{asset('js/dropzone.js')}}"></script>
     </head>
     <body>
     <!--Header-->
+    @include('maintenancemode::notification')
     <header>
         <nav id="czqoHeaderLight" class="navbar navbar-expand-md navbar-light p-0" style="min-height:59px;">
             <div class="container">
@@ -226,11 +229,12 @@
                 <a href="https://vatcan.ca" class="font-weight-bold black-text">VATCAN</a>
             </div>
             <div class="mt-3">
-                <small class="text-muted">{{App\CoreSettings::where('id', 1)->firstOrFail()->sys_name}} {{App\CoreSettings::where('id', 1)->firstOrFail()->release}} ({{App\CoreSettings::where('id', 1)->firstOrFail()->sys_build}}) - <a href="{{route('changelog')}}" class="text-muted">Changelog</a></small>
+                <a href="{{route('about')}}"><small class="text-muted">{{App\CoreSettings::where('id', 1)->firstOrFail()->sys_name}} {{App\CoreSettings::where('id', 1)->firstOrFail()->release}} ({{App\CoreSettings::where('id', 1)->firstOrFail()->sys_build}})</small></a> <small>- <a href="{{route('changelog')}}" class="text-muted">Changelog</a></small>
             </div>
         </div>
     </footer>
     <!-- Footer -->
+    @if (Auth::check() && Auth::user()->init == 0 && Request::is('privacy') == false)
     <!--Privacy welcome modal-->
     <div class="modal fade" id="welcomeModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle"
          aria-hidden="true">
@@ -248,19 +252,18 @@
                     subscribe! It is highly recommended.
                 </div>
                 <div class="modal-footer">
-                    <a role="button" href="{{ URL('/logout') }}" class="btn btn-outline-danger">I disagree</a>
+                    <a role="button" href="{{ URL('/privacydeny') }}" class="btn btn-outline-danger">I disagree</a>
                     <a href="{{url('/privacyaccept')}}" role="button" class="btn btn-success">I agree</a>
                 </div>
             </div>
         </div>
     </div>
-    @if (Auth::check() && Auth::user()->init == 0 && Request::is('privacy') == false)
         <script>
             $('#welcomeModal').modal({backdrop: 'static'});
             $('#welcomeModal').modal('show');
         </script>
-    @endif
     <!-- End privacy welcome modal-->
+    @endif
     <script type="text/javascript">
         Dropzone.options.dropzone =
             {

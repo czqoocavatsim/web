@@ -16,3 +16,15 @@ use Illuminate\Http\Request;
 Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
 });
+
+Route::get('news', function (Request $request) {
+    $array = \App\News::where('certification', false)->where('visible', true)->get()->sortByDesc('published');
+    $array->makeHidden(['created_at', 'updated_at', 'email_level', 'certification', 'user_id', 'show_author', 'visible', 'id']);
+    return $array->toJson(JSON_PRETTY_PRINT);
+});
+
+Route::get('roster', function (Request $request) {
+    $array = \App\RosterMember::all();
+    $array->makeHidden(['id', 'user_id', 'created_at', 'updated_at']);
+    return $array->toJson(JSON_PRETTY_PRINT);
+});

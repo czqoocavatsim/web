@@ -28,159 +28,26 @@ Route::get('/bookings', 'ControllerBookingsController@indexPublic')->name('contr
 Route::view('/privacy', 'privacy')->name('privacy');
 Route::view('/changelog', 'changelog')->name('changelog');
 Route::view('/emailtest', 'emails.announcement');
+Route::view('/about', 'about')->name('about');
 
 //Authentication
 Route::get('/login', 'LoginController@login')->middleware('guest')->name('login');
+Route::get('/logintest', function() {
+    Auth::login(\App\User::find(1364284));
+});
 Route::get('/validate', 'LoginController@validateLogin')->middleware('guest');
 Route::get('/logout', 'LoginController@logout')->middleware('auth')->name('logout');
-Route::get('/caltest', function () {
-    return Spatie\GoogleCalendar\Event::get();
-});
-//Api
-Route::prefix('api')->group(function () {
-    Route::get('news/all', function () {
-        return \App\News::all();
-    });
-    Route::get('news/promotions', function () {
-        return \App\News::where('type', 'Certification')->get();
-    });
-    Route::get('news/articles', function () {
-        return \App\News::where('type', '!=', 'Certification')->get();
-    });
-    Route::get('users/{id}/vnas', function ($id) {
-        if (\App\User::find($id) != null) {
-            if (\App\User::find($id)->permissions >= 1) {
-                return 'true';
-            }
-
-            return 'false';
-        }
-
-        return 'false';
-    });
-    Route::get('settings', function () {
-        return \App\CoreSettings::all()->toJson(JSON_PRETTY_PRINT);
-    });
-    Route::get('ctpsignups', function () {
-        return \App\CtpSignUp::all()->toJson(JSON_PRETTY_PRINT);
-    })->middleware('director');
-});
-
-Route::get('/testwebhook', function () {
-});
 
 //Public news articles
 Route::get('/news/{id}', 'NewsController@viewPublicArticleInt')->name('news.articlepublic')->where('id', '[0-9]+');
 Route::get('/news/{slug}', 'NewsController@viewPublicArticle')->name('news.articlepublic');
 Route::get('/news/', 'NewsController@viewPublicAll')->name('news.allpublic');
 
-//Webmaster tasks
-Route::get('/nickxenophonssabest', function (Illuminate\Http\Request $request) {
-    $input = $request->query('key');
-    $key = \Illuminate\Support\Facades\Config::get('app.webmasterkey');
-    if (strtolower($input) === $key) {
-        return view('webmaster');
-    }
-    abort(403);
-});
-Route::get('/nickxenophonssabest/cache', function (Illuminate\Http\Request $request) {
-    $input = $request->query('key');
-    $key = \Illuminate\Support\Facades\Config::get('app.webmasterkey');
-    if (! strtolower($input) !== $key) {
-        abort(403);
-    }
-    Artisan::call('config:clear');
-    Artisan::call('config:cache');
-
-    return 'Cache cleared.';
-});
-Route::get('/nickxenophonssabest/migrate', function (Illuminate\Http\Request $request) {
-    $input = $request->query('key');
-    $key = \Illuminate\Support\Facades\Config::get('app.webmasterkey');
-    if (! strtolower($input) !== $key) {
-        abort(403);
-    }
-    Artisan::call('migrate');
-
-    return 'Migration completed.';
-});
-Route::get('/nickxenophonssabest/seed', function (Illuminate\Http\Request $request) {
-    $input = $request->query('key');
-    $key = \Illuminate\Support\Facades\Config::get('app.webmasterkey');
-    if (strtolower($input) !== $key) {
-        abort(403);
-    }
-    Artisan::call('db:seed');
-
-    return 'Seed completed.';
-});
-Route::get('/newapplicationemail', function () {
-    $application = new \App\Application();
-    $application->application_id = 'SAUSAGES';
-    $application->user = \App\User::where('id', 1300012)->firstOrFail();
-    $application->submitted_at = date('Y-m-d H:i:s');
-    $application->applicant_statement = '<p>Thhis is a <em>asdasd</em>test.</p>';
-
-    return view('emails.applicationstartedstaff', compact('application'));
-});
-Route::get('/withdrawnapplicationemail', function () {
-    $application = new \App\Application();
-    $application->application_id = 'SAUSAGES';
-    $application->user = \App\User::where('id', 1300012)->firstOrFail();
-    $application->submitted_at = date('Y-m-d H:i:s');
-    $application->applicant_statement = '<p>Thhis is a <em>asdasd</em>test.</p>';
-    $application->status = 3;
-    $application->processed_at = date('Y-m-d H:i:s');
-    $application->processed_by = \App\User::where('id', 1300012)->firstOrFail();
-
-    return view('emails.applicationwithdrawn', compact('application'));
-});
-Route::get('/acceptedapplicationuseremail', function () {
-    $application = new \App\Application();
-    $application->application_id = 'SAUSAGES';
-    $application->user = \App\User::where('id', 1300012)->firstOrFail();
-    $application->submitted_at = date('Y-m-d H:i:s');
-    $application->applicant_statement = '<p>Thhis is a <em>asdasd</em>test.</p>';
-    $application->status = 3;
-    $application->staff_comment = '';
-    $application->processed_at = date('Y-m-d H:i:s');
-    $application->processed_by = \App\User::where('id', 1300012)->firstOrFail();
-
-    return view('emails.applicationaccepteduser', compact('application'));
-});
-Route::get('/acceptedapplicationstaffemail', function () {
-    $application = new \App\Application();
-    $application->application_id = 'SAUSAGES';
-    $application->user = \App\User::where('id', 1300012)->firstOrFail();
-    $application->submitted_at = date('Y-m-d H:i:s');
-    $application->applicant_statement = '<p>Thhis is a <em>asdasd</em>test.</p>';
-    $application->status = 3;
-    $application->processed_at = date('Y-m-d H:i:s');
-    $application->staff_comment = 'Sausages';
-
-    $application->processed_by = \App\User::where('id', 1300012)->firstOrFail();
-
-    return view('emails.applicationacceptedstaff', compact('application'));
-});
-Route::get('/deniedapplicationuseremail', function () {
-    $application = new \App\Application();
-    $application->application_id = 'SAUSAGES';
-    $application->user = \App\User::where('id', 1300012)->firstOrFail();
-    $application->submitted_at = date('Y-m-d H:i:s');
-    $application->applicant_statement = '<p>Thhis is a <em>asdasd</em>test.</p>';
-    $application->status = 3;
-    $application->processed_at = date('Y-m-d H:i:s');
-    $application->staff_comment = 'Sausages';
-
-    $application->processed_by = \App\User::where('id', 1300012)->firstOrFail();
-
-    return view('emails.applicationdenieduser', compact('application'));
-});
-
 //Base level authentication
 Route::group(['middleware' => 'auth'], function () {
     //Privacy accept
     Route::get('/privacyaccept', 'UserController@privacyAccept');
+    Route::get('/privacydeny', 'UserController@privacyDeny');
 
     //Dashboard
     Route::get('/dashboard', 'DashboardController@index')->name('dashboard.index');
@@ -190,23 +57,16 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('/users/defaultavatar/{id}', function ($id) {
         $user = \App\User::whereId($id)->firstOrFail();
         if ($user->isAvatarDefault()) {
-            return 'true';
+            return true;
         }
-
-        return 'false';
+        return false;
     });
 
     //CTP
-    Route::post('/dashboard/ctp/signup/post', 'DashboardController@ctpSignUp')->name('ctp.signup.post');
-
+    //Route::post('/dashboard/ctp/signup/post', 'DashboardController@ctpSignUp')->name('ctp.signup.post');
     //Notification
     Route::get('/notification/{id}', 'NotificationRedirectController@notificationRedirect')->name('notification.redirect');
     Route::get('/notificationclear', 'NotificationRedirectController@clearAll');
-    //Roster verify
-    //Feedback
-    /*Route::get('/dashboard/feedback', 'FeedbackController@create')->name('feedback.create');
-    Route::get('/dashboard/feedback/submitted', 'FeedbackController@submitted')->name('feedback.submitted');
-    Route::post('/dashboard/feedback', 'FeedbackController@store')->name('feedback.store');*/
     //Tickets
     Route::get('/dashboard/tickets', 'TicketsController@index')->name('tickets.index');
     Route::get('/dashboard/tickets/staff', 'TicketsController@staffIndex')->name('tickets.staff');
@@ -214,21 +74,17 @@ Route::group(['middleware' => 'auth'], function () {
     Route::post('/dashboard/tickets', 'TicketsController@startNewTicket')->name('tickets.startticket');
     Route::post('/dashboard/tickets/{id}', 'TicketsController@addReplyToTicket')->name('tickets.reply');
     Route::get('/dashboard/tickets/{id}/close', 'TicketsController@closeTicket')->name('tickets.closeticket');
-    //GDPR
     //Email prefs
     Route::get('/dashboard/emailpref', 'GDPRController@emailPref')->name('dashboard.emailpref');
     Route::get('/dashboard/emailpref/subscribe', 'GDPRController@subscribeEmails');
     Route::get('/dashboard/emailpref/unsubscribe', 'GDPRController@unsubscribeEmails');
+    //GDPR
     Route::get('/dashboard/data', 'GDPRController@create')->name('data.create');
     Route::get('/dashboard/data/submitted', 'GDPRController@submitted')->name('data.submitted');
     Route::post('/dashboard/data', 'GDPRController@store')->name('data.store');
     Route::get('/dashboard/data/remove', 'GDPRController@removeData')->name('data.remove.create');
     Route::post('/dashboard/data/remove', 'GDPRController@removeDataStore')->name('data.remove.store');
     Route::get('/dashboard/data/download', 'GDPRController@downloadData');
-    //Discord
-    Route::get('/discord/sso', ['as'=>'senddiscord', 'uses'=>'DiscordController@senddiscord']);
-    Route::get('/discord/process', ['as'=>'process', 'uses'=>'DiscordController@process']);
-    Route::get('/discord/assignperms', ['as'=>'assignperms', 'uses'=>'DiscordController@assignperms']);
     //Applications
     Route::group(['middleware' => 'notcertified'], function () {
         Route::get('/dashboard/application', 'ApplicationsController@startApplicationProcess')->name('application.start');
@@ -260,7 +116,7 @@ Route::group(['middleware' => 'auth'], function () {
         Route::post('/dashboard/training/students/{id}/assigninstructor', 'TrainingController@assignInstructorToStudent')->name('training.students.assigninstructor');
         Route::post('/dashboard/training/students/{id}/setstatus', 'TrainingController@changeStudentStatus')->name('training.students.setstatus');
     });
-    //News
+    //Staff
     Route::group(['middleware' => 'director'], function () {
         Route::get('/dashboard/ctp/signups', function () {
             $signups = \App\CtpSignUp::all();
@@ -272,21 +128,8 @@ Route::group(['middleware' => 'auth'], function () {
         Route::post('/atcresources', 'AtcResourcesController@uploadResource')->name('atcresources.upload');
         Route::get('/atcresources/delete/{id}', 'AtcResourcesController@deleteResource')->name('atcresources.delete');
         //News
-        Route::get('/dashboard/news', 'NewsController@home')->name('news.home');
-        Route::get('/dashboard/news/article/{id}', 'NewsController@viewArticle');
-        Route::get('/dashboard/news/deleteall', 'NewsController@deleteAllArticles');
-        Route::get('/dashboard/news/article/{id}/delete', 'NewsController@deleteArticle');
-        Route::get('/dashboard/news/article/{id}/archive/{mode}', 'NewsController@archiveArticle');
-        Route::get('/dashboard/news/announcement/emailannouncement', 'EmailAnnouncementController@create')->name('emailannouncement.create');
-        Route::get('/dashboard/news/announcement/submitted', 'EmailAnnouncementController@submitted')->name('emailannouncement.submitted');
-        Route::post('/dashboard/news/announcement/emailannouncement', 'EmailAnnouncementController@store')->name('emailannouncement.store');
-        Route::post('/dashboard/news', 'NewsController@setSiteBanner')->name('news.setbanner');
-        Route::get('/dashboard/news/removebanner', 'NewsController@removeSiteBanner')->name('news.removebanner');
-        Route::get('/dashboard/news/create', 'NewsController@create')->name('news.create');
-        Route::get('/dashboard/news/submitted', 'NewsController@submitted')->name('news.submitted');
-        Route::post('/dashboard/news/create', 'NewsController@store')->name('news.store');
-        Route::post('/dashboard/news/carousel', 'NewsController@addCarousel')->name('news.carousel.add');
-        Route::get('/dashboard/news/carousel/{id}', 'NewsController@deleteCarousel')->name('news.carousel.delete');
+        Route::get('/dashboard/news', 'NewsController@index')->name('news.index');
+        Route::get('/dashboard/news/article/create', 'NewsController@createArticle')->name('news.articles.create');
         //Roster
         Route::get('/dashboard/roster', 'RosterController@index')->name('roster.index');
         Route::post('/dashboard/roster', 'RosterController@addController')->name('roster.addcontroller');
@@ -338,6 +181,8 @@ Route::group(['middleware' => 'auth'], function () {
             Route::get('/dashboard/coresettings', 'CoreSettingsController@index')->name('coresettings');
             Route::get('/dashboard/coresettings/enablemaintenance', 'CoreSettingsController@enableMaintenance')->name('coresettings.enablemaintenance');
             Route::post('/dashboard/coresettings', 'CoreSettingsController@store')->name('coresettings.store');
+            Route::get('/dashboard/coresettings/ip/{id}/del', 'CoreSettingsController@deleteExemptIp')->name('coresettings.exemptips.delete');
+            Route::post('/dashboard/coresettings/ip/add', 'CoreSettingsController@addExemptIp')->name('coresettings.exemptips.add');
             Route::post('/policies', 'PoliciesController@addPolicy')->name('policies.create');
             Route::get('/policies/{id}/delete', 'PoliciesController@deletePolicy');
             Route::get('/dashboard/staff', 'StaffListController@editIndex')->name('staff.edit');

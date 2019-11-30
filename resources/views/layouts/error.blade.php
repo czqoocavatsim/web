@@ -1,34 +1,63 @@
-<html>
+<!DOCTYPE HTML>
+<html lang="en">
     <head>
+         <!--
+        {{App\CoreSettings::where('id', 1)->firstOrFail()->sys_name}}
+        {{App\CoreSettings::where('id', 1)->firstOrFail()->release}} ({{App\CoreSettings::where('id', 1)->firstOrFail()->sys_build}})
+        Built on Bootstrap 4 and Laravel 6
+
+        Written by Liesel D
+
+          sSSs. sSSSSSs   sSSSs     sSSSs
+         S           s   S     S   S     S
+        S           s   S       S S       S
+        S          s    S       S S       S
+        S         s     S       S S       S
+         S       s       S   s S   S     S
+          "sss' sSSSSSs   "sss"ss   "sss"
+
+        For Flight Simulation Use Only - Not To Be Used For Real World Navigation. All content on this web site may not be shared, copied, reproduced or used in any way without prior express written consent of Gander Oceanic. © Copyright {{App\CoreSettings::where('id', 1)->firstOrFail()->copyright_year}} Gander Oceanic, All Rights Reserved.
+
+        Taking a peek under the hood, and like what you see? Want to help out? Send Liesel an email!
+        -->
         <!--Metadata-->
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <!--Rich Preview Meta-->
-        <title>CZQO Gander Oceanic FIR</title>
-        <meta name="description" content="Website for the VATSIM Gander Oceanic FIR">
-        <meta name="theme-color" content="#3c75d1">
-        <meta name="og:title" content="CZQO VATSIM">
-        <meta name="og:description" content="Gander Oceanic FIR">
-        <meta name="og:image" content="{{ asset('favicon.ico') }}">
         <link rel="shortcut icon" href="{{ asset('favicon.ico') }}" type="image/x-icon">
-        <!--Bootstrap-->
-        <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
-        <link href="{{ URL::to('/')}}/css/structure.css" rel="stylesheet">
-        <link href="{{ URL::to('/')}}/css/czqo.css" rel="stylesheet">
-        <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.0.10/css/all.css" integrity="sha384-+d0P83n9kaQMCwj8F4RJB66tzIwOKmrdb46+porD/OvrJ+37WqIM7UoBtwHO6Nlg" crossorigin="anonymous">
-        
+        <meta name="csrf-token" content="{{ csrf_token() }}">
+        <!--Rich Preview Meta-->
+        <title>@yield('title', 'Error') - Gander Oceanic VATSIM</title>
+        <meta name="og:image" content="@yield('image',asset('favicon.ico'))">
+        <link rel="shortcut icon" href="{{ asset('favicon.ico') }}" type="image/x-icon">
+        <!-- Font Awesome -->
+        <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.2/css/all.css">
+        <!-- Bootstrap core CSS -->
+        <link href="https://stackpath.bootstrapcdn.com/bootswatch/4.1.3/materia/bootstrap.min.css" rel="stylesheet" integrity="sha384-5bFGNjwF8onKXzNbIcKR8ABhxicw+SC1sjTh6vhSbIbtVgUuVTm2qBZ4AaHc7Xr9" crossorigin="anonymous">        <!-- Material Design Bootstrap -->
+        <!-- Material Design Bootstrap -->
+        <link href="https://cdnjs.cloudflare.com/ajax/libs/mdbootstrap/4.8.11/css/mdb.min.css" rel="stylesheet">
+        <!-- JQuery -->
+        <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+        <!-- Bootstrap tooltips -->
+        <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.4/umd/popper.min.js"></script>
+        <!-- Bootstrap core JavaScript -->
+        <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.3.1/js/bootstrap.min.js"></script>
+        <!-- MDB core JavaScript -->
+        <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mdbootstrap/4.8.11/js/mdb.min.js"></script>
+        <!--CZQO specific CSS-->
+        <link href="{{ asset('css/czqomd.css') }}" rel="stylesheet">
     </head>
-    <div class="page-wrap d-flex flex-row align-items-center" style="height: 100%; z-index: 44;">
+    <div class="page-wrap d-flex flex-column align-items-center justify-content-center" style="height: 100%; z-index: 44;">
         <div class="container">
             <div class="row justify-content-center">
                 <div class="col-md-12 text-center">
                     <span class="display-4 d-block">@yield('error')</span>
                     <br/>
-                    <div class="mb-4 lead ">@yield('message')</div>
-                    <a href="/" class="btn btn-link">Go home</a>
+                    @yield('message')
                 </div>
             </div>
         </div>
+        <div class="justify-self-bottom">
+            <small class="text-muted">Copyright {{App\CoreSettings::where('id', 1)->firstOrFail()->copyright_year}} Gander Oceanic - All Rights Reserved - {{App\CoreSettings::where('id', 1)->firstOrFail()->sys_name}} {{App\CoreSettings::where('id', 1)->firstOrFail()->release}} ({{App\CoreSettings::where('id', 1)->firstOrFail()->sys_build}})</small>
+        </div>
     </div>
-
 </html>

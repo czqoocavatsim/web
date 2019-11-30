@@ -23,10 +23,25 @@ class UserController extends Controller
     public function privacyAccept()
     {
         $user = Auth::user();
+        if ($user->init == 1) {
+            return redirect()->route('index');
+        }
         $user->init = 1;
         $user->save();
 
         return redirect('/dashboard')->with('success', 'Welcome to CZQO, '.$user->fname.'! We are glad to have you on board.');
+    }
+
+    public function privacyDeny()
+    {
+        $user = Auth::user();
+        if ($user->init == 1) {
+            return redirect()->route('index');
+        }
+        Auth::logout($user);
+        AuditLogEntry::insert(User::find(1), 'User '.$user->fullName('FLC').' denied privacy policy - account deleted', User::find(1), 0);
+        $user->delete();
+        return redirect()->route('index')->with('info', 'Your account has been removed as you have not accepted the privacy policy.');
     }
 
     public function viewAllUsers()
@@ -225,7 +240,7 @@ class UserController extends Controller
     public function changeAvatar(Request $request)
     {
         $this->validate($request, [
-            'file' => 'required',
+            'file' => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
         ]);
         $user = Auth::user();
         $uploadedFile = $request->file('file');

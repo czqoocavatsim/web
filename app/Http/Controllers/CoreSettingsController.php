@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\AuditLogEntry;
 use App\CoreSettings;
+use App\Models\Settings\MaintenanceIPExemption;
 use App\Notifications\MaintenanceNotification;
 use App\User;
 use Artisan;
@@ -15,8 +16,9 @@ class CoreSettingsController extends Controller
     public function index()
     {
         $settings = CoreSettings::where('id', 1)->firstOrFail();
+        $ips = MaintenanceIPExemption::all();
 
-        return view('dashboard.coresettings', compact('settings'));
+        return view('dashboard.coresettings', compact('settings', 'ips'));
     }
 
     public function store(Request $request)
@@ -73,5 +75,31 @@ class CoreSettingsController extends Controller
         Artisan::call('down', ['--message' => 'The CZQO website is down for maintenance. If you require assistance, please contact us at info@czqo.vatcan.ca', '--retry' => 30]);
 
         return redirect()->route('coresettings')->with('success', 'Maintenance mode enabled.');
+    }
+
+    public function addExemptIp(Request $request)
+    {
+        $this->validate($request, [
+            'label' => 'required|max:15',
+            'ipv4' => 'required|unique:maintenance_i_p_exemptions|ipv4'
+        ]);
+
+        $ip = new MaintenanceIPExemption([
+            'label' => $request->get('label'),
+            'ipv4' => $request->get('ipv4')
+        ]);
+
+        $ip->save();
+
+        AuditLogEntry::insert(Auth::user(), 'Added '. $ip->ipv4 . ' as exempt from maintenance mode', User::whereId(1)->first(), 1);
+
+        return redirect()->back()->with('success', 'Added '. $ip->ipv4 .' as exempt!');
+    }
+
+    public function deleteExemptIp($id)
+    {
+        $ip = MaintenanceIPExemption::whereId($id)->firstOrFail();
+        $ip->delete();
+        return redirect()->back()->with('info', 'IP deleted.');
     }
 }

@@ -95,8 +95,37 @@
         {!! Form::submit('Save Settings', ['class' => 'btn btn-primary']) !!}
         {!! Form::close() !!}
         <hr/>
-        <a href="{{url('/dashboard/coresettings/entermaintenance')}}" role="button" class="btn btn-danger">Enter Maintenance</a>
-        <br/>
+        <h2>Maintenance Mode Exempt IPs</h2>
+        <table class="table">
+            <thead>
+                <th scope="col">Label</th>
+                <th scope="col">IP Address (IPv4)</th>
+                <th scope="col">Delete</th>
+            </thead>
+            <tbody>
+                @foreach ($ips as $i)
+                <tr>
+                    <td>{{$i->label}}</td>
+                    <td>{{$i->ipv4}}</td>
+                    <td>
+                        <a href="{{route('coresettings.exemptips.delete', $i->id)}}" class="red-text">Delete</a>
+                    </td>
+                </tr>
+                @endforeach
+            </tbody>
+        </table>
+        <h5>Add IP Address</h5>
+        <form action="{{route('coresettings.exemptips.add')}}" method="POST">
+        @csrf
+        <div class="md-form input-group mb-3">
+            <input type="text" name="label" class="form-control" placeholder="Label (e.g. FIR Chief)" id="">
+            <input type="text" class="form-control" placeholder="IP Address (e.g. 192.168.1.1)" name="ipv4" id="">
+            <div class="input-group-append">
+                <input value="Add" type="submit" class="btn btn-success"></button>
+            </div>
+        </div>
+        </form>
+        <hr/>
         <a href="{{url('/nickxenophonssabest')}}">Webmaster Portal</a>
     </div>
 @stop

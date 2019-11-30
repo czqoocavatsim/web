@@ -56,6 +56,7 @@
         <div class="col">
             @if (Auth::user()->permissions >= 1)
                 <h4 class="display-6">Controller Tools</h4>
+                <div class="card">
                 <div class="list-group">
                     <a href="http://oca.vnas.net" target="_new" class="list-group-item list-group-item-action">
                         <i class="fa fa-compass"></i>&nbsp;
@@ -78,7 +79,9 @@
                         <i class="fa fa-calendar"></i>
                         View Bookings
                     </a>
-                </div><br/>
+                </div>
+                </div>
+                <br/>
             @endif
             <h4 class="display-6">Your Data</h4>
             <div data-step="2" data-intro="Here is where you manage and view the data we store on you and your CZQO profile." class="card">
@@ -86,34 +89,32 @@
                     <div class="row">
                         <div class="col" data-step="3" data-intro="Here is an overview of your profile, including your CZQO roles. You can change the way your name is displayed by clicking on your name, at the top of the panel. (CoC A4(b))">
                             <h5 class="card-title">
-                                <a href="" data-toggle="modal" data-target="#changeDisplayNameModal" class="text-dark">
+                                <a href="" data-toggle="modal" data-target="#changeDisplayNameModal" class="text-dark text-decoration-underline">
                                     {{ Auth::user()->fullName('FLC') }}
                                 </a>
                             </h5>
                             <h6 class="card-subtitle mb-2 text-muted">
                                 {{Auth::user()->rating_GRP}} ({{Auth::user()->rating_short}})
                             </h6>
-                            <ul>
-                                <li>Region: {{ Auth::user()->region_name }}</li>
-                                <li>Division: {{ Auth::user()->division_name }}</li>
-                                @if (Auth::user()->subdivision_name)
-                                <li>vACC/ARTCC: {{ Auth::user()->subdivision_name }}</li>
-                                @endif
-                                @if (Auth::user()->permissions == 0)
-                                    <li>Status: Not Certified/Guest</li>
-                                @elseif (Auth::user()->permissions == 1)
-                                    <li>Status: Controller</li>
-                                @elseif (Auth::user()->permissions == 2)
-                                    <li>Status: Instructor</li>
-                                @elseif (Auth::user()->permissions == 3)
-                                    <li>Status: Staff</li>
-                                @elseif (Auth::user()->permissions == 4)
-                                    <li>Status: Executive</li>
-                                @endif
-                                @if(Auth::user()->staffProfile)
-                                <li>Staff Role: {{Auth::user()->staffProfile->position}}</li>
-                                @endif
-                            </ul>
+                            Region: {{ Auth::user()->region_name }}<br/>
+                            Division: {{ Auth::user()->division_name }}<br/>
+                            @if (Auth::user()->subdivision_name)
+                            vACC/ARTCC: {{ Auth::user()->subdivision_name }}<br/>
+                            @endif
+                            @if (Auth::user()->permissions == 0)
+                                Status: Not Certified/Guest<br/>
+                            @elseif (Auth::user()->permissions == 1)
+                                Status: Controller<br/>
+                            @elseif (Auth::user()->permissions == 2)
+                                Status: Instructor<br/>
+                            @elseif (Auth::user()->permissions == 3)
+                                Status: Staff<br/>
+                            @elseif (Auth::user()->permissions == 4)
+                                Status: Executive<br/>
+                            @endif
+                            @if(Auth::user()->staffProfile)
+                            Staff Role: {{Auth::user()->staffProfile->position}}
+                            @endif
                         </div>
                         <div data-step="4" data-intro="You can change your avatar here. Your avatar is available when people view your account. This will likely only be staff members, unless you sign up for an event or similar activity." class="col">
                             <h5 class="card-title">Avatar</h5>
@@ -308,6 +309,7 @@
             <br/>
             @if (Auth::user()->permissions >= 2)
             <h4 class="display-6">Administration</h4>
+            <div class="card">
             <div class="list-group">
                 <div class="list-group-item"><small><b>INSTRUCTORS</b></small></div>
                 <a href="{{url('/dashboard/training')}}" class="list-group-item list-group-item-action"><i class="fa fa-graduation-cap"></i>&nbsp;Controller Training</a>
@@ -315,16 +317,17 @@
                     <a href="{{url('/dashboard/training/applications')}}" class="list-group-item list-group-item-action"><i class="fa fa-file-contract"></i>&nbsp;Controller Applications</a>
                 @endif
                 @if (Auth::user()->permissions >= 3)
-                    <div class="list-group-item"><small><b>DIRECTORS</b></small></div>
+                    <div class="list-group-item"><small><b>EXECUTIVE</b></small></div>
                     <a href="{{url('/dashboard/roster')}}" class="list-group-item list-group-item-action"><i class="fa fa-users"></i>&nbsp;Controller Roster</a>
                     <a href="{{url('/dashboard/news')}}" class="list-group-item list-group-item-action"><i class="fa fa-newspaper"></i>&nbsp;News</a>
                 @endif
                 @if (Auth::user()->permissions >= 4)
-                    <div class="list-group-item"><small><b>EXECUTIVE</b></small></div>
+                    <div class="list-group-item"><small><b>ADMIN</b></small></div>
                     <a href="{{url('/dashboard/auditlog')}}" class="list-group-item list-group-item-action"><i class="fa fa-list-ul"></i>&nbsp;Audit Log</a>
                     <a href="{{route('staff.edit')}}" class="list-group-item list-group-item-action"><i class="fa fa-users"></i>&nbsp;Staff List</a>
                     <a href="{{url('/dashboard/coresettings')}}" class="list-group-item list-group-item-action"><i class="fa fa-cog"></i>&nbsp;Core Settings</a>
                 @endif
+            </div>
             </div>
             @endif
         </div>
@@ -332,28 +335,8 @@
     <br/>
     <a href="javascript:void(0);" onclick="javascript:introJs().setOption('showProgress', true).start();">View the tutorial</a>
 </div>
-<!-- Modal -->
-<div class="modal fade" id="betaModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered" role="document">
-        <div class="modal-content">
-        <div class="modal-header">
-            <h5 class="modal-title" id="exampleModalLongTitle">Welcome to the CZQO Dashboard</h5>
-            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-            <span aria-hidden="true">&times;</span>
-            </button>
-        </div>
-        <div class="modal-body">
-            <h4>Please note that this is in <b>beta stage</b>.</h4>
-            <p>Please report all bugs either via the feedback form or via email to l.downes(at)vatpac.org</p>
-            <p>Thanks!</p>
-        </div>
-        <div class="modal-footer">
-            <button type="button" class="btn btn-secondary" data-dismiss="modal">Okay!</button>
-        </div>
-        </div>
-    </div>
-</div>
 
+<!--Change avatar modal-->
 <div class="modal fade" id="changeAvatar" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered" role="document">
         <div class="modal-content">
@@ -363,22 +346,28 @@
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
+            <form method="post" action="{{route('users.changeavatar')}}" enctype="multipart/form-data" class="" id="">
             <div class="modal-body">
-                <p>Please ensure your avatar complies with the VATSIM Code of Conduct. This avatar will be visible to staff members, and if you're a staff member yourself, on the staff page.</p>
-                <form method="post" action="{{route('users.changeavatar')}}" enctype="multipart/form-data" class="" id="">
-                    @csrf
-                    <input type="file" name="file" class="form-control-file">
-                    <br/>
-                    <input type="submit" class="btn btn-success" value="Upload">
-                </form>
+                <p>Please ensure your avatar complies with the VATSIM Code of Conduct. This avatar will be visible to staff members, if you place a controller booking, and if you're a staff member yourself, on the staff page.</p>
+                @csrf
+                <div class="input-group">
+                    <div class="custom-file">
+                        <input type="file" class="custom-file-input" name="file">
+                        <label class="custom-file-label">Choose file</label>
+                    </div>
+                </div>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Dismiss</button>
+                <button type="button" class="btn btn-light" data-dismiss="modal">Dismiss</button>
+                <input type="submit" class="btn btn-success" value="Upload">
             </div>
+            </form>
         </div>
     </div>
 </div>
+<!--End change avatar modal-->
 
+<!--Biography modal-->
 <div class="modal fade" id="viewBio" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered" role="document">
         <div class="modal-content">
@@ -396,14 +385,15 @@
                 @endif
             </div>
             <div class="modal-footer">
+                <button type="button" class="btn btn-light" data-dismiss="modal">Dismiss</button>
                 <a href="{{route('me.editbioindex')}}" class="btn btn-primary" role="button">Edit Biography</a>
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Dismiss</button>
             </div>
         </div>
     </div>
-
 </div>
+<!--End biography modal-->
 
+<!--Change display name modal-->
 <div class="modal fade" id="changeDisplayNameModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered" role="document">
         <div class="modal-content">
@@ -413,8 +403,8 @@
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
+            <form method="POST" action="{{route('users.changedisplayname')}}">
             <div class="modal-body">
-                <form method="POST" action="{{route('users.changedisplayname')}}">
                     @csrf
                     <div class="form-group">
                         <label>Display first name</label>
@@ -435,20 +425,18 @@
                             <option value="showcid">Show CID only (e.g. {{Auth::id()}})</option>
                         </select>
                     </div>
-                    <div class="form-group">
-                        <input type="submit" class="btn btn-outline-success" value="Save Changes">
-                    </div>
-                </form>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Dismiss</button>
+                <button type="button" class="btn btn-light" data-dismiss="modal">Dismiss</button>
+                <input type="submit" class="btn btn-success" value="Save Changes">
             </div>
+            </form>
         </div>
     </div>
-
 </div>
+<!--End change display name modal-->
 
-<div class="modal fade" id="ctpSignUpModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+{{-- <div class="modal fade" id="ctpSignUpModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered" role="document">
         <div class="modal-content">
             <div class="modal-header">
@@ -489,9 +477,5 @@
         </div>
     </div>
 
-</div>
-
-<script>
-    //$('#ctpSignUpModal').modal('show')
-    </script>
+</div> --}}
 @stop
