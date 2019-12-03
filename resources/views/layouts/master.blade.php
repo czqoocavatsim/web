@@ -218,7 +218,7 @@
                 &nbsp;
                 •
                 &nbsp;
-                <a href="javascript:alert('fix')" class="font-weight-bold black-text">Contact</a>
+                <a href="#" data-toggle="modal" data-target="#contactUsModal" class="font-weight-bold black-text">Contact</a>
                 &nbsp;
                 •
                 &nbsp;
@@ -264,6 +264,28 @@
         </script>
     <!-- End privacy welcome modal-->
     @endif
+    <!-- Contact us modal-->
+    <div class="modal fade" id="contactUsModal" tabindex="-1" role="dialog" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLongTitle">Contact CZQO</b></h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    To contact CZQO staff, do one of the following:
+                    <ol>
+                        <li>Login, and open a <a href="{{route('tickets.index')}}">ticket.</a></li>
+                        <li>Go to the <a href="{{route('staff')}}">staff page</a> and email the relevant staff member.</li>
+                        <li>Join our <a href="https://discord.gg/MvPVAHP">Discord server</a> and ask in #westons-at-the-airport.</li>
+                    </ol>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- End contact us modal-->
     <script type="text/javascript">
         Dropzone.options.dropzone =
             {

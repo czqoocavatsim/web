@@ -19,3 +19,6 @@ Homestead.json
 .idea/discord.xml
 .idea/workspace.xml
 app/Http/Controllers/vendor/skymeyer/vatsimphp/app/logs/pilots.log
+
+*.zip
+
