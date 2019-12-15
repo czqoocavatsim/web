@@ -9,63 +9,6 @@
 @section('title', 'Staff - ')
 
 @section('content')
-<style>
-    .staff_img_container {
-        height: 125px;
-        width: 100%;
-        margin-bottom: 10px;
-        text-align: center;
-    }
-
-    .staff_img_container .staff_img_object {
-        width: 125px;
-        background: inherit;
-        display: inline-block;
-        vertical-align: middle;
-    }
-
-    .staff_img_container img {
-        height: 100%;
-        width: 100%;
-        border-radius: 50%;
-        background: inherit;
-
-    }
-
-    .staff_img_container .img_overlay {
-         position: absolute;
-         z-index: 998;
-         top: 0;
-         opacity: 0;
-         height: 125px;
-         width: 125px;
-         border-radius: 50%;
-         background: inherit;
-        transition: 0.5s ease;
-    }
-
-    .staff_img_container .img_overlay_text{
-        z-index: 999;
-        color: white;
-        margin-top: 40%;
-        opacity: 1;
-        font-size: 1.5em;
-    }
-
-    .staff_img_container .img_overlay_text a {
-        transition: 0.4s ease;
-        color: #fff;
-    }
-
-    .staff_img_container .img_overlay_text a:hover {
-        text-decoration: underline;
-    }
-
-    .staff_img_container .img_overlay:hover {
-        opacity: 0.6;
-        background: #000;
-    }
-</style>
 <div class="container" style="margin-top: 20px;">
     <h2>Gander Oceanic Staff</h2>
     <br>

@@ -55,7 +55,7 @@
             <tr>
                 <th scope="row">Status</th>
                 <td>
-                    {!! Form::select('status', ['certified' => 'Certified', 'not_certified' => 'Not Certified', 'training' => 'Training', 'instructor' => 'Instructor'], $controller->status, ['class' => 'form-control']) !!}
+                    {!! Form::select('status', ['certified' => 'Certified', 'not_certified' => 'Not Certified', 'training' => 'AtcTraining', 'instructor' => 'Instructor'], $controller->status, ['class' => 'form-control']) !!}
                 </td>
             </tr>
             <tr>

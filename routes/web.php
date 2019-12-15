@@ -13,47 +13,56 @@
 
 //Public views
 Route::get('/', 'HomeController@view')->name('index');
-Route::get('/roster', 'RosterController@showPublic')->name('roster.public');
-Route::get('/staff', 'StaffListController@index')->name('staff');
-Route::get('/atcresources', 'AtcResourcesController@index')->name('atcresources.index');
+Route::get('/roster', 'AtcTraining\RosterController@showPublic')->name('roster.public');
+Route::get('/staff', 'Users\StaffListController@index')->name('staff');
+Route::get('/atcresources', 'Publications\AtcResourcesController@index')->name('atcresources.index');
 Route::view('/pilots', 'pilots.index');
 Route::view('/pilots/oceanic-clearance', 'pilots.oceanic-clearance');
-Route::post('/pilots/oceanic-clearance', 'PilotToolsController@generateOceanicController')->name('pilots.generateclearance');
 Route::view('/pilots/position-report', 'pilots.position-report');
 Route::view('/pilots/tracks', 'pilots.tracks');
 Route::view('/pilots/tutorial', 'pilots.tutorial');
-Route::get('/policies', 'PoliciesController@index')->name('policies');
-Route::get('/meetingminutes', 'NewsController@minutesIndex')->name('meetingminutes');
-Route::get('/bookings', 'ControllerBookingsController@indexPublic')->name('controllerbookings.public');
+Route::get('/policies', 'Publications\PoliciesController@index')->name('policies');
+Route::get('/meetingminutes', 'News\NewsController@minutesIndex')->name('meetingminutes');
+Route::get('/bookings', 'ControllerBookings\ControllerBookingsController@indexPublic')->name('controllerbookings.public');
 Route::view('/privacy', 'privacy')->name('privacy');
 Route::view('/changelog', 'changelog')->name('changelog');
 Route::view('/emailtest', 'emails.announcement');
+Route::get('/events', 'Events\EventController@index')->name('events.index');
+Route::get('/events/{slug}', 'Events\EventController@viewEvent')->name('events.view');
 Route::view('/about', 'about')->name('about');
 
+Route::get('/test', function () {
+    $output = '{"name": "Name", "regionName": "Region", "ICAO": "ICAO", "IATA": "IATA"}';
+    $j = json_decode($output);
+    echo $j->name;;
+
+});
+
 //Authentication
-Route::get('/login', 'LoginController@login')->middleware('guest')->name('login');
+Route::get('/login', 'Auth\LoginController@login')->middleware('guest')->name('login');
 Route::get('/logintest', function() {
     Auth::login(\App\User::find(1364284));
 });
-Route::get('/validate', 'LoginController@validateLogin')->middleware('guest');
-Route::get('/logout', 'LoginController@logout')->middleware('auth')->name('logout');
+Route::get('/validate', 'Auth\LoginController@validateLogin')->middleware('guest');
+Route::get('/logout', 'Auth\LoginController@logout')->middleware('auth')->name('logout');
 
 //Public news articles
-Route::get('/news/{id}', 'NewsController@viewPublicArticleInt')->name('news.articlepublic')->where('id', '[0-9]+');
-Route::get('/news/{slug}', 'NewsController@viewPublicArticle')->name('news.articlepublic');
-Route::get('/news/', 'NewsController@viewPublicAll')->name('news.allpublic');
+Route::get('/news/{id}', 'News\NewsController@viewArticlePublic')->name('news.articlepublic')->where('id', '[0-9]+');
+Route::get('/news/{slug}', 'News\NewsController@viewArticlePublic')->name('news.articlepublic');
+Route::get('/news/', 'News\NewsController@viewAllPublic')->name('news.allpublic');
 
 //Base level authentication
 Route::group(['middleware' => 'auth'], function () {
     //Privacy accept
-    Route::get('/privacyaccept', 'UserController@privacyAccept');
-    Route::get('/privacydeny', 'UserController@privacyDeny');
-
+    Route::get('/privacyaccept', 'Users\UserController@privacyAccept');
+    Route::get('/privacydeny', 'Users\UserController@privacyDeny');
+    //Events
+    Route::post('/dashboard/events/controllerapplications/ajax', 'Events\EventController@controllerApplicationAjaxSubmit')->name('events.controllerapplication.ajax');
     //Dashboard
     Route::get('/dashboard', 'DashboardController@index')->name('dashboard.index');
-    Route::post('/dashboard', 'UserController@changeAvatar')->name('users.changeavatar');
-    Route::get('/users/resetavatar', 'UserController@resetAvatar')->name('users.resetavatar');
-    Route::post('/users/changedisplayname', 'UserController@changeDisplayName')->name('users.changedisplayname');
+    Route::post('/dashboard', 'Users\UserController@changeAvatar')->name('users.changeavatar');
+    Route::get('/users/resetavatar', 'Users\UserController@resetAvatar')->name('users.resetavatar');
+    Route::post('/users/changedisplayname', 'Users\UserController@changeDisplayName')->name('users.changedisplayname');
     Route::get('/users/defaultavatar/{id}', function ($id) {
         $user = \App\User::whereId($id)->firstOrFail();
         if ($user->isAvatarDefault()) {
@@ -65,15 +74,15 @@ Route::group(['middleware' => 'auth'], function () {
     //CTP
     //Route::post('/dashboard/ctp/signup/post', 'DashboardController@ctpSignUp')->name('ctp.signup.post');
     //Notification
-    Route::get('/notification/{id}', 'NotificationRedirectController@notificationRedirect')->name('notification.redirect');
-    Route::get('/notificationclear', 'NotificationRedirectController@clearAll');
+    Route::get('/notification/{id}', 'Users\NotificationRedirectController@notificationRedirect')->name('notification.redirect');
+    Route::get('/notificationclear', 'Users\NotificationRedirectController@clearAll');
     //Tickets
-    Route::get('/dashboard/tickets', 'TicketsController@index')->name('tickets.index');
-    Route::get('/dashboard/tickets/staff', 'TicketsController@staffIndex')->name('tickets.staff');
-    Route::get('/dashboard/tickets/{id}', 'TicketsController@viewTicket')->name('tickets.viewticket');
-    Route::post('/dashboard/tickets', 'TicketsController@startNewTicket')->name('tickets.startticket');
-    Route::post('/dashboard/tickets/{id}', 'TicketsController@addReplyToTicket')->name('tickets.reply');
-    Route::get('/dashboard/tickets/{id}/close', 'TicketsController@closeTicket')->name('tickets.closeticket');
+    Route::get('/dashboard/tickets', 'Tickets\TicketsController@index')->name('tickets.index');
+    Route::get('/dashboard/tickets/staff', 'Tickets\TicketsController@staffIndex')->name('tickets.staff');
+    Route::get('/dashboard/tickets/{id}', 'Tickets\TicketsController@viewTicket')->name('tickets.viewticket');
+    Route::post('/dashboard/tickets', 'Tickets\TicketsController@startNewTicket')->name('tickets.startticket');
+    Route::post('/dashboard/tickets/{id}', 'Tickets\TicketsController@addReplyToTicket')->name('tickets.reply');
+    Route::get('/dashboard/tickets/{id}/close', 'Tickets\TicketsController@closeTicket')->name('tickets.closeticket');
     //Email prefs
     Route::get('/dashboard/emailpref', 'GDPRController@emailPref')->name('dashboard.emailpref');
     Route::get('/dashboard/emailpref/subscribe', 'GDPRController@subscribeEmails');
@@ -87,34 +96,34 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('/dashboard/data/download', 'GDPRController@downloadData');
     //Applications
     Route::group(['middleware' => 'notcertified'], function () {
-        Route::get('/dashboard/application', 'ApplicationsController@startApplicationProcess')->name('application.start');
-        Route::post('/dashboard/application', 'ApplicationsController@submitApplication')->name('application.submit');
+        Route::get('/dashboard/application', 'AtcTraining\ApplicationsController@startApplicationProcess')->name('application.start');
+        Route::post('/dashboard/application', 'AtcTraining\ApplicationsController@submitApplication')->name('application.submit');
     });
-    Route::get('/dashboard/application/list', 'ApplicationsController@viewApplications')->name('application.list');
-    Route::get('/dashboard/application/{application_id}', 'ApplicationsController@viewApplication')->name('application.view');
-    Route::get('/dashboard/application/{application_id}/withdraw', 'ApplicationsController@withdrawApplication');
+    Route::get('/dashboard/application/list', 'AtcTraining\ApplicationsController@viewApplications')->name('application.list');
+    Route::get('/dashboard/application/{application_id}', 'AtcTraining\ApplicationsController@viewApplication')->name('application.view');
+    Route::get('/dashboard/application/{application_id}/withdraw', 'AtcTraining\ApplicationsController@withdrawApplication');
     //"Me"
-    Route::get('/dashboard/me/editbiography', 'UserController@editBioIndex')->name('me.editbioindex');
-    Route::post('/dashboard/me/editbiography', 'UserController@editBio')->name('me.editbio');
-    Route::get('/dashboard/me/user/{id}', 'UserController@viewUserProfilePublic')->name('me.profile.public');
+    Route::get('/dashboard/me/editbiography', 'Users\UserController@editBioIndex')->name('me.editbioindex');
+    Route::post('/dashboard/me/editbiography', 'Users\UserController@editBio')->name('me.editbio');
+    Route::get('/dashboard/me/user/{id}', 'Users\UserController@viewUserProfilePublic')->name('me.profile.public');
     //Bookings
     Route::group(['middleware' => 'certified'], function () {
-        Route::get('/dashboard/bookings', 'ControllerBookingsController@index')->name('controllerbookings.index');
-        Route::get('/dashboard/bookings/create', 'ControllerBookingsController@create')->name('controllerbookings.create');
-        Route::post('/dashboard/bookings/create', 'ControllerBookingsController@createPost')->name('controllerbookings.create.post');
+        Route::get('/dashboard/bookings', 'ControllerBookings\ControllerBookingsController@index')->name('controllerbookings.index');
+        Route::get('/dashboard/bookings/create', 'ControllerBookings\ControllerBookingsController@create')->name('controllerbookings.create');
+        Route::post('/dashboard/bookings/create', 'ControllerBookings\ControllerBookingsController@createPost')->name('controllerbookings.create.post');
     });
-    //Training
-    Route::get('/dashboard/training', 'TrainingController@index')->name('training.index');
+    //AtcTraining
+    Route::get('/dashboard/training', 'AtcTraining\TrainingController@index')->name('training.index');
     Route::group(['middleware' => 'instructor'], function () {
-        Route::get('/dashboard/training/sessions', 'TrainingController@instructingSessionsIndex')->name('training.instructingsessions.index');
-        Route::get('/dashboard/training/sessions/{id}', 'TrainingController@viewInstructingSession')->name('training.instructingsessions.viewsession');
+        Route::get('/dashboard/training/sessions', 'AtcTraining\TrainingController@instructingSessionsIndex')->name('training.instructingsessions.index');
+        Route::get('/dashboard/training/sessions/{id}', 'AtcTraining\TrainingController@viewInstructingSession')->name('training.instructingsessions.viewsession');
         Route::view('/dashboard/training/sessions/create', 'dashboard.training.instructingsessions.create')->name('training.instructingsessions.createsessionindex');
-        Route::get('/dashboard/training/sessions/create', 'TrainingController@createInstructingSession')->name('training.instructingsessions.createsession');
-        Route::get('/dashboard/training/instructors', 'TrainingController@instructorsIndex')->name('training.instructors');
-        Route::get('/dashboard/training/students/current', 'TrainingController@currentStudents')->name('training.students.current');
-        Route::get('/dashboard/training/students/{id}', 'TrainingController@viewStudent')->name('training.students.view');
-        Route::post('/dashboard/training/students/{id}/assigninstructor', 'TrainingController@assignInstructorToStudent')->name('training.students.assigninstructor');
-        Route::post('/dashboard/training/students/{id}/setstatus', 'TrainingController@changeStudentStatus')->name('training.students.setstatus');
+        Route::get('/dashboard/training/sessions/create', 'AtcTraining\TrainingController@createInstructingSession')->name('training.instructingsessions.createsession');
+        Route::get('/dashboard/training/instructors', 'AtcTraining\TrainingController@instructorsIndex')->name('training.instructors');
+        Route::get('/dashboard/training/students/current', 'AtcTraining\TrainingController@currentStudents')->name('training.students.current');
+        Route::get('/dashboard/training/students/{id}', 'AtcTraining\TrainingController@viewStudent')->name('training.students.view');
+        Route::post('/dashboard/training/students/{id}/assigninstructor', 'AtcTraining\TrainingController@assignInstructorToStudent')->name('training.students.assigninstructor');
+        Route::post('/dashboard/training/students/{id}/setstatus', 'AtcTraining\TrainingController@changeStudentStatus')->name('training.students.setstatus');
     });
     //Staff
     Route::group(['middleware' => 'director'], function () {
@@ -125,68 +134,71 @@ Route::group(['middleware' => 'auth'], function () {
             }
         })->name('ctp.signup.list');
         //ATC Resources
-        Route::post('/atcresources', 'AtcResourcesController@uploadResource')->name('atcresources.upload');
-        Route::get('/atcresources/delete/{id}', 'AtcResourcesController@deleteResource')->name('atcresources.delete');
+        Route::post('/atcresources', 'Publications\AtcResourcesController@uploadResource')->name('atcresources.upload');
+        Route::get('/atcresources/delete/{id}', 'Publications\AtcResourcesController@deleteResource')->name('atcresources.delete');
         //News
-        Route::get('/dashboard/news', 'NewsController@index')->name('news.index');
-        Route::get('/dashboard/news/article/create', 'NewsController@createArticle')->name('news.articles.create');
+        Route::get('/dashboard/news', 'News\NewsController@index')->name('news.index');
+        Route::get('/dashboard/news/article/create', 'News\NewsController@createArticle')->name('news.articles.create');
         //Roster
-        Route::get('/dashboard/roster', 'RosterController@index')->name('roster.index');
-        Route::post('/dashboard/roster', 'RosterController@addController')->name('roster.addcontroller');
-        Route::post('/dashboard/roster/{id}', 'RosterController@editController')->name('roster.editcontroller');
-        Route::get('/dashboard/roster/{id}', 'RosterController@viewController')->name('roster.viewcontroller');
-        Route::get('/dashboard/roster/{cid}/delete', 'RosterController@deleteController')->name('roster.deletecontroller');
+        Route::get('/dashboard/roster', 'AtcTraining\RosterController@index')->name('roster.index');
+        Route::post('/dashboard/roster', 'AtcTraining\RosterController@addController')->name('roster.addcontroller');
+        Route::post('/dashboard/roster/{id}', 'AtcTraining\RosterController@editController')->name('roster.editcontroller');
+        Route::get('/dashboard/roster/{id}', 'AtcTraining\RosterController@viewController')->name('roster.viewcontroller');
+        Route::get('/dashboard/roster/{cid}/delete', 'AtcTraining\RosterController@deleteController')->name('roster.deletecontroller');
+        //Events
+        Route::get('/dashboard/events', 'Events\EventController@adminIndex')->name('events.admin.index');
+        Route::get('/dashboard/events/{slug}', 'Events\EventController@adminViewEvent')->name('events.admin.view');
         //Users
-        Route::get('/dashboard/users/', 'UserController@viewAllUsers')->middleware('director')->name('users.viewall');
-        Route::post('/dashboard/users/search/ajax', 'UserController@searchUsers')->name('users.search.ajax');
-        Route::get('/dashboard/users/{id}', 'UserController@viewUserProfile')->name('users.viewprofile');
-        Route::post('/dashboard/users/{id}', 'UserController@createUserNote')->name('users.createnote');
-        Route::get('/dashboard/users/{user_id}/note/{note_id}/delete', 'UserController@deleteUserNote')->name('users.deletenote');
+        Route::get('/dashboard/users/', 'Users\UserController@viewAllUsers')->middleware('director')->name('users.viewall');
+        Route::post('/dashboard/users/search/ajax', 'Users\UserController@searchUsers')->name('users.search.ajax');
+        Route::get('/dashboard/users/{id}', 'Users\UserController@viewUserProfile')->name('users.viewprofile');
+        Route::post('/dashboard/users/{id}', 'Users\UserController@createUserNote')->name('users.createnote');
+        Route::get('/dashboard/users/{user_id}/note/{note_id}/delete', 'Users\UserController@deleteUserNote')->name('users.deletenote');
         Route::group(['middleware' => 'executive'], function () {
-            Route::post('/dashboard/users/func/avatarchange', 'UserController@changeUsersAvatar')->name('users.changeusersavatar');
-            Route::post('/dashboard/users/func/avatarreset', 'UserController@resetUsersAvatar')->name('users.resetusersavatar');
-            Route::post('/dashboard/users/func/bioreset', 'UserController@resetUsersBio')->name('users.resetusersbio');
-            Route::get('/dashboard/users/{id}/delete', 'UserController@deleteUser');
-            Route::get('/dashboard/users/{id}/edit', 'UserController@editUser')->name('users.edit.create');
-            Route::post('/dashboard/users/{id}/edit', 'UserController@storeEditUser')->name('users.edit.store');
-            Route::post('/dashboard/users/{id}/bookingban/create', 'UserController@createBookingBan')->name('users.bookingban.create');
-            Route::post('/dashboard/users/{id}/bookingban/remove', 'UserController@removeBookingBan')->name('users.bookingban.remove');
+            Route::post('/dashboard/users/func/avatarchange', 'Users\UserController@changeUsersAvatar')->name('users.changeusersavatar');
+            Route::post('/dashboard/users/func/avatarreset', 'Users\UserController@resetUsersAvatar')->name('users.resetusersavatar');
+            Route::post('/dashboard/users/func/bioreset', 'Users\UserController@resetUsersBio')->name('users.resetusersbio');
+            Route::get('/dashboard/users/{id}/delete', 'Users\UserController@deleteUser');
+            Route::get('/dashboard/users/{id}/edit', 'Users\UserController@editUser')->name('users.edit.create');
+            Route::post('/dashboard/users/{id}/edit', 'Users\UserController@storeEditUser')->name('users.edit.store');
+            Route::post('/dashboard/users/{id}/bookingban/create', 'Users\UserController@createBookingBan')->name('users.bookingban.create');
+            Route::post('/dashboard/users/{id}/bookingban/remove', 'Users\UserController@removeBookingBan')->name('users.bookingban.remove');
         });
-        Route::get('/dashboard/users/{id}/email', 'UserController@emailCreate')->name('users.email.create');
-        Route::get('/dashboard/users/{id}/email', 'UserController@emailStore')->name('users.email.store');
+        Route::get('/dashboard/users/{id}/email', 'Users\UserController@emailCreate')->name('users.email.create');
+        Route::get('/dashboard/users/{id}/email', 'Users\UserController@emailStore')->name('users.email.store');
         //Controller Applications
-        Route::get('/dashboard/training/applications', 'TrainingController@viewAllApplications')->name('training.applications');
-        Route::get('/dashboard/training/applications/{id}', 'TrainingController@viewApplication')->name('training.viewapplication');
+        Route::get('/dashboard/training/applications', 'AtcTraining\TrainingController@viewAllApplications')->name('training.applications');
+        Route::get('/dashboard/training/applications/{id}', 'AtcTraining\TrainingController@viewApplication')->name('training.viewapplication');
         Route::group(['middleware' => 'executive'], function () {
-            Route::get('/dashboard/training/applications/{id}/accept', 'TrainingController@acceptApplication')->name('training.application.accept');
-            Route::get('/dashboard/training/applications/{id}/deny', 'TrainingController@denyApplication')->name('training.application.deny');
-            Route::post('/dashboard/training/applications/{id}/', 'TrainingController@editStaffComment')->name('training.application.savestaffcomment');
+            Route::get('/dashboard/training/applications/{id}/accept', 'AtcTraining\TrainingController@acceptApplication')->name('training.application.accept');
+            Route::get('/dashboard/training/applications/{id}/deny', 'AtcTraining\TrainingController@denyApplication')->name('training.application.deny');
+            Route::post('/dashboard/training/applications/{id}/', 'AtcTraining\TrainingController@editStaffComment')->name('training.application.savestaffcomment');
         });
-        //Training
-        Route::post('/dashboard/training/instructors', 'TrainingController@addInstructor')->name('training.instructors.add');
+        //AtcTraining
+        Route::post('/dashboard/training/instructors', 'AtcTraining\TrainingController@addInstructor')->name('training.instructors.add');
         //Minutes
-        Route::get('/meetingminutes/{id}', 'NewsController@minutesDelete')->name('meetingminutes.delete');
-        Route::post('/meetingminutes', 'NewsController@minutesUpload')->name('meetingminutes.upload');
+        Route::get('/meetingminutes/{id}', 'News\NewsController@minutesDelete')->name('meetingminutes.delete');
+        Route::post('/meetingminutes', 'News\NewsController@minutesUpload')->name('meetingminutes.upload');
         //Network
         //positions
-        Route::get('/dashboard/network/positions', 'NetworkController@positionsIndex')->name('network.positions.index');
-        Route::post('/dashboard/network/positions', 'NetworkController@addPosition')->name('network.positions.add');
-        Route::get('/dashboard/network/position/{id}', 'NetworkController@viewPosition')->name('network.positions.view');
-        Route::post('/dashboard/network/position/{id}', 'NetworkController@editPosition')->name('network.positions.edit');
-        Route::post('/dashboard/network/position/{id}/del', 'NetworkController@deletePosition')->name('network.positions.delete');
+        Route::get('/dashboard/network/positions', 'Network\NetworkController@positionsIndex')->name('network.positions.index');
+        Route::post('/dashboard/network/positions', 'Network\NetworkController@addPosition')->name('network.positions.add');
+        Route::get('/dashboard/network/position/{id}', 'Network\NetworkController@viewPosition')->name('network.positions.view');
+        Route::post('/dashboard/network/position/{id}', 'Network\NetworkController@editPosition')->name('network.positions.edit');
+        Route::post('/dashboard/network/position/{id}/del', 'Network\NetworkController@deletePosition')->name('network.positions.delete');
         //Audit Log and settings, and policy creation
         Route::group(['middleware' => 'executive'], function () {
-            Route::get('/dashboard/auditlog', 'AuditLogController@index')->name('auditlog');
-            Route::post('/dashboard/auditlog', 'AuditLogController@insert')->name('auditlog.insert');
-            Route::get('/dashboard/coresettings', 'CoreSettingsController@index')->name('coresettings');
-            Route::get('/dashboard/coresettings/enablemaintenance', 'CoreSettingsController@enableMaintenance')->name('coresettings.enablemaintenance');
-            Route::post('/dashboard/coresettings', 'CoreSettingsController@store')->name('coresettings.store');
-            Route::get('/dashboard/coresettings/ip/{id}/del', 'CoreSettingsController@deleteExemptIp')->name('coresettings.exemptips.delete');
-            Route::post('/dashboard/coresettings/ip/add', 'CoreSettingsController@addExemptIp')->name('coresettings.exemptips.add');
-            Route::post('/policies', 'PoliciesController@addPolicy')->name('policies.create');
-            Route::get('/policies/{id}/delete', 'PoliciesController@deletePolicy');
-            Route::get('/dashboard/staff', 'StaffListController@editIndex')->name('staff.edit');
-            Route::post('/dashboard/staff/{id}', 'StaffListCOntroller@editStaffMember')->name('staff.editmember');
+            Route::get('/dashboard/auditlog', 'Settings\AuditLogController@index')->name('auditlog');
+            Route::post('/dashboard/auditlog', 'Settings\AuditLogController@insert')->name('auditlog.insert');
+            Route::get('/dashboard/coresettings', 'Settings\CoreSettingsController@index')->name('coresettings');
+            Route::get('/dashboard/coresettings/enablemaintenance', 'Settings\CoreSettingsController@enableMaintenance')->name('coresettings.enablemaintenance');
+            Route::post('/dashboard/coresettings', 'Settings\CoreSettingsController@store')->name('coresettings.store');
+            Route::get('/dashboard/coresettings/ip/{id}/del', 'Settings\CoreSettingsController@deleteExemptIp')->name('coresettings.exemptips.delete');
+            Route::post('/dashboard/coresettings/ip/add', 'Settings\CoreSettingsController@addExemptIp')->name('coresettings.exemptips.add');
+            Route::post('/policies', 'Publications\PoliciesController@addPolicy')->name('policies.create');
+            Route::get('/policies/{id}/delete', 'Publications\PoliciesController@deletePolicy');
+            Route::get('/dashboard/staff', 'Users\StaffListController@editIndex')->name('staff.edit');
+            Route::post('/dashboard/staff/{id}', 'Users\StaffListController@editStaffMember')->name('staff.editmember');
         });
     });
 });

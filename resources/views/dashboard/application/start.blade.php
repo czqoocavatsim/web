@@ -29,7 +29,6 @@
             <h4 class="alert-heading">You are eligibile to apply!</h4>
             <p>Please note this only takes into account your controller rating. Please also note the following requirements which will be manually verified:</p>
             <ul>
-                <li>120 hours on your C1.</li>
                 <li>50 hours spent controlling an enroute control position.</li>
             </ul>
         </div>
@@ -64,18 +63,33 @@
         {!! Form::close() !!}
     @elseif ($allowed == "false")
         <div class="alert alert-danger" role="alert">
-            <h4 class="alert-heading">You are not eligibile to apply.</h4>
+            <h4 class="alert-heading">You are not eligible to apply.</h4>
             <p>You are not yet a C1 controller or above. Please check back when you have a C1 rating and you have:</p>
             <ul>
-                <li>120 hours on your C1.</li>
+                <li>120 hours on your C1 or above ratings.</li>
                 <li>50 hours spent controlling an enroute control position.</li>
             </ul>
+            <p>If you believe there is an error, please <a href="{{route('tickets.index', ['create' => 'yes', 'department' => 'firchief', 'title' => 'Issue with requirement check on application system'])}}">start a support ticket.</a></p>
         </div>
-    @else
+    @elseif ($allowed == "pendingApplication")
         <div class="alert alert-danger" role="alert">
             <h4 class="alert-heading">You already have another pending application.</h4>
-            <p>Please wait for this application to be processed. Processing times are roughly up to 48 hours. If this is a mistake, please open a ticket.</p>
+            <p>Please wait for this application to be processed. Processing times are roughly up to 48 hours.</p>
+            <p>If you believe there is an error, please <a href="{{route('tickets.index', ['create' => 'yes', 'department' => 'firchief', 'title' => 'Issue with pending check on application system'])}}">start a support ticket.</a></p>
         </div>
+    @elseif ($allowed == "hours")
+        <div class="alert alert-danger" role="alert">
+            <h4 class="alert-heading">You are not eligible to apply.</h4>
+            <p>You do not yet have 120 hours or above on your C1 or above ratings. Please check back when you have:</p>
+            <ul>
+                <li>120 hours on your C1 or above ratings.</li>
+                <li>50 hours spent controlling an enroute control position.</li>
+            </ul>
+            <p>You currently have <a title="View your hours rating by rating" href="{{$url}}" target="_blank">{{$total}} hours</a> towards the requirements.</p>
+            <p>If you believe there is an error, please <a href="{{route('tickets.index', ['create' => 'yes', 'department' => 'firchief', 'title' => 'Issue with hour requirement check on application system'])}}">start a support ticket.</a></p>
+        </div>
+    @else
+        <b>You are not eligible to apply, but we're not sure why. Please contact the FIR Chief for further assistance.</b>
     @endif
 </div>
 @stop

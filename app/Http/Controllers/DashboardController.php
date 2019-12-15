@@ -2,10 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use App\CtpSignUp;
+use App\Models\Events\CtpSignUp;
 use App\Mail\CtpSignUpEmail;
-use App\RosterMember;
-use App\Ticket;
+use App\Models\AtcTraining\RosterMember;
+use App\Models\Tickets\Ticket;
 use Auth;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Mail;

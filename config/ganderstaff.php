@@ -37,7 +37,7 @@ return [
 
     'Instructor' => [
         'position' => 'Instructor',
-        'type' => 'Training',
+        'type' => 'AtcTraining',
         'accessLevel' => 'training',
     ],
 

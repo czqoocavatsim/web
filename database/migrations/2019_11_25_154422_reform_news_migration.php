@@ -28,6 +28,7 @@ class ReformNewsMigration extends Migration
            $table->boolean('visible')->default(true);
            $table->integer('email_level')->default(0);
            $table->boolean('certification')->default(false);
+           $table->string('slug');
            $table->timestamps();
         });
     }

@@ -96,11 +96,11 @@
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
+            {!! Form::open(['route' => 'roster.addcontroller']) !!}
             <div class="modal-body">
                 <p class="mb-2">
                     The CID entered will automatically check against users in the CZQO Core database, and if so, populate their data with CERT information. This will override information you input.
                 </p>
-                {!! Form::open(['route' => 'roster.addcontroller']) !!}
                 <div class="form-group">
                     <label for="recipient-name" class="col-form-label">VATSIM CID</label>
                     {!! Form::text('cid', null, ['class' => 'form-control', 'placeholder' => 'e.g. 1300001', 'maxlength' => 7]) !!}
@@ -120,7 +120,7 @@
                 </div>
                 <div class="form-group">
                     <label for="recipient-name" class="col-form-label">Status</label>
-                    {!! Form::select('status', ['certified' => 'Certified', 'not_certified' => 'Not Certified', 'training' => 'Training', 'instructor' => 'Instructor'], ['placeholder' => 'Please choose one..'], ['class' => 'form-control']) !!}
+                    {!! Form::select('status', ['certified' => 'Certified', 'not_certified' => 'Not Certified', 'training' => 'AtcTraining', 'instructor' => 'Instructor'], ['placeholder' => 'Please choose one..'], ['class' => 'form-control']) !!}
                 </div>
                 <div class="form-group">
                     <label for="recipient-name" class="col-form-label">Active</label>
@@ -130,8 +130,8 @@
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
                 {!! Form::submit('Add Controller', ['class' => 'btn btn-primary']) !!}
-                {!! Form::close() !!}
             </div>
+            {!! Form::close() !!}
         </div>
     </div>
 </div>

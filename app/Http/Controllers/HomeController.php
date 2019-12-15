@@ -2,9 +2,8 @@
 
 namespace App\Http\Controllers;
 
-use App\CarouselItem;
-use App\News;
-use App\Ticket;
+use App\Models\News\News;
+use App\Models\News\CarouselItem;
 use Auth;
 use Illuminate\Http\Request;
 
@@ -25,8 +24,8 @@ class HomeController extends Controller
         }
 
         //News
-        $news = News::all();
-        $promotions = News::all();
+        $news = News::all()->sortByDesc('published')->take(3);
+        $promotions = News::where('certification', true)->get()->take(6);
         $carouselItems = CarouselItem::all();
         $arrContextOptions = [
             'ssl'=>[

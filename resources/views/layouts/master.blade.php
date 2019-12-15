@@ -2,8 +2,8 @@
 <html lang="en">
     <head>
         <!--
-        {{App\CoreSettings::where('id', 1)->firstOrFail()->sys_name}}
-        {{App\CoreSettings::where('id', 1)->firstOrFail()->release}} ({{App\CoreSettings::where('id', 1)->firstOrFail()->sys_build}})
+        {{App\Models\Settings\CoreSettings::where('id', 1)->firstOrFail()->sys_name}}
+        {{App\Models\Settings\CoreSettings::where('id', 1)->firstOrFail()->release}} ({{App\Models\Settings\CoreSettings::where('id', 1)->firstOrFail()->sys_build}})
         Built on Bootstrap 4 and Laravel 6
 
         Written by Liesel D
@@ -16,7 +16,7 @@
          S       s       S   s S   S     S
           "sss' sSSSSSs   "sss"ss   "sss"
 
-        For Flight Simulation Use Only - Not To Be Used For Real World Navigation. All content on this web site may not be shared, copied, reproduced or used in any way without prior express written consent of Gander Oceanic. © Copyright {{App\CoreSettings::where('id', 1)->firstOrFail()->copyright_year}} Gander Oceanic, All Rights Reserved.
+        For Flight Simulation Use Only - Not To Be Used For Real World Navigation. All content on this web site may not be shared, copied, reproduced or used in any way without prior express written consent of Gander Oceanic. © Copyright {{App\Models\Settings\CoreSettings::where('id', 1)->firstOrFail()->copyright_year}} Gander Oceanic, All Rights Reserved.
 
         Taking a peek under the hood, and like what you see? Want to help out? Send Liesel an email!
         -->
@@ -76,10 +76,19 @@
         <script src="https://cdn.jsdelivr.net/simplemde/latest/simplemde.min.js"></script>
         <!--Dropzone-->
         <script src="{{asset('js/dropzone.js')}}"></script>
+        <!--JqueryValidate-->
+        <script src="https://cdn.jsdelivr.net/npm/jquery-validation@1.19.1/dist/jquery.validate.min.js"></script>
     </head>
     <body>
     <!--Header-->
     @include('maintenancemode::notification')
+    @if (\App\Models\Settings\CoreSettings::where('id', 1)->firstOrFail()->banner)
+        <div class="alert alert-{{\App\Models\Settings\CoreSettings::where('id', 1)->firstOrFail()->bannerMode}}" style="margin: 0; border-radius: 0; border: none;">
+            <div class="text-center align-self-center">
+                <a href="{{\App\Models\Settings\CoreSettings::where('id', 1)->firstOrFail()->bannerLink}}"><span style="margin: 0;">{{\App\Models\Settings\CoreSettings::where('id', 1)->firstOrFail()->banner}}</span></a>
+            </div>
+        </div>
+    @endif
     <header>
         <nav id="czqoHeaderLight" class="navbar navbar-expand-md navbar-light p-0" style="min-height:59px;">
             <div class="container">
@@ -97,6 +106,9 @@
                         </li>
                         <li class="nav-item">
                             <a href="{{route('controllerbookings.public')}}" class="nav-link {{ Request::is('bookings/*') || Request::is('bookings') ? 'active' : '' }}">Bookings</a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="{{route('events.index')}}" class="nav-link {{ Request::is('events/*') || Request::is('events') ? 'active' : '' }}">Events</a>
                         </li>
                         <li class="nav-item dropdown">
                             <a class="nav-link dropdown-toggle {{ Request::is('dashboard/application') || Request::is('sector-files') ? 'active white-text' : '' }}" style="cursor:pointer" id="dropdown01" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">ATC</a>
@@ -158,13 +170,6 @@
             </div>
         </nav>
     </header>
-    @if (\App\CoreSettings::where('id', 1)->firstOrFail()->banner)
-        <div class="alert alert-{{\App\CoreSettings::where('id', 1)->firstOrFail()->bannerMode}}" style="margin: 0; border-radius: 0; border: none;">
-            <div class="text-center align-self-center">
-                <h4 style="margin: 0;">{{\App\CoreSettings::where('id', 1)->firstOrFail()->banner}}&nbsp;|&nbsp;<a class="alert-link" href="{{\App\CoreSettings::where('id', 1)->firstOrFail()->bannerLink}}">Learn more <i class="fa fa-arrow-circle-right"></i></a></h4>
-            </div>
-        </div>
-    @endif
     @if ($errors->any())
         <div class="alert alert-danger" style="margin: 0; border-radius: 0; border: none;">
             <div class="container">
@@ -204,7 +209,7 @@
     <footer class="page-footer text-dark font-small py-4 mt-5">
         <div class="container">
             <p>For Flight Simulation Use Only - Not To Be Used For Real World Navigation. All content on this web site may not be shared, copied, reproduced or used in any way without prior express written consent of Gander Oceanic.</p>
-            <p>Copyright {{App\CoreSettings::where('id', 1)->firstOrFail()->copyright_year}} Gander Oceanic - All Rights Reserved</p>
+            <p>Copyright {{App\Models\Settings\CoreSettings::where('id', 1)->firstOrFail()->copyright_year}} Gander Oceanic - All Rights Reserved</p>
             <div class="flex-left mt-3">
                 <a href="{{route('privacy')}}" class="font-weight-bold black-text">Privacy Policy</a>
                 &nbsp;
@@ -229,7 +234,7 @@
                 <a href="https://vatcan.ca" class="font-weight-bold black-text">VATCAN</a>
             </div>
             <div class="mt-3">
-                <a href="{{route('about')}}"><small class="text-muted">{{App\CoreSettings::where('id', 1)->firstOrFail()->sys_name}} {{App\CoreSettings::where('id', 1)->firstOrFail()->release}} ({{App\CoreSettings::where('id', 1)->firstOrFail()->sys_build}})</small></a> <small>- <a href="{{route('changelog')}}" class="text-muted">Changelog</a></small>
+                <a href="{{route('about')}}"><small class="text-muted">{{App\Models\Settings\CoreSettings::where('id', 1)->firstOrFail()->sys_name}} {{App\Models\Settings\CoreSettings::where('id', 1)->firstOrFail()->release}} ({{App\Models\Settings\CoreSettings::where('id', 1)->firstOrFail()->sys_build}})</small></a> <small>- <a href="{{route('changelog')}}" class="text-muted">Changelog</a></small>
             </div>
         </div>
     </footer>
@@ -307,7 +312,6 @@
             };
     </script>
     <script>
-        flatpickr(".flatpickr");
         $("blockquote").addClass('blockquote');
     </script>
     </body>

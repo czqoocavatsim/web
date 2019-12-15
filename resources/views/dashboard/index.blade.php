@@ -320,6 +320,7 @@
                     <div class="list-group-item"><small><b>EXECUTIVE</b></small></div>
                     <a href="{{url('/dashboard/roster')}}" class="list-group-item list-group-item-action"><i class="fa fa-users"></i>&nbsp;Controller Roster</a>
                     <a href="{{url('/dashboard/news')}}" class="list-group-item list-group-item-action"><i class="fa fa-newspaper"></i>&nbsp;News</a>
+                    <a href="{{route('events.admin.index')}}" class="list-group-item list-group-item-action"><i class="fas fa-calendar"></i>&nbsp;Events</a>
                 @endif
                 @if (Auth::user()->permissions >= 4)
                     <div class="list-group-item"><small><b>ADMIN</b></small></div>

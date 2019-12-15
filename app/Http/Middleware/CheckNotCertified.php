@@ -22,6 +22,6 @@ class CheckNotCertified
             }
         }
 
-        return redirect('/');
+        abort(403, 'You are already a certified Gander controller. (NOTCERTIFIED check)');
     }
 }

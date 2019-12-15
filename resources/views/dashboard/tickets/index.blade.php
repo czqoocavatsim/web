@@ -120,4 +120,12 @@
             </div>
         </div>
     </div>
+    <script>
+        var url = new URL(window.location.href);
+        if (url.searchParams.get('create') == 'yes') {
+            $('#startTicketModal').modal('show');
+            $('select[name="department"]').val(url.searchParams.get('department'));
+            $('input[name="title"]').val(url.searchParams.get('title'));
+        }
+    </script>
 @stop
