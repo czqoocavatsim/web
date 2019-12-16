@@ -56,8 +56,8 @@ class ApplicationsController extends Controller
         if (in_array($rating, $ratings)) {
             //user is in a prohibited rating
             return view('dashboard.application.start')->with('allowed', 'false');
-        } elseif ($total < -50) {
-            //user does not have 120 hrs
+        } elseif ($total < 80) {
+            //user does not have 80 hrs
             return view('dashboard.application.start', compact('total', 'url'))->with('allowed', 'hours');
         } elseif ($existingApplication != null) {
             //user already has an application
