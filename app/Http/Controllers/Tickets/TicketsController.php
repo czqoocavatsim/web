@@ -8,8 +8,12 @@ use App\Mail\NewTicketMail;
 use App\Mail\NewTicketReplyMail;
 use App\Models\Tickets\Ticket;
 use App\Models\Tickets\TicketReply;
+use App\Models\Users\StaffMember;
 use App\Models\Users\User;
 use App\Models\Users\UserNotification;
+use App\Notifications\NewTicket;
+use App\Notifications\TicketReply as NotificationsTicketReply;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Mail;
@@ -22,8 +26,9 @@ class TicketsController extends Controller
         $openTickets = Ticket::where('user_id', Auth::user()->id)->where('status', 0)->get()->sortByDesc('id');
         $closedTickets = Ticket::where('user_id', Auth::user()->id)->where('status', 1)->get()->sortByDesc('id');
         $onHoldTickets = Ticket::where('user_id', Auth::user()->id)->where('status', 2)->get()->sortByDesc('id');
+        $staff_members = StaffMember::where('user_id', '!=', 1)->get();
 
-        return view('dashboard.tickets.index', compact('openTickets', 'closedTickets', 'onHoldTickets'));
+        return view('dashboard.tickets.index', compact('openTickets', 'closedTickets', 'onHoldTickets', 'staff_members'));
     }
 
     public function staffIndex()
@@ -53,13 +58,13 @@ class TicketsController extends Controller
         $validatedData = $request->validate([
             'title' => 'required|max:50',
             'message' => 'required|min:25',
-            'department' => 'required',
+            'staff_member' => 'required',
         ]);
 
         $ticket = new Ticket([
             'user_id' => Auth::user()->id,
             'ticket_id' => Str::random(6),
-            'department' => $request->get('department'),
+            'staff_member_id' => StaffMember::where('shortform', $request->get('staff_member'))->first()->id,
             'title' => $request->get('title'),
             'message' => $request->get('message'),
             'status' => 0,
@@ -68,15 +73,7 @@ class TicketsController extends Controller
 
         $ticket->save();
 
-        if ($ticket->department == 'firchief') {
-            Mail::to(CoreSettings::where('id', 1)->firstOrFail()->emailfirchief)->cc(CoreSettings::whereId(1)->firstOrFail()->emailwebmaster)->send(new NewTicketMail($ticket));
-        } elseif ($ticket->department == 'chiefinstructor') {
-            Mail::to(CoreSettings::where('id', 1)->firstOrFail()->emailcinstructor)->cc(CoreSettings::whereId(1)->firstOrFail()->emailwebmaster)->send(new NewTicketMail($ticket));
-        } elseif ($ticket->department == 'webmaster') {
-            Mail::to(CoreSettings::whereId(1)->firstOrFail()->emailwebmaster)->send(new NewTicketMail($ticket));
-        } else {
-            Mail::to(CoreSettings::where('id', 1)->firstOrFail()->emailfirchief)->cc(CoreSettings::whereId(1)->firstOrFail()->emailcinstructor)->cc(CoreSettings::whereId(1)->firstOrFail()->emailwebmaster)->send(new NewTicketMail($ticket));
-        }
+        $ticket->staff_member->user->notify(new NewTicket($ticket->staff_member, $ticket));
 
         return redirect()->route('tickets.index')->with('success', 'Ticket '.$ticket->ticket_id.' created! A staff member will respond soon.');
     }
@@ -93,20 +90,13 @@ class TicketsController extends Controller
             $ticketReply = new TicketReply([
                 'user_id' => 1,
                 'ticket_id' => $ticket->ticket_id,
-                'message' => 'Ticket closed by '.Auth::user()->fname.' '.Auth::user()->lname.' '.Auth::user()->id.' at '.date('Y-m-d H:i:s').'. If you require further assistance please open a new ticket.',
+                'message' => 'Ticket closed by '.Auth::user()->fullName('FLC').' at '.Carbon::now()->toDayDateTimeString().' Zulu. If you require further assistance please open a new ticket.',
                 'submission_time' => date('Y-m-d H:i:s'),
             ]);
             $ticketReply->save();
             $ticket->status = 1;
             $ticket->updated_at = date('Y-m-d H:i:s');
             $ticket->save();
-            $notification = new UserNotification([
-                'user_id' => $ticket->user_id,
-                'content' => 'Your ticket '.$ticket->ticket_id.' was closed.',
-                'link' => route('tickets.viewticket', $ticket->ticket_id),
-                'dateTime' => date('Y-m-d H:i:s'),
-            ]);
-            $notification->save();
 
             return redirect()->route('tickets.viewticket', $ticket->ticket_id)->with('success', 'Ticket closed!');
         } else {
@@ -137,17 +127,11 @@ class TicketsController extends Controller
         $ticket->updated_at = date('Y-m-d H:i:s');
         $ticket->save();
 
-        if ($ticketReply->user_id != $ticket->user_id) {
-            $notification = new UserNotification([
-                'user_id' => $ticket->user_id,
-                'content' => 'Your ticket '.$ticket->ticket_id.' has a new reply from '.User::find($ticketReply->user_id)->fname.User::find($ticketReply->user_id)->lname.'!',
-                'link' => route('tickets.viewticket', $ticket->ticket_id),
-                'dateTime' => date('Y-m-d H:i:s'),
-            ]);
-            $notification->save();
+        if ($ticketReply->user == $ticket->user) {
+            $ticket->staff_member->user->notify(new NotificationsTicketReply($ticket->staff_member->user, $ticket, $ticketReply));
+        } else {
+            $ticket->user->notify(new NotificationsTicketReply($ticket->user, $ticket, $ticketReply));
         }
-
-        Mail::to($ticket->user->email)->send(new NewTicketReplyMail($ticketReply, $ticket));
 
         return redirect()->route('tickets.viewticket', $ticket->ticket_id)->with('success', 'Reply sent.');
     }

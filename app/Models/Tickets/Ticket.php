@@ -2,6 +2,7 @@
 
 namespace App\Models\Tickets;
 
+use App\Models\Users\StaffMember;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\HtmlString;
@@ -11,7 +12,7 @@ use App\Models\Users\User;
 class Ticket extends Model
 {
     protected $fillable = [
-        'user_id', 'ticket_id', 'department', 'title', 'message', 'status', 'submission_time',
+        'user_id', 'ticket_id', 'staff_member_id', 'title', 'message', 'status', 'submission_time',
     ];
 
     public function replies()
@@ -22,6 +23,11 @@ class Ticket extends Model
     public function user()
     {
         return $this->belongsTo(User::class);
+    }
+
+    public function staff_member()
+    {
+        return $this->belongsTo(StaffMember::class);
     }
 
     public function html()

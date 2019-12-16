@@ -1,16 +1,8 @@
 @extends('layouts.email')
+@section('to-line', 'Hi '. $application->user->fullName('FLC') . ',')
 
-@section('title')
-    <b>Application {{$application->application_id}} Accepted!</b>
-@stop
-
-@section('to')
-
-    <strong>Hi there,</strong>
-@stop
-
-@section('content')
-    <p>Congratulations, your application for Gander Oceanic has been accepted by {{\App\User::find($application->processed_by)->fullName('FLC')}}  at {{$application->processed_at}} (Zulu)!</p>
+@section('message-content')
+    <p>Congratulations, your application for Gander Oceanic has been accepted by {{\App\Models\Users\User::find($application->processed_by)->fullName('FLC')}}  at {{$application->processed_at}} (Zulu)!</p>
     <b>Staff Comments:</b>
     <p>
         @if (!$application->staff_comment)
@@ -25,6 +17,9 @@
     You can view your application <a href="{{route('application.view', $application->application_id)}}">here.</a>
 @stop
 
-@section('end')
-    <b>Gander Oceanic Core</b>
-@stop
+
+@section('footer-to-line', $application->user->fullName('FLC').' ('.$application->user->email.')')
+
+@section('footer-reason-line')
+as they hold an account an account on the CZQO website and submitted an application for ocenaic endorsement.
+@endsection

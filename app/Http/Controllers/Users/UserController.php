@@ -9,6 +9,7 @@ use App\Notifications\PermissionsChanged;
 use App\Models\Users\User;
 use App\Models\Users\UserNote;
 use App\Models\Users\UserNotification;
+use App\Notifications\WelcomeNewUser;
 use Auth;
 use Flash;
 use function GuzzleHttp\Promise\all;
@@ -29,7 +30,7 @@ class UserController extends Controller
         }
         $user->init = 1;
         $user->save();
-
+        $user->notify(new WelcomeNewUser($user));
         return redirect('/dashboard')->with('success', 'Welcome to CZQO, '.$user->fname.'! We are glad to have you on board.');
     }
 
@@ -130,7 +131,7 @@ class UserController extends Controller
             abort(403, 'The avatar is already the default avatar.');
         }
 
-        $user->avatar = 'https://www.drupal.org/files/profile_default.png';
+        $user->avatar = '/img/profile-picture-img.jpg';
         $user->save();
         AuditLogEntry::insert($editUser, 'Reset user avatar', $user, 0);
 

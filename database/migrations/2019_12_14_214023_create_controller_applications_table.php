@@ -34,6 +34,6 @@ class CreateControllerApplicationsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('controller_applications');
+        Schema::dropIfExists('event_controller_applications');
     }
 }

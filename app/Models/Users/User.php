@@ -126,7 +126,7 @@ class User extends Authenticatable
 
     public function isAvatarDefault()
     {
-        if (!$this->avatar === 'https://www.drupal.org/files/profile_default.png') {
+        if (!$this->avatar === '/img/profile-picture-img.jpg') {
             return false;
         }
 

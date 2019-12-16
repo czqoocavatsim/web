@@ -1,11 +1,5 @@
 @extends('layouts.master')
 
-@section('navbarprim')
-
-    @parent
-
-@stop
-
 @section('content')
     <div class="container" style="margin-top: 20px;">
         <h2>Ticket Inbox</h2>
@@ -46,7 +40,7 @@
                         @foreach ($openTickets as $ticket)
                             <tr>
                             <th scope="row">#{{$ticket->ticket_id}}</th>
-                            <td>{{App\User::find($ticket->user_id)->fullName('FLC')}}</td>
+                            <td>{{$ticket->user->fullName('FLC')}}</td>
                             <td>{{$ticket->title}}</td>
                             <td>{{count($ticket->replies)}}</td>
                             <td>{{$ticket->submission_time}}</td>
@@ -79,7 +73,7 @@
                         @foreach ($closedTickets as $ticket)
                             <tr>
                             <th scope="row">#{{$ticket->ticket_id}}</th>
-                            <td>{{App\User::find($ticket->user_id)->fullName('FLC')}}</td>
+                            <td>{{$ticket->user->fullName('FLC')}}</td>
                             <td>{{$ticket->title}}</td>
                             <td>{{count($ticket->replies)}}</td>
                             <td>{{$ticket->submission_time}}</td>
@@ -112,7 +106,7 @@
                         @foreach ($onHoldTickets as $ticket)
                             <tr>
                             <th scope="row">#{{$ticket->ticket_id}}</th>
-                            <td>{{App\User::find($ticket->user_id)->fullName('FLC')}}</td>
+                            <td>{{$ticket->user->fullName('FLC')}}</td>
                             <td>{{$ticket->title}}</td>
                             <td>{{count($ticket->replies)}}</td>
                             <td>{{$ticket->submission_time}}</td>

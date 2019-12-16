@@ -7,7 +7,7 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
 
-class MaintenanceNotification extends Notification
+class TicketReply extends Notification
 {
     use Queueable;
 
@@ -16,9 +16,11 @@ class MaintenanceNotification extends Notification
      *
      * @return void
      */
-    public function __construct()
+    public function __construct($user, $ticket, $reply)
     {
-        //
+        $this->user = $user;
+        $this->ticket = $ticket;
+        $this->reply = $reply;
     }
 
     /**
@@ -40,8 +42,9 @@ class MaintenanceNotification extends Notification
      */
     public function toMail($notifiable)
     {
-        return (new MailMessage)
-                    ->line('The Core System has been sent into Maintenance mode.');
+        return (new MailMessage)->view(
+            'emails.ticketreply', ['user' => $this->user, 'ticket' => $this->ticket, 'reply' => $this->reply]
+        )->subject('#'.$this->ticket->ticket_id.' | New Reply From '.$this->reply->user->fullName('FLC'));
     }
 
     /**

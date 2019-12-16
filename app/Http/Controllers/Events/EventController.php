@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Events\ControllerApplication;
 use App\Models\Users\User;
 use App\Models\Events\Event;
+use App\Models\Settings\AuditLogEntry;
 use Illuminate\Http\Request;
 use Auth;
 
@@ -42,6 +43,10 @@ class EventController extends Controller
             'submission_timestamp' => date('Y-m-d H:i:s'),
         ]);
         $application->save();
+        $webhook = $application->discord_webhook();
+        if (!$webhook) {
+            AuditLogEntry::insert(Auth::user(), 'Webhook failed', Auth::user(), 0);
+        }
         return redirect()->back()->with('success', 'Submitted!');
     }
 

@@ -37,10 +37,7 @@
         ],
         "psr-4": {
             "App\\": "app/"
-        },
-        "files": [
-            "app/Helpers/webhooks.php"
-        ]
+        }
     },
     "autoload-dev": {
         "psr-4": {

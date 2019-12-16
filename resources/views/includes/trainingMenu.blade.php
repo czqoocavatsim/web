@@ -26,8 +26,8 @@
             <li class="nav-item">
                 <a class="nav-link {{ Request::is('dashboard/training/applications/*') || Request::is('dashboard/training/applications') ? 'active' : '' }}" href="{{route('training.applications')}}">
                     Applications
-                    @if (count(\App\Application::where('status', 0)->get()) >= 1)
-                        <span class="badge-pill {{ Request::is('dashboard/training/applications/*') || Request::is('dashboard/training/applications') ? 'badge-light text-primary' : 'badge-primary' }}">{{count(\App\Application::where('status', 0)->get())}}</span>
+                    @if (count(\App\Models\AtcTraining\Application::where('status', 0)->get()) >= 1)
+                        <span class="badge-pill {{ Request::is('dashboard/training/applications/*') || Request::is('dashboard/training/applications') ? 'badge-light text-primary' : 'badge-primary' }}">{{count(\App\Models\AtcTraining\Application::where('status', 0)->get())}}</span>
                     @endif
                 </a>
             </li>

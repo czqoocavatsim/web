@@ -1,15 +1,9 @@
 @extends('layouts.email')
 
-@section('title')
-    <b>Application {{$application->application_id}} Denied</b>
-@stop
+@section('to-line', 'Hi '. $application->user->fullName('FLC') . ',')
 
-@section('to')
 
-    <strong>Hi there,</strong>
-@stop
-
-@section('content')
+@section('message-content')
     <p>Your application for Gander Oceanic has been denied by {{\App\User::find($application->processed_by)->fullName('FLC')}} at {{$application->processed_at}} (Zulu).</p>
     <b>Staff Comments:</b>
     <p>
@@ -25,6 +19,8 @@
     You can view your application <a href="{{route('application.view', $application->application_id)}}">here.</a>
 @stop
 
-@section('end')
-    <b>Gander Oceanic Core</b>
-@stop
+@section('footer-to-line', $application->user->fullName('FLC').' ('.$application->user->email.')')
+
+@section('footer-reason-line')
+as they hold an account an account on the CZQO website and submitted an application for ocenaic endorsement.
+@endsection

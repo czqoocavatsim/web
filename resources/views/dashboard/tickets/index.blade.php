@@ -96,8 +96,14 @@
                 {!! Form::open(['route' => 'tickets.startticket']) !!}
                 <div class="modal-body">
                     <div class="form-group">
-                        <label for="recipient-name" class="col-form-label">Department</label>
-                        {!! Form::select('department', ['firchief' => 'FIR Chief', 'chiefinstructor' => 'Chief Instructor', 'webmaster' => 'Webmaster', 'feedback' => 'Controller Feedback/Other'], ['placeholder' => 'Please choose one..'], ['class' => 'form-control']) !!}
+                        <label for="recipient-name" class="col-form-label">Staff Member</label>
+                        <select name="staff_member" id="staff_member_select" class="form-control">
+                            <option value="" selected hidden>Please select one...</option>
+                            @foreach ($staff_members as $s)
+                            <option value="{{$s->shortform}}">{{$s->position}} - {{$s->user->fullName('FLC')}}</option>
+                            @endforeach
+                        </select>
+                        <small>For general feedback, choose the FIR Chief.</small>
                     </div>
                     <div class="form-group">
                         <label for="recipient-name" class="col-form-label">Title</label>
@@ -120,12 +126,4 @@
             </div>
         </div>
     </div>
-    <script>
-        var url = new URL(window.location.href);
-        if (url.searchParams.get('create') == 'yes') {
-            $('#startTicketModal').modal('show');
-            $('select[name="department"]').val(url.searchParams.get('department'));
-            $('input[name="title"]').val(url.searchParams.get('title'));
-        }
-    </script>
 @stop

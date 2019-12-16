@@ -2,8 +2,8 @@
 <html lang="en">
     <head>
          <!--
-        {{App\CoreSettings::where('id', 1)->firstOrFail()->sys_name}}
-        {{App\CoreSettings::where('id', 1)->firstOrFail()->release}} ({{App\CoreSettings::where('id', 1)->firstOrFail()->sys_build}})
+        {{App\Models\Settings\CoreSettings::where('id', 1)->firstOrFail()->sys_name}}
+        {{App\Models\Settings\CoreSettings::where('id', 1)->firstOrFail()->release}} ({{App\Models\Settings\CoreSettings::where('id', 1)->firstOrFail()->sys_build}})
         Built on Bootstrap 4 and Laravel 6
 
         Written by Liesel D
@@ -16,7 +16,7 @@
          S       s       S   s S   S     S
           "sss' sSSSSSs   "sss"ss   "sss"
 
-        For Flight Simulation Use Only - Not To Be Used For Real World Navigation. All content on this web site may not be shared, copied, reproduced or used in any way without prior express written consent of Gander Oceanic. © Copyright {{App\CoreSettings::where('id', 1)->firstOrFail()->copyright_year}} Gander Oceanic, All Rights Reserved.
+        For Flight Simulation Use Only - Not To Be Used For Real World Navigation. All content on this web site may not be shared, copied, reproduced or used in any way without prior express written consent of Gander Oceanic. © Copyright {{App\Models\Settings\CoreSettings::where('id', 1)->firstOrFail()->copyright_year}} Gander Oceanic, All Rights Reserved.
 
         Taking a peek under the hood, and like what you see? Want to help out? Send Liesel an email!
         -->
@@ -57,7 +57,7 @@
             </div>
         </div>
         <div class="justify-self-bottom">
-            <small class="text-muted">Copyright {{App\CoreSettings::where('id', 1)->firstOrFail()->copyright_year}} Gander Oceanic - All Rights Reserved - {{App\CoreSettings::where('id', 1)->firstOrFail()->sys_name}} {{App\CoreSettings::where('id', 1)->firstOrFail()->release}} ({{App\CoreSettings::where('id', 1)->firstOrFail()->sys_build}})</small>
+            <small class="text-muted">Copyright {{App\Models\Settings\CoreSettings::where('id', 1)->firstOrFail()->copyright_year}} Gander Oceanic - All Rights Reserved - {{App\Models\Settings\CoreSettings::where('id', 1)->firstOrFail()->sys_name}} {{App\Models\Settings\CoreSettings::where('id', 1)->firstOrFail()->release}} ({{App\Models\Settings\CoreSettings::where('id', 1)->firstOrFail()->sys_build}})</small>
         </div>
     </div>
 </html>

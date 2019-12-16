@@ -1,15 +1,11 @@
 @extends('layouts.email')
 
-@section('title')
-    <b>New Application Submitted</b>
-@stop
-
-@section('to')
+@section('to-line')
 
     <strong>Hi there,</strong>
 @stop
 
-@section('content')
+@section('message-content')
     <p>A controller has submitted an application for Gander Oceanic.</p>
     <b>Details</b>
     <ul>
@@ -24,8 +20,4 @@
     <hr>
     <br/>
     You can view their application <a href="{{route('training.viewapplication', $application->application_id)}}">here.</a>
-@stop
-
-@section('end')
-    <b>Gander Oceanic Core</b>
 @stop

@@ -7,7 +7,7 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
 
-class PermissionsChanged extends Notification
+class WelcomeNewUser extends Notification
 {
     use Queueable;
 
@@ -16,11 +16,9 @@ class PermissionsChanged extends Notification
      *
      * @return void
      */
-    public $notification;
-
-    public function __construct($notification)
+    public function __construct($user)
     {
-        $this->notification = $notification;
+        $this->user = $user;
     }
 
     /**
@@ -31,7 +29,7 @@ class PermissionsChanged extends Notification
      */
     public function via($notifiable)
     {
-        return ['database'];
+        return ['mail'];
     }
 
     /**
@@ -42,10 +40,9 @@ class PermissionsChanged extends Notification
      */
     public function toMail($notifiable)
     {
-        return (new MailMessage)
-                    ->line('The introduction to the notification.')
-                    ->action('Notification Action', url('/'))
-                    ->line('Thank you for using our application!');
+        return (new MailMessage)->view(
+            'emails.welcomenewuser', ['user' => $this->user]
+        )->subject('Welcome to CZQO, ' . $this->user->fullName('F') . '!')->from('chief@czqo.vatcan.ca', 'Andrew Ogden');
     }
 
     /**
@@ -56,6 +53,8 @@ class PermissionsChanged extends Notification
      */
     public function toArray($notifiable)
     {
-        return $this->notification->toArray();
+        return [
+            //
+        ];
     }
 }

@@ -1,15 +1,11 @@
 @extends('layouts.email')
 
-@section('title')
-    <b>Application {{$application->application_id}} Withdrawn</b>
-@stop
-
 @section('to')
 
     <strong>Hi there,</strong>
 @stop
 
-@section('content')
+@section('message-content')
     <p>A controller has withdrawn their application for Gander Oceanic.</p>
     <b>Details</b>
     <ul>
@@ -20,8 +16,4 @@
     <hr>
     <br/>
     You can view their application <a href="{{route('training.viewapplication', $application->application_id)}}">here.</a>
-@stop
-
-@section('end')
-    <b>Gander Oceanic Core</b>
 @stop

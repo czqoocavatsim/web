@@ -12,6 +12,9 @@
 */
 
 //Public views
+
+use Illuminate\Support\Facades\Notification;
+
 Route::get('/', 'HomeController@view')->name('index');
 Route::get('/roster', 'AtcTraining\RosterController@showPublic')->name('roster.public');
 Route::get('/staff', 'Users\StaffListController@index')->name('staff');
@@ -32,10 +35,10 @@ Route::get('/events/{slug}', 'Events\EventController@viewEvent')->name('events.v
 Route::view('/about', 'about')->name('about');
 
 Route::get('/test', function () {
-    $output = '{"name": "Name", "regionName": "Region", "ICAO": "ICAO", "IATA": "IATA"}';
-    $j = json_decode($output);
-    echo $j->name;;
-
+    /* $user = \App\Models\Users\User::find(1300012);
+    $application = \App\Models\AtcTraining\Application::whereId(1)->firstOrFail();
+    Notification::route('mail', 'liesel.downes@icloud.com')->notify(new \App\Notifications\NewApplicationStaff($application));
+    return (new \App\Notifications\NewApplicationStaff($application))->toMail($user);*/
 });
 
 //Authentication
