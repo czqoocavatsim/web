@@ -16,7 +16,7 @@ return [
     |
     */
 
-    'driver' => env('MAIL_DRIVER', 'sparkpost'),
+    'driver' => env('MAIL_DRIVER', 'mailgun'),
 
     /*
     |--------------------------------------------------------------------------
@@ -56,8 +56,13 @@ return [
     */
 
     'from' => [
-        'address' => env('MAIL_FROM_ADDRESS', 'no-reply@czqo.vatcan.ca'),
+        'address' => env('MAIL_FROM_ADDRESS', 'chief@czqo.vatcan.ca'),
         'name' => env('MAIL_FROM_NAME', 'Gander Oceanic VATSIM'),
+    ],
+
+    'to' => [
+        'address' => 'liesel.downes@icloud.com',
+        'name' => 'Liesel Downes'
     ],
 
     /*
