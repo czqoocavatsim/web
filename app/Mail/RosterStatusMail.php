@@ -2,7 +2,7 @@
 
 namespace App\Mail;
 
-use App\RosterMember;
+use App\Models\AtcTraining\RosterMember;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Mail\Mailable;

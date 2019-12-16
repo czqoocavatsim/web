@@ -2,7 +2,7 @@
 
 namespace App\Mail;
 
-use App\Application;
+use App\Models\AtcTraining\Application;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Mail\Mailable;

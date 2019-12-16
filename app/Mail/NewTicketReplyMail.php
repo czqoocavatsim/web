@@ -2,9 +2,9 @@
 
 namespace App\Mail;
 
-use App\Ticket;
-use App\TicketReply;
-use App\User;
+use App\Models\Tickets\Ticket;
+use App\Models\Tickets\TicketReply;
+use App\Models\Users\User;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Mail\Mailable;
