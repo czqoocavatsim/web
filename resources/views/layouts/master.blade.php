@@ -29,9 +29,9 @@
         <title>@yield('title', '')Gander Oceanic VATSIM</title>
         <meta name="description" content="@yield('description', '')">
         <meta name="theme-color" content="#000000">
-        <meta name="og:title" content="@yield('title'.' - ', 'Gander Oceanic VATSIM')">
+        <meta name="og:title" content="@yield('title', '')Gander Oceanic VATSIM">
         <meta name="og:description" content="@yield('description', '')">
-        <meta name="og:image" content="@yield('image',asset('favicon.ico'))">
+        <meta name="og:image" content="@yield('image',asset('img/icon.png'))">
         <link rel="shortcut icon" href="{{ asset('favicon.ico') }}" type="image/x-icon">
         <!-- Font Awesome -->
         <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.2/css/all.css">
@@ -208,8 +208,8 @@
     <!-- Footer -->
     <footer class="page-footer text-dark font-small py-4 mt-5">
         <div class="container">
-            <p>For Flight Simulation Use Only - Not To Be Used For Real World Navigation. All content on this web site may not be shared, copied, reproduced or used in any way without prior express written consent of Gander Oceanic.</p>
-            <p>Copyright {{App\Models\Settings\CoreSettings::where('id', 1)->firstOrFail()->copyright_year}} Gander Oceanic - All Rights Reserved</p>
+            <p>For Flight Simulation Use Only - Not To Be Used For Real World Navigation. All content on this web site may not be shared, copied, reproduced or used in any way without prior express written consent of Gander Oceanic. <a href="https://flightplandatabase.com" class="black-text">Using data from the Flight Plan Database.</a></p>
+            <p>Copyright {{App\Models\Settings\CoreSettings::where('id', 1)->firstOrFail()->copyright_year}} Gander Oceanic - All Rights Reserved.</p>
             <div class="flex-left mt-3">
                 <a href="{{route('privacy')}}" class="font-weight-bold black-text">Privacy Policy</a>
                 &nbsp;

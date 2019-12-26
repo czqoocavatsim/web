@@ -1,7 +1,14 @@
 @extends('layouts.master')
 
 @section('title', $event->name.' - ')
-@section('description', '')
+@section('description')
+{{$event->departure_icao_data()->name}} ({{$event->departure_icao_data()->ICAO}}) to {{$event->arrival_icao_data()->name}} ({{$event->arrival_icao_data()->ICAO}})), starting {{$event->start_timestamp_pretty()}}
+@endsection
+@if($event->image_url)
+@section('image')
+{{$event->image_url}}
+@endsection
+@endif
 
 @section('content')
     <div class="card card-image rounded-0 blue" style="@if($event->image_url)background-image: url({{$event->image_url}});@endif background-size: cover; background-position: center;">
@@ -10,7 +17,7 @@
                 <div class="py-5">
                     <h1 class="h1" style="font-size: 3em;">{{$event->name}}</h1>
                     @if ($event->departure_icao && $event->arrival_icao)
-                    <h3>{{$event->departure_icao_data()->name}} // {{$event->departure_icao_data()->ICAO}}&nbsp;&nbsp;<i class="fas fa-plane"></i>&nbsp;&nbsp;{{$event->arrival_icao_data()->name}} // {{$event->arrival_icao_data()->ICAO}}</h3>
+                    <h3>{{$event->departure_icao_data()->name}} ({{$event->departure_icao_data()->ICAO}})&nbsp;&nbsp;<i class="fas fa-plane"></i>&nbsp;&nbsp;{{$event->arrival_icao_data()->name}} ({{$event->arrival_icao_data()->ICAO}})</h3>
                     @endif
                 </div>
             </div>
@@ -47,7 +54,7 @@
                 @else
                 <ul class="list-unstyled">
                     <li>{{$event->arrival_icao_data()->name}}</li>
-                    <li>{{$event->arrival_icao_data()->ICAO}} ({{$event->departure_icao_data()->IATA}})</li>
+                    <li>{{$event->arrival_icao_data()->ICAO}} ({{$event->arrival_icao_data()->IATA}})</li>
                     <li>{{$event->arrival_icao_data()->regionName}}</li>
                 </ul>
                 @endif

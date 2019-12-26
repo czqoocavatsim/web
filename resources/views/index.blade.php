@@ -1,4 +1,5 @@
 @extends('layouts.master')
+@section('description', 'Cool, calm and collected oceanic control services in the North Atlantic on VATSIM. ')
 
 @section('content')
     <div class="card card-image" style="background-image: url({{asset('https://images-ext-2.discordapp.net/external/zrbU4E4qUOjK6Q3NSJGSn5Y60lzV0dLbNFdgf2DZ5kY/https/image.prntscr.com/image/cKAyIvYHTOOFLh1OvTJZhQ.png?width=1007&height=417')}}); background-size: cover; background-position: center;">
@@ -79,41 +80,15 @@
             <div class="col-md-6">
                 <h3 class="blue-text font-weight-bold">New Controllers</h3>
                 <div class="row">
+                    @foreach ($promotions as $p)
                     <div class="col-md-6 d-flex flex-row justify-content-left py-2">
-                        <img class="profile-img img-fluid" style="width: 50px; height: 50px;" src="https://czqo.vatcan.ca/storage/files/avatars/1364284/53636522-D935-4FA9-ADF4-22911FC4E29E.png" alt="">
+                        <img class="profile-img img-fluid" style="width: 50px; height: 50px;" src="{{$p->image}}" alt="">
                         <div style="margin-left: 10px;">
-                            <h4>Liesel Downes</h4>
-                            <span>9 December 2019</span>
+                            <h4>{{$p->title}}</h4>
+                            <span>{{$p->summary}}</span>
                         </div>
                     </div>
-                    <div class="col-md-6 d-flex flex-row justify-content-left py-2">
-                        <img class="profile-img img-fluid" style="width: 50px; height: 50px;" src="https://czqo.vatcan.ca/storage/files/avatars/1364284/53636522-D935-4FA9-ADF4-22911FC4E29E.png" alt="">
-                        <div style="margin-left: 10px;">
-                            <h4>Liesel Downes</h4>
-                            <span>9 December 2019</span>
-                        </div>
-                    </div>
-                    <div class="col-md-6 d-flex flex-row justify-content-left py-2">
-                        <img class="profile-img img-fluid" style="width: 50px; height: 50px;" src="https://czqo.vatcan.ca/storage/files/avatars/1364284/53636522-D935-4FA9-ADF4-22911FC4E29E.png" alt="">
-                        <div style="margin-left: 10px;">
-                            <h4>Liesel Downes</h4>
-                            <span>9 December 2019</span>
-                        </div>
-                    </div>
-                    <div class="col-md-6 d-flex flex-row justify-content-left py-2">
-                        <img class="profile-img img-fluid" style="width: 50px; height: 50px;" src="https://czqo.vatcan.ca/storage/files/avatars/1364284/53636522-D935-4FA9-ADF4-22911FC4E29E.png" alt="">
-                        <div style="margin-left: 10px;">
-                            <h4>Liesel Downes</h4>
-                            <span>9 December 2019</span>
-                        </div>
-                    </div>
-                    <div class="col-md-6 d-flex flex-row justify-content-left py-2">
-                        <img class="profile-img img-fluid" style="width: 50px; height: 50px;" src="https://czqo.vatcan.ca/storage/files/avatars/1364284/53636522-D935-4FA9-ADF4-22911FC4E29E.png" alt="">
-                        <div style="margin-left: 10px;">
-                            <h4>Liesel Downes</h4>
-                            <span>9 December 2019</span>
-                        </div>
-                    </div>
+                    @endforeach
                 </div>
             </div>
             <div class="col-md-6">

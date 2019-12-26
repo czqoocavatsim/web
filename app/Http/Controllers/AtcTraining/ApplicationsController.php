@@ -30,10 +30,6 @@ class ApplicationsController extends Controller
      */
     public function startApplicationProcess()
     {
-        //Get user's rating and array of prohibited ratings
-        $ratings = ['INA', 'OBS', 'S1', 'S2', 'S3'];
-        $rating = Auth::user()->rating_short;
-
         //Is there an existing application?
         $existingApplication = Application::where('user_id', Auth::id())->where('status', 0)->first();
 
@@ -53,7 +49,7 @@ class ApplicationsController extends Controller
         $total = floor($hours);
 
         //Redirects
-        if (in_array($rating, $ratings)) {
+        if (Auth::user()->rating_id < 5) {
             //user is in a prohibited rating
             return view('dashboard.application.start')->with('allowed', 'false');
         } elseif ($total < 80) {

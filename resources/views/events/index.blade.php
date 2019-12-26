@@ -16,7 +16,7 @@
                         </a>
                         <h5>{{$e->start_timestamp_pretty()}} to {{$e->end_timestamp_pretty()}}</h5>
                         @if ($e->departure_icao && $e->arrival_icao)
-                        <h3>{{$e->departure_icao_data()->name}} // {{$e->departure_icao_data()->ICAO}}&nbsp;&nbsp;<i class="fas fa-plane"></i>&nbsp;&nbsp;{{$e->arrival_icao_data()->name}} // {{$e->arrival_icao_data()->ICAO}}</h3>
+                        <h3>{{$e->departure_icao_data()->name}} ({{$e->departure_icao_data()->ICAO}})&nbsp;&nbsp;<i class="fas fa-plane"></i>&nbsp;&nbsp;{{$e->arrival_icao_data()->name}} ({{$e->arrival_icao_data()->ICAO}})</h3>
                         @endif
                         @if (!$e->event_in_past())
                         <h4>Starts {{$e->starts_in_pretty()}}</h4>

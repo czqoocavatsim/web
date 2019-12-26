@@ -16,7 +16,7 @@
         <table id="rosterTable" class="table table-hover">
             <thead>
                 <tr>
-                    <th scope="col">CID</th>
+                    <th scope="col"><b>CID</b></th>
                     <th scope="col">Full Name</th>
                     <th scope="col">Rating</th>
                     <th scope="col">Division</th>
@@ -27,15 +27,15 @@
             <tbody>
             @foreach ($roster as $controller)
                 <tr>
-                    <th scope="row">{{$controller->cid}}</th>
+                    <th scope="row"><b>{{$controller->cid}}</b></th>
                     <td>
                         {{$controller->user->fullName('FL')}}
                     </td>
                     <td>
-                        {{$controller->rating}}
+                        {{$controller->user->rating_short}}
                     </td>
                     <td>
-                        {{$controller->division}}
+                        {{$controller->user->division_name}} ({{$controller->user->division_code}})
                     </td>
                     @if ($controller->active)
                         <td class="bg-success text-white">Active</td>

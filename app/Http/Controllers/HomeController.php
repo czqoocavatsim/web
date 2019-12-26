@@ -6,6 +6,7 @@ use App\Models\News\News;
 use App\Models\News\CarouselItem;
 use Auth;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Cache;
 
 class HomeController extends Controller
 {
@@ -27,16 +28,20 @@ class HomeController extends Controller
         $news = News::all()->sortByDesc('published')->take(3);
         $promotions = News::where('certification', true)->get()->take(6);
         $carouselItems = CarouselItem::all();
-        $arrContextOptions = [
-            'ssl'=>[
-                'verify_peer'=>false,
-                'verify_peer_name'=>false,
-            ],
-        ];
-        $vatcanNews = file_get_contents('http://www.vatcan.ca/ajax/news', false, stream_context_create($arrContextOptions));
-        $vatcanNewsJsonFull = \GuzzleHttp\json_decode($vatcanNews, true);
-        $vatcanNewsJson = array_splice($vatcanNewsJsonFull, 5);
 
-        return view('index', compact('ganderControllers', 'shanwickControllers', 'news', 'vatcanNewsJson', 'promotions', 'carouselItems'));
+        //Get VATCAN news
+        $vatcanNews = Cache::remember('news.vatcannews', 21600, function () {
+            $url = 'http://www.vatcan.ca/ajax/news';
+            $ch = curl_init();
+            curl_setopt($ch, CURLOPT_URL, $url);
+            curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+            $json = curl_exec($ch);
+            error_log('Grabbing VATCAN news from API');
+            Log::info('Grabbing VATCAN news from API '.date('Y-m-d H:i:s'));
+            curl_close($ch);
+            return json_decode($json);
+        });
+        var_dump($vatcanNews);
+        return view('index', compact('ganderControllers', 'shanwickControllers', 'news', 'vatcanNews', 'promotions', 'carouselItems'));
     }
 }

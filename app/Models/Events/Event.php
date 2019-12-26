@@ -8,6 +8,9 @@ use Illuminate\Database\Eloquent\Model;
 use Parsedown;
 use Illuminate\Support\HtmlString;
 use Auth;
+use Exception;
+use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\Log;
 
 class Event extends Model
 {
@@ -62,40 +65,41 @@ class Event extends Model
     {
         if (!$this->departure_icao) {return null;}
 
-        $url = 'https://api.flightplandatabase.com/nav/airport/'.$this->departure_icao;
+        $output = Cache::remember('events.data.'.$this->departure_icao, 172800, function () {
+            $url = 'https://api.flightplandatabase.com/nav/airport/'.$this->departure_icao;
 
-        /* $ch = curl_init();
-        curl_setopt($ch, CURLOPT_URL, $url);
-        curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
-        $output = curl_exec($ch);
-        $httpcode = curl_getinfo($ch, CURLINFO_RESPONSE_CODE);
-        curl_close($ch); */
+            $ch = curl_init();
+            curl_setopt($ch, CURLOPT_URL, $url);
+            curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+            $json = curl_exec($ch);
+            error_log('Grabbing info from API');
+            Log::info('Grabbing '.$this->departure_info.' info from API '.date('Y-m-d H:i:s'));
+            curl_close($ch);
 
-        //if ($httpcode == 429) {
-            //abort(403,'Too Many Requests');
-        //}
-        $output = '{"name": "Name", "regionName": "Region", "ICAO": "ICAO", "IATA": "IATA"}';
-        return json_decode($output);
+            return json_decode($json);
+        });
+
+        return $output;
     }
 
     public function arrival_icao_data()
     {
         if (!$this->arrival_icao) {return null;}
 
-        $url = 'https://api.flightplandatabase.com/nav/airport/'.$this->arrival_icao;
+        $output = Cache::remember('events.data.'.$this->arrival_icao, 172800, function () {
+            $url = 'https://api.flightplandatabase.com/nav/airport/'.$this->arrival_icao;
 
-        /* $ch = curl_init();
-        curl_setopt($ch, CURLOPT_URL, $url);
-        curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
-        $output = curl_exec($ch);
-        $httpcode = curl_getinfo($ch, CURLINFO_RESPONSE_CODE);
-        curl_close($ch); */
+            $ch = curl_init();
+            curl_setopt($ch, CURLOPT_URL, $url);
+            curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+            $json = curl_exec($ch);
+            curl_close($ch);
+            error_log('Grabbing info from API');
+            Log::info('Grabbing '.$this->departure_info.' info from API '.date('Y-m-d H:i:s'));
+            return json_decode($json);
+        });
 
-        //if ($httpcode == 429) {
-            //abort(403,'Too Many Requests');
-        //}
-        $output = '{"name": "Name", "regionName": "Region", "ICAO": "ICAO", "IATA": "IATA"}';
-        return json_decode($output);
+        return $output;
     }
 
     public function event_in_past()

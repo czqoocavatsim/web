@@ -126,7 +126,7 @@ class User extends Authenticatable
 
     public function isAvatarDefault()
     {
-        if (!$this->avatar === '/img/profile-picture-img.jpg') {
+        if (!$this->avatar === '/img/default-profile-img.jpg') {
             return false;
         }
 
