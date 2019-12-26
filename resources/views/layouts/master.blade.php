@@ -286,6 +286,7 @@
                         <li>Go to the <a href="{{route('staff')}}">staff page</a> and email the relevant staff member.</li>
                         <li>Join our <a href="https://discord.gg/MvPVAHP">Discord server</a> and ask in #westons-at-the-airport.</li>
                     </ol>
+                    <b>If your query is related to ATC coverage for your event, please visit <a href="{{route('events.index')}}">this page.</a></b>
                 </div>
             </div>
         </div>

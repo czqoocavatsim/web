@@ -7,6 +7,7 @@ use App\Models\News\CarouselItem;
 use Auth;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\Log;
 
 class HomeController extends Controller
 {
@@ -30,7 +31,7 @@ class HomeController extends Controller
         $carouselItems = CarouselItem::all();
 
         //Get VATCAN news
-        $vatcanNews = Cache::remember('news.vatcannews', 21600, function () {
+        $vatcanNews = Cache::remember('news.vatcan', 21600, function () {
             $url = 'http://www.vatcan.ca/ajax/news';
             $ch = curl_init();
             curl_setopt($ch, CURLOPT_URL, $url);
@@ -41,7 +42,6 @@ class HomeController extends Controller
             curl_close($ch);
             return json_decode($json);
         });
-        var_dump($vatcanNews);
         return view('index', compact('ganderControllers', 'shanwickControllers', 'news', 'vatcanNews', 'promotions', 'carouselItems'));
     }
 }

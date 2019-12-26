@@ -73,7 +73,7 @@ class Event extends Model
             curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
             $json = curl_exec($ch);
             error_log('Grabbing info from API');
-            Log::info('Grabbing '.$this->departure_info.' info from API '.date('Y-m-d H:i:s'));
+            Log::info('Grabbing '.$this->departure_icao.' info from API '.date('Y-m-d H:i:s'));
             curl_close($ch);
 
             return json_decode($json);
@@ -95,7 +95,7 @@ class Event extends Model
             $json = curl_exec($ch);
             curl_close($ch);
             error_log('Grabbing info from API');
-            Log::info('Grabbing '.$this->departure_info.' info from API '.date('Y-m-d H:i:s'));
+            Log::info('Grabbing '.$this->arrival_icao.' info from API '.date('Y-m-d H:i:s'));
             return json_decode($json);
         });
 

@@ -2,7 +2,10 @@
 @section('title', 'CZQO Events - ')
 @section('content')
     <div class="container py-4">
-        <h1 class="blue-text font-weight-bold">Events</h1>
+        <div class="d-flex flex-row justify-content-between align-items-center mb-1">
+            <h1 class="blue-text font-weight-bold">Events</h1>
+            <a href="#" class="btn btn-link float-right mx-0 px-0" data-toggle="modal" data-target="#requestModal">Request ATC Coverage</a>
+        </div>
         <ul class="list-unstyled">
             @if (count($events) == 0)
             <li>No events.</li>
@@ -37,5 +40,31 @@
             </div>
             @endforeach
         </ul>
+    </div>
+    <!-- ATC coverage request modal-->
+    <div class="modal fade" id="requestModal" tabindex="-1" role="dialog" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLongTitle">Request ATC Coverage</b></h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <p>Gander Oceanic is happy to provide ATC coverage for your event crossing the North Atlantic.<br/>
+                        To request ATC for your event, contact the Events and Marketing Director via a <a href="{{route('tickets.index')}}">ticket</a> or via <a href="{{route('staff')}}">email.</a> If the position is vacant, instead contact the FIR Chief.</p>
+                    <br/>
+                    <p>Section 2.5 of the General Policy applies.</p>
+                    <blockquote style="font-size: 12px !important;">
+                        <p  style="font-size: 12px !important;">2.5    Events<br/><br/>
+2.5.1    Gander Oceanic warmly welcomes events (including those organised by Virtual Airlines, streamers, etc) that pass through the Gander and Shanwick airspace, and we are very happy to provide our wonderful, professional service for both sectors.<br/><br/>
+2.5.2    Gander Oceanic requires a notice of at least fourteen (14) days from the event coordinator if Oceanic control is needed. This ensures that you can have the best oceanic experience throughout the duration of your event, as it takes time to compile a roster.<br/><br/>
+2.5.3    If fourteen (14) days is not provided, then Gander Oceanic cannot guarantee coverage for your event. A roster will not be compiled for any event made aware to us less than fourteen days before the event date, nor will the event be published on our event page. Your cooperation is appreciated in this regard.<br/><br/>
+2.5.4    Requests in accordance with 2.5.2 and 2.5.3 shall be made in writing via email to the Events and Marketing Director, copying in the FIR Chief. If the Events and Marketing Director position is vacant, than correspondence shall be directed straight to the FIR Chief. Email addresses can be found on the website, on the staff page.</p>
+                    </blockquote>
+                </div>
+            </div>
+        </div>
     </div>
 @endsection
