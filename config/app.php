@@ -155,6 +155,8 @@ return [
         Barryvdh\DomPDF\ServiceProvider::class,
         MisterPhilip\MaintenanceMode\MaintenanceModeServiceProvider::class,
         MisterPhilip\MaintenanceMode\MaintenanceCommandServiceProvider::class,
+        NotificationChannels\Discord\DiscordServiceProvider::class,
+        SocialiteProviders\Manager\ServiceProvider::class,
         /*
          * Application Service Providers...
          */

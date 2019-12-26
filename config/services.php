@@ -41,4 +41,11 @@ return [
             'transactional' => true,
         ],
     ],
+    'discord' => [
+        'token' => env('DISCORD_BOT_TOKEN'),
+        'client_id' => env('DISCORD_KEY'),
+        'client_secret' => env('DISCORD_SECRET'),
+        'redirect' => env('DISCORD_REDIRECT_URI'),
+        'redirect_join' => env('DISCORD_REDIRECT_URI_JOIN'),
+    ],
 ];

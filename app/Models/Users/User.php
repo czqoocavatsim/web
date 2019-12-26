@@ -15,6 +15,9 @@ use App\Models\News;
 use App\Models\Publications;
 use App\Models\Settings;
 use App\Models\Tickets;
+use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\Log;
+use RestCord\DiscordClient;
 
 class User extends Authenticatable
 {
@@ -29,6 +32,7 @@ class User extends Authenticatable
         'id', 'fname', 'lname', 'email', 'rating_id', 'rating_short', 'rating_long', 'rating_GRP',
         'reg_date', 'region_code', 'region_name', 'division_code', 'division_name',
         'subdivision_code', 'subdivision_name', 'permissions', 'init', 'gdpr_subscribed_emails', 'avatar', 'bio', 'display_cid_only', 'display_fname', 'display_last_name',
+        'discord_user_id', 'discord_dm_channel_id'
     ];
 
     /**
@@ -149,5 +153,28 @@ class User extends Authenticatable
         }
 
         return true;
+    }
+
+    public function routeNotificationForDiscord()
+    {
+        return $this->discord_dm_channel_id;
+    }
+
+    public function hasDiscord()
+    {
+        if (!$this->discord_user_id) { return false; }
+        return true;
+    }
+
+    public function getDiscordUser()
+    {
+        return Cache::remember('users.discorduserdata.'.$this->id, 84600, function () {
+            $discord = new DiscordClient(['token' => config('services.discord.token')]);
+
+            $user = $discord->user->getUser(['user.id' => $this->discord_user_id]);
+            Log::info('Caching Discord user');
+            Log::info(print_r($user, true));
+            return $user;
+        });
     }
 }

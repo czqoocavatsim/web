@@ -5,6 +5,8 @@ namespace App\Http\Controllers\Users;
 use App\Http\Controllers\Controller;
 use App\Models\Settings\AuditLogEntry;
 use App\Models\ControllerBookings\ControllerBookingsBan;
+use App\Notifications\DiscordLinkCreated;
+use App\Notifications\DiscordWelcome;
 use App\Notifications\PermissionsChanged;
 use App\Models\Users\User;
 use App\Models\Users\UserNote;
@@ -12,6 +14,8 @@ use App\Models\Users\UserNotification;
 use App\Notifications\WelcomeNewUser;
 use Auth;
 use Flash;
+use RestCord\DiscordClient;
+use SocialiteProviders\Manager\Config;
 use function GuzzleHttp\Promise\all;
 use function GuzzleHttp\Psr7\str;
 use Illuminate\Http\Request;
@@ -19,6 +23,10 @@ use Illuminate\Support\Facades\Storage;
 use Mail;
 use mofodojodino\ProfanityFilter\Check;
 use RestCord\Interfaces\AuditLog;
+use Illuminate\Support\Facades\Log;
+use Laravel\Socialite\Facades\Socialite;
+use NotificationChannels\Discord\Discord;
+
 
 class UserController extends Controller
 {
@@ -387,5 +395,72 @@ class UserController extends Controller
     public function removeBookingBan(Request $request, $id)
     {
 
+    }
+
+    public function linkDiscord()
+    {
+        Log::info('Linking Discord for '.Auth::id());
+        return Socialite::with('discord')->scopes(['identify'])->redirect();
+    }
+
+    public function linkDiscordRedirect()
+    {
+        $discordUser = Socialite::driver('discord')->user();
+        if (!$discordUser) {
+            abort(403, 'Discord OAuth failed.');
+        }
+        $user = Auth::user();
+        $user->discord_user_id = $discordUser->id;
+        $user->discord_dm_channel_id = app(Discord::class)->getPrivateChannel($discordUser->id);
+        $user->save();
+        return redirect()->route('dashboard.index')->with('success', 'Linked with account '.$discordUser->nickname. '!');
+    }
+
+    public function joinDiscordServerRedirect()
+    {
+        $config = new Config(config('services.discord.client_id'), config('services.discord.client_secret'), config('services.discord.redirect_join'));
+        return Socialite::with('discord')->setConfig($config)->scopes(['identify', 'guilds.join'])->redirect();
+    }
+
+    public function joinDiscordServer()
+    {
+        $discord = new DiscordClient(['token' => config('services.discord.token')]);
+        $config = new Config(config('services.discord.client_id'), config('services.discord.client_secret'), config('services.discord.redirect_join'));
+        $discordUser = Socialite::driver('discord')->setConfig($config)->user();
+        $args = array(
+            'guild.id' => 479250337048297483,
+            'user.id' => intval($discordUser->id),
+            'access_token' => $discordUser->token,
+            'nick' => Auth::user()->fullName('FLC')
+        );
+        if (Auth::user()->rosterProfile) {
+            if (Auth::user()->rosterProfile->status == 'training') {
+                $args['roles'] = array(482824058141016075);
+            }
+            elseif (Auth::user()->rosterProfile->status == 'certified') {
+                $args['roles'] = array(482819739996127259);
+            }
+        }
+        else {
+            $args['roles'] = array(482835389640343562);
+        }
+        $discord->guild->addGuildMember($args);
+        Auth::user()->notify(new DiscordWelcome());
+        $discord->channel->createMessage(['channel.id' => 482860026831175690, 'content' => '<@'.$discordUser->id.'> ('.Auth::id().') has joined.']);
+        return redirect()->route('dashboard.index')->with('success', 'You have joined the CZQO Discord server!');
+    }
+
+    public function unlinkDiscord()
+    {
+        $discord = new DiscordClient(['token' => config('services.discord.token')]);
+        $user = Auth::user();
+        if ($discord->guild->getGuildMember(['guild.id' => 479250337048297483, 'user.id' => $user->discord_user_id])) {
+            $discord->guild->removeGuildMember(['guild.id' => 479250337048297483, 'user.id' => $user->discord_user_id]);
+            $discord->channel->createMessage(['channel.id' => 482860026831175690, 'content' => '<@'.$user->discord_user_id.'> ('.Auth::id().') has unlinked their account and has been kicked.']);
+        }
+        $user->discord_user_id = null;
+        $user->discord_dm_channel_id = null;
+        $user->save();
+        return redirect()->route('dashboard.index')->with('info', 'Account unlinked.');
     }
 }

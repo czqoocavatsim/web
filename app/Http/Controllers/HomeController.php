@@ -14,10 +14,13 @@ class HomeController extends Controller
     public function view()
     {
         //VATSIM online controllers
-        $logFile = __DIR__.'/vendor/skymeyer/vatsimphp/app/logs/pilots.log';
-        $vatsim = new \Vatsimphp\VatsimData();
-        $vatsim->setConfig('cacheOnly', false);
-        $vatsim->setConfig('logFile', $logFile);
+        $vatsim = Cache::remember('vatsim.data', 900, function () {
+            $logFile = __DIR__.'/vendor/skymeyer/vatsimphp/app/logs/pilots.log';
+            $data = new \Vatsimphp\VatsimData();
+            $data->setConfig('cacheOnly', false);
+            $data->setConfig('logFile', $logFile);
+            return $data;
+        });
         $ganderControllers = [];
         $shanwickControllers = [];
         if ($vatsim->loadData()) {

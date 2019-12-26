@@ -115,8 +115,18 @@
                             @if(Auth::user()->staffProfile)
                             Staff Role: {{Auth::user()->staffProfile->position}}
                             @endif
+                            <br/>
+                            <div data-step="4" data-intro="Here you can link your Discord account to receive reminders for training sessions, and gain access to the CZQO Discord.">
+                            <h5>Discord</h5>
+                            @if (!Auth::user()->hasDiscord())
+                            <p class="mt-1">You don't have a linked Discord account.</p>
+                            <a href="#" data-toggle="modal" data-target="#discordModal" class="mt-1">Link a Discord account</a>
+                            @else
+                            <p class="mt-1">{{Auth::user()->getDiscordUser()->username}}#{{Auth::user()->getDiscordUser()->discriminator}}</p>
+                            @endif
+                            </div>
                         </div>
-                        <div data-step="4" data-intro="You can change your avatar here. Your avatar is available when people view your account. This will likely only be staff members, unless you sign up for an event or similar activity." class="col">
+                        <div data-step="5" data-intro="You can change your avatar here. Your avatar is available when people view your account. This will likely only be staff members, unless you sign up for an event or similar activity." class="col">
                             <h5 class="card-title">Avatar</h5>
                             <div class="text-center">
                                 <img src="{{Auth::user()->avatar}}" style="width: 125px; height: 125px; margin-bottom: 10px; border-radius: 50%;">
@@ -130,7 +140,7 @@
                     </div>
                     <br/>
                 </div>
-                <div class="list-group-flush" data-step="5" data-intro="This is where you can manage your biography, and manage your data preferences.">
+                <div class="list-group-flush" data-step="6" data-intro="This is where you can manage your biography, and manage your data preferences.">
                     <a href="#" class="list-group-item list-group-item-action" data-target="#viewBio" data-toggle="modal"><i class="fa fa-address-card"></i>&nbsp;View Biography</a>
                     <a href="{{url('dashboard/data/')}}" class="list-group-item list-group-item-action"><i class="fa fa-file-download"></i>&nbsp;&nbsp;Download All Data</a>
                     <a href="{{url('/dashboard/data/remove')}}" class="list-group-item list-group-item-action"><i class="fa fa-user-slash"></i>&nbsp;Request Removal</a>
@@ -201,7 +211,7 @@
         </div>
         <div class="col">
             <h4>CZQO Certification & Training</h4>
-            <div class="card" data-step="6" data-intro="Here you can view your certification status within CZQO.">
+            <div class="card" data-step="7" data-intro="Here you can view your certification status within CZQO.">
                 <div class="card-body">
                     <h5 class="card-title">Certification status</h5>
                     <h5 class="card-text">
@@ -262,12 +272,12 @@
                 </div>
                 <div class="list-group-flush" >
                     @if (Auth::user()->permissions >= 2)
-                    <a data-step="7" data-intro="Access CZQO training resources here." href="{{url('/dashboard/training')}}" target="" class="list-group-item list-group-item-action">
+                    <a data-step="8" data-intro="Access CZQO training resources here." href="{{url('/dashboard/training')}}" target="" class="list-group-item list-group-item-action">
                         <i class="fa fa-graduation-cap"></i>
                         Training and Resources
                     </a>
                     @endif
-                    <a data-step="8" data-intro="View your CZQO controller applications here." target="" href="{{route('application.list')}}" class="list-group-item list-group-item-action">
+                    <a data-step="9" data-intro="View your CZQO controller applications here." target="" href="{{route('application.list')}}" class="list-group-item list-group-item-action">
                         <i class="fa fa-file-contract"></i>&nbsp;
                         Your Applications
                     </a>
@@ -275,7 +285,7 @@
             </div>
             <br/>
             <h4 class="display-6">Tickets</h4>
-            <div data-step="9" data-intro="If you have any enquires or issues for the staff, feel free to make a ticket via the ticketing system." class="card">
+            <div data-step="10" data-intro="If you have any enquires or issues for the staff, feel free to make a ticket via the ticketing system." class="card">
                 <div class="card-body">
                     @if (count($openTickets) < 1)
                         No open tickets.
@@ -436,6 +446,33 @@
     </div>
 </div>
 <!--End change display name modal-->
+
+<!--Change Discord modal-->
+<div class="modal fade" id="discordModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        @if (!Auth::user()->hasDiscord())
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLongTitle">Link your Discord account</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <p>write description here</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-light" data-dismiss="modal">Dismiss</button>
+                <a role="button" type="submit" href="{{route('me.discord.link')}}" class="btn btn-primary">Link Account</a>
+            </div>
+        </div>
+        @endif
+    </div>
+</div>
+<script>
+    $("#discordModal").modal();
+</script>
+<!--End Discord modal-->
 
 {{-- <div class="modal fade" id="ctpSignUpModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered" role="document">
