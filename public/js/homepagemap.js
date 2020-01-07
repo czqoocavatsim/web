@@ -1,13 +1,28 @@
-var map = L.map('map', {zoomControl: false, dragging: false, boxZoom: false, doubleClickZoom: false, scrollWheelZoom: false}).setView([55.198470, -32.708], 3);
+function createHomePageMap(planes) {
+var map = L.map('map', {zoomControl: false, dragging: false, boxZoom: false, doubleClickZoom: false, scrollWheelZoom: false}).setView([53.198470, -32.708], 3);
 
 L.tileLayer('https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token={accessToken}', {
     attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors, <a href="https://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery © <a href="https://www.mapbox.com/">Mapbox</a>',
-    maxZoom: 18,
-    id: 'mapbox.light',
+    maxZoom: 100,
+    zoom: 0,
+    id: 'mapbox.dark',
     accessToken: 'pk.eyJ1IjoiZWx0ZWNocm9uIiwiYSI6ImNqOTlydHR4czB4NG8ycWxzYXNla2pmOXcifQ.hBI3z2L84aiEDfp5H946_Q'
 }).addTo(map);
 
-var ganderOca = L.polygon([
+planes.forEach(function (plane) {
+   console.log(plane);
+    let markerIcon = L.icon({
+        iconUrl: '/img/planes/base.png',
+        iconSize: [30, 30],
+        iconAnchor: [2,4]
+    });
+   var marker = L.marker([plane.latitude, plane.longitude], {rotationAngle: plane.heading, icon:markerIcon}).addTo(map);
+   marker.bindPopup(`<h5><b>${plane.callsign}</b></h5><br/>${plane.realname}<br/>${plane.planned_depairport} to ${plane.planned_destairport}`);
+});
+
+map.setZoom(3.6);
+
+/*var ganderOca = L.polygon([
     [45.0, -30],
     [45.0, -40],
     [45,-51],
@@ -25,4 +40,6 @@ var ganderOca = L.polygon([
     [63.3, -39],
     [61,-30]
 ]).addTo(map);
-ganderOca.bindPopup('Gander OCA (CZQX)');
+ganderOca.bindPopup('Gander OCA (CZQX)');*/
+
+}

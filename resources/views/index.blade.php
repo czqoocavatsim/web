@@ -2,11 +2,19 @@
 @section('description', 'Cool, calm and collected oceanic control services in the North Atlantic on VATSIM. ')
 
 @section('content')
-    <div class="card card-image" style="background-image: url({{asset('https://images-ext-2.discordapp.net/external/zrbU4E4qUOjK6Q3NSJGSn5Y60lzV0dLbNFdgf2DZ5kY/https/image.prntscr.com/image/cKAyIvYHTOOFLh1OvTJZhQ.png?width=1007&height=417')}}); background-size: cover; background-position: center;">
-        <div class="text-white text-left py-3 px-4 rgba-black-strong">
+    <div class="card card-image" style="height: 250px;">
+        <div id="map" style="height: 100%; margin:0; background:#000; z-index: 0 !important; position: relative;">
+            <div class="container flex-center">
+                <h5 style="color:#fff;"><i class="fas fa-circle-notch fa-spin"></i>
+                    &nbsp;
+                    Loading map...
+                </h5>
+            </div>
+        </div>
+        <div class="mask flex-center rgba-black-light" style="position:absolute; top:0; left:0; z-index: 1; height: 100%; width: 100%;">
             <div class="container">
                 <div class="py-5">
-                    <h1 class="h1 my-4 py-2" style="font-size: 3em;">Cool, calm and collected oceanic control services in the North Atlantic.</h1>
+                    <h1 class="h1 my-4 py-2" style="font-size: 3em; color: #fff;">Cool, calm and collected oceanic control services in the North Atlantic.</h1>
                 </div>
             </div>
         </div>
@@ -47,9 +55,6 @@
                 <h5><b>Andrew Ogden, FIR Chief</b></h5>
             </div>
             <div class="col-md-6">
-                <div id="map" style="height: 300px;">
-                    Loading...
-                </div>
             </div>
         </div>
     </div>
@@ -108,5 +113,8 @@
         </div>
     </div>
     <script src="{{asset('js/homepagemap.js')}}"></script>
+    <script>
+        createHomePageMap(@php echo json_encode($planes); @endphp);
+    </script>
 @endsection
 

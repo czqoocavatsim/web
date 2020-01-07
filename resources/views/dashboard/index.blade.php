@@ -122,7 +122,7 @@
                             <p class="mt-1">You don't have a linked Discord account.</p>
                             <a href="#" data-toggle="modal" data-target="#discordModal" class="mt-1">Link a Discord account</a>
                             @else
-                            <p class="mt-1">{{Auth::user()->getDiscordUser()->username}}#{{Auth::user()->getDiscordUser()->discriminator}}</p>
+                            <p class="mt-1"><img style="border-radius:50%; height: 30px;" class="img-fluid" src="{{Auth::user()->getDiscordAvatar()}}" alt="">&nbsp;&nbsp;{{Auth::user()->getDiscordUser()->username}}#{{Auth::user()->getDiscordUser()->discriminator}}</p>
                             @endif
                             </div>
                         </div>
@@ -132,7 +132,7 @@
                                 <img src="{{Auth::user()->avatar}}" style="width: 125px; height: 125px; margin-bottom: 10px; border-radius: 50%;">
                             </div>
                             <br/>
-                            <a role="button" data-toggle="modal" data-target="#changeAvatar" class="btn btn-sm btn-block btn-outline"  href="#">Change</a>
+                            <a role="button" data-toggle="modal" data-target="#changeAvatar" class="btn btn-sm shadow-none btn-block"  href="#">Change</a>
                             @if (!Auth::user()->isAvatarDefault())
                                 <a role="button" class="btn btn-sm btn-block btn-outline mt-2"  href="{{route('users.resetavatar')}}">Reset</a>
                             @endif
@@ -367,6 +367,10 @@
                         <label class="custom-file-label">Choose file</label>
                     </div>
                 </div>
+                @if(Auth::user()->hasDiscord())
+                    or use your Discord avatar (refreshes every 6 hours)<br/>
+                    <a href="{{route('users.changeavatar.discord')}}" class="btn btn-sm">Use Discord Avatar</a>
+                @endif
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-light" data-dismiss="modal">Dismiss</button>
@@ -470,7 +474,7 @@
     </div>
 </div>
 <script>
-    $("#discordModal").modal();
+    //$("#discordModal").modal();
 </script>
 <!--End Discord modal-->
 

@@ -36,8 +36,7 @@ class Kernel extends ConsoleKernel
             //Record controller sessions
             $logFile = __DIR__.'/vendor/skymeyer/vatsimphp/app/logs/pilots.log';
             $vatsim = new \Vatsimphp\VatsimData();
-            $vatsim->setConfig('cacheOnly', false);
-            $vatsim->setConfig('logFile', $logFile);
+            $vatsim->loadData();
             if (!$vatsim->loadData()) {
                 Log::alert('No VATSIM data ('.Carbon::now().')');
             } else {

@@ -63,7 +63,8 @@ Route::group(['middleware' => 'auth'], function () {
     Route::post('/dashboard/events/controllerapplications/ajax', 'Events\EventController@controllerApplicationAjaxSubmit')->name('events.controllerapplication.ajax');
     //Dashboard
     Route::get('/dashboard', 'DashboardController@index')->name('dashboard.index');
-    Route::post('/dashboard', 'Users\UserController@changeAvatar')->name('users.changeavatar');
+    Route::post('/users/changeavatar', 'Users\UserController@changeAvatar')->name('users.changeavatar');
+    Route::get('/users/changeavatar/discord', 'Users\UserController@changeAvatarDiscord')->name('users.changeavatar.discord');
     Route::get('/users/resetavatar', 'Users\UserController@resetAvatar')->name('users.resetavatar');
     Route::post('/users/changedisplayname', 'Users\UserController@changeDisplayName')->name('users.changedisplayname');
     Route::get('/users/defaultavatar/{id}', function ($id) {

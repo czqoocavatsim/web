@@ -130,7 +130,7 @@ class User extends Authenticatable
 
     public function isAvatarDefault()
     {
-        if (!$this->avatar === '/img/default-profile-img.jpg') {
+        if (!$this->avatar == 'img/default-profile-img.jpg') {
             return false;
         }
 
@@ -175,6 +175,18 @@ class User extends Authenticatable
             Log::info('Caching Discord user');
             Log::info(print_r($user, true));
             return $user;
+        });
+    }
+
+    public function getDiscordAvatar()
+    {
+        return Cache::remember('users.discorduserdata.'.$this->id.'.avatar', 21600, function () {
+            $discord = new DiscordClient(['token' => config('services.discord.token')]);
+
+            $user = $discord->user->getUser(['user.id' => $this->discord_user_id]);
+            $url = 'https://cdn.discordapp.com/avatars/'.$user->id.'/'.$user->avatar.'.webp';
+            Log::info($url);
+            return $url;
         });
     }
 }

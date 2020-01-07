@@ -303,7 +303,7 @@
                         @if ($note->confidential == 1)
                             @if (Auth::user()->permissions == 4)
                                 <div class="list-group-item">
-                                    <h5>{{$note->timestamp}} by {{\App\User::find($note->author)->fullName('FLC')}}</h5>
+                                    <h5>{{$note->timestamp}} by {{\App\Models\Users\User::find($note->author)->fullName('FLC')}}</h5>
                                     <div class="badge badge-danger">Confidential</div>
                                     <p style="word-break: break-all;">
                                         {{$note->content}}
@@ -313,7 +313,7 @@
                             @endif
                         @else
                             <div class="list-group-item">
-                                <h5>{{$note->timestamp}} by {{\App\User::find($note->author)->fullName('FLC')}}</h5>
+                                <h5>{{$note->timestamp}} by {{\App\Models\Users\User::find($note->author)->fullName('FLC')}}</h5>
                                 <p style="word-break: break-all;">
                                     {{$note->content}}
                                 </p>
@@ -346,7 +346,7 @@
                         <tr>
                             <th scope="row">{{$entry->time}}</th>
                             <td>
-                                {{App\User::find($entry->user_id)->fullName('FLC')}}
+                                {{\App\Models\Users\User::find($entry->user_id)->fullName('FLC')}}
                             </td>
                             <td>
                                 {{$entry->action}}

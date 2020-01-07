@@ -17,7 +17,7 @@ class HomeController extends Controller
         $vatsim = Cache::remember('vatsim.data', 900, function () {
             $logFile = __DIR__.'/vendor/skymeyer/vatsimphp/app/logs/pilots.log';
             $data = new \Vatsimphp\VatsimData();
-            $data->setConfig('cacheOnly', false);
+            $data->setConfig('cacheOnly', true);
             $data->setConfig('logFile', $logFile);
             return $data;
         });
@@ -27,6 +27,8 @@ class HomeController extends Controller
             $ganderControllers = $vatsim->searchCallsign('CZQX_');
             $shanwickControllers = $vatsim->searchCallsign('EGGX_');
         }
+        $planes = $vatsim->getPilots()->toArray();
+
 
         //News
         $news = News::all()->sortByDesc('published')->take(3);
@@ -45,6 +47,6 @@ class HomeController extends Controller
             curl_close($ch);
             return json_decode($json);
         });
-        return view('index', compact('ganderControllers', 'shanwickControllers', 'news', 'vatcanNews', 'promotions', 'carouselItems'));
+        return view('index', compact('ganderControllers', 'shanwickControllers', 'news', 'vatcanNews', 'promotions', 'carouselItems', 'planes'));
     }
 }

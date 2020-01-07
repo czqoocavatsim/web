@@ -266,6 +266,15 @@ class UserController extends Controller
         return redirect()->route('dashboard.index')->with('success', 'Avatar changed!');
     }
 
+    public function changeAvatarDiscord()
+    {
+        $user = Auth::user();
+        $discordUrl = $user->getDiscordAvatar();
+        $user->avatar = $discordUrl;
+        $user->save();
+        return redirect()->route('dashboard.index')->with('success', 'Avatar changed!');
+    }
+
     public function resetAvatar()
     {
         $user = Auth::user();
