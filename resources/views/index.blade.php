@@ -1,5 +1,5 @@
 @extends('layouts.master')
-@section('description', 'Cool, calm and collected oceanic control services in the North Atlantic on VATSIM. ')
+@section('description', 'Cool, calm and collected oceanic control services in the North Atlantic on VATSIM.')
 
 @section('content')
     <div class="card card-image" style="height: 250px;">
@@ -55,18 +55,47 @@
                 <h5><b>Andrew Ogden, FIR Chief</b></h5>
             </div>
             <div class="col-md-6">
+                <h3>Online Controllers</h3>
+                <ul class="list-unstyled ml-0 mt-3 p-0">
+                    @if(count($ganderControllers) < 1 && count($shanwickControllers) < 1)
+                    No controllers online :(
+                    @endif
+                    @foreach($ganderControllers as $controller)
+                    <li class="mb-2">
+                        <div class="card shadow-none black-text blue-grey lighten-5 p-3">
+                            <div class="d-flex flex-row justify-content-between align-items-center mb-1">
+                                <h4 class="m-0">{{$controller['callsign']}}</h4>
+                                <span><i class="far fa-user-circle"></i>&nbsp;&nbsp;{{$controller['realname']}} {{$controller['cid']}}</span>
+                            </div>
+                        </div>
+                    </li>
+                    @endforeach
+                    @foreach($shanwickControllers as $controller)
+                    <li class="mb-2">
+                        <div class="card shadow-none black-text blue-grey lighten-5 p-3">
+                            <div class="d-flex flex-row justify-content-between align-items-center mb-1">
+                                <h4 class="m-0">{{$controller['callsign']}}</h4>
+                                <span><i class="far fa-user-circle"></i>&nbsp;&nbsp;{{$controller['realname']}} {{$controller['cid']}}</span>
+                            </div>
+                        </div>
+                    </li>
+                    @endforeach
+                </ul>
             </div>
         </div>
     </div>
-    <div class="jumbotron white-text blue py-3 mb-0">
+    <div class="jumbotron shadow-none py-3 mb-0">
         <div class="container py-2">
-            <h3>News</h3>
+            <h3 class="blue-text">News</h3>
             <div class="card-columns">
                 @foreach($news as $n)
                 <div class="card blue white-text darken-3 my-2 h-100">
-                    {{-- <div style="background-image:url({{$n->image}}); background-position: center; height: 125px;" class="waves-effect"> --}}
                     <a href="{{route('news.articlepublic', $n->slug)}}">
-                        <div style="background-color:darkslategrey; background-position: center; height: 125px;" class="waves-effect"></div>
+                        @if ($n->image)
+                        <div style="background-image:url({{$n->image}}); background-position: center; background-size:cover; height: 125px;" class="waves-effect"></div>
+                        @else
+                        <div style="height: 125px;" class="blue waves-effect"></div>
+                        @endif
                     </a>
                     <div class="card-body pb-2">
                         <a class="card-title font-weight-bold white-text" href="{{route('news.articlepublic', $n->slug)}}"><h4>{{$n->title}}</h4></a>
@@ -76,14 +105,14 @@
                 @endforeach
             </div>
             <div class="d-flex flex-row">
-                <a href="#" class="float-right ml-auto mr-0 white-text" style="font-size: 1.2em;">View all news <i class="fas fa-arrow-right"></i></a>
+                <a href="{{route('news')}}" class="float-right ml-auto mr-0 white-text" style="font-size: 1.2em;">View all news <i class="fas fa-arrow-right"></i></a>
             </div>
         </div>
     </div>
     <div class="container py-4">
         <div class="row">
-            <div class="col-md-6">
-                <h3 class="blue-text font-weight-bold">New Controllers</h3>
+            {{-- <div class="col-md-6">
+                <h3 class="blue-text">New Controllers</h3>
                 <div class="row">
                     @foreach ($promotions as $p)
                     <div class="col-md-6 d-flex flex-row justify-content-left py-2">
@@ -95,9 +124,9 @@
                     </div>
                     @endforeach
                 </div>
-            </div>
+            </div> --}}
             <div class="col-md-6">
-                <h3 class="blue-text font-weight-bold">Quick Links</h3>
+                <h3 class="blue-text">Quick Links</h3>
                 <ol class="list-unstyled">
                     <li class="py-1">
                         <a href="#" class="btn btn-block btn-discord align-content-center"><i class="fab fa-discord fa-2x" style="vertical-align:middle;"></i>&nbsp;&nbsp;Join Our Discord</a>
@@ -114,7 +143,7 @@
     </div>
     <script src="{{asset('js/homepagemap.js')}}"></script>
     <script>
-        createHomePageMap(@php echo json_encode($planes); @endphp);
+        createHomePageMap(@php echo json_encode($planes); @endphp, @php echo json_encode($ganderControllers->toArray()); @endphp, @php echo json_encode($shanwickControllers->toArray()); @endphp);
     </script>
 @endsection
 

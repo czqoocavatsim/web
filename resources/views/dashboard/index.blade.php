@@ -123,6 +123,10 @@
                             <a href="#" data-toggle="modal" data-target="#discordModal" class="mt-1">Link a Discord account</a>
                             @else
                             <p class="mt-1"><img style="border-radius:50%; height: 30px;" class="img-fluid" src="{{Auth::user()->getDiscordAvatar()}}" alt="">&nbsp;&nbsp;{{Auth::user()->getDiscordUser()->username}}#{{Auth::user()->getDiscordUser()->discriminator}}</p>
+                            @if(!Auth::user()->memberOfCzqoGuild())
+                            <a href="#" data-toggle="modal" data-target="#joinDiscordServerModal" class="mt-1">Join The CZQO Discord</a><br/>
+                            @endif
+                            <a href="#" data-toggle="modal" data-target="#discordModal" class="mt-1">Unlink</a>
                             @endif
                             </div>
                         </div>
@@ -451,7 +455,7 @@
 </div>
 <!--End change display name modal-->
 
-<!--Change Discord modal-->
+<!--Link/unlink Discord modal-->
 <div class="modal fade" id="discordModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered" role="document">
         @if (!Auth::user()->hasDiscord())
@@ -463,11 +467,39 @@
                 </button>
             </div>
             <div class="modal-body">
-                <p>write description here</p>
+                <img style="height: 50px;" src="{{asset('/img/discord/czqoplusdiscord.png')}}" class="img-fluid mb-2" alt="">
+                <p>Linking your Discord account with Gander Oceanic allows you to:</p>
+                <ul>
+                    <li>Join our Discord community</li>
+                    <li>Receive notifications for ticket replies, training updates, and more</li>
+                    <li>Use your Discord avatar on the website</li>
+                </ul>
+                <p>To link your account, click the button below. You will be redirected to Discord to approve the link. Information on data stored through Discord OAuth is available in the <a href="{{route('privacy')}}">privacy policy.</a></p>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-light" data-dismiss="modal">Dismiss</button>
                 <a role="button" type="submit" href="{{route('me.discord.link')}}" class="btn btn-primary">Link Account</a>
+            </div>
+        </div>
+        @else
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Unlink your Discord account</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <p>Unlinking your account will:</p>
+                <ul>
+                    <li>Remove you from the CZQO Discord, if you're a member</li>
+                    <li>Remove a Discord avatar if you have it selected</li>
+                    <li>Stop sending you notifications via Discord</li>
+                </ul>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-light" data-dismiss="modal">Dismiss</button>
+                <a role="button" type="submit" href="{{route('me.discord.unlink')}}" class="btn btn-danger">Unlink Account</a>
             </div>
         </div>
         @endif
@@ -477,6 +509,37 @@
     //$("#discordModal").modal();
 </script>
 <!--End Discord modal-->
+@if(!Auth::user()->memberOfCzqoGuild())
+<!--Join guild modal-->
+<div class="modal fade" id="joinDiscordServerModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLongTitle">Join the Gander Oceanic Discord server</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <p>Joining the Gander Oceanic Discord server allows you to join the Gander Oceanic controller and pilot community.</p>
+                <h5>Rules</h5>
+                <ul>
+                    <li>1. The VATSIM Code of Conduct applies.</li>
+                    <li>2. Always show respect and common decency to fellow members.</li>
+                    <li>3. Do not send server invites to servers unrelated to VATSIM without staff permission. Do not send ANY invites via DMs unless asked to.
+                    </li>
+                </ul>
+                <p>Clicking the 'Join' button will redirect you to Discord. We require the Join Server permission to add your Discord account to your server.</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-light" data-dismiss="modal">Dismiss</button>
+                <a role="button" type="submit" href="{{route('me.discord.join')}}" class="btn btn-primary">Join</a>
+            </div>
+        </div>
+    </div>
+</div>
+@endif
+<!--End join guild modal
 
 {{-- <div class="modal fade" id="ctpSignUpModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered" role="document">

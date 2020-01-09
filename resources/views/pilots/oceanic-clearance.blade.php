@@ -5,7 +5,8 @@
     @parent
 
 @stop
-
+@section('title', 'Oceanic Clearance Tool - ')
+@section('description', 'Generate oceanic clearances')
 @section('content')
 <div class="container" style="margin-top: 20px;">
     <div class="row">

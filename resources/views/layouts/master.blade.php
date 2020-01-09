@@ -139,7 +139,7 @@
                             <div class="dropdown-menu" aria-labelledby="dropdown01">
                                 <a class="dropdown-item {{ Request::is('policies') ? 'active white-text' : '' }}" href="{{route('policies')}}">Policies</a>
                                 <a class="dropdown-item {{ Request::is('meetingminutes') ? 'active white-text' : '' }}" href="{{route('meetingminutes')}}">Meeting Minutes</a>
-                                <a class="dropdown-item {{ Request::is('news') ? 'active white-text' : '' }}" href="{{route('news.allpublic')}}">News</a>
+                                <a class="dropdown-item {{ Request::is('news') ? 'active white-text' : '' }}" href="{{route('news')}}">News</a>
                             </div>
                         </li>
                     </ul>

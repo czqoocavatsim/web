@@ -15,6 +15,7 @@ use App\Models\News;
 use App\Models\Publications;
 use App\Models\Settings;
 use App\Models\Tickets;
+use Exception;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Log;
 use RestCord\DiscordClient;
@@ -188,5 +189,19 @@ class User extends Authenticatable
             Log::info($url);
             return $url;
         });
+    }
+
+    public function memberOfCzqoGuild()
+    {
+        $discord = new DiscordClient(['token' => config('services.discord.token')]);
+        try {
+            if ($discord->guild->getGuildMember(['guild.id' => 479250337048297483, 'user.id' => $this->discord_user_id])) {
+                return true;
+            }
+        }
+        catch (Exception $ex) {
+            return false;
+        }
+        return false;
     }
 }

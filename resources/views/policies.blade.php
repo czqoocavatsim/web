@@ -7,6 +7,7 @@
 @stop
 
 @section('title', 'Policies - ')
+@section('description', 'Policies and guidelines for the operation of Gander Oceanic')
 
 @section('content')
     <div class="container" style="margin-top: 20px;">

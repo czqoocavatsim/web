@@ -36,6 +36,12 @@ class NewsController extends Controller
         return view('publicarticle', compact('article'));
     }
 
+    public function viewAllPublic()
+    {
+        $news = News::all()->sortByDesc('id');
+        return view('publicnews', compact('news'));
+    }
+
     public function minutesIndex()
     {
         $minutes = MeetingMinutes::all();

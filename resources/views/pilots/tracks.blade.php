@@ -5,7 +5,8 @@
     @parent
 
 @stop
-
+@section('title', 'NAT Tracks - ')
+@section('description', 'View the current oceanic NAT tracks')
 @section('content')
 <div class="container" style="margin-top: 20px;">
     <div class="row">

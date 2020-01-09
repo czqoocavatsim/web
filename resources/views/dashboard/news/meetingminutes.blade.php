@@ -5,7 +5,8 @@
     @parent
 
 @stop
-
+@section('title', 'Meeting Minutes - ')
+@section('description', 'View Gander staff meeting minutes')
 @section('content')
     <div class="container" style="margin-top: 20px;">
         <h2>Meeting Minutes</h2>

@@ -5,7 +5,7 @@
     @parent
 
 @stop
-
+@section('title', 'Pilot Tools - ')
 @section('content')
     <div class="container" style="margin-top: 20px;">
         <div class="row">

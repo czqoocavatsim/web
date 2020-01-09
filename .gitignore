@@ -22,3 +22,5 @@ app/Http/Controllers/vendor/skymeyer/vatsimphp/app/logs/pilots.log
 
 *.zip
 
+
+.vscode/

@@ -52,7 +52,7 @@ Route::get('/logout', 'Auth\LoginController@logout')->middleware('auth')->name('
 //Public news articles
 Route::get('/news/{id}', 'News\NewsController@viewArticlePublic')->name('news.articlepublic')->where('id', '[0-9]+');
 Route::get('/news/{slug}', 'News\NewsController@viewArticlePublic')->name('news.articlepublic');
-Route::get('/news/', 'News\NewsController@viewAllPublic')->name('news.allpublic');
+Route::get('/news/', 'News\NewsController@viewAllPublic')->name('news');
 
 //Base level authentication
 Route::group(['middleware' => 'auth'], function () {

@@ -7,6 +7,7 @@
 @stop
 
 @section('title', 'ATC Resources - ')
+@section('description', 'Sector files and resources for Gander controllers')
 
 @section('content')
 <div class="container" style="margin-top: 20px;">

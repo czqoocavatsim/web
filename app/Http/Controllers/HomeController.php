@@ -23,11 +23,13 @@ class HomeController extends Controller
         });
         $ganderControllers = [];
         $shanwickControllers = [];
+        $planes = [];
         if ($vatsim->loadData()) {
             $ganderControllers = $vatsim->searchCallsign('CZQX_');
+            Log::info($ganderControllers->toArray());
             $shanwickControllers = $vatsim->searchCallsign('EGGX_');
+            $planes = $vatsim->getPilots()->toArray();
         }
-        $planes = $vatsim->getPilots()->toArray();
 
 
         //News

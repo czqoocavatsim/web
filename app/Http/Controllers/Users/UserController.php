@@ -419,6 +419,9 @@ class UserController extends Controller
             abort(403, 'Discord OAuth failed.');
         }
         $user = Auth::user();
+        if (User::where('discord_user_id', $discordUser->id)->first()) {
+            return redirect()->route('dashboard.index')->with('error', 'Account already used by another user.');
+        }
         $user->discord_user_id = $discordUser->id;
         $user->discord_dm_channel_id = app(Discord::class)->getPrivateChannel($discordUser->id);
         $user->save();
@@ -463,7 +466,7 @@ class UserController extends Controller
     {
         $discord = new DiscordClient(['token' => config('services.discord.token')]);
         $user = Auth::user();
-        if ($discord->guild->getGuildMember(['guild.id' => 479250337048297483, 'user.id' => $user->discord_user_id])) {
+        if ($user->memberOfCzqoGuild()) {
             $discord->guild->removeGuildMember(['guild.id' => 479250337048297483, 'user.id' => $user->discord_user_id]);
             $discord->channel->createMessage(['channel.id' => 482860026831175690, 'content' => '<@'.$user->discord_user_id.'> ('.Auth::id().') has unlinked their account and has been kicked.']);
         }

@@ -5,7 +5,8 @@
     @parent
 
 @stop
-
+@section('title', 'Position Report Tool - ')
+@section('description', 'Generate position tools')
 @section('content')
 <div class="container" style="margin-top: 20px;">
     <div class="row">
