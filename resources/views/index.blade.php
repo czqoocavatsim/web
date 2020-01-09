@@ -105,7 +105,7 @@
                 @endforeach
             </div>
             <div class="d-flex flex-row">
-                <a href="{{route('news')}}" class="float-right ml-auto mr-0 white-text" style="font-size: 1.2em;">View all news <i class="fas fa-arrow-right"></i></a>
+                <a href="{{route('news')}}" class="float-right ml-auto mr-0 blue-text" style="font-size: 1.2em;">View all news <i class="fas fa-arrow-right"></i></a>
             </div>
         </div>
     </div>
@@ -129,13 +129,13 @@
                 <h3 class="blue-text">Quick Links</h3>
                 <ol class="list-unstyled">
                     <li class="py-1">
-                        <a href="#" class="btn btn-block btn-discord align-content-center"><i class="fab fa-discord fa-2x" style="vertical-align:middle;"></i>&nbsp;&nbsp;Join Our Discord</a>
+                        <a href="javascript:alert('To join our Discord, please log-in, and link your Discord account in the dashboard.')" class="btn btn-block btn-discord align-content-center"><i class="fab fa-discord fa-2x" style="vertical-align:middle;"></i>&nbsp;&nbsp;Join Our Discord</a>
                     </li>
                     <li class="py-1">
                         <a href="{{url('/pilots')}}" class="btn btn-block btn-light">Pilot Resources</a>
                     </li>
                     <li class="py-1">
-                        <a href="" class="btn btn-block btn-light light-blue darken-1 white-text">Facebook</a>
+                        <a href="https://www.facebook.com/czqofir" class="btn btn-block btn-light light-blue darken-1 white-text">Facebook</a>
                     </li>
                 </ol>
             </div>

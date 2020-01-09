@@ -409,7 +409,7 @@ class UserController extends Controller
     public function linkDiscord()
     {
         Log::info('Linking Discord for '.Auth::id());
-        return Socialite::with('discord')->scopes(['identify'])->redirect();
+        return Socialite::with('discord')->setScopes(['identify'])->redirect();
     }
 
     public function linkDiscordRedirect()
@@ -431,7 +431,7 @@ class UserController extends Controller
     public function joinDiscordServerRedirect()
     {
         $config = new Config(config('services.discord.client_id'), config('services.discord.client_secret'), config('services.discord.redirect_join'));
-        return Socialite::with('discord')->setConfig($config)->scopes(['identify', 'guilds.join'])->redirect();
+        return Socialite::with('discord')->setConfig($config)->setScopes(['identify', 'guilds.join'])->redirect();
     }
 
     public function joinDiscordServer()
@@ -443,7 +443,7 @@ class UserController extends Controller
             'guild.id' => 479250337048297483,
             'user.id' => intval($discordUser->id),
             'access_token' => $discordUser->token,
-            'nick' => Auth::user()->fullName('FLC')
+             'nick' => Auth::user()->fullName('FLC')
         );
         if (Auth::user()->rosterProfile) {
             if (Auth::user()->rosterProfile->status == 'training') {
