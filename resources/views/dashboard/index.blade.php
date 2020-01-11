@@ -527,6 +527,7 @@
                     <li>2. Always show respect and common decency to fellow members.</li>
                     <li>3. Do not send server invites to servers unrelated to VATSIM without staff permission. Do not send ANY invites via DMs unless asked to.
                     </li>
+                    <li>4. Do not send spam in the server, including images, text, or emotes.</li>
                 </ul>
                 <p>Clicking the 'Join' button will redirect you to Discord. We require the Join Server permission to add your Discord account to your server.</p>
             </div>

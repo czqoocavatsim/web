@@ -16,7 +16,6 @@ planes.forEach(function (plane) {
         iconAnchor: [2,4]
     });
    var marker = L.marker([plane.latitude, plane.longitude], {rotationAngle: plane.heading, icon:markerIcon}).addTo(map);
-   marker.bindPopup(`<h5><b>${plane.callsign}</b></h5><br/>${plane.realname}<br/>${plane.planned_depairport} to ${plane.planned_destairport}`);
 });
 
 map.setZoom(3.6);
@@ -41,8 +40,18 @@ if(ganderControllers.length > 0) {
         [63.3, -39],
         [61,-30]
     ]).addTo(map);
-    ganderOca.bindPopup('Gander OCA (CZQX)');
 }
-
+if (shanwickControllers.length > 0) {
+    var shanwickOca = L.polygon([
+        [61.0, -30],
+        [61.0, -10],
+        [57.0, -10],
+        [57.0, -15],
+        [49.0,-15],
+        [48.49, -8],
+        [45.0, -8],
+        [45.0, -30]
+    ]).addTo(map);
+}
 
 }

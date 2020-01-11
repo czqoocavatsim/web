@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Users;
 use App\Http\Controllers\Controller;
 use App\Models\Settings\AuditLogEntry;
 use App\Models\ControllerBookings\ControllerBookingsBan;
+use App\Models\Users\DiscordBan;
 use App\Notifications\DiscordLinkCreated;
 use App\Notifications\DiscordWelcome;
 use App\Notifications\PermissionsChanged;

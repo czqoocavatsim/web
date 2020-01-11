@@ -41,7 +41,7 @@ class DiscordWelcome extends Notification
      */
     public function toDiscord($notifiable)
     {
-        return DiscordMessage::create("Hi " . Auth::user()->fullName('F') . ", welcome to the Gander Oceanic Discord server!\n\nPlease keep in mind the following rules for the server:\n```\n1. The VATSIM Code of Conduct applies.\n2. Always show respect and common decency to fellow members.\n3. Do not send server invites to servers unrelated to VATSIM without staff permission. Do not send ANY invites via DMs unless asked to.\n```\n\nFailure to comply with this rules can result in your removal from the server.\n\nEnjoy, and if you have any concerns, please feel free to message a staff member or create a ticket!");
+        return DiscordMessage::create("Hi " . Auth::user()->fullName('F') . ", welcome to the Gander Oceanic Discord server!\n\nPlease keep in mind the following rules for the server:\n```\n1. The VATSIM Code of Conduct applies.\n2. Always show respect and common decency to fellow members.\n3. Do not send server invites to servers unrelated to VATSIM without staff permission. Do not send ANY invites via DMs unless asked to.\n4. Do not send spam in the server, including images, text, or emotes.\n```\n\nFailure to comply with this rules can result in your removal from the server.\n\nEnjoy, and if you have any concerns, please feel free to message a staff member or create a ticket!");
     }
 
     /**

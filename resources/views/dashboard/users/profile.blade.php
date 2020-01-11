@@ -233,7 +233,7 @@
                 @endif
                 @endif
                 <br/>
-                <h5>Biography</h5>
+                <h5 class="mt-3">Biography</h5>
                 <p class="border p-1">{!! html_entity_decode($user->bio) !!}</p>
                 @if (Auth::user()->permissions >= 4)
                     <form class="mt-1" action="{{route('users.resetusersbio')}}" method="POST">
@@ -241,6 +241,32 @@
                         <input type="hidden" name="user_id" value="{{$user->id}}">
                         <input type="submit" value="Reset Biography" class="btn btn-sm btn-block btn-outline-danger">
                     </form>
+                @endif
+                @if (Auth::user()->permissions >= 4)
+                <h5 class="mt-3">Discord</h5>
+                @if ($user->hasDiscord())
+                <p class="mt-1"><img style="border-radius:50%; height: 30px;" class="img-fluid" src="{{$user->getDiscordAvatar()}}" alt="">&nbsp;&nbsp;{{$user->getDiscordUser()->username}}#{{$user->getDiscordUser()->discriminator}}</p>
+                @if ($user->memberOfCzqoGuild())
+                Member of CZQO Guild
+                @endif
+                <h6>Bans</h6>
+                <ul class="ml-0 list-unstyled">
+                    @foreach($user->discordBans as $ban)
+                    <div class="p-2 border mb-2">
+                        @if($ban->isPermanent()) <h4 class="red-text mb-0">Permanent</h4><br/>
+                        <p>From {{$ban->banStartPretty()}}</p>
+                        @else
+                        @if($ban->isCurrent()) <h4 class="black-text mb-0">Current</h4><br/>@endif
+                        <p>From {{$ban->banStartPretty()}} to {{$ban->banEndPretty()}}</p>
+                        @endif
+                        <h5>Reason</h5>
+                        <blockquote class="blockquote">{{$ban->reasonHtml()}}</blockquote>
+                    </div>
+                    @endforeach
+                </ul>
+                @else
+                This user has not connected a Discord account.
+                @endif
                 @endif
             </div>
         </div>

@@ -19,81 +19,13 @@
             </div>
         </div>
     </div>
-    @if (!Auth::check())
-    <div class="jumbotron blue text-white py-3 mb-0">
-        <div class="container">
-            <div class="d-flex flex-row justify-content-between align-items-center">
-                <h3 class="m-0 py-0">Join our talented controller team today!</h3>
-                <a href="{{route('application.start')}}" class="m-0 btn btn-light py-2 px-4 text-nowrap" style="background-color: #fff !important;">Login & Apply</a>
-            </div>
-        </div>
-    </div>
-    @elseif (Auth::check() && !Auth::user()->rosterProfile)
-    <div class="jumbotron blue text-white py-3 mb-0">
-        <div class="container">
-            <div class="d-flex flex-row justify-content-between align-items-center">
-                <h3 class="m-0 py-0">Join our talented controller team today!</h3>
-                <a href="{{route('application.start')}}" class="m-0 btn btn-light py-2 px-4 text-nowrap" style="background-color: #fff !important;">Apply</a>
-            </div>
-        </div>
-    </div>
-    @else
-    <div class="jumbotron blue text-white py-3 mb-0">
-        <div class="container">
-            <div class="d-flex flex-row justify-content-between align-items-center">
-                <h3 class="m-0 py-0">Welcome back, {{Auth::user()->fullName('F')}}!</h3>
-                <a href="{{route('dashboard.index')}}" class="m-0 btn btn-light py-2 px-4 text-nowrap" style="background-color: #fff !important;">Go To Dashboard</a>
-            </div>
-        </div>
-    </div>
-    @endif
+
     <div class="container py-4 pt-1">
         <div class="row">
             <div class="col-md-6">
                 <h3>Welcome to Gander Oceanic!</h3>
                 <p>With our team of talented controllers we operate the Gander FIR in the north-western atlantic. For years we have prided ourselves in providing the coolest, calmest and most collected oceanic services to pilots flying all across the North Atlantic. From assisting new pilots in their oceanic endeavours, to providing services in Cross the Pond twice a year, this is where the magic happens! I extend my warmest welcome to visitors and controllers, young and old and hope that you enjoy the bountiful resources on the site and the incredible services by our oceanic controllers. Please contact us if you have any queries, questions or concerns!</p>
                 <h5><b>Andrew Ogden, FIR Chief</b></h5>
-            </div>
-            <div class="col-md-6">
-                <h3>Online Controllers</h3>
-                <ul class="list-unstyled ml-0 mt-3 p-0">
-                    @if(count($ganderControllers) < 1 && count($shanwickControllers) < 1)
-                    <li class="mb-2">
-                        <div class="card shadow-none black-text blue-grey lighten-5 p-3">
-                            <div class="d-flex flex-row justify-content-between align-items-center mb-1">
-                                <h4 class="m-0">No controllers online</h4>
-                            </div>
-                        </div>
-                    </li>
-                    @endif
-                    @foreach($ganderControllers as $controller)
-                    <li class="mb-2">
-                        <div class="card shadow-none black-text blue-grey lighten-5 p-3">
-                            <div class="d-flex flex-row justify-content-between align-items-center mb-1">
-                                <h4 class="m-0">{{$controller['callsign']}}</h4>
-                                <span><i class="far fa-user-circle"></i>&nbsp;&nbsp;{{$controller['realname']}} {{$controller['cid']}}</span>
-                            </div>
-                        </div>
-                    </li>
-                    @endforeach
-                    @foreach($shanwickControllers as $controller)
-                    <li class="mb-2">
-                        <div class="card shadow-none black-text blue-grey lighten-5 p-3">
-                            <div class="d-flex flex-row justify-content-between align-items-center mb-1">
-                                <h4 class="m-0">{{$controller['callsign']}}</h4>
-                                <span><i class="far fa-user-circle"></i>&nbsp;&nbsp;{{$controller['realname']}} {{$controller['cid']}}</span>
-                            </div>
-                        </div>
-                    </li>
-                    @endforeach
-                </ul>
-            </div>
-        </div>
-    </div>
-    <div class="container">
-
-        <div class="card py-3 mb-0">
-            <div class="container py-2 px-4">
                 <h3 class="blue-text">News</h3>
                 <div class="card-columns">
                     @foreach($news as $n)
@@ -116,6 +48,46 @@
                     <a href="{{route('news')}}" class="float-right ml-auto mr-0 blue-text" style="font-size: 1.2em;">View all news <i class="fas fa-arrow-right"></i></a>
                 </div>
             </div>
+            <div class="col-md-6">
+                <h3>Online Controllers</h3>
+                <ul class="list-unstyled ml-0 mt-3 p-0">
+                    @if(count($ganderControllers) < 1 && count($shanwickControllers) < 1)
+                    No controllers online :(
+                    @endif
+                    @foreach($ganderControllers as $controller)
+                    <li class="mb-2">
+                        <div class="card shadow-none black-text blue-grey lighten-5 p-3">
+                            <div class="d-flex flex-row justify-content-between align-items-center mb-1">
+                                <h4 class="m-0">{{$controller['callsign']}}</h4>
+                                <span><i class="far fa-user-circle"></i>&nbsp;&nbsp;{{$controller['realname']}} {{$controller['cid']}}</span>
+                            </div>
+                        </div>
+                    </li>
+                    @endforeach
+                    @foreach($shanwickControllers as $controller)
+                    <li class="mb-2">
+                        <div class="card shadow-none black-text blue-grey lighten-5 p-3">
+                            <div class="d-flex flex-row justify-content-between align-items-center mb-1">
+                                <h4 class="m-0">{{$controller['callsign']}}</h4>
+                                <span><i class="far fa-user-circle"></i>&nbsp;&nbsp;{{$controller['realname']}} {{$controller['cid']}}</span>
+                            </div>
+                        </div>
+                    </li>
+                    @endforeach
+                    <h3 class="blue-text">Quick Links</h3>
+                <ol class="list-unstyled">
+                    <li class="py-1">
+                        <a href="javascript:alert('To join our Discord, please log-in, and link your Discord account in the dashboard.')" class="btn btn-block btn-discord align-content-center"><i class="fab fa-discord fa-2x" style="vertical-align:middle;"></i>&nbsp;&nbsp;Join Our Discord</a>
+                    </li>
+                    <li class="py-1">
+                        <a href="{{url('/pilots')}}" class="btn btn-block btn-light">Pilot Resources</a>
+                    </li>
+                    <li class="py-1">
+                        <a href="https://www.facebook.com/czqofir" class="btn btn-block btn-light light-blue darken-1 white-text">Facebook</a>
+                    </li>
+                </ol>
+                </ul>
+            </div>
         </div>
     </div>
     <div class="container py-4">
@@ -135,18 +107,7 @@
                 </div>
             </div> --}}
             <div class="col-md-6">
-                <h3 class="blue-text">Quick Links</h3>
-                <ol class="list-unstyled">
-                    <li class="py-1">
-                        <a href="javascript:alert('To join our Discord, please log-in, and link your Discord account in the dashboard.')" class="btn btn-block btn-discord align-content-center"><i class="fab fa-discord fa-2x" style="vertical-align:middle;"></i>&nbsp;&nbsp;Join Our Discord</a>
-                    </li>
-                    <li class="py-1">
-                        <a href="{{url('/pilots')}}" class="btn btn-block btn-light">Pilot Resources</a>
-                    </li>
-                    <li class="py-1">
-                        <a href="https://www.facebook.com/czqofir" class="btn btn-block btn-light light-blue darken-1 white-text">Facebook</a>
-                    </li>
-                </ol>
+
             </div>
         </div>
     </div>

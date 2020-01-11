@@ -204,4 +204,19 @@ class User extends Authenticatable
         }
         return false;
     }
+
+    public function currentDiscordBan()
+    {
+        $ban = DiscordBan::whereDate('ban_end_timestamp','>',Carbon::now())->where('user_id', $this->id)->first();
+        if ($ban) {
+            return $ban;
+        } else {
+            return null;
+        }
+    }
+
+    public function discordBans()
+    {
+        return $this->hasMany(DiscordBan::class);
+    }
 }
