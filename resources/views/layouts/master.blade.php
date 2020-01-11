@@ -105,9 +105,9 @@
                                 Roster
                             </a>
                         </li>
-                        <li class="nav-item">
+                        {{-- <li class="nav-item">
                             <a href="{{route('controllerbookings.public')}}" class="nav-link {{ Request::is('bookings/*') || Request::is('bookings') ? 'active' : '' }}">Bookings</a>
-                        </li>
+                        </li> --}}
                         <li class="nav-item">
                             <a href="{{route('events.index')}}" class="nav-link {{ Request::is('events/*') || Request::is('events') ? 'active' : '' }}">Events</a>
                         </li>

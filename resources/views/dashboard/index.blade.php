@@ -70,7 +70,7 @@
                         <i class="fa fa-file"></i>
                         Phraseology Sheet
                     </a>
-                    <div class="list-group-item"><small><b>CONTROLLER BOOKINGS</b></small></div>
+                    {{-- <div class="list-group-item"><small><b>CONTROLLER BOOKINGS</b></small></div>
                     <a target="_blank" href="https://docs.google.com/document/d/1AYVSvTnP-q_cdRS7dwHfLUaXamBzm-Jv71XWWqngi1Q/edit?usp=sharing" class="list-group-item list-group-item-action">
                         <i class="fa fa-clock"></i>
                         Make a Booking
@@ -78,7 +78,7 @@
                     <a target="_blank" href="https://docs.google.com/document/d/1AYVSvTnP-q_cdRS7dwHfLUaXamBzm-Jv71XWWqngi1Q/edit?usp=sharing" class="list-group-item list-group-item-action">
                         <i class="fa fa-calendar"></i>
                         View Bookings
-                    </a>
+                    </a> --}}
                 </div>
                 </div>
                 <br/>
@@ -146,8 +146,7 @@
                 </div>
                 <div class="list-group-flush" data-step="6" data-intro="This is where you can manage your biography, and manage your data preferences.">
                     <a href="#" class="list-group-item list-group-item-action" data-target="#viewBio" data-toggle="modal"><i class="fa fa-address-card"></i>&nbsp;View Biography</a>
-                    <a href="{{url('dashboard/data/')}}" class="list-group-item list-group-item-action"><i class="fa fa-file-download"></i>&nbsp;&nbsp;Download All Data</a>
-                    <a href="{{url('/dashboard/data/remove')}}" class="list-group-item list-group-item-action"><i class="fa fa-user-slash"></i>&nbsp;Request Removal</a>
+                    <p class="p-3">For data removal/download requests during the 2001 beta, please email the Webmaster.</p>
                     <a href="{{url('/dashboard/emailpref')}}" class="list-group-item list-group-item-action"><i class="fa fa-envelope"></i> Manage Email Preferences</a>
                 </div>
             </div>
@@ -528,6 +527,7 @@
                     <li>2. Always show respect and common decency to fellow members.</li>
                     <li>3. Do not send server invites to servers unrelated to VATSIM without staff permission. Do not send ANY invites via DMs unless asked to.
                     </li>
+                    <li>4. Do not send spam in the server, including images, text, or emotes.</li>
                 </ul>
                 <p>Clicking the 'Join' button will redirect you to Discord. We require the Join Server permission to add your Discord account to your server.</p>
             </div>
