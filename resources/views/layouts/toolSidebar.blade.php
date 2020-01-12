@@ -21,6 +21,7 @@
     <a href="{{url('/pilots/tracks')}}" class="list-group-item list-group-item-action {{ Request::is('pilots/tracks') ? 'active' : '' }}">
         NAT Tracks
     </a>
+    <a href="{{url('/map')}}" class="list-group-item list-group-item-action">Map</a>
 </div>
 <br/>
 <button data-toggle="modal" type="button" data-target="#shareModal" class="btn btn-success btn-block"><i class="fa fa-share-square"></i>&nbsp;Share these tools</button>

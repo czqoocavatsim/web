@@ -1,5 +1,6 @@
+
 function createHomePageMap(planes, ganderControllers, shanwickControllers) {
-var map = L.map('map', {attributionControl: false, zoomControl: false, dragging: false, boxZoom: false, doubleClickZoom: false, scrollWheelZoom: false}).setView([53.198470, -32.708], 3);
+    var map = L.map('map', {attributionControl: false, zoomControl: false, dragging: false, boxZoom: false, doubleClickZoom: false, scrollWheelZoom: false}).setView([53.198470, -32.708], 3);
 
 L.tileLayer('https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token={accessToken}', {
     attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors, <a href="https://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery © <a href="https://www.mapbox.com/">Mapbox</a>',
@@ -55,3 +56,4 @@ if (shanwickControllers.length > 0) {
 }
 
 }
+

@@ -112,7 +112,7 @@
                             <a href="{{route('events.index')}}" class="nav-link {{ Request::is('events/*') || Request::is('events') ? 'active' : '' }}">Events</a>
                         </li>
                         <li class="nav-item dropdown">
-                            <a class="nav-link dropdown-toggle {{ Request::is('dashboard/application') || Request::is('sector-files') ? 'active white-text' : '' }}" style="cursor:pointer" id="dropdown01" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">ATC</a>
+                            <a class="nav-link dropdown-toggle {{ Request::is('dashboard/application') || Request::is('atcresources') ? 'active' : '' }}" style="cursor:pointer" id="dropdown01" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">ATC</a>
                             <div class="dropdown-menu" aria-labelledby="dropdown01">
                                 @if (Auth::check() && Auth::user()->permissions >= 1)
                                     <a class="dropdown-item {{ Request::is('dashboard/application/list') ? 'active white-text' : '' }}" href="{{url ('/dashboard/application/list')}}">Your Applications</a>
@@ -129,6 +129,7 @@
                                 <a class="dropdown-item {{ Request::is('pilots/position-report') ? 'active white-text' : '' }}" href="{{url('/pilots/position-report')}}">Position Report Generator</a>
                                 <a class="dropdown-item" href="https://www.vatsim.net/pilots/resources" target="_blank">VATSIM Resources</a>
                                 <a class="dropdown-item {{ Request::is('pilots/tracks') ? 'active white-text' : ''}}" href="{{url('/pilots/tracks')}}">NAT Tracks</a>
+                                <a class="dropdown-item" href="{{url('/map')}}">Map</a>
                             </div>
                         </li>
                         <li class="nav-item">

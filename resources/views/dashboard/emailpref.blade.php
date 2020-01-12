@@ -8,8 +8,9 @@
 
 @section('content')
     <div class="container" style="margin-top: 20px;">
-        <h2>Your Email Preferences</h2>
-        <br/>
+        <a href="{{route('dashboard.index')}}" class="blue-text" style="font-size: 1.2em;"> <i class="fas fa-arrow-left"></i> Dashboard</a>
+        <h1 class="blue-text font-weight-bold mt-2">Email Preferences</h1>
+        <hr>
         <h5>Current subscription status:</h5>
         @if (Auth::user()->gdpr_subscribed_emails == 0)
             <h3>

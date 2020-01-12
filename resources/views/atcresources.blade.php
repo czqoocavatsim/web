@@ -11,10 +11,12 @@
 
 @section('content')
 <div class="container" style="margin-top: 20px;">
-    <h2>ATC Resources</h2>
-    <br/>
+    <div class="container" style="margin-top: 20px;">
+    <h1 class="blue-text font-weight-bold mt-2">ATC Resources</h1>
+    <hr>
     <div class="list-group list-group-flush">
         @foreach ($resources as $resource)
+        @break($resource->atc_only && Auth::check() && !Auth::user()->rosterProfile)
         <div class="list-group-item">
             <div class="row">
                 <div class="col"><b>{{$resource->title}}</b></div>
@@ -35,7 +37,7 @@
                     </div>
                     <div class="modal-body">
                         <small>Description</small><br/>
-                        {!!html_entity_decode($resource->description)!!}
+                        {{$resource->html()}}
                     </div>
                     <div class="modal-footer">
                         @if (Auth::check() && Auth::user()->permissions >= 3)
@@ -60,18 +62,20 @@
         </div>
         <div class="form-group">
             <label>Description</label>
-            <input type="text" id="descriptionField" name="description">
+            <textarea id="descriptionField" name="description" cols="30" rows="10"></textarea>
             <script>
-                tinymce.init({
-                    selector: '#descriptionField',
-                    plugins: 'link media table',
-                    menubar: 'edit insert format'
-                });
+                var simplemde = new SimpleMDE({ element: document.getElementById("descriptionField") });
             </script>
         </div>
         <div class="form-group">
             <label>URL (Google Drive or Dropbox preferred)</label>
             <input type="url" class="form-control" name="url">
+        </div>
+        <div class="form-group">
+            <div class="custom-control custom-checkbox">
+                <input type="checkbox" class="custom-control-input" name="atc_only" id="atc_only">
+                <label class="custom-control-label" for="atc_only">ATC Only</label>
+            </div>
         </div>
         <br/>
         <input value="Submit" type="submit" class="btn btn-sm btn-block btn-success">

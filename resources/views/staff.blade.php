@@ -10,8 +10,8 @@
 
 @section('content')
 <div class="container" style="margin-top: 20px;">
-    <h2>Gander Oceanic Staff</h2>
-    <br>
+    <h1 class="blue-text font-weight-bold">Staff</h1>
+    <hr>
     <h4><b>Executive</b></h4>
     <div class="row" class="staff_img_container">
         @foreach ($staff as $member)

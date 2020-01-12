@@ -8,8 +8,10 @@
 
 @section('content')
     <div class="container" style="margin-top: 20px;">
-        <h2>Your Applications</h2>
-        <br/>
+        <div class="container" style="margin-top: 20px;">
+            <a href="{{route('dashboard.index')}}" class="blue-text" style="font-size: 1.2em;"> <i class="fas fa-arrow-left"></i> Dashboard</a>
+        <h1 class="blue-text font-weight-bold mt-2">Your Applications</h1>
+        <hr>
         @if (count($applications) > 0)
             <div class="list-group">
                 @foreach ($applications as $application)

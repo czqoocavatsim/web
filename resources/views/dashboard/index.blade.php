@@ -41,7 +41,7 @@
     </div>
 </div>
 <div class="container py-4">
-    <h2 data-step="1" data-intro="Welcome to the CZQO Dashboard! This is your central hub for all things Gander. Here you can interact with our FIR, and manage your account.">Dashboard</h2>
+    <h1 data-step="1" data-intro="Welcome to the CZQO Dashboard! This is your central hub for all things Gander. Here you can interact with our FIR, and manage your account." class="blue-text font-weight-bold">Dashboard</h1>
     {{--@if (Auth::user()->rating_id >= 5)
     <blockquote class="blockquote bq-primary">
         <p class="bq-title">Cross the Pond Eastbound 2019</p>
@@ -55,30 +55,14 @@
     <div class="row">
         <div class="col">
             @if (Auth::user()->permissions >= 1)
-                <h4 class="display-6">Controller Tools</h4>
+                <h4 class="display-6">ATC Resources</h4>
                 <div class="card">
                 <div class="list-group">
-                    <a href="http://oca.vnas.net" target="_new" class="list-group-item list-group-item-action">
-                        <i class="fa fa-compass"></i>&nbsp;
-                        Virtual Norweigan Tools
+                    @foreach($atcResources as $resource)
+                    <a href="{{$resource->url}}" target="_new" class="list-group-item list-group-item-action">
+                        {{$resource->title}}
                     </a>
-                    <a target="_new" href="https://docs.google.com/spreadsheets/d/1N2vGBlljpltchJ-7tn_FFufLKdts42eXeYDww1y03Hc/edit?usp=sharing" class="list-group-item list-group-item-action">
-                        <i class="fa fa-file"></i>&nbsp;
-                        Google Sheets Spreadsheet
-                    </a>
-                    <a target="_blank" href="https://docs.google.com/document/d/1AYVSvTnP-q_cdRS7dwHfLUaXamBzm-Jv71XWWqngi1Q/edit?usp=sharing" class="list-group-item list-group-item-action">
-                        <i class="fa fa-file"></i>
-                        Phraseology Sheet
-                    </a>
-                    {{-- <div class="list-group-item"><small><b>CONTROLLER BOOKINGS</b></small></div>
-                    <a target="_blank" href="https://docs.google.com/document/d/1AYVSvTnP-q_cdRS7dwHfLUaXamBzm-Jv71XWWqngi1Q/edit?usp=sharing" class="list-group-item list-group-item-action">
-                        <i class="fa fa-clock"></i>
-                        Make a Booking
-                    </a>
-                    <a target="_blank" href="https://docs.google.com/document/d/1AYVSvTnP-q_cdRS7dwHfLUaXamBzm-Jv71XWWqngi1Q/edit?usp=sharing" class="list-group-item list-group-item-action">
-                        <i class="fa fa-calendar"></i>
-                        View Bookings
-                    </a> --}}
+                    @endforeach
                 </div>
                 </div>
                 <br/>
@@ -117,7 +101,7 @@
                             @endif
                             <br/>
                             <div data-step="4" data-intro="Here you can link your Discord account to receive reminders for training sessions, and gain access to the CZQO Discord.">
-                            <h5>Discord</h5>
+                            <h5 class="mt-2">Discord</h5>
                             @if (!Auth::user()->hasDiscord())
                             <p class="mt-1">You don't have a linked Discord account.</p>
                             <a href="#" data-toggle="modal" data-target="#discordModal" class="mt-1">Link a Discord account</a>
@@ -146,7 +130,7 @@
                 </div>
                 <div class="list-group-flush" data-step="6" data-intro="This is where you can manage your biography, and manage your data preferences.">
                     <a href="#" class="list-group-item list-group-item-action" data-target="#viewBio" data-toggle="modal"><i class="fa fa-address-card"></i>&nbsp;View Biography</a>
-                    <p class="p-3">For data removal/download requests during the 2001 beta, please email the Webmaster.</p>
+                    <a href="{{url('/dashboard/me/data')}}" class="list-group-item list-group-item-action"><i class="fa fa-user"></i> Manage Your Data</a>
                     <a href="{{url('/dashboard/emailpref')}}" class="list-group-item list-group-item-action"><i class="fa fa-envelope"></i> Manage Email Preferences</a>
                 </div>
             </div>
@@ -287,7 +271,7 @@
                 </div>
             </div>
             <br/>
-            <h4 class="display-6">Tickets</h4>
+            <h4 class="display-6">Support Tickets</h4>
             <div data-step="10" data-intro="If you have any enquires or issues for the staff, feel free to make a ticket via the ticketing system." class="card">
                 <div class="card-body">
                     @if (count($openTickets) < 1)
@@ -303,7 +287,7 @@
                             </h5>
                             <div class="list-group bg-info">
                                 @foreach ($openTickets as $ticket)
-                                    <a href="{{url('/dashboard/tickets/'.$ticket->ticket_id)}}" class="list-group-item list-group-item-action purple">{{$ticket->title}}<br/>
+                                    <a href="{{url('/dashboard/tickets/'.$ticket->ticket_id)}}" class="list-group-item list-group-item-action purple rounded-0 ">{{$ticket->title}}<br/>
                                         <small title="{{$ticket->updated_at}} (GMT+0, Zulu)">Last updated {{$ticket->updated_at_pretty()}}</small>
                                     </a>
                                 @endforeach
@@ -583,4 +567,5 @@
     </div>
 
 </div> --}}
+
 @stop

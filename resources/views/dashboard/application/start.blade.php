@@ -8,7 +8,10 @@
 
 @section('content')
 <div class="container" style="margin-top: 20px;">
-    <h3>Apply for Gander Oceanic Certification</h3>
+    <div class="container" style="margin-top: 20px;">
+        <a href="{{route('application.list')}}" class="blue-text" style="font-size: 1.2em;"> <i class="fas fa-arrow-left"></i> Applications</a>
+    <h1 class="blue-text font-weight-bold mt-2">Start an application</h1>
+    <hr>
     <p>Your personal information is automatically gathered from your VATSIM SSO login.</p>
     <script src="http://code.jquery.com/jquery-1.5.js"></script>
     <script>
@@ -66,7 +69,7 @@
             <h4 class="alert-heading">You are not eligible to apply.</h4>
             <p>You are not yet a C1 controller or above. Please check back when you have a C1 rating and you have:</p>
             <ul>
-                <li>120 hours on your C1 or above ratings.</li>
+                <li>80 hours on your C1 or above ratings.</li>
                 <li>50 hours spent controlling an enroute control position.</li>
             </ul>
             <p>If you believe there is an error, please <a href="{{route('tickets.index', ['create' => 'yes', 'department' => 'firchief', 'title' => 'Issue with requirement check on application system'])}}">start a support ticket.</a></p>
@@ -80,9 +83,9 @@
     @elseif ($allowed == "hours")
         <div class="alert alert-danger" role="alert">
             <h4 class="alert-heading">You are not eligible to apply.</h4>
-            <p>You do not yet have 120 hours or above on your C1 or above ratings. Please check back when you have:</p>
+            <p>You do not yet have 80 hours or above on your C1 or above ratings. Please check back when you have:</p>
             <ul>
-                <li>120 hours on your C1 or above ratings.</li>
+                <li>80 hours on your C1 or above ratings.</li>
                 <li>50 hours spent controlling an enroute control position.</li>
             </ul>
             <p>You currently have <a title="View your hours rating by rating" href="{{$url}}" target="_blank">{{$total}} hours</a> towards the requirements.</p>

@@ -18,7 +18,7 @@
                 <tr>
                     <td>{{$m->title}}</td>
                     @if(Auth::check() && Auth::user()->permissions >= 3)
-                    <td>Added by {{\App\User::find($m->user_id)->fullName('FLC')}}</td>
+                    <td>Added by {{\App\Models\Users\User::find($m->user_id)->fullName('FLC')}}</td>
                     @endif
                     <td>
                     <a target="_blank" href="{{$m->link}}">View</a>

@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Events\CtpSignUp;
 use App\Mail\CtpSignUpEmail;
 use App\Models\AtcTraining\RosterMember;
+use App\Models\Publications\AtcResource;
 use App\Models\Tickets\Ticket;
 use Auth;
 use Illuminate\Http\Request;
@@ -27,7 +28,9 @@ class DashboardController extends Controller
         }
         $openTickets = Ticket::where('user_id', $user->id)->where('status', 0)->get();
 
-        return view('dashboard.index', compact('openTickets', 'certification', 'active'));
+        $atcResources = AtcResource::all()->sortBy('title');
+
+        return view('dashboard.index', compact('openTickets', 'certification', 'active', 'atcResources'));
     }
 
     public function ctpSignUp(Request $request)

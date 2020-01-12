@@ -14,23 +14,18 @@ class HomeController extends Controller
     public function view()
     {
         //VATSIM online controllers
-        $vatsim = Cache::remember('vatsim.data', 900, function () {
-            $logFile = __DIR__.'/vendor/skymeyer/vatsimphp/app/logs/pilots.log';
-            $data = new \Vatsimphp\VatsimData();
-            $data->setConfig('cacheOnly', true);
-            $data->setConfig('logFile', $logFile);
-            return $data;
-        });
+        $vatsim = new \Vatsimphp\VatsimData();
+        $vatsim->setConfig('cacheOnly', false);
         $ganderControllers = [];
         $shanwickControllers = [];
-        $planes = [];
+        $planes = null;
         if ($vatsim->loadData()) {
-            $ganderControllers = $vatsim->searchCallsign('M');
+            $ganderControllers = $vatsim->searchCallsign('CZQX_');
             Log::info($ganderControllers->toArray());
-            $shanwickControllers = $vatsim->searchCallsign('M');
+            Log::info('cheese');
+            $shanwickControllers = $vatsim->searchCallsign('EGGX_');
             $planes = $vatsim->getPilots()->toArray();
         }
-
 
         //News
         $news = News::all()->sortByDesc('published')->take(3);
@@ -50,5 +45,21 @@ class HomeController extends Controller
             return json_decode($json);
         });
         return view('index', compact('ganderControllers', 'shanwickControllers', 'news', 'vatcanNews', 'promotions', 'carouselItems', 'planes'));
+    }
+
+    public function map()
+    {
+        //VATSIM online controllers
+        $vatsim = new \Vatsimphp\VatsimData();
+        $vatsim->setConfig('cacheOnly', false);
+        $ganderControllers = [];
+        $shanwickControllers = [];
+        $planes = null;
+        if ($vatsim->loadData()) {
+            $ganderControllers = $vatsim->searchCallsign('A');
+            $shanwickControllers = $vatsim->searchCallsign('A');
+            $planes = $vatsim->getPilots()->toArray();
+        }
+        return view('map', compact('ganderControllers', 'shanwickControllers', 'planes'));
     }
 }

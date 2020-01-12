@@ -70,6 +70,16 @@ class User extends Authenticatable
         return $this->hasOne(AtcTraining\Student::class);
     }
 
+    public function tickets()
+    {
+        return $this->hasMany(Tickets\Ticket::class);
+    }
+
+    public function ticketReplies()
+    {
+        return $this->hasMany(Tickets\TicketReply::class);
+    }
+
     public function staffProfile()
     {
         return $this->hasOne(StaffMember::class);

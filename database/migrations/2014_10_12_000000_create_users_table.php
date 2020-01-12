@@ -33,7 +33,7 @@ class CreateUsersTable extends Migration
             $table->integer('gdpr_subscribed_emails')->default(0);
             $table->boolean('deleted')->default(false);
             $table->integer('init')->default(0);
-            $table->string('avatar')->default('img/default-profile-img.jpg');
+            $table->string('avatar')->default('/img/default-profile-img.jpg');
             $table->longText('bio')->nullable();
             $table->rememberToken();
             $table->timestamps();

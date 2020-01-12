@@ -8,7 +8,10 @@
 
 @section('content')
     <div class="container" style="margin-top: 20px;">
-        <h2>Application #{{ $application->application_id }}</h2>
+        <div class="container" style="margin-top: 20px;">
+            <a href="{{route('application.list')}}" class="blue-text" style="font-size: 1.2em;"> <i class="fas fa-arrow-left"></i> Applications</a>
+        <h1 class="blue-text font-weight-bold mt-2">Applications #{{$application->application_id}}</h1>
+        <hr>
         <br/>
         <h6>Status</h6>
         @if ($application->status == 0)
@@ -68,7 +71,7 @@
         <div>
             <a class="btn btn-secondary" href="{{route('application.list')}}">
                 Go back
-            </a>    
+            </a>
             @if ($application->status == "Pending")
                 <a class="btn btn-danger" href="{{url('dashboard/application/' . $application->application_id . '/withdraw')}}">
                     Withdraw

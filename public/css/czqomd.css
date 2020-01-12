@@ -108,3 +108,16 @@ a:hover {
 div.d-flex.flex-row > i {
     vertical-align: middle;
 }
+
+.nav-item .active {
+    color:#2196f3!important;
+}
+
+.dropdown-item.active {
+    color: #fff!important;
+}
+
+.dropdown-item:active {
+    color: #2196f3!important;
+    background: none!important;
+}

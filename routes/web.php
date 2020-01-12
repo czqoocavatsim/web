@@ -16,6 +16,7 @@
 use Illuminate\Support\Facades\Notification;
 
 Route::get('/', 'HomeController@view')->name('index');
+Route::get('/map', 'HomeController@map')->name('map');
 Route::get('/roster', 'AtcTraining\RosterController@showPublic')->name('roster.public');
 Route::get('/staff', 'Users\StaffListController@index')->name('staff');
 Route::get('/atcresources', 'Publications\AtcResourcesController@index')->name('atcresources.index');
@@ -88,16 +89,12 @@ Route::group(['middleware' => 'auth'], function () {
     Route::post('/dashboard/tickets/{id}', 'Tickets\TicketsController@addReplyToTicket')->name('tickets.reply');
     Route::get('/dashboard/tickets/{id}/close', 'Tickets\TicketsController@closeTicket')->name('tickets.closeticket');
     //Email prefs
-    Route::get('/dashboard/emailpref', 'GDPRController@emailPref')->name('dashboard.emailpref');
-    Route::get('/dashboard/emailpref/subscribe', 'GDPRController@subscribeEmails');
-    Route::get('/dashboard/emailpref/unsubscribe', 'GDPRController@unsubscribeEmails');
+    Route::get('/dashboard/emailpref', 'Users\DataController@emailPref')->name('dashboard.emailpref');
+    Route::get('/dashboard/emailpref/subscribe', 'Users\DataController@subscribeEmails');
+    Route::get('/dashboard/emailpref/unsubscribe', 'Users\DataController@unsubscribeEmails');
     //GDPR
-    Route::get('/dashboard/data', 'GDPRController@create')->name('data.create');
-    Route::get('/dashboard/data/submitted', 'GDPRController@submitted')->name('data.submitted');
-    Route::post('/dashboard/data', 'GDPRController@store')->name('data.store');
-    Route::get('/dashboard/data/remove', 'GDPRController@removeData')->name('data.remove.create');
-    Route::post('/dashboard/data/remove', 'GDPRController@removeDataStore')->name('data.remove.store');
-    Route::get('/dashboard/data/download', 'GDPRController@downloadData');
+    Route::get('/dashboard/me/data', 'Users\DataController@index')->name('me.data');
+    Route::post('/dashboard/me/data/export/all', 'Users\DataController@exportAllData')->name('me.data.export.all');
     //Applications
     Route::group(['middleware' => 'notcertified'], function () {
         Route::get('/dashboard/application', 'AtcTraining\ApplicationsController@startApplicationProcess')->name('application.start');

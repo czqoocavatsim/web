@@ -28,6 +28,10 @@ class AtcResourcesController extends Controller
         $resource->description = $request->get('description');
         $resource->url = $request->get('url');
 
+        if ($request->get('atc_only') == 'yes') {
+            $resource->atc_only = true;
+        }
+
         $resource->save();
 
         return redirect()->route('atcresources.index')->with('success', 'Resource uploaded!');
