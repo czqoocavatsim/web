@@ -36,10 +36,7 @@ Route::get('/events/{slug}', 'Events\EventController@viewEvent')->name('events.v
 Route::view('/about', 'about')->name('about');
 
 Route::get('/test', function () {
-    /* $user = \App\Models\Users\User::find(1300012);
-    $application = \App\Models\AtcTraining\Application::whereId(1)->firstOrFail();
-    Notification::route('mail', 'liesel.downes@icloud.com')->notify(new \App\Notifications\NewApplicationStaff($application));
-    return (new \App\Notifications\NewApplicationStaff($application))->toMail($user);*/
+    abort(500, 'Test');
 });
 
 //Authentication

@@ -52,53 +52,68 @@ class DatabaseSeeder extends Seeder
             'display_fname' => 'Roster',
         ]);
 
+        DB::table('staff_groups')->insert([
+            'id' => 1,
+            'name' => 'Executive Team',
+            'slug' => 'executive',
+            'description' => 'CZQO\'s executive team oversees FIR operations',
+            'can_receive_tickets' => true,
+        ]);
+
+        DB::table('staff_groups')->insert([
+            'id' => 2,
+            'name' => 'Web Team',
+            'slug' => 'web',
+            'description' => 'Team responsible for developing CZQO\'s web precense',
+            'can_receive_tickets' => true,
+        ]);
+
+        DB::table('staff_groups')->insert([
+            'id' => 3,
+            'name' => 'Marketing Team',
+            'slug' => 'marketing',
+            'description' => 'Team responsible for marketing CZQO',
+            'can_receive_tickets' => true,
+        ]);
+
         DB::table('staff_member')->insert([
            'position' => 'FIR Chief',
-           'group' => 'executive',
+           'group_id' => 1,
            'description' => 'Ensures that CZQO is running optimally. In charge of day to day operations',
-            'email' => 'firchief@czqo.vatcan.ca',
+            'email' => 'chief@czqo.vatcan.ca',
             'shortform' => 'firchief',
         ]);
 
         DB::table('staff_member')->insert([
             'position' => 'Deputy FIR Chief',
-            'group' => 'executive',
+            'group_id' => 1,
             'description' => 'Assistant to the FIR Chief.',
-            'email' => 'deputyirchief@czqo.vatcan.ca',
+            'email' => 'deputy@czqo.vatcan.ca',
             'shortform' => 'dfirchief',
         ]);
 
         DB::table('staff_member')->insert([
             'position' => 'Chief Instructor',
-            'group' => 'executive',
+            'group_id' => 1,
             'description' => 'Manages the CZQO training program, including the talented team of Gander instructors.',
-            'email' => 'chiefinstructor@czqo.vatcan.ca',
+            'email' => 'training@czqo.vatcan.ca',
             'shortform' => 'cinstructor',
         ]);
 
         DB::table('staff_member')->insert([
-            'position' => 'Events Coordinator',
-            'group' => 'executive',
+            'position' => 'Events and Marketing Director',
+            'group_id' => 1,
             'description' => 'Devises awesome events for the Gander Oceanic FIR',
-            'email' => 'eventcoordinator@czqo.vatcan.ca',
-            'shortform' => 'eventcoord',
+            'email' => 'events@czqo.vatcan.ca',
+            'shortform' => 'eventsmarketing',
         ]);
 
         DB::table('staff_member')->insert([
             'position' => 'Facility Engineer',
-            'group' => 'executive',
+            'group_id' => 1,
             'description' => 'Manages and develops sector files and the Euroscope package for Gander Oceanic.',
-            'email' => 'facilityengineer@czqo.vatcan.ca',
+            'email' => 'engineer@czqo.vatcan.ca',
             'shortform' => 'fengineer',
-
-        ]);
-
-        DB::table('staff_member')->insert([
-            'position' => 'Webmaster',
-            'group' => 'executive',
-            'description' => 'Ensures our website stays online, operational and good looking.',
-            'email' => 'webmaster@czqo.vatcan.ca',
-            'shortform' => 'webmaster',
 
         ]);
     }

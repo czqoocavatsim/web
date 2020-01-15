@@ -91,7 +91,6 @@
         </div>
     </div>
     <div class="container">
-
         <div class="card py-3 mb-0">
             <div class="container py-2 px-4">
                 <h3 class="blue-text">News</h3>

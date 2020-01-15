@@ -98,6 +98,7 @@
                     Deny
                 </a>
             @endif
+            <a href="" class="btn btn-info">View VATSIM Stats</a>
         </div>
         <br/>
     </div>

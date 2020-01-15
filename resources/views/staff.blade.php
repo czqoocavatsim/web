@@ -12,67 +12,84 @@
 <div class="container" style="margin-top: 20px;">
     <h1 class="blue-text font-weight-bold">Staff</h1>
     <hr>
-    <h4><b>Executive</b></h4>
-    <div class="row" class="staff_img_container">
-        @foreach ($staff as $member)
-            <div class="col-sm-4">
-                <div style="text-align: center;">
-                    @if ($member->user_id == 1)
-                        <img src="https://www.drupal.org/files/profile_default.png" style="width: 125px; margin-bottom: 10px; border-radius: 50%;">
-                        <h4 style="margin-bottom: 2px;">
-                            <b>Vacant</b>
-                        </h4>
-                        <p style="margin: 0;"><i>{{$member->position}}</i></p>
-                        <p>{{$member->description}}</p>
-                        <p><a href="mailto:{{$member->email}}"><i class="fa fa-envelope"></i>&nbsp;{{$member->email}}</a>
-                        </p>
-                    @else
-                        <div class="staff_img_container">
-                            <div class="staff_img_object">
-                                <img style="height: 125px;" src="{{$member->user->avatar}}">
-                                <div class="img_overlay">
-                                    <div class="img_overlay_text">
-                                        <a href="#" data-toggle="modal" data-target="#viewStaffBio{{$member->id}}">View Bio</a>
+    <div class="row">
+        <div class="col-md-3">
+            <div class="list-group" style="position: sticky; top: 20px">
+                @foreach($groups as $g)
+                <a href="#{{$g->slug}}" class="list-group-item list-group-item-action">
+                    {{$g->name}}
+                </a>
+                @endforeach
+                <a href="#instructors" class="list-group-item list-group-item-action">Instructors</a>
+            </div>
+        </div>
+        <div class="col-md-9">
+            @foreach($groups as $g)
+            <a id="{{$g->slug}}"><h3 class="mb-3 blue-text font-weight-bold">{{$g->name}}</h3></a>
+            <p style="margin-top: 5px; margin-bottom: 10px;">{{$g->description}}</p>
+            <div class="row justify-content-center  mb-2" class="staff_img_container">
+                @foreach ($g->members as $member)
+                    <div class="col-sm-4 mt-2">
+                        <div style="text-align: center;">
+                            @if ($member->user_id == 1)
+                                <img src="https://www.drupal.org/files/profile_default.png" style="width: 125px; margin-bottom: 10px; border-radius: 50%;">
+                                <h4 style="margin-bottom: 2px;">
+                                    <b>Vacant</b>
+                                </h4>
+                                <p style="margin: 0;"><i>{{$member->position}}</i></p>
+                                <p style="min-height:57px !important;">{{$member->description}}</p>
+                                <p><a href="mailto:{{$member->email}}"><i class="fa fa-envelope"></i>&nbsp;{{$member->email}}</a>
+                                </p>
+                            @else
+                                <div class="staff_img_container">
+                                    <div class="staff_img_object">
+                                        <img style="height: 125px;" src="{{$member->user->avatar}}">
+                                        <div class="img_overlay">
+                                            <div class="img_overlay_text">
+                                                <a href="#" data-toggle="modal" data-target="#viewStaffBio{{$member->id}}">View Bio</a>
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
+                                <h4 style="margin-bottom: 2px;">
+                                    <b>{{$member->user->fullName('FLC')}}</b>
+                                </h4>
+                                <p style="margin: 0;"><i>{{$member->position}}</i></p>
+                                <p style="min-height:60px !important;">{{$member->description}}</p>
+                                <p><a href="mailto:{{$member->email}}"><i class="fa fa-envelope"></i>&nbsp;{{$member->email}}</a>
+                                </p>
+                            @endif
                         </div>
-                        <h4 style="margin-bottom: 2px;">
-                            <b>{{$member->user->fullName('FLC')}}</b>
-                        </h4>
-                        <p style="margin: 0;"><i>{{$member->position}}</i></p>
-                        <p>{{$member->description}}</p>
-                        <p><a href="mailto:{{$member->email}}"><i class="fa fa-envelope"></i>&nbsp;{{$member->email}}</a>
-                        </p>
-                    @endif
-                </div>
+                    </div>
+                @endforeach
             </div>
-        @endforeach
-    </div><br/>
-    <h4><b>Instructors</b></h4>
-    <div class="row">
-        @foreach ($instructors as $instructor)
-            <div class="col-sm-4">
-                <div style="text-align: center;">
-                    <div class="staff_img_container">
-                        <div class="staff_img_object">
-                            <img style="height: 125px;" src="{{$instructor->user->avatar}}">
-                            <div class="img_overlay">
-                                <div class="img_overlay_text">
-                                    <a href="#" data-toggle="modal" data-target="#viewInstructorBio{{$instructor->id}}">View Bio</a>
+            <hr>
+            @endforeach
+            <a id="instructors"><h3 class="mb-3 blue-text font-weight-bold">Instructors</h3></a>
+            <div class="row">
+                @foreach ($instructors as $instructor)
+                    <div class="col-sm-4">
+                        <div style="text-align: center;">
+                            <div class="staff_img_container">
+                                <div class="staff_img_object">
+                                    <img style="height: 125px;" src="{{$instructor->user->avatar}}">
+                                    <div class="img_overlay">
+                                        <div class="img_overlay_text">
+                                            <a href="#" data-toggle="modal" data-target="#viewInstructorBio{{$instructor->id}}">View Bio</a>
+                                        </div>
+                                    </div>
                                 </div>
-                            </div>
+                            </div>                    <h4 style="margin-bottom: 2px;"><b>{{$instructor->user->fullName('FL')}}</b></h4>
+                            <p style="margin: 0;"><i>{{$instructor->qualification}}</i></p>
+                            <p>
+                                <a href="mailto:{{$instructor->email}}"><i class="fa fa-envelope"></i>&nbsp;{{$instructor->email}}</a>
+                            </p>
                         </div>
-                    </div>                    <h4 style="margin-bottom: 2px;"><b>{{$instructor->user->fullName('FL')}}</b></h4>
-                    <p style="margin: 0;"><i>{{$instructor->qualification}}</i></p>
-                    <p>
-                        <a href="mailto:{{$instructor->email}}"><i class="fa fa-envelope"></i>&nbsp;{{$instructor->email}}</a>
-                    </p>
-                </div>
+                    </div>
+                @endforeach
             </div>
-        @endforeach
+        </div>
     </div>
-
 </div>
 
 @foreach ($staff as $member)

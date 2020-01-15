@@ -11,7 +11,8 @@
 
 @section('content')
     <div class="container" style="margin-top: 20px;">
-        <h2>Policies</h2>
+        <h1 class="font-weight-bold blue-text">Policies</h1>
+        <hr>
         @if (Auth::check() && Auth::user()->permissions >= 4)
             <div class="card w-50">
                 <div class="card-body">

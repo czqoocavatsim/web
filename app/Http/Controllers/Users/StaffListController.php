@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Users;
 use App\Http\Controllers\Controller;
 use App\Models\Settings\AuditLogEntry;
 use App\Models\AtcTraining\Instructor;
+use App\Models\Users\StaffGroup;
 use App\Models\Users\StaffMember;
 use App\Models\Users\User;
 use Auth;
@@ -16,8 +17,9 @@ class StaffListController extends Controller
     {
         $staff = StaffMember::all();
         $instructors = Instructor::all();
+        $groups = StaffGroup::all();
 
-        return view('staff', compact('staff', 'instructors'));
+        return view('staff', compact('staff', 'instructors','groups'));
     }
 
     public function editIndex()

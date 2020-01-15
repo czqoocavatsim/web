@@ -5,6 +5,7 @@
 
 body, html {
     height: 100vh;
+    scroll-behavior: smooth;
 }
 
 #czqoHeaderLight, .page-footer {
@@ -121,3 +122,5 @@ div.d-flex.flex-row > i {
     color: #2196f3!important;
     background: none!important;
 }
+
+

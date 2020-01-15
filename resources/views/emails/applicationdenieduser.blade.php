@@ -4,7 +4,7 @@
 
 
 @section('message-content')
-    <p>Your application for Gander Oceanic has been denied by {{\App\User::find($application->processed_by)->fullName('FLC')}} at {{$application->processed_at}} (Zulu).</p>
+    <p>Your application for Gander Oceanic has been denied by {{\App\Models\Users\User::find($application->processed_by)->fullName('FLC')}} at {{$application->processed_at}} (Zulu).</p>
     <b>Staff Comments:</b>
     <p>
         @if (!$application->staff_comment)
