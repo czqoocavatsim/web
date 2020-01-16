@@ -10,12 +10,12 @@
 @section('content')
 <div class="container" style="margin-top: 20px;">
     <div class="row">
-        <div class="col-md-4">
+        <div class="col-md-3">
             @include('layouts.toolSidebar')
         </div>
-        <div class="col-md-8">
-            <h2>Oceanic Clearance Generator</h2>
-            <br/>
+        <div class="col-md-9">
+            <h1 class="font-weight-bold blue-text">Oceanic Clearance Generator</h1>
+            <hr>
             <div class="form-row">
                 <div class="form-group col">
                     <label>Callsign</label>

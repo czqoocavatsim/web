@@ -9,10 +9,10 @@
 @section('description', 'View Gander staff meeting minutes')
 @section('content')
     <div class="container" style="margin-top: 20px;">
-        <h2>Meeting Minutes</h2>
-        <br/>
+        <h1 class="font-weight-bold blue-text">Meeting Minutes</h1>
+        <hr>
         @if (count($minutes) >= 1)
-        <table class="table">
+        <table class="table border-none">
             <tbody>
                 @foreach ($minutes as $m)
                 <tr>
@@ -35,7 +35,6 @@
         @else
         no meeting minutes.. bruh
         @endif
-        <br/>
         @if (Auth::check() && Auth::user()->permissions >= 3)
         <a href="#" data-toggle="modal" data-target="#upload">Upload Minutes</a>
         <div class="modal fade" id="upload" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">

@@ -100,19 +100,19 @@
                 </button>
                 <div class="collapse navbar-collapse" id="navbarSupportedContent">
                     <ul class="navbar-nav mr-auto">
-                        <li class="nav-item active">
-                            <a class="nav-link {{ Request::is('roster/*') || Request::is('roster') ? 'active' : '' }}" href="{{route('roster.public')}}">
+                        <li class="nav-item {{ Request::is('roster/*') || Request::is('roster') ? 'active' : '' }}">
+                            <a class="nav-link" href="{{route('roster.public')}}">
                                 Roster
                             </a>
                         </li>
                         {{-- <li class="nav-item">
                             <a href="{{route('controllerbookings.public')}}" class="nav-link {{ Request::is('bookings/*') || Request::is('bookings') ? 'active' : '' }}">Bookings</a>
                         </li> --}}
-                        <li class="nav-item">
-                            <a href="{{route('events.index')}}" class="nav-link {{ Request::is('events/*') || Request::is('events') ? 'active' : '' }}">Events</a>
+                        <li class="nav-item {{ Request::is('events/*') || Request::is('events') ? 'active' : '' }}">
+                            <a href="{{route('events.index')}}" class="nav-link">Events</a>
                         </li>
-                        <li class="nav-item dropdown">
-                            <a class="nav-link dropdown-toggle {{ Request::is('dashboard/application') || Request::is('atcresources') ? 'active' : '' }}" style="cursor:pointer" id="dropdown01" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">ATC</a>
+                        <li class="nav-item dropdown {{ Request::is('dashboard/application') || Request::is('dashboard/application/*') || Request::is('atcresources') ? 'active' : '' }}">
+                            <a class="nav-link dropdown-toggle" style="cursor:pointer" id="dropdown01" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">ATC</a>
                             <div class="dropdown-menu" aria-labelledby="dropdown01">
                                 @if (Auth::check() && Auth::user()->permissions >= 1)
                                     <a class="dropdown-item {{ Request::is('dashboard/application/list') ? 'active white-text' : '' }}" href="{{url ('/dashboard/application/list')}}">Your Applications</a>
@@ -122,8 +122,8 @@
                                 <a class="dropdown-item {{ Request::is('atcresources') ? 'active white-text' : '' }}" href="{{route('atcresources.index')}}">ATC Resources</a>
                             </div>
                         </li>
-                        <li class="nav-item dropdown">
-                            <a class="nav-link dropdown-toggle {{ Request::is('pilots/oceanic-clearance') || Request::is('pilots/position-report') || Request::is('pilots/vatsim-resources') || Request::is('pilots/tutorial') || Request::is('pilots/tracks') ? 'active' : '' }}" style="cursor:pointer" id="dropdown01" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Pilots</a>
+                        <li class="nav-item dropdown {{ Request::is('pilots/oceanic-clearance') || Request::is('pilots/position-report') || Request::is('pilots/vatsim-resources') || Request::is('pilots/tutorial') || Request::is('pilots/tracks') ? 'active' : '' }}">
+                            <a class="nav-link dropdown-toggle" style="cursor:pointer" id="dropdown01" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Pilots</a>
                             <div class="dropdown-menu" aria-labelledby="dropdown01">
                                 <a class="dropdown-item {{ Request::is('pilots/oceanic-clearance') ? 'active white-text' : '' }}" href="{{url('/pilots/oceanic-clearance')}}">Oceanic Clearance Generator</a>
                                 <a class="dropdown-item {{ Request::is('pilots/position-report') ? 'active white-text' : '' }}" href="{{url('/pilots/position-report')}}">Position Report Generator</a>
@@ -132,11 +132,11 @@
                                 <a class="dropdown-item" href="{{url('/map')}}">Map</a>
                             </div>
                         </li>
-                        <li class="nav-item">
-                            <a class="nav-link {{ Request::is('staff') ? 'active' : '' }}" href="{{url ('/staff')}}" aria-expanded="false">Staff</a>
+                        <li class="nav-item  {{ Request::is('staff') ? 'active' : '' }}">
+                            <a class="nav-link" href="{{url ('/staff')}}" aria-expanded="false">Staff</a>
                         </li>
-                        <li class="nav-item dropdown">
-                            <a class="nav-link dropdown-toggle {{ Request::is('policies') || Request::is('meetingminutes') ? 'active' : ''}}" style="cursor:pointer" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Publications</a>
+                        <li class="nav-item dropdown {{ Request::is('policies') || Request::is('meetingminutes') ? 'active' : ''}}">
+                            <a class="nav-link dropdown-toggle" style="cursor:pointer" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Publications</a>
                             <div class="dropdown-menu" aria-labelledby="dropdown01">
                                 <a class="dropdown-item {{ Request::is('policies') ? 'active white-text' : '' }}" href="{{route('policies')}}">Policies</a>
                                 <a class="dropdown-item {{ Request::is('meetingminutes') ? 'active white-text' : '' }}" href="{{route('meetingminutes')}}">Meeting Minutes</a>

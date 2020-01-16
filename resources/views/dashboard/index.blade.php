@@ -68,7 +68,7 @@
                 <br/>
             @endif
             <h4 class="display-6">Your Data</h4>
-            <div data-step="2" data-intro="Here is where you manage and view the data we store on you and your CZQO profile." class="card">
+            <div data-step="2" data-intro="Here is where you manage and view the data we store on you and your CZQO profile." class="card ">
                 <div class="card-body">
                     <div class="row">
                         <div class="col" data-step="3" data-intro="Here is an overview of your profile, including your CZQO roles. You can change the way your name is displayed by clicking on your name, at the top of the panel. (CoC A4(b))">
@@ -120,9 +120,9 @@
                                 <img src="{{Auth::user()->avatar()}}" style="width: 125px; height: 125px; margin-bottom: 10px; border-radius: 50%;">
                             </div>
                             <br/>
-                            <a role="button" data-toggle="modal" data-target="#changeAvatar" class="btn btn-sm btn-light shadow-none btn-block"  href="#">Change</a>
+                            <a role="button" data-toggle="modal" data-target="#changeAvatar" class="btn btn-sm shadow-none btn-block bg-czqo-blue-light"  href="#">Change</a>
                             @if (!Auth::user()->isAvatarDefault())
-                                <a role="button" class="btn btn-sm shadow-none btn-light btn-block bg-czqo-blue-light mt-2"  href="{{route('users.resetavatar')}}">Reset</a>
+                                <a role="button" class="btn btn-sm shadow-none btn-block bg-czqo-blue-light mt-2"  href="{{route('users.resetavatar')}}">Reset</a>
                             @endif
                         </div>
                     </div>
@@ -131,7 +131,7 @@
                 <div class="list-group-flush" data-step="6" data-intro="This is where you can manage your biography, and manage your data preferences.">
                     <a href="#" class="list-group-item list-group-item-action" data-target="#viewBio" data-toggle="modal"><i class="fa fa-address-card"></i>&nbsp;View Biography</a>
                     <a href="{{url('/dashboard/me/data')}}" class="list-group-item list-group-item-action"><i class="fa fa-user"></i> Manage Your Data</a>
-                    <a href="{{url('/dashboard/emailpref')}}" class="list-group-item list-group-item-action"><i class="fa fa-envelope"></i> Manage Email Preferences</a>
+                    <a href="{{url('/dashboard/emailpref')}}" class="list-group-item card-bottom-border list-group-item-action"><i class="fa fa-envelope"></i> Manage Email Preferences</a>
                 </div>
             </div>
             <br/>
@@ -188,9 +188,9 @@
                 <h4 class="display-6">Network</h4>
                 <div class="card">
                     <div class="list-group-flush">
-                        <a href="#" class="list-group-item list-group-item-action"><i class="fa fa-chart-line"></i>&nbsp;Network Activity</a>
+                        <a href="#" class="list-group-item card-top-border list-group-item-action"><i class="fa fa-chart-line"></i>&nbsp;Network Activity</a>
                         <a href="{{route('network.positions.index')}}" class="list-group-item list-group-item-action"><i class="fa fa-broadcast-tower"></i>&nbsp;Positions</a>
-                        <a href="#" class="list-group-item list-group-item-action"><i class="fa fa-flag"></i>&nbsp;Network Log</a>
+                        <a href="#" class="list-group-item card-bottom-border list-group-item-action"><i class="fa fa-flag"></i>&nbsp;Network Log</a>
 
                     </div>
                 </div>
@@ -264,7 +264,7 @@
                         Training and Resources
                     </a>
                     @endif
-                    <a data-step="9" data-intro="View your CZQO controller applications here." target="" href="{{route('application.list')}}" class="list-group-item list-group-item-action">
+                    <a data-step="9" data-intro="View your CZQO controller applications here." target="" href="{{route('application.list')}}" class="list-group-item  card-bottom-border list-group-item-action">
                         <i class="fa fa-file-contract"></i>&nbsp;
                         Your Applications
                     </a>
@@ -296,10 +296,10 @@
                     @endif
                 </div>
                 <div class="list-group-flush">
-                    <a href="{{url('/dashboard/tickets')}}" class="list-group-item list-group-item-action"><i class="fa fa-comments"></i>&nbsp;View Your Tickets</a>
+                    <a href="{{url('/dashboard/tickets')}}" class="list-group-item @if(!Auth::user()->permissions >= 3) card-bottom-border @endif list-group-item-action"><i class="fa fa-comments"></i>&nbsp;View Your Tickets</a>
                     @if (Auth::user()->permissions >= 3)
                     <div class="list-group-item"><small><b>DIRECTORS</b></small></div>
-                    <a href="{{url('/dashboard/tickets/staff')}}" class="list-group-item list-group-item-action"><i class="fa fa-inbox"></i>&nbsp;Ticket Inbox</a>
+                    <a href="{{url('/dashboard/tickets/staff')}}" class="list-group-item card-bottom-border list-group-item-action"><i class="fa fa-inbox"></i>&nbsp;Ticket Inbox</a>
                     @endif
                 </div>
             </div>
@@ -311,19 +311,19 @@
                 <div class="list-group-item"><small><b>INSTRUCTORS</b></small></div>
                 <a href="{{url('/dashboard/training')}}" class="list-group-item list-group-item-action"><i class="fa fa-graduation-cap"></i>&nbsp;Controller Training</a>
                 @if (Auth::user()->permissions >= 3)
-                    <a href="{{url('/dashboard/training/applications')}}" class="list-group-item list-group-item-action"><i class="fa fa-file-contract"></i>&nbsp;Controller Applications</a>
+                    <a href="{{url('/dashboard/training/applications')}}" class="list-group-item @if(!Auth::user()->permissions >= 3) card-bottom-border @endif  list-group-item-action"><i class="fa fa-file-contract"></i>&nbsp;Controller Applications</a>
                 @endif
                 @if (Auth::user()->permissions >= 3)
                     <div class="list-group-item"><small><b>EXECUTIVE</b></small></div>
                     <a href="{{url('/dashboard/roster')}}" class="list-group-item list-group-item-action"><i class="fa fa-users"></i>&nbsp;Controller Roster</a>
                     <a href="{{url('/dashboard/news')}}" class="list-group-item list-group-item-action"><i class="fa fa-newspaper"></i>&nbsp;News</a>
-                    <a href="{{route('events.admin.index')}}" class="list-group-item list-group-item-action"><i class="fas fa-calendar"></i>&nbsp;Events</a>
+                    <a href="{{route('events.admin.index')}}" class="list-group-item @if(!Auth::user()->permissions >= 4) card-bottom-border @endif  list-group-item-action"><i class="fas fa-calendar"></i>&nbsp;Events</a>
                 @endif
                 @if (Auth::user()->permissions >= 4)
                     <div class="list-group-item"><small><b>ADMIN</b></small></div>
                     <a href="{{url('/dashboard/auditlog')}}" class="list-group-item list-group-item-action"><i class="fa fa-list-ul"></i>&nbsp;Audit Log</a>
                     <a href="{{route('staff.edit')}}" class="list-group-item list-group-item-action"><i class="fa fa-users"></i>&nbsp;Staff List</a>
-                    <a href="{{url('/dashboard/coresettings')}}" class="list-group-item list-group-item-action"><i class="fa fa-cog"></i>&nbsp;Core Settings</a>
+                    <a href="{{url('/dashboard/coresettings')}}" class="list-group-item card-bottom-border list-group-item-action"><i class="fa fa-cog"></i>&nbsp;Core Settings</a>
                 @endif
             </div>
             </div>
@@ -348,7 +348,7 @@
             <div class="modal-body">
                 <p>Please ensure your avatar complies with the VATSIM Code of Conduct. This avatar will be visible to staff members, if you place a controller booking, and if you're a staff member yourself, on the staff page.</p>
                 @csrf
-                <div class="input-group">
+                <div class="input-group pb-3">
                     <div class="custom-file">
                         <input type="file" class="custom-file-input" name="file">
                         <label class="custom-file-label">Choose file</label>
@@ -356,7 +356,7 @@
                 </div>
                 @if(Auth::user()->hasDiscord())
                     or use your Discord avatar (refreshes every 6 hours)<br/>
-                    <a href="{{route('users.changeavatar.discord')}}" class="btn btn-sm">Use Discord Avatar</a>
+                    <a href="{{route('users.changeavatar.discord')}}" class="btn bg-czqo-blue-light mt-3">Use Discord Avatar</a>
                 @endif
             </div>
             <div class="modal-footer">
@@ -412,7 +412,7 @@
                         <label>Display first name</label>
                         <input type="text" class="form-control" value="{{Auth::user()->display_fname}}" name="display_fname" id="input_display_fname">
                         <br/>
-                        <a class="btn btn-outline-light btn-sm" role="button" onclick="resetToCertFirstName()"><span style="color: #000">Reset to CERT first name</span></a>
+                        <a class="btn bg-czqo-blue-light btn-sm" role="button" onclick="resetToCertFirstName()"><span style="color: #000">Reset to CERT first name</span></a>
                         <script>
                             function resetToCertFirstName() {
                                 $("#input_display_fname").val("{{Auth::user()->fname}}")

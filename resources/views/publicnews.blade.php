@@ -6,6 +6,7 @@
 @section('content')
     <div class="container py-4">
         <h1 class="blue-text font-weight-bold">News</h1>
+        <hr>
         <div class="card-columns">
             @foreach($news as $n)
             <div class="card blue white-text darken-3 my-2 h-100">

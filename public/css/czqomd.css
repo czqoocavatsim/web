@@ -134,3 +134,45 @@ div.d-flex.flex-row > i {
     color: #2196f3 !important;
 }
 
+.btn, .btn:hover, .btn:active {
+    box-shadow: none !important;
+    border-radius: .45em !important;
+}
+
+.custom-file {
+    border: 1px solid #E0E0DC;
+    border-radius: .45em !important;
+}
+
+.custom-file-input:lang(en) ~ .custom-file-label::after {
+    border-left: 1px solid #E0E0DC;
+}
+
+.modal-content .modal-header h5.modal-title {
+    font-weight: 700 !important;
+    color: #2196f3!important;
+    font-size: 1.2rem;
+}
+
+.modal-dialog .modal-content {
+    border-radius: 0.5em !important;
+}
+
+.card {
+    border-radius: 0.7em !important;
+}
+
+.card .homepage-news .homepage-news-img {
+    border-top-left-radius: 0.7em;
+    border-top-right-radius: 0.7em;
+}
+
+.list-group-item.card-bottom-border {
+    border-bottom-left-radius: 0.7em;
+    border-bottom-right-radius: 0.7em;
+}
+
+.list-group-item.card-top-border {
+    border-top-left-radius: 0.7em;
+    border-top-right-radius: 0.7em;
+}

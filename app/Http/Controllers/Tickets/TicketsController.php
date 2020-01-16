@@ -8,6 +8,7 @@ use App\Mail\NewTicketMail;
 use App\Mail\NewTicketReplyMail;
 use App\Models\Tickets\Ticket;
 use App\Models\Tickets\TicketReply;
+use App\Models\Users\StaffGroup;
 use App\Models\Users\StaffMember;
 use App\Models\Users\User;
 use App\Models\Users\UserNotification;
@@ -26,9 +27,10 @@ class TicketsController extends Controller
         $openTickets = Ticket::where('user_id', Auth::user()->id)->where('status', 0)->get()->sortByDesc('id');
         $closedTickets = Ticket::where('user_id', Auth::user()->id)->where('status', 1)->get()->sortByDesc('id');
         $onHoldTickets = Ticket::where('user_id', Auth::user()->id)->where('status', 2)->get()->sortByDesc('id');
-        $staff_members = StaffMember::where('user_id', '!=', 1)->get();
+        $staff_members = StaffMember::where('user_id', '!=', 1)->where('group_id', 1)->get();
+        $groups = StaffGroup::where('can_receive_tickets', true)->get();
 
-        return view('dashboard.tickets.index', compact('openTickets', 'closedTickets', 'onHoldTickets', 'staff_members'));
+        return view('dashboard.tickets.index', compact('openTickets', 'closedTickets', 'onHoldTickets', 'staff_members', 'groups'));
     }
 
     public function staffIndex()
