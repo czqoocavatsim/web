@@ -383,16 +383,18 @@
     <property name="settings.editor.selected.configurable" value="preferences.lookFeel" />
   </component>
   <component name="RecentsManager">
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="Q:\VATSIM\czqo-core\app\Models\Network" />
+      <recent name="Q:\VATSIM\czqo-core\app\Models\ActivityBot" />
+      <recent name="C:\Users\Liesel\Documents\Git\czqo-core\public\img\planes" />
+      <recent name="E:\Development\czqo-core\app" />
+    </key>
     <key name="CopyFile.RECENT_KEYS">
       <recent name="D:\Development\czqo-core\resources\views\emails" />
       <recent name="C:\Dev\czqo-core\resources\views\pilots" />
       <recent name="D:\Development\czqo-core\resources\views" />
       <recent name="F:\Development\czqo-core\resources\views\dashboard\network\positions" />
       <recent name="F:\Development\czqo-core\resources\views\dashboard\me" />
-    </key>
-    <key name="MoveFile.RECENT_KEYS">
-      <recent name="C:\Users\Liesel\Documents\Git\czqo-core\public\img\planes" />
-      <recent name="E:\Development\czqo-core\app" />
     </key>
   </component>
   <component name="ServiceViewManager">
@@ -506,6 +508,7 @@
       <workItem from="1577373782794" duration="14472000" />
       <workItem from="1577846389360" duration="33000" />
       <workItem from="1578263119075" duration="12152000" />
+      <workItem from="1579166226236" duration="13186000" />
     </task>
     <servers />
   </component>
@@ -573,9 +576,14 @@
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state x="747" y="209" key="com.intellij.openapi.editor.actions.MultiplePasteAction$ClipboardContentChooser/0.0.1920.1040/1920.306.1024.728@0.0.1920.1040" timestamp="1577376311592" />
-    <state x="623" y="225" width="672" height="678" key="search.everywhere.popup" timestamp="1578363691541">
-      <screen x="0" y="0" width="1920" height="1040" />
+    <state x="2221" y="-22" width="1316" height="976" maximized="true" key="dock-window-1" timestamp="1579176430626">
+      <screen x="1920" y="0" width="1920" height="1050" />
+    </state>
+    <state x="2221" y="-22" width="1316" height="976" maximized="true" key="dock-window-1/0.0.1920.1050/1920.0.1920.1050@0.0.1920.1050" timestamp="1579176430626" />
+    <state x="623" y="227" width="672" height="685" key="search.everywhere.popup" timestamp="1579171800733">
+      <screen x="0" y="0" width="1920" height="1050" />
     </state>
     <state x="623" y="225" width="672" height="678" key="search.everywhere.popup/0.0.1920.1040/1920.306.1024.728@0.0.1920.1040" timestamp="1578363691541" />
+    <state x="623" y="227" width="672" height="685" key="search.everywhere.popup/0.0.1920.1050/1920.0.1920.1050@0.0.1920.1050" timestamp="1579171800733" />
   </component>
 </project>
