@@ -117,12 +117,12 @@
                         <div data-step="5" data-intro="You can change your avatar here. Your avatar is available when people view your account. This will likely only be staff members, unless you sign up for an event or similar activity." class="col">
                             <h5 class="card-title">Avatar</h5>
                             <div class="text-center">
-                                <img src="{{Auth::user()->avatar}}" style="width: 125px; height: 125px; margin-bottom: 10px; border-radius: 50%;">
+                                <img src="{{Auth::user()->avatar()}}" style="width: 125px; height: 125px; margin-bottom: 10px; border-radius: 50%;">
                             </div>
                             <br/>
-                            <a role="button" data-toggle="modal" data-target="#changeAvatar" class="btn btn-sm shadow-none btn-block"  href="#">Change</a>
+                            <a role="button" data-toggle="modal" data-target="#changeAvatar" class="btn btn-sm btn-light shadow-none btn-block"  href="#">Change</a>
                             @if (!Auth::user()->isAvatarDefault())
-                                <a role="button" class="btn btn-sm btn-block btn-outline mt-2"  href="{{route('users.resetavatar')}}">Reset</a>
+                                <a role="button" class="btn btn-sm shadow-none btn-light btn-block bg-czqo-blue-light mt-2"  href="{{route('users.resetavatar')}}">Reset</a>
                             @endif
                         </div>
                     </div>

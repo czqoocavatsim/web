@@ -123,6 +123,7 @@ class UserController extends Controller
             $filename
         );
         $user->avatar = Storage::url('public/files/avatars/'.$user->id.'/'.$editUser->id.'/'.$filename);
+        $user->avatar_mode = 1;
         $user->save();
         AuditLogEntry::insert($editUser, 'Changed user avatar', $user, 0);
 
@@ -140,7 +141,8 @@ class UserController extends Controller
             abort(403, 'The avatar is already the default avatar.');
         }
 
-        $user->avatar = '/img/profile-picture-img.jpg';
+        $user->avatar = '/img/default-profile-img.jpg';
+        $user->avatar_mode = 0;
         $user->save();
         AuditLogEntry::insert($editUser, 'Reset user avatar', $user, 0);
 
@@ -262,6 +264,7 @@ class UserController extends Controller
             $filename
         );
         $user->avatar = Storage::url('public/files/avatars/'.$user->id.'/'.$filename);
+        $user->avatar_mode = 1;
         $user->save();
 
         return redirect()->route('dashboard.index')->with('success', 'Avatar changed!');
@@ -270,8 +273,7 @@ class UserController extends Controller
     public function changeAvatarDiscord()
     {
         $user = Auth::user();
-        $discordUrl = $user->getDiscordAvatar();
-        $user->avatar = $discordUrl;
+        $user->avatar_mode = 2;
         $user->save();
         return redirect()->route('dashboard.index')->with('success', 'Avatar changed!');
     }
@@ -283,7 +285,7 @@ class UserController extends Controller
             abort(403, 'Your avatar is already the default avatar.');
         }
 
-        $user->avatar = 'https://www.drupal.org/files/profile_default.png';
+        $user->avatar_mode = 0;
         $user->save();
 
         return redirect()->back()->with('success', 'Avatar reset!');

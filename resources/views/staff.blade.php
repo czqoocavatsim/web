@@ -32,7 +32,7 @@
                     <div class="col-sm-4 mt-2">
                         <div style="text-align: center;">
                             @if ($member->user_id == 1)
-                                <img src="https://www.drupal.org/files/profile_default.png" style="width: 125px; margin-bottom: 10px; border-radius: 50%;">
+                                <img src="{{asset('/img/default-profile-img.jpg')}}" style="width: 125px; margin-bottom: 10px; border-radius: 50%;">
                                 <h4 style="margin-bottom: 2px;">
                                     <b>Vacant</b>
                                 </h4>
@@ -43,7 +43,7 @@
                             @else
                                 <div class="staff_img_container">
                                     <div class="staff_img_object">
-                                        <img style="height: 125px;" src="{{$member->user->avatar}}">
+                                        <img style="height: 125px;" src="{{$member->user->avatar()}}">
                                         <div class="img_overlay">
                                             <div class="img_overlay_text">
                                                 <a href="#" data-toggle="modal" data-target="#viewStaffBio{{$member->id}}">View Bio</a>

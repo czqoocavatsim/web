@@ -155,7 +155,7 @@
                         @auth
                         <li class="nav-item dropdown">
                             <a class="nav-link dropdown-toggle" id="navbarDropdownMenuLink-333" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                <img src="{{Auth::user()->avatar}}" style="height: 27; width: 27px; margin-right: 7px; margin-bottom: 3px; border-radius: 50%;">&nbsp;{{Auth::user()->fullName("FLC")}}
+                                <img src="{{Auth::user()->avatar()}}" style="height: 27px; width: 27px; margin-right: 7px; margin-bottom: 3px; border-radius: 50%;">&nbsp;{{Auth::user()->fullName("FLC")}}
                             </a>
                             <div class="dropdown-menu dropdown-menu-right dropdown-default" aria-labelledby="navbarDropdownMenuLink-333">
                                 <a class="dropdown-item {{ Request::is('dashboard') || Request::is('dashboard/*') ? 'active white-text' : '' }}" href="{{route('dashboard.index')}}">

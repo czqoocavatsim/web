@@ -18,6 +18,8 @@ use App\Models\Tickets;
 use Exception;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Storage;
+use LasseRafn\InitialAvatarGenerator\InitialAvatar;
 use RestCord\DiscordClient;
 
 class User extends Authenticatable
@@ -33,7 +35,7 @@ class User extends Authenticatable
         'id', 'fname', 'lname', 'email', 'rating_id', 'rating_short', 'rating_long', 'rating_GRP',
         'reg_date', 'region_code', 'region_name', 'division_code', 'division_name',
         'subdivision_code', 'subdivision_name', 'permissions', 'init', 'gdpr_subscribed_emails', 'avatar', 'bio', 'display_cid_only', 'display_fname', 'display_last_name',
-        'discord_user_id', 'discord_dm_channel_id'
+        'discord_user_id', 'discord_dm_channel_id', 'avatar_mode'
     ];
 
     /**
@@ -141,11 +143,11 @@ class User extends Authenticatable
 
     public function isAvatarDefault()
     {
-        if (!$this->avatar == 'img/default-profile-img.jpg') {
-            return false;
+        if ($this->avatar_mode == 0) {
+            return true;
         }
 
-        return true;
+        return false;
     }
 
     public function certified()
@@ -228,5 +230,27 @@ class User extends Authenticatable
     public function discordBans()
     {
         return $this->hasMany(DiscordBan::class);
+    }
+
+    public function avatar()
+    {
+
+        if ($this->avatar_mode == 0) {
+            return Cache::remember('users.'.$this->id.'.initialsavatar', 172800, function () {
+                $avatar = new InitialAvatar();
+                $image = $avatar
+                    ->name($this->fullName('FL'))
+                    ->size(125)
+                    ->background('#cfeaff')
+                    ->color('#2196f3')
+                    ->generate();
+                Storage::put('public/files/avatars/'.$this->id.'/initials.png', (string) $image->encode('png'));
+                return Storage::url('public/files/avatars/'.$this->id.'/initials.png');
+            });
+        } elseif ($this->avatar_mode == 1) {
+            return $this->avatar;
+        } else {
+            return $this->getDiscordAvatar();
+        }
     }
 }

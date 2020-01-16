@@ -123,4 +123,14 @@ div.d-flex.flex-row > i {
     background: none!important;
 }
 
+.bg-czqo-blue-light {
+    background-color: #cfeaff !important;
+    color: #000;
+
+}
+
+.btn .bg-czqo-blue-light:not([disabled]):not(.disabled):active {
+    background-color: #cfeaff !important;
+    color: #2196f3 !important;
+}
 
