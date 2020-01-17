@@ -63,7 +63,7 @@ class Kernel extends ConsoleKernel
             }
 
             // List of session logs
-            $sessionLogs =  SessionLog::all();
+            $sessionLogs =  SessionLog::where("session_end", null)->get();
 
             // Check logs against currently online controllers
             foreach ($onlineControllers as $oc) {
