@@ -68,6 +68,7 @@ class Kernel extends ConsoleKernel
             // Check logs against currently online controllers
             foreach ($onlineControllers as $oc) {
                 $matchFound = false;
+                $ocLogon = NULL;
                 foreach ($sessionLogs as $log) {
                     // Parse logon time lol
                     $ocLogon = substr($oc['time_logon'],0,4).'-'
@@ -79,12 +80,19 @@ class Kernel extends ConsoleKernel
 
                     // If a match is found
                     if ($ocLogon == $log->session_start) {
-                        // todo: perform connection authentication again
+                        if (!$log->roster_member_id) { // Check if they're naughty
+                            if ($log->email_sent < 2) { // todo: send me email
+                                // MailController->sendUnauthorisedMail(); (or something like that idk how you do it)
+                            }
+                        }
                         $matchFound = true;
                     } else {
-                        continue;
+                        continue; // No match was found
                     }
                 }
+
+                // Create log variable here so it's within appropriate scope
+                $sessionLog = NULL;
 
                 // If no match was found
                 if (!$matchFound) {
@@ -94,24 +102,49 @@ class Kernel extends ConsoleKernel
                     $sessionLog->session_start = $ocLogon;
                     $sessionLog->callsign = $oc['callsign'];
                     $sessionLog->isNew = true;
+                    $sessionLog->emails_sent = 0;
 
                     // Check the user's CID against the roster
-                    $user = RosterMember::where('cid', '=', $oc['cid'])->first();
+                    $user = RosterMember::where('cid', $oc['cid'])->first();
                     if ($user && ($user->status != 'Training')) { // Add if on roster, don't if not (big problem lmao)
-                        $sessionLog->user_id = $user->id;
+                        $sessionLog->roster_member_id = $user->id;
                     }
-                    else {
-                        // todo: send email to me here if user_id is null
-                    }
+                    // todo: send email to me here if user_id is null
+                    // MailController->sendUnauthorisedConnectionEmail(); or something like that
 
                     // Add session
                     $sessionLog->save();
                 }
             }
 
-            // todo: do a search through the session logs to find any sessions without an end time (controller just logged off)
+            // Now check to see if any sessions should be marked as finished
             foreach ($sessionLogs as $log) {
+                // Are they still online?
+                $stillOnline = false;
 
+                // Loop through online controller list to find a match
+                foreach ($onlineControllers as $oc) {
+                    if ($oc['cid'] == $log->cid) { // If CID matches
+                        $stillOnline = true;
+                    }
+                }
+
+                // Check if the controller has indeed logged off
+                if (!$stillOnline) {
+                    // Start and end values parsed so Carbon can understand them
+                    $start = Carbon::createFromFormat($log->session_start);
+                    $end = Carbon::now();
+
+                    // Calculate difference (difference is the total hours gained)
+                    $difference = $start->floatDiffInHours($end);
+
+                    // Populate remaining columns
+                    $log->session_end = $end;
+                    $log->duration = $difference;
+
+                    // Save the log
+                    $log->save();
+                }
             }
         })->everyMinute();
 

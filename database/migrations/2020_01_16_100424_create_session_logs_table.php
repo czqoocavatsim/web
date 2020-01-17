@@ -15,14 +15,15 @@ class CreateSessionLogsTable extends Migration
     {
         Schema::create('session_logs', function (Blueprint $table) {
             $table->increments('id');
-            $table->integer('user_id')->unsigned()->nullable();
-            $table->foreign('user_id')->references('id')->on('users');
+            $table->integer('roster_member_id')->unsigned()->nullable();
+            $table->foreign('roster_member_id')->references('id')->on('roster');
             $table->integer('cid');
             $table->string('session_start');
             $table->string('session_end')->nullable();
             $table->integer('callsign')->unsigned();
-            $table->float('session_length')->nullable();
+            $table->float('duration')->nullable();
             $table->boolean('is_new');
+            $table->ineger('emails_sent');
             $table->timestamps();
         });
     }
