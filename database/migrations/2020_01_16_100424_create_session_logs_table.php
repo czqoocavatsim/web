@@ -18,12 +18,13 @@ class CreateSessionLogsTable extends Migration
             $table->integer('roster_member_id')->unsigned()->nullable();
             $table->foreign('roster_member_id')->references('id')->on('roster');
             $table->integer('cid');
-            $table->string('session_start');
-            $table->string('session_end')->nullable();
-            $table->integer('callsign')->unsigned();
+            $table->dateTime('session_start');
+            $table->dateTime('session_end')->nullable();
+            $table->integer('position_id')->unsigned();
+            $table->foreign('position_id')->references('id')->on('monitored_positions');
             $table->float('duration')->nullable();
             $table->boolean('is_new');
-            $table->ineger('emails_sent');
+            $table->integer('emails_sent');
             $table->timestamps();
         });
     }

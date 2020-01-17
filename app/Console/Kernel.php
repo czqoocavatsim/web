@@ -68,9 +68,10 @@ class Kernel extends ConsoleKernel
             // Check logs against currently online controllers
             foreach ($onlineControllers as $oc) {
                 $matchFound = false;
-                $ocLogon = NULL;
+                $ocLogon = null;
                 foreach ($sessionLogs as $log) {
                     // Parse logon time lol
+                    // Change this to the Y-m-d H:i:s format, as I changed the column type to 'dateTime'
                     $ocLogon = substr($oc['time_logon'],0,4).'-'
                         .substr($oc['time_logon'], 4, 2).'-'
                         .substr($oc['time_logon'], 6, 2).' '
@@ -92,16 +93,19 @@ class Kernel extends ConsoleKernel
                 }
 
                 // Create log variable here so it's within appropriate scope
-                $sessionLog = NULL;
+                $sessionLog = null;
 
+                error_log($ocLogon);
                 // If no match was found
                 if (!$matchFound) {
                     // Build new session log
+                    error_log($ocLogon);
                     $sessionLog = new SessionLog();
                     $sessionLog->cid = $oc['cid'];
                     $sessionLog->session_start = $ocLogon;
+                    //Change column name to position_id and find the monitored position ID from the callsign
                     $sessionLog->callsign = $oc['callsign'];
-                    $sessionLog->isNew = true;
+                    $sessionLog->is_new	= true;
                     $sessionLog->emails_sent = 0;
 
                     // Check the user's CID against the roster
