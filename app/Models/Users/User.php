@@ -115,6 +115,26 @@ class User extends Authenticatable
         return $difference;
     }
 
+    public function permissions()
+    {
+        switch ($this->permissions) {
+            case 0:
+                return "Guest";
+            break;
+            case 1:
+                return "Controller/Trainee";
+            break;
+            case 2:
+                return "Staff";
+            case 3:
+                return "Senior Staff";
+            case 4:
+                return "Administrator";
+            default:
+                return "Unknown";
+        }
+    }
+
     public function fullName($format)
     {
         //display name check

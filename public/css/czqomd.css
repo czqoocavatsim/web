@@ -176,3 +176,7 @@ div.d-flex.flex-row > i {
     border-top-left-radius: 0.7em;
     border-top-right-radius: 0.7em;
 }
+
+.rounded-0 {
+    border-radius:0 !important;
+}

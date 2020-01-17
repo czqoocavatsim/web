@@ -1,6 +1,6 @@
 @extends('layouts.master')
 @section('content')
-<div class="card card-image" style="background-image: url({{asset('img/787.png')}}); background-size: cover; background-position-y: center;">
+<div class="card card-image rounded-0" style="background-image: url({{asset('img/787.png')}}); background-size: cover; background-position-y: center;">
     <div class="text-white text-left rgba-stylish-strong py-3 px-4">
         <div class="container">
             <div class="py-5">
@@ -85,17 +85,7 @@
                             @if (Auth::user()->subdivision_name)
                             vACC/ARTCC: {{ Auth::user()->subdivision_name }}<br/>
                             @endif
-                            @if (Auth::user()->permissions == 0)
-                                Status: Not Certified/Guest<br/>
-                            @elseif (Auth::user()->permissions == 1)
-                                Status: Controller<br/>
-                            @elseif (Auth::user()->permissions == 2)
-                                Status: Instructor<br/>
-                            @elseif (Auth::user()->permissions == 3)
-                                Status: Staff<br/>
-                            @elseif (Auth::user()->permissions == 4)
-                                Status: Executive<br/>
-                            @endif
+                            {{Auth::user()->permissions()}}
                             @if(Auth::user()->staffProfile)
                             Staff Role: {{Auth::user()->staffProfile->position}}
                             @endif

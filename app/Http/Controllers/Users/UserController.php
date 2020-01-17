@@ -59,7 +59,7 @@ class UserController extends Controller
     {
         $users = User::all()->sortBy('id');
 
-        return view('dashboard.users.list', compact('users'));
+        return view('dashboard.users.index', compact('users'));
     }
 
     public function viewUserProfile($id)
