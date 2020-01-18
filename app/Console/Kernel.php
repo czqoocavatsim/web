@@ -96,6 +96,7 @@ class Kernel extends ConsoleKernel
                 $sessionLog = null;
 
                 error_log($ocLogon);
+
                 // If no match was found
                 if (!$matchFound) {
                     // Build new session log
@@ -105,7 +106,6 @@ class Kernel extends ConsoleKernel
                     $sessionLog->session_start = $ocLogon;
                     //Change column name to position_id and find the monitored position ID from the callsign
                     $sessionLog->callsign = $oc['callsign'];
-                    $sessionLog->is_new	= true;
                     $sessionLog->emails_sent = 0;
 
                     // Check the user's CID against the roster
@@ -148,13 +148,16 @@ class Kernel extends ConsoleKernel
 
                     // Save the log
                     $log->save();
+                    
+                    // Add hours
+                    $roster_member = RosterMember::where('cid', $oc['cid'])->first();
+                    $roster_member->currency = $roster_member->currency + $difference;
+                    
+                    // Save roster member
+                    $roster_member->save();
                 }
             }
-        })->everyMinute();
-
-        // Hour checking
-
-        // Purge period
+        })->everyMinute();        
     }
 
     /**

@@ -11,7 +11,7 @@ class SessionLog extends Model
 {
     // session_start and session_end are unix timestamps
     protected $fillable = [
-      'id', 'roster_member_id', 'cid', 'session_start', 'session_end', 'callsign', 'duration', 'is_new', 'emails_sent'
+      'id', 'roster_member_id', 'cid', 'session_start', 'session_end', 'callsign', 'duration', 'emails_sent'
     ];
 
     public function user() {

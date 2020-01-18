@@ -20,10 +20,8 @@ class CreateSessionLogsTable extends Migration
             $table->integer('cid');
             $table->dateTime('session_start');
             $table->dateTime('session_end')->nullable();
-            $table->integer('position_id')->unsigned();
-            $table->foreign('position_id')->references('id')->on('monitored_positions');
+            $table->string('callsign');
             $table->float('duration')->nullable();
-            $table->boolean('is_new');
             $table->integer('emails_sent');
             $table->timestamps();
         });

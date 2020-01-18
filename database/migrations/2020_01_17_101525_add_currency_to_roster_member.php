@@ -14,7 +14,7 @@ class AddCurrencyToRosterMember extends Migration
     public function up()
     {
         Schema::table('roster', function (Blueprint $table) {
-            $table->float('currency');
+            $table->float('currency')->nullable(); // Nullable because otherwise bad stuff would happen to the existing table
         });
     }
 
