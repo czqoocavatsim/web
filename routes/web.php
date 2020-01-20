@@ -36,6 +36,7 @@ Route::get('/events/{slug}', 'Events\EventController@viewEvent')->name('events.v
 Route::view('/about', 'about')->name('about');
 
 Route::get('/test', function () {
+    echo PHP_OS;
 });
 
 //Authentication
