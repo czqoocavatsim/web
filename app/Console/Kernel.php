@@ -11,6 +11,7 @@ use Carbon\Carbon;
 use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Foundation\Console\Kernel as ConsoleKernel;
 use Illuminate\Support\Facades\Log;
+use App\Mail\ActivityBot\UnauthorisedConnection;
 
 class Kernel extends ConsoleKernel
 {
@@ -83,7 +84,7 @@ class Kernel extends ConsoleKernel
                     if ($ocLogon == $log->session_start) {
                         if (!$log->roster_member_id) { // Check if they're naughty
                             if ($log->email_sent < 2) { // todo: send me email
-                                // MailController->sendUnauthorisedMail(); (or something like that idk how you do it)
+                                Mail::to(CoreSettings::where('id', 1)->firstOrFail()->emailfirchief)->cc(CoreSettings::where('id', 1)->firstOrFail()->emaildepfirchief)->send(new UnauthorisedConnection($oc));
                             }
                         }
                         $matchFound = true;
@@ -112,9 +113,9 @@ class Kernel extends ConsoleKernel
                     $user = RosterMember::where('cid', $oc['cid'])->first();
                     if ($user && ($user->status != 'Training')) { // Add if on roster, don't if not (big problem lmao)
                         $sessionLog->roster_member_id = $user->id;
+                    } else { // Send unauthorised notification to FIR Chief
+                        Mail::to(CoreSettings::where('id', 1)->firstOrFail()->emailfirchief)->cc(CoreSettings::where('id', 1)->firstOrFail()->emaildepfirchief)->send(new UnauthorisedConnection($oc));
                     }
-                    // todo: send email to me here if user_id is null
-                    // MailController->sendUnauthorisedConnectionEmail(); or something like that
 
                     // Add session
                     $sessionLog->save();
@@ -148,16 +149,16 @@ class Kernel extends ConsoleKernel
 
                     // Save the log
                     $log->save();
-                    
+
                     // Add hours
                     $roster_member = RosterMember::where('cid', $oc['cid'])->first();
                     $roster_member->currency = $roster_member->currency + $difference;
-                    
+
                     // Save roster member
                     $roster_member->save();
                 }
             }
-        })->everyMinute();        
+        })->everyMinute();
     }
 
     /**
