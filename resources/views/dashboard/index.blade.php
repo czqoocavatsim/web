@@ -194,35 +194,35 @@
                     <h5 class="card-text">
                         @if ($certification == "certified")
                             <h3>
-                            <span class="badge  badge-success">
+                            <span class="badge  badge-success rounded shadow-none">
                                 <i class="fa fa-check"></i>&nbsp;
                                 CZQO Certified
                             </span>
                             </h3>
                         @elseif ($certification == "not_certified")
                             <h3>
-                            <span class="badge badge-danger">
+                            <span class="badge badge-danger rounded shadow-none">
                                 <i class="fa fa-times"></i>&nbsp;
                                 Not Certified
                             </span>
                             </h3>
                         @elseif ($certification == "training")
                             <h3>
-                            <span class="badge badge-warning">
+                            <span class="badge badge-warning rounded shadow-none">
                                 <i class="fa fa-book-open"></i>&nbsp;
                                 In Training
                             </span>
                             </h3>
                         @elseif ($certification == "instructor")
                             <h3>
-                            <span class="badge badge-info">
+                            <span class="badge badge-info rounded shadow-none">
                                 <i class="fa fa-chalkboard-teacher"></i>&nbsp;
                                 CZQO Instructor
                             </span>
                             </h3>
                         @else
                             <h3>
-                            <span class="badge badge-dark">
+                            <span class="badge badge-dark rounded shadow-none">
                                 <i class="fa fa-question"></i>&nbsp;
                                 Unknown
                             </span>
@@ -230,14 +230,14 @@
                         @endif
                         @if ($active == 0)
                             <h3>
-                            <span class="badge badge-danger">
+                            <span class="badge badge-danger rounded shadow-none">
                                 <i class="fa fa-times"></i>&nbsp;
                                 Inactive
                             </span>
                             </h3>
                         @elseif ($active == 1)
                             <h3>
-                            <span class="badge badge-success">
+                            <span class="badge badge-success rounded shadow-none">
                                 <i class="fa fa-check"></i>&nbsp;
                                 Active
                             </span>
