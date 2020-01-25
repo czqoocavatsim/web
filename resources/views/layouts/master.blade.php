@@ -93,7 +93,7 @@
     <header>
         <nav id="czqoHeaderLight" class="navbar navbar-expand-lg navbar-dark blue p-0" style="min-height:59px;">
             <div class="container">
-                <a class="navbar-brand" href="{{route('index')}}"><img id="czqoHeaderImg" src="{{asset('img/Banner.png')}}" alt=""></a>
+                <a class="navbar-brand" href="{{route('index')}}"><img style="height: 40px; width:auto;" id="czqoHeaderImg" src="https://media.discordapp.net/attachments/557500419614703617/670470035961282560/unknown.png" alt=""></a>
                 <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
                         aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
