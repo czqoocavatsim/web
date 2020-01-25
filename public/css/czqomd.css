@@ -3,6 +3,10 @@
     font-family: 'Muli', 'Lato', 'Segoe UI', 'Arial', sans-serif;
 }
 
+h1, h2, h3, h4, h5, h6, .heading {
+    font-family: 'Avenir'
+}
+
 body, html {
     height: 100vh;
     scroll-behavior: smooth;
@@ -27,6 +31,10 @@ body, html {
 }
 .dropdown-menu .dropdown-item {
     padding-left: 15px !important;
+}
+
+.dropdown-menu .dropdown-item.active, .dropdown-item:active {
+    background: #0080c9;
 }
 
 .staff_img_container {
@@ -111,7 +119,7 @@ div.d-flex.flex-row > i {
 }
 
 .nav-item .active {
-    color:#2196f3!important;
+    color:#0080c9!important;
 }
 
 .dropdown-item.active {
@@ -119,7 +127,7 @@ div.d-flex.flex-row > i {
 }
 
 .dropdown-item:active {
-    color: #2196f3!important;
+    color: #0080c9!important;
     background: none!important;
 }
 
@@ -131,7 +139,7 @@ div.d-flex.flex-row > i {
 
 .btn .bg-czqo-blue-light:not([disabled]):not(.disabled):active {
     background-color: #cfeaff !important;
-    color: #2196f3 !important;
+    color: #0080c9 !important;
 }
 
 .btn, .btn:hover, .btn:active {
@@ -150,7 +158,7 @@ div.d-flex.flex-row > i {
 
 .modal-content .modal-header h5.modal-title {
     font-weight: 700 !important;
-    color: #2196f3!important;
+    color: #0080c9!important;
     font-size: 1.2rem;
 }
 
@@ -179,4 +187,12 @@ div.d-flex.flex-row > i {
 
 .rounded-0 {
     border-radius:0 !important;
+}
+
+.blue {
+    background-color: #0080c9 !important;
+}
+
+.blue-text {
+    color: #0080c9 !important;
 }
