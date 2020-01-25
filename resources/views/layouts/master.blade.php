@@ -294,6 +294,31 @@
         </div>
     </div>
     <!-- End contact us modal-->
+    @if (\Session::has('error-modal'))
+    <!-- Error modal -->
+    <div class="modal fade" id="errorModal" tabindex="-1" role="dialog" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLongTitle"><span class="font-weight-bold red-text"><i class="fas fa-exclamation-circle"></i> An error occured...</span></h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    {{\Session::get('error-modal')}}
+                    <div class="alert black-text bg-czqo-blue-light mt-4">
+                        If you believe this is a mistake, please create a <a target="_blank" class="black-text" href="{{route('tickets.index')}}">support ticket.</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script>
+    $("#errorModal").modal();
+    </script>
+    <!-- End error modal -->
+    @endif
     <script type="text/javascript">
         Dropzone.options.dropzone =
             {
