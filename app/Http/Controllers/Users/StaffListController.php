@@ -16,7 +16,25 @@ class StaffListController extends Controller
     public function index()
     {
         $staff = StaffMember::all();
-        $instructors = Instructor::all();
+        
+        // Instructor list
+        $instructors_temp = Instructor::all(); // Temp
+        $instructors = array(); // Actual
+        
+        // Sort assessors to top of array
+        foreach ($instructors_temp as $instructor) {
+            if ($instructor->qualification == "Assessor") {
+                array_push($instructors, $instructor);
+            }
+        }
+        
+        // Sort the instructors at the bottom of the array
+        foreach ($instructors_temp as $instructor) {
+            if ($instructor->qualification == "Instructor") {
+                array_push($instructors, $instructor);
+            }
+        }
+        
         $groups = StaffGroup::all();
 
         return view('staff', compact('staff', 'instructors','groups'));

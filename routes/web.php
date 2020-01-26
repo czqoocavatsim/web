@@ -36,15 +36,18 @@ Route::get('/events/{slug}', 'Events\EventController@viewEvent')->name('events.v
 Route::view('/about', 'about')->name('about');
 
 Route::get('/test', function () {
+    echo PHP_OS;
 });
 
 //Authentication
-Route::get('/login', 'Auth\LoginController@login')->middleware('guest')->name('login');
-Route::get('/logintest', function() {
-    Auth::login(\App\User::find(1364284));
+Route::prefix('auth')->group(function () {
+    Route::get('/sso/login', 'Auth\LoginController@ssoLogin')->middleware('guest')->name('auth.sso.login');
+    Route::get('/sso/validate', 'Auth\LoginController@validateSsoLogin')->middleware('guest');
+    Route::get('/connect/login', 'Auth\LoginController@connectLogin')->middleware('guest')->name('auth.connect.login');
+    Route::get('/connect/validate', 'Auth\LoginController@validateConnectLogin')->middleware('guest');
+    Route::get('/logout', 'Auth\LoginController@logout')->middleware('auth')->name('auth.logout');
 });
-Route::get('/validate', 'Auth\LoginController@validateLogin')->middleware('guest');
-Route::get('/logout', 'Auth\LoginController@logout')->middleware('auth')->name('logout');
+
 
 //Public news articles
 Route::get('/news/{id}', 'News\NewsController@viewArticlePublic')->name('news.articlepublic')->where('id', '[0-9]+');

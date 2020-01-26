@@ -43,7 +43,7 @@
                                     <p>{{Session::get('exportAll')}}</p>
                                 </div>
                                 @endif
-                                <input type="submit" value="Request Data" class="btn">
+                                <input type="submit" value="Request Data" class="btn bg-czqo-blue-light">
                             </form>
                           </div>
                         </li>
@@ -53,8 +53,8 @@
                               <span class="label">or export specific data</span>
                             </a>
                             <div class="step-content grey lighten-3">
-                              <p>Please open a support ticket to the Webmaster or email them to request specific pieces of data.</p>
-                                <button onclick="location.href='{{route('tickets.index', ['create' => 'yes', 'department' => 'firchief', 'title' => 'Data request'])}}'" class="btn">Support Ticket</button>
+                              <p>Please open a support ticket to the Web Team or email them to request specific pieces of data.</p>
+                                <button onclick="location.href='{{route('tickets.index', ['create' => 'yes', 'department' => 'firchief', 'title' => 'Data request'])}}'" class="btn bg-czqo-blue-light">Support Ticket</button>
                             </div>
                           </li>
                       </ul>
@@ -65,14 +65,14 @@
             <div class="card">
                 <div class="card-header">Delete Data</div>
                 <div class="card-body">
-                    <p>Please open a support ticket to the Webmaster or email them to request deletion of data.</p>
-                                <button onclick="location.href='{{route('tickets.index', ['create' => 'yes', 'department' => 'firchief', 'title' => 'Data request'])}}'" class="btn">Support Ticket</button>
+                    <p>Please open a support ticket to the Web Team or email them to request deletion of data.</p>
+                                <button onclick="location.href='{{route('tickets.index', ['create' => 'yes', 'department' => 'firchief', 'title' => 'Data request'])}}'" class="btn bg-czqo-blue-light">Support Ticket</button>
                 </div>
             </div>
             <div class="card mt-3">
                 <div class="card-header">Questions and Concerns</div>
                 <div class="card-body">
-                    <p>If you have a question related to data management, please contact the Webmaster.</p>
+                    <p>If you have a question related to data management, please contact the Web Team.</p>
                 </div>
             </div>
         </div>

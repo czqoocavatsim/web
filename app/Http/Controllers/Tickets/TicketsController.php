@@ -8,6 +8,7 @@ use App\Mail\NewTicketMail;
 use App\Mail\NewTicketReplyMail;
 use App\Models\Tickets\Ticket;
 use App\Models\Tickets\TicketReply;
+use App\Models\Users\StaffGroup;
 use App\Models\Users\StaffMember;
 use App\Models\Users\User;
 use App\Models\Users\UserNotification;
@@ -16,7 +17,9 @@ use App\Notifications\TicketReply as NotificationsTicketReply;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Str;
 
 class TicketsController extends Controller
@@ -26,9 +29,10 @@ class TicketsController extends Controller
         $openTickets = Ticket::where('user_id', Auth::user()->id)->where('status', 0)->get()->sortByDesc('id');
         $closedTickets = Ticket::where('user_id', Auth::user()->id)->where('status', 1)->get()->sortByDesc('id');
         $onHoldTickets = Ticket::where('user_id', Auth::user()->id)->where('status', 2)->get()->sortByDesc('id');
-        $staff_members = StaffMember::where('user_id', '!=', 1)->get();
+        $staff_members = StaffMember::where('user_id', '!=', 1)->where('group_id', 1)->get();
+        $groups = StaffGroup::where('can_receive_tickets', true)->get();
 
-        return view('dashboard.tickets.index', compact('openTickets', 'closedTickets', 'onHoldTickets', 'staff_members'));
+        return view('dashboard.tickets.index', compact('openTickets', 'closedTickets', 'onHoldTickets', 'staff_members', 'groups'));
     }
 
     public function staffIndex()
@@ -55,11 +59,23 @@ class TicketsController extends Controller
 
     public function startNewTicket(Request $request)
     {
-        $validatedData = $request->validate([
+        $messages = [
+            'title.required' => 'A ticket title is required.',
+            'title.max' => 'A ticket title may not be over 50 characters in length.',
+            'message.required' => 'A message is required.',
+            'message.min' => 'The message must be at least 25 characters long. You can see the length of your message below the Markdown editor.',
+            'staff_member.required' => 'You need to specify the recipient of the ticket.'
+        ];
+
+        $validator = Validator::make($request->all(), [
             'title' => 'required|max:50',
             'message' => 'required|min:25',
-            'staff_member' => 'required',
-        ]);
+            'staff_member' => 'required'
+        ], $messages);
+
+        if ($validator->fails()) {
+            return redirect()->back()->withInput()->with('error-modal', $validator->errors()->all());
+        }
 
         $ticket = new Ticket([
             'user_id' => Auth::user()->id,
@@ -100,7 +116,7 @@ class TicketsController extends Controller
 
             return redirect()->route('tickets.viewticket', $ticket->ticket_id)->with('success', 'Ticket closed!');
         } else {
-            return redirect()->route('tickets.viewticket', $ticket->ticket_id)->with('error', 'Ticket is already closed.');
+            return redirect()->route('tickets.viewticket', $ticket->ticket_id)->with('error-modal', 'Ticket '.$ticket->id.' is already closed.');
         }
     }
 

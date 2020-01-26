@@ -77,6 +77,7 @@ class DatabaseSeeder extends Seeder
         ]);
 
         DB::table('staff_member')->insert([
+            'group' => 'exec',
            'position' => 'FIR Chief',
            'group_id' => 1,
            'description' => 'Ensures that CZQO is running optimally. In charge of day to day operations',
@@ -85,6 +86,8 @@ class DatabaseSeeder extends Seeder
         ]);
 
         DB::table('staff_member')->insert([
+            'group' => 'exec',
+
             'position' => 'Deputy FIR Chief',
             'group_id' => 1,
             'description' => 'Assistant to the FIR Chief.',
@@ -93,6 +96,8 @@ class DatabaseSeeder extends Seeder
         ]);
 
         DB::table('staff_member')->insert([
+            'group' => 'exec',
+
             'position' => 'Chief Instructor',
             'group_id' => 1,
             'description' => 'Manages the CZQO training program, including the talented team of Gander instructors.',
@@ -101,6 +106,8 @@ class DatabaseSeeder extends Seeder
         ]);
 
         DB::table('staff_member')->insert([
+            'group' => 'exec',
+
             'position' => 'Events and Marketing Director',
             'group_id' => 1,
             'description' => 'Devises awesome events for the Gander Oceanic FIR',
@@ -109,6 +116,8 @@ class DatabaseSeeder extends Seeder
         ]);
 
         DB::table('staff_member')->insert([
+            'group' => 'exec',
+
             'position' => 'Facility Engineer',
             'group_id' => 1,
             'description' => 'Manages and develops sector files and the Euroscope package for Gander Oceanic.',

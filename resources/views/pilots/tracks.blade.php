@@ -10,13 +10,12 @@
 @section('content')
 <div class="container" style="margin-top: 20px;">
     <div class="row">
-        <div class="col-md-4">
+        <div class="col-md-3">
             @include('layouts.toolSidebar')
         </div>
-        <div class="col-md-8">
-        <h2>NAT Tracks</h2>
-        <br/>
-        <p>Please report any inaccurate data via the <a href="{{url('/dashboard/feedback')}}">feedback form.</a></p>
+        <div class="col-md-9">
+        <h1 class="font-weight-bold blue-text">NAT Tracks</h1>
+        <hr>
         <nav>
             <div class="nav nav-tabs" id="nav-tab" role="tablist">
                 <a class="nav-item nav-link active" id="nav-rl-tab" data-toggle="tab" href="#nav-rl" role="tab" aria-controls="nav-rl" aria-selected="true">Real World Tracks</a>

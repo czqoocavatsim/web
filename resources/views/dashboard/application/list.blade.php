@@ -45,10 +45,10 @@
                 @endforeach
             </div>
         @else
-            <div class="alert alert-info">
+            <div class="alert bg-czqo-blue-light">
                 You have no applications.
                 @if (Auth::user()->permissions == 0)
-                    <a href="{{route('application.start')}}" class="alert-link">
+                    <a href="{{route('application.start')}}" class="alert-link black-text">
                         Start one.
                     </a>
                 @endif

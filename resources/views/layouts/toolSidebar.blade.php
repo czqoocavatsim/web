@@ -1,6 +1,4 @@
-<h2>Pilot Tools</h2>
-<h5>Generators</h5>
-{{-- --}}
+<p>Generators</p>
 <div class="list-group">
     <a href="{{url('/pilots/oceanic-clearance')}}" class="list-group-item list-group-item-action {{ Request::is('pilots/oceanic-clearance') ? 'active' : '' }}">
         Oceanic Clearance
@@ -9,7 +7,7 @@
         Position Report
     </a>
 </div><br/>
-<h5>Resources</h5>
+<p>Resources</p>
 {{-- --}}
 <div class="list-group">
     <a href="https://www.vatsim.net/pilots/resources" target="_blank" class="list-group-item list-group-item-action {{ Request::is('pilots/vatsim-resources') ? 'active' : '' }}">

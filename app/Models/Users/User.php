@@ -115,6 +115,26 @@ class User extends Authenticatable
         return $difference;
     }
 
+    public function permissions()
+    {
+        switch ($this->permissions) {
+            case 0:
+                return "Guest";
+            break;
+            case 1:
+                return "Controller/Trainee";
+            break;
+            case 2:
+                return "Staff";
+            case 3:
+                return "Senior Staff";
+            case 4:
+                return "Administrator";
+            default:
+                return "Unknown";
+        }
+    }
+
     public function fullName($format)
     {
         //display name check
@@ -197,7 +217,7 @@ class User extends Authenticatable
             $discord = new DiscordClient(['token' => config('services.discord.token')]);
 
             $user = $discord->user->getUser(['user.id' => $this->discord_user_id]);
-            $url = 'https://cdn.discordapp.com/avatars/'.$user->id.'/'.$user->avatar.'.webp';
+            $url = 'https://cdn.discordapp.com/avatars/'.$user->id.'/'.$user->avatar.'.png';
             Log::info($url);
             return $url;
         });
@@ -237,6 +257,10 @@ class User extends Authenticatable
 
         if ($this->avatar_mode == 0) {
             return Cache::remember('users.'.$this->id.'.initialsavatar', 172800, function () {
+                //Dev issue
+                if (PHP_OS == "Darwin") {
+                    return;
+                }
                 $avatar = new InitialAvatar();
                 $image = $avatar
                     ->name($this->fullName('FL'))

@@ -13,7 +13,7 @@
         <hr>
         <div class="mb-2">
             <div class="btn-group btn-group-sm" role="group" aria-label="Basic example">
-                <button data-toggle="modal" data-target="#startTicketModal" type="button" class="btn btn-outline btn-sm">Start A Ticket</button>
+                <button data-toggle="modal" data-target="#startTicketModal" type="button" class="btn btn-outline btn-sm bg-czqo-blue-light">Start A Ticket</button>
             </div>
         </div>
         <ul class="nav nav-tabs" id="myTab" role="tablist">
@@ -104,8 +104,11 @@
                             @foreach ($staff_members as $s)
                             <option value="{{$s->shortform}}">{{$s->position}} - {{$s->user->fullName('FLC')}}</option>
                             @endforeach
+                            @foreach ($groups as $g)
+                            <option value="{{$g->shortform}}">{{$g->name}}</option>
+                            @endforeach
                         </select>
-                        <small>For general feedback, choose the FIR Chief.</small>
+                        <small>For general feedback, choose the Executive Team.</small>
                     </div>
                     <div class="form-group">
                         <label for="recipient-name" class="col-form-label">Title</label>

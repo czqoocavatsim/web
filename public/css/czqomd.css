@@ -29,6 +29,10 @@ body, html {
     padding-left: 15px !important;
 }
 
+.dropdown-menu .dropdown-item.active, .dropdown-item:active {
+    background: #0080c9;
+}
+
 .staff_img_container {
     height: 125px;
     width: 100%;
@@ -111,7 +115,7 @@ div.d-flex.flex-row > i {
 }
 
 .nav-item .active {
-    color:#2196f3!important;
+    color:#0080c9!important;
 }
 
 .dropdown-item.active {
@@ -119,7 +123,7 @@ div.d-flex.flex-row > i {
 }
 
 .dropdown-item:active {
-    color: #2196f3!important;
+    color: #0080c9!important;
     background: none!important;
 }
 
@@ -131,6 +135,60 @@ div.d-flex.flex-row > i {
 
 .btn .bg-czqo-blue-light:not([disabled]):not(.disabled):active {
     background-color: #cfeaff !important;
-    color: #2196f3 !important;
+    color: #0080c9 !important;
 }
 
+.btn, .btn:hover, .btn:active {
+    box-shadow: none !important;
+    border-radius: .45em !important;
+}
+
+.custom-file {
+    border: 1px solid #E0E0DC;
+    border-radius: .45em !important;
+}
+
+.custom-file-input:lang(en) ~ .custom-file-label::after {
+    border-left: 1px solid #E0E0DC;
+}
+
+.modal-content .modal-header h5.modal-title {
+    font-weight: 700 !important;
+    color: #0080c9!important;
+    font-size: 1.2rem;
+}
+
+.modal-dialog .modal-content {
+    border-radius: 0.5em !important;
+}
+
+.card {
+    border-radius: 0.7em !important;
+}
+
+.card .homepage-news .homepage-news-img {
+    border-top-left-radius: 0.7em;
+    border-top-right-radius: 0.7em;
+}
+
+.list-group-item.card-bottom-border {
+    border-bottom-left-radius: 0.7em;
+    border-bottom-right-radius: 0.7em;
+}
+
+.list-group-item.card-top-border {
+    border-top-left-radius: 0.7em;
+    border-top-right-radius: 0.7em;
+}
+
+.rounded-0 {
+    border-radius:0 !important;
+}
+
+.blue {
+    background-color: #0080c9 !important;
+}
+
+.blue-text {
+    color: #0080c9 !important;
+}

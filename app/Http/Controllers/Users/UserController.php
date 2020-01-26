@@ -59,7 +59,7 @@ class UserController extends Controller
     {
         $users = User::all()->sortBy('id');
 
-        return view('dashboard.users.list', compact('users'));
+        return view('dashboard.users.index', compact('users'));
     }
 
     public function viewUserProfile($id)
@@ -469,7 +469,7 @@ class UserController extends Controller
     {
         $discord = new DiscordClient(['token' => config('services.discord.token')]);
         $user = Auth::user();
-        if ($user->memberOfCzqoGuild()) {
+        if ($user->memberOfCzqoGuild() && !$user->staffProfile) {
             $discord->guild->removeGuildMember(['guild.id' => 479250337048297483, 'user.id' => $user->discord_user_id]);
             $discord->channel->createMessage(['channel.id' => 482860026831175690, 'content' => '<@'.$user->discord_user_id.'> ('.Auth::id().') has unlinked their account and has been kicked.']);
         }

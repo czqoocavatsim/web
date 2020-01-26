@@ -93,26 +93,26 @@
     <header>
         <nav id="czqoHeaderLight" class="navbar navbar-expand-lg navbar-dark blue p-0" style="min-height:59px;">
             <div class="container">
-                <a class="navbar-brand" href="{{route('index')}}"><img id="czqoHeaderImg" src="{{asset('img/Banner.png')}}" alt=""></a>
+                <a class="navbar-brand" href="{{route('index')}}"><img style="height: 40px; width:auto;" id="czqoHeaderImg" src="https://resources.czqo.vatcan.ca/pr/brand/banner/ZQO_BANNER_BLUE.png" alt=""></a>
                 <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
                         aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
                 </button>
                 <div class="collapse navbar-collapse" id="navbarSupportedContent">
                     <ul class="navbar-nav mr-auto">
-                        <li class="nav-item active">
-                            <a class="nav-link {{ Request::is('roster/*') || Request::is('roster') ? 'active' : '' }}" href="{{route('roster.public')}}">
+                        <li class="nav-item {{ Request::is('roster/*') || Request::is('roster') ? 'active' : '' }}">
+                            <a class="nav-link" href="{{route('roster.public')}}">
                                 Roster
                             </a>
                         </li>
                         {{-- <li class="nav-item">
                             <a href="{{route('controllerbookings.public')}}" class="nav-link {{ Request::is('bookings/*') || Request::is('bookings') ? 'active' : '' }}">Bookings</a>
                         </li> --}}
-                        <li class="nav-item">
-                            <a href="{{route('events.index')}}" class="nav-link {{ Request::is('events/*') || Request::is('events') ? 'active' : '' }}">Events</a>
+                        <li class="nav-item {{ Request::is('events/*') || Request::is('events') ? 'active' : '' }}">
+                            <a href="{{route('events.index')}}" class="nav-link">Events</a>
                         </li>
-                        <li class="nav-item dropdown">
-                            <a class="nav-link dropdown-toggle {{ Request::is('dashboard/application') || Request::is('atcresources') ? 'active' : '' }}" style="cursor:pointer" id="dropdown01" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">ATC</a>
+                        <li class="nav-item dropdown {{ Request::is('dashboard/application') || Request::is('dashboard/application/*') || Request::is('atcresources') ? 'active' : '' }}">
+                            <a class="nav-link dropdown-toggle" style="cursor:pointer" id="dropdown01" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">ATC</a>
                             <div class="dropdown-menu" aria-labelledby="dropdown01">
                                 @if (Auth::check() && Auth::user()->permissions >= 1)
                                     <a class="dropdown-item {{ Request::is('dashboard/application/list') ? 'active white-text' : '' }}" href="{{url ('/dashboard/application/list')}}">Your Applications</a>
@@ -122,8 +122,8 @@
                                 <a class="dropdown-item {{ Request::is('atcresources') ? 'active white-text' : '' }}" href="{{route('atcresources.index')}}">ATC Resources</a>
                             </div>
                         </li>
-                        <li class="nav-item dropdown">
-                            <a class="nav-link dropdown-toggle {{ Request::is('pilots/oceanic-clearance') || Request::is('pilots/position-report') || Request::is('pilots/vatsim-resources') || Request::is('pilots/tutorial') || Request::is('pilots/tracks') ? 'active' : '' }}" style="cursor:pointer" id="dropdown01" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Pilots</a>
+                        <li class="nav-item dropdown {{ Request::is('pilots/oceanic-clearance') || Request::is('pilots/position-report') || Request::is('pilots/vatsim-resources') || Request::is('pilots/tutorial') || Request::is('pilots/tracks') ? 'active' : '' }}">
+                            <a class="nav-link dropdown-toggle" style="cursor:pointer" id="dropdown01" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Pilots</a>
                             <div class="dropdown-menu" aria-labelledby="dropdown01">
                                 <a class="dropdown-item {{ Request::is('pilots/oceanic-clearance') ? 'active white-text' : '' }}" href="{{url('/pilots/oceanic-clearance')}}">Oceanic Clearance Generator</a>
                                 <a class="dropdown-item {{ Request::is('pilots/position-report') ? 'active white-text' : '' }}" href="{{url('/pilots/position-report')}}">Position Report Generator</a>
@@ -132,11 +132,11 @@
                                 <a class="dropdown-item" href="{{url('/map')}}">Map</a>
                             </div>
                         </li>
-                        <li class="nav-item">
-                            <a class="nav-link {{ Request::is('staff') ? 'active' : '' }}" href="{{url ('/staff')}}" aria-expanded="false">Staff</a>
+                        <li class="nav-item  {{ Request::is('staff') ? 'active' : '' }}">
+                            <a class="nav-link" href="{{url ('/staff')}}" aria-expanded="false">Staff</a>
                         </li>
-                        <li class="nav-item dropdown">
-                            <a class="nav-link dropdown-toggle {{ Request::is('policies') || Request::is('meetingminutes') ? 'active' : ''}}" style="cursor:pointer" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Publications</a>
+                        <li class="nav-item dropdown {{ Request::is('policies') || Request::is('meetingminutes') ? 'active' : ''}}">
+                            <a class="nav-link dropdown-toggle" style="cursor:pointer" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Publications</a>
                             <div class="dropdown-menu" aria-labelledby="dropdown01">
                                 <a class="dropdown-item {{ Request::is('policies') ? 'active white-text' : '' }}" href="{{route('policies')}}">Policies</a>
                                 <a class="dropdown-item {{ Request::is('meetingminutes') ? 'active white-text' : '' }}" href="{{route('meetingminutes')}}">Meeting Minutes</a>
@@ -146,8 +146,8 @@
                     </ul>
                     <ul class="navbar-nav ml-auto nav-flex-icons">
                         @unless (Auth::check())
-                        <li class="nav-item">
-                            <a href="{{route('login')}}" class="nav-link waves-effect waves-light">
+                        <li class="nav-item d-flex align-items-center">
+                            <a href="{{route('auth.sso.login')}}" class="nav-link waves-effect waves-light">
                                 <i class="fas fa-key"></i>&nbsp;Login
                             </a>
                         </li>
@@ -157,16 +157,31 @@
                             <a class="nav-link dropdown-toggle" id="navbarDropdownMenuLink-333" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                 <img src="{{Auth::user()->avatar()}}" style="height: 27px; width: 27px; margin-right: 7px; margin-bottom: 3px; border-radius: 50%;">&nbsp;{{Auth::user()->fullName("FLC")}}
                             </a>
-                            <div class="dropdown-menu dropdown-menu-right dropdown-default" aria-labelledby="navbarDropdownMenuLink-333">
+                            <div class="dropdown-menu dropdown-menu-right dropdown-default py-0" aria-labelledby="navbarDropdownMenuLink-333">
                                 <a class="dropdown-item {{ Request::is('dashboard') || Request::is('dashboard/*') ? 'active white-text' : '' }}" href="{{route('dashboard.index')}}">
                                     <i class="fa fa-tachometer-alt mr-2"></i>&nbsp;Dashboard
                                 </a>
-                                <a class="dropdown-item red-text" href="{{route('logout')}}">
+                                <a class="dropdown-item red-text" href="{{route('auth.logout')}}">
                                     <i class="fa fa-key mr-2"></i>&nbsp;Logout
                                 </a>
                             </div>
                         </li>
                         @endauth
+                        <li class="nav-item d-flex align-items-center">
+                            <a href="https://twitter.com/czqofirvatsim" class="nav-link waves-effect waves-light">
+                                <i style="font-size: 1.7em;" class="fab fa-twitter"></i>
+                            </a>
+                        </li>
+                        <li class="nav-item d-flex align-items-center">
+                            <a href="https://www.facebook.com/czqofir" class="nav-link waves-effect waves-light">
+                                <i style="font-size: 1.7em;" class="fab fa-facebook"></i>
+                            </a>
+                        </li>
+                        <li class="nav-item d-flex align-items-center">
+                            <a class="nav-link waves-effect waves-light" data-toggle="modal" data-target="#discordTopModal">
+                                <i style="height: 22px; font-size: 1.7em;width: 28px;padding-left: 5px;padding-top: 2px;" class="fab fa-discord"></i>
+                            </a>
+                        </li>
                     </ul>
                 </div>
             </div>
@@ -294,6 +309,49 @@
         </div>
     </div>
     <!-- End contact us modal-->
+    @if (\Session::has('error-modal'))
+    <!-- Error modal -->
+    <div class="modal fade" id="errorModal" tabindex="-1" role="dialog" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLongTitle"><span class="font-weight-bold red-text"><i class="fas fa-exclamation-circle"></i> An error occured...</span></h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    {{\Session::get('error-modal')}}
+                    <div class="alert black-text bg-czqo-blue-light mt-4">
+                        If you believe this is a mistake, please create a <a target="_blank" class="black-text" href="{{route('tickets.index')}}">support ticket.</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script>
+    $("#errorModal").modal();
+    </script>
+    <!-- End error modal -->
+    @endif
+    <!-- Start Discord (top nav) modal -->
+    <div class="modal fade" id="discordTopModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLongTitle">Join the CZQO Discord</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <img style="height: 50px;" src="{{asset('/img/discord/czqoplusdiscord.png')}}" class="img-fluid mb-2" alt="">
+                    <p>To link your Discord account and join our Discord community, please link your account at the <a href="{{route('dashboard.index')}}">dashboard.</a></p>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- End Discord (top nav) modal -->
     <script type="text/javascript">
         Dropzone.options.dropzone =
             {
