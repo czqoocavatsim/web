@@ -9,6 +9,9 @@ use Illuminate\Foundation\Auth\AuthenticatesUsers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Vatsim\OAuth\SSO;
+use Illuminate\Support\Str;
+use \GuzzleHttp\Client;
+use GuzzleHttp\Exception\ClientException;
 
 /**
  * Class LoginController.
@@ -35,7 +38,7 @@ class LoginController extends Controller
      *
      * @throws \Vatsim\OAuth\SSOException
      */
-    public function login()
+    public function ssoLogin()
     {
         $this->sso->login(config('sso.return'), function ($key, $secret, $url) {
             session()->put('key', $key);
@@ -55,7 +58,7 @@ class LoginController extends Controller
      */
     public $newUser;
 
-    public function validateLogin(Request $get)
+    public function validateSsoLogin(Request $get)
     {
         $this->sso->validate(session('key'), session('secret'), $get->input('oauth_verifier'), function ($user, $request) {
             session()->forget('key');
@@ -98,5 +101,65 @@ class LoginController extends Controller
         Auth::logout();
 
         return redirect('/');
+    }
+
+    /*
+    Connect integration
+    */
+    public function connectLogin()
+    {
+        session()->forget('state');
+        session()->forget('token');
+        session()->put('state', $state = Str::random(40));
+
+        $query = http_build_query([
+            'client_id' => env('CONNECT_CLIENT_ID'),
+            'redirect_uri' => env('CONNECT_REDIRECT_URI'),
+            'response_type' => 'code',
+            'scope' => env('CONNECT_SCOPE'),
+            'state' => $state,
+        ]);
+
+        return redirect("https://auth.vatsim.net/oauth/authorize?".$query);
+    }
+
+    public function validateConnectLogin(Request $request)
+    {
+        $http = new Client;
+        try {
+        $response = $http->post('https://auth.vatsim.net/oauth/token', [
+            'form_params' => [
+                'grant_type' => 'authorization_code',
+                'client_id' => env('CONNECT_CLIENT_ID'),
+                'client_secret' => env('CONNECT_SECRET'),
+                'redirect_uri' => env('CONNECT_REDIRECT_URI'),
+                'code' => $request->code,
+            ],
+        ]);
+        } catch (ClientException $e){
+        return view('sso.exception', ['message' => $e->getResponse()->getBody()]);
+        }
+        session()->put('token', json_decode((string) $response->getBody(), true));
+        try{
+        $response = (new \GuzzleHttp\Client)->get('https://auth.vatsim.net/api/user', [
+            'headers' => [
+                'Accept' => 'application/json',
+                'Authorization' => 'Bearer '.session()->get('token.access_token')
+            ]
+        ]);
+        } catch(ClientException $e){
+        return view('sso.exception', ['message' => $e->getResponse()->getBody()]);
+        }
+        $response = json_decode($response->getBody());
+        dd($response);
+        /** Harrison to ensure a CID is always returned
+         */
+        if(!isset($response->data->cid)){
+        abort(500);
+        }
+        $user = User::find($response->data->cid);
+        dd($user);
+
+        return redirect()->route('home');
     }
 }

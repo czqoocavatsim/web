@@ -137,7 +137,7 @@
                 <h3 class="blue-text">Quick Links</h3>
                 <ol class="list-unstyled">
                     <li class="py-1">
-                        <a href="javascript:alert('To join our Discord, please log-in, and link your Discord account in the dashboard.')" class="btn btn-block btn-discord align-content-center"><i class="fab fa-discord fa-2x" style="vertical-align:middle;"></i>&nbsp;&nbsp;Join Our Discord</a>
+                        <a data-toggle="modal" data-target="#discordTopModal" class="btn btn-block btn-discord align-content-center"><i class="fab fa-discord fa-2x" style="vertical-align:middle;"></i>&nbsp;&nbsp;Join Our Discord</a>
                     </li>
                     <li class="py-1">
                         <a href="{{url('/pilots')}}" class="btn btn-block btn-light">Pilot Resources</a>

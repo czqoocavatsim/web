@@ -93,7 +93,7 @@
     <header>
         <nav id="czqoHeaderLight" class="navbar navbar-expand-lg navbar-dark blue p-0" style="min-height:59px;">
             <div class="container">
-                <a class="navbar-brand" href="{{route('index')}}"><img style="height: 40px; width:auto;" id="czqoHeaderImg" src="https://media.discordapp.net/attachments/557500419614703617/670470035961282560/unknown.png" alt=""></a>
+                <a class="navbar-brand" href="{{route('index')}}"><img style="height: 40px; width:auto;" id="czqoHeaderImg" src="https://resources.czqo.vatcan.ca/pr/brand/banner/ZQO_BANNER_BLUE.png" alt=""></a>
                 <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
                         aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
@@ -146,8 +146,8 @@
                     </ul>
                     <ul class="navbar-nav ml-auto nav-flex-icons">
                         @unless (Auth::check())
-                        <li class="nav-item">
-                            <a href="{{route('login')}}" class="nav-link waves-effect waves-light">
+                        <li class="nav-item d-flex align-items-center">
+                            <a href="{{route('auth.sso.login')}}" class="nav-link waves-effect waves-light">
                                 <i class="fas fa-key"></i>&nbsp;Login
                             </a>
                         </li>
@@ -161,12 +161,27 @@
                                 <a class="dropdown-item {{ Request::is('dashboard') || Request::is('dashboard/*') ? 'active white-text' : '' }}" href="{{route('dashboard.index')}}">
                                     <i class="fa fa-tachometer-alt mr-2"></i>&nbsp;Dashboard
                                 </a>
-                                <a class="dropdown-item red-text" href="{{route('logout')}}">
+                                <a class="dropdown-item red-text" href="{{route('auth.logout')}}">
                                     <i class="fa fa-key mr-2"></i>&nbsp;Logout
                                 </a>
                             </div>
                         </li>
                         @endauth
+                        <li class="nav-item d-flex align-items-center">
+                            <a href="https://twitter.com/czqofirvatsim" class="nav-link waves-effect waves-light">
+                                <i style="font-size: 1.7em;" class="fab fa-twitter"></i>
+                            </a>
+                        </li>
+                        <li class="nav-item d-flex align-items-center">
+                            <a href="https://www.facebook.com/czqofir" class="nav-link waves-effect waves-light">
+                                <i style="font-size: 1.7em;" class="fab fa-facebook"></i>
+                            </a>
+                        </li>
+                        <li class="nav-item d-flex align-items-center">
+                            <a class="nav-link waves-effect waves-light" data-toggle="modal" data-target="#discordTopModal">
+                                <i style="height: 22px; font-size: 1.7em;width: 28px;padding-left: 5px;padding-top: 2px;" class="fab fa-discord"></i>
+                            </a>
+                        </li>
                     </ul>
                 </div>
             </div>
@@ -319,6 +334,24 @@
     </script>
     <!-- End error modal -->
     @endif
+    <!-- Start Discord (top nav) modal -->
+    <div class="modal fade" id="discordTopModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLongTitle">Join the CZQO Discord</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <img style="height: 50px;" src="{{asset('/img/discord/czqoplusdiscord.png')}}" class="img-fluid mb-2" alt="">
+                    <p>To link your Discord account and join our Discord community, please link your account at the <a href="{{route('dashboard.index')}}">dashboard.</a></p>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- End Discord (top nav) modal -->
     <script type="text/javascript">
         Dropzone.options.dropzone =
             {

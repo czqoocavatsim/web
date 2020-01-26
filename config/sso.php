@@ -66,7 +66,7 @@ O0gQ0RDS3gD8C5XHvy5vryYjUOB10rUn9A2xLQw4sqKv2suHvIhc0Eit
      * The URL users will be redirected to after they log in, this should
      * be on the same server as the request
      */
-    'return' => env('SSO_RETURN', 'http://localhost:8000/validate'),
+    'return' => env('SSO_RETURN', 'http://localhost:8000/auth/sso/validate'),
 
     'additionalConfig' => [
         'allow_suspended' => false,
