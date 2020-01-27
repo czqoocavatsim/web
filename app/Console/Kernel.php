@@ -104,6 +104,12 @@ class Kernel extends ConsoleKernel
                                 $log->emails_sent++;
                                 $log->save();
                             }
+                        } else if (!RosterMember::where('cid', $log->cid)->first()->active) { // inactive
+                            if ($log->emails_sent < 3) {
+                                // todo: send me email pls
+                                $log->emails_sent++;
+                                $log->save();
+                            }
                         }
                     
                         $matchFound = true;
@@ -145,12 +151,25 @@ class Kernel extends ConsoleKernel
                                 $sessionLog->emails_sent++;
                                 $sessionLog->save();
                             }
+                        } else if (!$user->active) { // inactive
+                            if ($sessionLog->emails_sent < 3) {
+                                // todo: send me email pls
+                                $sessionLog->emails_sent++;
+                                $sessionLog->save();
+                            }
                         }
                     } else { // Send unauthorised notification to FIR Chief
                         //Mail::to(CoreSettings::where('id', 1)->firstOrFail()->emailfirchief()->cc(CoreSettings::where('id', 1)->firstOrFail()->emaildepfirchief)->send(new UnauthorisedConnection($oc));
                         // todo: send me email pls
                         if ($user) $sessionLog->roster_member_id = $user->id;
-                        if ($sessionLog->emails_sent < 3) {
+                        if (!$user->active) { // inactive
+                            if ($log->emails_sent < 3) {
+                                // todo: send me email pls
+                                $log->emails_sent++;
+                                $log->save();
+                            }
+                        } else if ($sessionLog->emails_sent < 3) {
+                            // todo: send me email
                             $sessionLog->emails_sent++;
                             $sessionLog->save();
                         }
@@ -196,18 +215,34 @@ class Kernel extends ConsoleKernel
                     $roster_member = RosterMember::where('cid', $log->cid)->first();
                     
                     // check it exists
-                    if ($roster_member->status == 'certified' || $roster_member->status == 'instructor') {
+                    if ($roster_member) {
+                        if ($roster_member->status == 'certified' || $roster_member->status == 'instructor') {
+                            if($roster_member->active) {
+                                // Add hours
+                                $roster_member->currency = $roster_member->currency + $difference;
 
-                        // Add hours
-                        $roster_member->currency = $roster_member->currency + $difference;
-
-                        // Save roster member
-                        $roster_member->save();
+                                // Save roster member
+                                $roster_member->save();
+                            }
+                        }
                     }
                 }
             }
         })->everyMinute();
+
+        // Removal of members (run every day but check whether the day is the one in the DB) todo: finish this at some point
+        /*$schedule->call(function () {
+            $today = Carbon::today();
+
+            if ($today->day() == MemberRemovalTime::where('day', $today-day()) && $today->month() == MemberRemovalTime::where('day', $today->month())) {
+                $this->inactivityAndRemovalSetter();
+            }
+         })->dailyAt('00:01');*/
     }
+
+    /*private function inactivityAndRemovalSetter() { todo: finish this at some point
+
+    }*/
 
     /**
      * Register the commands for the application.
