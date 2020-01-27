@@ -44,6 +44,7 @@ class Kernel extends ConsoleKernel
             // Getters
             $positions = MonitoredPosition::all();
             $controllers = $vatsim->getControllers();
+            $staffOnly = false;
 
             // Scan controller list for callsign relationships
             foreach ($controllers as $controller) {
@@ -52,11 +53,17 @@ class Kernel extends ConsoleKernel
                     $callsign = false;
                     if (!strpos($position->identifier, '_')) { // If it is a prefix
                         if (substr($controller['callsign'], 0, strlen($position->identifier)) == $position->identifier) {
+                            if ($position->staff_only) {
+                                $staffOnly = true;
+                            }
                             array_push($onlineControllers, $controller); // Add to array if callsign starts with prefix
                         }
                     }
                     else { // If it's a callsign
-                        if ($controller['callsign'] == $position->identifier) {
+                        if (($controller['callsign'] == $position->identifier)) {
+                            if ($position->staff_only) {
+                                $staffOnly = true;
+                            }
                             array_push($onlineControllers, $controller); // Add if the callsign is the same as the position identifier
                         }
                     }
@@ -73,7 +80,7 @@ class Kernel extends ConsoleKernel
                 foreach ($sessionLogs as $log) {
                     // Parse logon time lol
                     // Change this to the Y-m-d H:i:s format, as I changed the column type to 'dateTime'
-                    $ocLogon = substr($oc['time_logon'],0,4).'-'
+                    $ocLogon = substr($oc['time_logon'], 0, 4).'-'
                         .substr($oc['time_logon'], 4, 2).'-'
                         .substr($oc['time_logon'], 6, 2).' '
                         .substr($oc['time_logon'], 8, 2).':'
@@ -82,11 +89,23 @@ class Kernel extends ConsoleKernel
 
                     // If a match is found
                     if ($ocLogon == $log->session_start) {
-                        if (!$log->roster_member_id) { // Check if they're naughty
-                            if ($log->email_sent < 2) { // todo: send me email
-                                Mail::to(CoreSettings::where('id', 1)->firstOrFail()->emailfirchief)->cc(CoreSettings::where('id', 1)->firstOrFail()->emaildepfirchief)->send(new UnauthorisedConnection($oc));
+                        if (!$log->roster_member_id || RosterMember::where('cid', $log->cid)->first()->status == 'training' || RosterMember::where('cid', $log->cid)->first()->status == 'not_certified') { // Check if they're naughty
+                            if ($log->emails_sent < 3) {
+                                //Mail::to(CoreSettings::where('id', 1)->firstOrFail()->emailfirchief()->cc(CoreSettings::where('id', 1)->firstOrFail()->emaildepfirchief)->send(new UnauthorisedConnection($oc));
+                                // todo: send me email pls
+                                // todo: I still want emails for students in training, even when they are in training session. Just make it a notification email, 
+                                // like 'User xxxxxx with status training has logged on XXX_XXX' rather than an 'unauthorised' email
+                                $log->emails_sent++;
+                                $log->save();
+                            }
+                        } else if ($staffOnly && (RosterMember::where('cid', $log->cid)->first()->status != 'instructor')) {
+                            if ($log->emails_sent < 3) {
+                                // todo: send me email pls
+                                $log->emails_sent++;
+                                $log->save();
                             }
                         }
+                    
                         $matchFound = true;
                     } else {
                         continue; // No match was found
@@ -96,12 +115,19 @@ class Kernel extends ConsoleKernel
                 // Create log variable here so it's within appropriate scope
                 $sessionLog = null;
 
-                error_log($ocLogon);
-
                 // If no match was found
                 if (!$matchFound) {
+
+                    // Parse logon time again lol
+                    // Change this to the Y-m-d H:i:s format, as I changed the column type to 'dateTime'
+                    $ocLogon = substr($oc['time_logon'], 0, 4).'-'
+                        .substr($oc['time_logon'], 4, 2).'-'
+                        .substr($oc['time_logon'], 6, 2).' '
+                        .substr($oc['time_logon'], 8, 2).':'
+                        .substr($oc['time_logon'], 10, 2).':'
+                        .substr($oc['time_logon'], 12, 2); 
+
                     // Build new session log
-                    error_log($ocLogon);
                     $sessionLog = new SessionLog();
                     $sessionLog->cid = $oc['cid'];
                     $sessionLog->session_start = $ocLogon;
@@ -111,10 +137,23 @@ class Kernel extends ConsoleKernel
 
                     // Check the user's CID against the roster
                     $user = RosterMember::where('cid', $oc['cid'])->first();
-                    if ($user && ($user->status != 'Training')) { // Add if on roster, don't if not (big problem lmao)
+                    if ($user && $user->status != 'training' && $user->status != 'not_certified') { // Add if on roster, don't if not (big problem lmao)
                         $sessionLog->roster_member_id = $user->id;
+                        if ($staffOnly && ($user->status != 'instructor')) {
+                            // todo: send me email pls
+                            if ($sessionLog->emails_sent < 3) {
+                                $sessionLog->emails_sent++;
+                                $sessionLog->save();
+                            }
+                        }
                     } else { // Send unauthorised notification to FIR Chief
-                        Mail::to(CoreSettings::where('id', 1)->firstOrFail()->emailfirchief)->cc(CoreSettings::where('id', 1)->firstOrFail()->emaildepfirchief)->send(new UnauthorisedConnection($oc));
+                        //Mail::to(CoreSettings::where('id', 1)->firstOrFail()->emailfirchief()->cc(CoreSettings::where('id', 1)->firstOrFail()->emaildepfirchief)->send(new UnauthorisedConnection($oc));
+                        // todo: send me email pls
+                        if ($user) $sessionLog->roster_member_id = $user->id;
+                        if ($sessionLog->emails_sent < 3) {
+                            $sessionLog->emails_sent++;
+                            $sessionLog->save();
+                        }
                     }
 
                     // Add session
@@ -136,26 +175,35 @@ class Kernel extends ConsoleKernel
 
                 // Check if the controller has indeed logged off
                 if (!$stillOnline) {
+                    
                     // Start and end values parsed so Carbon can understand them
-                    $start = Carbon::createFromFormat($log->session_start);
+                    $start = Carbon::create($log->session_start);
                     $end = Carbon::now();
 
-                    // Calculate difference (difference is the total hours gained)
-                    $difference = $start->floatDiffInHours($end);
+                    // Calculate decimal difference (difference is the total hours gained) ie. 30 minutes = 0.5
+                    $difference = $start->floatDiffInMinutes($end) / 60;
 
                     // Populate remaining columns
                     $log->session_end = $end;
                     $log->duration = $difference;
+                    
+                    error_log($difference);
 
                     // Save the log
                     $log->save();
 
                     // Add hours
-                    $roster_member = RosterMember::where('cid', $oc['cid'])->first();
-                    $roster_member->currency = $roster_member->currency + $difference;
+                    $roster_member = RosterMember::where('cid', $log->cid)->first();
+                    
+                    // check it exists
+                    if ($roster_member->status == 'certified' || $roster_member->status == 'instructor') {
 
-                    // Save roster member
-                    $roster_member->save();
+                        // Add hours
+                        $roster_member->currency = $roster_member->currency + $difference;
+
+                        // Save roster member
+                        $roster_member->save();
+                    }
                 }
             }
         })->everyMinute();
