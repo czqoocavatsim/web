@@ -116,7 +116,7 @@ class LoginController extends Controller
             'client_id' => env('CONNECT_CLIENT_ID'),
             'redirect_uri' => env('CONNECT_REDIRECT_URI'),
             'response_type' => 'code',
-            'scope' => env('CONNECT_SCOPE'),
+            'scope' => 'full_name vatsim_details email',
             'state' => $state,
         ]);
 
@@ -125,6 +125,7 @@ class LoginController extends Controller
 
     public function validateConnectLogin(Request $request)
     {
+        //Written by Harrison Scott
         $http = new Client;
         try {
         $response = $http->post('https://auth.vatsim.net/oauth/token', [
@@ -137,7 +138,7 @@ class LoginController extends Controller
             ],
         ]);
         } catch (ClientException $e){
-        return view('sso.exception', ['message' => $e->getResponse()->getBody()]);
+            abort(500, $e->getResponse()->getBody());
         }
         session()->put('token', json_decode((string) $response->getBody(), true));
         try{
@@ -148,18 +149,31 @@ class LoginController extends Controller
             ]
         ]);
         } catch(ClientException $e){
-        return view('sso.exception', ['message' => $e->getResponse()->getBody()]);
+            abort(500, $e->getResponse()->getBody());
         }
         $response = json_decode($response->getBody());
-        dd($response);
-        /** Harrison to ensure a CID is always returned
-         */
         if(!isset($response->data->cid)){
-        abort(500);
+        abort(500, 'No CID returned');
         }
+        User::updateOrCreate(['id' => $response->data->cid], [
+            'email' => $response->data->personal->email,
+            'fname' => utf8_decode($response->data->personal->name_first),
+            'lname' => $response->data->personal->name_last,
+            'rating_id' => $response->data->vatsim->rating->id,
+            'rating_short' => $response->data->vatsim->rating->short,
+            'rating_long' => $response->data->vatsim->rating->long,
+            'rating_GRP' => $response->data->vatsim->rating->long,
+            'reg_date' => null,
+            'region_code' => $response->data->vatsim->region->id,
+            'region_name' => $response->data->vatsim->region->name,
+            'division_code' => $response->data->vatsim->division->id,
+            'division_name' => $response->data->vatsim->division->name,
+            'display_fname' => utf8_decode($response->data->personal->name_first),
+            'used_connect' => true
+        ]);
         $user = User::find($response->data->cid);
-        dd($user);
+        Auth::login($user, true);
 
-        return redirect()->route('home');
+        return redirect('/dashboard')->with('success', 'Logged in!');
     }
 }
