@@ -51,7 +51,7 @@
         <div class="row">
             <div class="col-md-6">
                 <h3>Welcome to Gander Oceanic!</h3>
-                <p>With our team of talented controllers we operate the Gander FIR in the north-western atlantic. For years we have prided ourselves in providing the coolest, calmest and most collected oceanic services to pilots flying all across the North Atlantic. From assisting new pilots in their oceanic endeavours, to providing services in Cross the Pond twice a year, this is where the magic happens! I extend my warmest welcome to visitors and controllers, young and old and hope that you enjoy the bountiful resources on the site and the incredible services by our oceanic controllers. Please contact us if you have any queries, questions or concerns!</p>
+                <p>With a diverse team of skilled and experienced controllers we operate the Gander Oceanic FIR in the North-Western Atlantic Ocean. We pride ourselves in providing the coolest, calmest and most collected Oceanic service on the VATSIM network to pilots traversing the North Atlantic Ocean. Our staff extends their warmest welcome to you and whether you are young, old, experienced or new, we are bound to have something for you available on our website. Please contact us if you have any questions, or even if you just want to say hi!</p>
                 <h5><b>Andrew Ogden, FIR Chief</b></h5>
             </div>
             <div class="col-md-6">
