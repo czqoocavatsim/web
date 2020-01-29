@@ -7,16 +7,6 @@
 
 @if(isset(${Config::get('maintenancemode.inject.prefix').'Enabled'}) &&
     ${Config::get('maintenancemode.inject.prefix').'Enabled'} == true)
-
-    @if(Config::get('maintenancemode.notification-styles', true))
-        <!-- Font Awesome -->
-        <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.2/css/all.css">
-        <!-- Bootstrap core CSS -->
-        <link href="https://stackpath.bootstrapcdn.com/bootswatch/4.1.3/materia/bootstrap.min.css" rel="stylesheet" integrity="sha384-5bFGNjwF8onKXzNbIcKR8ABhxicw+SC1sjTh6vhSbIbtVgUuVTm2qBZ4AaHc7Xr9" crossorigin="anonymous">        <!-- Material Design Bootstrap -->
-        <!-- Material Design Bootstrap -->
-        <link href="https://cdnjs.cloudflare.com/ajax/libs/mdbootstrap/4.8.11/css/mdb.min.css" rel="stylesheet">
-    @endif
-
     <div class="maintenance-mode-alert alert red mb-0 d-flex flex-row" style="border-radius:0;" id="maintenance-mode-alert" role="alert">
         <div class="container">
             <strong>@lang('maintenancemode::defaults.title'):&nbsp;</strong>

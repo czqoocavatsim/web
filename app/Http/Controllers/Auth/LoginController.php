@@ -113,8 +113,8 @@ class LoginController extends Controller
         session()->put('state', $state = Str::random(40));
 
         $query = http_build_query([
-            'client_id' => env('CONNECT_CLIENT_ID'),
-            'redirect_uri' => env('CONNECT_REDIRECT_URI'),
+            'client_id' => config('connect.client_id'),
+            'redirect_uri' => config('connect.redirect'),
             'response_type' => 'code',
             'scope' => 'full_name vatsim_details email',
             'state' => $state,
@@ -131,9 +131,9 @@ class LoginController extends Controller
         $response = $http->post('https://auth.vatsim.net/oauth/token', [
             'form_params' => [
                 'grant_type' => 'authorization_code',
-                'client_id' => env('CONNECT_CLIENT_ID'),
-                'client_secret' => env('CONNECT_SECRET'),
-                'redirect_uri' => env('CONNECT_REDIRECT_URI'),
+                'client_id' => config('connect.client_id'),
+                'client_secret' => config('connect.secret'),
+                'redirect_uri' => config('connect.redirect'),
                 'code' => $request->code,
             ],
         ]);

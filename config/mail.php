@@ -60,11 +60,6 @@ return [
         'name' => env('MAIL_FROM_NAME', 'Gander Oceanic VATSIM'),
     ],
 
-    'to' => [
-        'address' => 'andrewogden@bigpond.com',
-        'name' => 'Andrew Ogden'
-    ],
-
     /*
     |--------------------------------------------------------------------------
     | E-Mail Encryption Protocol
