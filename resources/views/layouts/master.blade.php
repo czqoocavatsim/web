@@ -173,7 +173,7 @@
                             </a>
                         </li>
                         <li class="nav-item d-flex align-items-center">
-                            <a href="https://www.facebook.com/czqofir" class="nav-link waves-effect waves-light">
+                            <a href="https://www.facebook.com/czqofirvatsim" class="nav-link waves-effect waves-light">
                                 <i style="font-size: 1.7em;" class="fab fa-facebook"></i>
                             </a>
                         </li>
