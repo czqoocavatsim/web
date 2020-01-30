@@ -9,6 +9,7 @@ use App\Models\Events\Event;
 use App\Models\Settings\AuditLogEntry;
 use Illuminate\Http\Request;
 use Auth;
+use Carbon\Carbon;
 
 class EventController extends Controller
 {
@@ -17,8 +18,15 @@ class EventController extends Controller
     */
     public function index()
     {
-        $events = Event::all()->sortByDesc('start_timestamp');
-        return view('events.index', compact('events'));
+        $events = Event::cursor()->filter(function ($event) {
+            return !$event->event_in_past();
+        })->sortByDesc('start_timestamp');
+
+        $pastEvents = Event::cursor()->filter(function ($event) {
+            return $event->event_in_past();
+        })->sortByDesc('start_timestamp');
+
+        return view('events.index', compact('events', 'pastEvents'));
     }
 
     public function viewEvent($slug)

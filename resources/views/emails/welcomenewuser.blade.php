@@ -1,13 +1,11 @@
 @extends('layouts.email')
 @section('to-line', 'Hi '. $user->fullName('FLC') . '!')
 @section('message-content')
-Welcome to Gander Oceanic, we're super excited to have you on board!
-<br/>
-
-We have tonnes of resources on our website for pilots and controllers alike, feel free to check them out! We look forward to seeing you in our skies very soon :)
+<p>Welcome to Gander Oceanic, we're very excited that you're here!</p>
+<p>On our site you can find many resources pertaining to Oceanic operations in the North Atlantic for both pilots and controllers. Please don't hesitate to contact me should you have any questions about us!</p>
 @endsection
 @section('from-line')
-Kind regards,<br/>
+Cheers,<br/>
 <b>Andrew Ogden</b><br>
 <b>FIR Chief</b>
 @endsection

@@ -185,11 +185,12 @@
             @endif
         </div>
         <div class="col">
-            <h4>CZQO Certification & Training</h4>
+            <h4>Certification & Training</h4>
             <div class="card" data-step="7" data-intro="Here you can view your certification status within CZQO.">
                 <div class="card-body">
                     <h5 class="card-title">Certification status</h5>
-                    <h5 class="card-text">
+                    <div class="card-text">
+                        <div class="d-flex flex-row justify-content-left">
                         @if ($certification == "certified")
                             <h3>
                             <span class="badge  badge-success rounded shadow-none">
@@ -228,22 +229,38 @@
                         @endif
                         @if ($active == 0)
                             <h3>
-                            <span class="badge badge-danger rounded shadow-none">
+                            <span class="badge ml-2 badge-danger rounded shadow-none">
                                 <i class="fa fa-times"></i>&nbsp;
                                 Inactive
                             </span>
                             </h3>
                         @elseif ($active == 1)
                             <h3>
-                            <span class="badge badge-success rounded shadow-none">
+                            <span class="badge ml-2 badge-success rounded shadow-none">
                                 <i class="fa fa-check"></i>&nbsp;
                                 Active
                             </span>
                             </h3>
-                        @else
-
                         @endif
-                    </h5>
+                        </div>
+                    </div>
+                    @if (Auth::user()->rosterProfile)
+                    <h5 class="card-title mt-2">Activity</h5>
+                        @if (Auth::user()->rosterProfile->currency < 0.1)
+                        <h3><span class="badge rounded shadow-none red">
+                            No hours recorded
+                        </span></h3>
+                        @elseif (Auth::user()->rosterProfile->currency < 8.0)
+                        <h3><span class="badge rounded shadow-none blue">
+                            {{Auth::user()->rosterProfile->currency}} hours recorded
+                        </span></h3>
+                        @elseif (Auth::user()->rosterProfile->currency >= 8.0)
+                        <h3><span class="badge rounded shadow-none green">
+                            {{Auth::user()->rosterProfile->currency}} hours recorded
+                        </span></h3>
+                        @endif
+                        <p>You require <b>6 hours</b> of activity every 6 months</p>
+                    @endif
                 </div>
                 <div class="list-group-flush" >
                     @if (Auth::user()->permissions >= 2)

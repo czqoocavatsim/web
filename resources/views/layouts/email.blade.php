@@ -134,7 +134,7 @@
 <div style="border-top:0px solid transparent; border-left:0px solid transparent; border-bottom:0px solid transparent; border-right:0px solid transparent; padding-top:5px; padding-bottom:5px; padding-right: 0px; padding-left: 0px;">
 <!--<![endif]-->
 <div align="left" class="img-container left fixedwidth" style="padding-right: 0px;padding-left: 0px;">
-<!--[if mso]><table width="100%" cellpadding="0" cellspacing="0" border="0"><tr style="line-height:0px"><td style="padding-right: 0px;padding-left: 0px;" align="left"><![endif]--><img alt="Image" border="0" class="left fixedwidth" src="https://d15k2d11r6t6rl.cloudfront.net/public/users/BeeFree/beefree-aip0n7bobko/icon.png" style="text-decoration: none; -ms-interpolation-mode: bicubic; border: 0; height: auto; width: 100%; max-width: 100px; display: block;" title="Image" width="100"/>
+<!--[if mso]><table width="100%" cellpadding="0" cellspacing="0" border="0"><tr style="line-height:0px"><td style="padding-right: 0px;padding-left: 0px;" align="left"><![endif]--><img alt="Image" border="0" class="left fixedwidth" src="https://resources.czqo.vatcan.ca/pr/brand/square/ZQO_SQUARE_TRANSPARENTBLUE.png" style="text-decoration: none; -ms-interpolation-mode: bicubic; border: 0; height: auto; width: 100%; max-width: 100px; display: block;" title="Image" width="100"/>
 <!--[if mso]></td></tr></table><![endif]-->
 </div>
 <!--[if (!mso)&(!IE)]><!-->
@@ -227,9 +227,7 @@
 </div>
 <!--[if mso]></td></tr></table><![endif]-->
 <div align="left" class="img-container left fixedwidth" style="padding-right: 0px;padding-left: 10px;">
-<!--[if mso]><table width="100%" cellpadding="0" cellspacing="0" border="0"><tr style="line-height:0px"><td style="padding-right: 0px;padding-left: 10px;" align="left"><![endif]-->
-<div style="font-size:1px;line-height:25px"> </div><img alt="Image" border="0" class="left fixedwidth" src="{{asset('img/BannerGrey.png')}}" style="text-decoration: none; -ms-interpolation-mode: bicubic; border: 0; height: auto; width: 100%; max-width: 225px; display: block;" title="Image" width="225"/>
-<!--[if mso]></td></tr></table><![endif]-->
+
 </div>
 <!--[if (!mso)&(!IE)]><!-->
 </div>

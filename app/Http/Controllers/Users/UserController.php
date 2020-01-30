@@ -328,7 +328,7 @@ class UserController extends Controller
         //Run through profanity filter
         $check = new Check();
         if ($check->hasProfanity($input)) {
-            return redirect()->back()->withInput()->with('error', 'Profanity was detected in your input, please remove it.');
+            return redirect()->back()->withInput()->with('error-modal', 'Profanity was detected in your input, please remove it.');
         }
 
         //No swear words.. give them the new bio
@@ -423,7 +423,7 @@ class UserController extends Controller
         }
         $user = Auth::user();
         if (User::where('discord_user_id', $discordUser->id)->first()) {
-            return redirect()->route('dashboard.index')->with('error', 'Account already used by another user.');
+            return redirect()->route('dashboard.index')->with('error-modal', 'This Discord account has already been linked by another user.');
         }
         $user->discord_user_id = $discordUser->id;
         $user->discord_dm_channel_id = app(Discord::class)->getPrivateChannel($discordUser->id);

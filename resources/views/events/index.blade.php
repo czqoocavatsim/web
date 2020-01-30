@@ -42,6 +42,44 @@
             </div>
             @endforeach
         </ul>
+        <br>
+        <h4><a data-toggle="collapse" data-target="#pastEvents">Show Past Events <i class="fas fa-caret-down"></i></a></h4>
+        <div class="collapse" id="pastEvents">
+            <ul class="list-unstyled">
+                @if (count($pastEvents) == 0)
+                <li>No past events.</li>
+                @endif
+                @foreach($pastEvents as $e)
+                <div class="card my-2" style="height:150px;">
+                    <div class="d-flex flex-row justify-content-between">
+                        <div class="p-3">
+                            <a href="{{route('events.view', $e->slug)}}">
+                                <h3>{{$e->name}}</h3>
+                            </a>
+                            <h5>{{$e->start_timestamp_pretty()}} to {{$e->end_timestamp_pretty()}}</h5>
+                            @if ($e->departure_icao && $e->arrival_icao)
+                            <h3>{{$e->departure_icao_data()->name}} ({{$e->departure_icao_data()->ICAO}})&nbsp;&nbsp;<i class="fas fa-plane"></i>&nbsp;&nbsp;{{$e->arrival_icao_data()->name}} ({{$e->arrival_icao_data()->ICAO}})</h3>
+                            @endif
+                            @if (!$e->event_in_past())
+                            <p>Starts {{$e->starts_in_pretty()}}</p>
+                            @endif
+                        </div>
+                        @if ($e->image_url)
+                        <a href="{{route('events.view', $e->slug)}}" style="width: 35%; height: 150px;">
+                            <div style="width: 100%; height: 150px; background-image:url({{$e->image_url}}); background-position: center;" class="waves-effect">
+                            </div>
+                        </a>
+                        @else
+                        <a href="{{route('events.view', $e->slug)}}" style="width: 35%; height 150px;">
+                            <div style="width: 100%; height: 150px;" class="grey waves-effect">
+                            </div>
+                        </a>
+                        @endif
+                    </div>
+                </div>
+                @endforeach
+            </ul>
+        </div>
     </div>
     <!-- ATC coverage request modal-->
     <div class="modal fade" id="requestModal" tabindex="-1" role="dialog" aria-hidden="true">

@@ -243,6 +243,10 @@
                 &nbsp;
                 •
                 &nbsp;
+                <a href="{{route('branding')}}" class="font-weight-bold black-text">Branding</a>
+                &nbsp;
+                •
+                &nbsp;
                 <a href="#" data-toggle="modal" data-target="#contactUsModal" class="font-weight-bold black-text">Contact</a>
                 &nbsp;
                 •

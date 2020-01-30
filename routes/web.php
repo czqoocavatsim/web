@@ -34,6 +34,7 @@ Route::view('/emailtest', 'emails.announcement');
 Route::get('/events', 'Events\EventController@index')->name('events.index');
 Route::get('/events/{slug}', 'Events\EventController@viewEvent')->name('events.view');
 Route::view('/about', 'about')->name('about');
+Route::view('/branding', 'branding')->name('branding');
 
 Route::get('/test', function () {
     echo PHP_OS;
