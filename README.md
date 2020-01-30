@@ -4,7 +4,7 @@
 
 #### Initial setup process
 
-1. Rename `.env.exmaple` to `.env` and fill required fields.
+1. Rename `.env.exmaple` to `.env` and fill required fields. For SSO credentials, use the Demo vACC key from the VATSIM forums. For VATSIM Connect, you will need correct keys from VATSIM Connect. This are not publicly available.
 2. Create a SQL database, and put the credentials in `.env`.
 3. Run `php artisan migrate --seed` (runs database migrations and seeds with required rows).
 4. Run `php artisan key:generate`.
