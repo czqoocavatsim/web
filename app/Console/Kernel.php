@@ -12,6 +12,7 @@ use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Foundation\Console\Kernel as ConsoleKernel;
 use Illuminate\Support\Facades\Log;
 use App\Mail\ActivityBot\UnauthorisedConnection;
+use Illuminate\Support\Facades\DB;
 
 class Kernel extends ConsoleKernel
 {
@@ -34,6 +35,10 @@ class Kernel extends ConsoleKernel
     {
         // Connection logging
         $schedule->call(function () {
+
+            // Because OOMs
+            DB::connection()->disableQueryLog();
+
             // Load VATSIM data
             $vatsim = new \Vatsimphp\VatsimData();
             $vatsim->loadData();
@@ -217,12 +222,14 @@ class Kernel extends ConsoleKernel
                     // check it exists
                     if ($roster_member) {
                         if ($roster_member->status == 'certified' || $roster_member->status == 'instructor') {
-                            if($roster_member->active) {
-                                // Add hours
-                                $roster_member->currency = $roster_member->currency + $difference;
+                            if ($roster_member->active) {
+                                if (!$staffOnly) {
+                                    // Add hours
+                                    $roster_member->currency = $roster_member->currency + $difference;
 
-                                // Save roster member
-                                $roster_member->save();
+                                    // Save roster member
+                                    $roster_member->save();
+                                }
                             }
                         }
                     }
