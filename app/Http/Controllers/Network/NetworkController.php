@@ -17,6 +17,12 @@ class NetworkController extends Controller
     public function monitoredPositionsIndex()
     {
         $positions = MonitoredPosition::all()->sortByDesc('identifier');
-        return view('dashboard.network.monitoredpositions.index');
+        return view('dashboard.network.monitoredpositions.index', compact('positions'));
+    }
+
+    public function viewMonitoredPosition($position)
+    {
+        $position = MonitoredPosition::where(strtolower('identifier'), strtolower($position))->firstOrFail();
+        return view('dashboard.network.monitoredpositions.view', compact('position'));
     }
 }

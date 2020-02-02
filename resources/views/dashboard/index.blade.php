@@ -85,7 +85,7 @@
                             @if (Auth::user()->subdivision_name)
                             vACC/ARTCC: {{ Auth::user()->subdivision_name }}<br/>
                             @endif
-                            Role: {{Auth::user()->permissions()}}
+                            Role: {{Auth::user()->permissions()}}<br/>
                             @if(Auth::user()->staffProfile)
                             Staff Role: {{Auth::user()->staffProfile->position}}
                             @endif
@@ -178,7 +178,7 @@
                <h4 class="display-6">Network</h4>
                 <div class="card">
                     <div class="list-group-flush">
-                        <a href="#" class="list-group-item card-top-border list-group-item-action"><i class="fa fa-chart-line"></i>&nbsp;Network</a>
+                        <a href="{{route('network.index')}}" class="list-group-item card-top-border list-group-item-action"><i class="fa fa-chart-line"></i>&nbsp;Network</a>
 
                     </div>
                 </div>
