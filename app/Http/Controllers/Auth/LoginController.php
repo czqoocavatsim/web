@@ -138,7 +138,7 @@ class LoginController extends Controller
             ],
         ]);
         } catch (ClientException $e){
-            abort(500, $e->getResponse()->getBody());
+            return redirect()->back()->with('error-modal', $e->getResponse()->getBody());
         }
         session()->put('token', json_decode((string) $response->getBody(), true));
         try{
@@ -149,11 +149,11 @@ class LoginController extends Controller
             ]
         ]);
         } catch(ClientException $e){
-            abort(500, $e->getResponse()->getBody());
+            return redirect()->back()->with('error-modal', $e->getResponse()->getBody());
         }
         $response = json_decode($response->getBody());
         if(!isset($response->data->cid)){
-        abort(500, 'No CID returned');
+            return redirect()->back()->with('error-modal', 'There was an error processing data from Connect (No CID)');
         }
         User::updateOrCreate(['id' => $response->data->cid], [
             'email' => $response->data->personal->email,
