@@ -189,6 +189,7 @@ Route::group(['middleware' => 'auth'], function () {
         Route::get('/dashboard/network', 'Network\NetworkController@index')->name('network.index');
         Route::get('/dashboard/network/monitoredpositions', 'Network\NetworkController@monitoredPositionsIndex')->name('network.monitoredpositions.index');
         Route::get('/dashboard/network/monitoredpositions/{position}', 'Network\NetworkController@viewMonitoredPosition')->name('network.monitoredpositions.view');
+        Route::post('/dashboard/network/monitoredpositions/create', 'Network\NetworkController@createMonitoredPosition')->name('network.monitoredpositions.create');
         //Audit Log and settings, and policy creation
         Route::group(['middleware' => 'executive'], function () {
             Route::get('/dashboard/auditlog', 'Settings\AuditLogController@index')->name('auditlog');

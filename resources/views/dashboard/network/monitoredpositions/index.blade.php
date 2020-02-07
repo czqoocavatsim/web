@@ -25,6 +25,16 @@
         </div>
         <div class="col-md-4">
             <h4>Actions</h4>
+            @if($errors->createMonitoredPosition->any())
+            <div class="alert alert-danger">
+                <h4>Error creating monitored position</h4>
+                <ul class="pl-0 ml-0 list-unstyled">
+                    @foreach ($errors->createMonitoredPosition->all() as $error)
+                        <li>{{ $error }}</li>
+                    @endforeach
+                </ul>
+            </div>
+            @endif
             <a href="#" data-target="#createPositionModal" data-toggle="modal" class="btn bg-czqo-blue-light btn-block">Create Position</a>
             <a href="#" class="mt-2 btn bg-czqo-blue-light btn-block">Download Positions JSON</a>
         </div>
@@ -40,7 +50,7 @@
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
-            {!! Form::open(['route' => 'tickets.startticket']) !!}
+            {!! Form::open(['route' => 'network.monitoredpositions.create']) !!}
             <div class="modal-body">
                 <p>ActivityBot will monitor positions for activity and record sessions. You can specify a prefix or complete callsign.</p>
                 <div class="form-group">
@@ -49,7 +59,7 @@
                 </div>
                 <div class="form-group">
                     <label for="recipient-name" class="col-form-label">Staff Only</label>
-                    {{ Form::checkbox('staffOnly', 'yes', false) }}
+                    {{ Form::checkbox('staffOnly', 'no', false) }}
                 </div>
             </div>
             <div class="modal-footer">
