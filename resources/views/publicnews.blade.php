@@ -9,12 +9,12 @@
         <hr>
         <div class="card-columns">
             @foreach($news as $n)
-            <div class="card blue white-text darken-3 my-2 h-100">
+            <div class="card homepage-news blue white-text darken-3 my-2 h-100">
                 <a href="{{route('news.articlepublic', $n->slug)}}">
                     @if ($n->image)
-                    <div style="background-image:url({{$n->image}}); background-position: center; background-size:cover; height: 125px;" class="waves-effect"></div>
+                    <div style="background-image:url({{$n->image}}); background-position: center; background-size:cover; height: 125px;" class="homepage-news-img waves-effect"></div>
                     @else
-                    <div style="height: 125px;" class="blue waves-effect"></div>
+                    <div style="height: 125px;" class="blue waves-effect homepage-news-img"></div>
                     @endif
                 </a>
                 <div class="card-body pb-2">
