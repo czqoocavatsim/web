@@ -94,9 +94,9 @@
         <div class="card py-3 mb-0">
             <div class="container py-2 px-4">
                 <h3 class="blue-text">News</h3>
-                <div class="card-columns">
+                <div class="card-deck">
                     @foreach($news as $n)
-                    <div class="card homepage-news blue white-text darken-3 my-2 h-100">
+                    <div class="card homepage-news blue white-text darken-3 my-2">
                         <a href="{{route('news.articlepublic', $n->slug)}}">
                             @if ($n->image)
                             <div style="background-image:url({{$n->image}}); background-position: center; background-size:cover; height: 125px;" class="homepage-news-img waves-effect"></div>
@@ -104,7 +104,7 @@
                             <div style="height: 125px;" class="homepage-news-img blue waves-effect"></div>
                             @endif
                         </a>
-                        <div class="card-body pb-2">
+                        <div class="card-body pb-2  ">
                             <a class="card-title font-weight-bold white-text" href="{{route('news.articlepublic', $n->slug)}}"><h4>{{$n->title}}</h4></a>
                             <p>{{$n->summary}}</p>
                         </div>
