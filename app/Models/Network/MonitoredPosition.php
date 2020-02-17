@@ -19,6 +19,12 @@ class MonitoredPosition extends Model
         return $session;
     }
 
+    public function sessions()
+    {
+        $sessions =  SessionLog::where('callsign', $this->identifier)->get();
+        return $sessions;
+    }
+
     public function lastOnlinePretty()
     {
         $session = $this->lastSession();

@@ -45,6 +45,32 @@
             @endif
         </div>
     </div>
+    <h4>Sessions</h4>
+    <div class="row">
+        <div class="col-md-6">
+            <table class="table">
+                <thead>
+                    <td>Start</td>
+                    <td>End</td>
+                    <td>Duration</td>
+                    <td>CID</td>
+                </thead>
+                <tbody>
+                    @foreach($position->sessions() as $s)
+                    <tr>
+                        <td>{{$s->session_start}}</td>
+                        <td>{{$s->session_end}}</td>
+                        <td>{{$s->duration}} hours</td>
+                        <td>{{$s->cid}}</td>
+                    </tr>
+                    @endforeach
+                </tbody>
+            </table>
+        </div>
+        <div class="col-md-6">
+
+        </div>
+    </div>
 </div>
 <script>
 $('.table').dataTable();
