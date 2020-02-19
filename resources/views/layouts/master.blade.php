@@ -370,7 +370,7 @@
                     </button>
                 </div>
                 <div class="modal-body">
-                    <p>Gander Oceanic is trialing use of VATSIM Connect for authentication. This is similar to SSO, but allows you to select specific data to share with us. Click 'Login' below to continue.</p>
+                    <p>Gander Oceanic uses VATSIM Connect (auth.vatsim.net) for authentication. This is similar to SSO, but allows you to select specific data to share with us. Click 'Login' below to continue.</p>
                     <p><small>If you are having issues with Connect, please send an email to the Deputy FIR Chief and use <a href="{{route('auth.sso.login')}}">SSO to login.</a></small></p>
                 </div>
                 <div class="modal-footer">

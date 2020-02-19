@@ -14,9 +14,9 @@
                 </thead>
                 <tbody>
                     @foreach ($articles as $a)
-                    <td>
-                        <a class="blue-text">{{$a->title}}</a>
-                    </td>
+                    <tr>
+                        <td><a class="blue-text" href="{{route('news.articles.view', $a->slug)}}">{{$a->title}}</a></td>
+                    </tr>
                     @endforeach
                 </tbody>
             </table>

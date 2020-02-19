@@ -145,6 +145,8 @@ Route::group(['middleware' => 'auth'], function () {
         //News
         Route::get('/dashboard/news', 'News\NewsController@index')->name('news.index');
         Route::get('/dashboard/news/article/create', 'News\NewsController@createArticle')->name('news.articles.create');
+        Route::post('/dashboard/news/article/create', 'News\NewsController@postArticle')->name('news.articles.create.post');
+        Route::get('/dashboard/news/article/{slug}', 'News\NewsController@viewArticle')->name('news.articles.view');
         //Roster
         Route::get('/dashboard/roster', 'AtcTraining\RosterController@index')->name('roster.index');
         Route::post('/dashboard/roster', 'AtcTraining\RosterController@addController')->name('roster.addcontroller');
