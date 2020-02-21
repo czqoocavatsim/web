@@ -114,9 +114,14 @@ class ProcessArticlePublishing implements ShouldQueue
             $error = curl_error($ch);
         }
         curl_close($ch);
+        Log::info(config('discord.news_webhook'));
 
         //Send emails as appropirate
         switch ($this->article->email_level) {
+            case 0:
+                $discord = new DiscordClient(['token' => config('services.discord.token')]);
+                $discord->channel->createMessage(['channel.id' => 482860026831175690, 'content' => 'Sent no emails for article '.$this->article->title]);
+            break;
             case 1:
                 //Send to controllers
                 $roster = RosterMember::where('status', '!=', 'not_certified')->get();
@@ -128,7 +133,7 @@ class ProcessArticlePublishing implements ShouldQueue
             break;
             case 2:
                 //Send to subscribed users
-                $users = User::where('gdpr_subscribed_emails')->get();
+                $users = User::where('gdpr_subscribed_emails', 1)->get();
                 foreach ($users as $user) {
                     $user->notify(new NewsNotification($user, $this->article));
                 }

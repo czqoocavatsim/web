@@ -109,10 +109,10 @@ class NewsController extends Controller
                 $article->email_level = 1;
             break;
             case 'all':
-                $article->email_level = 3;
+                $article->email_level = 2;
             break;
             case 'allimportant':
-                $article->email_level = 4;
+                $article->email_level = 3;
             break;
         }
 
