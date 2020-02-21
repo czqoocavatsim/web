@@ -2,7 +2,7 @@
 
 @section('title', $event->name.' - ')
 @section('description')
-{{$event->departure_icao_data()->name}} ({{$event->departure_icao_data()->ICAO}}) to {{$event->arrival_icao_data()->name}} ({{$event->arrival_icao_data()->ICAO}}), starting {{$event->start_timestamp_pretty()}}
+@if ($event->departure_icao && $event->arrival_icao) {{$event->departure_icao_data()->name}} ({{$event->departure_icao_data()->ICAO}}) to {{$event->arrival_icao_data()->name}} ({{$event->arrival_icao_data()->ICAO}}). @endif Starting {{$event->start_timestamp_pretty()}}
 @endsection
 @if($event->image_url)
 @section('image')
