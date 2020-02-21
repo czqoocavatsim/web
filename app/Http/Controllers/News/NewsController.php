@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\News;
 
 use App\Http\Controllers\Controller;
+use App\Jobs\ProcessArticlePublishing;
 use App\Models\Settings\AuditLogEntry;
 use App\Models\News\CarouselItem;
 use App\Models\Settings\CoreSettings;
@@ -11,9 +12,11 @@ use App\Models\News\News;
 use App\Models\Users\StaffMember;
 use App\Models\Users\User;
 use Auth;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Str;
 
 class NewsController extends Controller
@@ -28,6 +31,107 @@ class NewsController extends Controller
     {
         $staff = StaffMember::where('user_id', '!=', 1)->get();
         return view('dashboard.news.articles.create', compact('staff'));
+    }
+
+    public function postArticle(Request $request)
+    {
+        //Define validator messages
+        $messages = [
+            'title.required' => 'A title is required.',
+            'title.max' => 'A title may not be more than 100 characters long.',
+            'image.mimes' => 'We need an image file in the jpg png or gif formats.',
+            'content.required' => 'Content is required.',
+            'emailOption.required' => 'Please select an email option.',
+        ];
+
+        //Validate
+        $validator = Validator::make($request->all(), [
+            'title' => 'required|max:100',
+            'image' => 'mimes:jpeg,jpg,png,gif',
+            'content' => 'required',
+            'emailOption' => 'required'
+        ], $messages);
+
+        //Redirect if fails
+        if ($validator->fails()) {
+            return redirect()->back()->withInput()->withErrors($validator, 'createArticleErrors');
+        }
+
+        $article = new News();
+
+        //Assign title
+        $article->title = $request->get('title');
+
+        //Date for publishing
+        $article->published = date('Y-m-d H:i:s');
+
+        //Create slug
+        $article->slug = Str::slug($request->get('title').'-'.Carbon::now()->toDateString());
+
+        //Upload image if it exists
+        if ($request->file('image')) {
+            $basePath = 'public/files/'.Carbon::now()->toDateString().'/'.rand(1000,2000);
+            $path = $request->file('image')->store($basePath);
+            $article->image = Storage::url($path);
+        }
+
+        //Create a summary if required
+        if (!$request->get('summary')) {
+            $article->summary = strtok($request->get('content'), '\n');
+        } else {
+            $article->summary = $request->get('summary');
+        }
+
+        //Assign author
+        $article->user_id = $request->get('author');
+        if ($request->get('showAuthor') == 'on') {
+            $article->show_author = true;
+        } else {
+            $article->show_author = false;
+        }
+
+        //Content
+        $article->content = $request->get('content');
+
+        //Options
+        //Publicly visible
+        if ($request->get('articleVisible') == 'on') {
+            $article->visible = true;
+        } else {
+            $article->visible = false;
+        }
+        //Email level
+        switch ($request->get('emailOption')) {
+            case 'no':
+                $article->email_level = 0;
+            break;
+            case 'controllers':
+                $article->email_level = 1;
+            break;
+            case 'all':
+                $article->email_level = 2;
+            break;
+            case 'allimportant':
+                $article->email_level = 3;
+            break;
+        }
+
+        //Create and publish if needed
+        $article->save();
+        if ($article->visible) {
+            ProcessArticlePublishing::dispatch($article);
+            $request->session()->flash('articleCreated', 'Article created and published!');
+        } else {
+            $request->session()->flash('artileCreated', 'Article created, but not yet published.');
+        }
+        return redirect()->route('news.articles.view', $article->slug);
+    }
+
+    public function viewArticle($slug)
+    {
+        $staff = StaffMember::where('user_id', '!=', 1)->get();
+        $article = News::where('slug', $slug)->firstOrFail();
+        return view('dashboard.news.articles.view', compact('article', 'staff'));
     }
 
     public function viewArticlePublic($slug)

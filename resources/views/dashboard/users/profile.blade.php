@@ -77,7 +77,12 @@
                         <li class="d-flex align-items-center">Member of the CZQO Discord: <i style="margin-left: 5px;font-size: 20px;" class="{{$user->memberOfCzqoGuild() ? 'fas fa-check-circle green-text' : 'fas fa-times-circle red-text'}}"></i></li>
                     </ul>
                     <hr>
-                    <h5>Bans</h5>
+                    <h5>
+                        <div class="d-flex flex-row justify-content-between align-items-center">
+                            Bans
+                            <a href="#" class="btn btn-sm bg-czqo-blue-light">Add Ban</a>
+                        </div>
+                    </h5>
                     @if (count($user->discordBans) < 1)
                     No bans found.
                     @else

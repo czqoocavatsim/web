@@ -138,7 +138,7 @@ class LoginController extends Controller
             ],
         ]);
         } catch (ClientException $e){
-            abort(500, $e->getResponse()->getBody());
+            return redirect()->route('index')->with('error-modal', $e->getResponse()->getBody());
         }
         session()->put('token', json_decode((string) $response->getBody(), true));
         try{
@@ -149,16 +149,19 @@ class LoginController extends Controller
             ]
         ]);
         } catch(ClientException $e){
-            abort(500, $e->getResponse()->getBody());
+            return redirect()->back()->with('error-modal', $e->getResponse()->getBody());
         }
         $response = json_decode($response->getBody());
         if(!isset($response->data->cid)){
-        abort(500, 'No CID returned');
+            return redirect()->route('index')->with('error-modal', 'There was an error processing data from Connect (No CID)');
+        }
+        if (!isset($response->data->vatsim->rating)) {
+            return redirect()->route('index')->with('error-modal', 'We cannot create an account without VATSIM details.');
         }
         User::updateOrCreate(['id' => $response->data->cid], [
-            'email' => $response->data->personal->email,
-            'fname' => utf8_decode($response->data->personal->name_first),
-            'lname' => $response->data->personal->name_last,
+            'email' => isset($response->data->personal->email) ? $response->data->personal->email : 'no-reply@czqo.vatcan.ca',
+            'fname' => isset($response->data->personal->name_first) ? utf8_decode($response->data->personal->name_first) : $response->data->cid,
+            'lname' => isset($response->data->personal->name_last) ? $response->data->personal->name_last : $response->data->cid,
             'rating_id' => $response->data->vatsim->rating->id,
             'rating_short' => $response->data->vatsim->rating->short,
             'rating_long' => $response->data->vatsim->rating->long,
@@ -168,10 +171,14 @@ class LoginController extends Controller
             'region_name' => $response->data->vatsim->region->name,
             'division_code' => $response->data->vatsim->division->id,
             'division_name' => $response->data->vatsim->division->name,
-            'display_fname' => utf8_decode($response->data->personal->name_first),
+            'display_fname' => isset($response->data->personal->name_first) ? utf8_decode($response->data->personal->name_first) : $response->data->cid,
             'used_connect' => true
         ]);
         $user = User::find($response->data->cid);
+        if (!isset($response->data->personal->name_first)) {
+            $user->display_cid_only = true;
+            $user->save();
+        }
         Auth::login($user, true);
 
         return redirect('/dashboard')->with('success', 'Logged in!');

@@ -270,6 +270,7 @@ class User extends Authenticatable
                     ->generate();
                 Storage::put('public/files/avatars/'.$this->id.'/initials.png', (string) $image->encode('png'));
                 return Storage::url('public/files/avatars/'.$this->id.'/initials.png');
+                imagedestroy($image);
             });
         } elseif ($this->avatar_mode == 1) {
             return $this->avatar;
