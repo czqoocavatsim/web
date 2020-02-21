@@ -47,7 +47,7 @@ class ProcessArticlePublishing implements ShouldQueue
             /*
              * The image location for the senders image
              */
-            "avatar_url" => asset('img/iconwhitebg.png'),
+            "avatar_url" => "https://resources.czqo.vatcan.ca/pr/brand/square/ZQO_SQUARE_BLUE.png",
             /*
              * Whether or not to read the message in Text-to-speech
              */
