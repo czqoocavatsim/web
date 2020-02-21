@@ -18,7 +18,7 @@
 
         For Flight Simulation Use Only - Not To Be Used For Real World Navigation. All content on this web site may not be shared, copied, reproduced or used in any way without prior express written consent of Gander Oceanic. © Copyright {{App\Models\Settings\CoreSettings::where('id', 1)->firstOrFail()->copyright_year}} Gander Oceanic, All Rights Reserved.
 
-        Taking a peek under the hood, and like what you see? Want to help out? Send Liesel an email!
+        Taking a peek under the hood and like what you see? Want to help out? Send Liesel an email! deputy@czqo.vatcan.ca
         -->
         <!--Metadata-->
         <meta charset="utf-8">
@@ -235,7 +235,10 @@
                 &nbsp;
                 •
                 &nbsp;
-                <a href="https://www.facebook.com/czqofir" class="font-weight-bold black-text">Facebook</a>
+                <a href="https://www.facebook.com/czqofirvatsim" class="font-weight-bold black-text">Facebook</a>
+                •
+                &nbsp;
+                <a href="https://twitter.com/czqofirvatsim" class="font-weight-bold black-text">Twitter</a>
                 &nbsp;
                 •
                 &nbsp;
