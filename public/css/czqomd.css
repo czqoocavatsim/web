@@ -167,7 +167,7 @@ div.d-flex.flex-row > i {
 }
 
 .card {
-    border-radius: 0.7em !important;
+    border-radius: 0.5em !important;
 }
 
 .card .homepage-news .homepage-news-img {
@@ -199,4 +199,10 @@ div.d-flex.flex-row > i {
 
 .btn-primary {
     background-color: #0080c9 !important;
+}
+
+.dashboard-card-actions {
+    font-size: 1.3em !important;
+    color: #0080c9;
+    font-weight: 600;
 }
