@@ -254,7 +254,6 @@ class User extends Authenticatable
 
     public function avatar()
     {
-
         if ($this->avatar_mode == 0) {
             return Cache::remember('users.'.$this->id.'.initialsavatar', 172800, function () {
                 //Dev issue
@@ -277,5 +276,10 @@ class User extends Authenticatable
         } else {
             return $this->getDiscordAvatar();
         }
+    }
+
+    public function preferences()
+    {
+        return $this->hasOne(UserPreferences::class);
     }
 }

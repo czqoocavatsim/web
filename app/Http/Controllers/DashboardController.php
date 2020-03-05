@@ -30,7 +30,11 @@ class DashboardController extends Controller
 
         $atcResources = AtcResource::all()->sortBy('title');
 
-        return view('dashboard.indexnew', compact('openTickets', 'certification', 'active', 'atcResources'));
+        if ($user->preferences->enable_beta_features) {
+            return view('dashboard.indexnew', compact('openTickets', 'certification', 'active', 'atcResources'));
+        } else {
+            return view('dashboard.index', compact('openTickets', 'certification', 'active', 'atcResources'));
+        }
     }
 
     public function ctpSignUp(Request $request)

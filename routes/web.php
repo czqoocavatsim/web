@@ -106,12 +106,13 @@ Route::group(['middleware' => 'auth'], function () {
     //"Me"
     Route::get('/dashboard/me/editbiography', 'Users\UserController@editBioIndex')->name('me.editbioindex');
     Route::post('/dashboard/me/editbiography', 'Users\UserController@editBio')->name('me.editbio');
-    Route::get('/dashboard/me/user/{id}', 'Users\UserController@viewUserProfilePublic')->name('me.profile.public');
     Route::get('/dashboard/me/discord/link', 'Users\UserController@linkDiscord')->name('me.discord.link');
     Route::get('/dashboard/me/discord/unlink', 'Users\UserController@unlinkDiscord')->name('me.discord.unlink');
     Route::get('/dashboard/me/discord/link/redirect', 'Users\UserController@linkDiscordRedirect')->name('me.discord.link.redirect');
     Route::get('/dashboard/me/discord/server/join', 'Users\UserController@joinDiscordServerRedirect')->name('me.discord.join');
     Route::get('/dashboard/me/discord/server/join/redirect', 'Users\UserController@joinDiscordServer');
+    Route::get('/dashboard/me/preferences', 'Users\UserController@preferences')->name('me.preferences');
+    Route::post('/dashboard/me/preferences', 'Users\UserController@preferencesPost')->name('me.preferences.post');
     //Bookings
     Route::group(['middleware' => 'certified'], function () {
         Route::get('/dashboard/bookings', 'ControllerBookings\ControllerBookingsController@index')->name('controllerbookings.index');

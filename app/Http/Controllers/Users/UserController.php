@@ -478,4 +478,10 @@ class UserController extends Controller
         $user->save();
         return redirect()->route('dashboard.index')->with('info', 'Account unlinked.');
     }
+
+    public function preferences()
+{
+        $preferences = Auth::user()->preferences;
+        return view('dashboard.me.preferences', compact('preferences'));
+    }
 }

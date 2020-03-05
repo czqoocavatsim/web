@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
 use App\Models\Users\User;
+use App\Models\Users\UserPreferences;
 use DB;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
 use Illuminate\Http\Request;
@@ -180,7 +181,11 @@ class LoginController extends Controller
             $user->save();
         }
         Auth::login($user, true);
-
+        if (!$user->preferences) {
+            $prefs = new UserPreferences();
+            $prefs->user_id = $user->id;
+            $prefs->save();
+        }
         return redirect('/dashboard')->with('success', 'Logged in!');
     }
 }
