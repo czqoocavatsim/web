@@ -83,7 +83,7 @@
                         <a href="{{url('/pilots')}}" class="btn btn-block btn-light">Pilot Resources</a>
                     </li>
                     <li class="py-1">
-                        <a href="https://www.facebook.com/czqofir" class="btn btn-block btn-light light-blue darken-1 white-text">Facebook</a>
+                        <a href="https://www.facebook.com/czqofirvatsim" class="btn btn-block btn-light light-blue darken-1 white-text">Facebook</a>
                     </li>
                 </ol>
                 </ul>
