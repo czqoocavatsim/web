@@ -4,7 +4,9 @@
 <div class="container py-4">
     <h1 class="font-weight-bold blue-text">Branding</h1>
     <hr>
-    <p>Access our logos and social media icons here. We kindly ask that you ask permission from us to use these logos in your material via email to the Deputy FIR Chief.</p>
+    <p>Access our logos and social media icons here. You may use these logos in their published form at your discretion. 
+    We ask however that you do not modify the images from their original, published form. Resizing is permitted, provided the aspect ratio remains unadjusted.
+    Please contact our Deputy FIR Chief if you have any queries: <a href="mailto:deputy@czqo.vatcan.ca">deputy@czqo.vatcan.ca.</a></p>
     <h3>Banners</h3>
     <div class="p-2">
         <div class="row">
