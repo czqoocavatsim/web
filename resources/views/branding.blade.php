@@ -13,22 +13,22 @@
             <div class="col-md-3 d-flex flex-column align-items-center justify-content-center">
                 <img src="https://resources.czqo.vatcan.ca/pr/brand/banner/ZQO_BANNER_BLUE.png" class="img-fluid" alt="">
                 <br/>
-                <a href="https://resources.czqo.vatcan.ca/pr/brand/banner/ZQO_BANNER_BLUE.png">Blue background</a>
+                <a href="https://resources.czqo.vatcan.ca/pr/brand/banner/ZQO_BANNER_BLUE.png">White on Blue</a>
             </div>
             <div class="col-md-3 d-flex flex-column align-items-center justify-content-center">
                 <img src="https://resources.czqo.vatcan.ca/pr/brand/banner/ZQO_BANNER_WHITE.png" class="img-fluid" alt="">
                 <br/>
-                <a href="https://resources.czqo.vatcan.ca/pr/brand/banner/ZQO_BANNER_WHITE.png">White (not transparent)</a>
+                <a href="https://resources.czqo.vatcan.ca/pr/brand/banner/ZQO_BANNER_WHITE.png">Blue on White</a>
             </div>
             <div class="col-md-3 d-flex flex-column align-items-center justify-content-center">
                 <img src="https://resources.czqo.vatcan.ca/pr/brand/banner/ZQO_BANNER_TRANSPARENTBLUE.png" class="img-fluid" alt="">
                 <br/>
-                <a href="https://resources.czqo.vatcan.ca/pr/brand/banner/ZQO_BANNER_TRANSPARENTBLUE.png">Blue (transparent)</a>
+                <a href="https://resources.czqo.vatcan.ca/pr/brand/banner/ZQO_BANNER_TRANSPARENTBLUE.png">Blue on Transparent</a>
             </div>
             <div class="col-md-3 d-flex flex-column align-items-center justify-content-center">
                 <img src="https://resources.czqo.vatcan.ca/pr/brand/banner/ZQO_BANNER_TRANSPARENTWHITE.png" class="img-fluid" alt="">
                 <br/>
-                <a href="https://resources.czqo.vatcan.ca/pr/brand/banner/ZQO_BANNER_TRANSPARENTWHITE.png">White (transparent)</a>
+                <a href="https://resources.czqo.vatcan.ca/pr/brand/banner/ZQO_BANNER_TRANSPARENTWHITE.png">White on Transparent</a>
             </div>
         </div>
     </div>
@@ -38,22 +38,22 @@
             <div class="col-md-3 d-flex flex-column align-items-center justify-content-center">
                 <img src="https://resources.czqo.vatcan.ca/pr/brand/square/ZQO_SQUARE_BLUE.png" class="img-fluid" alt="">
                 <br/>
-                <a href="https://resources.czqo.vatcan.ca/pr/brand/square/ZQO_SQUARE_BLUE.png">Blue background</a>
+                <a href="https://resources.czqo.vatcan.ca/pr/brand/square/ZQO_SQUARE_BLUE.png">White on Blue</a>
             </div>
             <div class="col-md-3 d-flex flex-column align-items-center justify-content-center">
                 <img src="https://resources.czqo.vatcan.ca/pr/brand/square/ZQO_SQUARE_WHITE.png" class="img-fluid" alt="">
                 <br/>
-                <a href="https://resources.czqo.vatcan.ca/pr/brand/square/ZQO_SQUARE_WHITE.png">White (not transparent)</a>
+                <a href="https://resources.czqo.vatcan.ca/pr/brand/square/ZQO_SQUARE_WHITE.png">Blue on White</a>
             </div>
             <div class="col-md-3 d-flex flex-column align-items-center justify-content-center">
                 <img src="https://resources.czqo.vatcan.ca/pr/brand/square/ZQO_SQUARE_TRANSPARENTBLUE.png" class="img-fluid" alt="">
                 <br/>
-                <a href="https://resources.czqo.vatcan.ca/pr/brand/square/ZQO_SQUARE_TRANSPARENTBLUE.png">Blue (transparent)</a>
+                <a href="https://resources.czqo.vatcan.ca/pr/brand/square/ZQO_SQUARE_TRANSPARENTBLUE.png">Blue on Transparent</a>
             </div>
             <div class="col-md-3 d-flex flex-column align-items-center justify-content-center">
                 <img src="https://resources.czqo.vatcan.ca/pr/brand/square/ZQO_SQUARE_TRANSPARENTWHITE.png" class="img-fluid" alt="">
                 <br/>
-                <a href="https://resources.czqo.vatcan.ca/pr/brand/squares/ZQO_SQUARE_TRANSPARENTWHITE.png">White (transparent)</a>
+                <a href="https://resources.czqo.vatcan.ca/pr/brand/squares/ZQO_SQUARE_TRANSPARENTWHITE.png">White on Transparent</a>
             </div>
         </div>
     </div>
@@ -63,22 +63,22 @@
             <div class="col-md-3 d-flex flex-column align-items-center justify-content-center">
                 <img src="https://resources.czqo.vatcan.ca/pr/brand/social/ZQO_SOCIAL_BLUE.png" class="img-fluid" alt="">
                 <br/>
-                <a href="https://resources.czqo.vatcan.ca/pr/brand/social/ZQO_SOCIAL_BLUE.png">Blue background</a>
+                <a href="https://resources.czqo.vatcan.ca/pr/brand/social/ZQO_SOCIAL_BLUE.png">White on Blue</a>
             </div>
             <div class="col-md-3 d-flex flex-column align-items-center justify-content-center">
                 <img src="https://resources.czqo.vatcan.ca/pr/brand/social/ZQO_SOCIAL_WHITE.png" class="img-fluid" alt="">
                 <br/>
-                <a href="https://resources.czqo.vatcan.ca/pr/brand/social/ZQO_SOCIAL_WHITE.png">White (not transparent)</a>
+                <a href="https://resources.czqo.vatcan.ca/pr/brand/social/ZQO_SOCIAL_WHITE.png">Blue on White</a>
             </div>
             <div class="col-md-3 d-flex flex-column align-items-center justify-content-center">
                 <img src="https://resources.czqo.vatcan.ca/pr/brand/social/ZQO_SOCIAL_TRANSPARENTBLUE.png" class="img-fluid" alt="">
                 <br/>
-                <a href="https://resources.czqo.vatcan.ca/pr/brand/social/ZQO_SOCIAL_TRANSPARENTBLUE.png">Blue (transparent)</a>
+                <a href="https://resources.czqo.vatcan.ca/pr/brand/social/ZQO_SOCIAL_TRANSPARENTBLUE.png">Blue on Transparent</a>
             </div>
             <div class="col-md-3 d-flex flex-column align-items-center justify-content-center">
                 <img src="https://resources.czqo.vatcan.ca/pr/brand/social/ZQO_SOCIAL_TRANSPARENTWHITE.png" class="img-fluid" alt="">
                 <br/>
-                <a href="https://resources.czqo.vatcan.ca/pr/brand/social/ZQO_SOCIAL_TRANSPARENTWHITE.png">White (transparent)</a>
+                <a href="https://resources.czqo.vatcan.ca/pr/brand/social/ZQO_SOCIAL_TRANSPARENTWHITE.png">White on Transparent</a>
             </div>
         </div>
     </div>
