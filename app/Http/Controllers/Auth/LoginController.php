@@ -181,7 +181,7 @@ class LoginController extends Controller
             $user->save();
         }
         Auth::login($user, true);
-        if (!$user->preferences) {
+        if (!UserPreferences::where('user_id', $user->id)->first()) {
             $prefs = new UserPreferences();
             $prefs->user_id = $user->id;
             $prefs->save();
