@@ -83,8 +83,13 @@ class LoginController extends Controller
             ]);
             $user = User::find($user->id);
             Auth::login($user, true);
-        });
 
+            if (!UserPreferences::where('user_id', $user->id)->first()) {
+                $prefs = new UserPreferences();
+                $prefs->user_id = $user->id;
+                $prefs->save();
+            }
+        });
         return redirect('/dashboard')->with('success', 'Logged in!');
     }
 

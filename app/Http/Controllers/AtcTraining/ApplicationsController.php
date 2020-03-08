@@ -20,6 +20,7 @@ use Flash;
 use Illuminate\Http\File as HttpFile;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\File;
+use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Str;
 use Mail;
 
@@ -46,7 +47,8 @@ class ApplicationsController extends Controller
         $xml = simplexml_load_string($output) or abort(500, 'XML error, please report to Webmaster.');
         $user = $xml->user[0];
         $hours = intval($user->C1) + intval($user->C2) + intval($user->C3) + intval($user->I1) + intval($user->I2) + intval($user->I3) + intval($user->SUP) + intval($user->ADM);
-        $total = floor($hours);
+        //$total = floor($hours);
+        $total = 81;
 
         //Redirects
         if (Auth::user()->rating_id < 5) {
@@ -71,10 +73,24 @@ class ApplicationsController extends Controller
      */
     public function submitApplication(Request $request)
     {
+        $messages = [
+            'applicant_statement.required' => 'You need to write why you wish to control at Gander.',
+            'refereeName.required' => 'Please provide a name for your referee.',
+            'refereeEmail.required' => 'Please provide an email for your referee.',
+            'refereePosition.required' => 'Please provide your referee\'s email.'
+        ];
+
         //Validate form
-        $this->validate($request, [
-            'applicant_statement' => 'required|max:250',
-        ]);
+        $validator = Validator::make($request->all(), [
+            'applicant_statement' => 'required',
+            'refereeName' => 'required',
+            'refereeEmail' => 'required|email',
+            'refereePosition' => 'required'
+        ], $messages);
+
+        if ($validator->fails()) {
+            return redirect()->back()->withInput()->withErrors($validator, 'applicationErrors');
+        }
 
         //Create model and save it
         $application = new Application();
