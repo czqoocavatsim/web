@@ -246,6 +246,7 @@
                 •
                 &nbsp;
                 <a href="https://www.facebook.com/czqofirvatsim" class="font-weight-bold black-text">Facebook</a>
+                &nbsp;
                 •
                 &nbsp;
                 <a href="https://twitter.com/czqofirvatsim" class="font-weight-bold black-text">Twitter</a>

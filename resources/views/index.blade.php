@@ -119,6 +119,32 @@
     </div>
     <div class="container py-4">
         <div class="row">
+            <div class="col-md-6">
+                <h3 class="blue-text">Quick Links</h3>
+                <div class="d-flex flex-row">
+                    <a data-toggle="modal" data-target="#discordTopModal" href="" class="blue-text mr-1" style="text-decoration:none">
+                        <div class="blue-grey lighten-5" style="height: 80px; !important; width: 80px !important;">
+                            <div class="d-flex flex-row justify-content-center align-items-center h-100">
+                                <i class="fab fa-discord fa-3x" style="vertical-align:middle;"></i>
+                            </div>
+                        </div>
+                    </a>
+                    <a href="https://twitter.com/czqofirvatsim" class="blue-text mr-1" style="text-decoration:none">
+                        <div class="blue-grey lighten-5" style="height: 80px; !important; width: 80px !important;">
+                            <div class="d-flex flex-row justify-content-center align-items-center h-100">
+                                <i class="fab fa-twitter fa-3x" style="vertical-align:middle;"></i>
+                            </div>
+                        </div>
+                    </a>
+                    <a href="https://www.facebook.com/czqofirvatsim" class="blue-text mr-1" style="text-decoration:none">
+                        <div class="blue-grey lighten-5" style="height: 80px; !important; width: 80px !important;">
+                            <div class="d-flex flex-row justify-content-center align-items-center h-100">
+                                <i class="fab fa-facebook fa-3x" style="vertical-align:middle;"></i>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+            </div>
             {{-- <div class="col-md-6">
                 <h3 class="blue-text">New Controllers</h3>
                 <div class="row">
@@ -133,20 +159,6 @@
                     @endforeach
                 </div>
             </div> --}}
-            <div class="col-md-6">
-                <h3 class="blue-text">Quick Links</h3>
-                <ol class="list-unstyled">
-                    <li class="py-1">
-                        <a data-toggle="modal" data-target="#discordTopModal" class="btn btn-block btn-discord align-content-center"><i class="fab fa-discord fa-2x" style="vertical-align:middle;"></i>&nbsp;&nbsp;Join Our Discord</a>
-                    </li>
-                    <li class="py-1">
-                        <a href="{{url('/pilots')}}" class="btn btn-block btn-light">Pilot Resources</a>
-                    </li>
-                    <li class="py-1">
-                        <a href="https://www.facebook.com/czqofirvatsim" class="btn btn-block btn-light light-blue darken-1 white-text">Facebook</a>
-                    </li>
-                </ol>
-            </div>
         </div>
     </div>
     <script src="{{asset('js/homepagemap.js')}}"></script>
