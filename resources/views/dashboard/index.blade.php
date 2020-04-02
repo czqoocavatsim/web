@@ -103,13 +103,41 @@
                             @endif
                         </div>
                     </div>
-                    <br/>
-                </div>
-                <div class="list-group-flush" data-step="6" data-intro="This is where you can manage your biography, and manage your data preferences.">
-                    <a href="#" class="list-group-item list-group-item-action" data-target="#viewBio" data-toggle="modal"><i class="fa fa-address-card"></i>&nbsp;View Biography</a>
-                    <a href="{{url('/dashboard/me/data')}}" class="list-group-item list-group-item-action"><i class="fa fa-user"></i> Manage Your Data</a>
-                    <a href="{{url('/dashboard/emailpref')}}" class="list-group-item list-group-item-action"><i class="fa fa-envelope"></i> Manage Email Preferences</a>
-                    <a href="{{url('/dashboard/me/preferences')}}" class="list-group-item card-bottom-border  list-group-item-action"><i class="fas fa-sliders-h"></i> Preferences</a>
+                    <ul class="list-unstyled mt-2 mb-0">
+                        <li class="mb-2">
+                            <a href="" style="text-decoration:none;">
+                                <span class="blue-text">
+                                    <i class="fas fa-chevron-right"></i>
+                                </span>
+                                &nbsp;
+                                <span class="black-text">
+                                    View your biography
+                                </span>
+                            </a>
+                        </li>
+                        <li class="mb-2">
+                            <a href="" style="text-decoration:none;">
+                                <span class="blue-text">
+                                    <i class="fas fa-chevron-right"></i>
+                                </span>
+                                &nbsp;
+                                <span class="black-text">
+                                    Manage preferences
+                                </span>
+                            </a>
+                        </li>
+                        <li class="mb-2">
+                            <a href="" style="text-decoration:none;">
+                                <span class="blue-text">
+                                    <i class="fas fa-chevron-right"></i>
+                                </span>
+                                &nbsp;
+                                <span class="black-text">
+                                    Manage your data
+                                </span>
+                            </a>
+                        </li>
+                    </ul>
                 </div>
             </div>
             <br/>
@@ -290,6 +318,9 @@
                         </li>
                         <li class="mb-2">
                             <a href="" style="text-decoration:none;"><span class="blue-text"><i class="fas fa-chevron-right"></i></span> &nbsp; <span class="black-text">View previous support tickets</span></a>
+                        </li>
+                        <li class="mb-2">
+                            <a href="" style="text-decoration:none;"><span class="blue-text"><i class="fas fa-chevron-right"></i></span> &nbsp; <span class="black-text">CZQO Knowledge Base</span></a>
                         </li>
                     </ul>
                 </div>
