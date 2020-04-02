@@ -163,7 +163,7 @@ class RosterController extends Controller
             ]);
             $notification->save();
 
-            Mail::to(User::find($controller->user_id)->email)->send(new RosterStatusMail($controller));
+            Mail::to(User::find($controller->user_id)->email)->send(new RosterStatusMail($controller, User::find($controller->user_id)));
 
             return redirect()->route('roster.index')->with('success', 'Controller added!');
         }
@@ -217,7 +217,7 @@ class RosterController extends Controller
             'dateTime' => date('Y-m-d H:i:s'),
         ]);
         $notification->save();
-        Mail::to(User::find($controller->user_id))->send(new RosterStatusMail($controller));
+        Mail::to(User::find($controller->user_id))->send(new RosterStatusMail($controller, User::find($controller->user_id)));
 
         return back()->with('success', 'Controller updated!');
     }
@@ -253,7 +253,7 @@ class RosterController extends Controller
             'dateTime' => date('Y-m-d H:i:s'),
         ]);
         $notification->save();
-        Mail::to(User::find($controller->user_id))->send(new RosterStatusMail($controller));
+        //Mail::to(User::find($controller->user_id))->send(new RosterStatusMail($controller, User::find($controller->user_id)));
 
         return redirect()->route('roster.index')->with('success', 'Controller deleted!');
     }

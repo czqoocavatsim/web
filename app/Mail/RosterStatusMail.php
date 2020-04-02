@@ -3,6 +3,7 @@
 namespace App\Mail;
 
 use App\Models\AtcTraining\RosterMember;
+use App\Models\Users\User;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Mail\Mailable;
@@ -18,10 +19,12 @@ class RosterStatusMail extends Mailable
      * @return void
      */
     public $controller;
+    public $user;
 
-    public function __construct(RosterMember $controller)
+    public function __construct(RosterMember $controller, User $user)
     {
         $this->controller = $controller;
+        $this->user = $user;
     }
 
     /**
