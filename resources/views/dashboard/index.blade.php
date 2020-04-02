@@ -54,22 +54,9 @@
     <br class="my-2">
     <div class="row">
         <div class="col">
-            @if (Auth::user()->permissions >= 1)
-                <h4 class="display-6">ATC Resources</h4>
-                <div class="card">
-                <div class="list-group">
-                    @foreach($atcResources as $resource)
-                    <a href="{{$resource->url}}" target="_new" class="list-group-item list-group-item-action">
-                        {{$resource->title}}
-                    </a>
-                    @endforeach
-                </div>
-                </div>
-                <br/>
-            @endif
-            <h4 class="display-6">Your Data</h4>
             <div data-step="2" data-intro="Here is where you manage and view the data we store on you and your CZQO profile." class="card ">
                 <div class="card-body">
+                    <h3 class="font-weight-bold blue-text pb-2">Your Data</h3>
                     <div class="row">
                         <div class="col" data-step="3" data-intro="Here is an overview of your profile, including your CZQO roles. You can change the way your name is displayed by clicking on your name, at the top of the panel. (CoC A4(b))">
                             <h5 class="card-title">
@@ -127,9 +114,9 @@
             </div>
             <br/>
             @if (Auth::user()->permissions >= 3)
-                <h4 class="display-6">Users</h4>
                 <div class="card">
                     <div class="card-body">
+                        <h3 class="font-weight-bold blue-text pb-2">Users</h3>
                         <div class="input-group mb-3">
                             <input id="searchUsersQuery" type="text" class="form-control" placeholder="Search for a user">
                         </div>
@@ -176,20 +163,21 @@
                     </div>
                 </div>
                 <br/>
-               <h4 class="display-6">Network</h4>
                 <div class="card">
+                    <div class="card-body">
+                        <h3 class="font-weight-bold blue-text pb-2">Network</h3>
+                    </div>
                     <div class="list-group-flush">
                         <a href="{{route('network.index')}}" class="list-group-item card-top-border list-group-item-action"><i class="fa fa-chart-line"></i>&nbsp;Network</a>
-
                     </div>
                 </div>
             @endif
         </div>
         <div class="col">
-            <h4>Certification & Training</h4>
             <div class="card" data-step="7" data-intro="Here you can view your certification status within CZQO.">
                 <div class="card-body">
-                    <h5 class="card-title">Certification status</h5>
+                    <h3 class="font-weight-bold blue-text pb-2">Certification and Training</h3>
+                    <h5 class="card-title">Status</h5>
                     <div class="card-text">
                         <div class="d-flex flex-row justify-content-left">
                         @if ($certification == "certified")
@@ -262,76 +250,82 @@
                         @endif
                         <p>You require <b>6 hours</b> of activity every 6 months</p>
                     @endif
-                </div>
-                <div class="list-group-flush" >
-                    @if (Auth::user()->permissions >= 2)
-                    <a data-step="8" data-intro="Access CZQO training resources here." href="{{url('/dashboard/training')}}" target="" class="list-group-item list-group-item-action">
-                        <i class="fa fa-graduation-cap"></i>
-                        Training and Resources
-                    </a>
-                    @endif
-                    <a data-step="9" data-intro="View your CZQO controller applications here." target="" href="{{route('application.list')}}" class="list-group-item  card-bottom-border list-group-item-action">
-                        <i class="fa fa-file-contract"></i>&nbsp;
-                        Your Applications
-                    </a>
+                    <ul class="list-unstyled mt-2 mb-0">
+                        <li class="mb-2">
+                            <a href="" style="text-decoration:none;"><span class="blue-text"><i class="fas fa-chevron-right"></i></span> &nbsp; <span class="black-text">View Your Applications</span></a>
+                        </li>
+                        <li class="mb-2">
+                            <a href="" style="text-decoration:none;"><span class="blue-text"><i class="fas fa-chevron-right"></i></span> &nbsp; <span class="black-text">Training Centre</span></a>
+                        </li>
+                    </ul>
                 </div>
             </div>
             <br/>
-            <h4 class="display-6">Support Tickets</h4>
             <div data-step="10" data-intro="If you have any enquires or issues for the staff, feel free to make a ticket via the ticketing system." class="card">
                 <div class="card-body">
+                    <h3 class="font-weight-bold blue-text pb-2">Support</h3>
                     @if (count($openTickets) < 1)
-                        No open tickets.
+                        You have no open support tickets.
                     @else
-                        <div class="alert alert-info">
-                            <h5 class="alert-heading">
+                        <div class="alert bg-czqo-blue-light">
+                            <h5 class="black-text">
                                 @if (count($openTickets) == 1)
                                     1 open ticket
                                 @else
                                     {{count($openTickets)}} open tickets
                                 @endif
                             </h5>
-                            <div class="list-group bg-info">
+                            <div class="list-group">
                                 @foreach ($openTickets as $ticket)
-                                    <a href="{{url('/dashboard/tickets/'.$ticket->ticket_id)}}" class="list-group-item list-group-item-action purple rounded-0 ">{{$ticket->title}}<br/>
+                                    <a href="{{url('/dashboard/tickets/'.$ticket->ticket_id)}}" class="list-group-item list-group-item-action bg-czqo-blue-light black-text rounded-0 ">{{$ticket->title}}<br/>
                                         <small title="{{$ticket->updated_at}} (GMT+0, Zulu)">Last updated {{$ticket->updated_at_pretty()}}</small>
                                     </a>
                                 @endforeach
                             </div>
                         </div>
                     @endif
-                </div>
-                <div class="list-group-flush">
-                    <a href="{{url('/dashboard/tickets')}}" class="list-group-item @if(!Auth::user()->permissions >= 3) card-bottom-border @endif list-group-item-action"><i class="fa fa-comments"></i>&nbsp;View Your Tickets</a>
-                    @if (Auth::user()->permissions >= 3)
-                    <div class="list-group-item"><small><b>DIRECTORS</b></small></div>
-                    <a href="{{url('/dashboard/tickets/staff')}}" class="list-group-item card-bottom-border list-group-item-action"><i class="fa fa-inbox"></i>&nbsp;Ticket Inbox</a>
-                    @endif
+                    <ul class="list-unstyled mt-2 mb-0">
+                        <li class="mb-2">
+                            <a href="" style="text-decoration:none;"><span class="blue-text"><i class="fas fa-chevron-right"></i></span> &nbsp; <span class="black-text">Start a support ticket</span></a>
+                        </li>
+                        <li class="mb-2">
+                            <a href="" style="text-decoration:none;"><span class="blue-text"><i class="fas fa-chevron-right"></i></span> &nbsp; <span class="black-text">View previous support tickets</span></a>
+                        </li>
+                    </ul>
                 </div>
             </div>
             <br/>
             @if (Auth::user()->permissions >= 2)
-            <h4 class="display-6">Administration</h4>
             <div class="card">
-            <div class="list-group">
-                <div class="list-group-item"><small><b>INSTRUCTORS</b></small></div>
-                <a href="{{url('/dashboard/training')}}" class="list-group-item list-group-item-action"><i class="fa fa-graduation-cap"></i>&nbsp;Controller Training</a>
-                @if (Auth::user()->permissions >= 3)
-                    <a href="{{url('/dashboard/training/applications')}}" class="list-group-item @if(!Auth::user()->permissions >= 3) card-bottom-border @endif  list-group-item-action"><i class="fa fa-file-contract"></i>&nbsp;Controller Applications</a>
-                @endif
-                @if (Auth::user()->permissions >= 3)
-                    <div class="list-group-item"><small><b>EXECUTIVE</b></small></div>
-                    <a href="{{url('/dashboard/roster')}}" class="list-group-item list-group-item-action"><i class="fa fa-users"></i>&nbsp;Controller Roster</a>
-                    <a href="{{url('/dashboard/news')}}" class="list-group-item list-group-item-action"><i class="fa fa-newspaper"></i>&nbsp;News</a>
-                    <a href="{{route('events.admin.index')}}" class="list-group-item @if(!Auth::user()->permissions >= 4) card-bottom-border @endif  list-group-item-action"><i class="fas fa-calendar"></i>&nbsp;Events</a>
-                @endif
-                @if (Auth::user()->permissions >= 4)
-                    <div class="list-group-item"><small><b>ADMIN</b></small></div>
-                    <a href="{{url('/dashboard/auditlog')}}" class="list-group-item list-group-item-action"><i class="fa fa-list-ul"></i>&nbsp;Audit Log</a>
-                    <a href="{{route('staff.edit')}}" class="list-group-item list-group-item-action"><i class="fa fa-users"></i>&nbsp;Staff List</a>
-                    <a href="{{url('/dashboard/coresettings')}}" class="list-group-item card-bottom-border list-group-item-action"><i class="fa fa-cog"></i>&nbsp;Core Settings</a>
-                @endif
-            </div>
+                <div class="card-body">
+                    <h3 class="font-weight-bold blue-text pb-2">Staff</h3>
+                    <ul class="list-unstyled mt-2 mb-0">
+                        <li class="mb-2">
+                            <a href="" style="text-decoration:none;"><span class="blue-text"><i class="fas fa-chevron-right"></i></span> &nbsp; <span class="black-text">Controller Training</span></a>
+                        </li>
+                        <li class="mb-2">
+                            <a href="" style="text-decoration:none;"><span class="blue-text"><i class="fas fa-chevron-right"></i></span> &nbsp; <span class="black-text">Controller Roster</span></a>
+                        </li>
+                        <li class="mb-2">
+                            <a href="" style="text-decoration:none;"><span class="blue-text"><i class="fas fa-chevron-right"></i></span> &nbsp; <span class="black-text">Events</span></a>
+                        </li>
+                        <li class="mb-2">
+                            <a href="" style="text-decoration:none;"><span class="blue-text"><i class="fas fa-chevron-right"></i></span> &nbsp; <span class="black-text">News</span></a>
+                        </li>
+                    </ul>
+                    <h5>Site Admin</h5>
+                    <ul class="list-unstyled mt-2 mb-0">
+                        <li class="mb-2">
+                            <a href="" style="text-decoration:none;"><span class="blue-text"><i class="fas fa-chevron-right"></i></span> &nbsp; <span class="black-text">Staff Members</span></a>
+                        </li>
+                        <li class="mb-2">
+                            <a href="" style="text-decoration:none;"><span class="blue-text"><i class="fas fa-chevron-right"></i></span> &nbsp; <span class="black-text">Audit Log</span></a>
+                        </li>
+                        <li class="mb-2">
+                            <a href="" style="text-decoration:none;"><span class="blue-text"><i class="fas fa-chevron-right"></i></span> &nbsp; <span class="black-text">Core Settings</span></a>
+                        </li>
+                    </ul>
+                </div>
             </div>
             @endif
         </div>

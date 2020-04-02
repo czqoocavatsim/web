@@ -238,7 +238,7 @@
     <!-- Footer -->
     <footer class="page-footer text-dark font-small py-4 {{Request::is('/dashboard') ? 'mt-5' : ''}}">
         <div class="container">
-            <p>For Flight Simulation Use Only - Not To Be Used For Real World Navigation. All content on this web site may not be shared, copied, reproduced or used in any way without prior express written consent of Gander Oceanic. <a href="https://flightplandatabase.com" class="black-text">Using data from the Flight Plan Database.</a></p>
+            <p>For Flight Simulation Use Only - Not To Be Used For Real World Navigation. Any and all proprietary content available on this website may not be shared, copied, reproduced or used in any way without providing credit to the Gander Oceanic FIR - VATCAN. If in doubt, contact the Deputy FIR Chief.</p>
             <p>Copyright {{App\Models\Settings\CoreSettings::where('id', 1)->firstOrFail()->copyright_year}} Gander Oceanic - All Rights Reserved.</p>
             <div class="flex-left mt-3">
                 <a href="{{route('privacy')}}" class="font-weight-bold black-text">Privacy Policy</a>
