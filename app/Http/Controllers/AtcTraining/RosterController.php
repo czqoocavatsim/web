@@ -23,4 +23,12 @@ class RosterController extends Controller
         return view('roster', compact('roster'));
     }
 
+    public function index()
+    {
+        $roster = RosterMember::all();
+
+        return view('dashboard.roster.index', compact('roster'));
+    }
+
+
 }

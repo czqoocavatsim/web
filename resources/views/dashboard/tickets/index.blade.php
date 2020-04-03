@@ -131,4 +131,11 @@
             </div>
         </div>
     </div>
+    <script>
+        //Handle create=yes in url
+        var url = new URL(this.location.href);
+        if (url.searchParams.get('create') == 'yes') {
+            $("#startTicketModal").modal();
+        }
+    </script>
 @stop

@@ -105,7 +105,7 @@
                     </div>
                     <ul class="list-unstyled mt-2 mb-0">
                         <li class="mb-2">
-                            <a href="" style="text-decoration:none;">
+                            <a href="" data-target="#viewBio" data-toggle="modal" style="text-decoration:none;">
                                 <span class="blue-text">
                                     <i class="fas fa-chevron-right"></i>
                                 </span>
@@ -116,7 +116,7 @@
                             </a>
                         </li>
                         <li class="mb-2">
-                            <a href="" style="text-decoration:none;">
+                            <a href="{{route('me.preferences')}}" style="text-decoration:none;">
                                 <span class="blue-text">
                                     <i class="fas fa-chevron-right"></i>
                                 </span>
@@ -127,7 +127,7 @@
                             </a>
                         </li>
                         <li class="mb-2">
-                            <a href="" style="text-decoration:none;">
+                            <a href="{{route('me.data')}}" style="text-decoration:none;">
                                 <span class="blue-text">
                                     <i class="fas fa-chevron-right"></i>
                                 </span>
@@ -145,58 +145,38 @@
                 <div class="card">
                     <div class="card-body">
                         <h3 class="font-weight-bold blue-text pb-2">Users</h3>
-                        <div class="input-group mb-3">
-                            <input id="searchUsersQuery" type="text" class="form-control" placeholder="Search for a user">
-                        </div>
-                        <p id="userSearchResultsStatus"></p>
-                        <div class="list-group" id="userSearchResultsList">
-                        </div>
-                        <script type="text/javascript">
-                            $('#searchUsersQuery').on('keydown', function(){
-                               value = $(this).val();
-                               if (value === '') {
-                                   return;
-                               }
-                                $("#userSearchResultsList").html('');
-                               $.ajax({
-                                   type: 'post',
-                                   headers: {
-                                       'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                                   },
-                                   url: '{{route('users.search.ajax')}}',
-                                   data: {'query': value},
-                                   success: function(data) {
-                                       console.log(data);
-                                       if (data === 'n/a') {
-                                           $('#userSearchResultsStatus').text('No results found! Try searching something else.');
-                                           return;
-                                       }
-                                       $('#userSearchResultsStatus').text(data.length + ' results found.');
-                                       for (i = 0; i < data.length; i++) {
-                                           user = data[i];
-                                           row = `<a class='list-group-item list-group-item-action' href='/dashboard/users/${user.id}'>${user.display_fname} ${user.lname} ${user.id}</a>`;
-                                           $("#userSearchResultsList").append(row)
-                                       }
-                                   },
-                                   error: function(error) {
-                                       console.log(error);
-
-                                   }
-                               })
-                            });
-                        </script>
-                    </div>
-                    <div class="list-group-flush">
-                        <a href="{{url('/dashboard/users')}}" class="list-group-item list-group-item-action"><i class="fa fa-users-cog"></i>&nbsp;View All Users</a>
+                        <ul class="list-unstyled mt-2 mb-0">
+                            <li class="mb-2">
+                                <a href="{{url('/dashboard/users')}}" style="text-decoration:none;">
+                                    <span class="blue-text">
+                                        <i class="fas fa-chevron-right"></i>
+                                    </span>
+                                    &nbsp;
+                                    <span class="black-text">
+                                        View users
+                                    </span>
+                                </a>
+                            </li>
+                        </ul>
                     </div>
                 </div>
                 <br/>
                 <div class="card">
                     <div class="card-body">
                         <h3 class="font-weight-bold blue-text pb-2">Network</h3>
-                    </div>
-                    <div class="list-group-flush">
-                        <a href="{{route('network.index')}}" class="list-group-item card-top-border list-group-item-action"><i class="fa fa-chart-line"></i>&nbsp;Network</a>
+                        <ul class="list-unstyled mt-2 mb-0">
+                            <li class="mb-2">
+                                <a href="{{route('network.index')}}" style="text-decoration:none;">
+                                    <span class="blue-text">
+                                        <i class="fas fa-chevron-right"></i>
+                                    </span>
+                                    &nbsp;
+                                    <span class="black-text">
+                                        View network data
+                                    </span>
+                                </a>
+                            </li>
+                        </ul>
                     </div>
                 </div>
             @endif
@@ -283,7 +263,7 @@
                             <a href="" style="text-decoration:none;"><span class="blue-text"><i class="fas fa-chevron-right"></i></span> &nbsp; <span class="black-text">View Your Applications</span></a>
                         </li>
                         <li class="mb-2">
-                            <a href="" style="text-decoration:none;"><span class="blue-text"><i class="fas fa-chevron-right"></i></span> &nbsp; <span class="black-text">Training Centre</span></a>
+                            <a href="{{route('application.list')}}" style="text-decoration:none;"><span class="blue-text"><i class="fas fa-chevron-right"></i></span> &nbsp; <span class="black-text">Training Centre</span></a>
                         </li>
                     </ul>
                 </div>
@@ -293,7 +273,7 @@
                 <div class="card-body">
                     <h3 class="font-weight-bold blue-text pb-2">Support</h3>
                     @if (count($openTickets) < 1)
-                        You have no open support tickets.
+                        You have no open support tickets
                     @else
                         <div class="alert bg-czqo-blue-light">
                             <h5 class="black-text">
@@ -314,10 +294,10 @@
                     @endif
                     <ul class="list-unstyled mt-2 mb-0">
                         <li class="mb-2">
-                            <a href="" style="text-decoration:none;"><span class="blue-text"><i class="fas fa-chevron-right"></i></span> &nbsp; <span class="black-text">Start a support ticket</span></a>
+                            <a href="{{route('tickets.index', ['create' => 'yes'])}}" style="text-decoration:none;"><span class="blue-text"><i class="fas fa-chevron-right"></i></span> &nbsp; <span class="black-text">Start a support ticket</span></a>
                         </li>
                         <li class="mb-2">
-                            <a href="" style="text-decoration:none;"><span class="blue-text"><i class="fas fa-chevron-right"></i></span> &nbsp; <span class="black-text">View previous support tickets</span></a>
+                            <a href="{{route('tickets.index')}}" style="text-decoration:none;"><span class="blue-text"><i class="fas fa-chevron-right"></i></span> &nbsp; <span class="black-text">View previous support tickets</span></a>
                         </li>
                         <li class="mb-2">
                             <a href="" style="text-decoration:none;"><span class="blue-text"><i class="fas fa-chevron-right"></i></span> &nbsp; <span class="black-text">CZQO Knowledge Base</span></a>
@@ -335,25 +315,25 @@
                             <a href="" style="text-decoration:none;"><span class="blue-text"><i class="fas fa-chevron-right"></i></span> &nbsp; <span class="black-text">Controller Training</span></a>
                         </li>
                         <li class="mb-2">
-                            <a href="" style="text-decoration:none;"><span class="blue-text"><i class="fas fa-chevron-right"></i></span> &nbsp; <span class="black-text">Controller Roster</span></a>
+                            <a href="{{route('roster.index')}}" style="text-decoration:none;"><span class="blue-text"><i class="fas fa-chevron-right"></i></span> &nbsp; <span class="black-text">Controller Roster</span></a>
                         </li>
                         <li class="mb-2">
-                            <a href="" style="text-decoration:none;"><span class="blue-text"><i class="fas fa-chevron-right"></i></span> &nbsp; <span class="black-text">Events</span></a>
+                            <a href="{{route('events.admin.index')}}" style="text-decoration:none;"><span class="blue-text"><i class="fas fa-chevron-right"></i></span> &nbsp; <span class="black-text">Events</span></a>
                         </li>
                         <li class="mb-2">
-                            <a href="" style="text-decoration:none;"><span class="blue-text"><i class="fas fa-chevron-right"></i></span> &nbsp; <span class="black-text">News</span></a>
+                            <a href="{{route('news.index')}}" style="text-decoration:none;"><span class="blue-text"><i class="fas fa-chevron-right"></i></span> &nbsp; <span class="black-text">News</span></a>
                         </li>
                     </ul>
                     <h5>Site Admin</h5>
                     <ul class="list-unstyled mt-2 mb-0">
                         <li class="mb-2">
-                            <a href="" style="text-decoration:none;"><span class="blue-text"><i class="fas fa-chevron-right"></i></span> &nbsp; <span class="black-text">Staff Members</span></a>
+                            <a href="{{route('staff.edit')}}" style="text-decoration:none;"><span class="blue-text"><i class="fas fa-chevron-right"></i></span> &nbsp; <span class="black-text">Staff Members</span></a>
                         </li>
                         <li class="mb-2">
-                            <a href="" style="text-decoration:none;"><span class="blue-text"><i class="fas fa-chevron-right"></i></span> &nbsp; <span class="black-text">Audit Log</span></a>
+                            <a href="{{route('auditlog')}}" style="text-decoration:none;"><span class="blue-text"><i class="fas fa-chevron-right"></i></span> &nbsp; <span class="black-text">Audit Log</span></a>
                         </li>
                         <li class="mb-2">
-                            <a href="" style="text-decoration:none;"><span class="blue-text"><i class="fas fa-chevron-right"></i></span> &nbsp; <span class="black-text">Core Settings</span></a>
+                            <a href="{{route('coresettings')}}" style="text-decoration:none;"><span class="blue-text"><i class="fas fa-chevron-right"></i></span> &nbsp; <span class="black-text">Core Settings</span></a>
                         </li>
                     </ul>
                 </div>
