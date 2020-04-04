@@ -13,4 +13,4 @@
 
 #### Contributing
 
-If you wish to contribute, submit a pull request, create an issue, or email Liesel.
+If you wish to contribute, feel free to submit a pull request. Alternatively, contact Liesel.
