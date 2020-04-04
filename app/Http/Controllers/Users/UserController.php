@@ -14,6 +14,7 @@ use App\Models\Users\UserNote;
 use App\Models\Users\UserNotification;
 use App\Notifications\WelcomeNewUser;
 use Auth;
+use Exception;
 use Flash;
 use RestCord\DiscordClient;
 use SocialiteProviders\Manager\Config;
@@ -470,8 +471,12 @@ class UserController extends Controller
         $discord = new DiscordClient(['token' => config('services.discord.token')]);
         $user = Auth::user();
         if ($user->memberOfCzqoGuild() && !$user->staffProfile) {
-            $discord->guild->removeGuildMember(['guild.id' => 479250337048297483, 'user.id' => $user->discord_user_id]);
-            $discord->channel->createMessage(['channel.id' => 482860026831175690, 'content' => '<@'.$user->discord_user_id.'> ('.Auth::id().') has unlinked their account and has been kicked.']);
+            try {
+                $discord->guild->removeGuildMember(['guild.id' => 479250337048297483, 'user.id' => $user->discord_user_id]);
+                $discord->channel->createMessage(['channel.id' => 482860026831175690, 'content' => '<@'.$user->discord_user_id.'> ('.Auth::id().') has unlinked their account and has been kicked.']);
+            } catch (Exception $ex) {
+                Log::error($ex->getMessage());
+            }
         }
         $user->discord_user_id = null;
         $user->discord_dm_channel_id = null;

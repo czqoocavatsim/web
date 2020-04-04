@@ -524,7 +524,7 @@
                     </li>
                     <li>4. Do not send spam in the server, including images, text, or emotes.</li>
                 </ul>
-                <p>Clicking the 'Join' button will redirect you to Discord. We require the Join Server permission to add your Discord account to your server.</p>
+                <p>Clicking the 'Join' button will redirect you to Discord. We require the Join Server permission to add your Discord account to the server.</p>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-light" data-dismiss="modal">Dismiss</button>
