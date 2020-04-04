@@ -480,6 +480,9 @@ class UserController extends Controller
         }
         $user->discord_user_id = null;
         $user->discord_dm_channel_id = null;
+        if ($user->avatar_mode == 2) {
+            $user->avatar_mode = 0;
+        }
         $user->save();
         return redirect()->route('dashboard.index')->with('info', 'Account unlinked.');
     }
