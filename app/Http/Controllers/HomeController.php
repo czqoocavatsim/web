@@ -29,6 +29,7 @@ class HomeController extends Controller
 
         //News
         $news = News::all()->sortByDesc('published')->take(3);
+        $latest = News::latest()->first();
         $promotions = News::where('certification', true)->get()->take(6);
         $carouselItems = CarouselItem::all();
 
@@ -44,7 +45,7 @@ class HomeController extends Controller
             curl_close($ch);
             return json_decode($json);
         });
-        return view('index', compact('ganderControllers', 'shanwickControllers', 'news', 'vatcanNews', 'promotions', 'carouselItems', 'planes'));
+        return view('index', compact('ganderControllers', 'shanwickControllers', 'news', 'latest', 'vatcanNews', 'promotions', 'carouselItems', 'planes'));
     }
 
     public function map()

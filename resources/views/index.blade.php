@@ -2,25 +2,77 @@
 @section('description', 'Cool, calm and collected oceanic control services in the North Atlantic on VATSIM.')
 
 @section('content')
-    <div class="card card-image" style="height: 250px;">
-        <div id="map" style="height: 100%; margin:0; background:#000; z-index: 0 !important; position: relative;">
-            <div class="container flex-center">
-                <h5 style="color:#fff;"><i class="fas fa-circle-notch fa-spin"></i>
-                    &nbsp;
-                    Loading map...
-                </h5>
-            </div>
-        </div>
-        <div class="mask flex-center rgba-black-light" style="position:absolute; top:0; left:0; z-index: 1; height: 100%; width: 100%;">
-            <div class="container">
-                <div class="py-5">
-                    <h1 class="h1 my-4 py-2" style="font-size: 3em; color: #fff;">Cool, calm and collected oceanic control services in the North Atlantic.</h1>
+    <script src="https://unpkg.com/jarallax@1/dist/jarallax.min.js"></script>
+    <script src="https://unpkg.com/jarallax@1/dist/jarallax-video.min.js"></script>
+    <script src="https://unpkg.com/jarallax@1/dist/jarallax-element.min.js"></script>
+    <style>
+        .jarallax {
+            position: relative;
+            z-index: 0;
+        }
+        .jarallax > .jarallax-img {
+            position: absolute;
+            object-fit: cover;
+            /* support for plugin https://github.com/bfred-it/object-fit-images */
+            font-family: 'object-fit: cover;';
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+        }
+    </style>
+    <div data-jarallax data-speed="0.2" class="jarallax" style="height: calc(100vh - 59px)">
+        <img class="jarallax-img" src="https://cdn.discordapp.com/attachments/498332235154456579/695982036346994708/unknown.png" alt="">
+        <div class="mask flex-center flex-column" style="position:absolute; top:0; left:0; z-index: 1; height: 100%; width: 100%; background: linear-gradient(40deg,rgba(69,202,252,.7),rgba(48,63,159,.4))!important;">
+            <div class="row">
+                <div class="col-md-7">
+                    <div class="container">
+                        <div class="py-5">
+                            <h1 class="h1 my-4 py-2" style="font-size: 3em; color: #fff;">Cool, calm and collected oceanic control services in the North Atlantic.</h1>
+                            <h4><a href="#blueBannerMid" id="discoverMore" class="white-text" style="transition:fade 0.4s;">Find out more&nbsp;&nbsp;<i class="fas fa-arrow-down"></i></a></h4>
+                        </div>
+                    </div>
+                    <div class="container">
+                            <a href="https://twitter.com/czqofirvatsim" class="nav-link ml-0 pl-0 waves-effect white-text waves-light">
+                                <i class="fab fa-twitter fa-3x"></i>
+                            </a>
+                            <a href="https://www.facebook.com/czqofirvatsim" class="nav-link waves-effect white-text waves-light">
+                                <i class="fab fa-facebook fa-3x"></i>
+                            </a>
+                            <a class="nav-link waves-effect white-text waves-light" data-toggle="modal" data-target="#discordTopModal">
+                                <i class="fab fa-discord fa-3x"></i>
+                    </a>
+                    </div>
+                </div>
+                <div class="col-md-5">
+                    <div class="card homepage-news mash rgba-blue-light white-text darken-3 my-2 h-100" style="border-radius:0.7em;">
+                        <a style="height: 50%" href="{{route('news.articlepublic', $latest->slug)}}">
+                            @if ($latest->image)
+                            <div style="background-image:url({{$latest->image}}); background-position: center; background-size:cover; height: 100%; border-top-left-radius:0.7em; border-top-right-radius:0.7em;" class="homepage-news-img waves-effect"></div>
+                            @else
+                            <div style="height: 100%; border-top-left-radius:0.7em; border-top-right-radius:0.7em;" class="homepage-news-img blue waves-effect"></div>
+                            @endif
+                        </a>
+                        <div class="card-body pb-2">
+                            <div class="d-flex flex-column justify-content-between h-100">
+                                <div>
+                                    <a class="card-title font-weight-bold white-text" href="{{route('news.articlepublic', $latest->slug)}}"><h2>{{$latest->title}}</h2></a>
+                                    <h5>{{$latest->summary}}</h5>
+                                </div>
+                                <div class="mb-2">
+                                    <a href="{{route('news.articlepublic', $latest->slug)}}" class="btn btn-primary">Read More</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
+
         </div>
     </div>
     @if (!Auth::check())
-    <div class="jumbotron blue text-white py-3 mb-0">
+    <div id="blueBannerMid"  class="jumbotron blue text-white py-3 mb-0">
         <div class="container">
             <div class="d-flex flex-row justify-content-between align-items-center">
                 <h3 class="m-0 py-0">Join our talented controller team today!</h3>
@@ -29,7 +81,7 @@
         </div>
     </div>
     @elseif (Auth::check() && !Auth::user()->rosterProfile)
-    <div class="jumbotron blue text-white py-3 mb-0">
+    <div id="blueBannerMid" class="jumbotron blue text-white py-3 mb-0">
         <div class="container">
             <div class="d-flex flex-row justify-content-between align-items-center">
                 <h3 class="m-0 py-0">Join our talented controller team today!</h3>
@@ -38,7 +90,7 @@
         </div>
     </div>
     @else
-    <div class="jumbotron blue text-white py-3 mb-0">
+    <div id="blueBannerMid" class="jumbotron blue text-white py-3 mb-0">
         <div class="container">
             <div class="d-flex flex-row justify-content-between align-items-center">
                 <h3 class="m-0 py-0">Welcome back, {{Auth::user()->fullName('F')}}!</h3>
@@ -161,9 +213,12 @@
             </div> --}}
         </div>
     </div>
-    <script src="{{asset('js/homepagemap.js')}}"></script>
     <script>
-        createHomePageMap(@php echo json_encode($planes); @endphp, @php echo json_encode($ganderControllers->toArray()); @endphp, @php echo json_encode($shanwickControllers->toArray()); @endphp);
+        // jarallax(document.querySelectorAll('.jarallax'), {
+           // speed: 0.5,
+            //videoStartTime: 200,
+            //videoSrc: 'https://www.youtube.com/watch?v=MjjDUna_ppw'
+       // });
     </script>
 @endsection
 

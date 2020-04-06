@@ -38,7 +38,7 @@
                                 <div class="border" style="padding: 10px;">
                                     <a href="{{url('/policies/'.$policy->id.'/delete')}}" class="btn btn-primary">Delete policy</a>
                                     &nbsp;
-                                    <b>Created by {{\App\User::find($policy->author)->fname}} {{\App\User::find($policy->author)->lname}} {{\App\User::find($policy->author)->id}} on {{$policy->releaseDate }}</b>
+                                    <b>Created by {{\App\Models\Users\User::find($policy->author)->fname}} {{\App\Models\Users\User::find($policy->author)->lname}} {{\App\Models\Users\User::find($policy->author)->id}} on {{$policy->releaseDate }}</b>
                                 </div>
                             @endif
                             <p>{{$policy->details}}</p>
