@@ -247,11 +247,11 @@
                         <h3><span class="badge rounded shadow-none red">
                             No hours recorded
                         </span></h3>
-                        @elseif (Auth::user()->rosterProfile->currency < 8.0)
+                        @elseif (Auth::user()->rosterProfile->currency < 6.0)
                         <h3><span class="badge rounded shadow-none blue">
                             {{Auth::user()->rosterProfile->currency}} hours recorded
                         </span></h3>
-                        @elseif (Auth::user()->rosterProfile->currency >= 8.0)
+                        @elseif (Auth::user()->rosterProfile->currency >= 6.0)
                         <h3><span class="badge rounded shadow-none green">
                             {{Auth::user()->rosterProfile->currency}} hours recorded
                         </span></h3>
