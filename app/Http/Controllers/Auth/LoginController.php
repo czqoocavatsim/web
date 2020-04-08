@@ -41,6 +41,7 @@ class LoginController extends Controller
      */
     public function ssoLogin()
     {
+        abort(403, "Disabled");
         $this->sso->login(config('sso.return'), function ($key, $secret, $url) {
             session()->put('key', $key);
             session()->put('secret', $secret);
@@ -61,6 +62,7 @@ class LoginController extends Controller
 
     public function validateSsoLogin(Request $get)
     {
+        abort(403, "Disabled");
         $this->sso->validate(session('key'), session('secret'), $get->input('oauth_verifier'), function ($user, $request) {
             session()->forget('key');
             session()->forget('secret');
