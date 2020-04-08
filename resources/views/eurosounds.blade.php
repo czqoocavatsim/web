@@ -20,7 +20,7 @@
     <li>2. Paste the entire contents of the Sounds.zip file into this new 'sounds' folder. There should be 20 .wav files.</li>
     </ul>
     <p>
-        For any questions in relation to Eurosounds, please email <a href="mailto:a.ogden@vatcan.ca">a.ogden (at) vatcan.ca.</a>
+        For any questions relating to Eurosounds, please email <a href="mailto:a.ogden@vatcan.ca">a.ogden (at) vatcan.ca.</a>
     </p>
     <p>
         This package is free to use. Redistribution (for example within Euroscope sector packages) under this license is permitted, however please provide a hyperlink to this webpage and indicate if any modifications were made to the original product.
