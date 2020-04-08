@@ -3,10 +3,11 @@
 @section('description', 'An immersive and realistic sound package for the Euroscope ATC Client.')
 @section('content')
 <div class="container py-4">
-    <h1 class="font-weight-bold blue-text">EuroSounds</h1>
+    <img src="https://resources.ganderoceanic.com/pr/brand/banner/EUROSOUNDS_BANNER_TRANSPARENTBLUE.png" style="height: 50px; margin-bottom: 10px;" alt="">
     <h3 class="font-weight-bold blue-text">An immersive and realistic sound package for the Euroscope ATC Client.</h3>
     <hr>
     <p>Created by Andrew Ogden.</p>
+    <iframe width="560" height="315" src="https://www.youtube.com/embed/lLPmKYXsiP4" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe><br>
     <a href="hhttps://resources.ganderoceanic.com/files/eurosounds/eurosounds-8apr20.zip" role="button" class="btn btn-success mb-4"><i class="fas fa-cloud-download-alt"></i>&nbsp;Download EuroSounds</a>
     <h4 class="font-weight-bold blue-text">Installation Instructions</h4>
     <h5>For individuals:</h5>
