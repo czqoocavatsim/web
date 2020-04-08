@@ -26,11 +26,11 @@
         This package is free to use. Redistribution (for example within Euroscope sector packages) under this license is permitted, however please provide a hyperlink to this webpage and indicate if any modifications were made to the original product.
     </p>
     <p>
-This package is licensed under Creative Commons. Copyright ©️ 2018-2020 - Some Rights Reserved
+        This package is licensed under Creative Commons. Copyright ©️ 2018-2020 Andrew Ogden - Some Rights Reserved
     </p>
     <p style="text-align:center;">
         <iframe width="560" height="315" src="https://www.youtube.com/embed/lLPmKYXsiP4" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe><br>
-        <i>Demo Video</i>
+        <strong>Demonstration Video</strong>
     </p>
 </div>
 @endsection
