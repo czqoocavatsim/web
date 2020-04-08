@@ -14,11 +14,11 @@
     </style>
 </head>
 <body>
-<p>Gander Oceanic FIR https://czqo.vatcan.ca</p>
+<p>Gander Oceanic FIR https://ganderoceanic.com</p>
 <h2>{{Auth::user()->fullName('FLC')}}</h2>
 <h5>Data as of {{\Carbon\Carbon::now()}}.</h5>
 <div style="border: 1px solid; padding: 10px;">
-    This data has been gathered at the request of {{Auth::user()->fullName('FLC')}} in accordance with the Gander Oceanic FIR privacy policy. For more information, please visit https://czqo.vatcan.ca/privacy.
+    This data has been gathered at the request of {{Auth::user()->fullName('FLC')}} in accordance with the Gander Oceanic FIR privacy policy. For more information, please visit https://ganderoceanic.com/privacy.
 </div>
 <h5>Basic Data</h5>
 <table>
