@@ -56,7 +56,7 @@ class DashboardController extends Controller
             /*
              * The general "message" shown above your embeds
              */
-            'content' => 'Wow! Someone has signed up to control CTP! View all signups here: https://czqo.vatcan.ca/api/ctpsignups (you need to be signed in)',
+            'content' => 'Wow! Someone has signed up to control CTP! View all signups here: https://ganderoceanic.com/api/ctpsignups (you need to be signed in)',
             /*
              * The username shown in the message
              */

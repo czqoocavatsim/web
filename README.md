@@ -1,5 +1,5 @@
 # czqo-core 
-### The website for VATSIM's Gander Oceanic FIR https://czqo.vatcan.ca
+### The website for VATSIM's Gander Oceanic FIR https://ganderoceanic.com
 ---
 
 #### Initial setup process
