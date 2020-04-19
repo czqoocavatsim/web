@@ -256,10 +256,6 @@ class User extends Authenticatable
     {
         if ($this->avatar_mode == 0) {
             return Cache::remember('users.'.$this->id.'.initialsavatar', 172800, function () {
-                //Dev issue
-                if (PHP_OS == "Darwin") {
-                    return;
-                }
                 $avatar = new InitialAvatar();
                 $image = $avatar
                     ->name($this->fullName('FL'))
