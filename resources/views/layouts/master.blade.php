@@ -161,7 +161,7 @@
                             {{-- <a href="{{route('auth.sso.login')}}" class="nav-link waves-effect waves-light">
                                 <i class="fas fa-key"></i>&nbsp;Login
                             </a> --}}
-                            <a href="#" data-toggle="modal" data-target="#connectModal" class="nav-link waves-effect waves-light">
+                            <a href="{{route('auth.connect.login')}}" class="nav-link waves-effect waves-light">
                                 <i class="fas fa-key"></i>&nbsp;Login with VATSIM
                             </a>
                         </li>

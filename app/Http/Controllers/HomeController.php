@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\News\News;
 use App\Models\News\CarouselItem;
+use App\Models\News\HomeNewControllerCert;
 use Auth;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cache;
@@ -30,7 +31,7 @@ class HomeController extends Controller
         //News
         $news = News::all()->sortByDesc('published')->take(3);
         $latest = News::latest()->first();
-        $promotions = News::where('certification', true)->get()->take(6);
+        $certifications = HomeNewControllerCert::all()->sortByDesc('timestamp')->take(6);
         $carouselItems = CarouselItem::all();
 
         //Get VATCAN news
@@ -45,7 +46,7 @@ class HomeController extends Controller
             curl_close($ch);
             return json_decode($json);
         });
-        return view('index', compact('ganderControllers', 'shanwickControllers', 'news', 'latest', 'vatcanNews', 'promotions', 'carouselItems', 'planes'));
+        return view('index', compact('ganderControllers', 'shanwickControllers', 'news', 'latest', 'vatcanNews', 'certifications', 'carouselItems', 'planes'));
     }
 
     public function map()
