@@ -299,6 +299,11 @@
                         <li class="mb-2">
                             <a href="{{route('tickets.index')}}" style="text-decoration:none;"><span class="blue-text"><i class="fas fa-chevron-right"></i></span> &nbsp; <span class="black-text">View previous support tickets</span></a>
                         </li>
+                        @if(Auth::user()->permissions >= 3)
+                        <li class="mb-2">
+                            <a href="{{route('tickets.staff')}}" style="text-decoration:none;"><span class="blue-text"><i class="fas fa-chevron-right"></i></span> &nbsp; <span class="black-text">View staff ticket inbox</span></a>
+                        </li>
+                        @endif
                         <li class="mb-2">
                             <a href="" style="text-decoration:none;"><span class="blue-text"><i class="fas fa-chevron-right"></i></span> &nbsp; <span class="black-text">CZQO Knowledge Base</span></a>
                         </li>
@@ -333,7 +338,7 @@
                             <a href="{{route('auditlog')}}" style="text-decoration:none;"><span class="blue-text"><i class="fas fa-chevron-right"></i></span> &nbsp; <span class="black-text">Audit Log</span></a>
                         </li>
                         <li class="mb-2">
-                            <a href="{{route('coresettings')}}" style="text-decoration:none;"><span class="blue-text"><i class="fas fa-chevron-right"></i></span> &nbsp; <span class="black-text">Core Settings</span></a>
+                            <a href="{{route('coresettings')}}  " style="text-decoration:none;"><span class="blue-text"><i class="fas fa-chevron-right"></i></span> &nbsp; <span class="black-text">Core Settings</span></a>
                         </li>
                     </ul>
                 </div>
