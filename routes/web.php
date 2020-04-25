@@ -79,9 +79,11 @@ Route::group(['middleware' => 'auth'], function () {
 
     //CTP
     //Route::post('/dashboard/ctp/signup/post', 'DashboardController@ctpSignUp')->name('ctp.signup.post');
+
     //Notification
     Route::get('/notification/{id}', 'Users\NotificationRedirectController@notificationRedirect')->name('notification.redirect');
     Route::get('/notificationclear', 'Users\NotificationRedirectController@clearAll');
+
     //Tickets
     Route::get('/dashboard/tickets', 'Tickets\TicketsController@index')->name('tickets.index');
     Route::get('/dashboard/tickets/staff', 'Tickets\TicketsController@staffIndex')->name('tickets.staff');
@@ -89,21 +91,16 @@ Route::group(['middleware' => 'auth'], function () {
     Route::post('/dashboard/tickets', 'Tickets\TicketsController@startNewTicket')->name('tickets.startticket');
     Route::post('/dashboard/tickets/{id}', 'Tickets\TicketsController@addReplyToTicket')->name('tickets.reply');
     Route::get('/dashboard/tickets/{id}/close', 'Tickets\TicketsController@closeTicket')->name('tickets.closeticket');
+
     //Email prefs
     Route::get('/dashboard/emailpref', 'Users\DataController@emailPref')->name('dashboard.emailpref');
     Route::get('/dashboard/emailpref/subscribe', 'Users\DataController@subscribeEmails');
     Route::get('/dashboard/emailpref/unsubscribe', 'Users\DataController@unsubscribeEmails');
+
     //GDPR
     Route::get('/dashboard/me/data', 'Users\DataController@index')->name('me.data');
     Route::post('/dashboard/me/data/export/all', 'Users\DataController@exportAllData')->name('me.data.export.all');
-    //Applications
-    Route::group(['middleware' => 'notcertified'], function () {
-        Route::get('/dashboard/application', 'AtcTraining\ApplicationsController@startApplicationProcess')->name('application.start');
-        Route::post('/dashboard/application', 'AtcTraining\ApplicationsController@submitApplication')->name('application.submit');
-    });
-    Route::get('/dashboard/application/list', 'AtcTraining\ApplicationsController@viewApplications')->name('application.list');
-    Route::get('/dashboard/application/{application_id}', 'AtcTraining\ApplicationsController@viewApplication')->name('application.view');
-    Route::get('/dashboard/application/{application_id}/withdraw', 'AtcTraining\ApplicationsController@withdrawApplication');
+
     //"Me"
     Route::get('/dashboard/me/editbiography', 'Users\UserController@editBioIndex')->name('me.editbioindex');
     Route::post('/dashboard/me/editbiography', 'Users\UserController@editBio')->name('me.editbio');
@@ -114,25 +111,20 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('/dashboard/me/discord/server/join/redirect', 'Users\UserController@joinDiscordServer');
     Route::get('/dashboard/me/preferences', 'Users\UserController@preferences')->name('me.preferences');
     Route::post('/dashboard/me/preferences', 'Users\UserController@preferencesPost')->name('me.preferences.post');
+
     //Bookings
     Route::group(['middleware' => 'certified'], function () {
         Route::get('/dashboard/bookings', 'ControllerBookings\ControllerBookingsController@index')->name('controllerbookings.index');
         Route::get('/dashboard/bookings/create', 'ControllerBookings\ControllerBookingsController@create')->name('controllerbookings.create');
         Route::post('/dashboard/bookings/create', 'ControllerBookings\ControllerBookingsController@createPost')->name('controllerbookings.create.post');
     });
-    //AtcTraining
-    Route::get('/dashboard/training', 'AtcTraining\TrainingController@index')->name('training.index');
-    Route::group(['middleware' => 'instructor'], function () {
-        Route::get('/dashboard/training/sessions', 'AtcTraining\TrainingController@instructingSessionsIndex')->name('training.instructingsessions.index');
-        Route::get('/dashboard/training/sessions/{id}', 'AtcTraining\TrainingController@viewInstructingSession')->name('training.instructingsessions.viewsession');
-        Route::view('/dashboard/training/sessions/create', 'dashboard.training.instructingsessions.create')->name('training.instructingsessions.createsessionindex');
-        Route::get('/dashboard/training/sessions/create', 'AtcTraining\TrainingController@createInstructingSession')->name('training.instructingsessions.createsession');
-        Route::get('/dashboard/training/instructors', 'AtcTraining\TrainingController@instructorsIndex')->name('training.instructors');
-        Route::get('/dashboard/training/students/current', 'AtcTraining\TrainingController@currentStudents')->name('training.students.current');
-        Route::get('/dashboard/training/students/{id}', 'AtcTraining\TrainingController@viewStudent')->name('training.students.view');
-        Route::post('/dashboard/training/students/{id}/assigninstructor', 'AtcTraining\TrainingController@assignInstructorToStudent')->name('training.students.assigninstructor');
-        Route::post('/dashboard/training/students/{id}/setstatus', 'AtcTraining\TrainingController@changeStudentStatus')->name('training.students.setstatus');
+
+    //Training
+    Route::prefix('training')->group(function () {
+        Route::get('applications/apply', 'Training\ApplicationsController@apply')->name('training.applications.apply');
+        Route::post('applications/apply', 'Training\ApplicationsController@applyPost')->name('training.applications.apply.post');
     });
+
     //Staff
     Route::group(['middleware' => 'director'], function () {
         Route::get('/dashboard/ctp/signups', function () {
@@ -176,16 +168,6 @@ Route::group(['middleware' => 'auth'], function () {
         });
         Route::get('/dashboard/users/{id}/email', 'Users\UserController@emailCreate')->name('users.email.create');
         Route::get('/dashboard/users/{id}/email', 'Users\UserController@emailStore')->name('users.email.store');
-        //Controller Applications
-        Route::get('/dashboard/training/applications', 'AtcTraining\TrainingController@viewAllApplications')->name('training.applications');
-        Route::get('/dashboard/training/applications/{id}', 'AtcTraining\TrainingController@viewApplication')->name('training.viewapplication');
-        Route::group(['middleware' => 'executive'], function () {
-            Route::get('/dashboard/training/applications/{id}/accept', 'AtcTraining\TrainingController@acceptApplication')->name('training.application.accept');
-            Route::get('/dashboard/training/applications/{id}/deny', 'AtcTraining\TrainingController@denyApplication')->name('training.application.deny');
-            Route::post('/dashboard/training/applications/{id}/', 'AtcTraining\TrainingController@editStaffComment')->name('training.application.savestaffcomment');
-        });
-        //AtcTraining
-        Route::post('/dashboard/training/instructors', 'AtcTraining\TrainingController@addInstructor')->name('training.instructors.add');
         //Minutes
         Route::get('/meetingminutes/{id}', 'News\NewsController@minutesDelete')->name('meetingminutes.delete');
         Route::post('/meetingminutes', 'News\NewsController@minutesUpload')->name('meetingminutes.upload');
