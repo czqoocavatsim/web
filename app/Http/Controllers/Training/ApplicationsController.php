@@ -2,22 +2,38 @@
 
 namespace App\Http\Controllers\Training;
 
+use App\Events\Training\ApplicationSubmitted;
 use App\Http\Controllers\Controller;
 use App\Models\Training\Application;
 use App\Models\Training\ApplicationReferee;
 use App\Models\Training\ApplicationUpdate;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Gate;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Str;
 
 class ApplicationsController extends Controller
 {
-    public function apply()
+    public function showAll()
     {
-        if (Application::where('user_id', Auth::id())->where('status', 0)->first())
+        $applications = Auth::user()->applications;
+        return view('training.applications.showall', compact('applications'));
+    }
+
+    public function apply(Request $request)
+    {
+        if (Gate::denies('start-application'))
+        {
+            abort(403, 'You cannot apply for Gander Oceanic at this time. If this is a mistake, please contact staff.');
+        }
+
+        if ($pendingApp = Application::where('user_id', Auth::id())->where('status', 0)->first())
         {
             //redirect
+            $request->session()->flash('alreadyApplied', 'You already have a pending application for Gander.');
+            return redirect()->route('training.applications.show', $pendingApp->reference_id);
         }
 
         //Redirect of rating isnt C1
@@ -89,12 +105,62 @@ class ApplicationsController extends Controller
         //Create processing update
         $processingUpdate = new ApplicationUpdate([
             'application_id' => $application->id,
-            'update_title' => 'Sit tight, your application is processing!',
+            'update_title' => 'Sit tight, your application is currently being processed!',
             'update_content' => 'If you do not see an update through email or Discord within 5 days, please contact the (Deputy) FIR Chief.',
-            'update_type' => 'positive'
+            'update_type' => 'green'
         ]);
         $processingUpdate->save();
 
+        //Dispatch event
+        event(new ApplicationSubmitted($application));
+
+        //Redirect to application page
+        return redirect()->route('training.applications.show', $application->reference_id);
+    }
+
+    public function show($reference_id)
+    {
+        //Find application or fail
+        $application = Application::where('reference_id', $reference_id)->firstOrFail();
+
+        //Check if not allowed
+        if (Gate::denies('view-application', $application))
+        {
+            //Show 404 to not show that the application does exist
+            abort(404);
+        }
+
+        //Get other objects
+        $referees = $application->referees;
+        $latestUpdate = $application->updates->first();
+        $comments = $application->comments;
+
         //Redirect
+        return view('training.applications.show', compact('application', 'referees', 'latestUpdate', 'comments'));
+    }
+
+    public function withdraw(Request $request)
+    {
+        //Validate form
+        $validator = Validator::make($request->all(), [
+            'reference_id' => 'required'
+        ]);
+
+        //If bad, return response
+        if ($validator->fails()) {
+            return response()->json(['message' => 'Please fill all fields.'], 400);
+        }
+
+        //Check if the application exists
+        $application = Application::where('reference_id', $request->get('reference_id'))->firstOrFail();
+        if(!$application) {
+            //return error
+            Log::error('Application withdraw fail (ref #'.$request->get('reference_id').')');
+            Log::error($request->all());
+            return response()->json(['message' => 'There has been an error. Please contact the Deputy FIR Chief.'], 400);
+        }
+
+        $request->session()->flash('alreadyApplied', 'Application withdrawn.');
+        return redirect()->route('training.applications.show', $application->reference_id);
     }
 }

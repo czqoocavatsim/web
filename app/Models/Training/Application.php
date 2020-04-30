@@ -15,6 +15,16 @@ class Application extends Model
 
     protected $hidden = ['id'];
 
+    /*
+    Application statuses
+
+    0 = pending
+    1 = accepted
+    2 = denied
+    3 = withdrawn
+    4 = deleted
+    */
+
     public function user()
     {
         return $this->belongsTo(User::class);

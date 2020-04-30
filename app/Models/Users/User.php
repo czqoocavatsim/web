@@ -7,7 +7,7 @@ use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Carbon;
-use App\Models\AtcTraining;
+use App\Models\Training;
 use App\Models\ControllerBookings;
 use App\Models\Events;
 use App\Models\Network;
@@ -59,7 +59,7 @@ class User extends Authenticatable
 
     public function applications()
     {
-        return $this->hasMany(AtcTraining\Application::class);
+        return $this->hasMany(Training\Application::class);
     }
 
     public function instructorProfile()

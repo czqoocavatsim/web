@@ -15,6 +15,10 @@ class ApplicationUpdate extends Model
 
     protected $hidden = ['id'];
 
+    protected $fillable = [
+        'application_id', 'update_title', 'update_content', 'update_type'
+    ];
+
     public function user()
     {
         return $this->belongsTo(User::class);

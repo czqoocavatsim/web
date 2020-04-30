@@ -120,7 +120,10 @@ class ProcessArticlePublishing implements ShouldQueue
         switch ($this->article->email_level) {
             case 0:
                 $discord = new DiscordClient(['token' => config('services.discord.token')]);
-                $discord->channel->createMessage(['channel.id' => 482860026831175690, 'content' => 'Sent no emails for article '.$this->article->title]);
+                $discord->channel->createMessage([
+                    'channel.id' => 482860026831175690,
+                    'content' => 'Sent no emails for article '.$this->article->title
+                ]);
             break;
             case 1:
                 //Send to controllers
@@ -129,7 +132,10 @@ class ProcessArticlePublishing implements ShouldQueue
                     $member->user->notify(new NewsNotification($member->user, $this->article));
                 }
                 $discord = new DiscordClient(['token' => config('services.discord.token')]);
-                $discord->channel->createMessage(['channel.id' => 482860026831175690, 'content' => 'Sent '.count($roster). ' emails to controllers for article '.$this->article->title]);
+                $discord->channel->createMessage([
+                    'channel.id' => 482860026831175690,
+                    'content' => 'Sent '.count($roster). ' emails to controllers for article '.$this->article->title
+                ]);
             break;
             case 2:
                 //Send to subscribed users
