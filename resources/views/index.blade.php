@@ -147,7 +147,7 @@
                 <div class="col-md-5">
                     <h1 class="font-weight-bold blue-text">We control the skies over the North Atlantic on VATSIM.</h1>
                     <p style="font-size: 1.2em;" class="mt-3">
-                        With our diverse team of skilled and experienced Oceanic controllers, we pride ourselves on providing the coolest, calmest and most collected Oceanic service on the VATSIM network to pilots flying across the North Atlantic. There is something for everyone here, pilots and controllers alike. Our staff extends their warmest welcome to you; please be sure to contact us if you have any questions!
+                        Gander Oceanic is VATSIM's coolest, calmest and most collected provider of Oceanic control. With our worldwide team of skilled Oceanic controllers, we pride ourselves on our expert, high-quality service to pilots flying across the North Atlantic. Our incredible community of pilots and controllers extend their warmest welcome and we hope that you enjoy our abundance of Oceanic resources!
                     </p>
                     <div class="d-flex flex-row">
                         @if(!Auth::check() || !Auth::user()->rosterProfile)
