@@ -144,7 +144,10 @@ class ProcessArticlePublishing implements ShouldQueue
                     $user->notify(new NewsNotification($user, $this->article));
                 }
                 $discord = new DiscordClient(['token' => config('services.discord.token')]);
-                $discord->channel->createMessage(['channel.id' => 482860026831175690, 'content' => 'Sent '.count($users). ' emails to subscribed users for article '.$this->article->title]);
+                $discord->channel->createMessage([
+                    'channel.id' => 482860026831175690,
+                    'content' => 'Sent '.count($users). ' emails to subscribed users for article '.$this->article->title
+                ]);
             break;
             case 3:
                 //Send to all
@@ -153,7 +156,10 @@ class ProcessArticlePublishing implements ShouldQueue
                     $user->notify(new NewsNotification($user, $this->article));
                 }
                 $discord = new DiscordClient(['token' => config('services.discord.token')]);
-                $discord->channel->createMessage(['channel.id' => 482860026831175690, 'content' => 'Sent '.count($users). ' emails to all users for article '.$this->article->title]);
+                $discord->channel->createMessage([
+                    'channel.id' => 482860026831175690,
+                    'content' => 'Sent '.count($users). ' emails to all users for article '.$this->article->title
+                ]);
         }
     }
 }
