@@ -89,6 +89,10 @@ Route::group(['middleware' => 'auth'], function () {
     Route::post('/dashboard/tickets', 'Tickets\TicketsController@startNewTicket')->name('tickets.startticket');
     Route::post('/dashboard/tickets/{id}', 'Tickets\TicketsController@addReplyToTicket')->name('tickets.reply');
     Route::get('/dashboard/tickets/{id}/close', 'Tickets\TicketsController@closeTicket')->name('tickets.closeticket');
+
+    //Feedback
+    Route::get('/feedback', 'Feedback\FeedbackController@create')->name('feedback.create');
+
     //Email prefs
     Route::get('/dashboard/emailpref', 'Users\DataController@emailPref')->name('dashboard.emailpref');
     Route::get('/dashboard/emailpref/subscribe', 'Users\DataController@subscribeEmails');
