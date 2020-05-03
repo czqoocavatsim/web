@@ -73,60 +73,12 @@
             </div>
             <div class="modal-body">
                 If you do not wish to proceed with your application, you may withdraw it. You are free to apply again in the future.
-                <input type="hidden" name="reference_id" value="{{$application->reference_id}}">
-                <br>
-                <button id="withdrawAppB" onclick="withdrawApplication()" class="btn btn-danger mt-3">Withdraw application</button>
-                <div id="withdraw-message-box"></div>
-                <script>
-                    function withdrawApplication() {
-
-                        $("#withdraw-message-box").html('');
-
-                        $("#withdrawAppB")
-                            .prop('disabled', true)
-                            .text('Withdrawing...')
-                            .removeClass('btn-danger')
-                            .addClass('btn-light');
-
-                        let reference_id = $('input[name="reference_id"]').val();
-
-                        $.ajax({
-                            type: 'POST',
-                            url: '{{route('training.applications.withdraw')}}',
-                            data: {reference_id: reference_id},
-                            dataType: 'json',
-                            headers: {
-                                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content'),
-                            },
-                            success: function(data) {
-                                console.log(data)
-                                $("#withdraw-message-box").html(
-                                    `
-                                    <div class="alert alert-success mt-3" role="alert">
-                                    <h4 class="alert-heading">Application withdrawn!</h4>
-                                    </div>
-                                    `
-                                )
-                            },
-                            error: function(data) {
-                                console.log(data)
-                                $("#withdrawAppB")
-                                    .prop('disabled', false)
-                                    .text('Withdraw application')
-                                    .removeClass('btn-light')
-                                    .addClass('btn-danger');
-                                $("#withdraw-message-box").html(
-                                    `
-                                    <div class="alert alert-danger mt-3" role="alert">
-                                    <h4 class="alert-heading">There were errors</h4>
-                                    <p>${data.responseJSON.message}</p>
-                                    </div>
-                                    `
-                                )
-                            }
-                        })
-                    }
-                </script>
+                <form action="{{route('training.applications.withdraw')}}" method="POST">
+                    @csrf
+                    <input type="hidden" name="refnce_id" value="{{$application->reference_id}}">
+                    <br>
+                    <button id="withdrawAppB" class="btn btn-danger mt-3">Withdraw application</button>
+                </form>
             </div>
         </div>
     </div>

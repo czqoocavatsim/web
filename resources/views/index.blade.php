@@ -33,6 +33,9 @@
             </h1>
             <div class="row">
                 <div class="col-md-6">
+                    @if(count($news) < 1)
+                        <span class="white-text">No news found.</span>
+                    @else
                     <div class="carousel slide carousel-fade" style="height: 300px;" id="news-carousel" data-ride="carousel">
                         <ol class="carousel-indicators">
                             @php
@@ -78,6 +81,7 @@
                             <span class="sr-only">Next</span>
                         </a>
                     </div>
+                    @endif
                 </div>
                 <div class="col-md-6">
                     <h3 class="white-text">Online Controllers</h3>

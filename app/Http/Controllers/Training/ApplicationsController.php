@@ -106,7 +106,7 @@ class ApplicationsController extends Controller
         $processingUpdate = new ApplicationUpdate([
             'application_id' => $application->id,
             'update_title' => 'Sit tight, your application is currently being processed!',
-            'update_content' => 'If you do not see an update through email or Discord within 5 days, please contact the (Deputy) FIR Chief.',
+            'update_content' => 'If you do not see an update through email or Discord within 5 days, please contact the FIR Chief.',
             'update_type' => 'green'
         ]);
         $processingUpdate->save();
@@ -148,7 +148,7 @@ class ApplicationsController extends Controller
 
         //If bad, return response
         if ($validator->fails()) {
-            return response()->json(['message' => 'Please fill all fields.'], 400);
+            return redirect()->back()->with('error-modal', 'There was an error withdrawing your application. Please contact the Deputy FIR Chief.');
         }
 
         //Check if the application exists
@@ -157,7 +157,7 @@ class ApplicationsController extends Controller
             //return error
             Log::error('Application withdraw fail (ref #'.$request->get('reference_id').')');
             Log::error($request->all());
-            return response()->json(['message' => 'There has been an error. Please contact the Deputy FIR Chief.'], 400);
+            return redirect()->back()->with('error-modal', 'There was an error withdrawing your application. Please contact the Deputy FIR Chief.');
         }
 
         $request->session()->flash('alreadyApplied', 'Application withdrawn.');
