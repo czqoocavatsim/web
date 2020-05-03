@@ -92,6 +92,7 @@ Route::group(['middleware' => 'auth'], function () {
 
     //Feedback
     Route::get('/feedback', 'Feedback\FeedbackController@create')->name('feedback.create');
+    Route::post('/feedback', 'Feedback\FeedbackController@createPost')->name('feedback.create.post');
 
     //Email prefs
     Route::get('/dashboard/emailpref', 'Users\DataController@emailPref')->name('dashboard.emailpref');

@@ -9,6 +9,15 @@ class FeedbackController extends Controller
 {
     public function create()
     {
+        return view('feedback.create');
+    }
 
+    public function createPost(Request $request)
+    {
+        //Define validator messages
+        $messages = [
+            'feedbackType.required' => 'You need to select a type of feedback.',
+            'subject.required' => 
+        ]
     }
 }
