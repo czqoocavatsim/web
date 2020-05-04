@@ -6,7 +6,10 @@
     <hr>
     <p>Access our logos and social media icons here. You may use these logos in their published form at your discretion.
     We ask however that you do not modify the images from their original, published form. Resizing is permitted, provided the aspect ratio remains unadjusted.
-    Please contact our Deputy FIR Chief if you have any queries: <a href="mailto:deputy@czqo.vatcan.ca">deputy@czqo.vatcan.ca.</a></p>
+    Please contact our Deputy FIR Chief with any queries: <a href="mailto:deputy@czqo.vatcan.ca">deputy@czqo.vatcan.ca.</a>
+    <br/><br/>
+    The hex colour codes used in our branding are <span class="font-weight-bold black-text">#0080C9 (Blue)</span> and <span class="font-weight-bold black-text">#FFFFFF (White)</span>. 
+    The font is <span class="font-weight-bold black-text">Avenir Lt Std</span>.</p>
     <h3>Banners</h3>
     <div class="p-2">
         <div class="row">
