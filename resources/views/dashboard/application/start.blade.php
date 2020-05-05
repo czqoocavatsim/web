@@ -32,6 +32,7 @@
             <ul>
                 <li>25 hours spent controlling an enroute control position.</li>
             </ul>
+            <p>If you are an existing Shanwick controller, please contact chief(at)ganderoceanic.com if you would like your endorsement transferred.</p>
         </div>
         @if ($errors->applicationErrors->any())
             <div class="alert alert-danger">
@@ -48,10 +49,10 @@
             <li class="active">
                 <a href="">
                     <span class="circle">1</span>
-                    <span class="label">Why do you wish to be an oceanic controller?</span>
+                    <span class="label">Why would you like to be an oceanic controller?</span>
                 </a>
                 <div class="step-content w-75 grey lighten-3">
-                    <p>Enter your reason here (minimum 100 words):</p>
+                    <p>Please type here (minimum 50 words):</p>
                     {!! Form::textarea('applicant_statement', null, ['class' => 'w-100', 'id' => 'justificationField', 'onkeyup' => 'countChar(this)']) !!}
                     <script>
                         var simplemde = new SimpleMDE({ element: document.getElementById("justificationField"), toolbar:false });
@@ -93,7 +94,7 @@
                 </a>
                 <div class="step-content w-75 grey lighten-3">
                     <h5>Activity requirements</h5>
-                    <p>By applying to Gander Oceanic you acknowledge the activity requirements for after you receive your endorsement. You will be required to control 6 hours each half-year. Failure to do so could result in the removal of your endorsement.</p>
+                    <p>By applying to Gander Oceanic you acknowledge that you agree to be bound to the activity requirements stipulated upon receipt of your endorsement. You will be required to control 6 hours bi-annually (every half-year). Failure to do so may result in the revokation of your endorsement.</p>
                     <div class="custom-control custom-checkbox">
                         <input type="checkbox" class="custom-control-input" required name="agreeActivity" id="agreeActivity">
                         <label class="custom-control-label" for="agreeActivity">I understand</label>
