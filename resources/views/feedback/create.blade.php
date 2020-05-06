@@ -7,6 +7,16 @@
             Here you can submit feedback on our controlling or operations at Gander Oceanic.
         </p>
         <hr>
+        @if($errors->createFeedbackErrors->any())
+            <div class="alert alert-danger">
+                <h4>Error</h4>
+                <ul class="pl-0 ml-0">
+                    @foreach ($errors->createFeedbackErrors->all() as $error)
+                        <li>{{ $error }}</li>
+                    @endforeach
+                </ul>
+            </div>
+        @endif
         <form action="{{route('feedback.create.post')}}" method="POST">
             @csrf
             <ul class="mt-0 pt-0 pl-0 stepper stepper-vertical">
