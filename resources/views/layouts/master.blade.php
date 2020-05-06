@@ -118,6 +118,11 @@
                         {{-- <li class="nav-item">
                             <a href="{{route('controllerbookings.public')}}" class="nav-link {{ Request::is('bookings/*') || Request::is('bookings') ? 'active' : '' }}">Bookings</a>
                         </li> --}}
+                        <li class="nav-item {{ Request::is('news') ? 'active white-text' : '' }} {{ Request::is('news/*') ? 'active white-text' : '' }}">
+                            <a class="nav-link" href="{{route('news')}}">
+                                News
+                            </a>
+                        </li>
                         <li class="nav-item {{ Request::is('events/*') || Request::is('events') ? 'active' : '' }}">
                             <a href="{{route('events.index')}}" class="nav-link">Events</a>
                         </li>
@@ -151,7 +156,6 @@
                             <div class="dropdown-menu" aria-labelledby="dropdown01">
                                 <a class="dropdown-item {{ Request::is('policies') ? 'active white-text' : '' }}" href="{{route('policies')}}">Policies</a>
                                 <a class="dropdown-item {{ Request::is('meetingminutes') ? 'active white-text' : '' }}" href="{{route('meetingminutes')}}">Meeting Minutes</a>
-                                <a class="dropdown-item {{ Request::is('news') ? 'active white-text' : '' }}" href="{{route('news')}}">News</a>
                             </div>
                         </li>
                     </ul>
