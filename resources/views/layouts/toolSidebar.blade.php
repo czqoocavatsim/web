@@ -13,6 +13,9 @@
     <a href="https://www.vatsim.net/pilots/resources" target="_blank" class="list-group-item list-group-item-action {{ Request::is('pilots/vatsim-resources') ? 'active' : '' }}">
         VATSIM Resources
     </a>
+    <a href="https://nattrak.vatsim.net" target="_blank" class="list-group-item list-group-item-action">
+        NATTRAK
+    </a>
     {{--<a href="{{url('/pilots/tutorial')}}" class="list-group-item list-group-item-action {{ Request::is('pilots/tutorial') ? 'active' : '' }}">
         Oceanic Tutorial
     </a>--}}
