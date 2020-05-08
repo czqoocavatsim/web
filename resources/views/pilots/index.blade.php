@@ -13,7 +13,7 @@
                 @include('layouts.toolSidebar')
             </div>
             <div class="col-md-8">
-                <h4>Please select a tool from the left!</h4>
+                <h4>Please select a tool from the left</h4>
             </div>
         </div>
     </div>

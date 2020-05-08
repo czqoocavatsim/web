@@ -153,9 +153,7 @@
                         @if(!Auth::check() || !Auth::user()->rosterProfile)
                         <a href="{{route('application.start')}}" class="btn bg-czqo-blue-light" role="button">Apply To Control</a>
                         @endif
-                        @if(Auth::check())
-                        <a href="{{route('dashboard.index')}}" class="btn bg-czqo-blue-light" role="button">Go To Dashboard</a>
-                        @endif
+                        <a href="/pilots" class="btn bg-czqo-blue-light" role="button">Pilot Resources</a>
                     </div>
                 </div>
             </div>
