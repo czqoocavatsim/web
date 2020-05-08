@@ -352,13 +352,7 @@
                     <h5>Site Admin</h5>
                     <ul class="list-unstyled mt-2 mb-0">
                         <li class="mb-2">
-                            <a href="{{route('staff.edit')}}" style="text-decoration:none;"><span class="blue-text"><i class="fas fa-chevron-right"></i></span> &nbsp; <span class="black-text">Staff Members</span></a>
-                        </li>
-                        <li class="mb-2">
-                            <a href="{{route('auditlog')}}" style="text-decoration:none;"><span class="blue-text"><i class="fas fa-chevron-right"></i></span> &nbsp; <span class="black-text">Audit Log</span></a>
-                        </li>
-                        <li class="mb-2">
-                            <a href="{{route('coresettings')}}  " style="text-decoration:none;"><span class="blue-text"><i class="fas fa-chevron-right"></i></span> &nbsp; <span class="black-text">Core Settings</span></a>
+                            <a href="{{route('settings.index')}}" style="text-decoration:none;"><span class="blue-text"><i class="fas fa-chevron-right"></i></span> &nbsp; <span class="black-text">Settings</span></a>
                         </li>
                     </ul>
                 </div>

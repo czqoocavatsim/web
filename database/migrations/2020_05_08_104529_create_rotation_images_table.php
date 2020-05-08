@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CaroueselShit extends Migration
+class CreateRotationImagesTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,11 +13,18 @@ class CaroueselShit extends Migration
      */
     public function up()
     {
-        Schema::create('carousel', function (Blueprint $table) {
+        Schema::create('rotation_images', function (Blueprint $table) {
+            //Identification
             $table->increments('id');
-            $table->text('image_url');
-            $table->text('caption')->nullable();
-            $table->text('caption_url')->nullable();
+
+            //Assoicated user
+            $table->unsignedInteger('user_id');
+            $table->foreign('user_id')->references('id')->on('users');
+
+            //Information
+            $table->string('path');
+
+            //Timestamps
             $table->timestamps();
         });
     }
@@ -29,6 +36,6 @@ class CaroueselShit extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('carousel');
+        Schema::dropIfExists('rotation_images');
     }
 }
