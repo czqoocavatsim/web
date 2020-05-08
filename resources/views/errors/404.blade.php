@@ -1,12 +1,17 @@
-@extends('layouts.error')
+@extends('layouts.master')
+@section('title', 'Error 404 - ')
 
-
-@section('error')
-Error 404 - Page Not Found
-@endsection
-
-@section('message')
-<div class="mb-4 lead">We have dispatched our helpless webmaster to investigate. If you believe this is an error, please <a href="{{url('/dashboard/tickets')}}">contact us via the ticket system</a> or <a href="mailto:info@czqo.vatcan.ca">via email.</a>
-</div>
-<a href="/" class="btn btn-link">Go home</a>
+@section('content')
+    <div class="container py-5">
+        <h1 class="font-weight-bold blue-text">Oops... that page is missing</h1>
+        <h4 class="font-weight-bold">ERROR 404</h4>
+        <div class="mt-4">
+            <p style="font-size: 1.2em;">
+                We couldn't find anything at <a href="{{Request::url()}}">{{Request::url()}}</a>.
+                <br>
+                If you believe this is a mistake, please contact us.
+            </p>
+        </div>
+        <a href="{{route('index')}}" class="btn bg-czqo-blue-light">Go Home</a>
+    </div>
 @endsection

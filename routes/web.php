@@ -37,9 +37,6 @@ Route::view('/about', 'about')->name('about');
 Route::view('/branding', 'branding')->name('branding');
 Route::view('/eurosounds', 'eurosounds')->name('eurosounds');
 
-Route::get('/test', function () {
-    echo PHP_OS;
-});
 
 //Authentication
 Route::prefix('auth')->group(function () {
