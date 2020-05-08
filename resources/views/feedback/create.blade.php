@@ -10,7 +10,7 @@
         @if($errors->createFeedbackErrors->any())
             <div class="alert alert-danger">
                 <h4>Error</h4>
-                <ul class="pl-0 ml-0">
+                <ul class="pl-0 ml-0" style="list-style:none;">
                     @foreach ($errors->createFeedbackErrors->all() as $error)
                         <li>{{ $error }}</li>
                     @endforeach
@@ -54,10 +54,7 @@
                         </div>
                         <div id="contentGroup">
                             <label style="font-size: 1rem;">Your feedback</label>
-                            <textarea id="contentMD" name="content" class="w-75"></textarea>
-                            <script>
-                                var simplemde = new SimpleMDE({ element: document.getElementById("contentMD"), toolbar: false });
-                            </script>
+                            <textarea class="form-control" name="content" class="w-75"></textarea>
                         </div>
                     </div>
                 </li>
