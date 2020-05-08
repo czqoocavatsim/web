@@ -194,7 +194,7 @@
                     @foreach ($certifications as $cert)
                     <div class="col mb-3">
                         <div class="d-flex flex-row">
-                            <img src="{{$cert->controller->avatar()}}" style="height: 55px; width: 55px; margin-right: 10px; margin-bottom: 3px; border-radius: 50%;">
+                            <img src="{{$cert->controller->avatar()}}" style="height: 55px !important; width: 55px !important; margin-right: 10px; margin-bottom: 3px; border-radius: 50%;">
                             <div class="d-flex flex-column">
                                 <h4 class="font-weight-bold">{{$cert->controller->fullName('FL')}}</h4>
                                 <p title="{{Carbon\Carbon::create($cert->timestamp)->toDayDateTimeString()}}">{{Carbon\Carbon::create($cert->timestamp)->diffForHumans()}}</p>
