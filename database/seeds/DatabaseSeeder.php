@@ -26,19 +26,19 @@ class DatabaseSeeder extends Seeder
             'emaileventc' => 'eventcoordinator@czqo.vatcan.ca',
             'emailfacilitye' => 'facilityengineer@czqo.vatcan.ca',
             'emailwebmaster' => 'webmaster@czqo.vatcan.ca'*/
-            'emailfirchief' => 'webmaster@czqo.vatcan.ca',
-            'emaildepfirchief' => 'webmaster@czqo.vatcan.ca',
-            'emailcinstructor' => 'webmaster@czqo.vatcan.ca',
-            'emaileventc' => 'webmaster@czqo.vatcan.ca',
-            'emailfacilitye' => 'webmaster@czqo.vatcan.ca',
-            'emailwebmaster' => 'webmaster@czqo.vatcan.ca',
+            'emailfirchief' => 'webmaster@ganderoceanic.com',
+            'emaildepfirchief' => 'webmaster@ganderoceanic.com',
+            'emailcinstructor' => 'webmaster@ganderoceanic.com',
+            'emaileventc' => 'webmaster@ganderoceanic.com',
+            'emailfacilitye' => 'webmaster@ganderoceanic.com',
+            'emailwebmaster' => 'webmaster@ganderoceanic.com',
         ]);
 
         DB::table('users')->insert([
             'id' => 1,
             'fname' => 'System',
             'lname' => 'User',
-            'email' => 'no-reply@czqo.vatcan.ca',
+            'email' => 'no-reply@ganderoceanic.com',
             'permissions' => 4,
             'display_fname' => 'System',
         ]);
@@ -47,7 +47,7 @@ class DatabaseSeeder extends Seeder
             'id' => 2,
             'fname' => 'Roster',
             'lname' => 'Placeholder',
-            'email' => 'no-reply@czqo.vatcan.ca',
+            'email' => 'no-reply@ganderoceanic.com',
             'permissions' => 1,
             'display_fname' => 'Roster',
         ]);

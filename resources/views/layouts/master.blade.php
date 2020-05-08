@@ -247,6 +247,10 @@
             <p>For Flight Simulation Use Only - Not To Be Used For Real World Navigation. Any and all proprietary content available on this website may not be shared, copied, reproduced or used in any way without providing credit to the Gander Oceanic FIR - VATCAN. If in doubt, contact the Deputy FIR Chief.</p>
             <p>Copyright © {{App\Models\Settings\CoreSettings::where('id', 1)->firstOrFail()->copyright_year}} Gander Oceanic - All Rights Reserved.</p>
             <div class="flex-left mt-3">
+                <a href="{{route('feedback.create')}}" class="font-weight-bold black-text">Feedback</a>
+                &nbsp;
+                •
+                &nbsp;
                 <a href="{{route('privacy')}}" class="font-weight-bold black-text">Privacy Policy</a>
                 &nbsp;
                 •

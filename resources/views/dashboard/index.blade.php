@@ -311,6 +311,9 @@
                     @endif
                     <ul class="list-unstyled mt-2 mb-0">
                         <li class="mb-2">
+                            <a href="{{route('feedback.create')}}" style="text-decoration:none;"><span class="blue-text"><i class="fas fa-chevron-right"></i></span> &nbsp; <span class="black-text">Send feedback to staff</span></a>
+                        </li>
+                        <li class="mb-2">
                             <a href="{{route('tickets.index', ['create' => 'yes'])}}" style="text-decoration:none;"><span class="blue-text"><i class="fas fa-chevron-right"></i></span> &nbsp; <span class="black-text">Start a support ticket</span></a>
                         </li>
                         <li class="mb-2">
