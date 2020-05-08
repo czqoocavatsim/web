@@ -54,6 +54,23 @@
     <br class="my-2">
     <div class="row">
         <div class="col">
+            <div class="card">
+                <div class="card-body">
+                    <h3 class="font-weight-bold blue-text pb-2">ATC Resources</h3>
+                    <div class="list-group" style="border-radius: 0.5em !important">
+                        @foreach($atcResources as $resource)
+                        @if($resource->atc_only && Auth::user()->permissions < 1)
+                            @continue
+                        @else
+                        <a href="{{$resource->url}}" target="_new" class="list-group-item list-group-item-action">
+                            {{$resource->title}}
+                        </a>
+                        @endif
+                        @endforeach
+                    </div>
+                </div>
+            </div>
+            <br>
             <div data-step="2" data-intro="Here is where you manage and view the data we store on you and your CZQO profile." class="card ">
                 <div class="card-body">
                     <h3 class="font-weight-bold blue-text pb-2">Your Data</h3>
