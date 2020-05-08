@@ -20,7 +20,7 @@
         Oceanic Tutorial
     </a>--}}
     <a href="{{url('/pilots/tracks')}}" class="list-group-item list-group-item-action {{ Request::is('pilots/tracks') ? 'active' : '' }}">
-        NAT Tracks
+        Current NAT Tracks
     </a>
     <a href="{{url('/map')}}" class="list-group-item list-group-item-action">Map</a>
 </div>
