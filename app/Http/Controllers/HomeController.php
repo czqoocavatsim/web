@@ -58,8 +58,8 @@ class HomeController extends Controller
         $shanwickControllers = [];
         $planes = null;
         if ($vatsim->loadData()) {
-            $ganderControllers = $vatsim->searchCallsign('A');
-            $shanwickControllers = $vatsim->searchCallsign('A');
+            $ganderControllers = $vatsim->searchCallsign('CZQX_');
+            $shanwickControllers = $vatsim->searchCallsign('EGGX_');
             $planes = $vatsim->getPilots()->toArray();
         }
         return view('map', compact('ganderControllers', 'shanwickControllers', 'planes'));
