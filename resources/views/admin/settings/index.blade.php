@@ -17,7 +17,7 @@
                 <div class="card h-100 p-4 bg-czqo-blue-light black-text shadow-none">
                     <h3>Emails</h3>
                     <p>Set emails where site events are sent to&nbsp;</p>
-                    <a class="black-text font-weight-bold" href="{{route('network.monitoredpositions.index')}}">Go <i class="fas fa-arrow-right"></i></a>
+                    <a class="black-text font-weight-bold" href="{{route('settings.emails')}}">Go <i class="fas fa-arrow-right"></i></a>
                 </div>
             </div>
             <div class="col-md-3 mb-3">
@@ -31,7 +31,7 @@
                 <div class="card h-100 p-4 bg-czqo-blue-light black-text shadow-none">
                     <h3>Audit Log</h3>
                     <p>System/user events<br>&nbsp;</p>
-                    <a class="black-text font-weight-bold" href="{{route('network.monitoredpositions.index')}}">Go <i class="fas fa-arrow-right"></i></a>
+                    <a class="black-text font-weight-bold" href="{{route('settings.auditlog')}}">Go <i class="fas fa-arrow-right"></i></a>
                 </div>
             </div>
         </div>

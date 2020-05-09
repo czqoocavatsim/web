@@ -207,6 +207,9 @@ Route::group(['middleware' => 'auth'], function () {
                 Route::get('/', 'Settings\SettingsController@index')->name('settings.index');
                 Route::get('/site-information', 'Settings\SettingsController@siteInformation')->name('settings.siteinformation');
                 Route::post('/site-information', 'Settings\SettingsController@saveSiteInformation')->name('settings.siteinformation.post');
+                Route::get('/emails', 'Settings\SettingsController@emails')->name('settings.emails');
+                Route::post('/emails', 'Settings\SettingsController@saveEmails')->name('settings.emails.post');
+                Route::get('/audit-log', 'Settings\SettingsController@auditLog')->name('settings.auditlog');
             });
         });
     });

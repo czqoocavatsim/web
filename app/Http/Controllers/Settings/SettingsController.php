@@ -49,4 +49,46 @@ class SettingsController extends Controller
         //Return the view
         return view('admin.settings.siteinformation', compact('coreSettings'))->with('success', 'Settings saved');
     }
+
+    /*
+    Emails
+    */
+    public function emails()
+    {
+        //Get settings
+        $coreSettings = CoreSettings::find(1);
+
+        //Return the view
+        return view('admin.settings.emails', compact('coreSettings'));
+    }
+
+    /*
+    Save emails
+    */
+    public function saveEmails(Request $request)
+    {
+        //Get the settings
+        $coreSettings = CoreSettings::find(1);
+
+        //Save changes
+        $coreSettings->emailfirchief = $request->get('emailfirchief');
+        $coreSettings->emaildepfirchief = $request->get('emaildepfirchief');
+        $coreSettings->emailcinstructor = $request->get('emailcinstructor');
+        $coreSettings->emaileventc = $request->get('emaileventc');
+        $coreSettings->emailfacilitye = $request->get('emailfacilitye');
+        $coreSettings->emailwebmaster = $request->get('emailwebmaster');
+        $coreSettings->save();
+
+        //Return the view
+        return view('admin.settings.emails', compact('coreSettings'))->with('success', 'Emails saved');
+    }
+
+    /*
+    Audit log
+    */
+    public function auditLog()
+    {
+        $entries = AuditLogEntry::all();
+        return view('admin.settings.auditlog', compact('entries'));
+    }
 }
