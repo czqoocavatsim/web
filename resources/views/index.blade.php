@@ -192,7 +192,7 @@
                     <h2 class="font-weight-bold blue-text mb-3">Our newest controllers</h2>
                     <div class="row">
                     @foreach ($certifications as $cert)
-                    <div class="col mb-3">
+                    <div class="col md-3">
                         <div class="d-flex flex-row">
                             <img src="{{$cert->controller->avatar()}}" style="height: 55px !important; width: 55px !important; margin-right: 10px; margin-bottom: 3px; border-radius: 50%;">
                             <div class="d-flex flex-column">
