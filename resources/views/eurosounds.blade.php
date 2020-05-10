@@ -3,7 +3,7 @@
 @section('description', 'An immersive and realistic sound package for the Euroscope ATC Client.')
 @section('content')
 <div class="container py-4">
-    <img src="https://resources.ganderoceanic.com/pr/brand/banner/EUROSOUNDS_BNR_TSPBLUE.png" style="height: 50px; margin-bottom: 10px;" alt="">
+    <img src="https://resources.ganderoceanic.com/media/img/brand/bnr/EUROSOUNDS_BNR_TSPBLUE.png" style="height: 50px; margin-bottom: 10px;" alt="">
     <h3 class="font-weight-bold blue-text">An immersive and realistic sound package for the Euroscope ATC Client.</h3>
     <hr>
     <p>Created by Andrew Ogden.</p>
