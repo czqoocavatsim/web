@@ -209,7 +209,7 @@
     <script>
         jarallax(document.querySelectorAll('.jarallax'), {
             speed: 0.5,
-            videoSrc: 'https://resources.ganderoceanic.com/media/video/ZQO_SITE_TIMELAPSE.mp4'
+            videoSrc: 'https://www.youtube.com/watch?v=8FZsJt951WA'
         });
     </script>
 @endsection
