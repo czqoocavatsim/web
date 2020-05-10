@@ -145,7 +145,7 @@
                                 <a class="dropdown-item {{ Request::is('pilots/position-report') ? 'active white-text' : '' }}" href="{{url('/pilots/position-report')}}">Position Report Generator</a>
                                 <a class="dropdown-item {{ Request::is('pilots/tracks') ? 'active white-text' : ''}}" href="{{url('/pilots/tracks')}}">Current NAT Tracks</a>
                                 <a class="dropdown-item" href="https://www.vatsim.net/pilots/resources" target="_blank">VATSIM Resources</a>
-                                <a class="dropdown-item" href="https://nattrak.vatsim.net" target="_blank">natTRAK</a>                                
+                                <a class="dropdown-item" href="https://nattrak.vatsim.net" target="_blank">natTRAK</a>
                                 <a class="dropdown-item" href="{{url('/map')}}">Map</a>
                             </div>
                         </li>
@@ -157,6 +157,7 @@
                             <div class="dropdown-menu" aria-labelledby="dropdown01">
                                 <a class="dropdown-item {{ Request::is('policies') ? 'active white-text' : '' }}" href="{{route('policies')}}">Policies</a>
                                 <a class="dropdown-item {{ Request::is('meetingminutes') ? 'active white-text' : '' }}" href="{{route('meetingminutes')}}">Meeting Minutes</a>
+                                <a class="dropdown-item" href="https://blog.ganderoceanic.com">Blog</a>
                             </div>
                         </li>
                     </ul>
@@ -251,15 +252,11 @@
                 &nbsp;
                 •
                 &nbsp;
+                <a href="{{route('about')}}" class="font-weight-bold black-text">About</a>
+                &nbsp;
+                •
+                &nbsp;
                 <a href="{{route('privacy')}}" class="font-weight-bold black-text">Privacy Policy</a>
-                &nbsp;
-                •
-                &nbsp;
-                <a href="https://www.facebook.com/czqofirvatsim" class="font-weight-bold black-text">Facebook</a>
-                &nbsp;
-                •
-                &nbsp;
-                <a href="https://twitter.com/czqofirvatsim" class="font-weight-bold black-text">Twitter</a>
                 &nbsp;
                 •
                 &nbsp;
@@ -271,7 +268,7 @@
                 &nbsp;
                 •
                 &nbsp;
-                <a href="#" data-toggle="modal" data-target="#contactUsModal" class="font-weight-bold black-text">Contact</a>
+                <a href="#" data-toggle="modal" data-target="#contactUsModal" class="font-weight-bold black-text">Contact Us</a>
                 &nbsp;
                 •
                 &nbsp;
@@ -287,7 +284,7 @@
                 <img src="https://cdn.discordapp.com/attachments/482817676067209217/695255571623837837/220px-Bisexual_Pride_Flag.png" style="height:20px;" alt="">
             </div>
             <div class="mt-3">
-                <a href="{{route('about')}}"><small class="text-muted">{{App\Models\Settings\CoreSettings::where('id', 1)->firstOrFail()->sys_name}} {{App\Models\Settings\CoreSettings::where('id', 1)->firstOrFail()->release}} ({{App\Models\Settings\CoreSettings::where('id', 1)->firstOrFail()->sys_build}})</small></a> <small>- <a href="{{route('changelog')}}" class="text-muted">Changelog</a></small>
+                <a href="{{route('about')}}"><small class="text-muted">{{App\Models\Settings\CoreSettings::where('id', 1)->firstOrFail()->sys_name}} {{App\Models\Settings\CoreSettings::where('id', 1)->firstOrFail()->release}} ({{App\Models\Settings\CoreSettings::where('id', 1)->firstOrFail()->sys_build}})</small></a> <small>- <a target="_blank" href="https://blog.ganderoceanic.com/gander-oceanic-core-update-log/" class="text-muted">Update Log</a></small>
             </div>
         </div>
     </footer>
