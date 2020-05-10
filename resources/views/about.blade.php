@@ -8,5 +8,6 @@
 <br>
 <h5 class="text-center"><a href="https://github.com/gander-oceanic-fir-vatsim/czqo-core">View our GitHub</a></h5>
 <h5 class="text-center"><a href="https://blog.ganderoceanic.com/gander-oceanic-core-update-log/">Site Update Log</a></h5>
+<h5 class="text-center"><a href="https://canary.ganderoceanic.com/">Development ("Canary") Website</a></h5>
 </div>
 @endsection
