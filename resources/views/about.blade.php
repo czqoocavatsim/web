@@ -2,7 +2,7 @@
 @section('title', 'About CZQO Core - ')
 @section('content')
 <div class="container d-flex py-5 flex-column align-items-center justify-content-center">
-<img src="https://resources.ganderoceanic.com/pr/brand/square/ZQO_SQ_TSPBLUE.png" class="img-fluid" style="width: 125px;" alt="">
+<img src="https://resources.ganderoceanic.com/media/brand/square/ZQO_SQ_TSPBLUE.png" class="img-fluid" style="width: 125px;" alt="">
 <h1 class="heading blue-text font-weight-bold display-5">Gander Oceanic Core</h1>
 <h4>Release {{App\Models\Settings\CoreSettings::where('id', 1)->firstOrFail()->release}} ({{App\Models\Settings\CoreSettings::where('id', 1)->firstOrFail()->sys_build}})</h4>
 <br>
