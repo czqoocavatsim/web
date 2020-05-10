@@ -23,7 +23,6 @@
         }
     </style>
     <div data-jarallax data-speed="0.2" class="jarallax" style="height: calc(100vh - 59px)">
-        <img class="jarallax-img" src="https://cdn.discordapp.com/attachments/498332235154456579/695982036346994708/unknown.png" alt="">
         <div class="mask flex-center flex-column" style="position:absolute; top:0; left:0; z-index: 1; height: 100%; width: 100%; background: linear-gradient(40deg,rgba(69,202,252,.7),rgba(48,63,159,.4))!important;">
             <div class="container">
                 <div class="py-5">
@@ -208,11 +207,10 @@
         </div>
     </div>
     <script>
-      /*   jarallax(document.querySelectorAll('.jarallax'), {
+        jarallax(document.querySelectorAll('.jarallax'), {
             speed: 0.5,
-            videoStartTime: 10,
-            videoSrc: 'https://www.youtube.com/watch?v=yOCiUColKZ4'
-        });*/
+            videoSrc: 'https://www.youtube.com/watch?v=8FZsJt951WA'
+        });
     </script>
 @endsection
 
