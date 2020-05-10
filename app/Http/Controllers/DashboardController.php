@@ -6,6 +6,7 @@ use App\Models\Events\CtpSignUp;
 use App\Mail\CtpSignUpEmail;
 use App\Models\AtcTraining\RosterMember;
 use App\Models\Publications\AtcResource;
+use App\Models\Settings\RotationImage;
 use App\Models\Tickets\Ticket;
 use Auth;
 use Illuminate\Http\Request;
@@ -30,10 +31,12 @@ class DashboardController extends Controller
 
         $atcResources = AtcResource::all()->sortBy('title');
 
+        $bannerImg = RotationImage::all()->random();
+
         if ($user->preferences->enable_beta_features) {
-            return view('dashboard.indexnew', compact('openTickets', 'certification', 'active', 'atcResources'));
+            return view('dashboard.indexnew', compact('openTickets', 'certification', 'active', 'atcResources', 'bannerImg'));
         } else {
-            return view('dashboard.index', compact('openTickets', 'certification', 'active', 'atcResources'));
+            return view('dashboard.index', compact('openTickets', 'certification', 'active', 'atcResources', 'bannerImg'));
         }
     }
 

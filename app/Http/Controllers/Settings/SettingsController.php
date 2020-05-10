@@ -6,11 +6,14 @@ use App\Http\Controllers\Controller;
 use App\Models\Settings\AuditLogEntry;
 use App\Models\Settings\CoreSettings;
 use App\Models\Settings\MaintenanceIPExemption;
+use App\Models\Settings\RotationImage;
 use App\Notifications\MaintenanceNotification;
 use App\Models\Users\User;
 use Artisan;
 use Auth;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 
 class SettingsController extends Controller
 {
@@ -90,5 +93,41 @@ class SettingsController extends Controller
     {
         $entries = AuditLogEntry::all();
         return view('admin.settings.auditlog', compact('entries'));
+    }
+
+    /*
+    Rotation images
+    */
+    public function rotationImages()
+    {
+        $images = RotationImage::all()->sortByDesc('created_at');
+
+        return view('admin.settings.rotationimages', compact('images'));
+    }
+
+    public function uploadRotationImage(Request $request)
+    {
+        $this->validate($request, [
+            'file' => 'required|image|mimes:jpeg,png,jpg'
+        ]);
+
+        $image = new RotationImage();
+
+        $basePath = 'public/files/rotation/'.Carbon::now()->toDateString().'/'.rand(1000,2000);
+        $path = $request->file('file')->store($basePath);
+        $image->path = Storage::url($path);
+
+        $image->user_id = Auth::id();
+
+        $image->save();
+
+        return redirect()->back()->with('success', 'Image uploaded.');
+    }
+
+    public function deleteRotationImage($image_id)
+    {
+        $image = RotationImage::whereId($image_id)->firstOrFail();
+        $image->delete();
+        return redirect()->back()->with('info', 'Image deleted.');
     }
 }

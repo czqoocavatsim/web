@@ -1,6 +1,6 @@
 @extends('layouts.master')
 @section('content')
-<div class="card card-image rounded-0" style="background-image: url({{asset('img/787.png')}}); background-size: cover; background-position-y: center;">
+<div class="card card-image rounded-0" style="background-image: url({{$bannerImg->path}}); background-size: cover; background-position-y: center;">
     <div class="text-white text-left rgba-stylish-strong py-3 px-4">
         <div class="container">
             <div class="py-5">
@@ -25,11 +25,7 @@
                         "hey"=>"Hey",
                         "hi"=>"Hi",
                         "hola"=>"Hola",
-                        "howdy"=>"Howdy",
-                        "salutations"=>"Salutations",
-                        "sup"=>"Sup",
-                        "whatsup"=>"What's up",
-                        "yo"=>"Yo");
+                        "howdy"=>"Howdy");
 
                     //echo greeting
                     echo (randomArrayVar($greeting));
