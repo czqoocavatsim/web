@@ -29,7 +29,7 @@
                 <a href="https://resources.ganderoceanic.com/media/img/brand/bnr/ZQO_BNR_TSPBLUE.png">Blue on Transparent</a>
             </div>
             <div class="col-md-3 d-flex flex-column align-items-center justify-content-center">
-                <img src="https://resources.ganderoceanic.com/media/img/brand/bnr/ZQO_BNR_TSPWHITE.png" class="img-fluid" alt="">
+                <img style="background-color: #444444;" src="https://resources.ganderoceanic.com/media/img/brand/bnr/ZQO_BNR_TSPWHITE.png" class="img-fluid" alt="">
                 <br/>
                 <a href="https://resources.ganderoceanic.com/media/img/brand/bnr/ZQO_BNR_TSPWHITE.png">White on Transparent</a>
             </div>
@@ -54,7 +54,7 @@
                 <a href="https://resources.ganderoceanic.com/media/img/brand/sqr/ZQO_SQ_TSPBLUE.png">Blue on Transparent</a>
             </div>
             <div class="col-md-3 d-flex flex-column align-items-center justify-content-center">
-                <img src="https://resources.ganderoceanic.com/media/img/brand/sqr/ZQO_SQ_TSPWHITE.png" class="img-fluid" alt="">
+                <img style="background-color: #444444;" src="https://resources.ganderoceanic.com/media/img/brand/sqr/ZQO_SQ_TSPWHITE.png" class="img-fluid" alt="">
                 <br/>
                 <a href="https://resources.ganderoceanic.com/media/img/brand/sqr/ZQO_SQ_TSPWHITE.png">White on Transparent</a>
             </div>
@@ -79,7 +79,7 @@
                 <a href="https://resources.ganderoceanic.com/media/img/brand/social/ZQO_SOCIAL_TSPBLUE.png">Blue on Transparent</a>
             </div>
             <div class="col-md-3 d-flex flex-column align-items-center justify-content-center">
-                <img src="https://resources.ganderoceanic.com/media/img/brand/social/ZQO_SOCIAL_TSPWHITE.png" class="img-fluid" alt="">
+                <img style="background-color: #444444;" src="https://resources.ganderoceanic.com/media/img/brand/social/ZQO_SOCIAL_TSPWHITE.png" class="img-fluid" alt="">
                 <br/>
                 <a href="https://resources.ganderoceanic.com/media/img/brand/social/ZQO_SOCIAL_TSPWHITE.png">White on Transparent</a>
             </div>
