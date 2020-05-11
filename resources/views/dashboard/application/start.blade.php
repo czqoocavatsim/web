@@ -58,7 +58,7 @@
                         var simplemde = new SimpleMDE({ element: document.getElementById("justificationField"), toolbar:false });
                     </script>
                 </div>
-            </li>
+            </li>{{--
             <li class="active">
                 <a href="">
                     <span class="circle">2</span>
@@ -86,10 +86,10 @@
                         <input type="text" placeholder="Division director" required name="refereePosition" id="" class="form-control">
                     </div>
                 </div>
-            </li>
+            </li> --}}
             <li class="active">
                 <a href="">
-                    <span class="circle">3</span>
+                    <span class="circle">2</span>
                     <span class="label">Finish your application</span>
                 </a>
                 <div class="step-content w-75 grey lighten-3">
