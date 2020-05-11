@@ -37,7 +37,7 @@
                             {{$user->permissions()}}
                         </td>
                         <td>
-                            <a class="blue-text" href="{{url('/dashboard/users/'.$user->id)}}"><i class="fa fa-eye"></i> View User</a>
+                            <a class="blue-text" href="{{route('users.viewprofile', $user->id)}}"><i class="fa fa-eye"></i> View User</a>
                         </td>
                     </tr>
                     @endif
