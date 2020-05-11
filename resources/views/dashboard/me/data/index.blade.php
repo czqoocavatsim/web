@@ -66,7 +66,13 @@
                 <div class="card-header">Delete Data</div>
                 <div class="card-body">
                     <p>Please open a support ticket to the Web Team or email them to request deletion of data.</p>
-                                <button onclick="location.href='{{route('tickets.index', ['create' => 'yes', 'department' => 'firchief', 'title' => 'Data request'])}}'" class="btn bg-czqo-blue-light">Support Ticket</button>
+                    <button onclick="location.href='{{route('tickets.index', ['create' => 'yes', 'department' => 'firchief', 'title' => 'Data request'])}}'" class="btn bg-czqo-blue-light">Support Ticket</button>
+                </div>
+            </div>
+            <div class="card mt-3">
+                <div class="card-header">Email Preferences</div>
+                <div class="card-body">
+                    <p>To edit your email preferences, visit the <a href="{{route('me.preferences')}}">preferences page.</a></p>
                 </div>
             </div>
             <div class="card mt-3">
