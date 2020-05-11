@@ -26,7 +26,7 @@
         <div class="mask flex-center flex-column" style="position:absolute; top:0; left:0; z-index: 1; height: 100%; width: 100%; background: linear-gradient(40deg,rgba(69,202,252,.7),rgba(48,63,159,.4))!important;">
             <div class="container">
                 <div class="py-5">
-                    <h1 class="h1 my-4 py-2" style="font-size: 3em; color: #fff;">Cool, calm and collected oceanic control services in the North Atlantic.</h1>
+                    <h1 class="h1 my-4 py-2" style="font-size: 3em; color: #fff;">Cool, calm and collected oceanic control services over the North Atlantic.</h1>
                     <h4><a href="#blueBannerMid" id="discoverMore" class="white-text" style="transition:fade 0.4s;">Find out more&nbsp;&nbsp;<i class="fas fa-arrow-down"></i></a></h4>
                 </div>
             </div>
@@ -146,11 +146,11 @@
                 <div class="col-md-5">
                     <h1 class="font-weight-bold blue-text">We control the skies over the North Atlantic on VATSIM.</h1>
                     <p style="font-size: 1.2em;" class="mt-3">
-                        Gander Oceanic is VATSIM's coolest, calmest and most collected provider of Oceanic control. With our worldwide team of skilled Oceanic controllers, we pride ourselves on our expert, high-quality service to pilots flying across the North Atlantic. Our incredible community of pilots and controllers extend their warmest welcome and we hope that you enjoy our abundance of Oceanic resources!
+                        Gander Oceanic is VATSIM's coolest, calmest and most collected provider of Oceanic control. With our worldwide team of skilled Oceanic controllers, we pride ourselves on our expert, high-quality service to pilots flying across the North Atlantic. Our incredible community of pilots and controllers extend their warmest welcome and wish you all the best for your oceanic crossings!
                     </p>
                     <div class="d-flex flex-row">
                         @if(!Auth::check() || !Auth::user()->rosterProfile)
-                        <a href="{{route('application.start')}}" class="btn bg-czqo-blue-light" role="button">Apply To Control</a>
+                        <a href="{{route('application.start')}}" class="btn bg-czqo-blue-light" role="button">Apply Now</a>
                         @endif
                         <a href="/pilots" class="btn bg-czqo-blue-light" role="button">Pilot Resources</a>
                     </div>
@@ -188,7 +188,7 @@
                     </div>
                 </div>
                 <div class="col-md-6">
-                    <h2 class="font-weight-bold blue-text mb-3">Our newest controllers</h2>
+                    <h2 class="font-weight-bold blue-text mb-3">Our Newest Controllers</h2>
                     <div class="row">
                     @foreach ($certifications as $cert)
                     <div class="col md-3">
