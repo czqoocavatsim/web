@@ -31,7 +31,7 @@
         <meta name="theme-color" content="#000000">
         <meta name="og:title" content="@yield('title', '')Gander Oceanic VATSIM">
         <meta name="og:description" content="@yield('description', '')">
-        <meta name="og:image" content="@yield('image',asset('img/icon.png'))">
+        <meta name="og:image" content="@yield('image','https://resources.ganderoceanic.com/media/img/brand/sqr/ZQO_SQ_TSPBLUE.png')">
         <link rel="shortcut icon" href="{{ asset('favicon.ico') }}" type="image/x-icon">
         <!-- Font Awesome -->
         <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.2/css/all.css">
