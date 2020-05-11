@@ -16,7 +16,7 @@
         @endif
         @if($user->id == 1 || $user->id == 2)
         <div class="alert bg-czqo-blue-light">
-            This account is a system account used to identify automatic actions, or for a placeholder user.
+            This account is a system account used to identify automatic actions, or to serve as a placeholder user.
         </div>
         @endif
         <div class="row">
@@ -149,7 +149,7 @@
                 </div>
                 <form method="post" action="{{route('users.changeusersavatar')}}" enctype="multipart/form-data" class="" id="">
                 <div class="modal-body">
-                    <p>Abuse of this function will result in disciplinary action. This should only be used for adjusting staff members avatars for the staff page, or at a users request.</p>
+                    <p>Abuse of this function will result in disciplinary action. This function should only be used for adjusting staff members' avatars for the staff page, or at a users request.</p>
                     @csrf
                     <div class="input-group pb-3">
                         <div class="custom-file">

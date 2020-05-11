@@ -35,7 +35,7 @@
                 <br>
                 <h4>Updates</h4>
                 @if (count($updates) == 0)
-                None yet!
+                No updates yet.
                 @else
                 @foreach($updates as $u)
                 <div class="card p-3">
@@ -52,7 +52,7 @@
                 @endif
                 <h4 class="mt-3">Controller Applications</h4>
                 @if (count($applications) == 0)
-                None yet!
+                No applications yet.
                 @else
                 @foreach($applications as $a)
                 <div class="card p-3">
