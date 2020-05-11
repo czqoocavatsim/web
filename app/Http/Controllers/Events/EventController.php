@@ -61,7 +61,7 @@ class EventController extends Controller
     public function adminIndex()
     {
         $events = Event::all()->sortByDesc('created_at');
-        return view('dashboard.events.index', compact('events'));
+        return view('admin.events.index', compact('events'));
     }
 
     public function adminViewEvent($slug)
@@ -69,6 +69,6 @@ class EventController extends Controller
         $event = Event::where('slug', $slug)->firstOrFail();
         $applications = $event->controllerApplications;
         $updates = $event->updates;
-        return view('dashboard.events.view', compact('event','applications', 'updates'));
+        return view('admin.events.view', compact('event','applications', 'updates'));
     }
 }

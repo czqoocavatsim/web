@@ -160,6 +160,7 @@ Route::group(['middleware' => 'auth'], function () {
         //Events
         Route::get('/admin/events', 'Events\EventController@adminIndex')->name('events.admin.index');
         Route::get('/admin/events/{slug}', 'Events\EventController@adminViewEvent')->name('events.admin.view');
+        Route::get('/admin/events/create', 'Events\EventController@createEvent')->name('events.admin.create');
         //Users
         Route::get('/admin/users/', 'Users\UserController@viewAllUsers')->middleware('director')->name('users.viewall');
         Route::post('/admin/users/search/ajax', 'Users\UserController@searchUsers')->name('users.search.ajax');

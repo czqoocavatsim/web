@@ -160,7 +160,7 @@
                         <h3 class="font-weight-bold blue-text pb-2">Users</h3>
                         <ul class="list-unstyled mt-2 mb-0">
                             <li class="mb-2">
-                                <a href="{{url('/dashboard/users')}}" style="text-decoration:none;">
+                                <a href="{{(route('users.viewall'))}}" style="text-decoration:none;">
                                     <span class="blue-text">
                                         <i class="fas fa-chevron-right"></i>
                                     </span>
@@ -321,7 +321,7 @@
                         </li>
                         @endif
                         <li class="mb-2">
-                            <a href="" style="text-decoration:none;"><span class="blue-text"><i class="fas fa-chevron-right"></i></span> &nbsp; <span class="black-text">CZQO Knowledge Base</span></a>
+                            <a href="https://kb.ganderoceanic.com" target="_blank" style="text-decoration:none;"><span class="blue-text"><i class="fas fa-chevron-right"></i></span> &nbsp; <span class="black-text">CZQO Knowledge Base</span></a>
                         </li>
                     </ul>
                 </div>
