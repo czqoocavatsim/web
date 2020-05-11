@@ -1,7 +1,9 @@
 @extends('layouts.master')
 @section('content')
 <div class="container py-4">
-    <h2>{{$event->name}}</h2>
+    <a href="{{route('events.admin.index')}}" class="blue-text" style="font-size: 1.2em;"> <i class="fas fa-arrow-left"></i> Events</a>
+    <h1 class="font-weight-bold blue-text">{{$event->name}}</h1>
+    <hr>
     <div class="row">
         <div class="col-md-3">
             <h4 class="mt-2">Start Time</h4>
