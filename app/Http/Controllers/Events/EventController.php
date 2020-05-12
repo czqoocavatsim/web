@@ -145,6 +145,13 @@ class EventController extends Controller
         $event->save();
 
         //Redirect
-        return redirect()->route('events.admin.view', $event->slug)->with('sucess', 'Event created!');
+        return redirect()->route('events.admin.view', $event->slug)->with('success', 'Event created!');
+    }
+
+    public function adminDeleteEvent($slug)
+    {
+        $event = Event::where('slug', $slug)->firstOrFail();
+        $event->delete();
+        return redirect()->route('events.admin.index')->with('info', 'Event deleted.');
     }
 }
