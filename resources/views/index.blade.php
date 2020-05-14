@@ -102,10 +102,10 @@
                 </div>
                 <div class="col-md-6">
                     <h3 class="white-text">Online Controllers</h3>
-                    <ul class="list-unstyled ml-0 mt-3 p-0">
+                    <ul class="list-unstyled ml-0 mt-3 p-0 onlineControllers">
                         @if(count($ganderControllers) < 1 && count($shanwickControllers) < 1)
                         <li class="mb-2">
-                            <div class="card shadow-none black-text blue-grey lighten-5 p-3">
+                            <div class="card shadow-none blue-grey lighten-5 p-3">
                                 <div class="d-flex flex-row justify-content-between align-items-center mb-1">
                                     <h4 class="m-0">No controllers online</h4>
                                 </div>
@@ -114,7 +114,7 @@
                         @endif
                         @foreach($ganderControllers as $controller)
                         <li class="mb-2">
-                            <div class="card shadow-none black-text blue-grey lighten-5 p-3">
+                            <div class="card shadow-none blue-grey lighten-5 p-3">
                                 <div class="d-flex flex-row justify-content-between align-items-center mb-1">
                                     <h4 class="m-0">{{$controller['callsign']}}</h4>
                                     <span><i class="far fa-user-circle"></i>&nbsp;&nbsp;{{$controller['realname']}} {{$controller['cid']}}</span>
@@ -124,7 +124,7 @@
                         @endforeach
                         @foreach($shanwickControllers as $controller)
                         <li class="mb-2">
-                            <div class="card shadow-none black-text blue-grey lighten-5 p-3">
+                            <div class="card shadow-none blue-grey lighten-5 p-3">
                                 <div class="d-flex flex-row justify-content-between align-items-center mb-1">
                                     <h4 class="m-0">{{$controller['callsign']}}</h4>
                                     <span><i class="far fa-user-circle"></i>&nbsp;&nbsp;{{$controller['realname']}} {{$controller['cid']}}</span>
