@@ -3,13 +3,53 @@
     font-family: 'Muli', 'Lato', 'Segoe UI', 'Arial', sans-serif;
 }
 
+:root{
+    --czqo-blue: #0080c9;
+}
+
 body, html {
     height: 100vh;
     scroll-behavior: smooth;
 }
 
-#czqoHeaderLight, .page-footer {
+body[data-theme="dark"] {
+    background-color: rgb(47, 49, 54) !important;
+    color: #eee;
+    --czqo-blue: #2db2ff;
+}
+
+body[data-theme="dark"] .card,
+body[data-theme="dark"].list-group-item {
+    background-color: rgb(59, 61, 68) !important;
+}
+
+body[data-theme="dark"] .list-group-item,
+body[data-theme="dark"]span.black-text,
+body[data-theme="dark"].text-dark,
+body[data-theme="dark"].text-muted {
+    color: #eee !important;
+}
+
+body[data-theme="dark"] .onlineControllers .card.black-text h4 span p {
+    color: #eee !important;
+}
+
+
+.page-footer {
     background-color: rgb(249, 249, 249);
+}
+
+body[data-theme="dark"] .page-footer {
+    background-color: #000;
+}
+
+
+body[data-theme="dark"] .page-footer .black-text {
+    color: #eee !important;
+}
+
+body[data-theme="dark"] #czqoHeaderLight {
+    background: rgb(47, 49, 54) !important;
 }
 
 #czqoHeaderImg {
@@ -30,7 +70,7 @@ body, html {
 }
 
 .dropdown-menu .dropdown-item.active, .dropdown-item:active {
-    background: #0080c9;
+    background: var(--czqo-blue);
 }
 
 .staff_img_container {
@@ -106,6 +146,14 @@ a {
     transition: 0.8s ease;
 }
 
+body[data-theme="dark"] a {
+    color: #eee;
+}
+
+body[data-theme="dark"] a.bg-czqo-blue-light {
+    color: #000 !important;
+}
+
 a:hover {
     text-decoration: underline;
 }
@@ -115,7 +163,7 @@ div.d-flex.flex-row > i {
 }
 
 .nav-item .active {
-    color:#0080c9!important;
+    color:var(--czqo-blue)!important;
 }
 
 .dropdown-item.active {
@@ -123,7 +171,7 @@ div.d-flex.flex-row > i {
 }
 
 .dropdown-item:active {
-    color: #0080c9!important;
+    color: var(--czqo-blue)!important;
     background: none!important;
 }
 
@@ -135,11 +183,11 @@ div.d-flex.flex-row > i {
 
 .btn .bg-czqo-blue-light:not([disabled]):not(.disabled):active {
     background-color: #cfeaff !important;
-    color: #0080c9 !important;
+    color: var(--czqo-blue) !important;
 }
 
 .list-group-item.active {
-    background-color: #0080c9;
+    background-color: var(--czqo-blue);
 }
 
 .btn, .btn:hover, .btn:active {
@@ -158,7 +206,7 @@ div.d-flex.flex-row > i {
 
 .modal-content .modal-header h5.modal-title {
     font-weight: 700 !important;
-    color: #0080c9!important;
+    color: var(--czqo-blue)!important;
     font-size: 1.2rem;
 }
 
@@ -190,19 +238,20 @@ div.d-flex.flex-row > i {
 }
 
 .blue {
-    background-color: #0080c9 !important;
+    background-color: var(--czqo-blue) !important;
 }
 
 .blue-text {
-    color: #0080c9 !important;
+    color: var(--czqo-blue) !important;
 }
 
 .btn-primary {
-    background-color: #0080c9 !important;
+    background-color: var(--czqo-blue) !important;
 }
 
 .dashboard-card-actions {
     font-size: 1.3em !important;
-    color: #0080c9;
+    color: var(--czqo-blue);
     font-weight: 600;
 }
+
