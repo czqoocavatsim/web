@@ -26,6 +26,7 @@ use Mail;
 use mofodojodino\ProfanityFilter\Check;
 use RestCord\Interfaces\AuditLog;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Validator;
 use Laravel\Socialite\Facades\Socialite;
 use NotificationChannels\Discord\Discord;
 
@@ -495,8 +496,36 @@ class UserController extends Controller
     }
 
     public function preferences()
-{
+    {
         $preferences = Auth::user()->preferences;
         return view('dashboard.me.preferences', compact('preferences'));
+    }
+
+    public function preferencesPost(Request $request)
+    {
+        //Define validator messages
+        $messages = [
+            'ui_mode.required' => 'Please select a UI mode.'
+        ];
+
+        //Validate
+        $validator = Validator::make($request->all(), [
+            'ui_mode' => 'required',
+        ], $messages);
+
+        //Redirect if fails
+        if ($validator->fails()) {
+            return redirect()->back()->withInput()->withErrors($validator, 'savePreferencesErrors');
+        }
+
+        //Save preferences
+        $preferences = Auth::user()->preferences;
+
+        //UI mode
+        $preferences->ui_mode = $request->get('ui_mode');
+
+        //Save and redirect
+        $preferences->save();
+        return redirect()->back()->withInput()->with('success', 'Preferences saved!');
     }
 }

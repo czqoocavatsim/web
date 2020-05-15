@@ -191,6 +191,7 @@ class LoginController extends Controller
         if (!UserPreferences::where('user_id', $user->id)->first()) {
             $prefs = new UserPreferences();
             $prefs->user_id = $user->id;
+            $prefs->ui_mode = "light";
             $prefs->save();
         }
         return redirect('/dashboard')->with('success', 'Logged in!');
