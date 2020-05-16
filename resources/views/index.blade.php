@@ -2,26 +2,6 @@
 @section('description', 'Cool, calm and collected oceanic control services in the North Atlantic on VATSIM.')
 
 @section('content')
-    <script src="https://unpkg.com/jarallax@1/dist/jarallax.min.js"></script>
-    <script src="https://unpkg.com/jarallax@1/dist/jarallax-video.min.js"></script>
-    <script src="https://unpkg.com/jarallax@1/dist/jarallax-element.min.js"></script>
-    <style>
-        .jarallax {
-            position: relative;
-            z-index: 0;
-        }
-        .jarallax > .jarallax-img {
-            position: absolute;
-            object-fit: cover;
-            /* support for plugin https://github.com/bfred-it/object-fit-images */
-            font-family: 'object-fit: cover;';
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            z-index: -1;
-        }
-    </style>
     <div data-jarallax data-speed="0.2" class="jarallax" style="height: calc(100vh - 59px)">
         <div class="mask flex-center flex-column" style="position:absolute; top:0; left:0; z-index: 1; height: 100%; width: 100%; background: linear-gradient(40deg,rgba(69,202,252,.7),rgba(48,63,159,.4))!important;">
             <div class="container">
