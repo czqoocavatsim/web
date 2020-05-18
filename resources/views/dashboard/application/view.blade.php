@@ -40,7 +40,7 @@
             @if (!$application->processed_by    )
             no one yet.
             @else
-            {{\App\User::find($application->processed_by)->fullName('FLC')}}
+            {{$application->processed_by->fullName('FLC')}}
             @endif
         </p>
         <p class="mb-1">
