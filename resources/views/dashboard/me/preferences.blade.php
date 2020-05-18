@@ -22,8 +22,8 @@
         @csrf
         <div class="d-flex flex-row justify-content-between">
             <div>
-                <h4 class="font-weight-bold blue-text">UI Mode</h4>
-                <p>Do you live on the light ☀ or the dark 🌙 side?</p>
+                <h4 class="font-weight-bold blue-text">UI Mode <span class="badge blue">BETA</span></h4>
+                <p>Do you live on the light ☀ or the dark 🌙 side? (Dark mode is not yet complete)</p>
             </div>
             <div style="width: 25%;">
                 <select name="ui_mode" id="" class="form-control">
