@@ -176,6 +176,7 @@ Route::group(['middleware' => 'auth'], function () {
             Route::post('/admin/users/{id}/edit', 'Users\UserController@storeEditUser')->name('users.edit.store');
             Route::post('/admin/users/{id}/bookingban/create', 'Users\UserController@createBookingBan')->name('users.bookingban.create');
             Route::post('/admin/users/{id}/bookingban/remove', 'Users\UserController@removeBookingBan')->name('users.bookingban.remove');
+            Route::post('/admin/community/discord/discordban', 'Community\DiscordController@createDiscordBan')->name('discord.createban');
         });
         Route::get('/admin/users/{id}/email', 'Users\UserController@emailCreate')->name('users.email.create');
         Route::get('/admin/users/{id}/email', 'Users\UserController@emailStore')->name('users.email.store');

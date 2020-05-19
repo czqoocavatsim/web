@@ -10,6 +10,11 @@ use Parsedown;
 class DiscordBan extends Model
 {
     protected $hidden = ['id'];
+    protected $dateFormat = 'Y-m-d H:i';
+    public function getDateFormat()
+    {
+        return 'Y-m-d H:i';
+    }
 
     protected $fillable = [
         'user_id', 'moderator_id', 'reason', 'start_time', 'end_time', 'discord_id'
@@ -30,8 +35,8 @@ class DiscordBan extends Model
         return new HtmlString(app(Parsedown::class)->text($this->reason));
     }
 
-    protected $casts = [
-        'start_time' => 'datetime',
-        'end_time' => 'datetime'
+    protected $dates = [
+        'start_time', 'end_time'
     ];
+
 }

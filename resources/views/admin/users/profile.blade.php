@@ -80,7 +80,7 @@
                     <h5>
                         <div class="d-flex flex-row justify-content-between align-items-center">
                             Bans
-                            <a href="#" class="btn btn-sm bg-czqo-blue-light">Add Ban</a>
+                            <a href="#" data-target="#createDiscordBanModal" data-toggle="modal" class="btn btn-sm bg-czqo-blue-light">Add Ban</a>
                         </div>
                     </h5>
                     @if (count($user->discordBans) < 1)
@@ -90,13 +90,7 @@
                         @foreach($user->discordBans as $ban)
                         <div class="list-group-item pr-0">
                             <div class="d-flex flex-row justify-content-between">
-                                <b>From {{$ban->banStartPretty()}} to {{$ban->banEndPretty()}}</b>
-                                <div class="justify-self-end">
-                                    <a href="#" class="btn btn-sm bg-czqo-blue-light">View Reason</a>
-                                    @if($ban->isCurrent())
-                                    <a href="#" class="btn btn-sm btn-danger ">Remove Ban</a>
-                                </div>
-                                @endif
+                                {{$ban->end_time->toDayDateTimeString()}}
                             </div>
                         </div>
                         @endforeach
@@ -168,6 +162,62 @@
         </div>
     </div>
     <!--End change avatar modal-->
+    <!--Start create discord ban modal-->
+    <div class="modal fade" id="createDiscordBanModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLongTitle">Create Discord ban for {{$user->fullName('F')}}</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <form method="post" action="{{route('discord.createban')}}" class="" id="">
+                <input type="hidden" name="user_id" value="{{$user->id}}">
+                <div class="modal-body">
+                    <p>This will ban the user from the Discord.</p>
+                    @csrf
+                    <div class="form-group">
+                        <label for="">Ban reason (in markdown)</label>
+                        <textarea id="contentMD" name="reason" class="w-75"></textarea>
+                        <script>
+                            var simplemde = new SimpleMDE({ element: document.getElementById("contentMD"), toolbar: false });
+                        </script>
+                    </div>
+                    <div class="form-group">
+                        <label for="">Ban start time and date</label>
+                        <input type="datetime" name="start_time" class="form-control flatpickr" id="ban_start" placeholder="Enter date">
+                        <script>
+                            flatpickr('#ban_start', {
+                                enableTime: true,
+                                noCalendar: false,
+                                dateFormat: "Y-m-d H:i",
+                                time_24hr: true,
+                            });
+                        </script>
+                    </div>
+                    <div class="form-group">
+                        <label for="">Ban end time and date. Leave this blank for a permanent ban.</label>
+                        <input type="datetime" name="end_time" class="form-control flatpickr" id="ban_end" placeholder="Enter date">
+                        <script>
+                            flatpickr('#ban_end', {
+                                enableTime: true,
+                                noCalendar: false,
+                                dateFormat: "Y-m-d H:i",
+                                time_24hr: true,
+                            });
+                        </script>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-light" data-dismiss="modal">Dismiss</button>
+                    <input type="submit" class="btn btn-danger" value="Ban">
+                </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    <!--End create discord ban modal
     <script>
         function displayDeleteModal() {
             $('#deleteModal').modal('show')
