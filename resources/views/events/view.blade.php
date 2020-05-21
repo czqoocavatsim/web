@@ -16,7 +16,7 @@
             <a href="{{route('events.index')}}" class="white-text" style="font-size: 1.2em;"> <i class="fas fa-arrow-left"></i> All Events</a>
         </div>
     </div>
-    <div class="card card-image rounded-0 blue" style="@if($event->image_url)background-image: url({{$event->image_url}});@endif background-size: cover; background-position: center;">
+    <div class="card card-image rounded-0 blue jarallax" style="@if($event->image_url)background-image: url({{$event->image_url}});@endif background-size: cover; background-position: center;">
         <div class="text-white text-left py-1 px-4 mask rgba-blue-grey-strong">
             <div class="container">
                 <div class="py-5">
@@ -73,7 +73,7 @@
                     <form id="app-form" method="POST" action="{{route('events.controllerapplication.ajax')}}">
                         @csrf
                         <input type="hidden" name="event_id" value={{$event->id}}>
-                        <p>Submit an application to the Events Coordinator to control during this event through this form.</p>
+                        <p>Submit an application to control during this event through this form.</p>
                         <label for="">Availability start time (zulu)</label>
                         <input type="datetime" name="availability_start" class="form-control flatpickr" id="availability_start">
                         <label class="mt-2" for="">Availability end time (zulu)</label>
@@ -107,6 +107,10 @@
                 <br>
                 <h4 class="font-weight-bold blue-text my-3">Apply to control</h4>
                 <p>You have already applied. Contact the Events and Marketing Director to change times, or cancel.</p>
+                <h6 class="font-weight-bold">Your Availability</h6>
+                <p>{{$app->start_availability_timestamp}} to {{$app->end_availability_timestamp}}</p>
+                <h6 class="font-weight-bold">Comments</h6>
+                <p>{{$app->comments}}</p>
                 @endif
                 <br>
                 <h4 class="font-weight-bold blue-text my-3">Updates</h4>

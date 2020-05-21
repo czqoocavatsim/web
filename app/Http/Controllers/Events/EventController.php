@@ -36,6 +36,11 @@ class EventController extends Controller
     {
         $event = Event::where('slug', $slug)->firstOrFail();
         $updates = $event->updates;
+        if (Auth::check() && ControllerApplication::where('user_id', Auth::id())->where('event_id', $event->id))
+        {
+            $app = ControllerApplication::where('user_id', Auth::id())->where('event_id', $event->id)->first();
+            return view('events.view', compact('event', 'updates', 'app'));
+        }
         return view('events.view', compact('event', 'updates'));
     }
 

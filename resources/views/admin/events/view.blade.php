@@ -40,6 +40,8 @@
             {{$event->html()}}
             <br>
             <h4>Updates</h4>
+            <a href="#" class="btn-sm btn bg-czqo-blue-light">New Update</a>
+            <br>
             @if (count($updates) == 0)
                 None yet!
             @else

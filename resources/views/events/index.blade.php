@@ -25,6 +25,11 @@
                 </div>
             </div>
             @endforeach
+            @if(count($events) < 1)
+            <div class="col-md-6">
+                No events scheduled. Check back soon!
+            </div>
+            @endif
         </div>
         <div class="d-none d-sm-block">
         <h5 class="mt-4"><a data-toggle="collapse" data-target="#pastEvents">View Past Events <i class="fas fa-caret-down"></i></a></h5>

@@ -30,6 +30,7 @@
                     <h4><a href="#blueBannerMid" id="discoverMore" class="white-text" style="transition:fade 0.4s;">Find out more&nbsp;&nbsp;<i class="fas fa-arrow-down"></i></a></h4>
                 </div>
             </div>
+            @if($nextEvent)
             <div class="container white-text">
                 <p style="font-size: 1.4em;" class="font-weight-bold">
                     <a href="{{route('events.view', $nextEvent->slug)}}" class="white-text">
@@ -38,6 +39,7 @@
                 </p>
                 <p style="font-size: 1.2em;">{{$nextEvent->start_timestamp_pretty()}}</p>
             </div>
+            @endif
         </div>
     </div>
     <div class="container-fluid py-4 blue" id="blueBannerMid">
