@@ -38,7 +38,7 @@ class ControllerApplication extends Model
             /*
              * The image location for the senders image
              */
-            "avatar_url" => asset('img/iconwhitebg.png'),
+            "avatar_url" => "https://resources.ganderoceanic.com/media/img/brand/sqr/ZQO_SQ_BLUE.png",
             /*
              * Whether or not to read the message in Text-to-speech
              */
@@ -78,7 +78,7 @@ class ControllerApplication extends Model
                     // Footer object
                     "footer" => [
                         "text" => "Gander Oceanic Core",
-                        "icon_url" => asset('img/iconwhitebg.png')
+                        "icon_url" => "https://resources.ganderoceanic.com/media/img/brand/sqr/ZQO_SQ_BLUE.png"
                     ],
 
                     // Field array of objects

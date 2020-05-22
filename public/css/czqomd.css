@@ -52,6 +52,7 @@ body[data-theme="dark"] #czqoHeaderLight {
     background: rgb(47, 49, 54) !important;
 }
 
+
 body[data-theme="dark"] .modal-content {
     background:  rgb(59, 61, 68) !important;
 }

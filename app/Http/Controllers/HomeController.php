@@ -2,10 +2,12 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Events\Event;
 use App\Models\News\News;
 use App\Models\News\CarouselItem;
 use App\Models\News\HomeNewControllerCert;
 use Auth;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Log;
@@ -33,6 +35,9 @@ class HomeController extends Controller
         $certifications = HomeNewControllerCert::all()->sortByDesc('timestamp')->take(6);
         $carouselItems = CarouselItem::all();
 
+        //Event
+        $nextEvent = Event::where('start_timestamp', '>', Carbon::now())->get()->sortByDesc('id')->first();
+
         //Get VATCAN news
         $vatcanNews = Cache::remember('news.vatcan', 21600, function () {
             $url = 'http://www.vatcan.ca/ajax/news';
@@ -45,7 +50,7 @@ class HomeController extends Controller
             curl_close($ch);
             return json_decode($json);
         });
-        return view('index', compact('ganderControllers', 'shanwickControllers', 'news', 'vatcanNews', 'certifications', 'carouselItems', 'planes'));
+        return view('index', compact('ganderControllers', 'shanwickControllers', 'news', 'vatcanNews', 'certifications', 'carouselItems', 'planes', 'nextEvent'));
     }
 
     public function map()
