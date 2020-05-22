@@ -32,11 +32,11 @@
             <ul>
                 <li>25 hours spent controlling an enroute control position.</li>
             </ul>
-            <p>If you are an existing Shanwick controller, please contact chief(at)ganderoceanic.com if you would like your endorsement transferred.</p>
+            <p>If you are an existing Shanwick controller, please email chief(at)ganderoceanic.com if you would like your endorsement transferred.</p>
         </div>
         @if ($errors->applicationErrors->any())
             <div class="alert alert-danger">
-                <h4 class="alert-heading">There were errors submitting your application.</h4>
+                <h4 class="alert-heading">One or more errors occured whilst attempting to submit your application.</h4>
                 <ul>
                     @foreach ($errors->applicationErrors->all() as $error)
                         <li>{{ $error }}</li>
@@ -58,43 +58,43 @@
                         var simplemde = new SimpleMDE({ element: document.getElementById("justificationField"), toolbar:false });
                     </script>
                 </div>
-            </li>
+            </li>{{--
             <li class="active">
                 <a href="">
                     <span class="circle">2</span>
                     <span class="label">Referees</span>
                 </a>
                 <div class="step-content w-75 grey lighten-3">
-                    <p>Enter one referee to support your application. This may be one of the following individuals:</p>
+                    <p>Please mention one referee to support your application. This may be one of the following individuals:</p>
                     <ul>
-                        <li>Your home FIR or division director/chief</li>
-                        <li>Your home FIR or division training director</li>
-                        <li>Your regional director</li>
-                        <li>A member of Gander Oceanic staff</li>
+                        <li>Your home FIR Chief or Division Director</li>
+                        <li>Your home FIR Chief or Division Training Director</li>
+                        <li>Your Regional Director</li>
+                        <li>A member of the Gander Oceanic Staff Team</li>
                     </ul>
                     <br>
                     <div class="form-group">
-                        <label for="">Name of referee</label>
+                        <label for="">Referee's Name</label>
                         <input type="text" placeholder="Jane Doe" name="refereeName" required id="" class="form-control">
                     </div>
                     <div class="form-group">
-                        <label for="">Email of referee</label>
+                        <label for="">Referee's Email</label>
                         <input type="email" placeholder="j.doe@division.com" required name="refereeEmail" id="" class="form-control">
                     </div>
                     <div class="form-group">
-                        <label for="">Staff position of referee</label>
+                        <label for="">Referee's Staff Position</label>
                         <input type="text" placeholder="Division director" required name="refereePosition" id="" class="form-control">
                     </div>
                 </div>
-            </li>
+            </li> --}}
             <li class="active">
                 <a href="">
-                    <span class="circle">3</span>
+                    <span class="circle">2</span>
                     <span class="label">Finish your application</span>
                 </a>
                 <div class="step-content w-75 grey lighten-3">
                     <h5>Activity requirements</h5>
-                    <p>By applying to Gander Oceanic you acknowledge that you agree to be bound to the activity requirements stipulated upon receipt of your endorsement. You will be required to control 6 hours bi-annually (every half-year). Failure to do so may result in the revokation of your endorsement.</p>
+                    <p>By applying to Gander Oceanic you acknowledge that you agree to be bound to the following activity requirements upon receipt of your endorsement. You will be required to control 6 hours bi-annually (every half-year). Failure to do so may result in the revokation of your endorsement.</p>
                     <div class="custom-control custom-checkbox">
                         <input type="checkbox" class="custom-control-input" required name="agreeActivity" id="agreeActivity">
                         <label class="custom-control-label" for="agreeActivity">I understand</label>
@@ -107,26 +107,26 @@
     @elseif ($allowed == "false")
         <div class="alert alert-danger" role="alert">
             <h4 class="alert-heading">You are not eligible to apply.</h4>
-            <p>You are not yet a C1 controller or above. Please check back when you have a C1 rating and you have:</p>
+            <p>You are not yet a C1 controller or higher. Please check back when you have a C1 rating and have obtained:</p>
             <ul>
                 <li>80 hours on your C1 or above ratings.</li>
-                <li>50 hours spent controlling an enroute control position.</li>
+                <li>25 hours spent controlling a single enroute control position.</li>
             </ul>
             <p>If you believe there is an error, please <a href="{{route('tickets.index', ['create' => 'yes', 'department' => 'firchief', 'title' => 'Issue with requirement check on application system'])}}">start a support ticket.</a></p>
         </div>
     @elseif ($allowed == "pendingApplication")
         <div class="alert alert-danger" role="alert">
             <h4 class="alert-heading">You already have another pending application.</h4>
-            <p>Please wait for this application to be processed. Processing times are roughly up to 48 hours.</p>
+            <p>Please wait for this application to be processed. Processing times may take up to 48 hours.</p>
             <p>If you believe there is an error, please <a href="{{route('tickets.index', ['create' => 'yes', 'department' => 'firchief', 'title' => 'Issue with pending check on application system'])}}">start a support ticket.</a></p>
         </div>
     @elseif ($allowed == "hours")
         <div class="alert alert-danger" role="alert">
             <h4 class="alert-heading">You are not eligible to apply.</h4>
-            <p>You do not yet have 80 hours or above on your C1 or above ratings. Please check back when you have:</p>
+            <p>You do not yet have 80 hours or above on your C1 or above ratings. Please check back when you have obtained:</p>
             <ul>
                 <li>80 hours on your C1 or above ratings.</li>
-                <li>50 hours spent controlling an enroute control position.</li>
+                <li>25 hours spent controlling a single enroute control position.</li>
             </ul>
             <p>You currently have <a title="View your hours rating by rating" href="{{$url}}" target="_blank">{{$total}} hours</a> towards the requirements.</p>
             <p>If you believe there is an error, please <a href="{{route('tickets.index', ['create' => 'yes', 'department' => 'firchief', 'title' => 'Issue with hour requirement check on application system'])}}">start a support ticket.</a></p>

@@ -68,14 +68,6 @@
         <!--DataTables-->
         <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/v/bs4/dt-1.10.18/datatables.min.css"/>
         <script type="text/javascript" src="https://cdn.datatables.net/v/bs4/dt-1.10.18/datatables.min.js"></script>
-        <!--CSS Emoticons-->
-        <link href="{{asset('css/jquery.cssemoticons.css')}}" media="screen" rel="stylesheet" type="text/css" />
-        <script src="{{asset('/js/jquery.cssemoticons.js')}}" type="text/javascript"></script>
-        <!--Fullcalendar-->
-        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fullcalendar/core@4.0.2/main.css">
-        <script src="//cdnjs.cloudflare.com/ajax/libs/moment.js/2.9.0/moment.min.js"></script>
-        <script src="//cdnjs.cloudflare.com/ajax/libs/fullcalendar/2.2.7/fullcalendar.min.js"></script>
-        <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/fullcalendar/2.2.7/fullcalendar.min.css"/>
         <!--IntroJS-->
         <link rel="stylesheet" href="{{asset('introjs/introjs.min.css')}}">
         <script src="{{asset('introjs/intro.min.js')}}"></script>
@@ -85,12 +77,12 @@
         <!--SimpleMDE-->
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/simplemde/latest/simplemde.min.css">
         <script src="https://cdn.jsdelivr.net/simplemde/latest/simplemde.min.js"></script>
-        <!--Dropzone-->
-        <script src="{{asset('js/dropzone.js')}}"></script>
-        <!--JqueryValidate-->
-        <script src="https://cdn.jsdelivr.net/npm/jquery-validation@1.19.1/dist/jquery.validate.min.js"></script>
+        <!--Jarallax-->
+        <script src="https://unpkg.com/jarallax@1/dist/jarallax.min.js"></script>
+        <script src="https://unpkg.com/jarallax@1/dist/jarallax-video.min.js"></script>
+        <script src="https://unpkg.com/jarallax@1/dist/jarallax-element.min.js"></script>
     </head>
-    <body>
+    <body @if(Auth::check() && Auth::user()->preferences) data-theme="{{Auth::user()->preferences->ui_mode}}" @else data-theme="light" @endif>
     <!--Header-->
     @include('maintenancemode::notification')
     @if (\App\Models\Settings\CoreSettings::where('id', 1)->firstOrFail()->banner)
@@ -299,12 +291,12 @@
                     <h5 class="modal-title" id="exampleModalLongTitle">Welcome to CZQO!</b></h5>
                 </div>
                 <div class="modal-body">
-                    Welcome to the Gander Oceanic Core system. Here you can apply for CZQO certification, organise your
-                    training, and access important resources. Before
+                    Welcome to the Gander Oceanic Core system. Here you can apply for a CZQO certification, organise your
+                    training, and access important pilot and controller resources. Before
                     we allow you to use the system, we require you to accept our Privacy Policy. The Policy is available
                     <a target="_blank" href="{{url('/privacy')}}">here.</a>
-                    By default, you are <b>not</b> subscribed to all emails. Go to Dashboard and Email Preferences to
-                    subscribe! It is highly recommended.
+                    By default, you are <b>not</b> subscribed to non-essential email notifications. Head to the Dashboard and click on Manage my Preferences to
+                    subscribe, we highly recommend it!
                 </div>
                 <div class="modal-footer">
                     <a role="button" href="{{ URL('/privacydeny') }}" class="btn btn-outline-danger">I disagree</a>
@@ -330,11 +322,11 @@
                     </button>
                 </div>
                 <div class="modal-body">
-                    To contact CZQO staff, do one of the following:
+                    To contact us, please do one of the following:
                     <ol>
-                        <li>Login, and open a <a href="{{route('tickets.index')}}">ticket.</a></li>
-                        <li>Go to the <a href="{{route('staff')}}">staff page</a> and email the relevant staff member.</li>
-                        <li>Join our <a href="https://discord.gg/MvPVAHP">Discord server</a> and ask in #westons-at-the-airport.</li>
+                        <li>Login and open a <a href="{{route('tickets.index')}}">support ticket.</a></li>
+                        <li>Head to the <a href="{{route('staff')}}">staff page</a> and email the relevant staff member.</li>
+                        <li>Join our <a href="https://discord.gg/MvPVAHP">Discord server</a> and ask in the #westons-at-the-airport channel.</li>
                     </ol>
                     <b>If your query is related to ATC coverage for your event, please visit <a href="{{route('events.index')}}">this page.</a></b>
                 </div>
@@ -379,7 +371,7 @@
                 </div>
                 <div class="modal-body">
                     <img style="height: 50px;" src="{{asset('/img/discord/czqoplusdiscord.png')}}" class="img-fluid mb-2" alt="">
-                    <p>To link your Discord account and join our Discord community, please link your account at the <a href="{{route('dashboard.index')}}">dashboard.</a></p>
+                    <p>To link your Discord account and join our Discord community, please head to your <a href="{{route('dashboard.index')}}">dashboard.</a></p>
                 </div>
             </div>
         </div>

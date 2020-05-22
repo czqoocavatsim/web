@@ -19,14 +19,14 @@ body[data-theme="dark"] {
 }
 
 body[data-theme="dark"] .card,
-body[data-theme="dark"].list-group-item {
+body[data-theme="dark"] .list-group-item {
     background-color: rgb(59, 61, 68) !important;
 }
 
 body[data-theme="dark"] .list-group-item,
-body[data-theme="dark"]span.black-text,
-body[data-theme="dark"].text-dark,
-body[data-theme="dark"].text-muted {
+body[data-theme="dark"] span.black-text,
+body[data-theme="dark"] .text-dark,
+body[data-theme="dark"] .text-muted {
     color: #eee !important;
 }
 
@@ -50,6 +50,15 @@ body[data-theme="dark"] .page-footer .black-text {
 
 body[data-theme="dark"] #czqoHeaderLight {
     background: rgb(47, 49, 54) !important;
+}
+
+
+body[data-theme="dark"] .modal-content {
+    background:  rgb(59, 61, 68) !important;
+}
+
+body[data-theme="dark"] .modal-content .close {
+    color: #eee !important;
 }
 
 #czqoHeaderImg {
@@ -200,6 +209,19 @@ div.d-flex.flex-row > i {
     border-radius: .45em !important;
 }
 
+body[data-theme="dark"] .custom-file-label, body[data-theme="dark"] .custom-file-label::after {
+    color: #eee !important;
+}
+
+body[data-theme="dark"] .form-control {
+    color: #eee !important;
+}
+
+body[data-theme="dark"]  ::placeholder {
+    color: rgb(184, 184, 184) !important;
+    opacity: 1;
+  }
+
 .custom-file-input:lang(en) ~ .custom-file-label::after {
     border-left: 1px solid #E0E0DC;
 }
@@ -255,3 +277,19 @@ div.d-flex.flex-row > i {
     font-weight: 600;
 }
 
+
+.jarallax {
+    position: relative;
+    z-index: 0;
+}
+.jarallax > .jarallax-img {
+    position: absolute;
+    object-fit: cover;
+    /* support for plugin https://github.com/bfred-it/object-fit-images */
+    font-family: 'object-fit: cover;';
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: -1;
+}

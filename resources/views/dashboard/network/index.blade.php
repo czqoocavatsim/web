@@ -7,7 +7,7 @@
     <div class="card-deck">
         <div class="card p-4 green white-text">
             <h3>Monitored Positions</h3>
-            <p>Edit monitored positions and view uptime</p>
+            <p>Edit monitored positions and view position uptime</p>
             <a class="text-white font-weight-bold" href="{{route('network.monitoredpositions.index')}}">Go <i class="fas fa-arrow-right"></i></a>
         </div>
         <div class="card p-4 orange white-text">

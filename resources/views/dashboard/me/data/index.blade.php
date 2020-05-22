@@ -4,7 +4,7 @@
     <a href="{{route('dashboard.index')}}" class="blue-text" style="font-size: 1.2em;"> <i class="fas fa-arrow-left"></i> Dashboard</a>
     <h1 class="blue-text font-weight-bold mt-2">Your Data</h1>
     <hr>
-    <p>Under our <a href="{{route('privacy')}}">privacy policy</a>, you have the right to export and delete data from our service.</p>
+    <p>Under our <a href="{{route('privacy')}}">Privacy Policy</a>, you have the right to export and delete data from our service.</p>
     <br>
     <div class="row">
         <div class="col-md-6">
@@ -13,7 +13,7 @@
                     Export Data
                 </div>
                 <div class="card-body">
-                    To export your data, you can either:
+                    To export your data, you may either:
                     <ul class="mt-0 pt-0 pl-0 stepper stepper-vertical">
                         <li class="active">
                           <a href="#!">
@@ -21,7 +21,7 @@
                             <span class="label">Export all data</span>
                           </a>
                           <div class="step-content grey lighten-3">
-                            <p>To export all data, fill out the form below. We require your email address for verification purposes.</p>
+                            <p>To export all data, please fill out the form below. We require your email address for verification purposes.</p>
                             <form action="{{route('me.data.export.all')}}" method="POST">
                                 @csrf
                                 <div class="md-form">
@@ -65,7 +65,7 @@
             <div class="card">
                 <div class="card-header">Delete Data</div>
                 <div class="card-body">
-                    <p>Please open a support ticket to the Web Team or email them to request deletion of data.</p>
+                    <p>Please open a support ticket to the Web Team or email them to request deletion of your data.</p>
                     <button onclick="location.href='{{route('tickets.index', ['create' => 'yes', 'department' => 'firchief', 'title' => 'Data request'])}}'" class="btn bg-czqo-blue-light">Support Ticket</button>
                 </div>
             </div>
