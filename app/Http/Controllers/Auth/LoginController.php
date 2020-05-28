@@ -185,8 +185,8 @@ class LoginController extends Controller
         $user = User::find($response->data->cid);
         if (!isset($response->data->personal->name_first)) {
             $user->display_cid_only = true;
-            $user->save();
         }
+        $user->save();
         Auth::login($user, true);
         if (!UserPreferences::where('user_id', $user->id)->first()) {
             $prefs = new UserPreferences();
