@@ -161,6 +161,7 @@ Route::group(['middleware' => 'auth'], function () {
         Route::get('/admin/events', 'Events\EventController@adminIndex')->name('events.admin.index');
         Route::get('/admin/events/create', 'Events\EventController@adminCreateEvent')->name('events.admin.create');
         Route::post('/admin/events/create', 'Events\EventController@adminCreateEventPost')->name('events.admin.create.post');
+        Route::post('/admin/events/{slug}/edit', 'Events\EventController@adminEditEventPost')->name('events.admin.edit.post');
         Route::get('/admin/events/{slug}', 'Events\EventController@adminViewEvent')->name('events.admin.view');
         Route::get('/admin/events/{slug}/delete', 'Events\EventController@adminDeleteEvent')->name('events.admin.delete');
         //Users

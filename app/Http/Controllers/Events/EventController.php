@@ -159,4 +159,66 @@ class EventController extends Controller
         $event->delete();
         return redirect()->route('events.admin.index')->with('info', 'Event deleted.');
     }
+
+    public function adminEditEventPost(Request $request, $event_id)
+    {
+        //Define validator messages
+        $messages = [
+            'name.required' => 'A name is required.',
+            'name.max' => 'A name may not be more than 100 characters long.',
+            'image.mimes' => 'An image file must be in the jpg png or gif formats.',
+            'description.required' => 'A description is required.',
+        ];
+
+        //Validate
+        $validator = Validator::make($request->all(), [
+            'name' => 'required|max:100',
+            'image' => 'mimes:jpeg,jpg,png,gif',
+            'description' => 'required',
+            'start' => 'required',
+            'end' => 'required'
+        ], $messages);
+
+        //Redirect if fails
+        if ($validator->fails()) {
+            return redirect()->back()->withInput()->withErrors($validator, 'editEventErrors');
+        }
+
+        //Get event object
+        $event = Event::whereId($event_id)->firstOrFail();
+
+        //Assign name
+        $event->name = $request->get('name');
+
+        //Assign start/end date/time
+        $event->start_timestamp = $request->get('start');
+        $event->end_timestamp = $request->get('end');
+
+        //Assign description
+        $event->description = $request->get('description');
+
+        //Upload image if it exists
+        if ($request->file('image')) {
+            $basePath = 'public/files/'.Carbon::now()->toDateString().'/'.rand(1000,2000);
+            $path = $request->file('image')->store($basePath);
+            $event->image_url = Storage::url($path);
+        }
+
+        //Assign departure icao and arrival icao if they exist
+        if ($request->get('departure_icao') && $request->get('arrival_icao')) {
+            $event->departure_icao = $request->get('departure_icao');
+            $event->arrival_icao = $request->get('arrival_icao');
+        }
+
+        //If controller apps are open then lets make them open
+        if ($request->has('openControllerApps')) {
+            $event->controller_applications_open = true;
+        }
+
+        //Save it
+        $event->save();
+
+        //Redirect
+        return redirect()->route('events.admin.view', $event->slug)->with('success', 'Event edited!');
+    }
 }
