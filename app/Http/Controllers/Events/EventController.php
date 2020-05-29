@@ -150,14 +150,25 @@ class EventController extends Controller
         //Save it
         $event->save();
 
+        //Audit
+        AuditLogEntry::insert(Auth::user(), 'Created event '.$event->name, User::find(1), 0);
+
         //Redirect
         return redirect()->route('events.admin.view', $event->slug)->with('success', 'Event created!');
     }
 
     public function adminDeleteEvent($slug)
     {
+        //Find the event
         $event = Event::where('slug', $slug)->firstOrFail();
+
+        //Delete it
         $event->delete();
+
+        //Audit it
+        AuditLogEntry::insert(Auth::user(), 'Deleted event '.$event->name, User::find(1), 0);
+
+        //Redirect
         return redirect()->route('events.admin.index')->with('info', 'Event deleted.');
     }
 
@@ -219,6 +230,9 @@ class EventController extends Controller
         //Save it
         $event->save();
 
+        //Audit it
+        AuditLogEntry::insert(Auth::user(), 'Edited event '.$event->name, User::find(1), 0);
+
         //Redirect
         return redirect()->route('events.admin.view', $event->slug)->with('success', 'Event edited!');
     }
@@ -256,6 +270,9 @@ class EventController extends Controller
         //Save it
         $update->save();
 
+        //Audit it
+        AuditLogEntry::insert(Auth::user(), 'Created event update for '.$event->name, User::find(1), 0);
+
         //Redirect
         return redirect()->route('events.admin.view', $event_slug)->with('success', 'Update created!');
     }
@@ -268,6 +285,9 @@ class EventController extends Controller
         //Delete it? Delete it!
         $app->delete();
 
+        //Audit it
+        AuditLogEntry::insert(Auth::user(), 'Deleted event controller app '.$app->id, User::find(1), 0);
+
         //Redirect
         return redirect()->route('events.admin.view', $event_slug)->with('info', 'Controller application from '.$app->user_id. 'deleted.');
     }
@@ -279,6 +299,9 @@ class EventController extends Controller
 
         //Delete it? Delete it!
         $update->delete();
+
+        //Audit it
+        AuditLogEntry::insert(Auth::user(), 'Deleted event update '.$update->id, User::find(1), 0);
 
         //Redirect
         return redirect()->route('events.admin.view', $event_slug)->with('info', 'Update \''.$update->title. '\'deleted.');

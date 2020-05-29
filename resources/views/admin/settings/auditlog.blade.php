@@ -20,7 +20,7 @@
                 <tbody>
                 @foreach ($entries as $entry)
                     <tr>
-                        <th scope="row">{{$entry->created_at->toDayDateTimeString()}}</th>
+                        <th data-order="{{$entry->created_at}}" scope="row">{{$entry->created_at->toDayDateTimeString()}}</th>
                         <td>
                             {{$entry->user->fullName("FLC")}}
                         </td>
@@ -42,7 +42,7 @@
     </div>
     <script>
         $(document).ready(function() {
-            $('.table.dt').DataTable();
+            $('.table.dt').DataTable({ "order": [[ 0, "desc" ]]});
         } );
     </script>
 @endsection
