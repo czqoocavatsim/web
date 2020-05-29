@@ -104,9 +104,6 @@
                             @foreach ($staff_members as $s)
                             <option value="{{$s->shortform}}">{{$s->position}} - {{$s->user->fullName('FLC')}}</option>
                             @endforeach
-                            @foreach ($groups as $g)
-                            <option value="{{$g->shortform}}">{{$g->name}}</option>
-                            @endforeach
                         </select>
                         <small>For general feedback, choose the Executive Team.</small>
                     </div>

@@ -1,15 +1,14 @@
 <?php
 
-namespace App\Models\Users;
+namespace App\Models\Settings;
 
+use App\Models\Users\User;
 use Illuminate\Database\Eloquent\Model;
 
-class UserPreferences extends Model
+class RotationImage extends Model
 {
-    protected $hidden = ['id'];
-
     protected $fillable = [
-        'enable_beta_components', 'ui_mode', 'enable_discord_notifications'
+        'user_id', 'path'
     ];
 
     public function user()

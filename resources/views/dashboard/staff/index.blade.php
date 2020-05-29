@@ -8,14 +8,15 @@
 
 @section('content')
     <div class="container" style="margin-top: 20px;">
-        <h2>Staff List</h2>
-        <p>To set a position as vacant, assign it to user 1.</p>
-        <br/>
+        <a href="{{route('settings.index')}}" class="blue-text" style="font-size: 1.2em;"> <i class="fas fa-arrow-left"></i> Settings</a>
+        <h1 class="blue-text font-weight-bold mt-2">Staff</h1>
+        <hr>
+        <p>To set a position to vacant, set it to user ID 1.</p>
         <div class="row">
             @foreach ($staff as $s)
             <div class="col-md-4 mb-3">
                 <div class="card">
-                    <form method="POST" action="{{route('staff.editmember', $s->id)}}">
+                    <form method="POST" action="{{route('settings.staff.editmember', $s->id)}}">
                     @csrf
                     <div class="card-header">{{$s->position}} ({{$s->shortform}})</div>
                     <div class="card-body">

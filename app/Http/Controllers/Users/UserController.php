@@ -26,6 +26,7 @@ use Mail;
 use mofodojodino\ProfanityFilter\Check;
 use RestCord\Interfaces\AuditLog;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Validator;
 use Laravel\Socialite\Facades\Socialite;
 use NotificationChannels\Discord\Discord;
 
@@ -60,7 +61,7 @@ class UserController extends Controller
     {
         $users = User::all()->sortBy('id');
 
-        return view('dashboard.users.index', compact('users'));
+        return view('admin.users.index', compact('users'));
     }
 
     public function viewUserProfile($id)
@@ -71,7 +72,7 @@ class UserController extends Controller
         $xml['return'] = 'sausage';
         $auditLog = AuditLogEntry::where('affected_id', $id)->get();
 
-        return view('dashboard.users.profile', compact('user', 'xml', 'auditLog'));
+        return view('admin.users.profile', compact('user', 'xml', 'auditLog'));
     }
 
     public function deleteUser($id)
@@ -105,7 +106,8 @@ class UserController extends Controller
     {
         $user = User::where('id', $id)->firstOrFail();
 
-        return view('dashboard.users.edituser', compact('user'));
+        //return view('admin.users.edituser', compact('user'));
+        abort(404, 'Not implemented');
     }
 
     public function changeUsersAvatar(Request $request)
@@ -192,14 +194,18 @@ class UserController extends Controller
             $notification->save();
         }
 
-        return redirect()->route('users.viewprofile', $user->id)->with('success', 'User edited!');
+        //return redirect()->route('users.viewprofile', $user->id)->with('success', 'User edited!');
+        abort(404, 'Not implemented');
+
     }
 
     public function emailCreate($id)
     {
         $user = User::where('id', $id)->firstOrFail();
 
-        return view('dashboard.users.email', compact('user'));
+        //return view('dashboard.users.email', compact('user'));
+        abort(404, 'Not implemented');
+
     }
 
     public function emailStore(Request $request)
@@ -226,7 +232,8 @@ class UserController extends Controller
 
         $note->save();
 
-        return redirect()->route('users.viewprofile', $user->id)->with('success', 'User note saved!');
+        //return redirect()->route('users.viewprofile', $user->id)->with('success', 'User note saved!');
+        abort(404, 'Not implemented');
     }
 
     public function deleteUserNote($user_id, $note_id)
@@ -248,7 +255,8 @@ class UserController extends Controller
 
         $note->delete();
 
-        return redirect()->route('users.viewprofile', $user->id)->with('success', 'User note deleted.');
+        //return redirect()->route('users.viewprofile', $user->id)->with('success', 'User note deleted.');
+        abort(404, 'Not implemented');
     }
 
     public function changeAvatar(Request $request)
@@ -488,8 +496,36 @@ class UserController extends Controller
     }
 
     public function preferences()
-{
+    {
         $preferences = Auth::user()->preferences;
         return view('dashboard.me.preferences', compact('preferences'));
+    }
+
+    public function preferencesPost(Request $request)
+    {
+        //Define validator messages
+        $messages = [
+            'ui_mode.required' => 'Please select a UI mode.'
+        ];
+
+        //Validate
+        $validator = Validator::make($request->all(), [
+            'ui_mode' => 'required',
+        ], $messages);
+
+        //Redirect if fails
+        if ($validator->fails()) {
+            return redirect()->back()->withInput()->withErrors($validator, 'savePreferencesErrors');
+        }
+
+        //Save preferences
+        $preferences = Auth::user()->preferences;
+
+        //UI mode
+        $preferences->ui_mode = $request->get('ui_mode');
+
+        //Save and redirect
+        $preferences->save();
+        return redirect()->back()->withInput()->with('success', 'Preferences saved!');
     }
 }

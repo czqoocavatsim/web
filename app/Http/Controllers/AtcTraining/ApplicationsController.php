@@ -75,17 +75,17 @@ class ApplicationsController extends Controller
     {
         $messages = [
             'applicant_statement.required' => 'You need to write why you wish to control at Gander.',
-            'refereeName.required' => 'Please provide a name for your referee.',
+           /*  'refereeName.required' => 'Please provide a name for your referee.',
             'refereeEmail.required' => 'Please provide an email for your referee.',
-            'refereePosition.required' => 'Please provide your referee\'s email.'
+            'refereePosition.required' => 'Please provide your referee\'s email.' */
         ];
 
         //Validate form
         $validator = Validator::make($request->all(), [
             'applicant_statement' => 'required',
-            'refereeName' => 'required',
+         /*    'refereeName' => 'required',
             'refereeEmail' => 'required|email',
-            'refereePosition' => 'required'
+            'refereePosition' => 'required' */
         ], $messages);
 
         if ($validator->fails()) {

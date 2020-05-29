@@ -2,10 +2,12 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Events\Event;
 use App\Models\News\News;
 use App\Models\News\CarouselItem;
 use App\Models\News\HomeNewControllerCert;
 use Auth;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Log;
@@ -23,16 +25,16 @@ class HomeController extends Controller
         if ($vatsim->loadData()) {
             $ganderControllers = $vatsim->searchCallsign('CZQX_');
             Log::info($ganderControllers->toArray());
-            Log::info('cheese');
             $shanwickControllers = $vatsim->searchCallsign('EGGX_');
             $planes = $vatsim->getPilots()->toArray();
         }
 
         //News
-        $news = News::all()->sortByDesc('published')->take(3);
-        $latest = News::latest()->first();
+        $news = News::where('visible', true)->get()->sortByDesc('published')->take(3);
         $certifications = HomeNewControllerCert::all()->sortByDesc('timestamp')->take(6);
-        $carouselItems = CarouselItem::all();
+
+        //Event
+        $nextEvent = Event::where('start_timestamp', '>', Carbon::now())->get()->sortByDesc('id')->first();
 
         //Get VATCAN news
         $vatcanNews = Cache::remember('news.vatcan', 21600, function () {
@@ -46,7 +48,7 @@ class HomeController extends Controller
             curl_close($ch);
             return json_decode($json);
         });
-        return view('index', compact('ganderControllers', 'shanwickControllers', 'news', 'latest', 'vatcanNews', 'certifications', 'carouselItems', 'planes'));
+        return view('index', compact('ganderControllers', 'shanwickControllers', 'news', 'vatcanNews', 'certifications', 'planes', 'nextEvent'));
     }
 
     public function map()
@@ -58,8 +60,8 @@ class HomeController extends Controller
         $shanwickControllers = [];
         $planes = null;
         if ($vatsim->loadData()) {
-            $ganderControllers = $vatsim->searchCallsign('A');
-            $shanwickControllers = $vatsim->searchCallsign('A');
+            $ganderControllers = $vatsim->searchCallsign('CZQX_');
+            $shanwickControllers = $vatsim->searchCallsign('EGGX_');
             $planes = $vatsim->getPilots()->toArray();
         }
         return view('map', compact('ganderControllers', 'shanwickControllers', 'planes'));

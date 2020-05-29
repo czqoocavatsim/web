@@ -147,10 +147,10 @@ Route::group(['middleware' => 'auth'], function () {
         Route::post('/atcresources', 'Publications\AtcResourcesController@uploadResource')->name('atcresources.upload');
         Route::get('/atcresources/delete/{id}', 'Publications\AtcResourcesController@deleteResource')->name('atcresources.delete');
         //News
-        Route::get('/dashboard/news', 'News\NewsController@index')->name('news.index');
-        Route::get('/dashboard/news/article/create', 'News\NewsController@createArticle')->name('news.articles.create');
-        Route::post('/dashboard/news/article/create', 'News\NewsController@postArticle')->name('news.articles.create.post');
-        Route::get('/dashboard/news/article/{slug}', 'News\NewsController@viewArticle')->name('news.articles.view');
+        Route::get('/admin/news', 'News\NewsController@index')->name('news.index');
+        Route::get('/admin/news/article/create', 'News\NewsController@createArticle')->name('news.articles.create');
+        Route::post('/admin/news/article/create', 'News\NewsController@postArticle')->name('news.articles.create.post');
+        Route::get('/admin/news/article/{slug}', 'News\NewsController@viewArticle')->name('news.articles.view');
         //Roster
         Route::get('/dashboard/roster', 'AtcTraining\RosterController@index')->name('roster.index');
         Route::post('/dashboard/roster', 'AtcTraining\RosterController@addController')->name('roster.addcontroller');
@@ -158,26 +158,33 @@ Route::group(['middleware' => 'auth'], function () {
         Route::get('/dashboard/roster/{id}', 'AtcTraining\RosterController@viewController')->name('roster.viewcontroller');
         Route::get('/dashboard/roster/{cid}/delete', 'AtcTraining\RosterController@deleteController')->name('roster.deletecontroller');
         //Events
-        Route::get('/dashboard/events', 'Events\EventController@adminIndex')->name('events.admin.index');
-        Route::get('/dashboard/events/{slug}', 'Events\EventController@adminViewEvent')->name('events.admin.view');
+        Route::get('/admin/events', 'Events\EventController@adminIndex')->name('events.admin.index');
+        Route::get('/admin/events/create', 'Events\EventController@adminCreateEvent')->name('events.admin.create');
+        Route::post('/admin/events/create', 'Events\EventController@adminCreateEventPost')->name('events.admin.create.post');
+        Route::post('/admin/events/{slug}/edit', 'Events\EventController@adminEditEventPost')->name('events.admin.edit.post');
+        Route::post('/admin/events/{slug}/update/create', 'Events\EventController@adminCreateUpdatePost')->name('events.admin.update.post');
+        Route::get('/admin/events/{slug}', 'Events\EventController@adminViewEvent')->name('events.admin.view');
+        Route::get('/admin/events/{slug}/delete', 'Events\EventController@adminDeleteEvent')->name('events.admin.delete');
+        Route::get('/admin/events/{slug}/controllerapps/{cid}/delete', 'Events\EventController@adminDeleteControllerApp')->name('events.admin.controllerapps.delete');
+        Route::get('/admin/events/{slug}/updates/{id}/delete', 'Events\EventController@adminDeleteUpdate')->name('events.admin.update.delete');
         //Users
-        Route::get('/dashboard/users/', 'Users\UserController@viewAllUsers')->middleware('director')->name('users.viewall');
-        Route::post('/dashboard/users/search/ajax', 'Users\UserController@searchUsers')->name('users.search.ajax');
-        Route::get('/dashboard/users/{id}', 'Users\UserController@viewUserProfile')->name('users.viewprofile');
-        Route::post('/dashboard/users/{id}', 'Users\UserController@createUserNote')->name('users.createnote');
-        Route::get('/dashboard/users/{user_id}/note/{note_id}/delete', 'Users\UserController@deleteUserNote')->name('users.deletenote');
+        Route::get('/admin/users/', 'Users\UserController@viewAllUsers')->middleware('director')->name('users.viewall');
+        Route::post('/admin/users/search/ajax', 'Users\UserController@searchUsers')->name('users.search.ajax');
+        Route::get('/admin/users/{id}', 'Users\UserController@viewUserProfile')->name('users.viewprofile');
+        Route::post('/admin/users/{id}', 'Users\UserController@createUserNote')->name('users.createnote');
+        Route::get('/admin/users/{user_id}/note/{note_id}/delete', 'Users\UserController@deleteUserNote')->name('users.deletenote');
         Route::group(['middleware' => 'executive'], function () {
-            Route::post('/dashboard/users/func/avatarchange', 'Users\UserController@changeUsersAvatar')->name('users.changeusersavatar');
-            Route::post('/dashboard/users/func/avatarreset', 'Users\UserController@resetUsersAvatar')->name('users.resetusersavatar');
-            Route::post('/dashboard/users/func/bioreset', 'Users\UserController@resetUsersBio')->name('users.resetusersbio');
-            Route::get('/dashboard/users/{id}/delete', 'Users\UserController@deleteUser');
-            Route::get('/dashboard/users/{id}/edit', 'Users\UserController@editUser')->name('users.edit.create');
-            Route::post('/dashboard/users/{id}/edit', 'Users\UserController@storeEditUser')->name('users.edit.store');
-            Route::post('/dashboard/users/{id}/bookingban/create', 'Users\UserController@createBookingBan')->name('users.bookingban.create');
-            Route::post('/dashboard/users/{id}/bookingban/remove', 'Users\UserController@removeBookingBan')->name('users.bookingban.remove');
+            Route::post('/admin/users/func/avatarchange', 'Users\UserController@changeUsersAvatar')->name('users.changeusersavatar');
+            Route::post('/admin/users/func/avatarreset', 'Users\UserController@resetUsersAvatar')->name('users.resetusersavatar');
+            Route::post('/admin/users/func/bioreset', 'Users\UserController@resetUsersBio')->name('users.resetusersbio');
+            Route::get('/admin/users/{id}/delete', 'Users\UserController@deleteUser');
+            Route::get('/admin/users/{id}/edit', 'Users\UserController@editUser')->name('users.edit.create');
+            Route::post('/admin/users/{id}/edit', 'Users\UserController@storeEditUser')->name('users.edit.store');
+            Route::post('/admin/users/{id}/bookingban/create', 'Users\UserController@createBookingBan')->name('users.bookingban.create');
+            Route::post('/admin/users/{id}/bookingban/remove', 'Users\UserController@removeBookingBan')->name('users.bookingban.remove');
         });
-        Route::get('/dashboard/users/{id}/email', 'Users\UserController@emailCreate')->name('users.email.create');
-        Route::get('/dashboard/users/{id}/email', 'Users\UserController@emailStore')->name('users.email.store');
+        Route::get('/admin/users/{id}/email', 'Users\UserController@emailCreate')->name('users.email.create');
+        Route::get('/admin/users/{id}/email', 'Users\UserController@emailStore')->name('users.email.store');
         //Controller Applications
         Route::get('/dashboard/training/applications', 'AtcTraining\TrainingController@viewAllApplications')->name('training.applications');
         Route::get('/dashboard/training/applications/{id}', 'AtcTraining\TrainingController@viewApplication')->name('training.viewapplication');
@@ -192,23 +199,30 @@ Route::group(['middleware' => 'auth'], function () {
         Route::get('/meetingminutes/{id}', 'News\NewsController@minutesDelete')->name('meetingminutes.delete');
         Route::post('/meetingminutes', 'News\NewsController@minutesUpload')->name('meetingminutes.upload');
         //Network
-        Route::get('/dashboard/network', 'Network\NetworkController@index')->name('network.index');
-        Route::get('/dashboard/network/monitoredpositions', 'Network\NetworkController@monitoredPositionsIndex')->name('network.monitoredpositions.index');
-        Route::get('/dashboard/network/monitoredpositions/{position}', 'Network\NetworkController@viewMonitoredPosition')->name('network.monitoredpositions.view');
-        Route::post('/dashboard/network/monitoredpositions/create', 'Network\NetworkController@createMonitoredPosition')->name('network.monitoredpositions.create');
-        //Audit Log and settings, and policy creation
+        Route::get('/admin/network', 'Network\NetworkController@index')->name('network.index');
+        Route::get('/admin/network/monitoredpositions', 'Network\NetworkController@monitoredPositionsIndex')->name('network.monitoredpositions.index');
+        Route::get('/admin/network/monitoredpositions/{position}', 'Network\NetworkController@viewMonitoredPosition')->name('network.monitoredpositions.view');
+        Route::post('/admin/network/monitoredpositions/create', 'Network\NetworkController@createMonitoredPosition')->name('network.monitoredpositions.create');
+
+        //Policy creation and settings
         Route::group(['middleware' => 'executive'], function () {
-            Route::get('/dashboard/auditlog', 'Settings\AuditLogController@index')->name('auditlog');
-            Route::post('/dashboard/auditlog', 'Settings\AuditLogController@insert')->name('auditlog.insert');
-            Route::get('/dashboard/coresettings', 'Settings\CoreSettingsController@index')->name('coresettings');
-            Route::get('/dashboard/coresettings/enablemaintenance', 'Settings\CoreSettingsController@enableMaintenance')->name('coresettings.enablemaintenance');
-            Route::post('/dashboard/coresettings', 'Settings\CoreSettingsController@store')->name('coresettings.store');
-            Route::get('/dashboard/coresettings/ip/{id}/del', 'Settings\CoreSettingsController@deleteExemptIp')->name('coresettings.exemptips.delete');
-            Route::post('/dashboard/coresettings/ip/add', 'Settings\CoreSettingsController@addExemptIp')->name('coresettings.exemptips.add');
             Route::post('/policies', 'Publications\PoliciesController@addPolicy')->name('policies.create');
             Route::get('/policies/{id}/delete', 'Publications\PoliciesController@deletePolicy');
-            Route::get('/dashboard/staff', 'Users\StaffListController@editIndex')->name('staff.edit');
-            Route::post('/dashboard/staff/{id}', 'Users\StaffListController@editStaffMember')->name('staff.editmember');
+
+            //Settings
+            Route::prefix('admin/settings')->group(function () {
+                Route::get('/', 'Settings\SettingsController@index')->name('settings.index');
+                Route::get('/site-information', 'Settings\SettingsController@siteInformation')->name('settings.siteinformation');
+                Route::post('/site-information', 'Settings\SettingsController@saveSiteInformation')->name('settings.siteinformation.post');
+                Route::get('/emails', 'Settings\SettingsController@emails')->name('settings.emails');
+                Route::post('/emails', 'Settings\SettingsController@saveEmails')->name('settings.emails.post');
+                Route::get('/audit-log', 'Settings\SettingsController@auditLog')->name('settings.auditlog');
+                Route::get('/rotation-images', 'Settings\SettingsController@rotationImages')->name('settings.rotationimages');
+                Route::get('/rotation-images/delete/{image_id}', 'Settings\SettingsController@deleteRotationImage')->name('settings.rotationimages.deleteimg');
+                Route::post('/rotation-images/uploadimg', 'Settings\SettingsController@uploadRotationImage')->name('settings.rotationimages.uploadimg');
+                Route::get('/staff', 'Users\StaffListController@editIndex')->name('settings.staff');
+                Route::post('/staff/{id}', 'Users\StaffListController@editStaffMember')->name('settings.staff.editmember');
+            });
         });
     });
 });

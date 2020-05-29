@@ -19,6 +19,11 @@
             <i class="far fa-clock"></i>&nbsp;&nbsp;<span @if($article->edited) title="Last edited {{$article->edited_pretty()}}" @endif>Published {{$article->published_pretty()}}</span>&nbsp;&nbsp;•&nbsp;&nbsp;<i class="far fa-user-circle"></i>&nbsp;&nbsp;{{$article->author_pretty()}}
         </div>
         <hr>
+        @if(!$article->visible)
+        <div class="alert bg-czqo-blue-light">
+            This article is not visible to the public.
+        </div>
+        @endif
         {{$article->html()}}
     </div>
 @stop

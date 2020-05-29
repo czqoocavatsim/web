@@ -31,7 +31,7 @@
         <meta name="theme-color" content="#000000">
         <meta name="og:title" content="@yield('title', '')Gander Oceanic VATSIM">
         <meta name="og:description" content="@yield('description', '')">
-        <meta name="og:image" content="@yield('image',asset('img/icon.png'))">
+        <meta name="og:image" content="@yield('image','https://resources.ganderoceanic.com/media/img/brand/sqr/ZQO_SQ_TSPBLUE.png')">
         <link rel="shortcut icon" href="{{ asset('favicon.ico') }}" type="image/x-icon">
         <!-- Font Awesome -->
         <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.2/css/all.css">
@@ -68,14 +68,6 @@
         <!--DataTables-->
         <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/v/bs4/dt-1.10.18/datatables.min.css"/>
         <script type="text/javascript" src="https://cdn.datatables.net/v/bs4/dt-1.10.18/datatables.min.js"></script>
-        <!--CSS Emoticons-->
-        <link href="{{asset('css/jquery.cssemoticons.css')}}" media="screen" rel="stylesheet" type="text/css" />
-        <script src="{{asset('/js/jquery.cssemoticons.js')}}" type="text/javascript"></script>
-        <!--Fullcalendar-->
-        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fullcalendar/core@4.0.2/main.css">
-        <script src="//cdnjs.cloudflare.com/ajax/libs/moment.js/2.9.0/moment.min.js"></script>
-        <script src="//cdnjs.cloudflare.com/ajax/libs/fullcalendar/2.2.7/fullcalendar.min.js"></script>
-        <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/fullcalendar/2.2.7/fullcalendar.min.css"/>
         <!--IntroJS-->
         <link rel="stylesheet" href="{{asset('introjs/introjs.min.css')}}">
         <script src="{{asset('introjs/intro.min.js')}}"></script>
@@ -85,12 +77,12 @@
         <!--SimpleMDE-->
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/simplemde/latest/simplemde.min.css">
         <script src="https://cdn.jsdelivr.net/simplemde/latest/simplemde.min.js"></script>
-        <!--Dropzone-->
-        <script src="{{asset('js/dropzone.js')}}"></script>
-        <!--JqueryValidate-->
-        <script src="https://cdn.jsdelivr.net/npm/jquery-validation@1.19.1/dist/jquery.validate.min.js"></script>
+        <!--Jarallax-->
+        <script src="https://unpkg.com/jarallax@1/dist/jarallax.min.js"></script>
+        <script src="https://unpkg.com/jarallax@1/dist/jarallax-video.min.js"></script>
+        <script src="https://unpkg.com/jarallax@1/dist/jarallax-element.min.js"></script>
     </head>
-    <body>
+    <body @if(Auth::check() && Auth::user()->preferences) data-theme="{{Auth::user()->preferences->ui_mode}}" @else data-theme="light" @endif>
     <!--Header-->
     @include('maintenancemode::notification')
     @if (\App\Models\Settings\CoreSettings::where('id', 1)->firstOrFail()->banner)
@@ -103,7 +95,7 @@
     <header>
         <nav id="czqoHeaderLight" class="navbar navbar-expand-lg navbar-dark blue p-0" style="min-height:59px;">
             <div class="container">
-                <a class="navbar-brand" href="{{route('index')}}"><img style="height: 40px; width:auto;" id="czqoHeaderImg" src="https://resources.ganderoceanic.com/pr/brand/banner/ZQO_BNR_BLUE.png" alt=""></a>
+                <a class="navbar-brand" href="{{route('index')}}"><img style="height: 40px; width:auto;" id="czqoHeaderImg" src="https://resources.ganderoceanic.com/media/img/brand/bnr/ZQO_BNR_TSPWHITE.png" alt=""></a>
                 <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
                         aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
@@ -143,9 +135,9 @@
                             <div class="dropdown-menu" aria-labelledby="dropdown01">
                                 <a class="dropdown-item {{ Request::is('pilots/oceanic-clearance') ? 'active white-text' : '' }}" href="{{url('/pilots/oceanic-clearance')}}">Oceanic Clearance Generator</a>
                                 <a class="dropdown-item {{ Request::is('pilots/position-report') ? 'active white-text' : '' }}" href="{{url('/pilots/position-report')}}">Position Report Generator</a>
+                                <a class="dropdown-item {{ Request::is('pilots/tracks') ? 'active white-text' : ''}}" href="{{url('/pilots/tracks')}}">Current NAT Tracks</a>
                                 <a class="dropdown-item" href="https://www.vatsim.net/pilots/resources" target="_blank">VATSIM Resources</a>
                                 <a class="dropdown-item" href="https://nattrak.vatsim.net" target="_blank">natTRAK</a>
-                                <a class="dropdown-item {{ Request::is('pilots/tracks') ? 'active white-text' : ''}}" href="{{url('/pilots/tracks')}}">NAT Tracks</a>
                                 <a class="dropdown-item" href="{{url('/map')}}">Map</a>
                             </div>
                         </li>
@@ -157,6 +149,7 @@
                             <div class="dropdown-menu" aria-labelledby="dropdown01">
                                 <a class="dropdown-item {{ Request::is('policies') ? 'active white-text' : '' }}" href="{{route('policies')}}">Policies</a>
                                 <a class="dropdown-item {{ Request::is('meetingminutes') ? 'active white-text' : '' }}" href="{{route('meetingminutes')}}">Meeting Minutes</a>
+                                <a class="dropdown-item" href="https://blog.ganderoceanic.com">Blog</a>
                             </div>
                         </li>
                     </ul>
@@ -251,15 +244,11 @@
                 &nbsp;
                 •
                 &nbsp;
+                <a href="{{route('about')}}" class="font-weight-bold black-text">About</a>
+                &nbsp;
+                •
+                &nbsp;
                 <a href="{{route('privacy')}}" class="font-weight-bold black-text">Privacy Policy</a>
-                &nbsp;
-                •
-                &nbsp;
-                <a href="https://www.facebook.com/czqofirvatsim" class="font-weight-bold black-text">Facebook</a>
-                &nbsp;
-                •
-                &nbsp;
-                <a href="https://twitter.com/czqofirvatsim" class="font-weight-bold black-text">Twitter</a>
                 &nbsp;
                 •
                 &nbsp;
@@ -271,7 +260,7 @@
                 &nbsp;
                 •
                 &nbsp;
-                <a href="#" data-toggle="modal" data-target="#contactUsModal" class="font-weight-bold black-text">Contact</a>
+                <a href="#" data-toggle="modal" data-target="#contactUsModal" class="font-weight-bold black-text">Contact Us</a>
                 &nbsp;
                 •
                 &nbsp;
@@ -287,7 +276,7 @@
                 <img src="https://cdn.discordapp.com/attachments/482817676067209217/695255571623837837/220px-Bisexual_Pride_Flag.png" style="height:20px;" alt="">
             </div>
             <div class="mt-3">
-                <a href="{{route('about')}}"><small class="text-muted">{{App\Models\Settings\CoreSettings::where('id', 1)->firstOrFail()->sys_name}} {{App\Models\Settings\CoreSettings::where('id', 1)->firstOrFail()->release}} ({{App\Models\Settings\CoreSettings::where('id', 1)->firstOrFail()->sys_build}})</small></a> <small>- <a href="{{route('changelog')}}" class="text-muted">Changelog</a></small>
+                <a href="{{route('about')}}"><small class="text-muted">{{App\Models\Settings\CoreSettings::where('id', 1)->firstOrFail()->sys_name}} {{App\Models\Settings\CoreSettings::where('id', 1)->firstOrFail()->release}} ({{App\Models\Settings\CoreSettings::where('id', 1)->firstOrFail()->sys_build}})</small></a> <small>- <a target="_blank" href="https://blog.ganderoceanic.com/gander-oceanic-core-update-log/" class="text-muted">Update Log</a></small>
             </div>
         </div>
     </footer>
@@ -302,12 +291,12 @@
                     <h5 class="modal-title" id="exampleModalLongTitle">Welcome to CZQO!</b></h5>
                 </div>
                 <div class="modal-body">
-                    Welcome to the Gander Oceanic Core system. Here you can apply for CZQO certification, organise your
-                    training, and access important resources. Before
+                    Welcome to the Gander Oceanic Core system. Here you can apply for a CZQO certification, organise your
+                    training, and access important pilot and controller resources. Before
                     we allow you to use the system, we require you to accept our Privacy Policy. The Policy is available
                     <a target="_blank" href="{{url('/privacy')}}">here.</a>
-                    By default, you are <b>not</b> subscribed to all emails. Go to Dashboard and Email Preferences to
-                    subscribe! It is highly recommended.
+                    By default, you are <b>not</b> subscribed to non-essential email notifications. Head to the Dashboard and click on Manage my Preferences to
+                    subscribe, we highly recommend it!
                 </div>
                 <div class="modal-footer">
                     <a role="button" href="{{ URL('/privacydeny') }}" class="btn btn-outline-danger">I disagree</a>
@@ -333,11 +322,11 @@
                     </button>
                 </div>
                 <div class="modal-body">
-                    To contact CZQO staff, do one of the following:
+                    To contact us, please do one of the following:
                     <ol>
-                        <li>Login, and open a <a href="{{route('tickets.index')}}">ticket.</a></li>
-                        <li>Go to the <a href="{{route('staff')}}">staff page</a> and email the relevant staff member.</li>
-                        <li>Join our <a href="https://discord.gg/MvPVAHP">Discord server</a> and ask in #westons-at-the-airport.</li>
+                        <li>Login and open a <a href="{{route('tickets.index')}}">support ticket.</a></li>
+                        <li>Head to the <a href="{{route('staff')}}">staff page</a> and email the relevant staff member.</li>
+                        <li>Join our <a href="https://discord.gg/MvPVAHP">Discord server</a> and ask in the #westons-at-the-airport channel.</li>
                     </ol>
                     <b>If your query is related to ATC coverage for your event, please visit <a href="{{route('events.index')}}">this page.</a></b>
                 </div>
@@ -382,7 +371,7 @@
                 </div>
                 <div class="modal-body">
                     <img style="height: 50px;" src="{{asset('/img/discord/czqoplusdiscord.png')}}" class="img-fluid mb-2" alt="">
-                    <p>To link your Discord account and join our Discord community, please link your account at the <a href="{{route('dashboard.index')}}">dashboard.</a></p>
+                    <p>To link your Discord account and join our Discord community, please head to your <a href="{{route('dashboard.index')}}">dashboard.</a></p>
                 </div>
             </div>
         </div>

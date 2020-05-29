@@ -1,6 +1,7 @@
 @extends('layouts.master')
 @section('content')
-<div class="card card-image rounded-0" style="background-image: url({{asset('img/787.png')}}); background-size: cover; background-position-y: center;">
+<div class="jarallax card card-image rounded-0" data-jarallax data-speed="0.2">
+    <img class="jarallax-img" src="{{$bannerImg->path}}" alt="">
     <div class="text-white text-left rgba-stylish-strong py-3 px-4">
         <div class="container">
             <div class="py-5">
@@ -25,11 +26,7 @@
                         "hey"=>"Hey",
                         "hi"=>"Hi",
                         "hola"=>"Hola",
-                        "howdy"=>"Howdy",
-                        "salutations"=>"Salutations",
-                        "sup"=>"Sup",
-                        "whatsup"=>"What's up",
-                        "yo"=>"Yo");
+                        "howdy"=>"Howdy");
 
                     //echo greeting
                     echo (randomArrayVar($greeting));
@@ -38,10 +35,19 @@
                 </h1>
             </div>
         </div>
+        @if(Auth::user()->created_at->diffInDays(Carbon\Carbon::now()) < 14) <!--14 days since user signed up-->
+        <div class="container white-text">
+            <p style="font-size: 1.4em;" class="font-weight-bold">
+                <a href="javascript:void(0);" onclick="javascript:startTutorial()" class="white-text">
+                    <i class="fas fa-question"></i>&nbsp;&nbsp;Need help? Click here to start the tutorial!
+                </a>
+            </p>
+        </div>
+        @endif
     </div>
 </div>
 <div class="container py-4">
-    <h1 data-step="1" data-intro="Welcome to the CZQO Dashboard! This is your central hub for all things Gander. Here you can interact with our FIR, and manage your account." class="blue-text font-weight-bold">Dashboard</h1>
+    <h1 data-step="1" data-intro="" class="blue-text font-weight-bold">Dashboard</h1>
     {{--@if (Auth::user()->rating_id >= 5)
     <blockquote class="blockquote bq-primary">
         <p class="bq-title">Cross the Pond Eastbound 2019</p>
@@ -54,7 +60,7 @@
     <br class="my-2">
     <div class="row">
         <div class="col">
-            <div class="card">
+            <div class="card" id="atcResources">
                 <div class="card-body">
                     <h3 class="font-weight-bold blue-text pb-2">ATC Resources</h3>
                     <div class="list-group" style="border-radius: 0.5em !important">
@@ -71,7 +77,7 @@
                 </div>
             </div>
             <br>
-            <div data-step="2" data-intro="Here is where you manage and view the data we store on you and your CZQO profile." class="card ">
+            <div id="yourData" class="card">
                 <div class="card-body">
                     <h3 class="font-weight-bold blue-text pb-2">Your Data</h3>
                     <div class="row">
@@ -164,7 +170,7 @@
                         <h3 class="font-weight-bold blue-text pb-2">Users</h3>
                         <ul class="list-unstyled mt-2 mb-0">
                             <li class="mb-2">
-                                <a href="{{url('/dashboard/users')}}" style="text-decoration:none;">
+                                <a href="{{(route('users.viewall'))}}" style="text-decoration:none;">
                                     <span class="blue-text">
                                         <i class="fas fa-chevron-right"></i>
                                     </span>
@@ -199,8 +205,8 @@
             @endif
         </div>
         <div class="col">
-            <div class="card" data-step="7" data-intro="Here you can view your certification status within CZQO.">
-                <div class="card-body">
+            <div class="card">
+                <div class="card-body" id="certification">
                     <h3 class="font-weight-bold blue-text pb-2">Certification and Training</h3>
                     <h5 class="card-title">Status</h5>
                     <div class="card-text">
@@ -286,7 +292,7 @@
                 </div>
             </div>
             <br/>
-            <div data-step="10" data-intro="If you have any enquires or issues for the staff, feel free to make a ticket via the ticketing system." class="card">
+            <div id="support" class="card">
                 <div class="card-body">
                     <h3 class="font-weight-bold blue-text pb-2">Support</h3>
                     @if (count($openTickets) < 1)
@@ -325,7 +331,7 @@
                         </li>
                         @endif
                         <li class="mb-2">
-                            <a href="" style="text-decoration:none;"><span class="blue-text"><i class="fas fa-chevron-right"></i></span> &nbsp; <span class="black-text">CZQO Knowledge Base</span></a>
+                            <a href="https://kb.ganderoceanic.com" target="_blank" style="text-decoration:none;"><span class="blue-text"><i class="fas fa-chevron-right"></i></span> &nbsp; <span class="black-text">CZQO Knowledge Base</span></a>
                         </li>
                     </ul>
                 </div>
@@ -352,13 +358,7 @@
                     <h5>Site Admin</h5>
                     <ul class="list-unstyled mt-2 mb-0">
                         <li class="mb-2">
-                            <a href="{{route('staff.edit')}}" style="text-decoration:none;"><span class="blue-text"><i class="fas fa-chevron-right"></i></span> &nbsp; <span class="black-text">Staff Members</span></a>
-                        </li>
-                        <li class="mb-2">
-                            <a href="{{route('auditlog')}}" style="text-decoration:none;"><span class="blue-text"><i class="fas fa-chevron-right"></i></span> &nbsp; <span class="black-text">Audit Log</span></a>
-                        </li>
-                        <li class="mb-2">
-                            <a href="{{route('coresettings')}}  " style="text-decoration:none;"><span class="blue-text"><i class="fas fa-chevron-right"></i></span> &nbsp; <span class="black-text">Core Settings</span></a>
+                            <a href="{{route('settings.index')}}" style="text-decoration:none;"><span class="blue-text"><i class="fas fa-chevron-right"></i></span> &nbsp; <span class="black-text">Settings</span></a>
                         </li>
                     </ul>
                 </div>
@@ -367,8 +367,48 @@
         </div>
     </div>
     <br/>
-    <a href="javascript:void(0);" onclick="javascript:introJs().setOption('showProgress', true).start();">View the tutorial</a>
+    <a href="javascript:void(0);" onclick="javascript:startTutorial()">View the tutorial</a>
 </div>
+
+<!-- Intro js -->
+<script>
+    function startTutorial()
+    {
+        var intro = introJs();
+        intro.setOptions({
+        steps: [
+            {
+            intro: "Hi {{Auth::user()->fullName('F')}}! Welcome to the tutorial for the Gander Oceanic website. We're excited to have you join us. On the dashboard, you can get a glance at your status within our OIR, and access functions easily. To begin, click the 'Next' button below."
+            },
+            {
+            element: "#atcResources",
+            intro: "Here you can view resources for Gander controllers, including sector files, documents, and the spreadsheet. If you're not a rostered controller yet, you may not be able to see everything. For pilot resources, click the Pilots tab on the navbar above."
+            },
+            {
+            element: '#yourData',
+            intro: "Here you can get an overview of your Gander Oceanic profile. Change your display name by clicking '{{Auth::user()->fullName('FLC')}}l and following the prompts. You can link your Discord account here and get access to our Discord community, and you can even set an avatar for yourself. The buttons below allow you to change settings such as your biography, preferences, and manage your data.",
+            position: 'right'
+            },
+            {
+            element: '#certification',
+            intro: 'Here you can view your certification status with us, and if you\'re a rostered controller, your activity hours. You can also view your previous applications to control here.',
+            position: 'left'
+            },
+            {
+            element: '#support',
+            intro: "If you ever need support from our staff or wish to send feedback, this is the place to do it. You can create a support ticket to a specific staff member, or send feedback on a controller or our operations.",
+            position: 'left'
+            },
+            {
+            intro: 'That\'s all for now! If you have any questions, please do not hesitate to contact us. The tutorial button on the top of the page will disappear when your account is older than 2 weeks. Enjoy!'
+            }
+        ]
+        });
+
+        intro.start();
+    }
+</script>
+<!-- End intro js -->
 
 <!--Change avatar modal-->
 <div class="modal fade" id="changeAvatar" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
@@ -528,6 +568,7 @@
     //$("#discordModal").modal();
 </script>
 <!--End Discord modal-->
+
 @if(!Auth::user()->memberOfCzqoGuild())
 <!--Join guild modal-->
 <div class="modal fade" id="joinDiscordServerModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">

@@ -2,46 +2,24 @@
 @section('description', 'Cool, calm and collected oceanic control services in the North Atlantic on VATSIM.')
 
 @section('content')
-    <script src="https://unpkg.com/jarallax@1/dist/jarallax.min.js"></script>
-    <script src="https://unpkg.com/jarallax@1/dist/jarallax-video.min.js"></script>
-    <script src="https://unpkg.com/jarallax@1/dist/jarallax-element.min.js"></script>
-    <style>
-        .jarallax {
-            position: relative;
-            z-index: 0;
-        }
-        .jarallax > .jarallax-img {
-            position: absolute;
-            object-fit: cover;
-            /* support for plugin https://github.com/bfred-it/object-fit-images */
-            font-family: 'object-fit: cover;';
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            z-index: -1;
-        }
-    </style>
     <div data-jarallax data-speed="0.2" class="jarallax" style="height: calc(100vh - 59px)">
-        <img class="jarallax-img" src="https://cdn.discordapp.com/attachments/498332235154456579/695982036346994708/unknown.png" alt="">
         <div class="mask flex-center flex-column" style="position:absolute; top:0; left:0; z-index: 1; height: 100%; width: 100%; background: linear-gradient(40deg,rgba(69,202,252,.7),rgba(48,63,159,.4))!important;">
             <div class="container">
                 <div class="py-5">
-                    <h1 class="h1 my-4 py-2" style="font-size: 3em; color: #fff;">Cool, calm and collected oceanic control services in the North Atlantic.</h1>
+                    <h1 class="h1 my-4 py-2" style="font-size: 3em; color: #fff;">Cool, calm and collected oceanic control services over the North Atlantic.</h1>
                     <h4><a href="#blueBannerMid" id="discoverMore" class="white-text" style="transition:fade 0.4s;">Find out more&nbsp;&nbsp;<i class="fas fa-arrow-down"></i></a></h4>
                 </div>
             </div>
-            <div class="container">
-                <a href="https://twitter.com/czqofirvatsim" class="nav-link ml-0 pl-0 waves-effect white-text waves-light">
-                    <i class="fab fa-twitter fa-3x"></i>
-                </a>
-                <a href="https://www.facebook.com/czqofirvatsim" class="nav-link waves-effect white-text waves-light">
-                    <i class="fab fa-facebook fa-3x"></i>
-                </a>
-                <a class="nav-link waves-effect white-text waves-light" data-toggle="modal" data-target="#discordTopModal">
-                    <i class="fab fa-discord fa-3x"></i>
-                </a>
+            @if($nextEvent)
+            <div class="container white-text">
+                <p style="font-size: 1.4em;" class="font-weight-bold">
+                    <a href="{{route('events.view', $nextEvent->slug)}}" class="white-text">
+                        <i class="fa fa-calendar"></i>&nbsp;&nbsp;Upcoming: &nbsp;{{$nextEvent->name}}
+                    </a>
+                </p>
+                <p style="font-size: 1.2em;">{{$nextEvent->start_timestamp_pretty()}}</p>
             </div>
+            @endif
         </div>
     </div>
     <div class="container-fluid py-4 blue" id="blueBannerMid">
@@ -75,7 +53,7 @@
                                 <div class="carousel-item @if($carousel_iteration == 0) active @endif" style="height: 300px;">
                                     <div class="view">
                                         @if ($n->image)
-                                        <img class="d-block w-100" src="{{$n->image}}" alt="{{$n->image}}">
+                                        <img class="d-block w-100" style="height: 300px !important;" src="{{$n->image}}" alt="{{$n->image}}">
                                         @else
                                         <div style="height:300px;" class="homepage-news-img blue waves-effect"></div>
                                         @endif
@@ -103,10 +81,10 @@
                 </div>
                 <div class="col-md-6">
                     <h3 class="white-text">Online Controllers</h3>
-                    <ul class="list-unstyled ml-0 mt-3 p-0">
+                    <ul class="list-unstyled ml-0 mt-3 p-0 onlineControllers">
                         @if(count($ganderControllers) < 1 && count($shanwickControllers) < 1)
                         <li class="mb-2">
-                            <div class="card shadow-none black-text blue-grey lighten-5 p-3">
+                            <div class="card shadow-none blue-grey lighten-5 p-3">
                                 <div class="d-flex flex-row justify-content-between align-items-center mb-1">
                                     <h4 class="m-0">No controllers online</h4>
                                 </div>
@@ -115,7 +93,7 @@
                         @endif
                         @foreach($ganderControllers as $controller)
                         <li class="mb-2">
-                            <div class="card shadow-none black-text blue-grey lighten-5 p-3">
+                            <div class="card shadow-none blue-grey lighten-5 p-3">
                                 <div class="d-flex flex-row justify-content-between align-items-center mb-1">
                                     <h4 class="m-0">{{$controller['callsign']}}</h4>
                                     <span><i class="far fa-user-circle"></i>&nbsp;&nbsp;{{$controller['realname']}} {{$controller['cid']}}</span>
@@ -125,7 +103,7 @@
                         @endforeach
                         @foreach($shanwickControllers as $controller)
                         <li class="mb-2">
-                            <div class="card shadow-none black-text blue-grey lighten-5 p-3">
+                            <div class="card shadow-none blue-grey lighten-5 p-3">
                                 <div class="d-flex flex-row justify-content-between align-items-center mb-1">
                                     <h4 class="m-0">{{$controller['callsign']}}</h4>
                                     <span><i class="far fa-user-circle"></i>&nbsp;&nbsp;{{$controller['realname']}} {{$controller['cid']}}</span>
@@ -147,11 +125,11 @@
                 <div class="col-md-5">
                     <h1 class="font-weight-bold blue-text">We control the skies over the North Atlantic on VATSIM.</h1>
                     <p style="font-size: 1.2em;" class="mt-3">
-                        Gander Oceanic is VATSIM's coolest, calmest and most collected provider of Oceanic control. With our worldwide team of skilled Oceanic controllers, we pride ourselves on our expert, high-quality service to pilots flying across the North Atlantic. Our incredible community of pilots and controllers extend their warmest welcome and we hope that you enjoy our abundance of Oceanic resources!
+                        Gander Oceanic is VATSIM's coolest, calmest and most collected provider of Oceanic control. With our worldwide team of skilled Oceanic controllers, we pride ourselves on our expert, high-quality service to pilots flying across the North Atlantic. Our incredible community of pilots and controllers extend their warmest welcome and wish you all the best for your oceanic crossings!
                     </p>
                     <div class="d-flex flex-row">
                         @if(!Auth::check() || !Auth::user()->rosterProfile)
-                        <a href="{{route('application.start')}}" class="btn bg-czqo-blue-light" role="button">Apply To Control</a>
+                        <a href="{{route('application.start')}}" class="btn bg-czqo-blue-light" role="button">Apply Now</a>
                         @endif
                         <a href="/pilots" class="btn bg-czqo-blue-light" role="button">Pilot Resources</a>
                     </div>
@@ -189,10 +167,10 @@
                     </div>
                 </div>
                 <div class="col-md-6">
-                    <h2 class="font-weight-bold blue-text mb-3">Our newest controllers</h2>
+                    <h2 class="font-weight-bold blue-text mb-3">Our Newest Controllers</h2>
                     <div class="row">
                     @foreach ($certifications as $cert)
-                    <div class="col mb-3">
+                    <div class="col md-3">
                         <div class="d-flex flex-row">
                             <img src="{{$cert->controller->avatar()}}" style="height: 55px !important; width: 55px !important; margin-right: 10px; margin-bottom: 3px; border-radius: 50%;">
                             <div class="d-flex flex-column">
@@ -208,11 +186,11 @@
         </div>
     </div>
     <script>
-      /*   jarallax(document.querySelectorAll('.jarallax'), {
+        jarallax(document.querySelectorAll('.jarallax'), {
             speed: 0.5,
-            videoStartTime: 10,
-            videoSrc: 'https://www.youtube.com/watch?v=yOCiUColKZ4'
-        });*/
+            videoSrc: 'mp4:https://resources.ganderoceanic.com/media/video/ZQO_SITE_TIMELAPSE.mp4',
+            videoLoop: true
+        });
     </script>
 @endsection
 

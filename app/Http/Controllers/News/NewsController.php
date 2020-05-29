@@ -137,12 +137,17 @@ class NewsController extends Controller
     public function viewArticlePublic($slug)
     {
         $article = News::where('slug', $slug)->firstOrFail();
+        if (!$article->visible) {
+            if (Auth::check() && !Auth::user()->permissions > 3) {
+                abort(403, 'This article is hidden.');
+            }
+        }
         return view('publicarticle', compact('article'));
     }
 
     public function viewAllPublic()
     {
-        $news = News::all()->sortByDesc('id');
+        $news = News::where('visible', true)->get()->sortByDesc('id');
         return view('publicnews', compact('news'));
     }
 

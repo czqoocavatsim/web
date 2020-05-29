@@ -185,12 +185,13 @@ class LoginController extends Controller
         $user = User::find($response->data->cid);
         if (!isset($response->data->personal->name_first)) {
             $user->display_cid_only = true;
-            $user->save();
         }
+        $user->save();
         Auth::login($user, true);
         if (!UserPreferences::where('user_id', $user->id)->first()) {
             $prefs = new UserPreferences();
             $prefs->user_id = $user->id;
+            $prefs->ui_mode = "light";
             $prefs->save();
         }
         return redirect('/dashboard')->with('success', 'Logged in!');

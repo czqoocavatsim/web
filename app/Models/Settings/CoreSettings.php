@@ -11,6 +11,6 @@ class CoreSettings extends Model
     protected $fillable = [
         'sys_name', 'release', 'sys_build', 'copyright_year', 'banner',
         'emailfirchief', 'emaildepfirchief', 'emailcinstructor',
-        'emaileventc', 'emailfaciilitye', 'emailwebmaster',
+        'emaileventc', 'emailfacilitye', 'emailwebmaster',
     ];
 }
