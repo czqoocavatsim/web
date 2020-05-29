@@ -18,7 +18,7 @@
                         <td>
                             <a href="{{route('events.admin.view', $e->slug)}}" class="blue-text">{{$e->name}}</a>
                         </td>
-                        <td>
+                        <td data-order="{{$e->start_timestamp}}">
                             {{$e->start_timestamp_pretty()}}
                         </td>
                     </tr>
@@ -27,7 +27,7 @@
             </table>
             <script>
                 $(document).ready(function() {
-                    $('.table.dt').DataTable();
+                    $('.table.dt').DataTable({ "order": [[ 1, "desc" ]]});
                 } );
             </script>
         </div>
