@@ -25,7 +25,6 @@ class HomeController extends Controller
         if ($vatsim->loadData()) {
             $ganderControllers = $vatsim->searchCallsign('CZQX_');
             Log::info($ganderControllers->toArray());
-            Log::info('cheese');
             $shanwickControllers = $vatsim->searchCallsign('EGGX_');
             $planes = $vatsim->getPilots()->toArray();
         }
@@ -33,7 +32,6 @@ class HomeController extends Controller
         //News
         $news = News::where('visible', true)->get()->sortByDesc('published')->take(3);
         $certifications = HomeNewControllerCert::all()->sortByDesc('timestamp')->take(6);
-        $carouselItems = CarouselItem::all();
 
         //Event
         $nextEvent = Event::where('start_timestamp', '>', Carbon::now())->get()->sortByDesc('id')->first();
@@ -50,7 +48,7 @@ class HomeController extends Controller
             curl_close($ch);
             return json_decode($json);
         });
-        return view('index', compact('ganderControllers', 'shanwickControllers', 'news', 'vatcanNews', 'certifications', 'carouselItems', 'planes', 'nextEvent'));
+        return view('index', compact('ganderControllers', 'shanwickControllers', 'news', 'vatcanNews', 'certifications', 'planes', 'nextEvent'));
     }
 
     public function map()
