@@ -53,7 +53,7 @@
                                 <div class="carousel-item @if($carousel_iteration == 0) active @endif" style="height: 300px;">
                                     <div class="view">
                                         @if ($n->image)
-                                        <img class="d-block w-100" src="{{$n->image}}" alt="{{$n->image}}">
+                                        <img class="d-block w-100" style="height: 300px !important;" src="{{$n->image}}" alt="{{$n->image}}">
                                         @else
                                         <div style="height:300px;" class="homepage-news-img blue waves-effect"></div>
                                         @endif
