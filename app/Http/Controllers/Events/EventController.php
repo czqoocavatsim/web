@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Events\ControllerApplication;
 use App\Models\Users\User;
 use App\Models\Events\Event;
+use App\Models\Events\EventUpdate;
 use App\Models\Settings\AuditLogEntry;
 use Illuminate\Http\Request;
 use Auth;
@@ -160,7 +161,7 @@ class EventController extends Controller
         return redirect()->route('events.admin.index')->with('info', 'Event deleted.');
     }
 
-    public function adminEditEventPost(Request $request, $event_id)
+    public function adminEditEventPost(Request $request, $event_slug)
     {
         //Define validator messages
         $messages = [
@@ -185,7 +186,7 @@ class EventController extends Controller
         }
 
         //Get event object
-        $event = Event::whereId($event_id)->firstOrFail();
+        $event = Event::where('slug', $event_slug)->firstOrFail();
 
         //Assign name
         $event->name = $request->get('name');
@@ -220,5 +221,66 @@ class EventController extends Controller
 
         //Redirect
         return redirect()->route('events.admin.view', $event->slug)->with('success', 'Event edited!');
+    }
+
+    public function adminCreateUpdatePost(Request $request, $event_slug)
+    {
+        //Define validator messages
+        $messages = [
+            'updateTitle.required' => 'A title is required.',
+            'updateTitle.max' => 'A title may not be more than 100 characters long.',
+            'updateContent.required' => 'Content is required.',
+        ];
+
+        //Validate
+        $validator = Validator::make($request->all(), [
+            'updateTitle' => 'required|max:100',
+            'updateContent' => 'required'
+        ], $messages);
+
+        //Redirect if fails
+        if ($validator->fails()) {
+            return redirect()->back()->withInput()->withErrors($validator, 'createUpdateErrors');
+        }
+
+        //Create update object
+        $update = new EventUpdate([
+            'event_id' => Event::where('slug', $event_slug)->firstOrFail()->id,
+            'user_id' => Auth::id(),
+            'title' => $request->get('updateTitle'),
+            'content' => $request->get('updateContent'),
+            'created_timestamp' => Carbon::now(),
+            'slug' => Str::slug($request->get('updateTitle').'-'.Carbon::now()->toDateString()),
+        ]);
+
+        //Save it
+        $update->save();
+
+        //Redirect
+        return redirect()->route('events.admin.view', $event_slug)->with('success', 'Update created!');
+    }
+
+    public function adminDeleteControllerApp($event_slug, $cid)
+    {
+        //Find the controller app
+        $app = ControllerApplication::where('user_id', $cid)->where('event_id', Event::where('slug', $event_slug)->firstOrFail()->id)->FirstOrFail();
+
+        //Delete it? Delete it!
+        $app->delete();
+
+        //Redirect
+        return redirect()->route('events.admin.view', $event_slug)->with('info', 'Controller application from '.$app->user_id. 'deleted.');
+    }
+
+    public function adminDeleteUpdate($event_slug, $update_id)
+    {
+        //Find the update
+        $update = EventUpdate::whereId($update_id)->where('event_id', Event::where('slug', $event_slug)->firstOrFail()->id)->FirstOrFail();
+
+        //Delete it? Delete it!
+        $update->delete();
+
+        //Redirect
+        return redirect()->route('events.admin.view', $event_slug)->with('info', 'Update \''.$update->title. '\'deleted.');
     }
 }

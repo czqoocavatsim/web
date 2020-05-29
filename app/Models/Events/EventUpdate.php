@@ -10,7 +10,10 @@ use App\Models\Users\User;
 
 class EventUpdate extends Model
 {
-    //
+    protected $fillable = [
+        'event_id', 'user_id', 'title', 'content', 'created_timestamp', 'slug'
+    ];
+
     public function event()
     {
         return $this->belongTo(Event::class);

@@ -6,42 +6,58 @@
     <hr>
     <div class="row">
         <div class="col-md-3">
-            <h4>Actions</h4>
-            <a href="#" data-toggle="modal" data-target="#editEvent" class="btn btn-block btn-sm bg-czqo-blue-light">Edit Event</a>
-            <a href="#" data-toggle="modal" data-target="#deleteEvent   " class="mt-2 btn btn-block btn-sm btn-danger">Delete Event</a>
+            <h4 class="font-weight-bold blue-text">Actions</h4>
+            <ul class="list-unstyled mt-3 mb-0" style="font-size: 1.05em;">
+                <li class="mb-2">
+                    <a href="" data-toggle="modal" data-target="#editEvent" style="text-decoration:none;"><span class="blue-text"><i class="fas fa-chevron-right"></i></span> &nbsp; <span class="text-body">Edit event details</span></a>
+                </li>
+                <li class="mb-2">
+                    <a href="" data-toggle="modal" data-target="#createUpdate" style="text-decoration:none;"><span class="blue-text"><i class="fas fa-chevron-right"></i></span> &nbsp; <span class="text-body">Create update</span></a>
+                </li>
+                {{-- <li class="mb-2">
+                    <a href="" style="text-decoration:none;"><span class="blue-text"><i class="fas fa-chevron-right"></i></span> &nbsp; <span class="text-body">Export controller applications</span></a>
+                </li> --}}
+                <li class="mb-2">
+                    <a href="" data-toggle="modal" data-target="#deleteEvent" style="text-decoration:none;"><span class="red-text"><i class="fas fa-chevron-right"></i></span> &nbsp; <span class="text-body">Delete event</span></a>
+                </li>
+            </ul>
         </div>
         <div class="col-md-9">
-            <h4>Details</h4>
-            <table class="table">
-                <thead>
-                    <th></th>
-                    <th></th>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td>Start Time</td>
-                        <td>{{$event->start_timestamp_pretty()}}</td>
-                    </tr>
-                    <tr>
-                        <td>End Time</td>
-                        <td>{{$event->end_timestamp_pretty()}}</td>
-                    </tr>
-                    <tr>
-                        <td>Departure Airport</td>
-                        <td>{{$event->departure_icao}}</td>
-                    </tr>
-                    <tr>
-                        <td>Arrival Airport</td>
-                        <td>{{$event->arrival_icao}}</td>
-                    </tr>
-                </tbody>
-            </table>
-            <h4 class="mt-4">Description</h4>
+            <h4 class="font-weight-bold blue-text">Details</h4>
+            <div class="row">
+                <div class="col-md-6">
+                    <table class="table table-borderless table-striped">
+                        <tbody>
+                            <tr>
+                                <td>Start Time</td>
+                                <td>{{$event->start_timestamp_pretty()}}</td>
+                            </tr>
+                            <tr>
+                                <td>End Time</td>
+                                <td>{{$event->end_timestamp_pretty()}}</td>
+                            </tr>
+                            <tr>
+                                <td>Departure Airport</td>
+                                <td>{{$event->departure_icao}}</td>
+                            </tr>
+                            <tr>
+                                <td>Arrival Airport</td>
+                                <td>{{$event->arrival_icao}}</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="col-md-6">
+                    @if ($event->image_url)
+                    <img src="{{$event->image_url}}" alt="" class="img-fluid w-50 img-thumbnail">
+                    @else
+                    No image.
+                    @endif
+                </div>
+            </div>
+            <h4 class="font-weight-bold blue-text">Description</h4>
             {{$event->html()}}
-            <br>
-            <h4>Updates</h4>
-            <a href="#" class="btn-sm btn bg-czqo-blue-light">New Update</a>
-            <br>
+            <h4 class="font-weight-bold blue-text">Updates</h4>
             @if (count($updates) == 0)
                 None yet!
             @else
@@ -49,15 +65,14 @@
                     <div class="card p-3">
                         <h4>{{$u->title}}</h4>
                         <div class="d-flex flex-row align-items-center">
-                            <i class="far fa-clock"></i>&nbsp;&nbsp;Created {{$u->created_pretty()}}</span>&nbsp;&nbsp;•&nbsp;&nbsp;<i class="far fa-user-circle"></i>&nbsp;&nbsp;{{$u->author_pretty()}}&nbsp;&nbsp;•&nbsp;&nbsp;<a href="#" class="red-text">Delete</a>
+                            <i class="far fa-clock"></i>&nbsp;&nbsp;Created {{$u->created_pretty()}}</span>&nbsp;&nbsp;•&nbsp;&nbsp;<i class="far fa-user-circle"></i>&nbsp;&nbsp;{{$u->author_pretty()}}&nbsp;&nbsp;•&nbsp;&nbsp;<a href="{{route('events.admin.update.delete', [$event->slug, $u->id])}}" class="red-text">Delete</a>
                         </div>
                         <hr>
                         {{$u->html()}}
                     </div>
                 @endforeach
             @endif
-            <br>
-            <h4 class="mt-3">Controller Applications</h4>
+            <h4 class="font-weight-bold blue-text mt-3">Controller Applications</h4>
             @if (count($applications) == 0)
                 None yet!
             @else
@@ -69,6 +84,7 @@
                         <p>{{$a->comments}}</p>
                         <h6>Email</h6>
                         <p>{{$a->user->email}}</p>
+                        <a href="{{route('events.admin.controllerapps.delete', [$event->slug, $a->user_id])}}" class="red-text">Delete</a>
                     </div>
                 @endforeach
             @endif
@@ -87,6 +103,7 @@
                 </button>
             </div>
             <div class="modal-body">
+                <p>This will soft delete the event, so it still exists in the database but cannot be viewed. Have a funny GIF too.</p>
                 <img src="https://tenor.com/view/bartsimpson-boot-simpsons-thesimpsons-homer-gif-9148667.gif" alt="">
             </div>
             <div class="modal-footer">
@@ -109,7 +126,7 @@
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
-            <form method="POST" action="{{route('events.admin.edit.post', $event->id)}}" enctype="multipart/form-data">
+            <form method="POST" action="{{route('events.admin.edit.post', $event->slug)}}" enctype="multipart/form-data">
                 @csrf
                 <div class="modal-body">
                     @if($errors->editEventErrors->any())
@@ -232,5 +249,56 @@
 @endif
 
 <!--End edit event modal-->
+
+<!--create update modal-->
+<div class="modal fade" id="createUpdate" tabindex="-1" role="dialog">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLongTitle">Create event update</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <form method="POST" action="{{route('events.admin.update.post', $event->slug)}}" enctype="multipart/form-data">
+                @csrf
+                <div class="modal-body">
+                    @if($errors->createUpdateErrors->any())
+                    <div class="alert alert-danger">
+                        <ul class="pl-0 ml-0 list-unstyled">
+                            @foreach ($errors->createUpdateErrors->all() as $error)
+                                <li>{{ $error }}</li>
+                            @endforeach
+                        </ul>
+                    </div>
+                    @endif
+                    <div class="form-group">
+                        <label for="">Title</label>
+                        <input type="text" name="updateTitle" id="" class="form-control">
+                    </div>
+                    <div class="form-group">
+                        <label for="">Use Markdown</label>
+                        <textarea id="updateContent" name="updateContent"></textarea>
+                        <script>
+                            var simplemde = new SimpleMDE({ element: document.getElementById("updateContent"), toolbar: false });
+                        </script>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-light" data-dismiss="modal">Dismiss</button>
+                    <button type="submit" class="btn btn-success">Create</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+@if($errors->createUpdateErrors->any())
+<script>
+    $("#createUpdate").modal('show');
+</script>
+@endif
+
+<!--End app update modal-->
 
 @endsection
