@@ -9,7 +9,7 @@ use Illuminate\Database\Eloquent\Model;
 class MonitoredPosition extends Model
 {
     protected $fillable = [
-        'id', 'identifier', 'callsign', 'staff_only', 'polygon_coordinates'
+        'id', 'identifier', 'staff_only', 'polygon_coordinates'
     ];
 
     public function lastSession()

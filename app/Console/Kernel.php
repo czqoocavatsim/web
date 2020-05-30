@@ -53,24 +53,32 @@ class Kernel extends ConsoleKernel
 
             // Scan controller list for callsign relationships
             foreach ($controllers as $controller) {
+
+                // Flag to set to true if position was in the monitored table
+                $identFound = false;
+
+                // Loop through position table
                 foreach ($positions as $position) {
-                    // Checker to determine whether it's a callsign or a prefix
-                    $callsign = false;
-                    if (!strpos($position->identifier, '_')) { // If it is a prefix
-                        if (substr($controller['callsign'], 0, strlen($position->identifier)) == $position->identifier) {
-                            if ($position->staff_only) {
-                                $staffOnly = true;
-                            }
-                            array_push($onlineControllers, $controller); // Add to array if callsign starts with prefix
+                    if (($controller['callsign'] == $position->identifier)) {
+                        if ($position->staff_only) {
+                            $staffOnly = true;
                         }
+                        $identNotFound = true; // set flag
+                        array_push($onlineControllers, $controller); // Add if the callsign is the same as the position identifier
                     }
-                    else { // If it's a callsign
-                        if (($controller['callsign'] == $position->identifier)) {
-                            if ($position->staff_only) {
-                                $staffOnly = true;
-                            }
-                            array_push($onlineControllers, $controller); // Add if the callsign is the same as the position identifier
-                        }
+                }
+
+                // If it wasn't found, check if it has the correct callsign prefix
+                if ($identNotFound) {
+                    if (substr($controller['callsign'], 0, 4) == "CZQX" || substr($controller['callsign'], 0, 4) == "EGGX") {
+                        // Add position to table if so, and email
+                        $monPos = new MonitoredPosition();
+                        $monPos->identifier = $controller["callsign"];
+                        $monPos->staff_only = false; // automatic staff only to false
+                        $monPos->save();
+                        // todo: send email so we know that a new position was created
+
+                        array_push($onlineControllers, $controller); // Add controller because they have logged on an oceanic position
                     }
                 }
             }
@@ -98,12 +106,12 @@ class Kernel extends ConsoleKernel
                             if ($log->emails_sent < 3) {
                                 //Mail::to(CoreSettings::where('id', 1)->firstOrFail()->emailfirchief()->cc(CoreSettings::where('id', 1)->firstOrFail()->emaildepfirchief)->send(new UnauthorisedConnection($oc));
                                 // todo: send me email pls
-                                // todo: I still want emails for students in training, even when they are in training session. Just make it a notification email, 
+                                // todo: I still want emails for students in training, even when they are in training session. Just make it a notification email,
                                 // like 'User xxxxxx with status training has logged on XXX_XXX' rather than an 'unauthorised' email
                                 $log->emails_sent++;
                                 $log->save();
                             }
-                        } else if ($staffOnly && (RosterMember::where('cid', $log->cid)->first()->status != 'instructor')) {
+                        } else if ($staffOnly && (RosterMember::where('cid', $log->cid)->first()->status != 'instructor')) { // instructor
                             if ($log->emails_sent < 3) {
                                 // todo: send me email pls
                                 $log->emails_sent++;
@@ -116,7 +124,7 @@ class Kernel extends ConsoleKernel
                                 $log->save();
                             }
                         }
-                    
+
                         $matchFound = true;
                     } else {
                         continue; // No match was found
@@ -136,14 +144,13 @@ class Kernel extends ConsoleKernel
                         .substr($oc['time_logon'], 6, 2).' '
                         .substr($oc['time_logon'], 8, 2).':'
                         .substr($oc['time_logon'], 10, 2).':'
-                        .substr($oc['time_logon'], 12, 2); 
+                        .substr($oc['time_logon'], 12, 2);
 
                     // Build new session log
                     $sessionLog = new SessionLog();
                     $sessionLog->cid = $oc['cid'];
                     $sessionLog->session_start = $ocLogon;
-                    //Change column name to position_id and find the monitored position ID from the callsign
-                    $sessionLog->callsign = $oc['callsign'];
+                    $sessionLog->monitored_position_id = MonitoredPosition::where('identifier', $oc['callsign'])->first()->id;
                     $sessionLog->emails_sent = 0;
 
                     // Check the user's CID against the roster
@@ -165,12 +172,11 @@ class Kernel extends ConsoleKernel
                         }
                     } else { // Send unauthorised notification to FIR Chief
                         //Mail::to(CoreSettings::where('id', 1)->firstOrFail()->emailfirchief()->cc(CoreSettings::where('id', 1)->firstOrFail()->emaildepfirchief)->send(new UnauthorisedConnection($oc));
-                        // todo: send me email pls
                         if ($user) $sessionLog->roster_member_id = $user->id;
                         if (!$user->active) { // inactive
-                            if ($log->emails_sent < 3) {
+                            if ($sessionLog->emails_sent < 3) {
                                 // todo: send me email pls
-                                $log->emails_sent++;
+                                $sessionLog->emails_sent++;
                                 $log->save();
                             }
                         } else if ($sessionLog->emails_sent < 3) {
@@ -199,7 +205,7 @@ class Kernel extends ConsoleKernel
 
                 // Check if the controller has indeed logged off
                 if (!$stillOnline) {
-                    
+
                     // Start and end values parsed so Carbon can understand them
                     $start = Carbon::create($log->session_start);
                     $end = Carbon::now();
@@ -210,7 +216,7 @@ class Kernel extends ConsoleKernel
                     // Populate remaining columns
                     $log->session_end = $end;
                     $log->duration = $difference;
-                    
+
                     error_log($difference);
 
                     // Save the log
@@ -218,38 +224,23 @@ class Kernel extends ConsoleKernel
 
                     // Add hours
                     $roster_member = RosterMember::where('cid', $log->cid)->first();
-                    
+
                     // check it exists
                     if ($roster_member) {
                         if ($roster_member->status == 'certified' || $roster_member->status == 'instructor') {
                             if ($roster_member->active) {
-                                if (!$staffOnly) {
-                                    // Add hours
-                                    $roster_member->currency = $roster_member->currency + $difference;
+                                // Add hours
+                                $roster_member->currency = $roster_member->currency + $difference;
 
-                                    // Save roster member
-                                    $roster_member->save();
-                                }
+                                // Save roster member
+                                $roster_member->save();
                             }
                         }
                     }
                 }
             }
         })->everyMinute();
-
-        // Removal of members (run every day but check whether the day is the one in the DB) todo: finish this at some point
-        /*$schedule->call(function () {
-            $today = Carbon::today();
-
-            if ($today->day() == MemberRemovalTime::where('day', $today-day()) && $today->month() == MemberRemovalTime::where('day', $today->month())) {
-                $this->inactivityAndRemovalSetter();
-            }
-         })->dailyAt('00:01');*/
     }
-
-    /*private function inactivityAndRemovalSetter() { todo: finish this at some point
-
-    }*/
 
     /**
      * Register the commands for the application.
