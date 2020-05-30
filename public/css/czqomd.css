@@ -19,15 +19,48 @@ body[data-theme="dark"] {
 }
 
 body[data-theme="dark"] .card,
-body[data-theme="dark"] .list-group-item {
+body[data-theme="dark"] .list-group-item,
+body[data-theme="dark"] .introjs-tooltip,
+body[data-theme="dark"] .home-quick-link,
+body[data-theme="dark"] ul.stepper li.active div.step-content,
+body[data-theme="dark"] .nav-tabs .nav-link.active {
     background-color: rgb(59, 61, 68) !important;
+}
+
+body[data-theme="dark"] .CodeMirror {
+    background: rgb(59, 61, 68);
+    color: #eee !important;
+    caret-color: #eee !important;
+}
+
+body[data-theme="dark"] .editor-toolbar a {
+    color: #eee !important;
+}
+
+body[data-theme="dark"] .CodeMirror-cursor {
+    border-left: 1px solid #eee !important;
+}
+
+body[data-theme="dark"] .editor-toolbar a:hover, .editor-toolbar a.active {
+    background: rgb(47, 49, 54) !important;
 }
 
 body[data-theme="dark"] .list-group-item,
 body[data-theme="dark"] span.black-text,
 body[data-theme="dark"] .text-dark,
-body[data-theme="dark"] .text-muted {
+body[data-theme="dark"] .text-muted,
+body[data-theme="dark"] .introjs-tooltiptext,
+body[data-theme="dark"] .stepper .label
+{
     color: #eee !important;
+}
+
+ul.stepper li.active a .circle {
+    background-color: var(--czqo-blue) !important;
+}
+
+body[data-theme="dark"] .introjs-button {
+    color: #333;
 }
 
 body[data-theme="dark"] .onlineControllers .card.black-text h4 span p {
@@ -187,7 +220,6 @@ div.d-flex.flex-row > i {
 .bg-czqo-blue-light {
     background-color: #cfeaff !important;
     color: #000;
-
 }
 
 .btn .bg-czqo-blue-light:not([disabled]):not(.disabled):active {
@@ -292,4 +324,8 @@ body[data-theme="dark"]  ::placeholder {
     width: 100%;
     height: 100%;
     z-index: -1;
+}
+
+body[data-theme="dark"] .list-group-item.bg-czqo-blue-light {
+    background-color: #cfeaff !important;
 }
