@@ -111,7 +111,7 @@ class Kernel extends ConsoleKernel
                                 $log->emails_sent++;
                                 $log->save();
                             }
-                        } else if ($staffOnly && (RosterMember::where('cid', $log->cid)->first()->status != 'instructor')) {
+                        } else if ($staffOnly && (RosterMember::where('cid', $log->cid)->first()->status != 'instructor')) { // instructor
                             if ($log->emails_sent < 3) {
                                 // todo: send me email pls
                                 $log->emails_sent++;
@@ -150,8 +150,7 @@ class Kernel extends ConsoleKernel
                     $sessionLog = new SessionLog();
                     $sessionLog->cid = $oc['cid'];
                     $sessionLog->session_start = $ocLogon;
-                    //Change column name to position_id and find the monitored position ID from the callsign
-                    $sessionLog->callsign = $oc['callsign'];
+                    $sessionLog->monitored_position_id = MonitoredPosition::where('identifier', $oc['callsign'])->first()->id;
                     $sessionLog->emails_sent = 0;
 
                     // Check the user's CID against the roster
@@ -173,12 +172,11 @@ class Kernel extends ConsoleKernel
                         }
                     } else { // Send unauthorised notification to FIR Chief
                         //Mail::to(CoreSettings::where('id', 1)->firstOrFail()->emailfirchief()->cc(CoreSettings::where('id', 1)->firstOrFail()->emaildepfirchief)->send(new UnauthorisedConnection($oc));
-                        // todo: send me email pls
                         if ($user) $sessionLog->roster_member_id = $user->id;
                         if (!$user->active) { // inactive
-                            if ($log->emails_sent < 3) {
+                            if ($sessionLog->emails_sent < 3) {
                                 // todo: send me email pls
-                                $log->emails_sent++;
+                                $sessionLog->emails_sent++;
                                 $log->save();
                             }
                         } else if ($sessionLog->emails_sent < 3) {
@@ -242,20 +240,7 @@ class Kernel extends ConsoleKernel
                 }
             }
         })->everyMinute();
-
-        // Removal of members (run every day but check whether the day is the one in the DB) todo: finish this at some point
-        /*$schedule->call(function () {
-            $today = Carbon::today();
-
-            if ($today->day() == MemberRemovalTime::where('day', $today-day()) && $today->month() == MemberRemovalTime::where('day', $today->month())) {
-                $this->inactivityAndRemovalSetter();
-            }
-         })->dailyAt('00:01');*/
     }
-
-    /*private function inactivityAndRemovalSetter() { todo: finish this at some point
-
-    }*/
 
     /**
      * Register the commands for the application.

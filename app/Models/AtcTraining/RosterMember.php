@@ -10,7 +10,7 @@ class RosterMember extends Model
     protected $table = 'roster';
 
     protected $fillable = [
-        'cid', 'user_id', 'full_name', 'rating', 'division', 'status', 'active', 'currency'
+        'cid', 'user_id', 'full_name', 'rating', 'division', 'status', 'active', 'currency', 'date_certified'
     ];
 
     public function user()
