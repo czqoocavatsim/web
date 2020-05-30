@@ -5,7 +5,7 @@
     <div class="text-white text-left rgba-stylish-strong py-3 px-4">
         <div class="container">
             <div class="py-5">
-                <h1 class="h1 my-4 py-2" style="font-size: 3em;">
+                <h1 class="h1 my-4 py-2 font-weight-bold" style="font-size: 3em;">
                     <?php
                     function randomArrayVar($array)
                     {
