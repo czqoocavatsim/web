@@ -50,7 +50,8 @@ body[data-theme="dark"] span.black-text,
 body[data-theme="dark"] .text-dark,
 body[data-theme="dark"] .text-muted,
 body[data-theme="dark"] .introjs-tooltiptext,
-body[data-theme="dark"] .stepper .label
+body[data-theme="dark"] .stepper .label,
+body[data-theme="dark"] .btn-link
 {
     color: #eee !important;
 }
