@@ -151,6 +151,9 @@ Route::group(['middleware' => 'auth'], function () {
         Route::get('/admin/news/article/create', 'News\NewsController@createArticle')->name('news.articles.create');
         Route::post('/admin/news/article/create', 'News\NewsController@postArticle')->name('news.articles.create.post');
         Route::get('/admin/news/article/{slug}', 'News\NewsController@viewArticle')->name('news.articles.view');
+        Route::get('/admin/news/announcement/create', 'News\NewsController@createAnnouncement')->name('news.announcements.create');
+        Route::post('/admin/news/announcement/create', 'News\NewsController@createAnnouncementPost')->name('news.announcements.create.post');
+        Route::get('/admin/news/announcement/{slug}', 'News\NewsController@viewAnnouncement')->name('news.announcements.view');
         //Roster
         Route::get('/dashboard/roster', 'AtcTraining\RosterController@index')->name('roster.index');
         Route::post('/dashboard/roster', 'AtcTraining\RosterController@addController')->name('roster.addcontroller');

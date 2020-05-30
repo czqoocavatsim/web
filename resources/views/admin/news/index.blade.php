@@ -20,15 +20,28 @@
                     @endforeach
                 </tbody>
             </table>
-            <script>
-                $(document).ready(function() {
-                    $('.table.dt').DataTable();
-                } );
-            </script>
         </div>
         <div class="col-md-6">
-
+            <h4>Announcements</h4>
+            <a href="{{route('news.announcements.create')}}" class="mb-3 btn btn-block btn-md waves-effect bg-czqo-blue-light">Create Announcement</a>
+            <table class="table dt table-hover table-bordered">
+                <thead>
+                    <th>Title</th>
+                </thead>
+                <tbody>
+                    @foreach ($announcements as $a)
+                    <tr>
+                        <td><a class="blue-text" href="{{route('news.announcements.view', $a->slug)}}">{{$a->title}}</a></td>
+                    </tr>
+                    @endforeach
+                </tbody>
+            </table>
         </div>
     </div>
 </div>
+<script>
+    $(document).ready(function() {
+        $('.table.dt').DataTable();
+    } );
+</script>
 @endsection

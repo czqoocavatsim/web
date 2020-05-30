@@ -3,7 +3,9 @@
 namespace App\Http\Controllers\News;
 
 use App\Http\Controllers\Controller;
+use App\Jobs\ProcessAnnouncement;
 use App\Jobs\ProcessArticlePublishing;
+use App\Models\News\Announcement;
 use App\Models\Settings\AuditLogEntry;
 use App\Models\News\CarouselItem;
 use App\Models\Settings\CoreSettings;
@@ -24,13 +26,14 @@ class NewsController extends Controller
     public function index()
     {
         $articles = News::where('certification', false)->get()->sortByDesc('id');
-        return view('dashboard.news.index', compact('articles'));
+        $announcements = Announcement::all()->sortByDesc('id');
+        return view('admin.news.index', compact('articles', 'announcements'));
     }
 
     public function createArticle()
     {
         $staff = StaffMember::where('user_id', '!=', 1)->get();
-        return view('dashboard.news.articles.create', compact('staff'));
+        return view('admin.news.articles.create', compact('staff'));
     }
 
     public function postArticle(Request $request)
@@ -131,7 +134,7 @@ class NewsController extends Controller
     {
         $staff = StaffMember::where('user_id', '!=', 1)->get();
         $article = News::where('slug', $slug)->firstOrFail();
-        return view('dashboard.news.articles.view', compact('article', 'staff'));
+        return view('admin.news.articles.view', compact('article', 'staff'));
     }
 
     public function viewArticlePublic($slug)
@@ -155,7 +158,7 @@ class NewsController extends Controller
     {
         $minutes = MeetingMinutes::all();
 
-        return view('dashboard.news.meetingminutes', compact('minutes'));
+        return view('admin.news.meetingminutes', compact('minutes'));
     }
 
     public function minutesDelete($id)
@@ -193,5 +196,63 @@ class NewsController extends Controller
         AuditLogEntry::insert(Auth::user(), 'Uploaded meeting minutes '.$minutes->title, User::find(1), 0);
 
         return redirect()->back()->with('success', 'Minutes uploaded!');
+    }
+
+    public function createAnnouncement()
+    {
+        return view('admin.news.announcements.create');
+    }
+
+    public function createAnnouncementPost(Request $request)
+    {
+        //Define validator messages
+        $messages = [
+            'title.required' => 'A title is required.',
+            'title.max' => 'A title may not be more than 100 characters long.',
+            'target_group.required' => 'A target group is required.',
+            'content.required' => 'Content is required.',
+            'reason_for_sending.required' => 'Please select an email option.',
+        ];
+
+        //Validate
+        $validator = Validator::make($request->all(), [
+            'title' => 'required|max:100',
+            'target_group' => 'required',
+            'content' => 'required',
+            'reason_for_sending' => 'required'
+        ], $messages);
+
+        //Redirect if fails
+        if ($validator->fails()) {
+            return redirect()->back()->withInput()->withErrors($validator, 'createAnnouncementErrors');
+        }
+
+        //Create announcement
+        $announcement = new Announcement([
+            'user_id' => Auth::id(),
+            'target_group' => $request->get('target_group'),
+            'title' => $request->get('title'),
+            'content' => $request->get('content'),
+            'slug' => Str::slug($request->get('title').'-'.Carbon::now()->toDateString()),
+            'reason_for_sending' => $request->get('reason_for_sending'),
+            'notes' => $request->get('notes')
+        ]);
+
+        $announcement->save();
+
+        //Dispatch the job to send emails
+        ProcessAnnouncement::dispatch($announcement);
+
+        //Redirect
+        return redirect()->route('news.announcements.view', $announcement->slug);
+    }
+
+    public function viewAnnouncement($slug)
+    {
+        //Find it
+        $announcement = Announcement::where('slug', $slug)->firstOrFail();
+
+        //Show it!
+        return view('admin.news.announcements.view', compact('announcement'));
     }
 }
