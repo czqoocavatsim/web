@@ -11,6 +11,7 @@ use App\Models\News\CarouselItem;
 use App\Models\Settings\CoreSettings;
 use App\Models\Publications\MeetingMinutes;
 use App\Models\News\News;
+use App\Models\Publications\UploadedImage;
 use App\Models\Users\StaffMember;
 use App\Models\Users\User;
 use Auth;
@@ -32,8 +33,9 @@ class NewsController extends Controller
 
     public function createArticle()
     {
+        $uploadedImgs = UploadedImage::all()->sortByDesc('id');
         $staff = StaffMember::where('user_id', '!=', 1)->get();
-        return view('admin.news.articles.create', compact('staff'));
+        return view('admin.news.articles.create', compact('staff', 'uploadedImgs'));
     }
 
     public function postArticle(Request $request)
@@ -76,6 +78,17 @@ class NewsController extends Controller
             $basePath = 'public/files/'.Carbon::now()->toDateString().'/'.rand(1000,2000);
             $path = $request->file('image')->store($basePath);
             $article->image = Storage::url($path);
+
+            //Add to uploaded images
+            $uploadedImg = new UploadedImage();
+            $uploadedImg->path = Storage::url($path);
+            $uploadedImg->user_id = Auth::id();
+            $uploadedImg->save();
+        }
+
+        //If there is a uplaoded image selected lets put it on there
+        if ($request->get('uploadedImage')) {
+            $article->image = UploadedImage::whereId($request->get('uploadedImage'))->first()->path;
         }
 
         //Create a summary if required

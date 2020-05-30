@@ -81,6 +81,10 @@
         <script src="https://unpkg.com/jarallax@1/dist/jarallax.min.js"></script>
         <script src="https://unpkg.com/jarallax@1/dist/jarallax-video.min.js"></script>
         <script src="https://unpkg.com/jarallax@1/dist/jarallax-element.min.js"></script>
+        <!--Image picker and masonry-->
+        <script src="{{asset('js/image-picker.min.js')}}"></script>
+        <link rel="stylesheet" href="{{asset('css/image-picker.css')}}">
+        <script src="{{asset('js/masonry.pkgd.min.js')}}"></script>
     </head>
     <body @if(Auth::check() && Auth::user()->preferences) data-theme="{{Auth::user()->preferences->ui_mode}}" @else data-theme="light" @endif>
     <!--Header-->

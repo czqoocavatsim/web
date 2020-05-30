@@ -7,6 +7,7 @@ use App\Models\Events\ControllerApplication;
 use App\Models\Users\User;
 use App\Models\Events\Event;
 use App\Models\Events\EventUpdate;
+use App\Models\Publications\UploadedImage;
 use App\Models\Settings\AuditLogEntry;
 use Illuminate\Http\Request;
 use Auth;
@@ -83,7 +84,8 @@ class EventController extends Controller
 
     public function adminCreateEvent()
     {
-        return view('admin.events.create');
+        $uploadedImgs = UploadedImage::all()->sortByDesc('id');
+        return view('admin.events.create', compact('uploadedImgs'));
     }
 
     public function adminCreateEventPost(Request $request)
@@ -131,6 +133,17 @@ class EventController extends Controller
             $basePath = 'public/files/'.Carbon::now()->toDateString().'/'.rand(1000,2000);
             $path = $request->file('image')->store($basePath);
             $event->image_url = Storage::url($path);
+
+            //Add to uploaded images
+            $uploadedImg = new UploadedImage();
+            $uploadedImg->path = Storage::url($path);
+            $uploadedImg->user_id = Auth::id();
+            $uploadedImg->save();
+        }
+
+        //If there is a uplaoded image selected lets put it on there
+        if ($request->get('uploadedImage')) {
+            $event->image_url = UploadedImage::whereId($request->get('uploadedImage'))->first()->path;
         }
 
         //Create slug
@@ -214,6 +227,17 @@ class EventController extends Controller
             $basePath = 'public/files/'.Carbon::now()->toDateString().'/'.rand(1000,2000);
             $path = $request->file('image')->store($basePath);
             $event->image_url = Storage::url($path);
+
+            //Add to uploaded images
+            $uploadedImg = new UploadedImage();
+            $uploadedImg->path = Storage::url($path);
+            $uploadedImg->user_id = Auth::id();
+            $uploadedImg->save();
+        }
+
+        //If there is a uplaoded image selected lets put it on there
+        if ($request->get('uploadedImage')) {
+            $event->image_url = UploadedImage::whereId($request->get('uploadedImage'))->first()->path;
         }
 
         //Assign departure icao and arrival icao if they exist
@@ -271,7 +295,7 @@ class EventController extends Controller
         $update->save();
 
         //Audit it
-        AuditLogEntry::insert(Auth::user(), 'Created event update for '.$event->name, User::find(1), 0);
+        AuditLogEntry::insert(Auth::user(), 'Created event update for '.Event::where('slug', $event_slug)->firstOrFail()->name, User::find(1), 0);
 
         //Redirect
         return redirect()->route('events.admin.view', $event_slug)->with('success', 'Update created!');
