@@ -33,13 +33,11 @@ class Kernel extends ConsoleKernel
      */
     protected function schedule (Schedule $schedule)
     {
-        // Connection logging
+        // ActivityBot logging
         $schedule->call(function () {
 
             // Because OOMs
             DB::connection()->disableQueryLog();
-
-            MonitoredPosition::inactivity();
 
             // Load VATSIM data
             $vatsim = new \Vatsimphp\VatsimData();
@@ -255,6 +253,9 @@ class Kernel extends ConsoleKernel
                                 // Add hours
                                 $roster_member->currency = $roster_member->currency + $difference;
 
+                                // Add hours to leaderboard
+                                $roster_member->monthly_hours = $roster_member->monthly_hours + $difference;
+
                                 // Save roster member
                                 $roster_member->save();
                             }
@@ -263,6 +264,26 @@ class Kernel extends ConsoleKernel
                 }
             }
         })->everyMinute();
+
+        // 6 monthly currency wipe
+        $schedule->call(function () {
+            // Loop through all roster members
+            foreach (RosterMember::all() as $rosterMember) {
+                // Reset the hours for every member
+                $rosterMember->currency = 0.0;
+                $rosterMember->save();
+            }
+        })->cron("0 0 1 */6 *");
+        
+        // Monthly leaderboard wipe
+        $schedule->call(function () {
+            // Loop through all roster members
+            foreach (RosterMember::all() as $rosterMember) {
+                // Reset the hours for every member
+                $rosterMember->monthly_hours = 0.0;
+                $rosterMember->save();
+            }
+        })->monthlyOn(1, '00:00');
     }
 
     /**
