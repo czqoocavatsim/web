@@ -40,7 +40,8 @@ class ProcessRosterInactivity implements ShouldQueue
             // Get date certified
             try {
                 $certifiedDate = Carbon::createFromFormat('Y-m-d H:i:s', $rosterMember->date_certified);
-            } catch (\InvalidArgumentException $e) {
+                error_log($certifiedDate);
+            } catch (\InvalidArgumentException $e) { // Catch exception if date is null
                 $certifiedDate = null;
             }
 
@@ -55,32 +56,31 @@ class ProcessRosterInactivity implements ShouldQueue
                         case 0:
                             break;
                         case 1: // 1 month
-                            $rosterMember->currency < 1.0 ?: $rosterMember->active = false;
+                            $rosterMember->active = $rosterMember->currency >= 1.0 ?: false;
                             break;
                         case 2: // 2 months
-                            $rosterMember->currency < 2.0 ?: $rosterMember->active = false;
+                            $rosterMember->active = $rosterMember->currency >= 2.0 ?: false;
                             break;
                         case 3: // 3 months
-                            $rosterMember->currency < 3.0 ?: $rosterMember->active = false;
+                            $rosterMember->active = $rosterMember->currency >= 3.0 ?: false;
                             break;
                         case 4: // 4 months
-                            $rosterMember->currency < 4.0 ?: $rosterMember->active = false;
+                            $rosterMember->active = $rosterMember->currency >= 4.0 ?: false;
                             break;
                         case 5: // 5 months
-                            $rosterMember->currency < 5.0 ?: $rosterMember->active = false;
+                            $rosterMember->active = $rosterMember->currency >= 5.0 ?: false;
                             break;
                         default: // Default
-                            $rosterMember->active = true;
+                            $isActive = true;
                             break;
                     }
                     // Save record
-                    $rosterMember->save();
+                    $rosterMember->update();
                 }
                 else {
                     // Assign to false if less than 6
-                    $rosterMember->currency < 6.0 ?: $rosterMember->active = false;
-                    error_log("less than 6 $rosterMember->cid");
-                    $saved = $rosterMember->save();
+                    $rosterMember->active = $rosterMember->currency >= 6.0 ?: false;
+                    $rosterMember->save();
                 }
             }
             else { // If inactive
