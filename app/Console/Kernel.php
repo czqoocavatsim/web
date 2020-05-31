@@ -39,6 +39,8 @@ class Kernel extends ConsoleKernel
             // Because OOMs
             DB::connection()->disableQueryLog();
 
+            MonitoredPosition::inactivity();
+
             // Load VATSIM data
             $vatsim = new \Vatsimphp\VatsimData();
             $vatsim->loadData();
@@ -63,14 +65,15 @@ class Kernel extends ConsoleKernel
                         if ($position->staff_only) {
                             $staffOnly = true;
                         }
-                        $identNotFound = true; // set flag
+                        $identFound = true; // set flag
                         array_push($onlineControllers, $controller); // Add if the callsign is the same as the position identifier
                     }
                 }
 
                 // If it wasn't found, check if it has the correct callsign prefix
-                if ($identNotFound) {
+                if (!$identFound) {
                     if (substr($controller['callsign'], 0, 4) == "CZQX" || substr($controller['callsign'], 0, 4) == "EGGX") {
+                        error_log("found");
                         // Add position to table if so, and email
                         $monPos = new MonitoredPosition();
                         $monPos->identifier = $controller["callsign"];
@@ -88,6 +91,7 @@ class Kernel extends ConsoleKernel
 
             // Check logs against currently online controllers
             foreach ($onlineControllers as $oc) {
+                error_log("{$oc['cid']}");
                 $matchFound = false;
                 $ocLogon = null;
                 foreach ($sessionLogs as $log) {
@@ -102,24 +106,32 @@ class Kernel extends ConsoleKernel
 
                     // If a match is found
                     if ($ocLogon == $log->session_start) {
-                        if (!$log->roster_member_id || RosterMember::where('cid', $log->cid)->first()->status == 'training' || RosterMember::where('cid', $log->cid)->first()->status == 'not_certified') { // Check if they're naughty
+                        if (!$log->roster_member_id || RosterMember::where('cid', $log->cid)->first()->status == 'not_certified') { // Check if they're naughty
                             if ($log->emails_sent < 3) {
                                 //Mail::to(CoreSettings::where('id', 1)->firstOrFail()->emailfirchief()->cc(CoreSettings::where('id', 1)->firstOrFail()->emaildepfirchief)->send(new UnauthorisedConnection($oc));
-                                // todo: send me email pls
-                                // todo: I still want emails for students in training, even when they are in training session. Just make it a notification email,
-                                // like 'User xxxxxx with status training has logged on XXX_XXX' rather than an 'unauthorised' email
-                                $log->emails_sent++;
-                                $log->save();
-                            }
-                        } else if ($staffOnly && (RosterMember::where('cid', $log->cid)->first()->status != 'instructor')) { // instructor
-                            if ($log->emails_sent < 3) {
-                                // todo: send me email pls
+                                // todo: send me unauthorised logon email please, this person very very very naughty :(
+                                error_log('unauthorised (not certified))');
                                 $log->emails_sent++;
                                 $log->save();
                             }
                         } else if (!RosterMember::where('cid', $log->cid)->first()->active) { // inactive
                             if ($log->emails_sent < 3) {
                                 // todo: send me email pls
+                                error_log('unauthorised (inactive)');
+                                $log->emails_sent++;
+                                $log->save();
+                            }
+                        } else if (RosterMember::where('cid', $log->cid)->first()->status == 'training') {
+                            if ($log->emails_sent < 3) {
+                                // todo: send me notification email please
+                                error_log('user in training');
+                                $log->emails_sent++;
+                                $log->save();
+                            }
+                        } else if ($staffOnly && (RosterMember::where('cid', $log->cid)->first()->status != 'instructor')) { // instructor
+                            if ($log->emails_sent < 3) {
+                                // todo: send me unauthorised logon email please
+                                error_log('unauthorised (not staff)');
                                 $log->emails_sent++;
                                 $log->save();
                             }
@@ -158,14 +170,16 @@ class Kernel extends ConsoleKernel
                     if ($user && $user->status != 'training' && $user->status != 'not_certified') { // Add if on roster, don't if not (big problem lmao)
                         $sessionLog->roster_member_id = $user->id;
                         if ($staffOnly && ($user->status != 'instructor')) {
-                            // todo: send me email pls
                             if ($sessionLog->emails_sent < 3) {
+                                // todo: send me email please
+                                error_log('unauthorised (not staff)');
                                 $sessionLog->emails_sent++;
                                 $sessionLog->save();
                             }
                         } else if (!$user->active) { // inactive
                             if ($sessionLog->emails_sent < 3) {
                                 // todo: send me email pls
+                                error_log('unauthorised (inactive)');
                                 $sessionLog->emails_sent++;
                                 $sessionLog->save();
                             }
@@ -176,11 +190,20 @@ class Kernel extends ConsoleKernel
                         if (!$user->active) { // inactive
                             if ($sessionLog->emails_sent < 3) {
                                 // todo: send me email pls
+                                error_log('unauthorised (inactive)');
                                 $sessionLog->emails_sent++;
-                                $log->save();
+                                $sessionLog->save();
+                            }
+                        } else if ($user->status == 'training') {
+                            if ($sessionLog->emails_sent < 3) {
+                                // todo: send me notification email please
+                                error_log('user in training');
+                                $sessionLog->emails_sent++;
+                                $sessionLog->save();
                             }
                         } else if ($sessionLog->emails_sent < 3) {
                             // todo: send me email
+                            error_log('unauthorised (not certified)');
                             $sessionLog->emails_sent++;
                             $sessionLog->save();
                         }

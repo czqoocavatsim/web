@@ -38,14 +38,19 @@ class ProcessRosterInactivity implements ShouldQueue
         foreach ($rosterMembers as $rosterMember) {
 
             // Get date certified
-            $certifiedDate = Carbon::createFromFormat('Y-m-d H:i:s', $rosterMember->date_certified);
+            try {
+                $certifiedDate = Carbon::createFromFormat('Y-m-d H:i:s', $rosterMember->date_certified);
+            } catch (\InvalidArgumentException $e) {
+                $certifiedDate = null;
+            }
 
             if($rosterMember->active) {
+
                 // Check if certified in last 6mo
-                $diff = Carbon::now()->diffInMonths($certifiedDate); // Get date diff
+                $diff = $certifiedDate != null ? Carbon::now()->diffInMonths($certifiedDate) : null; // Get date diff
 
                 // If less than 6 months
-                if ($diff <= 6) {
+                if ($diff != null && $diff <= 6) {
                     switch($diff) { // Switch the activity and check appropriate hours based on number
                         case 0:
                             break;
@@ -68,10 +73,14 @@ class ProcessRosterInactivity implements ShouldQueue
                             $rosterMember->active = true;
                             break;
                     }
+                    // Save record
+                    $rosterMember->save();
                 }
                 else {
                     // Assign to false if less than 6
                     $rosterMember->currency < 6.0 ?: $rosterMember->active = false;
+                    error_log("less than 6 $rosterMember->cid");
+                    $saved = $rosterMember->save();
                 }
             }
             else { // If inactive

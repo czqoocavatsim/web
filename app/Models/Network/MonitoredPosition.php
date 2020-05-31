@@ -2,6 +2,7 @@
 
 namespace App\Models\Network;
 
+use App\Jobs\ProcessRosterInactivity;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
 
@@ -11,6 +12,10 @@ class MonitoredPosition extends Model
     protected $fillable = [
         'id', 'identifier', 'staff_only', 'polygon_coordinates'
     ];
+
+    public static function inactivity() {
+        ProcessRosterInactivity::dispatchNow();
+    }
 
     public function lastSession()
     {
