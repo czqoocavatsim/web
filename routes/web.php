@@ -81,7 +81,7 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('/notificationclear', 'Users\NotificationRedirectController@clearAll');
     //Tickets
     Route::get('/dashboard/tickets', 'Tickets\TicketsController@index')->name('tickets.index');
-    Route::get('/dashboard/tickets/staff', 'Tickets\TicketsController@staffIndex')->name('tickets.staff');
+    Route::get('/dashboard/tickets/staff', 'Tickets\TicketsController@staffIndex')->name('tickets.staff')->middleware('executive');
     Route::get('/dashboard/tickets/{id}', 'Tickets\TicketsController@viewTicket')->name('tickets.viewticket');
     Route::post('/dashboard/tickets', 'Tickets\TicketsController@startNewTicket')->name('tickets.startticket');
     Route::post('/dashboard/tickets/{id}', 'Tickets\TicketsController@addReplyToTicket')->name('tickets.reply');
