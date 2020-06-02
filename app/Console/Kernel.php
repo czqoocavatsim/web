@@ -280,6 +280,21 @@ class Kernel extends ConsoleKernel
                 $rosterMember->save();
             }
         })->monthlyOn(1, '00:00');
+
+        // Daily roster rating check
+        $schedule->call(function () {
+            // Loop through all roster members
+            foreach (RosterMember::all() as $rosterMember) {
+                // Get corresponding user
+                $user = \App\Models\Users\User::all()->where('id', '==', $rosterMember->cid);
+
+                // Check if the rating is incorrect
+                if ($user->rating_short != $rosterMember->rating) {
+                    // If so, then reassign the rating
+                    $rosterMember->rating = $user->rating_short;
+                }
+            }
+        })->dailyAt('00:00');
     }
 
     /**
