@@ -13,10 +13,6 @@ class MonitoredPosition extends Model
         'id', 'identifier', 'staff_only', 'polygon_coordinates'
     ];
 
-    public static function inactivity() {
-        ProcessRosterInactivity::dispatchNow();
-    }
-
     public function lastSession()
     {
         $session = SessionLog::where('callsign', $this->identifier)->get()->last();
