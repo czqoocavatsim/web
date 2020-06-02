@@ -271,6 +271,33 @@ class Kernel extends ConsoleKernel
             }
         })->cron("0 0 1 */6 *");
 
+        //// CRONS FOR INACTIVITY EMAILS
+        /// May
+        $schedule->call(function () {
+
+        })->cron("0 0 1 5 *"); // 1 month before end of period
+
+        $schedule->call(function () {
+
+        })->cron("0 0 17 5 *"); // 2 weeks before end of period
+
+        $schedule->call(function () {
+
+        })->cron("0 0 24 5 *"); // 1 week before end of period
+
+        /// December
+        $schedule->call(function () {
+
+        })->cron("0 0 1 12 *"); // 1 month before end of period
+
+        $schedule->call(function () {
+
+        })->cron("0 0 16 12 *"); // 2 weeks before end of period
+
+        $schedule->call(function () {
+
+        })->cron("0 0 23 12 *"); // 1 week before end of period
+        
         // Monthly leaderboard wipe
         $schedule->call(function () {
             // Loop through all roster members
