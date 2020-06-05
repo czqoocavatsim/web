@@ -96,8 +96,8 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('/dashboard/emailpref/subscribe', 'Users\DataController@subscribeEmails');
     Route::get('/dashboard/emailpref/unsubscribe', 'Users\DataController@unsubscribeEmails');
     //GDPR
-    Route::get('/dashboard/me/data', 'Users\DataController@index')->name('me.data');
-    Route::post('/dashboard/me/data/export/all', 'Users\DataController@exportAllData')->name('me.data.export.all');
+    Route::get('/me/data', 'Users\DataController@index')->name('me.data');
+    Route::post('/me/data/export/all', 'Users\DataController@exportAllData')->name('me.data.export.all');
     //Applications
     Route::group(['middleware' => 'notcertified'], function () {
         Route::get('/dashboard/application', 'AtcTraining\ApplicationsController@startApplicationProcess')->name('application.start');
@@ -107,15 +107,15 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('/dashboard/application/{application_id}', 'AtcTraining\ApplicationsController@viewApplication')->name('application.view');
     Route::get('/dashboard/application/{application_id}/withdraw', 'AtcTraining\ApplicationsController@withdrawApplication');
     //"Me"
-    Route::get('/dashboard/me/editbiography', 'Users\UserController@editBioIndex')->name('me.editbioindex');
-    Route::post('/dashboard/me/editbiography', 'Users\UserController@editBio')->name('me.editbio');
-    Route::get('/dashboard/me/discord/link', 'Users\UserController@linkDiscord')->name('me.discord.link');
-    Route::get('/dashboard/me/discord/unlink', 'Users\UserController@unlinkDiscord')->name('me.discord.unlink');
-    Route::get('/dashboard/me/discord/link/redirect', 'Users\UserController@linkDiscordRedirect')->name('me.discord.link.redirect');
-    Route::get('/dashboard/me/discord/server/join', 'Users\UserController@joinDiscordServerRedirect')->name('me.discord.join');
-    Route::get('/dashboard/me/discord/server/join/redirect', 'Users\UserController@joinDiscordServer');
-    Route::get('/dashboard/me/preferences', 'Users\UserController@preferences')->name('me.preferences');
-    Route::post('/dashboard/me/preferences', 'Users\UserController@preferencesPost')->name('me.preferences.post');
+    Route::get('/me/editbiography', 'Users\UserController@editBioIndex')->name('me.editbioindex');
+    Route::post('/me/editbiography', 'Users\UserController@editBio')->name('me.editbio');
+    Route::get('/me/discord/link', 'Users\UserController@linkDiscord')->name('me.discord.link');
+    Route::get('/me/discord/unlink', 'Users\UserController@unlinkDiscord')->name('me.discord.unlink');
+    Route::get('/me/discord/link/redirect', 'Users\UserController@linkDiscordRedirect')->name('me.discord.link.redirect');
+    Route::get('/me/discord/server/join', 'Users\UserController@joinDiscordServerRedirect')->name('me.discord.join');
+    Route::get('/me/discord/server/join/redirect', 'Users\UserController@joinDiscordServer');
+    Route::get('/me/preferences', 'Users\UserController@preferences')->name('me.preferences');
+    Route::post('/me/preferences', 'Users\UserController@preferencesPost')->name('me.preferences.post');
     //Bookings
     Route::group(['middleware' => 'certified'], function () {
         Route::get('/dashboard/bookings', 'ControllerBookings\ControllerBookingsController@index')->name('controllerbookings.index');
