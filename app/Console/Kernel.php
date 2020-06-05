@@ -17,8 +17,12 @@ use App\Notifications\Network\ControllerInactive;
 use App\Notifications\Network\ControllerIsStudent;
 use App\Notifications\Network\ControllerNotCertified;
 use App\Notifications\Network\ControllerNotStaff;
+use App\Notifications\Network\OneMonthInactivityReminder;
+use App\Notifications\Network\OneWeekInactivityReminder;
+use App\Notifications\Network\TwoWeekInactivityReminder;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Notification;
+use RestCord\DiscordClient;
 
 class Kernel extends ConsoleKernel
 {
@@ -274,28 +278,112 @@ class Kernel extends ConsoleKernel
         //// CRONS FOR INACTIVITY EMAILS
         /// June
         $schedule->call(function () {
-
+            //Loop through controllers
+            $count = 0;
+            foreach (RosterMember::all() as $rosterMember) {
+                //Do they meet the requirements?
+                if ($rosterMember->meetsActivityRequirement()) {
+                    //Yes... skip them
+                    continue;
+                }
+                //Let's send them a notification
+                $count++;
+                $rosterMember->user->notify(new OneMonthInactivityReminder($rosterMember, 'june'));
+            }
+            //Tell Discord all about it
+            $discord = new DiscordClient(['token' => config('services.discord.token')]);
+            $discord->channel->createMessage(['channel.id' => 482817715489341441, 'content' => 'Sent '. $count . ' one month warning inactivty emails']);
         })->cron("0 0 1 6 *"); // 1 month before end of period
 
         $schedule->call(function () {
-
+            //Loop through controllers
+            $count = 0;
+            foreach (RosterMember::all() as $rosterMember) {
+                //Do they meet the requirements?
+                if ($rosterMember->meetsActivityRequirement()) {
+                    //Yes... skip them
+                    continue;
+                }
+                //Let's send them a notification
+                $count++;
+                $rosterMember->user->notify(new TwoWeekInactivityReminder($rosterMember, 'june'));
+            }
+            //Tell Discord all about it
+            $discord = new DiscordClient(['token' => config('services.discord.token')]);
+            $discord->channel->createMessage(['channel.id' => 482817715489341441, 'content' => 'Sent '. $count . ' two week warning inactivty emails']);
         })->cron("0 0 17 6 *"); // 2 weeks before end of period
 
         $schedule->call(function () {
-
+            //Loop through controllers
+            $count = 0;
+            foreach (RosterMember::all() as $rosterMember) {
+                //Do they meet the requirements?
+                if ($rosterMember->meetsActivityRequirement()) {
+                    //Yes... skip them
+                    continue;
+                }
+                //Let's send them a notification
+                $count++;
+                $rosterMember->user->notify(new OneWeekInactivityReminder($rosterMember, 'june'));
+            }
+            //Tell Discord all about it
+            $discord = new DiscordClient(['token' => config('services.discord.token')]);
+            $discord->channel->createMessage(['channel.id' => 482817715489341441, 'content' => 'Sent '. $count . ' one week warning inactivty emails']);
         })->cron("0 0 24 6 *"); // 1 week before end of period
 
         /// December
         $schedule->call(function () {
-
+            //Loop through controllers
+            $count = 0;
+            foreach (RosterMember::all() as $rosterMember) {
+                //Do they meet the requirements?
+                if ($rosterMember->meetsActivityRequirement()) {
+                    //Yes... skip them
+                    continue;
+                }
+                //Let's send them a notification
+                $count++;
+                $rosterMember->user->notify(new OneMonthInactivityReminder($rosterMember, 'december'));
+            }
+            //Tell Discord all about it
+            $discord = new DiscordClient(['token' => config('services.discord.token')]);
+            $discord->channel->createMessage(['channel.id' => 482817715489341441, 'content' => 'Sent '. $count . ' one month warning inactivty emails']);
         })->cron("0 0 1 12 *"); // 1 month before end of period
 
         $schedule->call(function () {
-
+            //Loop through controllers
+            $count = 0;
+            foreach (RosterMember::all() as $rosterMember) {
+                //Do they meet the requirements?
+                if ($rosterMember->meetsActivityRequirement()) {
+                    //Yes... skip them
+                    continue;
+                }
+                //Let's send them a notification
+                $count++;
+                $rosterMember->user->notify(new TwoWeekInactivityReminder($rosterMember, 'december'));
+            }
+            //Tell Discord all about it
+            $discord = new DiscordClient(['token' => config('services.discord.token')]);
+            $discord->channel->createMessage(['channel.id' => 482817715489341441, 'content' => 'Sent '. $count . ' two week warning inactivty emails']);
         })->cron("0 0 16 12 *"); // 2 weeks before end of period
 
         $schedule->call(function () {
-
+            //Loop through controllers
+            $count = 0;
+            foreach (RosterMember::all() as $rosterMember) {
+                //Do they meet the requirements?
+                if ($rosterMember->meetsActivityRequirement()) {
+                    //Yes... skip them
+                    continue;
+                }
+                //Let's send them a notification
+                $count++;
+                $rosterMember->user->notify(new OneWeekInactivityReminder($rosterMember, 'december'));
+            }
+            //Tell Discord all about it
+            $discord = new DiscordClient(['token' => config('services.discord.token')]);
+            $discord->channel->createMessage(['channel.id' => 482817715489341441, 'content' => 'Sent '. $count . ' one week warning inactivty emails']);
         })->cron("0 0 23 12 *"); // 1 week before end of period
 
         // Monthly leaderboard wipe
