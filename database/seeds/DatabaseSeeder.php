@@ -20,12 +20,6 @@ class DatabaseSeeder extends Seeder
             'banner' => '',
             'bannerLink' => '',
             'bannerMode' => '',
-            /*'emailfirchief' => 'firchief@czqo.vatcan.ca',
-            'emaildepfirchief' => 'deputyfirchief@czqo.vatcan.ca',
-            'emailcinstructor' => 'chiefinstructor@czqo.vatcan.ca',
-            'emaileventc' => 'eventcoordinator@czqo.vatcan.ca',
-            'emailfacilitye' => 'facilityengineer@czqo.vatcan.ca',
-            'emailwebmaster' => 'webmaster@czqo.vatcan.ca'*/
             'emailfirchief' => 'webmaster@ganderoceanic.com',
             'emaildepfirchief' => 'webmaster@ganderoceanic.com',
             'emailcinstructor' => 'webmaster@ganderoceanic.com',
@@ -39,7 +33,6 @@ class DatabaseSeeder extends Seeder
             'fname' => 'System',
             'lname' => 'User',
             'email' => 'no-reply@ganderoceanic.com',
-            'permissions' => 4,
             'display_fname' => 'System',
         ]);
 
@@ -48,7 +41,6 @@ class DatabaseSeeder extends Seeder
             'fname' => 'Roster',
             'lname' => 'Placeholder',
             'email' => 'no-reply@ganderoceanic.com',
-            'permissions' => 1,
             'display_fname' => 'Roster',
         ]);
 
@@ -81,7 +73,7 @@ class DatabaseSeeder extends Seeder
            'position' => 'FIR Chief',
            'group_id' => 1,
            'description' => 'Ensures that CZQO is running optimally. In charge of day to day operations',
-            'email' => 'chief@czqo.vatcan.ca',
+            'email' => 'chief@ganderoceanic.com',
             'shortform' => 'firchief',
         ]);
 
@@ -91,7 +83,7 @@ class DatabaseSeeder extends Seeder
             'position' => 'Deputy FIR Chief',
             'group_id' => 1,
             'description' => 'Assistant to the FIR Chief.',
-            'email' => 'deputy@czqo.vatcan.ca',
+            'email' => 'deputy@ganderoceanic.com',
             'shortform' => 'dfirchief',
         ]);
 
@@ -101,7 +93,7 @@ class DatabaseSeeder extends Seeder
             'position' => 'Chief Instructor',
             'group_id' => 1,
             'description' => 'Manages the CZQO training program, including the talented team of Gander instructors.',
-            'email' => 'training@czqo.vatcan.ca',
+            'email' => 'training@ganderoceanic.com',
             'shortform' => 'cinstructor',
         ]);
 
@@ -111,7 +103,7 @@ class DatabaseSeeder extends Seeder
             'position' => 'Events and Marketing Director',
             'group_id' => 1,
             'description' => 'Devises awesome events for the Gander Oceanic FIR',
-            'email' => 'events@czqo.vatcan.ca',
+            'email' => 'events@ganderoceanic.com',
             'shortform' => 'eventsmarketing',
         ]);
 
@@ -121,7 +113,7 @@ class DatabaseSeeder extends Seeder
             'position' => 'Facility Engineer',
             'group_id' => 1,
             'description' => 'Manages and develops sector files and the Euroscope package for Gander Oceanic.',
-            'email' => 'engineer@czqo.vatcan.ca',
+            'email' => 'engineer@ganderoceanic.com',
             'shortform' => 'fengineer',
 
         ]);

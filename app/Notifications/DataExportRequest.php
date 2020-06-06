@@ -43,7 +43,7 @@ class DataExportRequest extends Notification
     {
         return (new MailMessage)->view(
             'emails.dataexportrequest', ['user' => $this->user, 'json' => $this->json]
-        )->subject('Your Data Export Request')->from('webmaster@czqo.vatcan.ca', 'Gander Oceanic FIR');
+        )->subject('Your Data Export Request')->from('webmaster@ganderoceanic.com', 'Gander Oceanic FIR');
     }
 
     /**

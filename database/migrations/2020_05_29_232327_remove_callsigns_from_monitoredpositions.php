@@ -14,7 +14,7 @@ class RemoveCallsignsFromMonitoredpositions extends Migration
     public function up()
     {
         Schema::table('monitored_positions', function (Blueprint $table) {
-            $table->dropColumn('callsign');
+            //$table->dropColumn('callsign');
         });
     }
 

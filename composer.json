@@ -25,6 +25,7 @@
         "skymeyer/vatsimphp": "1.0.*",
         "socialiteproviders/discord": "^2.0",
         "spatie/laravel-google-calendar": "^2.3",
+        "spatie/laravel-permission": "^3.13",
         "vatsim/sso": "3.*",
         "vemcogroup/laravel-sparkpost-driver": "^1.0",
         "wohali/oauth2-discord-new": "^1.0"

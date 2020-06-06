@@ -92,7 +92,7 @@ class UserController extends Controller
         $entry->save();
         $user->fname = 'Deleted';
         $user->lname = 'User';
-        $user->email = 'no-reply@czqo.vatcan.ca';
+        $user->email = 'no-reply@ganderoceanic.com';
         $user->rating = 'Deleted';
         $user->division = 'Deleted';
         $user->permissions = 0;
