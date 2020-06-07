@@ -65,10 +65,66 @@ class PermissionsSeeder extends Seeder
         Permission::create(['name' => 'delete event']);
 
         //ActivityBot
-        Permission::create(['view activity data']);
-        Permission::create(['process inactivity']);
+        Permission::create(['name' => 'view activity data']);
+        Permission::create(['name' => 'process inactivity']);
 
         //Applications
-        Permission::create(['process applications']);
+        Permission::create(['name' => 'process applications']);
+
+        //Sync roles and their permissions
+        $seniorStaff->syncPermissions(
+            [
+                'view users',
+                'view tickets',
+                'reply to tickets',
+                'close tickets',
+                'edit tickets',
+                'edit atc resources',
+                'edit policies',
+                'view articles',
+                'create articles',
+                'edit articles',
+                'delete articles',
+                'send announcements',
+                'view network data',
+                'edit monitored positions',
+                'edit session logs',
+                'view events',
+                'create event',
+                'edit event',
+                'delete event',
+                'view activity data'
+            ]
+        );
+
+        /* $trainingTeam->syncPermissions(
+            [
+            ]
+        ); */
+
+        $webTeam->syncPermissions(
+            [
+                'edit settings',
+                'view tickets',
+                'reply to tickets',
+                'close tickets'
+            ]
+        );
+
+        $marketingTeam->syncPermissions(
+            [
+                'view events',
+                'create event',
+                'edit event',
+                'delete event'
+            ]
+        );
+
+        $certifiedController->syncPermissions(
+            [
+                'submit event controller application',
+                'view certified only atc resource'
+            ]
+        );
     }
 }

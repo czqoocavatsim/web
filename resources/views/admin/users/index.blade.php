@@ -34,7 +34,7 @@
                         <td>{{$user->fullName('FL')}}</td>
                         <td>{{$user->rating_short}}</td>
                         <td>
-                            {{$user->permissions()}}
+                            {{$user->highestRole()->name}}
                         </td>
                         <td>
                             <a class="blue-text" href="{{route('users.viewprofile', $user->id)}}"><i class="fa fa-eye"></i> View User</a>

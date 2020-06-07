@@ -95,7 +95,7 @@
                             @if (Auth::user()->subdivision_name)
                             vACC/ARTCC: {{ Auth::user()->subdivision_name }}<br/>
                             @endif
-                            Role: {{Auth::user()->permissions()}}<br/>
+                            Role: {{Auth::user()->highestRole()->name}}<br/>
                             @if(Auth::user()->staffProfile)
                             Staff Role: {{Auth::user()->staffProfile->position}}
                             @endif
@@ -164,7 +164,7 @@
                 </div>
             </div>
             <br/>
-            @if (Auth::user()->permissions >= 3)
+            @can('view users')
                 <div class="card">
                     <div class="card-body">
                         <h3 class="font-weight-bold blue-text pb-2">Users</h3>
@@ -183,6 +183,8 @@
                         </ul>
                     </div>
                 </div>
+            @endcan
+            @can('view network data')
                 <br/>
                 <div class="card">
                     <div class="card-body">
@@ -202,7 +204,7 @@
                         </ul>
                     </div>
                 </div>
-            @endif
+            @endcan
         </div>
         <div class="col">
             <div class="card">
@@ -325,11 +327,11 @@
                         <li class="mb-2">
                             <a href="{{route('tickets.index')}}" style="text-decoration:none;"><span class="blue-text"><i class="fas fa-chevron-right"></i></span> &nbsp; <span class="black-text">View previous support tickets</span></a>
                         </li>
-                        @if(Auth::user()->permissions >= 3)
+                        @can('view tickets')
                         <li class="mb-2">
                             <a href="{{route('tickets.staff')}}" style="text-decoration:none;"><span class="blue-text"><i class="fas fa-chevron-right"></i></span> &nbsp; <span class="black-text">View staff ticket inbox</span></a>
                         </li>
-                        @endif
+                        @endcan
                         <li class="mb-2">
                             <a href="https://kb.ganderoceanic.com" target="_blank" style="text-decoration:none;"><span class="blue-text"><i class="fas fa-chevron-right"></i></span> &nbsp; <span class="black-text">CZQO Knowledge Base</span></a>
                         </li>
@@ -337,33 +339,33 @@
                 </div>
             </div>
             <br/>
-            @if (Auth::user()->permissions >= 2)
+            @hasanyrole('Senior Staff|Training Team|Marketing Team|Web Team')
             <div class="card">
                 <div class="card-body">
                     <h3 class="font-weight-bold blue-text pb-2">Staff</h3>
                     <ul class="list-unstyled mt-2 mb-0">
-                        <li class="mb-2">
-                            <a href="" style="text-decoration:none;"><span class="blue-text"><i class="fas fa-chevron-right"></i></span> &nbsp; <span class="black-text">Controller Training</span></a>
-                        </li>
-                        <li class="mb-2">
-                            <a href="{{route('roster.index')}}" style="text-decoration:none;"><span class="blue-text"><i class="fas fa-chevron-right"></i></span> &nbsp; <span class="black-text">Controller Roster</span></a>
-                        </li>
+                        @can('view events')
                         <li class="mb-2">
                             <a href="{{route('events.admin.index')}}" style="text-decoration:none;"><span class="blue-text"><i class="fas fa-chevron-right"></i></span> &nbsp; <span class="black-text">Events</span></a>
                         </li>
+                        @endcan
+                        @canany('view articles|send announcements')
                         <li class="mb-2">
                             <a href="{{route('news.index')}}" style="text-decoration:none;"><span class="blue-text"><i class="fas fa-chevron-right"></i></span> &nbsp; <span class="black-text">News</span></a>
                         </li>
+                        @endcanany
                     </ul>
+                    @can('edit settings')
                     <h5>Site Admin</h5>
                     <ul class="list-unstyled mt-2 mb-0">
                         <li class="mb-2">
                             <a href="{{route('settings.index')}}" style="text-decoration:none;"><span class="blue-text"><i class="fas fa-chevron-right"></i></span> &nbsp; <span class="black-text">Settings</span></a>
                         </li>
                     </ul>
+                    @endcan
                 </div>
             </div>
-            @endif
+            @endhasanyrole
         </div>
     </div>
     <br/>
