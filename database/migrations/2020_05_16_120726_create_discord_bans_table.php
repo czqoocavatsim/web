@@ -14,12 +14,27 @@ class CreateDiscordBansTable extends Migration
     public function up()
     {
         Schema::create('discord_bans', function (Blueprint $table) {
+            //Identification
             $table->increments('id');
+
+            //Assoicated user
             $table->unsignedInteger('user_id');
             $table->foreign('user_id')->references('id')->on('users');
-            $table->longText('reason')->nullable();
-            $table->dateTime('ban_start_timestamp');
-            $table->dateTime('ban_end_timestamp')->nullable();
+
+            //User who gave the ban
+            $table->unsignedInteger('moderator_id');
+            $table->foreign('moderator_id')->references('id')->on('users');
+
+            //Status
+            $table->softDeletes();
+
+            //Ban information
+            $table->text('reason');
+            $table->dateTime('start_time');
+            $table->dateTime('end_time')->nullable();
+            $table->bigInteger('discord_id')->nullable();
+
+            //Timestamps
             $table->timestamps();
         });
     }

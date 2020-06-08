@@ -8,6 +8,7 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Carbon;
 use App\Models\AtcTraining;
+use App\Models\Community\Discord\DiscordBan;
 use App\Models\ControllerBookings;
 use App\Models\Events;
 use App\Models\Network;
