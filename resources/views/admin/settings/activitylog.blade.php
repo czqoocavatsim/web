@@ -2,7 +2,7 @@
 @section('content')
     <div class="container py-4">
         <a href="{{route('settings.index')}}" class="blue-text" style="font-size: 1.2em;"> <i class="fas fa-arrow-left"></i> Settings</a>
-        <h1 class="blue-text font-weight-bold mt-2">Audit Log</h1>
+        <h1 class="blue-text font-weight-bold mt-2">Activity Log</h1>
         <hr>
         <p>This log is strictly confidential.</p>
         @if (count($entries) < 1)
@@ -12,9 +12,10 @@
                 <thead>
                     <tr>
                         <th scope="col">Time</th>
-                        <th scope="col">User</th>
-                        <th scope="col">Affected User</th>
-                        <th scope="col">Action</th>
+                        <th scope="col">Subject</th>
+                        <th scope="col">Causer</th>
+                        <th scope="col">Description</th>
+                        <th scope="col">Changes</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -22,15 +23,18 @@
                     <tr>
                         <th data-order="{{$entry->created_at}}" scope="row">{{$entry->created_at->toDayDateTimeString()}}</th>
                         <td>
-                            {{$entry->user->fullName("FLC")}}
+                            {{$entry->subject->id}} ({{substr($entry->subject_type, strrpos($entry->subject_type, "\\") + 1)}})
                         </td>
                         <td>
-                            {{$entry->affectedUser->fullName("FLC")}}
+                            {{$entry->causer->id}} ({{substr($entry->causer_type, strrpos($entry->causer_type, "\\") + 1)}})
                         <td>
-                            {{$entry->action}}
-                            &nbsp;
-                            @if ($entry->private == 1)
-                            (private)
+                            {{$entry->description}}
+                        </td>
+                        <td>
+                            @if($entry->changes)
+                            {{$entry->changes}}
+                            @else
+                            N/A
                             @endif
                         </td>
                     </tr>

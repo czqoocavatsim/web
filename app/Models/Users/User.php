@@ -22,12 +22,17 @@ use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
 use LasseRafn\InitialAvatarGenerator\InitialAvatar;
 use RestCord\DiscordClient;
+use Spatie\Activitylog\Traits\LogsActivity;
 use Spatie\Permission\Traits\HasRoles;
 
 class User extends Authenticatable
 {
     use Notifiable;
     use HasRoles;
+    use LogsActivity;
+
+    protected static $logName = 'confidential';
+    protected static $logOnlyDirty = true;
 
     /**
      * The attributes that are mass assignable.

@@ -14,6 +14,7 @@ use Auth;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
+use Spatie\Activitylog\Models\Activity;
 
 class SettingsController extends Controller
 {
@@ -89,10 +90,10 @@ class SettingsController extends Controller
     /*
     Audit log
     */
-    public function auditLog()
+    public function activityLog()
     {
-        $entries = AuditLogEntry::all();
-        return view('admin.settings.auditlog', compact('entries'));
+        $entries = Activity::all();
+        return view('admin.settings.activitylog', compact('entries'));
     }
 
     /*

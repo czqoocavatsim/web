@@ -29,7 +29,8 @@ use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Validator;
 use Laravel\Socialite\Facades\Socialite;
 use NotificationChannels\Discord\Discord;
-
+use Spatie\Permission\Models\Permission;
+use Spatie\Permission\Models\Role;
 
 class UserController extends Controller
 {
@@ -67,12 +68,10 @@ class UserController extends Controller
     public function viewUserProfile($id)
     {
         $user = User::where('id', $id)->firstOrFail();
-        $xml = [];
-        //$xml['return'] = file_get_contents('https://cert.vatsim.net/cert/vatsimnet/idstatus.php?cid=' . $user->id);
-        $xml['return'] = 'sausage';
-        $auditLog = AuditLogEntry::where('affected_id', $id)->get();
+        $assignableRoles = Role::all();
+        $assignablePermissions = Permission::all();
 
-        return view('admin.users.profile', compact('user', 'xml', 'auditLog'));
+        return view('admin.users.profile', compact('user', 'assignableRoles', 'assignablePermissions'));
     }
 
     public function deleteUser($id)

@@ -7,9 +7,12 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\HtmlString;
 use Parsedown;
 use App\Models\Users\User;
+use Spatie\Activitylog\Traits\LogsActivity;
 
 class News extends Model
 {
+    use LogsActivity;
+
     protected $fillable = [
         'id', 'title', 'user_id', 'show_author', 'image', 'content', 'summary', 'published', 'edited', 'visible', 'email_level', 'certification', 'slug'
     ];

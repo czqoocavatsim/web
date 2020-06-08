@@ -29,9 +29,9 @@
             </div>
             <div class="col-md-3 mb-3">
                 <div class="card h-100 p-4 bg-czqo-blue-light black-text shadow-none">
-                    <h3>Audit Log</h3>
-                    <p>Log of all Core events.<br>&nbsp;</p>
-                    <a class="black-text font-weight-bold" href="{{route('settings.auditlog')}}">Go <i class="fas fa-arrow-right"></i></a>
+                    <h3>Activity Log</h3>
+                    <p>Log of all events.<br>&nbsp;</p>
+                    <a class="black-text font-weight-bold" href="{{route('settings.activitylog')}}">Go <i class="fas fa-arrow-right"></i></a>
                 </div>
             </div>
             <div class="col-md-3 mb-3">

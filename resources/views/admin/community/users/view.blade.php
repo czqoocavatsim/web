@@ -8,8 +8,14 @@
 
 @section('content')
     <div class="container py-4">
-        <a href="{{route('users.viewall')}}" class="blue-text" style="font-size: 1.2em;"> <i class="fas fa-arrow-left"></i> Users</a>
-        <h1 class="blue-text font-weight-bold mt-2"><img src="{{$user->avatar()}}" style="height: 50px; width:50px;margin-right: 15px; margin-bottom: 3px; border-radius: 50%;">{{$user->fullName('FL')}}</h1>
+        <a href="{{route('community.users.index')}}" class="blue-text" style="font-size: 1.2em;"> <i class="fas fa-arrow-left"></i> Users</a>
+        <div class="d-flex flex-row align-items-center">
+            <img src="{{$user->avatar()}}" style="height: 50px; width:50px;margin-right: 15px; margin-bottom: 3px; border-radius: 50%;">
+            <div>
+                <h1 class="blue-text font-weight-bold mt-2 mb-1">{{$user->fullName('FL')}}</h1>
+                <h5>{{$user->highestRole()->name}}</h5>
+            </div>
+        </div>
         <hr>
         @if ($user->fname != $user->display_fname || !$user->display_last_name || $user->display_cid_only)
             <small>Note: this user's display name does not match their CERT name.</small>
@@ -26,10 +32,10 @@
                     <h5>Identity</h5>
                     <ul class="list-unstyled">
                         <li>CID: {{$user->id}}</li>
-                        @if (Auth::user()->permissions == 4)
+                        @can('view user details')
                         <li>CERT First Name: {{$user->fname}}</li>
                         <li>CERT Last Name: {{$user->lname}}</li>
-                        @endif
+                        @endcan
                         <li>Display Name: {{$user->fullName('FLC')}}</li>
                     </ul>
                     <h5>Rating & Division</h5>
@@ -39,8 +45,85 @@
                         <li>Region: {{$user->region_name}} ({{$user->region_code}})</li>
                         <li>Rating: {{$user->rating_GRP}} ({{$user->rating_short}})</li>
                     </ul>
+                    @can('view user deatils')
                     <h5>Email</h5>
                     <a href="mailto:{{$user->email}}">{{$user->email}}</a>
+                    @endcan
+                </div>
+                <h4 class="mt-3">Roles and Permissions</h4>
+                <div class="card p-3">
+                    <h5>Roles</h5>
+                    <ul class="list-unstyled">
+                        @foreach($user->roles as $role)
+                        <li>
+                            {{$role->name}}
+                            @if($user->can('edit user details') && $role != $user->highestRole())
+                                <form style="display: inline;" action="{{route('community.users.remove.role', $user->id)}}" method="POST">
+                                    @csrf
+                                    {{ method_field('DELETE')}}
+                                    <input type="hidden" name="role_id" value="{{$role->id}}">
+                                    &nbsp;<button class="red-text btn btn-link m-0 p-0"><i class="fa fa-times"></i>   Remove</button>
+                                </form>
+                            @endif
+                        </li>
+                        @endforeach
+                    </ul>
+                    <h5>Assign Role</h5>
+                    <form action="{{route('community.users.assign.role', $user->id)}}" method="POST">
+                        @csrf
+                        <div class="input-group mb-3">
+                            <select class="form-control" name="role_id" id="">
+                                <option value="" hidden>Select role...</option>
+                                @foreach($assignableRoles as $role)
+                                @if ($user->hasRole($role)) @continue @endif
+                                <option value="{{$role->id}}">
+                                    {{$role->name}}
+                                </option>
+                                @endforeach
+                            </select>
+                            <div class="input-group-append">
+                                <button class="btn btn-link m-0 px-3 py-2 z-depth-0 waves-effect">Assign</button>
+                            </div>
+                        </div>
+                    </form>
+                    <hr>
+                    <h5>Permissions</h5>
+                    <ul class="list-unstyled">
+                        @foreach($user->permissions as $perm)
+                        <li>
+                            {{ucfirst($perm->name)}}
+                            @if($user->can('edit user details'))
+                                <form style="display: inline;" action="{{route('community.users.remove.permission', $user->id)}}" method="POST">
+                                    @csrf
+                                    {{ method_field('DELETE')}}
+                                    <input type="hidden" name="permission_id" value="{{$perm->id}}">
+                                    &nbsp;<button class="red-text btn btn-link m-0 p-0"><i class="fa fa-times"></i>   Remove</button>
+                                </form>
+                            @endif
+                        </li>
+                        @endforeach
+                        @if(count($user->permissions) == 0)
+                            <li>None assigned.</li>
+                        @endif
+                    </ul>
+                    <h5>Assign Permission</h5>
+                    <p>This should be used to give someone temporary access to a function without giving them unneeded access to other functions.</p>
+                    <form action="{{route('community.users.assign.permission', $user->id)}}" method="POST">
+                        @csrf
+                        <div class="input-group mb-3">
+                            <select class="form-control" name="permission_id" id="">
+                                <option value="" hidden>Select permission...</option>
+                                @foreach($assignablePermissions as $perm)
+                                <option value="{{$perm->id}}">
+                                    {{$perm->name}}
+                                </option>
+                                @endforeach
+                            </select>
+                            <div class="input-group-append">
+                                <button class="btn btn-link m-0 px-3 py-2 z-depth-0 waves-effect">Assign</button>
+                            </div>
+                        </div>
+                    </form>
                 </div>
             </div>
             <div class="col-md-6">
@@ -49,14 +132,16 @@
                     <div class="d-flex flex-row align-items-center">
                         <img src="{{$user->avatar()}}" style="height: 100px; width: 100px; border-radius: 50%;">
                         <div class="ml-4">
+                            @can('edit user details')
                             <a href="#" data-toggle="modal" data-target="#changeAvatar" class="btn btn-sm bg-czqo-blue-light">Change</a>
                             @if(!$user->isAvatarDefault())
-                            <form action="{{route('users.resetusersavatar')}}" method="POST">
+                            {{-- <form action="{{route('users.resetusersavatar')}}" method="POST">
                                 @csrf
                                 <input type="hidden" name="user_id" value="{{$user->id}}">
                                 <input type="submit" class="btn btn-sm bg-czqo-blue-light" value="Reset">
-                            </form>
+                            </form> --}}
                             @endif
+                            @endcan
                             <p class="mt-2 pl-1">Avatar Mode:
                                 @switch($user->avatar_mode)
                                 @case(0)Default
@@ -76,6 +161,7 @@
                     <ul class="list-unstyled">
                         <li class="d-flex align-items-center">Member of the CZQO Discord: <i style="margin-left: 5px;font-size: 20px;" class="{{$user->memberOfCzqoGuild() ? 'fas fa-check-circle green-text' : 'fas fa-times-circle red-text'}}"></i></li>
                     </ul>
+                    @can('edit user details')
                     <hr>
                     <h5>
                         <div class="d-flex flex-row justify-content-between align-items-center">
@@ -96,6 +182,7 @@
                         @endforeach
                     </div>
                     @endif
+                    @endcan
                     @else
                     This user does not have a linked Discord account.
                     @endif
@@ -103,36 +190,9 @@
             </div>
         </div>
     </div>
-    <div class="modal fade" id="addNoteModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-        <div class="modal-dialog" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabel">New note</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-                <div class="modal-body">
-                    {!! Form::open(['route' => ['users.createnote', $user->id]]) !!}
-                    <div class="form-group">
-                        <label for="recipient-name" class="col-form-label">Content</label>
-                        {!! Form::textarea('content', null, ['class' => 'form-control']) !!}
-                    </div>
-                    <div class="form-group">
-                        <label class="col-form-label">Confidential</label>
-                        {!! Form::checkbox('confidential', null, ['class' => 'form-control']) !!}
-                    </div>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                    {!! Form::submit('Submit', ['class' => 'btn btn-primary']) !!}
-                    {!! Form::close() !!}
-                </div>
-            </div>
-        </div>
-    </div>
+
     <!--Change avatar modal-->
-    <div class="modal fade" id="changeAvatar" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+    {{-- <div class="modal fade" id="changeAvatar" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered" role="document">
             <div class="modal-content">
                 <div class="modal-header">
@@ -160,7 +220,7 @@
                 </form>
             </div>
         </div>
-    </div>
+    </div> --}}
     <!--End change avatar modal-->
     <!--Start create discord ban modal-->
     <div class="modal fade" id="createDiscordBanModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">

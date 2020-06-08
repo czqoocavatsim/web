@@ -58,6 +58,11 @@
     </blockquote>
     @endif--}}
     <br class="my-2">
+    @role('Restricted')
+    <div class="alert bg-czqo-blue-light">
+        Your account on Gander Oceanic is currently restricted. You cannot access pages that require an account, except for "Manage your data". Contact the OCA Chief for more information.
+    </div>
+    @endrole
     <div class="row">
         <div class="col">
             <div class="card" id="atcResources">
@@ -65,7 +70,7 @@
                     <h3 class="font-weight-bold blue-text pb-2">ATC Resources</h3>
                     <div class="list-group" style="border-radius: 0.5em !important">
                         @foreach($atcResources as $resource)
-                        @if($resource->atc_only && Auth::user()->permissions < 1)
+                        @if($resource->atc_only && Auth::user()->cannot('view certified only atc resource'))
                             @continue
                         @else
                         <a href="{{$resource->url}}" target="_new" class="list-group-item list-group-item-action">
@@ -170,7 +175,7 @@
                         <h3 class="font-weight-bold blue-text pb-2">Users</h3>
                         <ul class="list-unstyled mt-2 mb-0">
                             <li class="mb-2">
-                                <a href="{{(route('users.viewall'))}}" style="text-decoration:none;">
+                                <a href="{{(route('community.users.index'))}}" style="text-decoration:none;">
                                     <span class="blue-text">
                                         <i class="fas fa-chevron-right"></i>
                                     </span>
@@ -339,7 +344,7 @@
                 </div>
             </div>
             <br/>
-            @hasanyrole('Senior Staff|Training Team|Marketing Team|Web Team')
+            @hasanyrole('Administrator|Senior Staff|Training Team|Marketing Team|Web Team')
             <div class="card">
                 <div class="card-body">
                     <h3 class="font-weight-bold blue-text pb-2">Staff</h3>
@@ -349,11 +354,11 @@
                             <a href="{{route('events.admin.index')}}" style="text-decoration:none;"><span class="blue-text"><i class="fas fa-chevron-right"></i></span> &nbsp; <span class="black-text">Events</span></a>
                         </li>
                         @endcan
-                        @canany('view articles|send announcements')
+                        @can('view articles')
                         <li class="mb-2">
                             <a href="{{route('news.index')}}" style="text-decoration:none;"><span class="blue-text"><i class="fas fa-chevron-right"></i></span> &nbsp; <span class="black-text">News</span></a>
                         </li>
-                        @endcanany
+                        @endcan
                     </ul>
                     @can('edit settings')
                     <h5>Site Admin</h5>

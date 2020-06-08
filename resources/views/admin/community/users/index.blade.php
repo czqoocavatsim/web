@@ -1,17 +1,11 @@
 @extends('layouts.master')
-
-@section('navbarprim')
-
-    @parent
-
-@stop
-
 @section('content')
 
     <div class="container py-4">
-        <a href="{{route('dashboard.index')}}" class="blue-text" style="font-size: 1.2em;"> <i class="fas fa-arrow-left"></i> Dashboard</a>
+        <a href="{{route('dashboard.index')}}" class="blue-text" style="font-size: 1.2em;"> <i class="fas fa-arrow-left"></i> Community</a>
         <h1 class="blue-text font-weight-bold mt-2">Users</h1>
         <hr>
+        <h4 class="mb-3">There are <span class="font-weight-bold blue-text">{{$userCount}}</span> users</h4>
         @if (empty($users))
             <div class="alert alert-danger">No users found</div>
         @else
@@ -21,14 +15,12 @@
                     <th scope="col">ID</th>
                     <th scope="col">Name</th>
                     <th scope="col">Rating</th>
-                    <th scope="col">Permission</th>
+                    <th scope="col">Role</th>
                     <th scope="col">Action</th>
                 </tr>
                 </thead>
                 <tbody>
                 @foreach ($users as $user)
-                    @if ($user->deleted == 1)
-                    @else
                     <tr>
                         <th scope="row"><b>{{$user->id}}</b></th>
                         <td>{{$user->fullName('FL')}}</td>
@@ -37,10 +29,9 @@
                             {{$user->highestRole()->name}}
                         </td>
                         <td>
-                            <a class="blue-text" href="{{route('users.viewprofile', $user->id)}}"><i class="fa fa-eye"></i> View User</a>
+                            <a class="blue-text" href="{{route('community.users.view', $user->id)}}"><i class="fa fa-eye"></i> View User</a>
                         </td>
                     </tr>
-                    @endif
                 @endforeach
                 </tbody>
             </table>
@@ -51,4 +42,5 @@
             $('#dataTable').DataTable();
         } );
     </script>
-@stop
+
+@endsection

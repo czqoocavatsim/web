@@ -1,5 +1,6 @@
 <?php
 
+use App\Models\Users\User;
 use Illuminate\Database\Seeder;
 use Spatie\Permission\Models\Role;
 use Spatie\Permission\Models\Permission;
@@ -126,5 +127,10 @@ class PermissionsSeeder extends Seeder
                 'view certified only atc resource'
             ]
         );
+
+
+        //Give the bot users the roles they deserve!
+        User::find(1)->assignRole('Administrator');
+        User::find(2)->assignRole('Administrator');
     }
 }

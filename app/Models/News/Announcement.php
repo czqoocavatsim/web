@@ -6,9 +6,12 @@ use App\Models\Users\User;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\HtmlString;
 use Parsedown;
+use Spatie\Activitylog\Traits\LogsActivity;
 
 class Announcement extends Model
 {
+    use LogsActivity;
+
     protected $hidden = ['id'];
 
     protected $fillable = [

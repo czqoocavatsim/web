@@ -98,7 +98,6 @@ class ProcessArticlePublishing implements ShouldQueue
             ]
 
         ], JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE );
-        Log::info($hook);
         $ch = curl_init();
         curl_setopt_array($ch, [
             CURLOPT_URL => config('discord.news_webhook'),
@@ -114,7 +113,6 @@ class ProcessArticlePublishing implements ShouldQueue
             $error = curl_error($ch);
         }
         curl_close($ch);
-        Log::info(config('discord.news_webhook'));
 
         //Send emails as appropirate
         switch ($this->article->email_level) {

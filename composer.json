@@ -24,6 +24,7 @@
         "sentry/sentry-laravel": "1.7.1",
         "skymeyer/vatsimphp": "1.0.*",
         "socialiteproviders/discord": "^2.0",
+        "spatie/laravel-activitylog": "^3.14",
         "spatie/laravel-google-calendar": "^2.3",
         "spatie/laravel-permission": "^3.13",
         "vatsim/sso": "3.*",

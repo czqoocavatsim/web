@@ -6,7 +6,9 @@
     <hr>
     <div class="row">
         <div class="col-md-6">
+            @can('create event')
             <a href="{{route('events.admin.create')}}" class="mb-3 btn btn-block btn-md waves-effect btn-primary">Create Event</a>
+            @endcan
             <table class="table dt table-hover table-bordered">
                 <thead>
                     <th>Title</th>

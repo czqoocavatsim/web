@@ -12,10 +12,14 @@ use Exception;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Log;
+use Spatie\Activitylog\Traits\LogsActivity;
 
 class Event extends Model
 {
     use SoftDeletes;
+    use LogsActivity;
+
+    protected static $logUnguarded = true;
 
     protected $fillable = [
         'id', 'name', 'start_timestamp', 'end_timestamp', 'user_id', 'description', 'image_url', 'controller_applications_open', 'departure_icao', 'arrival_icao', 'slug'
