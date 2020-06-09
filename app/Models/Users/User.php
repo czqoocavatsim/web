@@ -205,8 +205,6 @@ class User extends Authenticatable
             $discord = new DiscordClient(['token' => config('services.discord.token')]);
 
             $user = $discord->user->getUser(['user.id' => $this->discord_user_id]);
-            Log::info('Caching Discord user');
-            Log::info(print_r($user, true));
             return $user;
         });
     }
@@ -218,8 +216,7 @@ class User extends Authenticatable
 
             $user = $discord->user->getUser(['user.id' => $this->discord_user_id]);
             $url = 'https://cdn.discordapp.com/avatars/'.$user->id.'/'.$user->avatar.'.png';
-            Log::info($url);
-            return $url;
+]            return $url;
         });
     }
 
