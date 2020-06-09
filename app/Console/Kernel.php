@@ -115,26 +115,26 @@ class Kernel extends ConsoleKernel
                     // If a match is found
                     if ($ocLogon == $log->session_start) {
                         if (!$log->roster_member_id || RosterMember::where('cid', $log->cid)->first()->status == 'not_certified') { // Check if they're naughty
-                            if ($log->emails_sent < 3) {
+                            if ($log->emails_sent < 1) {
                                 Notification::route('mail', CoreSettings::find(1)->emailfirchief)->notify(new ControllerNotCertified($log));
                                 $log->emails_sent++;
                                 $log->save();
                             }
                         } else if (!RosterMember::where('cid', $log->cid)->first()->active) { // inactive
-                            if ($log->emails_sent < 3) {
+                            if ($log->emails_sent < 1) {
                                 Notification::route('mail', CoreSettings::find(1)->emailfirchief)->notify(new ControllerInactive($log));
                                 $log->emails_sent++;
                                 $log->save();
                             }
                         } else if (RosterMember::where('cid', $log->cid)->first()->status == 'training') {
-                            if ($log->emails_sent < 3) {
+                            if ($log->emails_sent < 1) {
                                 Notification::route('mail', CoreSettings::find(1)->emailfirchief)->notify(new ControllerIsStudent($log));
                                 error_log('user in training');
                                 $log->emails_sent++;
                                 $log->save();
                             }
                         } else if ($staffOnly && (RosterMember::where('cid', $log->cid)->first()->status != 'instructor')) { // instructor
-                            if ($log->emails_sent < 3) {
+                            if ($log->emails_sent < 1) {
                                 Notification::route('mail', CoreSettings::find(1)->emailfirchief)->notify(new ControllerNotStaff($log));
                                 $log->emails_sent++;
                                 $log->save();
@@ -174,13 +174,13 @@ class Kernel extends ConsoleKernel
                     if ($user && $user->status != 'training' && $user->status != 'not_certified') { // Add if on roster, don't if not (big problem lmao)
                         $sessionLog->roster_member_id = $user->id;
                         if ($staffOnly && ($user->status != 'instructor')) {
-                            if ($sessionLog->emails_sent < 3) {
+                            if ($sessionLog->emails_sent < 1) {
                                 Notification::route('mail', CoreSettings::find(1)->emailfirchief)->notify(new ControllerNotStaff($sessionLog));
                                 $sessionLog->emails_sent++;
                                 $sessionLog->save();
                             }
                         } else if (!$user->active) { // inactive
-                            if ($sessionLog->emails_sent < 3) {
+                            if ($sessionLog->emails_sent < 1) {
                                 Notification::route('mail', CoreSettings::find(1)->emailfirchief)->notify(new ControllerInactive($sessionLog));
                                 $sessionLog->emails_sent++;
                                 $sessionLog->save();
@@ -189,18 +189,18 @@ class Kernel extends ConsoleKernel
                     } else { // Send unauthorised notification to FIR Chief
                         if ($user) $sessionLog->roster_member_id = $user->id;
                         if (!$user->active) { // inactive
-                            if ($sessionLog->emails_sent < 3) {
+                            if ($sessionLog->emails_sent < 1) {
                                 Notification::route('mail', CoreSettings::find(1)->emailfirchief)->notify(new ControllerInactive($sessionLog));
                                 $sessionLog->emails_sent++;
                                 $sessionLog->save();
                             }
                         } else if ($user->status == 'training') {
-                            if ($sessionLog->emails_sent < 3) {
+                            if ($sessionLog->emails_sent < 1) {
                                 Notification::route('mail', CoreSettings::find(1)->emailfirchief)->notify(new ControllerIsStudent($sessionLog));
                                 $sessionLog->emails_sent++;
                                 $sessionLog->save();
                             }
-                        } else if ($sessionLog->emails_sent < 3) {
+                        } else if ($sessionLog->emails_sent < 1) {
                             Notification::route('mail', CoreSettings::find(1)->emailfirchief)->notify(new ControllerNotCertified($sessionLog));
                             $sessionLog->emails_sent++;
                             $sessionLog->save();
