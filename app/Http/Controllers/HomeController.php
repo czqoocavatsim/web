@@ -24,7 +24,6 @@ class HomeController extends Controller
         $planes = null;
         if ($vatsim->loadData()) {
             $ganderControllers = $vatsim->searchCallsign('CZQX_');
-            Log::info($ganderControllers->toArray());
             $shanwickControllers = $vatsim->searchCallsign('EGGX_');
             $planes = $vatsim->getPilots()->toArray();
         }
@@ -43,8 +42,6 @@ class HomeController extends Controller
             curl_setopt($ch, CURLOPT_URL, $url);
             curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
             $json = curl_exec($ch);
-            error_log('Grabbing VATCAN news from API');
-            Log::info('Grabbing VATCAN news from API '.date('Y-m-d H:i:s'));
             curl_close($ch);
             return json_decode($json);
         });

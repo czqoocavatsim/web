@@ -419,7 +419,6 @@ class UserController extends Controller
 
     public function linkDiscord()
     {
-        Log::info('Linking Discord for '.Auth::id());
         return Socialite::with('discord')->setScopes(['identify'])->redirect();
     }
 

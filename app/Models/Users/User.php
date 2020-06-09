@@ -205,10 +205,7 @@ class User extends Authenticatable
     {
         return Cache::remember('users.discorduserdata.'.$this->id, 84600, function () {
             $discord = new DiscordClient(['token' => config('services.discord.token')]);
-
             $user = $discord->user->getUser(['user.id' => $this->discord_user_id]);
-            Log::info('Caching Discord user');
-            Log::info(print_r($user, true));
             return $user;
         });
     }
@@ -217,10 +214,8 @@ class User extends Authenticatable
     {
         return Cache::remember('users.discorduserdata.'.$this->id.'.avatar', 21600, function () {
             $discord = new DiscordClient(['token' => config('services.discord.token')]);
-
             $user = $discord->user->getUser(['user.id' => $this->discord_user_id]);
             $url = 'https://cdn.discordapp.com/avatars/'.$user->id.'/'.$user->avatar.'.png';
-            Log::info($url);
             return $url;
         });
     }

@@ -35,7 +35,6 @@ class ProcessDataExport implements ShouldQueue
     public function handle()
     {
         $user = User::whereId($this->user->id)->with(['notes', 'applications', 'instructorProfile', 'studentProfile', 'staffProfile', 'rosterProfile', 'notifications', 'discordBans', 'tickets', 'ticketReplies'])->firstOrFail();
-        Log::info('Processing GDPR Export All for '.$this->user->id);
         $userArray = $user->toArray();
         $discord = null;
         if ($user->hasDiscord()) {
@@ -43,7 +42,6 @@ class ProcessDataExport implements ShouldQueue
         }
         array_push($userArray, $discord);
         $json = json_encode($userArray, JSON_PRETTY_PRINT);
-        Log::info($json);
         $user->notify(new DataExportRequest($user, $json));
     }
 }

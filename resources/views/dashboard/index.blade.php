@@ -26,7 +26,9 @@
                         "hey"=>"Hey",
                         "hi"=>"Hi",
                         "hola"=>"Hola",
-                        "howdy"=>"Howdy");
+                        "howdy"=>"Howdy",
+                        "guten_tag"=>"Guten Tag",
+                        "grüß_dich"=>"Grüß Dich");
 
                     //echo greeting
                     echo (randomArrayVar($greeting));
@@ -73,7 +75,7 @@
                         @if($resource->atc_only && Auth::user()->cannot('view certified only atc resource'))
                             @continue
                         @else
-                        <a href="{{$resource->url}}" target="_new" class="list-group-item list-group-item-action">
+                        <a href="{{$resource->url}}" target="_blank" class="list-group-item list-group-item-action">
                             {{$resource->title}}
                         </a>
                         @endif
