@@ -47,6 +47,15 @@ class ProcessAnnouncement implements ShouldQueue
                     $user->notify(new AnnouncementNotification($user, $this->announcement));
                 }
                 $discord->channel->createMessage(['channel.id' => 482860026831175690, 'content' => 'Sent '. count($users) . ' emails for announcement '.$this->announcement->title]);
+                break;
+            case "roster":
+                // All roster members
+                $rosterMembers = RosterMember::all();
+                foreach ($rosterMember as $member) {
+                    $member->notify(new AnnouncementNotification($member, $this->announcement));
+                }
+                $discord->channel->createMessage(['channel.id' => 482860026831175690, 'content' => 'Sent '. count($users) . ' emails for announcement '.$this->announcement->title]);
+                break;
         }
     }
 }
