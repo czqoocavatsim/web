@@ -52,9 +52,9 @@ class ProcessAnnouncement implements ShouldQueue
                 // All roster members
                 $rosterMembers = RosterMember::all();
                 foreach ($rosterMember as $member) {
-                    $member->notify(new AnnouncementNotification($member, $this->announcement));
+                    $member->user->notify(new AnnouncementNotification($member, $this->announcement));
                 }
-                $discord->channel->createMessage(['channel.id' => 482860026831175690, 'content' => 'Sent '. count($users) . ' emails for announcement '.$this->announcement->title]);
+                $discord->channel->createMessage(['channel.id' => 482860026831175690, 'content' => 'Sent '. count($users) . ' emails to roster members for announcement '.$this->announcement->title]);
                 break;
         }
     }
