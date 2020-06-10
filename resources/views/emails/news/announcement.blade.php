@@ -8,7 +8,7 @@
 @endsection
 
 @section('from-line')
-Sent by <b>{{$announcement->user->fullName('FLC')}} ({{$announcement->user->staffProfile->position}})</b>
+Sent by <b>{{$announcement->user->fullName('FLC')}} ({{$announcement->user->staffProfile->position ?? 'No staff position found'}})</b>
 @endsection
 
 @section('footer-to-line', $user->fullName('FLC').' ('.$user->email.')')

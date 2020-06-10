@@ -37,9 +37,9 @@
                             <select name="target_group" id="" class="form-control" required>
                                 <option hidden>Select one</option>
                                 <option value="everyone">Every user</option>
-                                <option value="subscribed">Subscribed users</option>
+                                <option disabled value="subscribed">Subscribed users</option>
                                 <option value="roster">Controller roster</option>
-                                <option value="staff">Staff members</option>
+                                <option disabled value="staff">Staff members</option>
                                 <option disabled value="students">Current students (disabled for now)</option>
                             </select>
                         </div>
