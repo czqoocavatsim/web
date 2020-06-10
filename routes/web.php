@@ -25,7 +25,7 @@ Route::view('/pilots/oceanic-clearance', 'pilots.oceanic-clearance');
 Route::view('/pilots/position-report', 'pilots.position-report');
 Route::view('/pilots/tracks', 'pilots.tracks');
 Route::view('/pilots/tutorial', 'pilots.tutorial');
-Route::get('/policies', 'Publications\PoliciesController@index')->name('policies');
+Route::get('/policies', 'Publications\PublicationsController@policiesIndex')->name('policies');
 Route::get('/meetingminutes', 'News\NewsController@minutesIndex')->name('meetingminutes');
 Route::get('/bookings', 'ControllerBookings\ControllerBookingsController@indexPublic')->name('controllerbookings.public');
 Route::view('/privacy', 'privacy')->name('privacy');
@@ -178,15 +178,6 @@ Route::group(['middleware' => 'auth'], function () {
         //AtcTraining
         Route::post('/dashboard/training/instructors', 'AtcTraining\TrainingController@addInstructor')->name('training.instructors.add');
 
-        //Minutes
-        Route::get('/meetingminutes/{id}', 'News\NewsController@minutesDelete')->name('meetingminutes.delete');
-        Route::post('/meetingminutes', 'News\NewsController@minutesUpload')->name('meetingminutes.upload');
-
-
-
-        Route::post('/policies', 'Publications\PoliciesController@addPolicy')->name('policies.create');
-        Route::get('/policies/{id}/delete', 'Publications\PoliciesController@deletePolicy');
-
         //Admin
         Route::prefix('admin')->group(function () {
 
@@ -214,6 +205,14 @@ Route::group(['middleware' => 'auth'], function () {
                 Route::get('/announcement/create', 'News\NewsController@createAnnouncement')->name('news.announcements.create');
                 Route::post('/announcement/create', 'News\NewsController@createAnnouncementPost')->name('news.announcements.create.post');
                 Route::get('/announcement/{slug}', 'News\NewsController@viewAnnouncement')->name('news.announcements.view');
+            });
+
+            //Publications
+            Route::prefix('publications')->group(function () {
+                Route::get('/', 'Publications\PublicationsController@adminIndex')->name('publications.index');
+                Route::get('/policy/create', 'Publications\PublicationsController@adminCreatePolicy')->name('publications.policies.create');
+                Route::post('/policy/create', 'Publications\PublicationsController@adminCreatePolicyPost')->name('publications.policies.create.post');
+                Route::get('/policy/{id}', 'Publications\PublicationsController@adminViewPolicy')->name('publications.policies.view');
             });
 
             //Network

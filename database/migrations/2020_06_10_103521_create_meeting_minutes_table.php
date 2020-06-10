@@ -14,11 +14,22 @@ class CreateMeetingMinutesTable extends Migration
     public function up()
     {
         Schema::create('meeting_minutes', function (Blueprint $table) {
+            //Identification
             $table->increments('id');
-            $table->integer('user_id')->unsigned();
+
+            //Assoicated user
+            $table->unsignedInteger('user_id');
             $table->foreign('user_id')->references('id')->on('users');
+
+            //Information
             $table->string('title');
-            $table->string('link');
+            $table->text('description');
+            $table->string('url');
+
+            //Deletes
+            $table->softDeletes();
+
+            //Timestamps
             $table->timestamps();
         });
     }

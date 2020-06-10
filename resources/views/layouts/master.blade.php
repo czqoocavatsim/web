@@ -47,7 +47,7 @@
         <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.3.1/js/bootstrap.min.js"></script>
         <!-- MDB core JavaScript -->
         <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mdbootstrap/4.8.11/js/mdb.min.js"></script>
-        <!--CZQO specific CSS-->
+        <!--CZQO specific CSS and JS-->
         @if (Auth::check())
         @switch (Auth::user()->preferences)
             @case("default")
@@ -422,5 +422,6 @@
     <script>
         $("blockquote").addClass('blockquote');
     </script>
+    <script src="{{asset('js/czqo.js')}}"></script>
     </body>
 </html>
