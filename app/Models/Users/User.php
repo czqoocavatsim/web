@@ -24,6 +24,7 @@ use LasseRafn\InitialAvatarGenerator\InitialAvatar;
 use RestCord\DiscordClient;
 use Spatie\Activitylog\Traits\LogsActivity;
 use Spatie\Permission\Traits\HasRoles;
+use Throwable;
 
 class User extends Authenticatable
 {
@@ -228,7 +229,7 @@ class User extends Authenticatable
                 return true;
             }
         }
-        catch (Exception $ex) {
+        catch (Throwable $ex) {
             return false;
         }
         return false;
