@@ -24,11 +24,11 @@ Guidelines for submitting a **pull request**:
 
 ### Initial setup process
 
-1. Rename `.env.exmaple` to `.env` and fill required fields. For SSO credentials, use the Demo vACC key from the VATSIM forums. For VATSIM Connect, you will need correct keys from VATSIM Connect. These are not publicly available.
-2. Create a SQL database, and put the credentials in `.env`.
-3. Run `php artisan migrate --seed` (runs database migrations and seeds with required rows).
-4. Run `php artisan key:generate`.
-5. Login with VATSIM demo SSO.
-6. Give that new account in the `users` table a `permissions` value of `4`.
+1. Rename `.env.example` to `.env` and fill required fields. The VATSIM connect demo URI is already placed in there. Get your ID and put your redirect URI into `http://auth-dev.vatsim.net`.
+3. Create a SQL database, and put the credentials in `.env`.
+4. Run `php artisan migrate --seed` (runs database migrations and seeds with required rows).
+5. Run `php artisan key:generate`.
+6. Login with one of the accounts found at http://wiki.vatsim.net/connect.
+7. Give that new account in the users table a permissions value of `4`.
 
 
