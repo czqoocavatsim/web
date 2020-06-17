@@ -15,8 +15,6 @@ class CreateSessionLogsTable extends Migration
     {
         Schema::create('session_logs', function (Blueprint $table) {
             $table->increments('id');
-            $table->integer('roster_member_id')->unsigned()->nullable();
-            $table->foreign('roster_member_id')->references('id')->on('roster');
             $table->integer('cid');
             $table->dateTime('session_start');
             $table->dateTime('session_end')->nullable();

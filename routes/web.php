@@ -156,6 +156,11 @@ Route::group(['middleware' => 'auth'], function () {
         Route::post('/dashboard/training/students/{id}/setstatus', 'AtcTraining\TrainingController@changeStudentStatus')->name('training.students.setstatus');
 
 
+    //Training
+    Route::prefix('training')->group(function () {
+        Route::get('applications/apply', 'Training\ApplicationsController@apply')->name('training.applications.apply');
+        Route::post('applications/apply', 'Training\ApplicationsController@applyPost')->name('training.applications.apply.post');
+    });
         //ATC Resources
         Route::post('/atcresources', 'Publications\AtcResourcesController@uploadResource')->name('atcresources.upload');
         Route::get('/atcresources/delete/{id}', 'Publications\AtcResourcesController@deleteResource')->name('atcresources.delete');
