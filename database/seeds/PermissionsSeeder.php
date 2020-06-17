@@ -69,9 +69,6 @@ class PermissionsSeeder extends Seeder
         Permission::create(['name' => 'view activity data']);
         Permission::create(['name' => 'process inactivity']);
 
-        //Applications
-        Permission::create(['name' => 'process applications']);
-
         //Sync roles and their permissions
         $seniorStaff->syncPermissions(
             [

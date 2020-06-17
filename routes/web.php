@@ -15,8 +15,8 @@
 
 use Illuminate\Support\Facades\Notification;
 
-Route::get('/', 'HomeController@view')->name('index');
-Route::get('/map', 'HomeController@map')->name('map');
+Route::get('/', 'PrimaryViewsController@home')->name('index');
+Route::get('/map', 'PrimaryViewsController@map')->name('map');
 Route::get('/roster', 'AtcTraining\RosterController@showPublic')->name('roster.public');
 Route::get('/staff', 'Users\StaffListController@index')->name('staff');
 Route::get('/atcresources', 'Publications\AtcResourcesController@index')->name('atcresources.index');
@@ -75,7 +75,7 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('/privacydeny', 'Users\UserController@privacyDeny');
 
     //Dashboard
-    Route::get('/dashboard', 'DashboardController@index')->name('dashboard.index');
+    Route::get('/dashboard', 'PrimaryViewsController@dashboard')->name('dashboard.index');
 
     //GDPR
     Route::get('/me/data', 'Users\DataController@index')->name('me.data');
@@ -142,31 +142,21 @@ Route::group(['middleware' => 'auth'], function () {
         Route::get('/me/preferences', 'Users\UserController@preferences')->name('me.preferences');
         Route::post('/me/preferences', 'Users\UserController@preferencesPost')->name('me.preferences.post');
 
-        //AtcTraining
-        Route::get('/dashboard/training', 'AtcTraining\TrainingController@index')->name('training.index');
+        //Training
+        Route::prefix('training')->group(function () {
 
-        Route::get('/dashboard/training/sessions', 'AtcTraining\TrainingController@instructingSessionsIndex')->name('training.instructingsessions.index');
-        Route::get('/dashboard/training/sessions/{id}', 'AtcTraining\TrainingController@viewInstructingSession')->name('training.instructingsessions.viewsession');
-        Route::view('/dashboard/training/sessions/create', 'dashboard.training.instructingsessions.create')->name('training.instructingsessions.createsessionindex');
-        Route::get('/dashboard/training/sessions/create', 'AtcTraining\TrainingController@createInstructingSession')->name('training.instructingsessions.createsession');
-        Route::get('/dashboard/training/instructors', 'AtcTraining\TrainingController@instructorsIndex')->name('training.instructors');
-        Route::get('/dashboard/training/students/current', 'AtcTraining\TrainingController@currentStudents')->name('training.students.current');
-        Route::get('/dashboard/training/students/{id}', 'AtcTraining\TrainingController@viewStudent')->name('training.students.view');
-        Route::post('/dashboard/training/students/{id}/assigninstructor', 'AtcTraining\TrainingController@assignInstructorToStudent')->name('training.students.assigninstructor');
-        Route::post('/dashboard/training/students/{id}/setstatus', 'AtcTraining\TrainingController@changeStudentStatus')->name('training.students.setstatus');
+            //Applications
+            Route::get('applications', 'Training\ApplicationsController@showAll')->name('training.applications.showall');
+            Route::get('applications/apply', 'Training\ApplicationsController@apply')->name('training.applications.apply');
+            Route::post('applications/apply', 'Training\ApplicationsController@applyPost')->name('training.applications.apply.post');
+            Route::post('applications/withdraw', 'Training\ApplicationsController@withdraw')->name('training.applications.withdraw');
+            Route::post('applications/comment/post', 'Training\ApplicationsController@commentPost')->name('training.applications.comment.post');
+            Route::get('applications/{reference_id}', 'Training\ApplicationsController@show')->name('training.applications.show');
+            Route::get('applications/{reference_id}/updates', 'Training\ApplicationsController@showUpdates')->name('training.applications.show.updates');
 
 
-    //Training
-    Route::prefix('training')->group(function () {
+        });
 
-        //Applications
-        Route::get('applications', 'Training\ApplicationsController@showAll')->name('training.applications.showall');
-        Route::get('applications/apply', 'Training\ApplicationsController@apply')->name('training.applications.apply');
-        Route::post('applications/apply', 'Training\ApplicationsController@applyPost')->name('training.applications.apply.post');
-        Route::get('applications/{reference_id}', 'Training\ApplicationsController@show')->name('training.applications.show');
-        Route::post('applications/withdraw', 'Training\ApplicationsController@withdraw')->name('training.applications.withdraw');
-
-    });
         //ATC Resources
         Route::post('/atcresources', 'Publications\AtcResourcesController@uploadResource')->name('atcresources.upload');
         Route::get('/atcresources/delete/{id}', 'Publications\AtcResourcesController@deleteResource')->name('atcresources.delete');

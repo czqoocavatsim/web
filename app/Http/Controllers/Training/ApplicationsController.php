@@ -5,14 +5,17 @@ namespace App\Http\Controllers\Training;
 use App\Events\Training\ApplicationSubmitted;
 use App\Http\Controllers\Controller;
 use App\Models\Training\Application;
+use App\Models\Training\ApplicationComment;
 use App\Models\Training\ApplicationReferee;
 use App\Models\Training\ApplicationUpdate;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Str;
+use mofodojodino\ProfanityFilter\Check;
 
 class ApplicationsController extends Controller
 {
@@ -24,7 +27,7 @@ class ApplicationsController extends Controller
 
     public function apply(Request $request)
     {
-        if (Gate::denies('start-application'))
+        if (!Auth::user()->can('start applications'))
         {
             abort(403, 'You cannot apply for Gander Oceanic at this time. If this is a mistake, please contact staff.');
         }
@@ -105,8 +108,8 @@ class ApplicationsController extends Controller
         //Create processing update
         $processingUpdate = new ApplicationUpdate([
             'application_id' => $application->id,
-            'update_title' => 'Sit tight, your application is currently being processed!',
-            'update_content' => 'If you do not see an update through email or Discord within 5 days, please contact the FIR Chief.',
+            'update_title' => 'Sit tight! Your application is now pending',
+            'update_content' => 'If you do not see an update through email or Discord within 5 days, please contact the OCA Chief.',
             'update_type' => 'green'
         ]);
         $processingUpdate->save();
@@ -139,6 +142,25 @@ class ApplicationsController extends Controller
         return view('training.applications.show', compact('application', 'referees', 'latestUpdate', 'comments'));
     }
 
+    public function showUpdates($reference_id)
+    {
+        //Find application or fail
+        $application = Application::where('reference_id', $reference_id)->firstOrFail();
+
+        //Check if not allowed
+        if (Gate::denies('view-application', $application))
+        {
+            //Show 404 to not show that the application does exist
+            abort(404);
+        }
+
+        //Get updates
+        $updates = $application->updates->sortByDesc('created_at');
+
+        //Redirect
+        return view('training.applications.showupdates', compact('application', 'updates'));
+    }
+
     public function withdraw(Request $request)
     {
         //Validate form
@@ -148,7 +170,7 @@ class ApplicationsController extends Controller
 
         //If bad, return response
         if ($validator->fails()) {
-            return redirect()->back()->with('error-modal', 'There was an error withdrawing your application. Please contact the Deputy FIR Chief.');
+            return redirect()->back()->with('error-modal', 'There was an error withdrawing your application. Please contact the Deputy OCA Chief.');
         }
 
         //Check if the application exists
@@ -156,11 +178,58 @@ class ApplicationsController extends Controller
         if(!$application) {
             //return error
             Log::error('Application withdraw fail (ref #'.$request->get('reference_id').')');
-            Log::error($request->all());
-            return redirect()->back()->with('error-modal', 'There was an error withdrawing your application. Please contact the Deputy FIR Chief.');
+            return redirect()->back()->with('error-modal', 'There was an error withdrawing your application. Please contact the Deputy OCA Chief.');
         }
 
         $request->session()->flash('alreadyApplied', 'Application withdrawn.');
+        return redirect()->route('training.applications.show', $application->reference_id);
+    }
+
+    public function commentPost(Request $request)
+    {
+        //Validate form
+        $validator = Validator::make($request->all(), [
+            'reference_id' => 'required',
+            'comment' => 'required'
+        ]);
+
+        //If bad, return response
+        if ($validator->fails()) {
+            return redirect()->back()->withInput()->with('error-modal', 'There was an error submitting your comment.');
+        }
+
+        //Check if the application exists
+        $application = Application::where('reference_id', $request->get('reference_id'))->firstOrFail();
+        if(!$application) {
+            //return error
+            Log::error('Application comment fail (ref #'.$request->get('reference_id').')');
+            return redirect()->back()->with('error-modal', 'There was an error commenting. Please contact the Deputy OCA Chief.');
+        }
+
+        //How long ago was the last one?
+        if ($application->comments->sortByDesc('created_at')->first()->created_at->diffInMinutes(Carbon::now()) < 10) {
+            return redirect()->back()->withInput()->with('error-modal', 'You can only submit a comment every 10 minutes to prevent spam.');
+        }
+
+        //Create the comment
+        $comment = new ApplicationComment();
+
+        //Profanity check it
+        $check = new Check();
+        if ($check->hasProfanity($request->get('comment'))) {
+            return redirect()->back()->withInput()->with('error-modal', 'Profanity was detected in your comment, please remove it.');
+        }
+
+        //Assign values
+        $comment->user_id = Auth::id();
+        $comment->content = $request->get('comment');
+        $comment->application_id = $application->id;
+
+        //Save it
+        $comment->save();
+
+        //Return
+        $request->session()->flash('alreadyApplied', 'Comment added!');
         return redirect()->route('training.applications.show', $application->reference_id);
     }
 }

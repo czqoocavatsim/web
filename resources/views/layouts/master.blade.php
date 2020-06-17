@@ -28,7 +28,7 @@
         <!--Rich Preview Meta-->
         <title>@yield('title', '')Gander Oceanic VATSIM</title>
         <meta name="description" content="@yield('description', '')">
-        <meta name="theme-color" content="#000000">
+        <meta name="theme-color" content="#0080c9">
         <meta name="og:title" content="@yield('title', '')Gander Oceanic VATSIM">
         <meta name="og:description" content="@yield('description', '')">
         <meta name="og:image" content="@yield('image','https://resources.ganderoceanic.com/media/img/brand/sqr/ZQO_SQ_TSPBLUE.png')">
@@ -59,6 +59,7 @@
         @else
         <link href="{{ asset('css/czqomd.css') }}" rel="stylesheet">
         @endif
+        <script src="{{asset('js/czqo.js')}}"></script>
         <!--Leaflet-->
         <link rel="stylesheet" href="https://unpkg.com/leaflet@1.4.0/dist/leaflet.css" integrity="sha512-puBpdR0798OZvTTbP4A8Ix/l+A4dHDD0DGqYW6RQ+9jxkRFclaxxQb/SJAWZfWAkuyeQUytO7+7N4QKrDh+drA==" crossorigin=""/>
         <script src="https://unpkg.com/leaflet@1.4.0/dist/leaflet.js" integrity="sha512-QVftwZFqvtRNi0ZyCtsznlKSWOStnDORoefr1enyq5mVL4tmKB3S/EnC3rRJcxCPavG10IcrVGSmPh6Qw5lwrg==" crossorigin=""></script>
@@ -424,6 +425,5 @@
     <script>
         $("blockquote").addClass('blockquote');
     </script>
-    <script src="{{asset('js/czqo.js')}}"></script>
     </body>
 </html>

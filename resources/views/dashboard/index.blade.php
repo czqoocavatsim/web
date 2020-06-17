@@ -273,7 +273,7 @@
                         @endif
                         </div>
                     </div>
-                    @if (Auth::user()->rosterProfile)
+                   {{--  @if (Auth::user()->rosterProfile)
                     <h5 class="card-title mt-2">Activity</h5>
                         @if (Auth::user()->rosterProfile->currency < 0.1)
                         <h3><span class="badge rounded shadow-none red">
@@ -289,7 +289,7 @@
                         </span></h3>
                         @endif
                         <p>You require <b>6 hours</b> of activity every 6 months, unless you were certified within the current activity cycle.</p>
-                    @endif
+                    @endif --}}
                     <ul class="list-unstyled mt-2 mb-0">
                         <li class="mb-2">
                             <a href="{{route('application.list')}}" style="text-decoration:none;"><span class="blue-text"><i class="fas fa-chevron-right"></i></span> &nbsp; <span class="black-text">View Your Applications</span></a>

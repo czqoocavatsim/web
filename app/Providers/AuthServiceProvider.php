@@ -30,7 +30,7 @@ class AuthServiceProvider extends ServiceProvider
         });
 
         Gate::define('start-application', function ($user) {
-            if ($user->permissions > 0)
+            if ($user->can('start applications'))
             {
                 return false;
             }
