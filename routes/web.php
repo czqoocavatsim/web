@@ -38,7 +38,17 @@ Route::view('/branding', 'branding')->name('branding');
 Route::view('/eurosounds', 'eurosounds')->name('eurosounds');
 
 Route::get('/test', function () {
-    App\Jobs\UpdateDiscordUserRoles::dispatch();
+    $timePeriod = Carbon\CarbonPeriod::create(Carbon\Carbon::now()->subDays(60), Carbon\Carbon::now());
+    foreach ($timePeriod as $day) {
+        $session = new App\Models\Network\SessionLog();
+        $session->cid = 1364284;
+        $session->session_start = $day->addHours(1);
+        $session->session_end = $day->addHours(2);
+        $session->monitored_position_id = 1;
+        $session->emails_sent = 0;
+        $session->duration = rand(0.5, 5.5);
+        $session->save();
+    }
 });
 
 
@@ -222,9 +232,9 @@ Route::group(['middleware' => 'auth'], function () {
             //Network
             Route::prefix('network')->group(function () {
                 Route::get('/', 'Network\NetworkController@index')->name('network.index');
-                Route::get('/monitoredpositions', 'Network\NetworkController@monitoredPositionsIndex')->name('network.monitoredpositions.index');
-                Route::get('/monitoredpositions/{position}', 'Network\NetworkController@viewMonitoredPosition')->name('network.monitoredpositions.view');
-                Route::post('/monitoredpositions/create', 'Network\NetworkController@createMonitoredPosition')->name('network.monitoredpositions.create');
+                Route::get('/monitored-positions', 'Network\NetworkController@monitoredPositionsIndex')->name('network.monitoredpositions.index');
+                Route::get('/monitored-positions/{position}', 'Network\NetworkController@viewMonitoredPosition')->name('network.monitoredpositions.view');
+                Route::post('/monitored-positions/create', 'Network\NetworkController@createMonitoredPosition')->name('network.monitoredpositions.create');
             });
 
             //Community

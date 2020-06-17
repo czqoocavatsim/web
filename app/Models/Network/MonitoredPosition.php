@@ -16,23 +16,15 @@ class MonitoredPosition extends Model
         'id', 'identifier', 'staff_only', 'polygon_coordinates'
     ];
 
-    public function lastSession()
-    {
-        $session = SessionLog::where('callsign', $this->identifier)->get()->last();
-        if (!$session) return null;
-        return $session;
-    }
-
     public function sessions()
     {
-        $sessions =  SessionLog::where('callsign', $this->identifier)->get();
-        return $sessions;
+        return $this->hasMany(SessionLog::class);
     }
 
-    public function lastOnlinePretty()
+    public function lastOnline()
     {
-        $session = $this->lastSession();
-        if (!$session) return "Never used";
-        return Carbon::create($session->session_end)->diffForHumans();
+        $session = $this->sessions->last();
+        if (!$session) return null;
+        return Carbon::create($session->session_end);
     }
 }

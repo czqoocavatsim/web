@@ -5,7 +5,17 @@
     <h1 class="blue-text font-weight-bold mt-2">Monitored Positions</h1>
     <hr>
     <div class="row">
-        <div class="col-md-8">
+        <div class="col-md-3">
+            <h4 class="font-weight-bold blue-text">Actions</h4>
+            <ul class="list-unstyled mt-3 mb-0" style="font-size: 1.05em;">
+                @can('edit monitored positions')
+                <li class="mb-2">
+                    <a href="#" style="text-decoration:none;"><span class="blue-text"><i class="fas fa-chevron-right"></i></span> &nbsp; <span class="text-body">Create monitored positions</span></a>
+                </li>
+                @endcan
+            </ul>
+        </div>
+        <div class="col-md-9">
             <table class="table">
                 <thead>
                     <th>Position</th>
@@ -16,27 +26,12 @@
                     @foreach ($positions as $p)
                         <tr>
                             <td>{{$p->identifier}}</td>
-                            <td>{{$p->lastOnlinePretty()}}</td>
-                            <td><a class="blue-text" href="{{route('network.monitoredpositions.view', strtolower($p->identifier))}}">View</a></td>
+                            <td title="{{$p->lastOnline()}}">{{$p->lastOnline()->diffForHumans()}}</td>
+                            <td><a class="blue-text" href="{{route('network.monitoredpositions.view', strtolower($p->identifier))}}"><i class="fa fa-eye"></i> View Position</a></td>
                         </tr>
                     @endforeach
                 </tbody>
             </table>
-        </div>
-        <div class="col-md-4">
-            <h4>Actions</h4>
-            @if($errors->createMonitoredPosition->any())
-            <div class="alert alert-danger">
-                <h4>Error creating monitored position</h4>
-                <ul class="pl-0 ml-0 list-unstyled">
-                    @foreach ($errors->createMonitoredPosition->all() as $error)
-                        <li>{{ $error }}</li>
-                    @endforeach
-                </ul>
-            </div>
-            @endif
-            <a href="#" data-target="#createPositionModal" data-toggle="modal" class="btn bg-czqo-blue-light btn-block">Create Position</a>
-            <a href="#" class="mt-2 btn bg-czqo-blue-light btn-block">Download Positions JSON</a>
         </div>
     </div>
 </div>
