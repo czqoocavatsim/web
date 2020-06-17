@@ -14,6 +14,10 @@ class ApplicationReferee extends Model
 
     protected $hidden = ['id'];
 
+    protected $fillable = [
+        'application_id', 'referee_full_name', 'referee_email', 'referee_staff_position'
+    ];
+
     public function application()
     {
         return $this->belongsTo(Application::class);

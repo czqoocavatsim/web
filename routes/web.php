@@ -158,8 +158,14 @@ Route::group(['middleware' => 'auth'], function () {
 
     //Training
     Route::prefix('training')->group(function () {
+
+        //Applications
+        Route::get('applications', 'Training\ApplicationsController@showAll')->name('training.applications.showall');
         Route::get('applications/apply', 'Training\ApplicationsController@apply')->name('training.applications.apply');
         Route::post('applications/apply', 'Training\ApplicationsController@applyPost')->name('training.applications.apply.post');
+        Route::get('applications/{reference_id}', 'Training\ApplicationsController@show')->name('training.applications.show');
+        Route::post('applications/withdraw', 'Training\ApplicationsController@withdraw')->name('training.applications.withdraw');
+
     });
         //ATC Resources
         Route::post('/atcresources', 'Publications\AtcResourcesController@uploadResource')->name('atcresources.upload');

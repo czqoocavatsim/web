@@ -44,7 +44,7 @@
                 <span class="label">Why do you wish to be an oceanic controller?</span>
             </a>
             <div class="step-content w-75 grey lighten-3">
-                <p>Enter your reason here. We want to here about your motivation for choosing Gander, and what you can bring to our FIR. (minimum 50 words):</p>
+                <p>Enter your reason here. We want to here about your motivation for choosing Gander, and what you can bring to our FIR.</p>
                 {!! Form::textarea('applicant_statement', null, ['class' => 'w-100', 'id' => 'justificationField', 'onkeyup' => 'countChar(this)']) !!}
                 <script>
                     var simplemde = new SimpleMDE({ element: document.getElementById("justificationField"), toolbar:false });
@@ -67,15 +67,15 @@
                 <br>
                 <div class="form-group">
                     <label for="">Name of referee</label>
-                    <input type="text" placeholder="Jane Doe" name="refereeName" required id="" class="form-control">
+                    <input type="text" placeholder="Jane Doe" value="{{old('refereeName')}}" name="refereeName" required id="" class="form-control">
                 </div>
                 <div class="form-group">
                     <label for="">Email of referee</label>
-                    <input type="email" placeholder="j.doe@division.com" required name="refereeEmail" id="" class="form-control">
+                    <input type="email" placeholder="j.doe@division.com" value="{{old('refereeEmail')}}" required name="refereeEmail" id="" class="form-control">
                 </div>
                 <div class="form-group">
                     <label for="">Staff position of referee</label>
-                    <input type="text" placeholder="Division director" required name="refereePosition" id="" class="form-control">
+                    <input type="text" placeholder="Division director" value="{{old('refereePosition')}}" required name="refereePosition" id="" class="form-control">
                 </div>
             </div>
         </li>
@@ -85,8 +85,8 @@
                 <span class="label">Finish your application</span>
             </a>
             <div class="step-content w-75 grey lighten-3">
-                <h5>Activity requirements</h5>
                 <p>By applying to Gander Oceanic you acknowledge the activity requirements for after you receive your endorsement. You will be required to control 6 hours each half-year. Failure to do so could result in the removal of your endorsement.</p>
+                <p>You also agree to comply with our General and Training policies.</p>
                 <div class="custom-control custom-checkbox">
                     <input type="checkbox" class="custom-control-input" required name="agreeActivity" id="agreeActivity">
                     <label class="custom-control-label" for="agreeActivity">I understand</label>
