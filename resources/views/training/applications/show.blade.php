@@ -15,7 +15,7 @@
         @if (!$latestUpdate)
             No update found
         @else
-            <div class="card shadow-none  grey lighten-3 p-4 mb-3">
+            <div class="card shadow-none mb-3">
                 <p style="font-size: 1.02rem;" title="{{$latestUpdate->created_at}} GMT">Latest update - {{$latestUpdate->created_at->diffForHumans()}}</p>
                 <h3 class="font-weight-bold {{$latestUpdate->update_type}}-text">{{$latestUpdate->update_title}}</h3>
                 <div>{{$latestUpdate->updateContentHtml()}}</div>
