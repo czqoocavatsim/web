@@ -121,7 +121,7 @@
                 If you do not wish to proceed with your application, you may withdraw it. You are free to apply again in the future.
                 <form action="{{route('training.applications.withdraw')}}" method="POST">
                     @csrf
-                    <input type="hidden" name="refnce_id" value="{{$application->reference_id}}">
+                    <input type="hidden" name="reference_id" value="{{$application->reference_id}}">
                     <br>
                     <button id="withdrawAppB" class="btn btn-danger mt-3">Withdraw application</button>
                 </form>

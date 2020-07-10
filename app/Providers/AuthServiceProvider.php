@@ -2,6 +2,7 @@
 
 namespace App\Providers;
 
+use App\Models\Training\Application;
 use Illuminate\Foundation\Support\Providers\AuthServiceProvider as ServiceProvider;
 use Illuminate\Support\Facades\Gate;
 
@@ -30,7 +31,7 @@ class AuthServiceProvider extends ServiceProvider
         });
 
         Gate::define('start-application', function ($user) {
-            if ($user->can('start applications'))
+            if (!$user->can('start applications') || Application::where('user_id', $user->id)->where('status', 0)->first())
             {
                 return false;
             }
