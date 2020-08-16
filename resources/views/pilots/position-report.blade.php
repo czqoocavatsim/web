@@ -16,6 +16,9 @@
         <div class="col-md-9">
             <h1 class="font-weight-bold blue-text">Position Report Generator</h1>
             <hr>
+            <div class="alert bg-czqo-blue-light my-3">
+                This tool <span class="font-weight-bold">does not</span> submit your position report to the Oceanic controller. This tool provides you with an idea of what to say to the controller when sending it via voice or text.
+            </div>
             <div class="form-row">
                 <div class="form-group col">
                     <label>Callsign</label>
@@ -57,7 +60,7 @@
                 </div>
             </div>
             <div class="form-row">
-                <button type="button" onclick="generate()" class="btn btn-primary">Submit</button>
+                <button type="button" onclick="generate()" class="btn btn-primary">Generate</button>
             </div><br/>
             <div id="errorA" class="alert alert-dismissible  alert-danger" role="alert" style="display:none;">
                 <h4 id="errorHeading" class="alert-heading">Please fill the following fields:</h4>

@@ -21,7 +21,7 @@ class ApplicationsController extends Controller
 {
     public function showAll()
     {
-        $applications = Auth::user()->applications;
+        $applications = Auth::user()->applications->sortByDesc('created_at');
         return view('training.applications.showall', compact('applications'));
     }
 
@@ -135,7 +135,7 @@ class ApplicationsController extends Controller
 
         //Get other objects
         $referees = $application->referees;
-        $latestUpdate = $application->updates->first();
+        $latestUpdate = $application->updates->sortByDesc('created_at')->first();
         $comments = $application->comments;
 
         //Redirect
@@ -175,12 +175,27 @@ class ApplicationsController extends Controller
 
         //Check if the application exists
         $application = Application::where('reference_id', $request->get('reference_id'))->firstOrFail();
+
         if(!$application) {
             //return error
             Log::error('Application withdraw fail (ref #'.$request->get('reference_id').')');
             return redirect()->back()->with('error-modal', 'There was an error withdrawing your application. Please contact the Deputy OCA Chief.');
         }
 
+        //Let's withdraw it then
+        $application->status = 3;
+        $application->save();
+
+        //Update
+        $update = new ApplicationUpdate([
+            'application_id' => $application->id,
+            'update_title' => 'Application withdrawn',
+            'update_content' => 'You may apply for Gander Oceanic again when you are ready',
+            'update_type' => 'grey'
+        ]);
+        $update->save();
+
+        //Return
         $request->session()->flash('alreadyApplied', 'Application withdrawn.');
         return redirect()->route('training.applications.show', $application->reference_id);
     }
