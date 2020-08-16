@@ -188,24 +188,30 @@ class Kernel extends ConsoleKernel
                             }
                         }
                     } else { // Send unauthorised notification to FIR Chief
-                        if ($user) $sessionLog->roster_member_id = $user->id;
-                        if (!$user->active) { // inactive
-                            if ($sessionLog->emails_sent < 1) {
-                                Notification::route('mail', CoreSettings::find(1)->emailfirchief)->notify(new ControllerInactive($sessionLog));
+                        if ($user) {
+                            $sessionLog->roster_member_id = $user->id;
+                            if (!$user->active) { // inactive
+                                if ($sessionLog->emails_sent < 1) {
+                                    Notification::route('mail', CoreSettings::find(1)->emailfirchief)->notify(new ControllerInactive($sessionLog));
+                                    $sessionLog->emails_sent++;
+                                    $sessionLog->save();
+                                }
+                            } else if ($user->status == 'training') {
+                                if ($sessionLog->emails_sent < 1) {
+                                    Notification::route('mail', CoreSettings::find(1)->emailfirchief)->notify(new ControllerIsStudent($sessionLog));
+                                    $sessionLog->emails_sent++;
+                                    $sessionLog->save();
+                                }
+                            } else if ($sessionLog->emails_sent < 1) {
+                                Notification::route('mail', CoreSettings::find(1)->emailfirchief)->notify(new ControllerNotCertified($sessionLog));
                                 $sessionLog->emails_sent++;
                                 $sessionLog->save();
                             }
-                        } else if ($user->status == 'training') {
-                            if ($sessionLog->emails_sent < 1) {
-                                Notification::route('mail', CoreSettings::find(1)->emailfirchief)->notify(new ControllerIsStudent($sessionLog));
-                                $sessionLog->emails_sent++;
-                                $sessionLog->save();
-                            }
-                        } else if ($sessionLog->emails_sent < 1) {
+                        } else {
                             Notification::route('mail', CoreSettings::find(1)->emailfirchief)->notify(new ControllerNotCertified($sessionLog));
                             $sessionLog->emails_sent++;
                             $sessionLog->save();
-                        }
+                        }                        
                     }
 
                     // Add session
@@ -221,7 +227,10 @@ class Kernel extends ConsoleKernel
                 // Loop through online controller list to find a match
                 foreach ($onlineControllers as $oc) {
                     if ($oc['cid'] == $log->cid) { // If CID matches
-                        $stillOnline = true;
+                        // If callsign matches
+                        if (MonitoredPosition::where('id', $sessionLog->monitored_position_id)->identifier == $oc['callsign']) {
+                            $stillOnline = true;
+                        }                           
                     }
                 }
 
