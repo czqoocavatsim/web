@@ -150,14 +150,14 @@
                                 </div>
                             </div>
                         </a>
-                        <a href="https://twitter.com/czqofirvatsim" class="blue-text mr-1" style="text-decoration:none">
+                        <a href="https://twitter.com/ganderocavatsim" class="blue-text mr-1" style="text-decoration:none">
                             <div class="blue-grey lighten-5 home-quick-link" style="height: 80px; !important; width: 80px !important;">
                                 <div class="d-flex flex-row justify-content-center align-items-center h-100">
                                     <i class="fab fa-twitter fa-3x" style="vertical-align:middle;"></i>
                                 </div>
                             </div>
                         </a>
-                        <a href="https://www.facebook.com/czqofirvatsim" class="blue-text mr-1" style="text-decoration:none">
+                        <a href="https://www.facebook.com/ganderocavatsim" class="blue-text mr-1" style="text-decoration:none">
                             <div class="blue-grey lighten-5 home-quick-link" style="height: 80px; !important; width: 80px !important;">
                                 <div class="d-flex flex-row justify-content-center align-items-center h-100">
                                     <i class="fab fa-facebook fa-3x" style="vertical-align:middle;"></i>
