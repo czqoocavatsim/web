@@ -157,7 +157,7 @@
                             </div>
                         </li>
                         <li class="nav-item  {{ Request::is('feedback') ? 'active' : '' }}">
-                        <a class="nav-link" href="{{route('feedback.create')}}" aria-expanded="false">Send Feedback</a>
+                        <a class="nav-link" href="{{route('feedback.create')}}" aria-expanded="false">Submit Feedback</a>
                         </li>
                     </ul>
                     <ul class="navbar-nav ml-auto nav-flex-icons">
