@@ -187,12 +187,12 @@
                         </li>
                         @endauth
                         <li class="nav-item d-flex align-items-center">
-                            <a href="https://twitter.com/czqofirvatsim" class="nav-link waves-effect waves-light">
+                            <a href="https://twitter.com/ganderocavatsim" class="nav-link waves-effect waves-light">
                                 <i style="font-size: 1.7em;" class="fab fa-twitter"></i>
                             </a>
                         </li>
                         <li class="nav-item d-flex align-items-center">
-                            <a href="https://www.facebook.com/czqofirvatsim" class="nav-link waves-effect waves-light">
+                            <a href="https://www.facebook.com/ganderocavatsim" class="nav-link waves-effect waves-light">
                                 <i style="font-size: 1.7em;" class="fab fa-facebook"></i>
                             </a>
                         </li>
