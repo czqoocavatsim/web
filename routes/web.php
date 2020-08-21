@@ -17,7 +17,7 @@ use Illuminate\Support\Facades\Notification;
 
 Route::get('/', 'PrimaryViewsController@home')->name('index');
 Route::get('/map', 'PrimaryViewsController@map')->name('map');
-Route::get('/roster', 'AtcTraining\RosterController@showPublic')->name('roster.public');
+Route::get('/roster', 'Roster\RosterController@publicRoster')->name('roster.public');
 Route::get('/staff', 'Users\StaffListController@index')->name('staff');
 Route::get('/atcresources', 'Publications\AtcResourcesController@index')->name('atcresources.index');
 Route::view('/pilots', 'pilots.index');
