@@ -94,12 +94,11 @@ class LoginController extends Controller
         });
         return redirect('/dashboard')->with('success', 'Logged in!');
     }
+   
 
     /**
      * Check if the user was on the old roster, if so, certify them!
-     */
-
-    /**
+     *
      * Log the user out.
      *
      * @return \Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector
@@ -166,6 +165,8 @@ class LoginController extends Controller
         if (!isset($response->data->vatsim->rating)) {
             return redirect()->route('index')->with('error-modal', 'We cannot create an account without VATSIM details.');
         }
+       
+       
         User::updateOrCreate(['id' => $response->data->cid], [
             'email' => isset($response->data->personal->email) ? $response->data->personal->email : 'no-reply@czqo.vatcan.ca',
             'fname' => isset($response->data->personal->name_first) ? utf8_decode($response->data->personal->name_first) : $response->data->cid,
@@ -179,14 +180,14 @@ class LoginController extends Controller
             'region_name' => $response->data->vatsim->region->name,
             'division_code' => $response->data->vatsim->division->id,
             'division_name' => $response->data->vatsim->division->name,
-            'used_connect' => true
+            'used_connect' => true,
         ]);
 
         $user = User::find($response->data->cid);
 
-        if(User::where('id', $user->id)->exists() == 0) {
+        if($user->display_fname === null) {
             User::updateOrCreate(['id' => $response->data->cid], [
-                'display_fname' => isset($response->data->personal->name_first) ? utf8_decode($response->data->personal->name_first) : $response->data->cid,
+                'display_fname' => $response->data->personal->name_first
             ]);
         }
 
@@ -194,7 +195,7 @@ class LoginController extends Controller
             $user->display_cid_only = true;
         }
         $user->save();
-        
+
         Auth::login($user, true);
         if (!UserPreferences::where('user_id', $user->id)->first()) {
             $prefs = new UserPreferences();
