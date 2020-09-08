@@ -37,6 +37,10 @@ Route::view('/about', 'about')->name('about');
 Route::view('/branding', 'branding')->name('branding');
 Route::view('/eurosounds', 'eurosounds')->name('eurosounds');
 
+Route::get('/test', function () {
+    App\Jobs\UpdateDiscordUserRoles::dispatch();
+});
+
 
 //Authentication
 Route::prefix('auth')->group(function () {

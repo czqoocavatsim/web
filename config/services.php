@@ -46,5 +46,6 @@ return [
         'client_secret' => env('DISCORD_SECRET'),
         'redirect' => env('DISCORD_REDIRECT_URI'),
         'redirect_join' => env('DISCORD_REDIRECT_URI_JOIN'),
+        'guild_id' => env('DISCORD_GUILD_ID')
     ],
 ];

@@ -3,6 +3,7 @@
 namespace App\Console;
 
 use App\AuditLogEntry;
+use App\Jobs\UpdateDiscordUserRoles;
 use App\Models\AtcTraining\RosterMember;
 use App\Models\Network\MonitoredPosition;
 use App\Models\Network\SessionLog;
@@ -410,6 +411,9 @@ class Kernel extends ConsoleKernel
                 }
             }
         })->dailyAt('00:00');
+
+        // Discord role updating
+        $schedule->job(new UpdateDiscordUserRoles)->twiceDaily(6, 18);
     }
 
     /**
