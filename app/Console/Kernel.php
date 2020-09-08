@@ -413,7 +413,7 @@ class Kernel extends ConsoleKernel
         })->dailyAt('00:00');
 
         // Discord role updating
-        $schedule->job(new UpdateDiscordUserRoles)->twiceDaily(6, 18);
+        //$schedule->job(new UpdateDiscordUserRoles)->twiceDaily(6, 18);
     }
 
     /**
