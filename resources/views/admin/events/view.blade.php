@@ -138,7 +138,7 @@
                 <div class="modal-body">
                     @if($errors->editEventErrors->any())
                     <div class="alert alert-danger">
-                        <h4>There were errors editing the event</h4>
+                        <h4>An error occurred whilst trying to edit the event</h4>
                         <ul class="pl-0 ml-0 list-unstyled">
                             @foreach ($errors->editEventErrors->all() as $error)
                                 <li>{{ $error }}</li>
@@ -159,11 +159,11 @@
                                 </div>
                                 <div class="form-group">
                                     <label for="">Start date and time</label>
-                                    <input type="datetime" name="start" value="{{$event->start_timestamp}}" placeholder="Put event start date/time here" class="form-control flatpickr" id="event_start">
+                                    <input type="datetime" name="start" value="{{$event->start_timestamp}}" placeholder="Event start date/time" class="form-control flatpickr" id="event_start">
                                 </div>
                                 <div class="form-group">
                                     <label for="">End date and time</label>
-                                    <input type="datetime" name="end" value="{{$event->end_timestamp}}" placeholder="Put event end date/time here" class="form-control flatpickr" id="event_end">
+                                    <input type="datetime" name="end" value="{{$event->end_timestamp}}" placeholder="Event end date/time" class="form-control flatpickr" id="event_end">
                                 </div>
                                 <div class="form-group">
                                     <label for="">Departure airport ICAO (optional)</label>

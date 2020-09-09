@@ -13,7 +13,7 @@
 <div class="container" style="margin-top: 20px;">
         <h1 class="blue-text font-weight-bold">Controller Roster</h1>
         <hr>
-        <p>Please note that the 'full name' field on this roster is dependant on the controller's name settings on the CZQO Core. As such, it is best to rely on the CID to determine whether they are on the roster.</p>
+        <p>Please note that the 'full name' field on this roster is dependent on the controller's individual name settings on the CZQO Core system.</p>
         <table id="rosterTable" class="table table-hover">
             <thead>
                 <tr>

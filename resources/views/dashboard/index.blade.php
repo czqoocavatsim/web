@@ -88,7 +88,7 @@
                 <div class="card-body">
                     <h3 class="font-weight-bold blue-text pb-2">Your Data</h3>
                     <div class="row">
-                        <div class="col" data-step="3" data-intro="Here is an overview of your profile, including your CZQO roles. You can change the way your name is displayed by clicking on your name, at the top of the panel. (CoC A4(b))">
+                        <div class="col" data-step="3" data-intro="Here is an overview of your profile, including your CZQO roles. You can change the way your name is displayed by clicking on your name at the top of the panel. (CoC A4(b))">
                             <h5 class="card-title">
                                 <a href="" data-toggle="modal" data-target="#changeDisplayNameModal" class="text-dark text-decoration-underline">
                                     {{ Auth::user()->fullName('FLC') }}
@@ -107,11 +107,11 @@
                             Staff Role: {{Auth::user()->staffProfile->position}}
                             @endif
                             <br/>
-                            <div data-step="4" data-intro="Here you can link your Discord account to receive reminders for training sessions, and gain access to the CZQO Discord.">
+                            <div data-step="4" data-intro="Here you can link your Discord account to receive training session reminders and to gain access to the CZQO Discord.">
                             <h5 class="mt-2">Discord</h5>
                             @if (!Auth::user()->hasDiscord())
-                            <p class="mt-1">You don't have a linked Discord account.</p>
-                            <a href="#" data-toggle="modal" data-target="#discordModal" class="mt-1">Link a Discord account</a>
+                            <p class="mt-1">You have not linked your Discord account.</p>
+                            <a href="#" data-toggle="modal" data-target="#discordModal" class="mt-1">Link your Discord account</a>
                             @else
                             <p class="mt-1"><img style="border-radius:50%; height: 30px;" class="img-fluid" src="{{Auth::user()->getDiscordAvatar()}}" alt="">&nbsp;&nbsp;{{Auth::user()->getDiscordUser()->username}}<span style="color: #d1d1d1;">#{{Auth::user()->getDiscordUser()->discriminator}}</span></p>
                             @if(!Auth::user()->memberOfCzqoGuild())
@@ -121,7 +121,7 @@
                             @endif
                             </div>
                         </div>
-                        <div data-step="5" data-intro="You can change your avatar here. Your avatar is available when people view your account. This will likely only be staff members, unless you sign up for an event or similar activity." class="col">
+                        <div data-step="5" data-intro="You can change your avatar here. Your avatar is available when people view your account and also on the 'Top Controllers' display on the front page." class="col">
                             <h5 class="card-title">Avatar</h5>
                             <div class="text-center">
                                 <img src="{{Auth::user()->avatar()}}" style="width: 125px; height: 125px; margin-bottom: 10px; border-radius: 50%;">
@@ -387,7 +387,7 @@
         intro.setOptions({
         steps: [
             {
-            intro: "Hi {{Auth::user()->fullName('F')}}! Welcome to the tutorial for the Gander Oceanic website. We're excited to have you join us. On the dashboard, you can get a glance at your status within our OIR, and access functions easily. To begin, click the 'Next' button below."
+            intro: "Hi {{Auth::user()->fullName('F')}}! Welcome to the tutorial for the Gander Oceanic website. We're excited to have you join us. On the dashboard, you can get a glance at your status within our OCA and access various functions. To begin, click the 'Next' button below."
             },
             {
             element: "#atcResources",
@@ -395,12 +395,12 @@
             },
             {
             element: '#yourData',
-            intro: "Here you can get an overview of your Gander Oceanic profile. Change your display name by clicking '{{Auth::user()->fullName('FLC')}}l and following the prompts. You can link your Discord account here and get access to our Discord community, and you can even set an avatar for yourself. The buttons below allow you to change settings such as your biography, preferences, and manage your data.",
+            intro: "Here you can get an overview of your Gander Oceanic profile. Change your display name by clicking '{{Auth::user()->fullName('FLC')}}l and following the prompts. You can link your Discord account here and access to our Discord community, and you can even set an avatar for yourself. The buttons below allow you to change settings such as your biography, preferences, and manage your data.",
             position: 'right'
             },
             {
             element: '#certification',
-            intro: 'Here you can view your certification status with us, and if you\'re a rostered controller, your activity hours. You can also view your previous applications to control here.',
+            intro: 'Here you can view your certification status with us, and if you\'re a rostered controller, your activity hours. You can also view your previous applications.',
             position: 'left'
             },
             {
@@ -431,7 +431,7 @@
             </div>
             <form method="post" action="{{route('users.changeavatar')}}" enctype="multipart/form-data" class="" id="">
             <div class="modal-body">
-                <p>Please ensure your avatar complies with the VATSIM Code of Conduct. This avatar will be visible to staff members, if you place a controller booking, and if you're a staff member yourself, on the staff page.</p>
+                <p>Please ensure your avatar complies with the VATSIM Code of Conduct. This avatar will be visible to staff members, viewable on the top controllers table, and if you're a staff member yourself, viewable on the staff page.</p>
                 @csrf
                 <div class="input-group pb-3">
                     <div class="custom-file">
@@ -497,7 +497,7 @@
                         <label>Display first name</label>
                         <input type="text" class="form-control" value="{{Auth::user()->display_fname}}" name="display_fname" id="input_display_fname">
                         <br/>
-                        <a class="btn bg-czqo-blue-light btn-sm" role="button" onclick="resetToCertFirstName()"><span style="color: #000">Reset to CERT first name</span></a>
+                        <a class="btn bg-czqo-blue-light btn-sm" role="button" onclick="resetToCertFirstName()"><span style="color: #000">Reset to your CERT first name</span></a>
                         <script>
                             function resetToCertFirstName() {
                                 $("#input_display_fname").val("{{Auth::user()->fname}}")
@@ -560,7 +560,7 @@
             <div class="modal-body">
                 <p>Unlinking your account will:</p>
                 <ul>
-                    <li>Remove you from the CZQO Discord, if you're a member</li>
+                    <li>Remove you from the CZQO Discord if you're a member</li>
                     <li>Remove a Discord avatar if you have it selected</li>
                     <li>Stop sending you notifications via Discord</li>
                 </ul>
