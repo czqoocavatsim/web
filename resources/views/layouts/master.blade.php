@@ -18,7 +18,7 @@
 
         For Flight Simulation Use Only - Not To Be Used For Real World Navigation. All content on this web site may not be shared, copied, reproduced or used in any way without prior express written consent of Gander Oceanic. © Copyright {{App\Models\Settings\CoreSettings::where('id', 1)->firstOrFail()->copyright_year}} Gander Oceanic, All Rights Reserved.
 
-        Taking a peek under the hood and like what you see? Want to help out? Send Liesel an email! deputy@czqo.vatcan.ca
+        Taking a peek under the hood and like what you see? Want to help out? Send Liesel an email! l.downes@ganderoceanic.com
         -->
         <!--Metadata-->
         <meta charset="utf-8">
@@ -241,7 +241,7 @@
     <!-- Footer -->
     <footer class="page-footer text-dark font-small py-4 {{Request::is('/dashboard') ? 'mt-5' : ''}}">
         <div class="container">
-            <p>For Flight Simulation Use Only - Not To Be Used For Real World Navigation. Any and all proprietary content available on this website may not be shared, copied, reproduced or used in any way without providing credit to the Gander Oceanic FIR - VATCAN. If in doubt, contact the Deputy FIR Chief.</p>
+            <p>For Flight Simulation Use Only - Not To Be Used For Real World Navigation. Any and all proprietary content available on this website may not be shared, copied, reproduced or used in any way without providing credit to the Gander Oceanic OCA - VATCAN. If in doubt, contact the Deputy OCA Chief.</p>
             <p>Copyright © {{App\Models\Settings\CoreSettings::where('id', 1)->firstOrFail()->copyright_year}} Gander Oceanic - All Rights Reserved.</p>
             <div class="flex-left mt-3">
                 <a href="{{route('feedback.create')}}" class="font-weight-bold black-text">Feedback</a>

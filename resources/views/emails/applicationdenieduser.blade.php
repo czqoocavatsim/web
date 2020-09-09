@@ -13,7 +13,7 @@
         {!! html_entity_decode($application->staff_comment) !!}
         @endif
     </p>
-    <p>Please ensure you meet the requirements for next time. If you believe there is an error, please contact the FIR Chief.</p>
+    <p>Please ensure you meet the requirements for next time. If you believe there is an error, please contact the OCA Chief.</p>
     <hr>
     <br/>
     You can view your application <a href="{{route('application.view', $application->application_id)}}">here.</a>
@@ -22,5 +22,5 @@
 @section('footer-to-line', $application->user->fullName('FLC').' ('.$application->user->email.')')
 
 @section('footer-reason-line')
-as they hold an account an account on the CZQO website and submitted an application for ocenaic endorsement.
+as they hold an account an account on the CZQO website and submitted an application for an Ocenanic endorsement.
 @endsection

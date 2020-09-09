@@ -112,7 +112,7 @@
                 <li>80 hours on your C1 or above ratings.</li>
                 <li>25 hours spent controlling a single enroute control position.</li>
             </ul>
-            <p>If you believe there is an error, please <a href="{{route('tickets.index', ['create' => 'yes', 'department' => 'firchief', 'title' => 'Issue with requirement check on application system'])}}">start a support ticket.</a></p>
+            <p>If you believe this is an error, please <a href="{{route('tickets.index', ['create' => 'yes', 'department' => 'firchief', 'title' => 'Issue with requirement check on application system'])}}">start a support ticket.</a></p>
         </div>
     @elseif ($allowed == "pendingApplication")
         <div class="alert alert-danger" role="alert">
@@ -123,13 +123,13 @@
     @elseif ($allowed == "hours")
         <div class="alert alert-danger" role="alert">
             <h4 class="alert-heading">You are not eligible to apply.</h4>
-            <p>You do not yet have 80 hours or above on your C1 or above ratings. Please check back when you have obtained:</p>
+            <p>You are not yet eligible to apply. Please check back when you have obtained:</p>
             <ul>
                 <li>80 hours on your C1 or above ratings.</li>
                 <li>25 hours spent controlling a single enroute control position.</li>
             </ul>
             <p>You currently have <a title="View your hours rating by rating" href="{{$url}}" target="_blank">{{$total}} hours</a> towards the requirements.</p>
-            <p>If you believe there is an error, please <a href="{{route('tickets.index', ['create' => 'yes', 'department' => 'firchief', 'title' => 'Issue with hour requirement check on application system'])}}">start a support ticket.</a></p>
+            <p>If you believe this is an error, please <a href="{{route('tickets.index', ['create' => 'yes', 'department' => 'firchief', 'title' => 'Issue with hour requirement check on application system'])}}">start a support ticket.</a></p>
         </div>
     @else
         <b>You are not eligible to apply, but we're not sure why. Please contact the FIR Chief for further assistance.</b>

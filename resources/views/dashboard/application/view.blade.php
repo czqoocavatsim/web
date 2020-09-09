@@ -46,7 +46,7 @@
         <p class="mb-1">
             Processed at:
             @if (!$application->processed_at)
-            not yet processed.
+            Not yet processed.
             @else
             {{$application->processed_at}}
             @endif

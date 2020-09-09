@@ -31,14 +31,14 @@
             <div class="form-group">
                 <label>Verify your email address</label>
                 {{ Form::email('email', false, ['class' => 'form-control']) }}
-                <small class="text-muted">Please enter the email address currently associated with your VATSIM account. We require this for verification purposes and we will not store this information.</small>
+                <small class="text-muted">Please enter the email address currently associated with your VATSIM account. We require this for verification purposes and will not store this address.</small>
             </div>
             <br/>
             <div class="form-group">
                 <a href="javascript:displayModal()" role="button" class="btn btn-danger">Request Removal Under GDPR</a>
             </div>
         @endif
-    <!-- Modal -->
+        <!-- Modal -->
         <div class="modal fade" id="deleteModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
             <div class="modal-dialog modal-dialog-centered" role="document">
                 <div class="modal-content">
@@ -54,7 +54,7 @@
                         <ul style="list-style: decimal;">
                             <li>Your data will be <i>removed permanently.</i></li>
                             <li>Training records may be <i>wiped.</i></li>
-                            <li>Your roster status may be <i>wiped.</i></li>
+                            <li>Your roster status will be <i>wiped.</i></li>
                         </ul>
                     </div>
                     <div class="modal-footer">

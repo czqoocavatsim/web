@@ -11,7 +11,7 @@
     <form action="{{route('me.preferences.post')}}" method="POST">
         @if($errors->savePreferencesErrors->any())
             <div class="alert alert-danger">
-                <h4>There were errors saving your preferences</h4>
+                <h4>One or more errors occurred whilst saving your preferences</h4>
                 <ul class="pl-0 ml-0 list-unstyled">
                     @foreach ($errors->savePreferencesErrors->all() as $error)
                         <li>{{ $error }}</li>
@@ -48,13 +48,13 @@
     <br/>
     <h4>What does this mean?</h4>
     <p>
-        When you subscribe to emails, you allow Gander Oceanic FIR to send you what the EU GDPR describes as "promotional" emails.
-        These emails are typically not necessary to your continued participation in the FIR or holding an account on the Core system.<br/>
+        When you subscribe to emails, you allow Gander Oceanic OCA to send you "promotional" emails as described in the EU GDPR.
+        These emails are not necessary for your continued participation in the OCA or to continue holding an account on the Core system.<br/>
         Some examples could include:
     </p>
     <ul style="list-style: square">
         <li>Controller certifications for the month</li>
-        <li>News from the FIR Chief about non-critical matters</li>
+        <li>News from the OCA Chief about non-critical matters</li>
         <li>Updates from other staff members</li>
     </ul>
     <p><br/>

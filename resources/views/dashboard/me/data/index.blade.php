@@ -53,7 +53,7 @@
                               <span class="label">or export specific data</span>
                             </a>
                             <div class="step-content grey lighten-3">
-                              <p>Please open a support ticket to the Web Team or email them to request specific pieces of data.</p>
+                              <p>Please open a support ticket with the Web Team or send them an email if you would like to request specific data.</p>
                                 <button onclick="location.href='{{route('tickets.index', ['create' => 'yes', 'department' => 'firchief', 'title' => 'Data request'])}}'" class="btn bg-czqo-blue-light">Support Ticket</button>
                             </div>
                           </li>

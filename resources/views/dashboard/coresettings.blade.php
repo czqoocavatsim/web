@@ -84,7 +84,7 @@
         </table>
         @if ($errors->any())
             <div class="alert alert-danger">
-                <h4 class="alert-heading">There were errors submitting</h4>
+                <h4 class="alert-heading">One or more errors have occurred.</h4>
                 <ul>
                     @foreach ($errors->all() as $error)
                         <li>{{ $error }}</li>

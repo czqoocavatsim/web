@@ -105,7 +105,6 @@
                             <option value="{{$s->shortform}}">{{$s->position}} - {{$s->user->fullName('FLC')}}</option>
                             @endforeach
                         </select>
-                        <small>For general feedback, choose the Executive Team.</small>
                     </div>
                     <div class="form-group">
                         <label for="recipient-name" class="col-form-label">Title</label>

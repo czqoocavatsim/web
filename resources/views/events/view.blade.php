@@ -34,9 +34,9 @@
                 <h4 class="font-weight-bold blue-text">Share</h4>
                 <a target="_blank" href="https://www.facebook.com/sharer/sharer.php?u{{Request::url()}}"><i class="fab blue-text fa-facebook fa-2x"></i></a>
                 &nbsp;
-                <a target="_blank" href="https://twitter.com/intent/tweet?text={{$event->name}} - Gander Oceanic FIR VATSIM {{Request::url()}}"><i class="fab blue-text fa-twitter fa-2x"></i></a>
+                <a target="_blank" href="https://twitter.com/intent/tweet?text={{$event->name}} - Gander Oceanic OCA VATSIM {{Request::url()}}"><i class="fab blue-text fa-twitter fa-2x"></i></a>
                 &nbsp;
-                <a target="_blank" href="http://www.reddit.com/submit?url={{Request::url()}}&title={{$event->name}} - Gander Oceanic FIR VATSIM"><i class="fab blue-text fa-reddit fa-2x"></i></a>
+                <a target="_blank" href="http://www.reddit.com/submit?url={{Request::url()}}&title={{$event->name}} - Gander Oceanic OCA VATSIM"><i class="fab blue-text fa-reddit fa-2x"></i></a>
                 &nbsp;
                 <a target="_blank" href="mailto:?subject={{$event->name}}&amp;body={{Request::url()}}"><i class="fas blue-text fa-at fa-2x"></i></a>
                 <h4 class="font-weight-bold blue-text mt-3">Start Time</h4>

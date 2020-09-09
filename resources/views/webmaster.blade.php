@@ -1,4 +1,4 @@
-<h2>CZQO Webmaster Portal, sponsored by Nick Xenophon's SA-BEST</h2>
+<h2>CZQO Webmaster Portal</h2>
 <hr>
 <a href="/nickxenophonssabest/cache/?key={{\Illuminate\Support\Facades\Config::get('app.webmasterkey')}}">Clear Application Cache (config:clear, config:cache)</a><small>Use after any config fle or .ENV change!</small><br/>
 <a href="/nickxenophonssabest/migrate/?key={{\Illuminate\Support\Facades\Config::get('app.webmasterkey')}}">Migrate Database (migrate)</a><br/>
