@@ -17,7 +17,7 @@ use Illuminate\Support\Facades\Notification;
 
 Route::get('/', 'PrimaryViewsController@home')->name('index');
 Route::get('/map', 'PrimaryViewsController@map')->name('map');
-Route::get('/roster', 'AtcTraining\RosterController@showPublic')->name('roster.public');
+Route::get('/roster', 'Roster\RosterController@publicRoster')->name('roster.public');
 Route::get('/staff', 'Users\StaffListController@index')->name('staff');
 Route::get('/atcresources', 'Publications\AtcResourcesController@index')->name('atcresources.index');
 Route::view('/pilots', 'pilots.index');
@@ -36,20 +36,6 @@ Route::get('/events/{slug}', 'Events\EventController@viewEvent')->name('events.v
 Route::view('/about', 'about')->name('about');
 Route::view('/branding', 'branding')->name('branding');
 Route::view('/eurosounds', 'eurosounds')->name('eurosounds');
-
-Route::get('/test', function () {
-    $timePeriod = Carbon\CarbonPeriod::create(Carbon\Carbon::now()->subDays(60), Carbon\Carbon::now());
-    foreach ($timePeriod as $day) {
-        $session = new App\Models\Network\SessionLog();
-        $session->cid = 1364284;
-        $session->session_start = $day->addHours(1);
-        $session->session_end = $day->addHours(2);
-        $session->monitored_position_id = 1;
-        $session->emails_sent = 0;
-        $session->duration = rand(0.5, 5.5);
-        $session->save();
-    }
-});
 
 
 //Authentication

@@ -56,6 +56,15 @@ class User extends Authenticatable
         'password', 'remember_token',
     ];
 
+    public function isBot()
+    {
+        if ($this->id == 1 || $this->id == 2) {
+            return true;
+        }
+
+        return false;
+    }
+
     /**
      * Return articles that the user has written.
      *

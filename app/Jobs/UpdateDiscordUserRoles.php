@@ -42,10 +42,12 @@ class UpdateDiscordUserRoles implements ShouldQueue
         foreach (User::where('discord_user_id', '!=', null)->cursor() as $user)
         {
             //Test if they're on the server or a staff member
-            if (!$user->memberOfCzqoGuild() || $user->staffProfile) {
+            if (!$user->memberOfCzqoGuild() || $user->staffProfile || $user->isBot()) {
                 //They're not.. continue on.
                 continue;
             }
+
+            Log::info($user);
 
             //Get their current user, so we can compare changes
             $guildMember = $discord->guild->getGuildMember([
@@ -100,7 +102,7 @@ class UpdateDiscordUserRoles implements ShouldQueue
             //Modify
             $discord->guild->modifyGuildMember($arguments);
 
-            //Notify them if roles/nickname were change
+            /* //Notify them if roles/nickname were change
             if ($user->fullName('FLC') != $guildMember->nick) {
                 $discord->channel->createMessage([
                     'channel.id' => intval($user->discord_dm_channel_id),
@@ -114,7 +116,7 @@ class UpdateDiscordUserRoles implements ShouldQueue
                     'content' => 'Hi there! Your roles on the Gander Oceanic Discord have been updated in line with your roster status. If there is a mistake, please contact the Web Team.'
                 ]);
             }
-
+ */
             //Counter!
             $counter++;
         }

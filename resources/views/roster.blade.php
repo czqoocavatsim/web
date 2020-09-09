@@ -43,27 +43,9 @@
                     @else
                         <td class="bg-danger text-white">Inactive</td>
                     @endif
-                    @if ($controller->status == "certified")
-                        <td class="bg-success text-white">
-                            Certified
-                        </td>
-                    @elseif ($controller->status == "not_certified")
-                        <td class="bg-danger text-white">
-                            Not Certified
-                        </td>
-                    @elseif ($controller->status == "instructor")
-                        <td class="bg-info text-white">
-                            Instructor
-                        </td>
-                    @elseif ($controller->status == "training")
-                        <td class="bg-warning text-dark">
-                            Training
-                        </td>
-                    @else
                         <td>
-                            {{$controller->status}}
+                            {{$controller->certification}}
                         </td>
-                    @endif
                 </tr>
             @endforeach
             </tbody>
