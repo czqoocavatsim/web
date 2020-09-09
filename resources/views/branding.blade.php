@@ -5,7 +5,8 @@
     <h1 class="font-weight-bold blue-text">Branding</h1>
     <hr>
     <p>Access our logos and social media icons here. You may use these logos in their published form at your discretion.
-    We ask however that you do not modify the images from their original, published form. Resizing is permitted, provided the aspect ratio remains unadjusted.
+    We ask however that you do not modify the images from their original, published form. Resizing is permitted, provided the aspect ratio remains unadjusted. Please aim to, wherever possible, use the
+    blue logo versions (either white on blue or blue on white), and only use the plain white where it is not possible or practical to use the blue versions.
     Please contact our Deputy OCA Chief with any queries: <a href="mailto:deputy@ganderoceanic.com">deputy@ganderoceanic.com</a>
     <br/><br/>
     The hex colour codes used for our branding are <span class="font-weight-bold black-text">#0080C9 (Blue)</span> and <span class="font-weight-bold black-text">#FFFFFF (White)</span>.
