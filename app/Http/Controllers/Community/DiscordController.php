@@ -6,7 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Community\Discord\DiscordBan;
 use App\Models\Users\User;
 use App\Notifications\Discord\BanNotification;
-use App\Notifications\DIscord\DiscordWelcome;
+use App\Notifications\Discord\DiscordWelcome;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
