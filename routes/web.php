@@ -13,12 +13,13 @@
 
 //Public views
 
+use App\Jobs\UpdateDiscordUserRoles;
 use Illuminate\Support\Facades\Notification;
 
 Route::get('/', 'PrimaryViewsController@home')->name('index');
 Route::get('/map', 'PrimaryViewsController@map')->name('map');
 Route::get('/roster', 'Roster\RosterController@publicRoster')->name('roster.public');
-Route::get('/staff', 'Users\StaffListController@index')->name('staff');
+Route::get('/staff', function() { return redirect(route('staff'), 301); });
 Route::get('/atcresources', 'Publications\AtcResourcesController@index')->name('atcresources.index');
 Route::view('/pilots', 'pilots.index');
 Route::view('/pilots/oceanic-clearance', 'pilots.oceanic-clearance');
@@ -32,10 +33,20 @@ Route::view('/privacy', 'privacy')->name('privacy');
 Route::view('/changelog', 'changelog')->name('changelog');
 Route::get('/events', 'Events\EventController@index')->name('events.index');
 Route::get('/events/{slug}', 'Events\EventController@viewEvent')->name('events.view');
-Route::view('/about', 'about')->name('about');
 Route::view('/branding', 'branding')->name('branding');
 Route::view('/eurosounds', 'eurosounds')->name('eurosounds');
 
+//About
+Route::prefix('about')->group(function () {
+    Route::get('/', function() { return redirect(route('about.who-we-are'), 301); })->name('about.index');
+    Route::view('/who-we-are', 'about.who-we-are')->name('about.who-we-are');
+    Route::view('/core', 'about-core')->name('about.core');
+    Route::get('/staff', 'Users\StaffListController@index')->name('staff');
+});
+
+Route::get('test', function() {
+    UpdateDiscordUserRoles::dispatch();
+});
 
 //Authentication
 Route::prefix('auth')->group(function () {

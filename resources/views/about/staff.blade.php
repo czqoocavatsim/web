@@ -67,7 +67,7 @@
             @endforeach
             <a id="instructors"><h3 class="mb-3 blue-text font-weight-bold">Instructors</h3></a>
             <div class="row">
-                @foreach ($instructors as $instructor)
+                {{-- @foreach ($instructors as $instructor)
                     <div class="col-sm-4">
                         <div style="text-align: center;">
                             <div class="staff_img_container">
@@ -86,7 +86,7 @@
                             </p>
                         </div>
                     </div>
-                @endforeach
+                @endforeach --}}
             </div>
         </div>
     </div>

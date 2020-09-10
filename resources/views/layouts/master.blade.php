@@ -109,6 +109,12 @@
                 </button>
                 <div class="collapse navbar-collapse" id="navbarSupportedContent">
                     <ul class="navbar-nav mr-auto">
+                        <li class="nav-item dropdown {{ Request::is('about/*') || Request::is('about') ? 'active' : ''}}">
+                            <a class="nav-link dropdown-toggle" style="cursor:pointer" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">About</a>
+                            <div class="dropdown-menu" aria-labelledby="dropdown01">
+                                <a class="dropdown-item" href="{{url ('/about/staff')}}" aria-expanded="false">Staff</a>
+                            </div>
+                        </li>
                         <li class="nav-item {{ Request::is('roster/*') || Request::is('roster') ? 'active' : '' }}">
                             <a class="nav-link" href="{{route('roster.public')}}">
                                 Roster
@@ -144,9 +150,6 @@
                                 <a class="dropdown-item" href="https://nattrak.vatsim.net" target="_blank">natTRAK</a>
                                 <a class="dropdown-item" href="{{url('/map')}}">Map</a>
                             </div>
-                        </li>
-                        <li class="nav-item  {{ Request::is('staff') ? 'active' : '' }}">
-                            <a class="nav-link" href="{{url ('/staff')}}" aria-expanded="false">Staff</a>
                         </li>
                         <li class="nav-item dropdown {{ Request::is('policies') || Request::is('meetingminutes') ? 'active' : ''}}">
                             <a class="nav-link dropdown-toggle" style="cursor:pointer" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Publications</a>
@@ -251,7 +254,7 @@
                 &nbsp;
                 •
                 &nbsp;
-                <a href="{{route('about')}}" class="font-weight-bold black-text">About</a>
+                <a href="{{route('about.core')}}" class="font-weight-bold black-text">About</a>
                 &nbsp;
                 •
                 &nbsp;
@@ -283,7 +286,7 @@
                 <img src="https://cdn.discordapp.com/attachments/482817676067209217/695255571623837837/220px-Bisexual_Pride_Flag.png" style="height:20px;" alt="">
             </div>
             <div class="mt-3">
-                <a href="{{route('about')}}"><small class="text-muted">{{App\Models\Settings\CoreSettings::where('id', 1)->firstOrFail()->sys_name}} {{App\Models\Settings\CoreSettings::where('id', 1)->firstOrFail()->release}} ({{App\Models\Settings\CoreSettings::where('id', 1)->firstOrFail()->sys_build}})</small></a> <small>- <a target="_blank" href="https://blog.ganderoceanic.com/gander-oceanic-core-update-log/" class="text-muted">Update Log</a></small>
+                <a href="{{route('about.core')}}"><small class="text-muted">{{App\Models\Settings\CoreSettings::where('id', 1)->firstOrFail()->sys_name}} {{App\Models\Settings\CoreSettings::where('id', 1)->firstOrFail()->release}} ({{App\Models\Settings\CoreSettings::where('id', 1)->firstOrFail()->sys_build}})</small></a> <small>- <a target="_blank" href="https://blog.ganderoceanic.com/gander-oceanic-core-update-log/" class="text-muted">Update Log</a></small>
             </div>
         </div>
     </footer>
