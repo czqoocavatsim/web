@@ -104,7 +104,7 @@
             </script>
         </div>
         <div class="form-group">
-            <label>URL (Google Drive or Dropbox preferred)</label>
+            <label>URL (Direct resources.ganderoceanic.com link preferred, ask Liesel to upload)</label>
             <input type="url" class="form-control" name="url">
         </div>
         <div class="form-group">

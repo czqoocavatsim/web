@@ -47,7 +47,7 @@
             </div>
             {!! Form::open(['route' => 'network.monitoredpositions.create']) !!}
             <div class="modal-body">
-                <p>ActivityBot will monitor positions for activity and record sessions. You can specify a prefix or complete callsign.</p>
+                <p>ActivityBot will monitor positions for activity and will record sessions. You can specify a prefix or complete callsign.</p>
                 <div class="form-group">
                     <label for="recipient-name" class="col-form-label">Identifier</label>
                     {!! Form::text('identifier', null, ['class' => 'form-control', 'placeholder' => 'CZQX_']) !!}

@@ -67,6 +67,7 @@
         Show/hide message form bsaed on whether the user has selected a feedback type
         */
         $("#feedbackTypeSelect").on('change', function() {
+            // TODO fix
             if (this.value) {
                 $("#typeNotSelected").hide();
                 $("#typeSelected").show();
@@ -78,6 +79,7 @@
          */
         $('#feedbackTypeSelect').on('change', function() {
             //Figure out what it is
+            // TODO fix
             if (this.value == 'controller') {
                 //Enable CID disable subject
                 $("#controllerCidGroup").show();

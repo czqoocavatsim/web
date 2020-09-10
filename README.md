@@ -1,9 +1,22 @@
-# czqo-core 
-### The website for VATSIM's Gander Oceanic FIR https://ganderoceanic.com
+<p align="center"><img src="https://resources.ganderoceanic.com/media/img/brand/sqr/ZQO_SQ_TSPBLUE.png"height="100"></p>
+
+<p align="center">The website for VATSIM's Gander Oceanic FIR<br>https://ganderoceanic.com</p>
+
 ---
 ### Contributing
 
 We would love you to help out with the website! If you find something and fix it, or notice something, or even have a feature request, feel free to make a pull request or an issue.
+
+#### Using this for your own VATSIM website
+
+czqo-core is licensed under the **MIT License**. You are free to use code from the repository within the reigns of that license.
+
+However, if you wish to use czqo-core as a basis for your own VATSIM related website (e.g. an FIR), we humbly ask the following:
+
+* You **provide credit for major portions of this repository used** to Gander Ocenaic OCA with a link to this repository.
+* You **do not** use the same public facing user interface or branding as the Gander Oceanic OCA website. This is important in ensuring that we maintain our brand identity. It is fine to keep admin-only user interfaces (e.g. the create news article form).
+
+If you require assistance with some aspect of czqo-core, feel free to DM one of us on Discord or send an email. We cannot guarantee support.
 
 #### Submitting an Issue or Pull Request
 Guidelines for submitting an **issue**:
@@ -22,13 +35,53 @@ Guidelines for submitting a **pull request**:
   - Why it was a problem, or why it was neccessary/nice to add
 - Document/comment your code. This is important for us and future developers so they can understand what you have written.
 
-### Initial setup process
+---
 
-1. Rename `.env.example` to `.env` and fill required fields. The VATSIM connect demo URI is already placed in there. Get your ID and put your redirect URI into `http://auth-dev.vatsim.net`.
-3. Create a SQL database, and put the credentials in `.env`.
-4. Run `php artisan migrate --seed` (runs database migrations and seeds with required rows).
-5. Run `php artisan key:generate`.
-6. Login with one of the accounts found at http://wiki.vatsim.net/connect.
-7. Give that new account in the users table a permissions value of `4`.
+### Setup process
 
+It's mostly basic Laravel setup, however these are the steps specific to CZQO:
 
+##### .env file
+
+The following values must be filled in the .env file
+```
+#If you want to send mail
+MAILGUN_DOMAIN=
+MAILGUN_SECRET=
+
+#Webhooks for Discord channels if you want them to work
+DISCORD_STAFF_WEBHOOK= #Your FIR's general staff channel
+CONTROLLER_APP_WEBHOOK= #Event controller applications
+DISCORD_NEWS_WEBHOOK= #Your announcements channel
+
+#Discord OAuth keys for linking/server joining
+DISCORD_KEY=
+DISCORD_SECRET=
+DISCORD_BOT_TOKEN=
+DISCORD_REDIRECT_URI= #for the link method
+DISCORD_REDIRECT_URI_JOIN= #for the join server method
+DISCORD_GUILD_ID= #your servers ID
+
+#VATSIM connect
+CONNECT_REDIRECT_URI=
+CONNECT_CLIENT_ID=
+CONNECT_SECRET=
+```
+
+##### Database seeding
+Run the migrations as normal (`php artisan migrate`). Then you need to run the seeders. Look in `database/seeders` and run each seeder through this command:
+`php artisan db:seed --class=CLASSNAMEHERE`
+
+For example, `PermissionsSeeder` would be `php artisan db:seed --class=PermissionsSeeder`.
+
+If you want to add extra permissions/roles, put them in a seeder.
+
+##### Permissions
+
+This site uses the [Laravel Permissions](https://docs.spatie.be/laravel-permission/v3/introduction/) package by Spatie. To give your user administrator permissions, do the following:
+
+* Run the seeders.
+* Login with the user.
+* Go to the `model_has_roles` table in your database.
+* Create a row where the `model_id` is the user's CID, `model_type` is `App\Models\Users\User`, and `role_id` is `1.`
+* Refresh on the website. You should now have administrator permissions.

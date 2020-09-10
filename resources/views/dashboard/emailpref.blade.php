@@ -24,13 +24,13 @@
         <br/>
         <h4>What does this mean?</h4>
         <p>
-            When you subscribe to emails, you allow Gander Oceanic FIR to send you what the EU GDPR describes as "promotional" emails.
-            These emails are typically not necessary to your continued participation in the FIR or holding an account on the Core system.<br/>
+            By subscribing to emails, you allow Gander Oceanic OCA to send you what the EU GDPR describes as "promotional" emails.
+            These emails are typically not necessary for your continued participation in the OCA or to hold an account on the Core system.<br/>
             Some examples could include:
         </p>
         <ul style="list-style: square">
             <li>Controller certifications for the month</li>
-            <li>News from the FIR Chief about non-critical matters</li>
+            <li>News from the OCA Chief about non-critical matters</li>
             <li>Updates from other staff members</li>
         </ul>
         <p><br/>
