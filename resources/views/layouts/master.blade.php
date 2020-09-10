@@ -370,15 +370,56 @@
     <div class="modal fade" id="discordTopModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered" role="document">
             <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLongTitle">Join the CZQO Discord</h5>
+                <div class="modal-header pb-2" style="border:none; text-align:center;">
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
                 <div class="modal-body">
-                    <img style="height: 50px;" src="{{asset('/img/discord/czqoplusdiscord.png')}}" class="img-fluid mb-2" alt="">
-                    <p>To link your Discord account and join our Discord community, please head to your <a href="{{route('dashboard.index')}}">dashboard.</a></p>
+                    <div class="d-flex flex-center flex-column">
+                        <h3 class="font-weight-bold blue-text">Join the Gander Oceanic Discord</h3>
+                        <ul class="list-unstyled mt-4">
+                            <li class="w-100">
+                                <div class="grey lighten-3 p-4" style="border-radius: 20px;">
+                                    <div class="d-flex flex-row">
+                                        <img style="height: 40px; margin-right: 20px;" src="https://resources.ganderoceanic.com/media/img/brand/sqr/ZQO_SQ_TSPBLUE.png" alt="">
+                                        <p class="font-weight-bold" style="width: 75%; text-align:left; font-size: 1.1em;">Chat with our Gander Oceanic controller and pilot community</p>
+                                    </div>
+                                </div>
+                            </li>
+                            <li class="w-100">
+                                <div class="grey lighten-3 p-4" style="border-radius: 20px;">
+                                    <div class="d-flex flex-row">
+                                        <i style="font-size:35px; margin-right:20px;" class="far fa-newspaper blue-text"></i>
+                                        <p class="font-weight-bold" style="width: 75%; text-align:left; font-size: 1.1em;">Get the latest CZQO and VATSIM news, and other relevant updates</p>
+                                    </div>
+                                </div>
+                            </li>
+                            <li class="w-100">
+                                <div class="grey lighten-3 p-4" style="border-radius: 20px;">
+                                    <div class="d-flex flex-row">
+                                        <i style="font-size:35px; margin-right:20px;" class="fas fa-user-friends blue-text"></i>
+                                        <p class="font-weight-bold" style="width: 75%; text-align:left; font-size: 1.1em;">Find people to have a controlling<br>session with</p>
+                                    </div>
+                                </div>
+                            </li>
+                        </ul>
+                        @auth
+                            @if(Auth::user()->hasDiscord() && !Auth::user()->memberOfCzqoGuild())
+                            <a href="{{route('me.discord.join')}}" class="class btn btn-primary mt-3">Join The Community</a>
+                            <p class="text-muted text-center mt-2">You will be redirected to Discord to allow us to add you to our server. Information collected is shown on the Discord authorisation screen. Read our privacy policy for details.</p>
+                            @elseif (Auth::user()->hasDiscord() && Auth::user()->memberOfCzqoGuild())
+                            <p class="mt-1"><img style="border-radius:50%; height: 30px;" class="img-fluid" src="{{Auth::user()->getDiscordAvatar()}}" alt="">&nbsp;&nbsp;{{Auth::user()->getDiscordUser()->username}}<span style="color: #d1d1d1;">#{{Auth::user()->getDiscordUser()->discriminator}}</span></p>
+                            <p class="text-muted text-center mt-2">You are already a member of the Gander Oceanic Discord. To unlink your account and leave the server, go to your Dashboard.</p>
+                            @else
+                                <a href="{{route('me.discord.link', ['param' => 'server_join_process'])}}" class="class btn btn-primary mt-3">Link Your Discord To Join</a>
+                                <p class="text-muted text-center mt-2">You will be redirected to Discord to connect your account, and then prompted to allow us to add you to our server. Information collected is shown on the Discord authorisation screen. Read our privacy policy for details.</p>
+                            @endif
+                        @else
+                        <a href="{{route('auth.connect.login')}}" class="class btn btn-primary mt-3">Login With VATSIM To Join</a>
+                        <p class="text-muted text-center mt-2">Once logged in, you can connect your Discord account and join the community in your Dashboard</p>
+                        @endauth
+                    </div>
                 </div>
             </div>
         </div>
@@ -427,6 +468,16 @@
     </script>
     <script>
         $("blockquote").addClass('blockquote');
+
+
+        $.urlParam = function(name){
+            var results = new RegExp('[\?&]' + name + '=([^&#]*)').exec(window.location.href);
+            return results[1] || 0;
+        }
+
+        if ($.urlParam('discord') == '1') {
+            $("#discordTopModal").modal();
+        }
     </script>
     </body>
 </html>

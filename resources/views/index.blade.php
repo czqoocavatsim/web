@@ -195,6 +195,7 @@
             videoSrc: 'mp4:https://resources.ganderoceanic.com/media/video/ZQO_SITE_TIMELAPSE.mp4',
             videoLoop: true
         });
+
     </script>
 @endsection
 

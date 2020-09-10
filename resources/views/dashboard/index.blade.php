@@ -115,7 +115,7 @@
                             @else
                             <p class="mt-1"><img style="border-radius:50%; height: 30px;" class="img-fluid" src="{{Auth::user()->getDiscordAvatar()}}" alt="">&nbsp;&nbsp;{{Auth::user()->getDiscordUser()->username}}<span style="color: #d1d1d1;">#{{Auth::user()->getDiscordUser()->discriminator}}</span></p>
                             @if(!Auth::user()->memberOfCzqoGuild())
-                            <a href="#" data-toggle="modal" data-target="#joinDiscordServerModal" class="mt-1">Join The CZQO Discord</a><br/>
+                            <a href="#" data-toggle="modal" data-target="#discordTopModal" class="mt-1">Join The CZQO Discord</a><br/>
                             @endif
                             <a href="#" data-toggle="modal" data-target="#discordModal" class="mt-1">Unlink</a>
                             @endif
@@ -528,46 +528,54 @@
     <div class="modal-dialog modal-dialog-centered" role="document">
         @if (!Auth::user()->hasDiscord())
         <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLongTitle">Link your Discord account</h5>
+            <div class="modal-header pb-2" style="border:none; text-align:center;">
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
             <div class="modal-body">
-                <img style="height: 50px;" src="{{asset('/img/discord/czqoplusdiscord.png')}}" class="img-fluid mb-2" alt="">
-                <p>Linking your Discord account with Gander Oceanic allows you to:</p>
-                <ul>
-                    <li>Join our Discord community</li>
-                    <li>Receive notifications for ticket replies, training updates, and more</li>
-                    <li>Use your Discord avatar on the website</li>
-                </ul>
-                <p>To link your account, click the button below. You will be redirected to Discord to approve the link. Information on data stored through Discord OAuth is available in the <a href="{{route('privacy')}}">privacy policy.</a></p>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-light" data-dismiss="modal">Dismiss</button>
-                <a role="button" type="submit" href="{{route('me.discord.link')}}" class="btn btn-primary">Link Account</a>
+                <div class="d-flex flex-center flex-column">
+                    <h3 class="font-weight-bold blue-text">Link your Discord Account to CZQO</h3>
+                    <ul class="list-unstyled mt-4">
+                        <li class="w-100">
+                            <div class="grey lighten-3 p-4" style="border-radius: 20px;">
+                                <div class="d-flex flex-row">
+                                    <img style="height: 40px; margin-right: 20px;" src="https://resources.ganderoceanic.com/media/img/brand/sqr/ZQO_SQ_TSPBLUE.png" alt="">
+                                    <p class="font-weight-bold" style="width: 75%; text-align:left; font-size: 1.1em;">Join the Gander Oceanic Discord community</p>
+                                </div>
+                            </div>
+                        </li>
+                        <li class="w-100">
+                            <div class="grey lighten-3 p-4" style="border-radius: 20px;">
+                                <div class="d-flex flex-row">
+                                    <i style="font-size:35px; margin-right:20px;" class="fas fa-user-circle blue-text"></i>
+                                    <p class="font-weight-bold" style="width: 75%; text-align:left; font-size: 1.1em;">Use your Discord avatar as your CZQO website avatar</p>
+                                </div>
+                            </div>
+                        </li>
+                    </ul>
+                    <a href="{{route('me.discord.link')}}" class="class btn btn-primary mt-3">Link Your Discord Account</a>
+                    <p class="text-muted text-center mt-2">You will be redirected to Discord to link your account. Information collected is shown on the Discord authorisation screen. Read our privacy policy for details.</p>
+                </div>
             </div>
         </div>
         @else
         <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title">Unlink your Discord account</h5>
+            <div class="modal-header pb-2" style="border:none; text-align:center;">
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
             <div class="modal-body">
-                <p>Unlinking your account will:</p>
-                <ul>
-                    <li>Remove you from the CZQO Discord, if you're a member</li>
-                    <li>Remove a Discord avatar if you have it selected</li>
-                    <li>Stop sending you notifications via Discord</li>
-                </ul>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-light" data-dismiss="modal">Dismiss</button>
-                <a role="button" type="submit" href="{{route('me.discord.unlink')}}" class="btn btn-danger">Unlink Account</a>
+                <div class="d-flex flex-center flex-column">
+                    <h3 class="font-weight-bold blue-text">Unlink your Discord account</h3>
+                    <p>Unlinking your account will:</p>
+                    <ul class="mt-2 list-unstyled">
+                        <li class="mb-2">Remove you from the CZQO Discord, if you're a member</li>
+                        <li class="mb-2">Remove your Discord avatar if you have it selected</li>
+                    </ul>
+                    <a href="{{route('me.discord.unlink')}}" class="class btn btn-danger mt-3">Unlink</a>
+                </div>
             </div>
         </div>
         @endif

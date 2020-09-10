@@ -45,6 +45,7 @@ return [
         'client_id' => env('DISCORD_KEY'),
         'client_secret' => env('DISCORD_SECRET'),
         'redirect' => env('DISCORD_REDIRECT_URI'),
+        'redirect_server_join_process' => env('DISCORD_REDIRECT_URI').'/server_join_process',
         'redirect_join' => env('DISCORD_REDIRECT_URI_JOIN'),
         'guild_id' => env('DISCORD_GUILD_ID')
     ],

@@ -30,7 +30,6 @@ Route::get('/meetingminutes', 'News\NewsController@minutesIndex')->name('meeting
 Route::get('/bookings', 'ControllerBookings\ControllerBookingsController@indexPublic')->name('controllerbookings.public');
 Route::view('/privacy', 'privacy')->name('privacy');
 Route::view('/changelog', 'changelog')->name('changelog');
-Route::view('/emailtest', 'emails.announcement');
 Route::get('/events', 'Events\EventController@index')->name('events.index');
 Route::get('/events/{slug}', 'Events\EventController@viewEvent')->name('events.view');
 Route::view('/about', 'about')->name('about');
@@ -47,6 +46,8 @@ Route::prefix('auth')->group(function () {
     Route::get('/logout', 'Auth\LoginController@logout')->middleware('auth')->name('auth.logout');
 });
 
+//Discord shortcut
+Route::get('/discord', 'Community\DiscordController@joinShortcut');
 
 //Public news articles
 Route::get('/news/{id}', 'News\NewsController@viewArticlePublic')->name('news.articlepublic')->where('id', '[0-9]+');
@@ -120,11 +121,11 @@ Route::group(['middleware' => 'auth'], function () {
         //"Me"
         Route::get('/me/editbiography', 'Users\UserController@editBioIndex')->name('me.editbioindex');
         Route::post('/me/editbiography', 'Users\UserController@editBio')->name('me.editbio');
-        Route::get('/me/discord/link', 'Users\UserController@linkDiscord')->name('me.discord.link');
-        Route::get('/me/discord/unlink', 'Users\UserController@unlinkDiscord')->name('me.discord.unlink');
-        Route::get('/me/discord/link/redirect', 'Users\UserController@linkDiscordRedirect')->name('me.discord.link.redirect');
-        Route::get('/me/discord/server/join', 'Users\UserController@joinDiscordServerRedirect')->name('me.discord.join');
-        Route::get('/me/discord/server/join/redirect', 'Users\UserController@joinDiscordServer');
+        Route::get('/me/discord/unlink', 'Community\DiscordController@unlinkDiscord')->name('me.discord.unlink');
+        Route::get('/me/discord/link/callback/{param?}', 'Community\DiscordController@linkCallbackDiscord')->name('me.discord.link.callback');
+        Route::get('/me/discord/link/{param?}', 'Community\DiscordController@linkRedirectDiscord')->name('me.discord.link');
+        Route::get('/me/discord/server/join', 'Community\DiscordController@joinRedirectDiscord')->name('me.discord.join');
+        Route::get('/me/discord/server/join/callback', 'Community\DiscordController@joinCallbackDiscord');
         Route::get('/me/preferences', 'Users\UserController@preferences')->name('me.preferences');
         Route::post('/me/preferences', 'Users\UserController@preferencesPost')->name('me.preferences.post');
 

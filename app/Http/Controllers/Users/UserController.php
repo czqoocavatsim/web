@@ -7,7 +7,7 @@ use App\Models\Settings\AuditLogEntry;
 use App\Models\ControllerBookings\ControllerBookingsBan;
 use App\Models\Users\DiscordBan;
 use App\Notifications\DiscordLinkCreated;
-use App\Notifications\DiscordWelcome;
+use App\Notifications\Discord\DiscordWelcome;
 use App\Notifications\PermissionsChanged;
 use App\Models\Users\User;
 use App\Models\Users\UserNote;
@@ -454,7 +454,7 @@ class UserController extends Controller
             'user.id' => intval($discordUser->id),
             'access_token' => $discordUser->token,
              'nick' => Auth::user()->fullName('FLC')
-        );
+        );/*
         if (Auth::user()->rosterProfile) {
             if (Auth::user()->rosterProfile->status == 'training') {
                 $args['roles'] = array(482824058141016075);
@@ -463,9 +463,9 @@ class UserController extends Controller
                 $args['roles'] = array(482819739996127259);
             }
         }
-        else {
+        else { */
             $args['roles'] = array(482835389640343562);
-        }
+        // }
         $discord->guild->addGuildMember($args);
         Auth::user()->notify(new DiscordWelcome());
         $discord->channel->createMessage(['channel.id' => 482860026831175690, 'content' => '<@'.$discordUser->id.'> ('.Auth::id().') has joined.']);

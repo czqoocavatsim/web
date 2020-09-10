@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Notifications;
+namespace App\Notifications\DIscord;
 
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
@@ -41,7 +41,31 @@ class DiscordWelcome extends Notification
      */
     public function toDiscord($notifiable)
     {
-        return DiscordMessage::create("Hi " . Auth::user()->fullName('F') . ", welcome to the Gander Oceanic Discord server!\n\nPlease keep in mind the following rules for the server:\n```\n1. The VATSIM Code of Conduct applies.\n2. Always show respect and common decency to fellow members.\n3. Do not send server invites to servers unrelated to VATSIM without staff permission. Do not send ANY invites via DMs unless asked to.\n4. Do not send spam in the server, including images, text, or emotes.\n```\n\nFailure to comply with this rules can result in your removal from the server.\n\nEnjoy, and if you have any concerns, please feel free to message a staff member or create a ticket!");
+        $message = new DiscordMessage;
+
+        $message->embed([
+            'title' => 'Welcome to the Gander Oceanic Discord, '.Auth::user()->fullName('F').'!',
+            'color' => 0x80c9,
+            'fields' => array(
+                [
+                    'name' => 'Rules',
+                    'value' => 'Please read and abide by the rules set out at the top of <#752761970826018877>. Failure to comply with this rules could result in your removal from the server and/or VATSIM disciplinary action.',
+                    'inline' => false
+                ],
+                [
+                    'name' => 'Chat with our Gander Oceanic controller and pilot community                    ',
+                    'value' => '<#479250337048297485> is where the action happens. Talk to other pilots and controllers as you make your oceanic crossing or ask questions.',
+                    'inline' => false
+                ],
+                [
+                    'name' => 'Get the latest CZQO and VATSIM news, and other relevant updates',
+                    'value' => 'Check out <#488265136696459292> for news from Gander Oceanic\'s staff team and <#752755987743768657> for the latest from the VATSIM network.',
+                    'inline' => false
+                ]
+            )
+        ]);
+
+        return $message;
     }
 
     /**
