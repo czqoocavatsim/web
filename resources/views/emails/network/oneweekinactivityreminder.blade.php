@@ -4,15 +4,13 @@
 
 @section('message-content')
 <h2>One Week Left - Activity Reminder</h2>
-<p>According to our records, you have not yet fulfilled our currency requirement. You require <b>6 hours</b> online controlling on Gander or Shanwick by 1 July.</p>
+<p>According to our records, you have not yet fulfilled our currency requirement. You require <b>3 hours</b> online controlling on Gander or Shanwick by the end of the quarter, otherwise you will be marked inactive.</p>
 
-<p>There is one week remaining in the current cycle, so this email serves only as a reminder in case you may have forgotten or missed our previous email at one month out and two weeks out.<p>
+<p>There is one week remaining in the current quarter, so this email serves only as a reminder in case you may have forgotten, or missed last week's email.<p>
 
-<p>If you have received your certification during the current currency period, your requirement is reduced by one hour per month into the activity requirement you were certified. For example, if you were certified in March, you are only required to do three hours, since there would be only three months left until the end of the currency period. Otherwise, you require six hours.</p>
+<p>Once again, if you have received your certification during this current quarter, then you are exempt from this quarter's requirement.</p>
 
-<p>This is the final reminder we will send. If you do not reach 6 hours of activity controlling Gander or Shanwick by 1 July, you will be marked as inactive.</p>
-
-<p>Please don’t hesitate to contact us should you have any concerns or require leniancy on the requirement. We're here to help!</p>
+<p>Please don’t hesitate to contact us should you have any concerns, or if you need us to make an accommodation. We're here to help!</p>
 @endsection
 
 @section('from-line')
