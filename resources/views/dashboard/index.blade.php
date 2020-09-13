@@ -279,16 +279,16 @@
                         <h3><span class="badge rounded shadow-none red">
                             No hours recorded
                         </span></h3>
-                        @elseif (Auth::user()->rosterProfile->currency < 6.0)
+                        @elseif (Auth::user()->rosterProfile->currency < 3.0)
                         <h3><span class="badge rounded shadow-none blue">
                             {{Auth::user()->rosterProfile->currency}} hours recorded
                         </span></h3>
-                        @elseif (Auth::user()->rosterProfile->currency >= 6.0)
+                        @elseif (Auth::user()->rosterProfile->currency >= 3.0)
                         <h3><span class="badge rounded shadow-none green">
                             {{Auth::user()->rosterProfile->currency}} hours recorded
                         </span></h3>
                         @endif
-                        <p>You require <b>6 hours</b> of activity every 6 months, unless you were certified within the current activity cycle.</p>
+                        <p>You require <b>3 hours</b> of activity each quarter, unless you were certified within the quarter.</p>
                     @endif --}}
                     <ul class="list-unstyled mt-2 mb-0">
                         <li class="mb-2">
