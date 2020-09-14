@@ -34,13 +34,16 @@ use Spatie\Permission\Models\Role;
 
 class UserController extends Controller
 {
-    public function privacyAccept()
+    public function privacyAccept(Request $request)
     {
         $user = Auth::user();
         if ($user->init == 1) {
             return redirect()->route('index');
         }
         $user->init = 1;
+        if ($request->get('optInEmails')) {
+            $user->gdpr_subscribed_emails = 1;
+        }
         $user->save();
         $user->notify(new WelcomeNewUser($user));
         return redirect('/dashboard')->with('success', 'Welcome to CZQO, '.$user->fname.'! We are glad to have you on board.');

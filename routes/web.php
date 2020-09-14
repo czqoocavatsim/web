@@ -44,10 +44,6 @@ Route::prefix('about')->group(function () {
     Route::get('/staff', 'Users\StaffListController@index')->name('staff');
 });
 
-Route::get('test', function() {
-    UpdateDiscordUserRoles::dispatch();
-});
-
 //Authentication
 Route::prefix('auth')->group(function () {
     Route::get('/sso/login', 'Auth\LoginController@ssoLogin')->middleware('guest')->name('auth.sso.login');
@@ -69,8 +65,9 @@ Route::get('/news/', 'News\NewsController@viewAllPublic')->name('news');
 Route::group(['middleware' => 'auth'], function () {
 
     //Privacy accept
-    Route::get('/privacyaccept', 'Users\UserController@privacyAccept');
+    Route::post('/privacyaccept', 'Users\UserController@privacyAccept')->name('privacyaccept');
     Route::get('/privacydeny', 'Users\UserController@privacyDeny');
+    Route::view('/me/accept-privacy-policy', 'accept-privacy-policy')->name('accept-privacy-policy');
 
     //Dashboard
     Route::get('/dashboard', 'PrimaryViewsController@dashboard')->name('dashboard.index');

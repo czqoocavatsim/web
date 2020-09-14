@@ -291,36 +291,6 @@
         </div>
     </footer>
     <!-- Footer -->
-    @if (Auth::check() && Auth::user()->init == 0 && Request::is('privacy') == false)
-    <!--Privacy welcome modal-->
-    <div class="modal fade" id="welcomeModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle"
-         aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLongTitle">Welcome to CZQO!</b></h5>
-                </div>
-                <div class="modal-body">
-                    Welcome to the Gander Oceanic Core system. Here you can apply for a CZQO certification, organise your
-                    training, and access important pilot and controller resources. Before
-                    we allow you to use the system, we require you to accept our Privacy Policy. The Policy is available
-                    <a target="_blank" href="{{url('/privacy')}}">here.</a>
-                    By default, you are <b>not</b> subscribed to non-essential email notifications. Head to the Dashboard and click on Manage my Preferences to
-                    subscribe, we highly recommend it!
-                </div>
-                <div class="modal-footer">
-                    <a role="button" href="{{ URL('/privacydeny') }}" class="btn btn-outline-danger">I disagree</a>
-                    <a href="{{url('/privacyaccept')}}" role="button" class="btn btn-success">I agree</a>
-                </div>
-            </div>
-        </div>
-    </div>
-        <script>
-            $('#welcomeModal').modal({backdrop: 'static'});
-            $('#welcomeModal').modal('show');
-        </script>
-    <!-- End privacy welcome modal-->
-    @endif
     <!-- Contact us modal-->
     <div class="modal fade" id="contactUsModal" tabindex="-1" role="dialog" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered" role="document">

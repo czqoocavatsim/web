@@ -21,10 +21,6 @@ class RedirectIfAuthenticated
             return redirect('/');
         }
 
-        if (Auth::check() && Auth::user()->init == 0) {
-            return redirect('/')->with('danger', 'Please accept the privacy policy.');
-        }
-
         return $next($request);
     }
 }
