@@ -104,7 +104,7 @@ Route::group(['middleware' => 'auth'], function () {
 
         //Tickets
         Route::get('/dashboard/tickets', 'Tickets\TicketsController@index')->name('tickets.index');
-        Route::get('/dashboard/tickets/staff', 'Tickets\TicketsController@staffIndex')->name('tickets.staff')->middleware('executive');
+        Route::get('/dashboard/tickets/staff', 'Tickets\TicketsController@staffIndex')->name('tickets.staff')->middleware('can:view tickets');
         Route::get('/dashboard/tickets/{id}', 'Tickets\TicketsController@viewTicket')->name('tickets.viewticket');
         Route::post('/dashboard/tickets', 'Tickets\TicketsController@startNewTicket')->name('tickets.startticket');
         Route::post('/dashboard/tickets/{id}', 'Tickets\TicketsController@addReplyToTicket')->name('tickets.reply');
@@ -164,16 +164,18 @@ Route::group(['middleware' => 'auth'], function () {
         Route::get('/dashboard/roster/{id}', 'AtcTraining\RosterController@viewController')->name('roster.viewcontroller');
         Route::get('/dashboard/roster/{cid}/delete', 'AtcTraining\RosterController@deleteController')->name('roster.deletecontroller');
 
-        //Events
-        Route::get('/admin/events', 'Events\EventController@adminIndex')->name('events.admin.index');
-        Route::get('/admin/events/create', 'Events\EventController@adminCreateEvent')->name('events.admin.create');
-        Route::post('/admin/events/create', 'Events\EventController@adminCreateEventPost')->name('events.admin.create.post');
-        Route::post('/admin/events/{slug}/edit', 'Events\EventController@adminEditEventPost')->name('events.admin.edit.post');
-        Route::post('/admin/events/{slug}/update/create', 'Events\EventController@adminCreateUpdatePost')->name('events.admin.update.post');
-        Route::get('/admin/events/{slug}', 'Events\EventController@adminViewEvent')->name('events.admin.view');
-        Route::get('/admin/events/{slug}/delete', 'Events\EventController@adminDeleteEvent')->name('events.admin.delete');
-        Route::get('/admin/events/{slug}/controllerapps/{cid}/delete', 'Events\EventController@adminDeleteControllerApp')->name('events.admin.controllerapps.delete');
-        Route::get('/admin/events/{slug}/updates/{id}/delete', 'Events\EventController@adminDeleteUpdate')->name('events.admin.update.delete');
+        Route::group(['middleware' => 'can:view events'], function () {
+            //Events
+            Route::get('/admin/events', 'Events\EventController@adminIndex')->name('events.admin.index');
+            Route::get('/admin/events/create', 'Events\EventController@adminCreateEvent')->name('events.admin.create')->middleware('can:create event');
+            Route::post('/admin/events/create', 'Events\EventController@adminCreateEventPost')->name('events.admin.create.post')->middleware('can:create event');
+            Route::post('/admin/events/{slug}/edit', 'Events\EventController@adminEditEventPost')->name('events.admin.edit.post')->middleware('can:edit event');
+            Route::post('/admin/events/{slug}/update/create', 'Events\EventController@adminCreateUpdatePost')->name('events.admin.update.post')->middleware('can:edit event');
+            Route::get('/admin/events/{slug}', 'Events\EventController@adminViewEvent')->name('events.admin.view');
+            Route::get('/admin/events/{slug}/delete', 'Events\EventController@adminDeleteEvent')->name('events.admin.delete')->middleware('can:delete event');
+            Route::get('/admin/events/{slug}/controllerapps/{cid}/delete', 'Events\EventController@adminDeleteControllerApp')->name('events.admin.controllerapps.delete')->middleware('can:edit event');
+            Route::get('/admin/events/{slug}/updates/{id}/delete', 'Events\EventController@adminDeleteUpdate')->name('events.admin.update.delete')->middleware('can:edit event');
+        });
 
         //Users
 
@@ -193,58 +195,66 @@ Route::group(['middleware' => 'auth'], function () {
 
             //Settings
             Route::prefix('settings')->group(function () {
-                Route::get('/', 'Settings\SettingsController@index')->name('settings.index');
-                Route::get('/site-information', 'Settings\SettingsController@siteInformation')->name('settings.siteinformation');
-                Route::post('/site-information', 'Settings\SettingsController@saveSiteInformation')->name('settings.siteinformation.post');
-                Route::get('/emails', 'Settings\SettingsController@emails')->name('settings.emails');
-                Route::post('/emails', 'Settings\SettingsController@saveEmails')->name('settings.emails.post');
-                Route::get('/activity-log', 'Settings\SettingsController@activityLog')->name('settings.activitylog');
-                Route::get('/rotation-images', 'Settings\SettingsController@rotationImages')->name('settings.rotationimages');
-                Route::get('/rotation-images/delete/{image_id}', 'Settings\SettingsController@deleteRotationImage')->name('settings.rotationimages.deleteimg');
-                Route::post('/rotation-images/uploadimg', 'Settings\SettingsController@uploadRotationImage')->name('settings.rotationimages.uploadimg');
-                Route::get('/staff', 'Users\StaffListController@editIndex')->name('settings.staff');
-                Route::post('/staff/{id}', 'Users\StaffListController@editStaffMember')->name('settings.staff.editmember');
+                Route::group(['middleware' => ['permission:edit settings']], function () {
+                    Route::get('/', 'Settings\SettingsController@index')->name('settings.index');
+                    Route::get('/site-information', 'Settings\SettingsController@siteInformation')->name('settings.siteinformation');
+                    Route::post('/site-information', 'Settings\SettingsController@saveSiteInformation')->name('settings.siteinformation.post');
+                    Route::get('/emails', 'Settings\SettingsController@emails')->name('settings.emails');
+                    Route::post('/emails', 'Settings\SettingsController@saveEmails')->name('settings.emails.post');
+                    Route::get('/activity-log', 'Settings\SettingsController@activityLog')->name('settings.activitylog');
+                    Route::get('/rotation-images', 'Settings\SettingsController@rotationImages')->name('settings.rotationimages');
+                    Route::get('/rotation-images/delete/{image_id}', 'Settings\SettingsController@deleteRotationImage')->name('settings.rotationimages.deleteimg');
+                    Route::post('/rotation-images/uploadimg', 'Settings\SettingsController@uploadRotationImage')->name('settings.rotationimages.uploadimg');
+                    Route::get('/staff', 'Users\StaffListController@editIndex')->name('settings.staff');
+                    Route::post('/staff/{id}', 'Users\StaffListController@editStaffMember')->name('settings.staff.editmember');
+                });
             });
 
             //News
             Route::prefix('news')->group(function () {
-                Route::get('/', 'News\NewsController@index')->name('news.index');
-                Route::get('/article/create', 'News\NewsController@createArticle')->name('news.articles.create');
-                Route::post('/article/create', 'News\NewsController@postArticle')->name('news.articles.create.post');
-                Route::get('/article/{slug}', 'News\NewsController@viewArticle')->name('news.articles.view');
-                Route::get('/announcement/create', 'News\NewsController@createAnnouncement')->name('news.announcements.create');
-                Route::post('/announcement/create', 'News\NewsController@createAnnouncementPost')->name('news.announcements.create.post');
-                Route::get('/announcement/{slug}', 'News\NewsController@viewAnnouncement')->name('news.announcements.view');
+                Route::group(['middleware' => 'can:view articles'], function () {
+                    Route::get('/', 'News\NewsController@index')->name('news.index');
+                    Route::get('/article/create', 'News\NewsController@createArticle')->name('news.articles.create')->middleware('can:create articles');
+                    Route::post('/article/create', 'News\NewsController@postArticle')->name('news.articles.create.post')->middleware('can:create articles');
+                    Route::get('/article/{slug}', 'News\NewsController@viewArticle')->name('news.articles.view');
+                    Route::get('/announcement/create', 'News\NewsController@createAnnouncement')->name('news.announcements.create')->middleware('can:send announcements');
+                    Route::post('/announcement/create', 'News\NewsController@createAnnouncementPost')->name('news.announcements.create.post')->middleware('can:send announcements');
+                    Route::get('/announcement/{slug}', 'News\NewsController@viewAnnouncement')->name('news.announcements.view');
+                });
             });
 
             //Publications
             Route::prefix('publications')->group(function () {
-                Route::get('/', 'Publications\PublicationsController@adminIndex')->name('publications.index');
-                Route::get('/policy/create', 'Publications\PublicationsController@adminCreatePolicy')->name('publications.policies.create');
-                Route::post('/policy/create', 'Publications\PublicationsController@adminCreatePolicyPost')->name('publications.policies.create.post');
-                Route::get('/policy/{id}', 'Publications\PublicationsController@adminViewPolicy')->name('publications.policies.view');
+                Route::group(['middleware' => ['permission:edit atc resources|edit policies']], function () {
+                    Route::get('/', 'Publications\PublicationsController@adminIndex')->name('publications.index');
+                    Route::get('/policy/create', 'Publications\PublicationsController@adminCreatePolicy')->name('publications.policies.create')->middleware('can:edit policies');
+                    Route::post('/policy/create', 'Publications\PublicationsController@adminCreatePolicyPost')->name('publications.policies.create.post')->middleware('can:edit policies');
+                    Route::get('/policy/{id}', 'Publications\PublicationsController@adminViewPolicy')->name('publications.policies.view')->middleware('can:edit policies');
+                });
             });
 
             //Network
             Route::prefix('network')->group(function () {
-                Route::get('/', 'Network\NetworkController@index')->name('network.index');
-                Route::get('/monitored-positions', 'Network\NetworkController@monitoredPositionsIndex')->name('network.monitoredpositions.index');
-                Route::get('/monitored-positions/{position}', 'Network\NetworkController@viewMonitoredPosition')->name('network.monitoredpositions.view');
-                Route::post('/monitored-positions/create', 'Network\NetworkController@createMonitoredPosition')->name('network.monitoredpositions.create');
+                Route::group(['middleware' => ['permission:view network data']], function () {
+                    Route::get('/', 'Network\NetworkController@index')->name('network.index');
+                    Route::get('/monitored-positions', 'Network\NetworkController@monitoredPositionsIndex')->name('network.monitoredpositions.index');
+                    Route::get('/monitored-positions/{position}', 'Network\NetworkController@viewMonitoredPosition')->name('network.monitoredpositions.view');
+                    Route::post('/monitored-positions/create', 'Network\NetworkController@createMonitoredPosition')->name('network.monitoredpositions.create')->middleware('edit monitored positions');
+                });
             });
 
             //Community
             Route::prefix('community')->group(function () {
                 //User Management
-                Route::get('/users', 'Community\UsersController@index')->name('community.users.index');
-                Route::get('/users/{id}', 'Community\UsersController@viewUser')->name('community.users.view');
-                Route::post('/users/{id}/assign/role', 'Community\UsersController@assignUserRole')->name('community.users.assign.role');
-                Route::post('/users/{id}/assign/permission', 'Community\UsersController@assignUserPermission')->name('community.users.assign.permission');
-                Route::delete('/users/{id}/remove/role', 'Community\UsersController@removeUserRole')->name('community.users.remove.role');
-                Route::delete('/users/{id}/remove/permission', 'Community\UsersController@removeUserPermission')->name('community.users.remove.permission');
-
-
-                Route::post('/discord/discordban', 'Community\DiscordController@createDiscordBan')->name('discord.createban');
+                Route::group(['middleware' => ['permission:view users']], function () {
+                    Route::get('/users', 'Community\UsersController@index')->name('community.users.index');
+                    Route::get('/users/{id}', 'Community\UsersController@viewUser')->name('community.users.view');
+                    Route::post('/users/{id}/assign/role', 'Community\UsersController@assignUserRole')->name('community.users.assign.role')->middleware('can:edit user data');
+                    Route::post('/users/{id}/assign/permission', 'Community\UsersController@assignUserPermission')->name('community.users.assign.permission')->middleware('can:edit user data');
+                    Route::delete('/users/{id}/remove/role', 'Community\UsersController@removeUserRole')->name('community.users.remove.role')->middleware('can:edit user data');
+                    Route::delete('/users/{id}/remove/permission', 'Community\UsersController@removeUserPermission')->name('community.users.remove.permission')->middleware('can:edit user data');
+                    Route::post('/discord/discordban', 'Community\DiscordController@createDiscordBan')->name('discord.createban');
+                });
             });
 
         });

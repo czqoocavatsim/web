@@ -71,7 +71,10 @@ class Kernel extends HttpKernel
         'notcertified' => \App\Http\Middleware\CheckNotCertified::class,
         'privacy' => \App\Http\Middleware\CheckPrivacy::class,
         'bookingban' => \App\Http\Middleware\BookingBanMiddleware::class,
-        'restricted' => CheckIfRestricted::class
+        'restricted' => CheckIfRestricted::class,
+        'role' => \Spatie\Permission\Middlewares\RoleMiddleware::class,
+        'permission' => \Spatie\Permission\Middlewares\PermissionMiddleware::class,
+        'role_or_permission' => \Spatie\Permission\Middlewares\RoleOrPermissionMiddleware::class,
     ];
 
     /**
