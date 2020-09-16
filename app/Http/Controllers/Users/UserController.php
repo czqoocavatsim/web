@@ -278,7 +278,7 @@ class UserController extends Controller
         $user->avatar_mode = 1;
         $user->save();
 
-        return redirect()->route('dashboard.index')->with('success', 'Avatar changed!');
+        return redirect()->route('my.index')->with('success', 'Avatar changed!');
     }
 
     public function changeAvatarDiscord()
@@ -286,7 +286,7 @@ class UserController extends Controller
         $user = Auth::user();
         $user->avatar_mode = 2;
         $user->save();
-        return redirect()->route('dashboard.index')->with('success', 'Avatar changed!');
+        return redirect()->route('my.index')->with('success', 'Avatar changed!');
     }
 
     public function resetAvatar()
@@ -433,12 +433,12 @@ class UserController extends Controller
         }
         $user = Auth::user();
         if (User::where('discord_user_id', $discordUser->id)->first()) {
-            return redirect()->route('dashboard.index')->with('error-modal', 'This Discord account has already been linked by another user.');
+            return redirect()->route('my.index')->with('error-modal', 'This Discord account has already been linked by another user.');
         }
         $user->discord_user_id = $discordUser->id;
         $user->discord_dm_channel_id = app(Discord::class)->getPrivateChannel($discordUser->id);
         $user->save();
-        return redirect()->route('dashboard.index')->with('success', 'Linked with account '.$discordUser->nickname. '!');
+        return redirect()->route('my.index')->with('success', 'Linked with account '.$discordUser->nickname. '!');
     }
 
     public function joinDiscordServerRedirect()
@@ -472,7 +472,7 @@ class UserController extends Controller
         $discord->guild->addGuildMember($args);
         Auth::user()->notify(new DiscordWelcome());
         $discord->channel->createMessage(['channel.id' => 482860026831175690, 'content' => '<@'.$discordUser->id.'> ('.Auth::id().') has joined.']);
-        return redirect()->route('dashboard.index')->with('success', 'You have joined the CZQO Discord server!');
+        return redirect()->route('my.index')->with('success', 'You have joined the CZQO Discord server!');
     }
 
     public function unlinkDiscord()
@@ -493,7 +493,7 @@ class UserController extends Controller
             $user->avatar_mode = 0;
         }
         $user->save();
-        return redirect()->route('dashboard.index')->with('info', 'Account unlinked.');
+        return redirect()->route('my.index')->with('info', 'Account unlinked.');
     }
 
     public function preferences()

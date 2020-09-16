@@ -99,7 +99,7 @@ class DiscordController extends Controller
 
         //If it doesn't exist...
         if (!$discordAccount) {
-            return redirect()->route('dashboard.index')->with('error-modal', 'There was an error linking your account. Contact the Web Team for assistance.');
+            return redirect()->route('my.index')->with('error-modal', 'There was an error linking your account. Contact the Web Team for assistance.');
         }
 
         //Get current user
@@ -107,7 +107,7 @@ class DiscordController extends Controller
 
         //Duplicate?
         if (User::where('discord_user_id', $discordAccount->id)->first()) {
-            return redirect()->route('dashboard.index')->with('error-modal', 'This Discord account has already been linked by another user.');
+            return redirect()->route('my.index')->with('error-modal', 'This Discord account has already been linked by another user.');
         }
 
         //Edit user
@@ -119,7 +119,7 @@ class DiscordController extends Controller
         if ($param == 'server_join_process') {
             return redirect()->route('me.discord.join');
         } else {
-            return redirect()->route('dashboard.index')->with('success', 'Linked with account '.$discordAccount->nickname. '!');
+            return redirect()->route('my.index')->with('success', 'Linked with account '.$discordAccount->nickname. '!');
         }
     }
 
@@ -160,7 +160,7 @@ class DiscordController extends Controller
         $user->save();
 
         //Redirect
-        return redirect()->route('dashboard.index')->with('info', 'Discord account unlinked.');
+        return redirect()->route('my.index')->with('info', 'Discord account unlinked.');
     }
 
     public function joinRedirectDiscord()
@@ -236,6 +236,6 @@ class DiscordController extends Controller
         ]);
 
         //And back to the dashboard
-        return redirect()->route('dashboard.index')->with('success', 'You have joined the CZQO Discord server!');
+        return redirect()->route('my.index')->with('success', 'You have joined the CZQO Discord server!');
     }
 }

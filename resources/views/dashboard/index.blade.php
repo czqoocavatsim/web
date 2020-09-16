@@ -1,8 +1,9 @@
 @extends('layouts.master')
 @section('content')
-<div class="jarallax card card-image rounded-0" data-jarallax data-speed="0.2">
+
+<div class="jarallax card card-image rounded-0"  data-jarallax data-speed="0.2">
     <img class="jarallax-img" src="{{$bannerImg->path}}" alt="">
-    <div class="text-white text-left rgba-stylish-strong py-3 px-4">
+    <div class="text-white text-left rgba-stylish-strong py-3 pt-5 px-4">
         <div class="container">
             <div class="py-5">
                 <h1 class="h1 my-4 py-2 font-weight-bold" style="font-size: 3em;">
@@ -49,7 +50,7 @@
     </div>
 </div>
 <div class="container py-4">
-    <h1 data-step="1" data-intro="" class="blue-text font-weight-bold">Dashboard</h1>
+    <h1 data-step="1" data-intro="" class="blue-text font-weight-bold">myCZQO</h1>
     {{--@if (Auth::user()->rating_id >= 5)
     <blockquote class="blockquote bq-primary">
         <p class="bq-title">Cross the Pond Eastbound 2019</p>
@@ -66,289 +67,259 @@
     </div>
     @endrole
     <div class="row">
-        <div class="col">
-            <div class="card" id="atcResources">
-                <div class="card-body">
-                    <h3 class="font-weight-bold blue-text pb-2">ATC Resources</h3>
-                    <div class="list-group" style="border-radius: 0.5em !important">
-                        @foreach($atcResources as $resource)
-                        @if($resource->atc_only && Auth::user()->cannot('view certified only atc resource'))
-                            @continue
-                        @else
-                        <a href="{{$resource->url}}" target="_blank" class="list-group-item list-group-item-action">
-                            {{$resource->title}}
-                        </a>
-                        @endif
-                        @endforeach
-                    </div>
-                </div>
-            </div>
-            <br>
-            <div id="yourData" class="card">
-                <div class="card-body">
-                    <h3 class="font-weight-bold blue-text pb-2">Your Data</h3>
-                    <div class="row">
-                        <div class="col" data-step="3" data-intro="Here is an overview of your profile, including your CZQO roles. You can change the way your name is displayed by clicking on your name at the top of the panel. (CoC A4(b))">
-                            <h5 class="card-title">
-                                <a href="" data-toggle="modal" data-target="#changeDisplayNameModal" class="text-dark text-decoration-underline">
-                                    {{ Auth::user()->fullName('FLC') }}
-                                </a>
-                            </h5>
-                            <h6 class="card-subtitle mb-2 text-muted">
-                                {{Auth::user()->rating_GRP}} ({{Auth::user()->rating_short}})
-                            </h6>
-                            Region: {{ Auth::user()->region_name }}<br/>
-                            Division: {{ Auth::user()->division_name }}<br/>
-                            @if (Auth::user()->subdivision_name)
-                            vACC/ARTCC: {{ Auth::user()->subdivision_name }}<br/>
-                            @endif
-                            Role: {{Auth::user()->highestRole()->name}}<br/>
-                            @if(Auth::user()->staffProfile)
-                            Staff Role: {{Auth::user()->staffProfile->position}}
-                            @endif
-                            <br/>
-                            <div data-step="4" data-intro="Here you can link your Discord account to receive training session reminders and to gain access to the CZQO Discord.">
-                            <h5 class="mt-2">Discord</h5>
-                            @if (!Auth::user()->hasDiscord())
-                            <p class="mt-1">You have not linked your Discord account.</p>
-                            <a href="#" data-toggle="modal" data-target="#discordModal" class="mt-1">Link your Discord account</a>
-                            @else
-                            <p class="mt-1"><img style="border-radius:50%; height: 30px;" class="img-fluid" src="{{Auth::user()->getDiscordAvatar()}}" alt="">&nbsp;&nbsp;{{Auth::user()->getDiscordUser()->username}}<span style="color: #d1d1d1;">#{{Auth::user()->getDiscordUser()->discriminator}}</span></p>
-                            @if(!Auth::user()->memberOfCzqoGuild())
-                            <a href="#" data-toggle="modal" data-target="#discordTopModal" class="mt-1">Join The CZQO Discord</a><br/>
-                            @endif
-                            <a href="#" data-toggle="modal" data-target="#discordModal" class="mt-1">Unlink</a>
-                            @endif
-                            </div>
+        <div class="col-md-3">
+            <ul class="list-unstyled w-100">
+                <a class="myczqo-tab active" data-myczqo-tab="yourProfileTab" href="#yourProfile">
+                    <li class="w-100">
+                        <div class="d-flex h-100 flex-row justify-content-left align-items-center">
+                            <i style="font-size: 1.6em; margin-right: 10px;" class="fas fa-user-circle fa-fw"></i>
+                            <span style="font-size: 1.1em;">Your Profile</span>
                         </div>
-                        <div data-step="5" data-intro="You can change your avatar here. Your avatar is available when people view your account and also on the 'Top Controllers' display on the front page." class="col">
-                            <h5 class="card-title">Avatar</h5>
-                            <div class="text-center">
-                                <img src="{{Auth::user()->avatar()}}" style="width: 125px; height: 125px; margin-bottom: 10px; border-radius: 50%;">
-                            </div>
-                            <br/>
-                            <a role="button" data-toggle="modal" data-target="#changeAvatar" class="btn btn-sm shadow-none btn-block bg-czqo-blue-light"  href="#">Change</a>
-                            @if (!Auth::user()->isAvatarDefault())
-                                <a role="button" class="btn btn-sm shadow-none btn-block bg-czqo-blue-light mt-2"  href="{{route('users.resetavatar')}}">Reset</a>
-                            @endif
+                    </li>
+                </a>
+                <a class="myczqo-tab" data-myczqo-tab="certificationTrainingTab" href="#certificationTraining">
+                    <li class="w-100">
+                        <div class="d-flex h-100 flex-row justify-content-left align-items-center">
+                            <i style="font-size: 1.6em; margin-right: 10px;" class="fas fa-graduation-cap fa-fw"></i>
+                            <span style="font-size: 1.1em;">Certfication and Training</span>
                         </div>
-                    </div>
-                    <ul class="list-unstyled mt-2 mb-0">
-                        <li class="mb-2">
-                            <a href="" data-target="#viewBio" data-toggle="modal" style="text-decoration:none;">
-                                <span class="blue-text">
-                                    <i class="fas fa-chevron-right"></i>
-                                </span>
-                                &nbsp;
-                                <span class="black-text">
-                                    View your biography
-                                </span>
-                            </a>
-                        </li>
-                        <li class="mb-2">
-                            <a href="{{route('me.preferences')}}" style="text-decoration:none;">
-                                <span class="blue-text">
-                                    <i class="fas fa-chevron-right"></i>
-                                </span>
-                                &nbsp;
-                                <span class="black-text">
-                                    Manage preferences
-                                </span>
-                            </a>
-                        </li>
-                        <li class="mb-2">
-                            <a href="{{route('me.data')}}" style="text-decoration:none;">
-                                <span class="blue-text">
-                                    <i class="fas fa-chevron-right"></i>
-                                </span>
-                                &nbsp;
-                                <span class="black-text">
-                                    Manage your data
-                                </span>
-                            </a>
-                        </li>
-                    </ul>
-                </div>
-            </div>
-            <br/>
-            @can('view users')
-                <div class="card">
-                    <div class="card-body">
-                        <h3 class="font-weight-bold blue-text pb-2">Users</h3>
-                        <ul class="list-unstyled mt-2 mb-0">
-                            <li class="mb-2">
-                                <a href="{{(route('community.users.index'))}}" style="text-decoration:none;">
-                                    <span class="blue-text">
-                                        <i class="fas fa-chevron-right"></i>
-                                    </span>
-                                    &nbsp;
-                                    <span class="black-text">
-                                        View users
-                                    </span>
-                                </a>
-                            </li>
-                        </ul>
-                    </div>
-                </div>
-            @endcan
-            @can('view network data')
-                <br/>
-                <div class="card">
-                    <div class="card-body">
-                        <h3 class="font-weight-bold blue-text pb-2">Network</h3>
-                        <ul class="list-unstyled mt-2 mb-0">
-                            <li class="mb-2">
-                                <a href="{{route('network.index')}}" style="text-decoration:none;">
-                                    <span class="blue-text">
-                                        <i class="fas fa-chevron-right"></i>
-                                    </span>
-                                    &nbsp;
-                                    <span class="black-text">
-                                        View network data
-                                    </span>
-                                </a>
-                            </li>
-                        </ul>
-                    </div>
-                </div>
-            @endcan
+                    </li>
+                </a>
+                <a class="myczqo-tab" data-myczqo-tab="supportTab" href="#support">
+                    <li class="w-100">
+                        <div class="d-flex h-100 flex-row justify-content-left align-items-center">
+                            <i style="font-size: 1.6em; margin-right: 10px;" class="fas fa-question-circle fa-fw"></i>
+                            <span style="font-size: 1.1em;">Support</span>
+                        </div>
+                    </li>
+                </a>
+                @hasanyrole('Administrator|Senior Staff|Training Team|Marketing Team|Web Team')
+                <a class="myczqo-tab" data-myczqo-tab="staffTab" href="#staff">
+                    <li class="w-100">
+                        <div class="d-flex h-100 flex-row justify-content-left align-items-center">
+                            <i style="font-size: 1.6em; margin-right: 10px;" class="fas fa-cog fa-fw"></i>
+                            <span style="font-size: 1.1em;">Staff</span>
+                        </div>
+                    </li>
+                </a>
+                @endhasanyrole
+                <a class="myczqo-tab no-click" data-myczqo-tab="none" href="https://knowledgebase.ganderoceanic.com">
+                    <li class="w-100">
+                        <div class="d-flex h-100 flex-row justify-content-left align-items-center">
+                            <i style="font-size: 1.6em; margin-right: 10px;" class="fas fa-book fa-fw"></i>
+                            <span style="font-size: 1.1em;">Knowledge Base</span>
+                        </div>
+                    </li>
+                </a>
+                <a class="myczqo-tab no-click" data-myczqo-tab="none" href="{{route('me.data')}}">
+                    <li class="w-100">
+                        <div class="d-flex h-100 flex-row justify-content-left align-items-center">
+                            <i style="font-size: 1.6em; margin-right: 10px;" class="fas fa-database fa-fw"></i>
+                            <span style="font-size: 1.1em;">Manage your data</span>
+                        </div>
+                    </li>
+                </a>
+                <a class="myczqo-tab no-click" data-myczqo-tab="none" href="{{route('me.preferences')}}">
+                    <li class="w-100">
+                        <div class="d-flex h-100 flex-row justify-content-left align-items-center">
+                            <i style="font-size: 1.6em; margin-right: 10px;" class="fas fa-cog fa-fw"></i>
+                            <span style="font-size: 1.1em;">Manage preferences</span>
+                        </div>
+                    </li>
+                </a>
+            </ul>
         </div>
-        <div class="col">
-            <div class="card">
-                <div class="card-body" id="certification">
-                    <h3 class="font-weight-bold blue-text pb-2">Certification and Training</h3>
-                    <h5 class="card-title">Status</h5>
-                    <div class="card-text">
-                        <div class="d-flex flex-row justify-content-left">
-                        @if ($certification == "certified")
-                            <h3>
-                            <span class="badge  badge-success rounded shadow-none">
-                                <i class="fa fa-check"></i>&nbsp;
-                                CZQO Certified
-                            </span>
-                            </h3>
-                        @elseif ($certification == "not_certified")
-                            <h3>
-                            <span class="badge badge-danger rounded shadow-none">
-                                <i class="fa fa-times"></i>&nbsp;
-                                Not Certified
-                            </span>
-                            </h3>
-                        @elseif ($certification == "training")
-                            <h3>
-                            <span class="badge badge-warning rounded shadow-none">
-                                <i class="fa fa-book-open"></i>&nbsp;
-                                In Training
-                            </span>
-                            </h3>
-                        @elseif ($certification == "instructor")
-                            <h3>
-                            <span class="badge badge-info rounded shadow-none">
-                                <i class="fa fa-chalkboard-teacher"></i>&nbsp;
-                                CZQO Instructor
-                            </span>
-                            </h3>
-                        @else
-                            <h3>
-                            <span class="badge badge-dark rounded shadow-none">
-                                <i class="fa fa-question"></i>&nbsp;
-                                Unknown
-                            </span>
-                            </h3>
+        <div class="col-md-9">
+            <div id="yourProfileTab">
+                <h3 class="font-weight-bold blue-text pb-2">Your Profile</h3>
+                <div class="row">
+                    <div class="col" data-step="3" data-intro="Here is an overview of your profile, including your CZQO roles. You can change the way your name is displayed by clicking on your name at the top of the panel. (CoC A4(b))">
+                        <h5 class="card-title">
+                            <a href="" data-toggle="modal" data-target="#changeDisplayNameModal" class="text-dark text-decoration-underline">
+                                {{ Auth::user()->fullName('FLC') }}
+                            </a>
+                        </h5>
+                        <h6 class="card-subtitle mb-2 text-muted">
+                            {{Auth::user()->rating_GRP}} ({{Auth::user()->rating_short}})
+                        </h6>
+                        Region: {{ Auth::user()->region_name }}<br/>
+                        Division: {{ Auth::user()->division_name }}<br/>
+                        @if (Auth::user()->subdivision_name)
+                        vACC/ARTCC: {{ Auth::user()->subdivision_name }}<br/>
                         @endif
-                        @if ($active == 0)
-                            <h3>
-                            <span class="badge ml-2 badge-danger rounded shadow-none">
-                                <i class="fa fa-times"></i>&nbsp;
-                                Inactive
-                            </span>
-                            </h3>
-                        @elseif ($active == 1)
-                            <h3>
-                            <span class="badge ml-2 badge-success rounded shadow-none">
-                                <i class="fa fa-check"></i>&nbsp;
-                                Active
-                            </span>
-                            </h3>
+                        Role: {{Auth::user()->highestRole()->name}}<br/>
+                        @if(Auth::user()->staffProfile)
+                        Staff Role: {{Auth::user()->staffProfile->position}}
+                        @endif
+                        <br/>
+                        <div data-step="4" data-intro="Here you can link your Discord account to receive training session reminders and to gain access to the CZQO Discord.">
+                        <h5 class="mt-2">Discord</h5>
+                        @if (!Auth::user()->hasDiscord())
+                        <p class="mt-1">You have not linked your Discord account.</p>
+                        <a href="#" data-toggle="modal" data-target="#discordModal" class="mt-1">Link your Discord account</a>
+                        @else
+                        <p class="mt-1"><img style="border-radius:50%; height: 30px;" class="img-fluid" src="{{Auth::user()->getDiscordAvatar()}}" alt="">&nbsp;&nbsp;{{Auth::user()->getDiscordUser()->username}}<span style="color: #d1d1d1;">#{{Auth::user()->getDiscordUser()->discriminator}}</span></p>
+                        @if(!Auth::user()->memberOfCzqoGuild())
+                        <a href="#" data-toggle="modal" data-target="#discordTopModal" class="mt-1">Join The CZQO Discord</a><br/>
+                        @endif
+                        <a href="#" data-toggle="modal" data-target="#discordModal" class="mt-1">Unlink</a>
                         @endif
                         </div>
                     </div>
-                   {{--  @if (Auth::user()->rosterProfile)
-                    <h5 class="card-title mt-2">Activity</h5>
-                        @if (Auth::user()->rosterProfile->currency < 0.1)
-                        <h3><span class="badge rounded shadow-none red">
-                            No hours recorded
-                        </span></h3>
-                        @elseif (Auth::user()->rosterProfile->currency < 3.0)
-                        <h3><span class="badge rounded shadow-none blue">
-                            {{Auth::user()->rosterProfile->currency}} hours recorded
-                        </span></h3>
-                        @elseif (Auth::user()->rosterProfile->currency >= 3.0)
-                        <h3><span class="badge rounded shadow-none green">
-                            {{Auth::user()->rosterProfile->currency}} hours recorded
-                        </span></h3>
-                        @endif
-                        <p>You require <b>3 hours</b> of activity each quarter, unless you were certified within the quarter.</p>
-                    @endif --}}
-                    <ul class="list-unstyled mt-2 mb-0">
-                        <li class="mb-2">
-                            <a href="{{route('application.list')}}" style="text-decoration:none;"><span class="blue-text"><i class="fas fa-chevron-right"></i></span> &nbsp; <span class="black-text">View Your Applications</span></a>
-                        </li>{{--
-                        <li class="mb-2">
-                            <a href="{{route('application.list')}}" style="text-decoration:none;"><span class="blue-text"><i class="fas fa-chevron-right"></i></span> &nbsp; <span class="black-text">Training Centre</span></a>
-                        </li> --}}
-                    </ul>
-                </div>
-            </div>
-            <br/>
-            <div id="support" class="card">
-                <div class="card-body">
-                    <h3 class="font-weight-bold blue-text pb-2">Support</h3>
-                    @if (count($openTickets) < 1)
-                        You have no open support tickets
-                    @else
-                        <div class="alert bg-czqo-blue-light">
-                            <h5 class="black-text">
-                                @if (count($openTickets) == 1)
-                                    1 open ticket
-                                @else
-                                    {{count($openTickets)}} open tickets
-                                @endif
-                            </h5>
-                            <div class="list-group">
-                                @foreach ($openTickets as $ticket)
-                                    <a href="{{url('/dashboard/tickets/'.$ticket->ticket_id)}}" class="list-group-item list-group-item-action bg-czqo-blue-light black-text rounded-0 ">{{$ticket->title}}<br/>
-                                        <small title="{{$ticket->updated_at}} (GMT+0, Zulu)">Last updated {{$ticket->updated_at_pretty()}}</small>
-                                    </a>
-                                @endforeach
-                            </div>
+                    <div data-step="5" data-intro="You can change your avatar here. Your avatar is available when people view your account and also on the 'Top Controllers' display on the front page." class="col">
+                        <h5 class="card-title">Avatar</h5>
+                        <div class="text-center">
+                            <img src="{{Auth::user()->avatar()}}" style="width: 125px; height: 125px; margin-bottom: 10px; border-radius: 50%;">
                         </div>
-                    @endif
-                    <ul class="list-unstyled mt-2 mb-0">
-                        <li class="mb-2">
-                            <a href="{{route('feedback.create')}}" style="text-decoration:none;"><span class="blue-text"><i class="fas fa-chevron-right"></i></span> &nbsp; <span class="black-text">Send feedback to staff</span></a>
-                        </li>
-                        <li class="mb-2">
-                            <a href="{{route('tickets.index', ['create' => 'yes'])}}" style="text-decoration:none;"><span class="blue-text"><i class="fas fa-chevron-right"></i></span> &nbsp; <span class="black-text">Start a support ticket</span></a>
-                        </li>
-                        <li class="mb-2">
-                            <a href="{{route('tickets.index')}}" style="text-decoration:none;"><span class="blue-text"><i class="fas fa-chevron-right"></i></span> &nbsp; <span class="black-text">View previous support tickets</span></a>
-                        </li>
-                        @can('view tickets')
-                        <li class="mb-2">
-                            <a href="{{route('tickets.staff')}}" style="text-decoration:none;"><span class="blue-text"><i class="fas fa-chevron-right"></i></span> &nbsp; <span class="black-text">View staff ticket inbox</span></a>
-                        </li>
-                        @endcan
-                        <li class="mb-2">
-                            <a href="https://kb.ganderoceanic.com" target="_blank" style="text-decoration:none;"><span class="blue-text"><i class="fas fa-chevron-right"></i></span> &nbsp; <span class="black-text">CZQO Knowledge Base</span></a>
-                        </li>
-                    </ul>
+                        <br/>
+                        <a role="button" data-toggle="modal" data-target="#changeAvatar" class="btn btn-sm shadow-none btn-block bg-czqo-blue-light"  href="#">Change</a>
+                        @if (!Auth::user()->isAvatarDefault())
+                            <a role="button" class="btn btn-sm shadow-none btn-block bg-czqo-blue-light mt-2"  href="{{route('users.resetavatar')}}">Reset</a>
+                        @endif
+                    </div>
                 </div>
+                <ul class="list-unstyled mt-2 mb-0">
+                    <li class="mb-2">
+                        <a href="" data-target="#viewBio" data-toggle="modal" style="text-decoration:none;">
+                            <span class="blue-text">
+                                <i class="fas fa-chevron-right"></i>
+                            </span>
+                            &nbsp;
+                            <span class="black-text">
+                                View your biography
+                            </span>
+                        </a>
+                    </li>
+                </ul>
             </div>
-            <br/>
-            @hasanyrole('Administrator|Senior Staff|Training Team|Marketing Team|Web Team')
-            <div class="card">
-                <div class="card-body">
+            <div id="supportTab" style="display:none;">
+                <h3 class="font-weight-bold blue-text pb-2">Support</h3>
+                @if (count($openTickets) < 1)
+                    You have no open support tickets
+                @else
+                    <div class="alert bg-czqo-blue-light">
+                        <h5 class="black-text">
+                            @if (count($openTickets) == 1)
+                                1 open ticket
+                            @else
+                                {{count($openTickets)}} open tickets
+                            @endif
+                        </h5>
+                        <div class="list-group">
+                            @foreach ($openTickets as $ticket)
+                                <a href="{{url('/dashboard/tickets/'.$ticket->ticket_id)}}" class="list-group-item list-group-item-action bg-czqo-blue-light black-text rounded-0 ">{{$ticket->title}}<br/>
+                                    <small title="{{$ticket->updated_at}} (GMT+0, Zulu)">Last updated {{$ticket->updated_at_pretty()}}</small>
+                                </a>
+                            @endforeach
+                        </div>
+                    </div>
+                @endif
+                <ul class="list-unstyled mt-2 mb-0">
+                    <li class="mb-2">
+                        <a href="{{route('feedback.create')}}" style="text-decoration:none;"><span class="blue-text"><i class="fas fa-chevron-right"></i></span> &nbsp; <span class="black-text">Send feedback to staff</span></a>
+                    </li>
+                    <li class="mb-2">
+                        <a href="{{route('tickets.index', ['create' => 'yes'])}}" style="text-decoration:none;"><span class="blue-text"><i class="fas fa-chevron-right"></i></span> &nbsp; <span class="black-text">Start a support ticket</span></a>
+                    </li>
+                    <li class="mb-2">
+                        <a href="{{route('tickets.index')}}" style="text-decoration:none;"><span class="blue-text"><i class="fas fa-chevron-right"></i></span> &nbsp; <span class="black-text">View previous support tickets</span></a>
+                    </li>
+                    @can('view tickets')
+                    <li class="mb-2">
+                        <a href="{{route('tickets.staff')}}" style="text-decoration:none;"><span class="blue-text"><i class="fas fa-chevron-right"></i></span> &nbsp; <span class="black-text">View staff ticket inbox</span></a>
+                    </li>
+                    @endcan
+                    <li class="mb-2">
+                        <a href="https://kb.ganderoceanic.com" target="_blank" style="text-decoration:none;"><span class="blue-text"><i class="fas fa-chevron-right"></i></span> &nbsp; <span class="black-text">CZQO Knowledge Base</span></a>
+                    </li>
+                </ul>
+            </div>
+            <div id="certificationTrainingTab" style="display:none">
+                <h3 class="font-weight-bold blue-text pb-2">Certification and Training</h3>
+                <h5 class="card-title">Status</h5>
+                <div class="card-text">
+                    <div class="d-flex flex-row justify-content-left">
+                    @if ($certification == "certified")
+                        <h3>
+                        <span class="badge  badge-success rounded shadow-none">
+                            <i class="fa fa-check"></i>&nbsp;
+                            CZQO Certified
+                        </span>
+                        </h3>
+                    @elseif ($certification == "not_certified")
+                        <h3>
+                        <span class="badge badge-danger rounded shadow-none">
+                            <i class="fa fa-times"></i>&nbsp;
+                            Not Certified
+                        </span>
+                        </h3>
+                    @elseif ($certification == "training")
+                        <h3>
+                        <span class="badge badge-warning rounded shadow-none">
+                            <i class="fa fa-book-open"></i>&nbsp;
+                            In Training
+                        </span>
+                        </h3>
+                    @elseif ($certification == "instructor")
+                        <h3>
+                        <span class="badge badge-info rounded shadow-none">
+                            <i class="fa fa-chalkboard-teacher"></i>&nbsp;
+                            CZQO Instructor
+                        </span>
+                        </h3>
+                    @else
+                        <h3>
+                        <span class="badge badge-dark rounded shadow-none">
+                            <i class="fa fa-question"></i>&nbsp;
+                            Unknown
+                        </span>
+                        </h3>
+                    @endif
+                    @if ($active == 0)
+                        <h3>
+                        <span class="badge ml-2 badge-danger rounded shadow-none">
+                            <i class="fa fa-times"></i>&nbsp;
+                            Inactive
+                        </span>
+                        </h3>
+                    @elseif ($active == 1)
+                        <h3>
+                        <span class="badge ml-2 badge-success rounded shadow-none">
+                            <i class="fa fa-check"></i>&nbsp;
+                            Active
+                        </span>
+                        </h3>
+                    @endif
+                    </div>
+                </div>
+                {{--  @if (Auth::user()->rosterProfile)
+                <h5 class="card-title mt-2">Activity</h5>
+                @if (Auth::user()->rosterProfile->currency < 0.1)
+                <h3><span class="badge rounded shadow-none red">
+                    No hours recorded
+                </span></h3>
+                @elseif (Auth::user()->rosterProfile->currency < 3.0)
+                <h3><span class="badge rounded shadow-none blue">
+                    {{Auth::user()->rosterProfile->currency}} hours recorded
+                </span></h3>
+                @elseif (Auth::user()->rosterProfile->currency >= 3.0)
+                <h3><span class="badge rounded shadow-none green">
+                    {{Auth::user()->rosterProfile->currency}} hours recorded
+                </span></h3>
+                @endif
+                <p>You require <b>3 hours</b> of activity each quarter, unless you were certified within the quarter.</p>
+                @endif --}}
+                <ul class="list-unstyled mt-2 mb-0">
+                    <li class="mb-2">
+                        <a href="{{route('application.list')}}" style="text-decoration:none;"><span class="blue-text"><i class="fas fa-chevron-right"></i></span> &nbsp; <span class="black-text">View Your Applications</span></a>
+                    </li>{{--
+                    <li class="mb-2">
+                        <a href="{{route('application.list')}}" style="text-decoration:none;"><span class="blue-text"><i class="fas fa-chevron-right"></i></span> &nbsp; <span class="black-text">Training Centre</span></a>
+                    </li> --}}
+                </ul>
+            </div>
+            <div id="staffTab" style="display:none">
+                @hasanyrole('Administrator|Senior Staff|Training Team|Marketing Team|Web Team')
                     <h3 class="font-weight-bold blue-text pb-2">Staff</h3>
                     <ul class="list-unstyled mt-2 mb-0">
                         @can('view events')
@@ -369,14 +340,43 @@
                             <a href="{{route('settings.index')}}" style="text-decoration:none;"><span class="blue-text"><i class="fas fa-chevron-right"></i></span> &nbsp; <span class="black-text">Settings</span></a>
                         </li>
                     </ul>
+
                     @endcan
-                </div>
+                    <h3 class="font-weight-bold blue-text pb-2">Users</h3>
+                    <ul class="list-unstyled mt-2 mb-0">
+                        <li class="mb-2">
+                            <a href="{{(route('community.users.index'))}}" style="text-decoration:none;">
+                                <span class="blue-text">
+                                    <i class="fas fa-chevron-right"></i>
+                                </span>
+                                &nbsp;
+                                <span class="black-text">
+                                    View users
+                                </span>
+                            </a>
+                        </li>
+                    </ul>
+
+                    <h3 class="font-weight-bold blue-text pb-2">Network</h3>
+                    <ul class="list-unstyled mt-2 mb-0">
+                        <li class="mb-2">
+                            <a href="{{route('network.index')}}" style="text-decoration:none;">
+                                <span class="blue-text">
+                                    <i class="fas fa-chevron-right"></i>
+                                </span>
+                                &nbsp;
+                                <span class="black-text">
+                                    View network data
+                                </span>
+                            </a>
+                        </li>
+                    </ul>
+                @endhasanyrole
             </div>
-            @endhasanyrole
+            <br/>
+            <a href="javascript:void(0);" onclick="javascript:startTutorial()">View the tutorial</a>
         </div>
     </div>
-    <br/>
-    <a href="javascript:void(0);" onclick="javascript:startTutorial()">View the tutorial</a>
 </div>
 
 <!-- Intro js -->
@@ -617,7 +617,7 @@
     </div>
 </div>
 @endif
-<!--End join guild modal
+<!--End join guild modal-->
 
 {{-- <div class="modal fade" id="ctpSignUpModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered" role="document">

@@ -3,7 +3,7 @@
 @section('content')
     <div class="container" style="margin-top: 20px;">
         <div class="container" style="margin-top: 20px;">
-            <a href="{{route('dashboard.index')}}" class="blue-text" style="font-size: 1.2em;"> <i class="fas fa-arrow-left"></i> Dashboard</a>
+            <a href="{{route('my.index')}}" class="blue-text" style="font-size: 1.2em;"> <i class="fas fa-arrow-left"></i> Dashboard</a>
         <h1 class="blue-text font-weight-bold mt-2">Ticket Inbox</h1>
         <hr>
         <ul class="nav nav-tabs" id="myTab" role="tablist">

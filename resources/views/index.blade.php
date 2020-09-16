@@ -2,11 +2,11 @@
 @section('description', 'Cool, calm and collected oceanic control services in the North Atlantic on VATSIM.')
 
 @section('content')
-    <div data-jarallax data-speed="0.2" class="jarallax" style="height: calc(100vh - 59px)">
-        <div class="mask flex-center flex-column" style="position:absolute; top:0; left:0; z-index: 1; height: 100%; width: 100%; background: linear-gradient(40deg,rgba(69,202,252,.7),rgba(48,63,159,.4))!important;">
+    <div data-jarallax data-speed="0.2" class="jarallax" style="height: calc(100vh)">
+        <div class="mask flex-center flex-column" style="position:absolute; top:0; left:0; z-index: 1; height: 100%; width: 100%; background: linear-gradient(40deg,rgba(3, 149, 233, 0.7),rgba(48,63,159,.4))!important;">
             <div class="container">
                 <div class="py-5">
-                    <h1 class="h1 my-4 py-2" style="font-size: 3em; color: #fff;">Cool, calm and collected oceanic control services over the North Atlantic.</h1>
+                    <h1 class="h1 my-4 py-2 font-weight-bold" style="font-size: 3em; width: 75%; color: #fff;">Cool, calm and collected oceanic control services over the North Atlantic.</h1>
                     <h4><a href="#blueBannerMid" id="discoverMore" class="white-text" style="transition:fade 0.4s;">Find out more&nbsp;&nbsp;<i class="fas fa-arrow-down"></i></a></h4>
                 </div>
             </div>

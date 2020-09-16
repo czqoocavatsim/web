@@ -100,7 +100,41 @@
         </div>
     @endif
     <header>
+        @if ($errors->any())
+            <div class="alert alert-danger" style="margin: 0; border-radius: 0; border: none;">
+                <div class="container">
+                    @foreach ($errors->all() as $error)
+                        {{ $error }} <br>
+                    @endforeach
+                </div>
+            </div>
+        @endif
+        @if (\Session::has('success'))
+            <div class="alert alert-success" style="margin: 0; border-radius: 0; border: none;">
+                <div class="container">
+                    {!! \Session::get('success') !!}
+                </div>
+            </div>
+        @endif
+        @if (\Session::has('error'))
+            <div class="alert alert-danger" style="margin: 0; border-radius: 0; border: none;">
+                <div class="container">
+                    {!! \Session::get('error') !!}
+                </div>
+            </div>
+        @endif
+        @if (\Session::has('info'))
+            <div class="alert alert-info" style="margin: 0; border-radius: 0; border: none;">
+                <div class="container">
+                    {!! \Session::get('info') !!}
+                </div>
+            </div>
+        @endif
+        @if(Request::is('my') || Request::is('/'))
+        <nav id="czqoHeaderLight" class="navbar navbar-expand-lg navbar-dark transparent shadow-none p-0" style="min-height:59px; z-index:999;">
+        @else
         <nav id="czqoHeaderLight" class="navbar navbar-expand-lg navbar-dark blue p-0" style="min-height:59px;">
+        @endif
             <div class="container">
                 <a class="navbar-brand" href="{{route('index')}}"><img style="height: 40px; width:auto;" id="czqoHeaderImg" src="https://resources.ganderoceanic.com/media/img/brand/bnr/ZQO_BNR_TSPWHITE.png" alt=""></a>
                 <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
@@ -180,11 +214,11 @@
                                 <img src="{{Auth::user()->avatar()}}" style="height: 27px; width: 27px; margin-right: 7px; margin-bottom: 3px; border-radius: 50%;">&nbsp;<span class="font-weight-bold">{{Auth::user()->fullName("F")}}</span>
                             </a>
                             <div class="dropdown-menu dropdown-menu-right dropdown-default py-0" aria-labelledby="navbarDropdownMenuLink-333">
-                                <a class="dropdown-item {{ Request::is('dashboard') || Request::is('dashboard/*') ? 'active white-text' : '' }}" href="{{route('dashboard.index')}}">
-                                    <i class="fa fa-tachometer-alt mr-2"></i>&nbsp;Dashboard
+                                <a class="dropdown-item {{ Request::is('my') || Request::is('my/*') ? 'active white-text' : '' }}" href="{{route('my.index')}}">
+                                    <img style="height: 25px; margin-left:-3px;" src="{{ Request::is('my') || Request::is('my/*') ? 'https://resources.ganderoceanic.com/media/img/brand/sqr/ZQO_SQ_TSPWHITE.png' : 'https://resources.ganderoceanic.com/media/img/brand/sqr/ZQO_SQ_TSPBLUE.png' }}" alt="">&nbsp;<span class="float-right">myCZQO</span>
                                 </a>
                                 <a class="dropdown-item red-text" href="{{route('auth.logout')}}">
-                                    <i class="fa fa-key mr-2"></i>&nbsp;Logout
+                                    <i class="fa fa-key mr-2"></i>&nbsp;<span class="float-right">Logout</span>
                                 </a>
                             </div>
                         </li>
@@ -209,38 +243,9 @@
             </div>
         </nav>
     </header>
-    @if ($errors->any())
-        <div class="alert alert-danger" style="margin: 0; border-radius: 0; border: none;">
-            <div class="container">
-                @foreach ($errors->all() as $error)
-                    {{ $error }} <br>
-                @endforeach
-            </div>
-        </div>
-    @endif
-    @if (\Session::has('success'))
-        <div class="alert alert-success" style="margin: 0; border-radius: 0; border: none;">
-            <div class="container">
-                {!! \Session::get('success') !!}
-            </div>
-        </div>
-    @endif
-    @if (\Session::has('error'))
-        <div class="alert alert-danger" style="margin: 0; border-radius: 0; border: none;">
-            <div class="container">
-                {!! \Session::get('error') !!}
-            </div>
-        </div>
-    @endif
-    @if (\Session::has('info'))
-        <div class="alert alert-info" style="margin: 0; border-radius: 0; border: none;">
-            <div class="container">
-                {!! \Session::get('info') !!}
-            </div>
-        </div>
-    @endif
     <!--End header-->
-    <div id="czqoContent">
+
+    <div id="czqoContent" @if(Request::is('my') || Request::is('/')) style="margin-top: -59px;" @endif>
         @yield('content')
     </div>
     <!-- Footer -->

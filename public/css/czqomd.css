@@ -95,6 +95,29 @@ body[data-theme="dark"] .modal-content .close {
     color: #eee !important;
 }
 
+.myczqo-tab {
+    color: inherit;
+}
+
+.myczqo-tab li {
+    height: 35px;
+    border-right: 3px solid #eeeeee;
+}
+
+.myczqo-tab.active li {
+    border-right: 3px solid var(--czqo-blue);
+    color: var(--czqo-blue)
+}
+
+.myczqo-tab:hover {
+    text-decoration: none;
+    color: var(--czqo-blue);
+}
+
+.myczqo-tab:hover li {
+    border-right: 3px solid var(--czqo-blue);
+}
+
 #czqoHeaderImg {
     width: 225px;
     margin-bottom: 4px;

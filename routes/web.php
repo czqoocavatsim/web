@@ -69,8 +69,9 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('/privacydeny', 'Users\UserController@privacyDeny');
     Route::view('/me/accept-privacy-policy', 'accept-privacy-policy')->name('accept-privacy-policy');
 
-    //Dashboard
-    Route::get('/dashboard', 'PrimaryViewsController@dashboard')->name('dashboard.index');
+    //Dashboard/MyCZQO
+    Route::get('/dashboard', function() { return redirect(route('my.index'), 301); });
+    Route::get('/my', 'PrimaryViewsController@dashboard')->name('my.index');
 
     //GDPR
     Route::get('/me/data', 'Users\DataController@index')->name('me.data');
@@ -126,7 +127,7 @@ Route::group(['middleware' => 'auth'], function () {
         Route::get('/dashboard/application/{application_id}', 'AtcTraining\ApplicationsController@viewApplication')->name('application.view');
         Route::get('/dashboard/application/{application_id}/withdraw', 'AtcTraining\ApplicationsController@withdrawApplication');
 
-        //"Me"
+        //"My"
         Route::get('/me/editbiography', 'Users\UserController@editBioIndex')->name('me.editbioindex');
         Route::post('/me/editbiography', 'Users\UserController@editBio')->name('me.editbio');
         Route::get('/me/discord/unlink', 'Community\DiscordController@unlinkDiscord')->name('me.discord.unlink');
