@@ -29,7 +29,7 @@ class PrimaryViewsController extends Controller
 
         //News
         $news = News::where('visible', true)->get()->sortByDesc('published')->take(3);
-        $certifications = HomeNewControllerCert::all()->sortByDesc('timestamp')->take(6);
+        $certifications = HomeNewControllerCert::all()->sortByDesc('timestamp')->take(4);
 
         //Next event
         $nextEvent = Event::where('start_timestamp', '>', Carbon::now())->get()->sortByDesc('id')->first();
