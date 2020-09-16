@@ -210,6 +210,13 @@ Route::group(['middleware' => 'auth'], function () {
                 });
             });
 
+            //Training
+            Route::prefix('training')->group(function () {
+                Route::name('training.admin.')->group(function () {
+                    Route::get('/', 'Training\TrainingAdminController@dashboard')->name('dashboard');
+                });
+            });
+
             //News
             Route::prefix('news')->group(function () {
                 Route::group(['middleware' => 'can:view articles'], function () {
