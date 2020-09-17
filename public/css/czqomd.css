@@ -353,3 +353,60 @@ body[data-theme="dark"]  ::placeholder {
 body[data-theme="dark"] .list-group-item.bg-czqo-blue-light {
     background-color: #cfeaff !important;
 }
+
+.myczqo_avatar_container {
+    height: 125px;
+    margin-bottom: 10px;
+    text-align: center;
+}
+
+.myczqo_avatar_container .myczqo_avatar_object {
+    width: 125px;
+    background: inherit;
+    display: inline-block;
+    vertical-align: middle;
+}
+
+.myczqo_avatar_container img {
+    height: 100%;
+    width: 100%;
+    border-radius: 50%;
+    background: inherit;
+
+}
+
+.myczqo_avatar_container .img_overlay {
+     position: absolute;
+     z-index: 998;
+     top: 0;
+     opacity: 0;
+     height: 125px;
+     width: 125px;
+     border-radius: 50%;
+     background: inherit;
+    transition: 0.5s ease;
+}
+
+.myczqo_avatar_container .img_overlay_text{
+    z-index: 999;
+    color: white;
+    margin-top: 40%;
+    opacity: 1;
+    font-size: 1.5em;
+    font-weight: 800;
+}
+
+.myczqo_avatar_container .img_overlay_text a {
+    transition: 0.4s ease;
+    color: white;
+}
+
+.myczqo_avatar_container .img_overlay_text a:hover {
+    text-decoration: underline;
+}
+
+.myczqo_avatar_container .img_overlay:hover {
+    opacity: 0.5;
+
+    background: #fff;
+}

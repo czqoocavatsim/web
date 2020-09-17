@@ -51,18 +51,11 @@
 </div>
 <div class="container py-4">
     <h1 data-step="1" data-intro="" class="blue-text font-weight-bold">myCZQO</h1>
-    {{--@if (Auth::user()->rating_id >= 5)
-    <blockquote class="blockquote bq-primary">
-        <p class="bq-title">Cross the Pond Eastbound 2019</p>
-        <p>Are you available to control for CTP Eastbound 2019? Fill out the CZQO sign-up form to control either Gander or Shanwick Oceanic for the event!
-            <br/>
-            <a href="#" role="button" class="btn btn-primary" data-toggle="modal" data-target="#ctpSignUpModal">Sign Up</a>
-        </p>
-    </blockquote>
-    @endif--}}
+    @if (Auth::user()->rating_id >= 5)
+    @endif
     <br class="my-2">
     @role('Restricted')
-    <div class="alert bg-czqo-blue-light">
+    <div class="alert bg-czqo-blue-light mb-4">
         Your account on Gander Oceanic is currently restricted. You cannot access pages that require an account, except for "Manage your data". Contact the OCA Chief for more information.
     </div>
     @endrole
@@ -134,63 +127,92 @@
                 <h3 class="font-weight-bold blue-text pb-2">Your Profile</h3>
                 <div class="row">
                     <div class="col" data-step="3" data-intro="Here is an overview of your profile, including your CZQO roles. You can change the way your name is displayed by clicking on your name at the top of the panel. (CoC A4(b))">
-                        <h5 class="card-title">
-                            <a href="" data-toggle="modal" data-target="#changeDisplayNameModal" class="text-dark text-decoration-underline">
-                                {{ Auth::user()->fullName('FLC') }}
-                            </a>
-                        </h5>
-                        <h6 class="card-subtitle mb-2 text-muted">
-                            {{Auth::user()->rating_GRP}} ({{Auth::user()->rating_short}})
-                        </h6>
-                        Region: {{ Auth::user()->region_name }}<br/>
-                        Division: {{ Auth::user()->division_name }}<br/>
-                        @if (Auth::user()->subdivision_name)
-                        vACC/ARTCC: {{ Auth::user()->subdivision_name }}<br/>
-                        @endif
-                        Role: {{Auth::user()->highestRole()->name}}<br/>
-                        @if(Auth::user()->staffProfile)
-                        Staff Role: {{Auth::user()->staffProfile->position}}
-                        @endif
+                        <div class="d-flex flex-row">
+                            <div class="myczqo_avatar_container" style=" margin-bottom: 10px; margin-right: 20px;">
+                                <a href="#" data-toggle="modal" data-target="#changeAvatar">
+                                <div class="myczqo_avatar_object">
+                                    <img src="{{Auth::user()->avatar()}}" style="width: 125px; height: 125px; border-radius: 50%;">
+                                    <div class="img_overlay"></div>
+                                </div>
+                                </a>
+                            </div>
+                            <div>
+                                <h5 class="card-title">
+                                    <a href="" data-toggle="modal" data-target="#changeDisplayNameModal" class="text-dark text-decoration-underline">
+                                        {{ Auth::user()->fullName('FLC') }}
+                                    </a>
+                                </h5>
+                                <h6 class="card-subtitle mb-2 text-muted">
+                                    {{Auth::user()->rating_GRP}} ({{Auth::user()->rating_short}})
+                                </h6>
+                                Region: {{ Auth::user()->region_name }}<br/>
+                                Division: {{ Auth::user()->division_name }}<br/>
+                                @if (Auth::user()->subdivision_name)
+                                vACC/ARTCC: {{ Auth::user()->subdivision_name }}<br/>
+                                @endif
+                                Role: {{Auth::user()->highestRole()->name}}<br/>
+                                @if(Auth::user()->staffProfile)
+                                Staff Role: {{Auth::user()->staffProfile->position}}
+                                @endif
+                            </div>
+                        </div>
                         <br/>
                         <div data-step="4" data-intro="Here you can link your Discord account to receive training session reminders and to gain access to the CZQO Discord.">
-                        <h5 class="mt-2">Discord</h5>
+                        <h3 class="mt-2" style="font-size: 1.3em;">Discord</h3>
                         @if (!Auth::user()->hasDiscord())
                         <p class="mt-1">You have not linked your Discord account.</p>
-                        <a href="#" data-toggle="modal" data-target="#discordModal" class="mt-1">Link your Discord account</a>
-                        @else
-                        <p class="mt-1"><img style="border-radius:50%; height: 30px;" class="img-fluid" src="{{Auth::user()->getDiscordAvatar()}}" alt="">&nbsp;&nbsp;{{Auth::user()->getDiscordUser()->username}}<span style="color: #d1d1d1;">#{{Auth::user()->getDiscordUser()->discriminator}}</span></p>
-                        @if(!Auth::user()->memberOfCzqoGuild())
-                        <a href="#" data-toggle="modal" data-target="#discordTopModal" class="mt-1">Join The CZQO Discord</a><br/>
-                        @endif
-                        <a href="#" data-toggle="modal" data-target="#discordModal" class="mt-1">Unlink</a>
-                        @endif
-                        </div>
-                    </div>
-                    <div data-step="5" data-intro="You can change your avatar here. Your avatar is available when people view your account and also on the 'Top Controllers' display on the front page." class="col">
-                        <h5 class="card-title">Avatar</h5>
-                        <div class="text-center">
-                            <img src="{{Auth::user()->avatar()}}" style="width: 125px; height: 125px; margin-bottom: 10px; border-radius: 50%;">
-                        </div>
-                        <br/>
-                        <a role="button" data-toggle="modal" data-target="#changeAvatar" class="btn btn-sm shadow-none btn-block bg-czqo-blue-light"  href="#">Change</a>
-                        @if (!Auth::user()->isAvatarDefault())
-                            <a role="button" class="btn btn-sm shadow-none btn-block bg-czqo-blue-light mt-2"  href="{{route('users.resetavatar')}}">Reset</a>
-                        @endif
-                    </div>
-                </div>
-                <ul class="list-unstyled mt-2 mb-0">
-                    <li class="mb-2">
-                        <a href="" data-target="#viewBio" data-toggle="modal" style="text-decoration:none;">
+                        <a href="#" data-toggle="modal" data-target="#discordModal" style="text-decoration:none;">
                             <span class="blue-text">
                                 <i class="fas fa-chevron-right"></i>
                             </span>
                             &nbsp;
                             <span class="black-text">
-                                View your biography
+                                Link your Discord
                             </span>
                         </a>
-                    </li>
-                </ul>
+                        @else
+                        <p class="mt-1" style="font-size: 1.1em;"><img style="border-radius:50%; height: 30px;" class="img-fluid" src="{{Auth::user()->getDiscordAvatar()}}" alt="">&nbsp;&nbsp;{{Auth::user()->getDiscordUser()->username}}<span style="color: #d1d1d1;">#{{Auth::user()->getDiscordUser()->discriminator}}</span></p>
+                        @if(!Auth::user()->memberOfCzqoGuild())
+                        <a href="#" data-toggle="modal" data-target="#discordTopModal" style="text-decoration:none;">
+                            <span class="blue-text">
+                                <i class="fas fa-chevron-right"></i>
+                            </span>
+                            &nbsp;
+                            <span class="black-text">
+                                Join Our Discord
+                            </span>
+                        </a>
+                        @endif
+                        <a href="#" data-toggle="modal" data-target="#discordModal"  style="text-decoration:none;">
+                            <span class="blue-text">
+                                <i class="fas fa-chevron-right"></i>
+                            </span>
+                            &nbsp;
+                            <span class="black-text">
+                                Unlink
+                            </span>
+                        </a>
+                        @endif
+                        <h3 class="mt-4" style="font-size: 1.3em;">Biography</h3>
+                        <p>
+                        @if (Auth::user()->bio)
+                        {{Auth::user()->bio}}
+                        @else
+                            You have no biography.
+                        @endif
+                        </p>
+                        <a href="{{route('me.editbioindex')}}" style="text-decoration:none;">
+                            <span class="blue-text">
+                                <i class="fas fa-chevron-right"></i>
+                            </span>
+                            &nbsp;
+                            <span class="black-text">
+                                Edit
+                            </span>
+                        </a>
+                        </div>
+                    </div>
+                </div>
             </div>
             <div id="supportTab" style="display:none;">
                 <h3 class="font-weight-bold blue-text pb-2">Support</h3>
@@ -423,20 +445,20 @@
 <div class="modal fade" id="changeAvatar" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered" role="document">
         <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLongTitle">Change avatar</h5>
+            <div class="modal-header" style="border-bottom: none">
+                <h5 class="modal-title" id="exampleModalLongTitle">Change your avatar</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
             <form method="post" action="{{route('users.changeavatar')}}" enctype="multipart/form-data" class="" id="">
             <div class="modal-body">
-                <p>Please ensure your avatar complies with the VATSIM Code of Conduct. This avatar will be visible to staff members, viewable on the top controllers table, and if you're a staff member yourself, viewable on the staff page.</p>
+                <p>Your avatar must comply with the VATSIM Code of Conduct.</p>
                 @csrf
                 <div class="input-group pb-3">
                     <div class="custom-file">
                         <input type="file" class="custom-file-input" name="file">
-                        <label class="custom-file-label">Choose file</label>
+                        <label class="custom-file-label">Choose image file</label>
                     </div>
                 </div>
                 @if(Auth::user()->hasDiscord())
@@ -445,7 +467,7 @@
                 @endif
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-light" data-dismiss="modal">Dismiss</button>
+                <a href="{{route('users.resetavatar')}}" role="button" class="btn btn-light">Reset Avatar</a>
                 <input type="submit" class="btn btn-success" value="Upload">
             </div>
             </form>
