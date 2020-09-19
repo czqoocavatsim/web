@@ -36,6 +36,9 @@
                     ?>
                     {{Auth::user()->fullName('F')}}!
                 </h1>
+                @if(isset($quote))
+                <p style="font-size: 1.2em;">{{$quote->contents->quotes[0]->quote}} ~ {{$quote->contents->quotes[0]->author}}</p>
+                @endif
             </div>
         </div>
         @if(Auth::user()->created_at->diffInDays(Carbon\Carbon::now()) < 14) <!--14 days since user signed up-->
@@ -399,6 +402,7 @@
             <a href="javascript:void(0);" onclick="javascript:startTutorial()">View the tutorial</a>
         </div>
     </div>
+    <small class="text-muted">Quote of the day provided by <a href="https://theysaidso.com">https://theysaidso.com</a></small>
 </div>
 
 <!-- Intro js -->

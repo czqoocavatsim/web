@@ -11,6 +11,7 @@ use App\Models\Tickets\Ticket;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Cache;
 
 class PrimaryViewsController extends Controller
 {
@@ -78,10 +79,22 @@ class PrimaryViewsController extends Controller
 
         $bannerImg = RotationImage::all()->random();
 
+        //Quote of the day
+        $quote = Cache::remember('quoteoftheday', 86400, function () {
+            //Download via CURL
+            $url = 'https://quotes.rest/qod';
+            $ch = curl_init();
+            curl_setopt($ch, CURLOPT_URL, $url);
+            curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+            $output = curl_exec($ch);
+            curl_close($ch);
+            return json_decode($output);
+        });
+
         if ($user->preferences->enable_beta_features) {
             return view('dashboard.indexnew', compact('openTickets', 'certification', 'active', 'atcResources', 'bannerImg'));
         } else {
-            return view('dashboard.index', compact('openTickets', 'certification', 'active', 'atcResources', 'bannerImg'));
+            return view('dashboard.index', compact('openTickets', 'certification', 'active', 'atcResources', 'bannerImg', 'quote'));
         }
     }
 }

@@ -16,4 +16,13 @@ class RosterController extends Controller
         //Return view
         return view('roster', compact('roster'));
     }
+
+    public function admin()
+    {
+        //Get the roster
+        $roster = RosterMember::all();
+
+        //Return the view
+        return view('admin.training.roster.index');
+    }
 }

@@ -215,6 +215,7 @@ Route::group(['middleware' => 'auth'], function () {
             Route::prefix('training')->group(function () {
                 Route::name('training.admin.')->group(function () {
                     Route::get('/', 'Training\TrainingAdminController@dashboard')->name('dashboard');
+                    Route::get('/roster', 'Training\TrainingAdminController@rosterView')->name('roster');
                 });
             });
 
