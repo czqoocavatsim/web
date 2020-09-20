@@ -22,7 +22,7 @@ class RosterController extends Controller
         //Get the roster
         $roster = RosterMember::all();
 
-        //Return the view
-        return view('admin.training.roster.index', compact('roster'));
+        //Return view
+        return view('admin.training.roster.index');
     }
 }
