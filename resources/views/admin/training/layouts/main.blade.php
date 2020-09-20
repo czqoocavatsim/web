@@ -17,7 +17,7 @@
                         </div>
                     </li>
                 </a>
-                <a class="myczqo-tab {{Request::is(route('training.admin.dashboard')) ? '' : 'active'}} no-click" data-myczqo-tab="none" href="{{route('training.admin.dashboard')}}">
+                <a class="myczqo-tab {{Request::is('admin/training') ? 'active' : ''}} no-click" data-myczqo-tab="none" href="{{route('training.admin.dashboard')}}">
                     <li class="w-100">
                         <div class="d-flex h-100 flex-row justify-content-left align-items-center">
                             <i style="font-size: 1.6em; margin-right: 10px;" class="fas fa-tachometer-alt fa-fw"></i>
@@ -25,7 +25,7 @@
                         </div>
                     </li>
                 </a>
-                <a class="myczqo-tab {{Request::is(route('training.admin.dashboard')) ? '' : 'active'}} no-click" data-myczqo-tab="none" href="{{route('training.admin.dashboard')}}">
+                <a class="myczqo-tab {{Request::is('admin/training/roster') ? 'active' : ''}} no-click" data-myczqo-tab="none" href="{{route('training.admin.roster')}}">
                     <li class="w-100">
                         <div class="d-flex h-100 flex-row justify-content-left align-items-center">
                             <i style="font-size: 1.6em; margin-right: 10px;" class="fas fa-users fa-fw"></i>
@@ -33,7 +33,15 @@
                         </div>
                     </li>
                 </a>
-                <a class="myczqo-tab {{Request::is(route('training.admin.dashboard')) ? '' : 'active'}} no-click" data-myczqo-tab="none" href="{{route('training.admin.dashboard')}}">
+                <a class="myczqo-tab {{Request::is('admin/training/solo-certifications') ? 'active' : ''}} no-click" data-myczqo-tab="none" href="{{route('training.admin.roster')}}">
+                    <li class="w-100">
+                        <div class="d-flex h-100 flex-row justify-content-left align-items-center">
+                            <i style="font-size: 1.6em; margin-right: 10px;" class="fas fa-certificate fa-fw"></i>
+                            <span style="font-size: 1.1em;">Solo Certifications</span>
+                        </div>
+                    </li>
+                </a>
+                <a class="myczqo-tab {{Request::is('admin/training/applications') ? 'active' : ''}} no-click" data-myczqo-tab="none" href="{{route('training.admin.dashboard')}}">
                     <li class="w-100">
                         <div class="d-flex h-100 flex-row justify-content-left align-items-center">
                             <i style="font-size: 1.6em; margin-right: 10px;" class="fas fa-clock fa-fw"></i>
@@ -44,9 +52,7 @@
             </ul>
         </div>
         <div class="col-md-9">
-            <div id="yourProfileTab">
-                <h1 class="font-weight-bold blue-text pb-2">Dashboard</h1>
-            </div>
+            @yield('training-content')
         </div>
     </div>
 </div>

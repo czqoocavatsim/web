@@ -27,6 +27,33 @@ class RosterMember extends Model
         return $this->monthly_hours;
     }
 
+    public function certificationPretty()
+    {
+        switch ($this->certification)
+        {
+            case "certified":
+                return "Certified";
+            break;
+            case "not_certified":
+                return "Not Certified";
+            break;
+            case "training":
+                return "Training";
+            break;
+            default:
+                "Unknown";
+        }
+    }
+
+    public function activePretty()
+    {
+        if ($this->active) {
+            return "Active";
+        } else {
+            return "Inactive";
+        }
+    }
+
     public function meetsActivityRequirement()
     {
         // Get date certified

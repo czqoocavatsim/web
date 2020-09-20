@@ -410,3 +410,7 @@ body[data-theme="dark"] .list-group-item.bg-czqo-blue-light {
 
     background: #fff;
 }
+
+.modal-header, .modal-footer {
+    border: none;
+}
