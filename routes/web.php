@@ -215,7 +215,13 @@ Route::group(['middleware' => 'auth'], function () {
             Route::prefix('training')->group(function () {
                 Route::name('training.admin.')->group(function () {
                     Route::get('/', 'Training\TrainingAdminController@dashboard')->name('dashboard');
+
+                    //Roster
                     Route::get('/roster', 'Roster\RosterController@admin')->name('roster');
+                    Route::post('/roster/add', 'Roster\RosterController@addRosterMemberPost')->name('roster.add');
+                    Route::get('/roster/{cid}', 'Roster\RosterController@viewRosterMember')->name('roster.viewcontroller');
+                    Route::get('/roster/{cid}/delete', 'Roster\RosterController@removeRosterMember')->name('roster.removecontroller');
+                    Route::post('/roster/{cid}/edit', 'Roster\RosterController@editRosterMemberPost')->name('roster.editcontroller');
                 });
             });
 

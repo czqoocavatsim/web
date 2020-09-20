@@ -25,7 +25,7 @@
                         </div>
                     </li>
                 </a>
-                <a class="myczqo-tab {{Request::is('admin/training/roster') ? 'active' : ''}} no-click" data-myczqo-tab="none" href="{{route('training.admin.roster')}}">
+                <a class="myczqo-tab {{Request::is('admin/training/roster') || Request::is('admin/training/roster/*') ? 'active' : ''}} no-click" data-myczqo-tab="none" href="{{route('training.admin.roster')}}">
                     <li class="w-100">
                         <div class="d-flex h-100 flex-row justify-content-left align-items-center">
                             <i style="font-size: 1.6em; margin-right: 10px;" class="fas fa-users fa-fw"></i>

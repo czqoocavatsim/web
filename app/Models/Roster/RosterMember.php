@@ -6,6 +6,7 @@ use App\Models\Users\User;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Support\Facades\Log;
 use Spatie\Activitylog\Traits\LogsActivity;
 
 class RosterMember extends Model
@@ -25,6 +26,13 @@ class RosterMember extends Model
 
     public function getLeaderboardHours() { // Get hours from leaderboard
         return $this->monthly_hours;
+    }
+
+    public function activeSoloCertification()
+    {
+        $cert = SoloCertification::where('expires', '>', Carbon::now())->where('roster_member_id', $this->id)->first();
+        if ($cert) { return $cert; }
+        return null;
     }
 
     public function certificationPretty()

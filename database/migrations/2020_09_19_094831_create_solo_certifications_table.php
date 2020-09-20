@@ -24,10 +24,9 @@ class CreateSoloCertificationsTable extends Migration
             //Dates
             $table->dateTime('expires')->nullable();
 
-           //Approved by
-           $table->unsignedInteger('instructor_id');
-           $table->foreign('instructor_id')->references('id')->on('users');
-
+            //Approved by
+            $table->unsignedInteger('instructor_id');
+            $table->foreign('instructor_id')->references('id')->on('users');
 
             //Remarks
             $table->text('remarks')->nullable();

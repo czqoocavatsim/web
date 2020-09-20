@@ -19,9 +19,13 @@
     <tbody>
         @foreach ($roster as $r)
             <tr>
-                <th scope="row" class="font-weight-bold"><a href="">{{$r->cid}}</a></th>
+                <th scope="row" class="font-weight-bold"><a href="{{route('training.admin.roster.viewcontroller', $r->cid)}}">{{$r->cid}}</a></th>
                 <td>
                     {{$r->user->fullName('FL')}}
+                    @if ($r->activeSoloCertification())
+
+                        <i title="Solo certification active - expires {{$r->activeSoloCertification()->expires->toDateString()}}" class="fas fa-certificate"></i>
+                    @endif
                     @if ($r->user_id == 2)
                         <i title="Not linked to a user account." class="fas fa-unlink"></i>
                     @endif
@@ -57,11 +61,6 @@
         @endforeach
     </tbody>
 </table>
-<script>
-    $(document).ready(function () {
-        $('.table.dt').DataTable();
-    })
-</script>
 
 <!--Start add roster member modal-->
 <div class="modal fade" id="addRosterMemberModal" tabindex="-1" role="dialog">
@@ -73,50 +72,81 @@
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
-            <div class="modal-body">
-                <div class="form-group">
-                    <label for="">Controller CID</label>
-                    <input type="text" name="cid" maxlength="9" id="" class="form-control" placeholder="1300001">
+            <form action="{{route('training.admin.roster.add')}}" method="POST">
+                @csrf
+                <div class="modal-body">
+                    @if($errors->addRosterMemberErrors->any())
+                    <div class="alert alert-danger">
+                        <h4>There were errors</h4>
+                        <ul class="pl-0 ml-0 list-unstyled">
+                            @foreach ($errors->addRosterMemberErrors->all() as $error)
+                                <li>{{ $error }}</li>
+                            @endforeach
+                        </ul>
+                    </div>
+                    @endif
+                    <div class="form-group">
+                        <label for="">Controller CID</label>
+                        <input type="text" value="{{old('cid')}}" name="cid" maxlength="9" id="" class="form-control" placeholder="1300001">
+                    </div>
+                    <div class="form-group">
+                        <label for="">Certification</label>
+                        <select class="custom-select" name="certification">
+                            <option value="not_certified" selected>Not Certified</option>
+                            <option value="certified">Certified</option>
+                            <option value="training">Training</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="">Active</label>
+                        <select class="custom-select" name="active">
+                            <option value="true" selected>Active</option>
+                            <option value="false">Inactive</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="">Date certified (ignored if not certified/training)</label>
+                        <input type="datetime" name="date_certified" class="form-control flatpickr" id="date_certified">
+                        <script>
+                            flatpickr('#date_certified', {
+                                enableTime: false,
+                                noCalendar: false,
+                                dateFormat: "Y-m-d",
+                                defaultDate: "{{Carbon\Carbon::now()}}"
+                            });
+                        </script>
+                    </div>
+                    <div class="form-group">
+                        <label for="">Remarks</label>
+                        <input type="text" name="remarks" id="" class="form-control" placeholder="">
+                    </div>
                 </div>
-                <div class="form-group">
-                    <label for="">Certification</label>
-                    <select class="custom-select" name="certification">
-                        <option value="not_certified" selected>Not Certified</option>
-                        <option value="certified">Certified</option>
-                        <option value="training">Training</option>
-                    </select>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-light" data-dismiss="modal">Close</button>
+                    <input type="submit" class="btn btn-primary" value="Add">
                 </div>
-                <div class="form-group">
-                    <label for="">Active</label>
-                    <select class="custom-select" name="active">
-                        <option value="true" selected>Active</option>
-                        <option value="false">Inactive</option>
-                    </select>
-                </div>
-                <div class="form-group">
-                    <label for="">Date certified</label>
-                    <input type="datetime" name="date_certified" class="form-control flatpickr" id="date_certified">
-                    <script>
-                        flatpickr('#date_certified', {
-                            enableTime: false,
-                            noCalendar: false,
-                            dateFormat: "Y-m-d",
-                            defaultDate: "{{Carbon\Carbon::now()}}"
-                        });
-                    </script>
-                </div>
-                <div class="form-group">
-                    <label for="">Remarks</label>
-                    <input type="text" name="remarks" id="" class="form-control" placeholder="">
-                </div>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-light" data-dismiss="modal">Close</button>
-                <input type="submit" class="btn btn-primary" value="Add">
-            </div>
+            </form>
         </div>
     </div>
 </div>
 <!--End add roster member modal-->
+
+
+<script>
+    $("blockquote").addClass('blockquote');
+
+    $(document).ready(function () {
+        $('.table.dt').DataTable();
+    })
+
+    $.urlParam = function(name){
+        var results = new RegExp('[\?&]' + name + '=([^&#]*)').exec(window.location.href);
+        return results[1] || 0;
+    }
+
+    if ($.urlParam('addRosterMemberModal') == '1') {
+        $("#addRosterMemberModal").modal();
+    }
+</script>
 
 @endsection
