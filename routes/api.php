@@ -1,5 +1,7 @@
 <?php
 
+use App\Models\Roster\SoloCertification;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 
 /*
@@ -24,7 +26,13 @@ Route::get('news', function (Request $request) {
 });
 
 Route::get('roster', function (Request $request) {
-    $array = \App\Models\AtcTraining\RosterMember::all();
-    $array->makeHidden(['id', 'user_id', 'created_at', 'updated_at']);
+    $array = \App\Models\Roster\RosterMember::all();
+    $array->makeHidden(['id', 'user_id', 'created_at', 'updated_at', 'remarks', 'date_certified']);
+    return $array->toJson(JSON_PRETTY_PRINT);
+});
+
+Route::get('roster/solocertifications', function (Request $request) {
+    $array = SoloCertification::where('expires', '>', Carbon::now())->with(['rosterMember'])->get();
+    $array->makeHidden(['id', 'roster_member_id', 'created_at', 'updated_at', 'remarks', 'instructor_id']);
     return $array->toJson(JSON_PRETTY_PRINT);
 });

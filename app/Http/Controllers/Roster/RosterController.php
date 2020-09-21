@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Roster\RosterMember;
 use App\Models\Roster\SoloCertification;
 use App\Models\Users\User;
+use App\Notifications\Roster\RemovedFromRoster;
 use App\Notifications\Roster\RosterStatusChanged;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Notification;
@@ -110,12 +111,16 @@ class RosterController extends Controller
     {
         //Get roster member
         $rosterMember = RosterMember::where('cid', $cid)->firstOrFail();
+        $user = $rosterMember->user;
 
         //Delete and its dependencies
         foreach (SoloCertification::where('roster_member_id', $rosterMember->id)->get() as $cert) {
             $cert->delete();
         }
         $rosterMember->delete();
+
+        //Notify user
+        Notification::send($user, new RemovedFromRoster($user));
 
         //Return view
         return redirect()->route('training.admin.roster')->with('info', 'Roster member removed');

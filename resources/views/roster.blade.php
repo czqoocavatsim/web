@@ -31,6 +31,9 @@
                     <th scope="row"><b>{{$controller->cid}}</b></th>
                     <td>
                         {{$controller->user->fullName('FL')}}
+                        @if ($controller->activeSoloCertification())
+                        <i title="Solo certification active - expires {{$controller->activeSoloCertification()->expires->toDateString()}}" class="fas fa-certificate"></i>
+                    @endif
                     </td>
                     <td>
                         {{$controller->user->rating_short}}
@@ -43,9 +46,23 @@
                     @else
                         <td class="bg-danger text-white">Inactive</td>
                     @endif
+                    @if ($controller->certification == "certified")
+                    <td class="bg-success text-white">
+                        Certified
+                    </td>
+                    @elseif ($controller->certification == "not_certified")
+                        <td class="bg-danger text-white">
+                            Not Certified
+                        </td>
+                    @elseif ($controller->certification == "training")
+                        <td class="bg-warning text-dark">
+                            Training
+                        </td>
+                    @else
                         <td>
                             {{$controller->certification}}
                         </td>
+                    @endif
                 </tr>
             @endforeach
             </tbody>

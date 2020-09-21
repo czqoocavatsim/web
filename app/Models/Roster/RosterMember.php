@@ -17,7 +17,7 @@ class RosterMember extends Model
         'cid', 'user_id', 'certification', 'date_certified', 'active', 'monthly_hours', 'remarks'
     ];
 
-    protected $hidden = ['id'];
+    protected $hidden = ['id', 'user_id', 'date_certified', 'monthly_hours', 'remarks', 'created_at', 'updated_at'];
 
     public function user()
     {

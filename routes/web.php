@@ -19,6 +19,7 @@ use Illuminate\Support\Facades\Notification;
 Route::get('/', 'PrimaryViewsController@home')->name('index');
 Route::get('/map', 'PrimaryViewsController@map')->name('map');
 Route::get('/roster', 'Roster\RosterController@publicRoster')->name('roster.public');
+Route::get('/roster/solo-certs', 'Training\SoloCertificationsController@public')->name('solocertifications.public');
 Route::get('/staff', function() { return redirect(route('staff'), 301); });
 Route::get('/atcresources', 'Publications\AtcResourcesController@index')->name('atcresources.index');
 Route::view('/pilots', 'pilots.index');
@@ -222,6 +223,10 @@ Route::group(['middleware' => 'auth'], function () {
                     Route::get('/roster/{cid}', 'Roster\RosterController@viewRosterMember')->name('roster.viewcontroller');
                     Route::get('/roster/{cid}/delete', 'Roster\RosterController@removeRosterMember')->name('roster.removecontroller');
                     Route::post('/roster/{cid}/edit', 'Roster\RosterController@editRosterMemberPost')->name('roster.editcontroller');
+
+                    //Solo certifications
+                    Route::get('/solocertifications', 'Training\SoloCertificationsController@admin')->name('solocertifications');
+                    Route::post('/solocertifications/add', 'Training\SoloCertificationsController@addSoloCertificationPost')->name('solocertifications.add');
                 });
             });
 
