@@ -204,7 +204,7 @@
                             You have no biography.
                         @endif
                         </p>
-                        <a href="{{route('me.editbioindex')}}" style="text-decoration:none;">
+                        <a href="#" data-toggle="modal" data-target="#bioModal" style="text-decoration:none;">
                             <span class="blue-text">
                                 <i class="fas fa-chevron-right"></i>
                             </span>
@@ -481,26 +481,30 @@
 <!--End change avatar modal-->
 
 <!--Biography modal-->
-<div class="modal fade" id="viewBio" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+<div class="modal fade" id="bioModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLongTitle">View your biography</h5>
+                <h5 class="modal-title" id="exampleModalLongTitle">Edit your biography</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
+            <form action="{{route('me.editbio')}}" method="POST">
             <div class="modal-body">
-                @if (Auth::user()->bio)
-                    {{Auth::user()->bio}}
-                @else
-                    You have no biography.
-                @endif
+                @csrf
+                <p>Your biography must comply with the VATSIM Code of Conduct. Markdown styling is disabled.</p>
+                <textarea id="contentMD" name="bio" class="w-75">{{Auth::user()->bio}}</textarea>
+                <script>
+                    var simplemde = new SimpleMDE({ element: document.getElementById("contentMD"), toolbar: false });
+                </script>
+                <p>Wonder what the purpose of a biography is? <a href="https://knowledgebase.ganderoceanic.com/en/website/myczqo" target="_blank">Find out here.</a></p>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-light" data-dismiss="modal">Dismiss</button>
-                <a href="{{route('me.editbioindex')}}" class="btn btn-primary" role="button">Edit Biography</a>
+                <button type="submit" class="btn btn-success">Save Biography</button>
             </div>
+            </form>
         </div>
     </div>
 </div>

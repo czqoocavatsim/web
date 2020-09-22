@@ -7,12 +7,17 @@ use App\Models\Users\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
+use mofodojodino\ProfanityFilter\Check;
 use Spatie\Activitylog\Models\Activity;
 use Spatie\Permission\Models\Permission;
 use Spatie\Permission\Models\Role;
 
 class UsersController extends Controller
 {
+    /*
+    Users admin functions
+    */
+
     public function index()
     {
         //Get all users
@@ -183,5 +188,51 @@ class UsersController extends Controller
 
         //Send good response back :)
         return back()->with('info', 'Permission to \''. $permission->name .'\' revoked.');
+    }
+
+    /*
+    Biography
+    */
+    //User end
+    public function saveUserBiography(Request $request)
+    {
+        $this->validate($request, [
+            'bio' => 'sometimes|max:5000',
+        ]);
+
+        //Get user
+        $user = Auth::user();
+
+        //Get input
+        $input = $request->get('bio');
+
+        //Run through profanity filter
+        $check = new Check();
+        if ($check->hasProfanity($input)) {
+            return redirect()->back()->withInput()->with('error-modal', 'Profanity was detected in your input, please remove it.');
+        }
+
+        //No swear words.. give them the new bio
+        $user->bio = $input;
+        $user->save();
+
+        //Redirect
+        return redirect()->back()->with('success', 'Biography saved!');
+    }
+
+    //Admin end
+    public function resetUserBiography($user_id)
+    {
+        //Get user
+        $user = User::whereId($user_id)->firstOrFail();
+
+        //Reset their biography
+        $user->bio = null;
+
+        //Log it
+        activity()->causedBy(Auth::user())->performedOn($user)->log('Biography reset');
+
+        //Return
+        return redirect()->back()->with('info', 'User biography reset');
     }
 }

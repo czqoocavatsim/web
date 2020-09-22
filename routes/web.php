@@ -129,8 +129,7 @@ Route::group(['middleware' => 'auth'], function () {
         Route::get('/dashboard/application/{application_id}/withdraw', 'AtcTraining\ApplicationsController@withdrawApplication');
 
         //"My"
-        Route::get('/me/editbiography', 'Users\UserController@editBioIndex')->name('me.editbioindex');
-        Route::post('/me/editbiography', 'Users\UserController@editBio')->name('me.editbio');
+        Route::post('/me/editbiography', 'Community\UsersController@saveUserBiography')->name('me.editbio');
         Route::get('/me/discord/unlink', 'Community\DiscordController@unlinkDiscord')->name('me.discord.unlink');
         Route::get('/me/discord/link/callback/{param?}', 'Community\DiscordController@linkCallbackDiscord')->name('me.discord.link.callback');
         Route::get('/me/discord/link/{param?}', 'Community\DiscordController@linkRedirectDiscord')->name('me.discord.link');
