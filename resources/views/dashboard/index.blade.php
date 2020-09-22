@@ -264,55 +264,49 @@
                 <h5 class="card-title">Status</h5>
                 <div class="card-text">
                     <div class="d-flex flex-row justify-content-left">
-                    @if ($certification == "certified")
-                        <h3>
-                        <span class="badge  badge-success rounded shadow-none">
-                            <i class="fa fa-check"></i>&nbsp;
-                            CZQO Certified
-                        </span>
+                        @if (Auth::user()->rosterProfile)
+                        <h3 class="mr-2">
+                        @switch (Auth::user()->rosterProfile->certification)
+                            @case("certified")
+                            <span class="badge badge-success rounded shadow-none">
+                                <i class="fa fa-check"></i>&nbsp;
+                                Certified
+                            </span>
+                            @break
+                            @case("not_certified")
+                            <span class="badge badge-danger rounded shadow-none">
+                                <i class="fa fa-times"></i>&nbsp;
+                                Not Certified
+                            </span>
+                            @break
+                            @case("training")
+                            <span class="badge badge-warning rounded shadow-none">
+                                <i class="fa fa-book-open"></i>&nbsp;
+                                Training
+                            </span>
+                            @break
+                            @default
+                            <span class="badge badge-dark rounded shadow-none">
+                                <i class="fa fa-question"></i>&nbsp;
+                                Unknown
+                            </span>
+                        @endswitch
                         </h3>
-                    @elseif ($certification == "not_certified")
                         <h3>
-                        <span class="badge badge-danger rounded shadow-none">
-                            <i class="fa fa-times"></i>&nbsp;
-                            Not Certified
-                        </span>
-                        </h3>
-                    @elseif ($certification == "training")
-                        <h3>
-                        <span class="badge badge-warning rounded shadow-none">
-                            <i class="fa fa-book-open"></i>&nbsp;
-                            In Training
-                        </span>
-                        </h3>
-                    @elseif ($certification == "instructor")
-                        <h3>
-                        <span class="badge badge-info rounded shadow-none">
-                            <i class="fa fa-chalkboard-teacher"></i>&nbsp;
-                            CZQO Instructor
-                        </span>
-                        </h3>
-                    @else
-                        <h3>
-                        <span class="badge badge-dark rounded shadow-none">
-                            <i class="fa fa-question"></i>&nbsp;
-                            Unknown
-                        </span>
-                        </h3>
-                    @endif
-                    @if ($active == 0)
-                        <h3>
-                        <span class="badge ml-2 badge-danger rounded shadow-none">
-                            <i class="fa fa-times"></i>&nbsp;
-                            Inactive
-                        </span>
-                        </h3>
-                    @elseif ($active == 1)
-                        <h3>
-                        <span class="badge ml-2 badge-success rounded shadow-none">
-                            <i class="fa fa-check"></i>&nbsp;
-                            Active
-                        </span>
+                        @switch (Auth::user()->rosterProfile->active)
+                            @case(true)
+                            <span class="badge badge-success rounded shadow-none">
+                                <i class="fa fa-check"></i>&nbsp;
+                                Active
+                            </span>
+                            @break
+                            @case(false)
+                            <span class="badge badge-danger rounded shadow-none">
+                                <i class="fa fa-times"></i>&nbsp;
+                                Inactive
+                            </span>
+                            @break
+                        @endswitch
                         </h3>
                     @endif
                     </div>

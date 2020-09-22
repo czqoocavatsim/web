@@ -63,16 +63,7 @@ class PrimaryViewsController extends Controller
     public function dashboard(Request $request)
     {
         $user = Auth::user();
-        $certification = 'not_certified';
-        $active = true;
-        /*$potentialRosterMember = RosterMember::where('user_id', $user->id)->first();
-        if ($potentialRosterMember === null) {
-            $certification = 'not_certified';
-            $active = 2;
-        } else {
-            $certification = $potentialRosterMember->status;
-            $active = $potentialRosterMember->active;
-        }*/
+
         $openTickets = Ticket::where('user_id', $user->id)->where('status', 0)->get();
 
         $atcResources = AtcResource::all()->sortBy('title');
@@ -92,9 +83,9 @@ class PrimaryViewsController extends Controller
         });
 
         if ($user->preferences->enable_beta_features) {
-            return view('dashboard.indexnew', compact('openTickets', 'certification', 'active', 'atcResources', 'bannerImg'));
+            return view('dashboard.indexnew', compact('openTickets', 'atcResources', 'bannerImg'));
         } else {
-            return view('dashboard.index', compact('openTickets', 'certification', 'active', 'atcResources', 'bannerImg', 'quote'));
+            return view('dashboard.index', compact('openTickets', 'atcResources', 'bannerImg', 'quote'));
         }
     }
 }

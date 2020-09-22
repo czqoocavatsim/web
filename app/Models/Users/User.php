@@ -2,7 +2,6 @@
 
 namespace App\Models\Users;
 
-use App\Http\Controllers\RosterController;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
@@ -14,6 +13,7 @@ use App\Models\Events;
 use App\Models\Network;
 use App\Models\News;
 use App\Models\Publications;
+use App\Models\Roster\RosterMember;
 use App\Models\Settings;
 use App\Models\Tickets;
 use Exception;
@@ -107,7 +107,7 @@ class User extends Authenticatable
 
     public function rosterProfile()
     {
-        return $this->hasOne(AtcTraining\RosterMember::class);
+        return $this->hasOne(RosterMember::class);
     }
 
     public function notifications()
