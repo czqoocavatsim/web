@@ -8,8 +8,10 @@ use App\Models\Roster\SoloCertification;
 use App\Models\Users\User;
 use App\Notifications\Roster\RemovedFromRoster;
 use App\Notifications\Roster\RosterStatusChanged;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Notification;
+use Illuminate\Support\Facades\Response;
 use Illuminate\Support\Facades\Validator;
 
 class RosterController extends Controller
@@ -176,4 +178,41 @@ class RosterController extends Controller
         return view('admin.training.roster.controller', compact('rosterMember'))->with('success', 'Edited!');
     }
 
+    public function exportRoster()
+    {
+        //Http headers
+        $headers = array(
+            "Content-type" => "text/csv",
+            "Content-Disposition" => "attachment; filename=roster-".Carbon::now()->toDateString().".csv",
+        );
+
+        //Get the roster
+        $roster = RosterMember::all();
+
+        //Columns
+        $columns = array('cid','name','rating','division','certification','active','email');
+
+        //Create the CSV file
+        $callback = function() use ($roster, $columns) {
+            $file = fopen('php://output', 'w');
+            fputcsv($file, $columns);
+
+            foreach ($roster as $r) {
+                fputcsv($file, array(
+                    $r->cid,
+                    $r->user->fullName('FL'),
+                    $r->user->ratings_short,
+                    $r->user->division_code,
+                    $r->certification,
+                    $r->active,
+                    Auth::user()->can('view user details') ? $r->email : 'REDACTED'
+                ));
+
+                fclose($file);
+            }
+        };
+
+        //Return
+        return response()->stream($callback, 200, $headers);
+    }
 }

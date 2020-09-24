@@ -219,6 +219,7 @@ Route::group(['middleware' => 'auth'], function () {
                     //Roster
                     Route::get('/roster', 'Roster\RosterController@admin')->name('roster');
                     Route::post('/roster/add', 'Roster\RosterController@addRosterMemberPost')->name('roster.add');
+                    Route::get('/roster/export', 'Roster\RosterController@exportRoster')->name('roster.export');
                     Route::get('/roster/{cid}', 'Roster\RosterController@viewRosterMember')->name('roster.viewcontroller');
                     Route::get('/roster/{cid}/delete', 'Roster\RosterController@removeRosterMember')->name('roster.removecontroller');
                     Route::post('/roster/{cid}/edit', 'Roster\RosterController@editRosterMemberPost')->name('roster.editcontroller');
