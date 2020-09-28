@@ -20,6 +20,8 @@ use RestCord\DiscordClient;
 use SocialiteProviders\Manager\Config;
 use function GuzzleHttp\Promise\all;
 use function GuzzleHttp\Psr7\str;
+use function PHPSTORM_META\map;
+
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use Mail;
@@ -485,12 +487,14 @@ class UserController extends Controller
     {
         //Define validator messages
         $messages = [
-            'ui_mode.required' => 'Please select a UI mode.'
+            'ui_mode.required' => 'Please select a UI mode.',
+            'accent_colour.required' => 'Please select an accent colour'
         ];
 
         //Validate
         $validator = Validator::make($request->all(), [
             'ui_mode' => 'required',
+            'accent_colour' => 'required'
         ], $messages);
 
         //Redirect if fails
@@ -503,6 +507,9 @@ class UserController extends Controller
 
         //UI mode
         $preferences->ui_mode = $request->get('ui_mode');
+
+        //Accent colour
+        $request->get('accent_colour') != "default" ? $preferences->accent_colour = $request->get('accent_colour') : $preferences->accent_colour = null;
 
         //Save and redirect
         $preferences->save();

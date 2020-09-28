@@ -89,7 +89,7 @@
         <!--Chart js-->
         <script src="https://cdn.jsdelivr.net/npm/chart.js@2.9.3/dist/Chart.min.js" integrity="sha256-R4pqcOYV8lt7snxMQO/HSbVCFRPMdrhAFMH+vr9giYI=" crossorigin="anonymous"></script>
     </head>
-    <body @if(Auth::check() && Auth::user()->preferences) data-theme="{{Auth::user()->preferences->ui_mode}}" @else data-theme="light" @endif>
+    <body @if(Auth::check() && Auth::user()->preferences) @if(Auth::user()->preferences->accent_colour) data-accent="{{Auth::user()->preferences->accent_colour}}" @endif data-theme="{{Auth::user()->preferences->ui_mode}}" @else data-theme="light" @endif>
     <!--Header-->
     @include('maintenancemode::notification')
     @if (\App\Models\Settings\CoreSettings::where('id', 1)->firstOrFail()->banner)

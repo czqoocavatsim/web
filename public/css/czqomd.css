@@ -5,6 +5,12 @@
 
 :root{
     --czqo-blue: #0080c9;
+    --red: #f44336;
+    --pink: #e91e63;
+    --light-pink: #ff80ab;
+    --purple: #9c27b0;
+    --green: #4caf50;
+    --orange: #ff9800;
 }
 
 body, html {
@@ -16,6 +22,30 @@ body[data-theme="dark"] {
     background-color: rgb(47, 49, 54) !important;
     color: #eee;
     --czqo-blue: #2db2ff;
+}
+
+body[data-accent="red"] {
+    --czqo-blue: var(--red);
+}
+
+body[data-accent="pink"] {
+    --czqo-blue: var(--pink);
+}
+
+body[data-accent="light-pink"] {
+    --czqo-blue: var(--light-pink);
+}
+
+body[data-accent="purple"] {
+    --czqo-blue: var(--purple);
+}
+
+body[data-accent="green"] {
+    --czqo-blue: var(--green);
+}
+
+body[data-accent="orange"] {
+    --czqo-blue: var(--orange);
 }
 
 body[data-theme="dark"] .card,

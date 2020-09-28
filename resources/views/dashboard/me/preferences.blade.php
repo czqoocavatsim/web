@@ -32,6 +32,23 @@
                 </select>
             </div>
         </div>
+        <div class="d-flex flex-row justify-content-between mt-2">
+            <div>
+                <h4 class="font-weight-bold blue-text">Accent Colour</h4>
+                <p>Choose your flavour of text colour and backgrounds</p>
+            </div>
+            <div style="width: 25%;">
+                <select name="accent_colour" id="" class="form-control">
+                    <option value="default" selected>Gander Blue</option>
+                    <option value="red">Red</option>
+                    <option value="pink">Pink</option>
+                    <option value="light-pink">Light Pink</option>
+                    <option value="purple">Purple</option>
+                    <option value="green">Green</option>
+                    <option value="orange">Orange</option>
+                </select>
+            </div>
+        </div>
 
         <button class="btn btn-primary mt-4">Save Settings</button>
     </form>
