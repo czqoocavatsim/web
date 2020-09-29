@@ -121,13 +121,6 @@ Route::group(['middleware' => 'auth'], function () {
         Route::get('/dashboard/emailpref/subscribe', 'Users\DataController@subscribeEmails');
         Route::get('/dashboard/emailpref/unsubscribe', 'Users\DataController@unsubscribeEmails');
 
-        //Applications
-        Route::get('/dashboard/application', 'AtcTraining\ApplicationsController@startApplicationProcess')->name('application.start');
-        Route::post('/dashboard/application', 'AtcTraining\ApplicationsController@submitApplication')->name('application.submit');
-        Route::get('/dashboard/application/list', 'AtcTraining\ApplicationsController@viewApplications')->name('application.list');
-        Route::get('/dashboard/application/{application_id}', 'AtcTraining\ApplicationsController@viewApplication')->name('application.view');
-        Route::get('/dashboard/application/{application_id}/withdraw', 'AtcTraining\ApplicationsController@withdrawApplication');
-
         //"My"
         Route::post('/me/editbiography', 'Community\UsersController@saveUserBiography')->name('me.editbio');
         Route::get('/me/discord/unlink', 'Community\DiscordController@unlinkDiscord')->name('me.discord.unlink');
@@ -157,14 +150,6 @@ Route::group(['middleware' => 'auth'], function () {
         Route::post('/atcresources', 'Publications\AtcResourcesController@uploadResource')->name('atcresources.upload');
         Route::get('/atcresources/delete/{id}', 'Publications\AtcResourcesController@deleteResource')->name('atcresources.delete');
 
-
-        //Roster
-        Route::get('/dashboard/roster', 'AtcTraining\RosterController@index')->name('roster.index');
-        Route::post('/dashboard/roster', 'AtcTraining\RosterController@addController')->name('roster.addcontroller');
-        Route::post('/dashboard/roster/{id}', 'AtcTraining\RosterController@editController')->name('roster.editcontroller');
-        Route::get('/dashboard/roster/{id}', 'AtcTraining\RosterController@viewController')->name('roster.viewcontroller');
-        Route::get('/dashboard/roster/{cid}/delete', 'AtcTraining\RosterController@deleteController')->name('roster.deletecontroller');
-
         Route::group(['middleware' => 'can:view events'], function () {
             //Events
             Route::get('/admin/events', 'Events\EventController@adminIndex')->name('events.admin.index');
@@ -177,19 +162,6 @@ Route::group(['middleware' => 'auth'], function () {
             Route::get('/admin/events/{slug}/controllerapps/{cid}/delete', 'Events\EventController@adminDeleteControllerApp')->name('events.admin.controllerapps.delete')->middleware('can:edit event');
             Route::get('/admin/events/{slug}/updates/{id}/delete', 'Events\EventController@adminDeleteUpdate')->name('events.admin.update.delete')->middleware('can:edit event');
         });
-
-        //Users
-
-
-        //Controller Applications
-        Route::get('/dashboard/training/applications', 'AtcTraining\TrainingController@viewAllApplications')->name('training.applications');
-        Route::get('/dashboard/training/applications/{id}', 'AtcTraining\TrainingController@viewApplication')->name('training.viewapplication');
-        Route::get('/dashboard/training/applications/{id}/accept', 'AtcTraining\TrainingController@acceptApplication')->name('training.application.accept');
-        Route::get('/dashboard/training/applications/{id}/deny', 'AtcTraining\TrainingController@denyApplication')->name('training.application.deny');
-        Route::post('/dashboard/training/applications/{id}/', 'AtcTraining\TrainingController@editStaffComment')->name('training.application.savestaffcomment');
-
-        //AtcTraining
-        Route::post('/dashboard/training/instructors', 'AtcTraining\TrainingController@addInstructor')->name('training.instructors.add');
 
         //Admin
         Route::prefix('admin')->group(function () {
@@ -227,6 +199,11 @@ Route::group(['middleware' => 'auth'], function () {
                     //Solo certifications
                     Route::get('/solocertifications', 'Training\SoloCertificationsController@admin')->name('solocertifications');
                     Route::post('/solocertifications/add', 'Training\SoloCertificationsController@addSoloCertificationPost')->name('solocertifications.add');
+
+                    //Applications
+                    Route::get('/applications', 'Training\ApplicationsController@admin')->name('applications');
+                    Route::get('/applications/processed', 'Training\ApplicationsController@adminProcessedApplications')->name('applications.processed');
+                    Route::get('/applications/withdrawn', 'Training\ApplicationsController@adminWithdrawnApplications')->name('applications.withdrawn');
                 });
             });
 

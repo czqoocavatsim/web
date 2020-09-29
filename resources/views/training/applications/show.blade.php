@@ -10,12 +10,12 @@
     @endif
     <a href="{{route('training.applications.showall')}}" class="blue-text" style="font-size: 1.2em;"> <i class="fas fa-arrow-left"></i>  Applications</a>
     <h1 class="font-weight-bold blue-text">Your application (#{{$application->reference_id}})</h1>
-    <h5 class="pb-4">Submitted {{$application->created_at->toDayDateTimeString()}}</h5>
+    <h5>Submitted {{$application->created_at->toDayDateTimeString()}}</h5>
     <div id="latestUpdate">
         @if (!$latestUpdate)
             No update found
         @else
-            <div class="card shadow-none mb-3">
+            <div class="card grey lighten-3 p-4 mt-3 shadow-none mb-3">
                 <p style="font-size: 1.02rem;" title="{{$latestUpdate->created_at}} GMT">Latest update - {{$latestUpdate->created_at->diffForHumans()}}</p>
                 <h3 class="font-weight-bold {{$latestUpdate->update_type}}-text">{{$latestUpdate->update_title}}</h3>
                 <div>{{$latestUpdate->updateContentHtml()}}</div>
@@ -23,7 +23,6 @@
             </div>
         @endif
     </div>
-
     <div class="py-2">
         <h3 class="font-weight-bold blue-text mb-3">Details</h3>
         <div class="row">
@@ -48,9 +47,11 @@
             <div class="col-md-3">
                 <h6>Actions</h6>
                 <ul class="list-unstyled mt-3 mb-0" style="font-size: 1.05em;">
+                    @if($application->status == 0)
                     <li class="mb-2">
                         <a href="" data-toggle="modal" data-target="#withdrawApplicationModal" style="text-decoration:none;"><span class="grey-text"><i class="fas fa-chevron-right"></i></span> &nbsp; <span class="text-body">Withdraw application</span></a>
                     </li>
+                    @endif
                 </ul>
             </div>
         </div>
@@ -93,6 +94,7 @@
                             @endforeach
                         </div>
                     @endif
+                    @if($application->status == 0)
                     <hr>
                     <p>Write a comment</p>
                     <form action="{{route('training.applications.comment.post')}}" method="POST">
@@ -101,12 +103,14 @@
                         <textarea name="comment" required id="" style="height: 100px; width: 100%; border-radius: 2.5%; border: 1px solid #eeeeee;">{{old('comment')}}</textarea>
                         <button class="btn btn-sm btn-primary">Submit Comment</button>
                     </form>
+                    @endif
                 </div>
             </div>
         </div>
     </div>
 </div>
 
+@if($application->status != 3)
 <!--Withdraw application modal-->
 <div class="modal fade" id="withdrawApplicationModal" tabindex="-1" role="dialog" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered" role="document">
@@ -129,5 +133,6 @@
         </div>
     </div>
 </div>
+@endif
 
 @endsection

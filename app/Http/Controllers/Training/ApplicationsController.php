@@ -10,6 +10,7 @@ use App\Models\Training\ApplicationReferee;
 use App\Models\Training\ApplicationUpdate;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Log;
@@ -222,7 +223,7 @@ class ApplicationsController extends Controller
         }
 
         //How long ago was the last one?
-        if ($application->comments->sortByDesc('created_at')->first()->created_at->diffInMinutes(Carbon::now()) < 10) {
+        if ($application->comments->sortByDesc('created_at')->first() && $application->comments->sortByDesc('created_at')->first()->created_at->diffInMinutes(Carbon::now()) < 10) {
             return redirect()->back()->withInput()->with('error-modal', 'You can only submit a comment every 10 minutes to prevent spam.');
         }
 
@@ -246,5 +247,21 @@ class ApplicationsController extends Controller
         //Return
         $request->session()->flash('alreadyApplied', 'Comment added!');
         return redirect()->route('training.applications.show', $application->reference_id);
+    }
+
+    /*
+    Admin
+    */
+    public function admin()
+    {
+        //Get all applications and sort into lists
+        $applications = array(
+            'pending' => Application::where('status', 0)->get()->sortByDesc('created_at'),
+            'processed' => Application::where('status', 1)->orWhere('status', 2)->get()->sortByDesc('created_at'),
+            'withdrawn' => Application::where('status', 3)->get()->sortByDesc('created_at')
+        );
+
+        //Return the view
+        return view('admin.training.applications.index', compact('applications'));
     }
 }

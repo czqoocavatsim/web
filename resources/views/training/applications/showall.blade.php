@@ -3,6 +3,7 @@
 @section('content')
 
 <div class="container py-4">
+    <a href="{{route('my.index')}}" class="blue-text" style="font-size: 1.2em;"> <i class="fas fa-arrow-left"></i> myCZQO</a>
     <h1 class="font-weight-bold blue-text">Your applications</h1>
     <hr>
     @if (count($applications) > 0)

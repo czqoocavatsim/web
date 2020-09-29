@@ -311,7 +311,7 @@
                     @endif
                     </div>
                 </div>
-                {{--  @if (Auth::user()->rosterProfile)
+                @if (Auth::user()->rosterProfile)
                 <h5 class="card-title mt-2">Activity</h5>
                 @if (Auth::user()->rosterProfile->currency < 0.1)
                 <h3><span class="badge rounded shadow-none red">
@@ -326,15 +326,12 @@
                     {{Auth::user()->rosterProfile->currency}} hours recorded
                 </span></h3>
                 @endif
-                <p>You require <b>3 hours</b> of activity each quarter, unless you were certified within the quarter.</p>
-                @endif --}}
-                <ul class="list-unstyled mt-2 mb-0">
+                <p>You require 6 hours of activity every 6 months, unless you were certified within the current activity cycle.</p>
+                @endif
+                <ul class="list-unstyled mt-4 mb-0">
                     <li class="mb-2">
-                        <a href="{{route('application.list')}}" style="text-decoration:none;"><span class="blue-text"><i class="fas fa-chevron-right"></i></span> &nbsp; <span class="black-text">View Your Applications</span></a>
-                    </li>{{--
-                    <li class="mb-2">
-                        <a href="{{route('application.list')}}" style="text-decoration:none;"><span class="blue-text"><i class="fas fa-chevron-right"></i></span> &nbsp; <span class="black-text">Training Centre</span></a>
-                    </li> --}}
+                        <a href="{{route('training.applications.showall')}}" style="text-decoration:none;"><span class="blue-text"><i class="fas fa-chevron-right"></i></span> &nbsp; <span class="black-text">View Your Applications</span></a>
+                    </li>
                 </ul>
             </div>
             <div id="staffTab" style="display:none">
@@ -352,16 +349,50 @@
                         </li>
                         @endcan
                     </ul>
-                    @can('edit settings')
-                    <h5>Site Admin</h5>
+
+                    @hasanyrole('Administrator|Senior Staff|Training Team')
+                    <h5 class="font-weight-bold blue-text mt-3">Training</h5>
                     <ul class="list-unstyled mt-2 mb-0">
                         <li class="mb-2">
-                            <a href="{{route('settings.index')}}" style="text-decoration:none;"><span class="blue-text"><i class="fas fa-chevron-right"></i></span> &nbsp; <span class="black-text">Settings</span></a>
+                            <a href="{{(route('training.admin.dashboard'))}}" style="text-decoration:none;">
+                                <span class="blue-text">
+                                    <i class="fas fa-chevron-right"></i>
+                                </span>
+                                &nbsp;
+                                <span class="black-text">
+                                    Dashboard
+                                </span>
+                            </a>
                         </li>
+                        @can('view roster admin')
+                        <li class="mb-2">
+                            <a href="{{(route('training.admin.roster'))}}" style="text-decoration:none;">
+                                <span class="blue-text">
+                                    <i class="fas fa-chevron-right"></i>
+                                </span>
+                                &nbsp;
+                                <span class="black-text">
+                                    Roster
+                                </span>
+                            </a>
+                        </li>
+                        <li class="mb-2">
+                            <a href="{{(route('training.admin.solocertifications'))}}" style="text-decoration:none;">
+                                <span class="blue-text">
+                                    <i class="fas fa-chevron-right"></i>
+                                </span>
+                                &nbsp;
+                                <span class="black-text">
+                                    Solo Certifications
+                                </span>
+                            </a>
+                        </li>
+                        @endcan
                     </ul>
+                    @endhasanyrole
 
-                    @endcan
-                    <h3 class="font-weight-bold blue-text pb-2">Users</h3>
+                    @can('view users')
+                    <h5 class="font-weight-bold blue-text mt-3">Users</h5>
                     <ul class="list-unstyled mt-2 mb-0">
                         <li class="mb-2">
                             <a href="{{(route('community.users.index'))}}" style="text-decoration:none;">
@@ -375,8 +406,10 @@
                             </a>
                         </li>
                     </ul>
+                    @endcan
 
-                    <h3 class="font-weight-bold blue-text pb-2">Network</h3>
+                    @can('view network data')
+                    <h5 class="font-weight-bold blue-text mt-3">Network</h5>
                     <ul class="list-unstyled mt-2 mb-0">
                         <li class="mb-2">
                             <a href="{{route('network.index')}}" style="text-decoration:none;">
@@ -390,6 +423,16 @@
                             </a>
                         </li>
                     </ul>
+                    @endcan
+
+                    @can('edit settings')
+                    <h5 class="font-weight-bold blue-text mt-3">Admin</h5>
+                    <ul class="list-unstyled mt-0 mb-0">
+                        <li class="mb-2">
+                            <a href="{{route('settings.index')}}" style="text-decoration:none;"><span class="blue-text"><i class="fas fa-chevron-right"></i></span> &nbsp; <span class="black-text">Settings</span></a>
+                        </li>
+                    </ul>
+                    @endcan
                 @endhasanyrole
             </div>
             <br/>

@@ -167,11 +167,6 @@
                         <li class="nav-item dropdown {{ Request::is('dashboard/application') || Request::is('dashboard/application/*') || Request::is('atcresources') ? 'active' : '' }}">
                             <a class="nav-link dropdown-toggle" style="cursor:pointer" id="dropdown01" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">ATC</a>
                             <div class="dropdown-menu" aria-labelledby="dropdown01">
-                                @unlessrole('guest')
-                                    <a class="dropdown-item {{ Request::is('dashboard/application/list') ? 'active white-text' : '' }}" href="{{url ('/dashboard/application/list')}}">Your Applications</a>
-                                @else
-                                    <a class="dropdown-item {{ Request::is('dashboard/application') ? 'active white-text' : '' }}" href="{{url ('/dashboard/application/')}}">Apply for CZQO</a>
-                                @endunlessrole
                                 <a class="dropdown-item {{ Request::is('atcresources') ? 'active white-text' : '' }}" href="{{route('atcresources.index')}}">ATC Resources</a>
                                 <a href="{{route('eurosounds')}}" class="dropdown-item {{ Request::is('eurosounds') ? 'active white-text' : '' }}">EuroSounds</a>
                             </div>
