@@ -255,7 +255,7 @@
                     </li>
                     @endcan
                     <li class="mb-2">
-                        <a href="https://kb.ganderoceanic.com" target="_blank" style="text-decoration:none;"><span class="blue-text"><i class="fas fa-chevron-right"></i></span> &nbsp; <span class="black-text">CZQO Knowledge Base</span></a>
+                        <a href="https://knowledgebase.ganderoceanic.com/" target="_blank" style="text-decoration:none;"><span class="blue-text"><i class="fas fa-chevron-right"></i></span> &nbsp; <span class="black-text">CZQO Knowledge Base</span></a>
                     </li>
                 </ul>
             </div>
