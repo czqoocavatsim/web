@@ -1,4 +1,5 @@
 @extends('layouts.master')
+@section('title', 'Who We Are - ')
 @section('content')
 <div class="jarallax card card-image shadow-none rounded-0" data-jarallax data-speed="0.2" style="height: 60vh">
     <img class="jarallax-img" src="https://cdn.discordapp.com/attachments/498332235154456579/695982036346994708/unknown.png" alt="">
@@ -18,6 +19,11 @@
     <div class="row">
         <div class="col-md-5">
             <h3 class="font-weight-bold blue-text">The Gander and Shanwick OCAs</h3>
+            <p>The Gander OCA spans a massive 905 nautical miles, bordering Shanwick at 30 degrees west, Santa Maria at 45 degrees north (between 30 and 40 degrees west) and New York Oceanic at 45 degrees north (between 40 and 51 degrees west). The OCA also borders several domestic flight information regions (FIRs), including Gander Domestic, Montreal, Sondrestrom and Edmonton. Airspace within the Gander OCA is Class A above 5,500 ft and Class G below.</p>
+            <p>The Shanwick OCA stretches another enormous 545 nautical miles, bordering Gander at 30 degrees west, Santa Maria at 45 degrees north and Reykjavik at 61 degrees north. Like Gander, Shanwick also borders several domestic FIRs: Scottish, Shannon, London, Brest and Madrid. Airspace is Class A above 5,500 ft and below, Class G.</p>
+            <p style="font-size: 1.2em;" class="mt-3">
+                <a class="font-weight-bold text-body" href="https://knowledgebase.ganderoceanic.com/en/basics/airspace">Read more about it &nbsp;&nbsp;<i class="fas fa-arrow-right blue-text"></i></a>
+            </p>
         </div>
         <div class="col-md-7">
             <script src="{{asset('js/leaflet.latlng.js')}}"></script>

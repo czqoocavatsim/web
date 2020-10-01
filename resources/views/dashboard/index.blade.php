@@ -44,8 +44,8 @@
         @if(Auth::user()->created_at->diffInDays(Carbon\Carbon::now()) < 14) <!--14 days since user signed up-->
         <div class="container white-text">
             <p style="font-size: 1.4em;" class="font-weight-bold">
-                <a href="javascript:void(0);" onclick="javascript:startTutorial()" class="white-text">
-                    <i class="fas fa-question"></i>&nbsp;&nbsp;Need help? Click here to start the tutorial!
+                <a href="https://knowledgebase.ganderoceanic.com/en/website/myczqo" class="white-text">
+                    <i class="fas fa-question"></i>&nbsp;&nbsp;Need help with myCZQO?
                 </a>
             </p>
         </div>
@@ -436,7 +436,6 @@
                 @endhasanyrole
             </div>
             <br/>
-            <a href="javascript:void(0);" onclick="javascript:startTutorial()">View the tutorial</a>
         </div>
     </div>
     <small class="text-muted">Quote of the day provided by <a href="https://theysaidso.com">https://theysaidso.com</a></small>

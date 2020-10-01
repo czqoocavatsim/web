@@ -9,13 +9,14 @@
             <li class="nav-item dropdown {{ Request::is('about/*') || Request::is('about') ? 'active' : ''}}">
                 <a class="nav-link dropdown-toggle" style="cursor:pointer" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">About</a>
                 <div class="dropdown-menu" aria-labelledby="dropdown01">
-                    <a class="dropdown-item" href="{{url ('/about/staff')}}" aria-expanded="false">Staff</a>
+                    <a href="{{route('about.who-we-are')}}" class="dropdown-item {{ Request::is('about/who-we-are') ? 'active white-text' : '' }}">Who We Are</a>
+                    <a class="dropdown-item {{ Request::is('about/staff') ? 'active white-text' : '' }}" href="{{url ('/about/staff')}}" aria-expanded="false">Staff</a>
                 </div>
             </li>
             <li class="nav-item dropdown {{ Request::is('roster') || Request::is('roster/solo-certs') ? 'active' : ''}}">
                 <a class="nav-link dropdown-toggle" style="cursor:pointer" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Roster</a>
                 <div class="dropdown-menu" aria-labelledby="dropdown01">
-                    <a class="dropdown-item {{ Request::is('roster') ? 'active white-text' : '' }}"" href="{{route('roster.public')}}" aria-expanded="false">Controller Roster</a>
+                    <a class="dropdown-item {{ Request::is('roster') ? 'active white-text' : '' }}" href="{{route('roster.public')}}" aria-expanded="false">Controller Roster</a>
                     <a class="dropdown-item {{ Request::is('roster/solo-certs') ? 'active white-text' : '' }}"" href="{{route('solocertifications.public')}}" aria-expanded="false">Solo Certifications</a>
                 </div>
             </li>
@@ -49,8 +50,9 @@
                 <a class="nav-link dropdown-toggle" style="cursor:pointer" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Publications</a>
                 <div class="dropdown-menu" aria-labelledby="dropdown01">
                     <a class="dropdown-item {{ Request::is('policies') ? 'active white-text' : '' }}" href="{{route('policies')}}">Policies</a>
-                    <a class="dropdown-item {{ Request::is('meetingminutes') ? 'active white-text' : '' }}" href="{{route('meetingminutes')}}">Meeting Minutes</a>
+                    {{-- <a class="dropdown-item {{ Request::is('meetingminutes') ? 'active white-text' : '' }}" href="{{route('meetingminutes')}}">Meeting Minutes</a> --}}
                     <a class="dropdown-item" href="https://blog.ganderoceanic.com">Blog</a>
+                    <a href="https://knowledgebase.ganderoceanic.com" class="dropdown-item">Knowledge Base</a>
                 </div>
             </li>
             <li class="nav-item  {{ Request::is('feedback') ? 'active' : '' }}">

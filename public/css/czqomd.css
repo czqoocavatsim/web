@@ -5,6 +5,7 @@
 
 :root{
     --czqo-blue: #0080c9;
+    --czqo-light-blue: #cfeaff;
     --red: #f44336;
     --pink: #e91e63;
     --light-pink: #ff80ab;
@@ -46,6 +47,10 @@ body[data-accent="green"] {
 
 body[data-accent="orange"] {
     --czqo-blue: var(--orange);
+}
+
+body[data-accent] {
+    --czqo-light-blue: var(--czqo-blue);
 }
 
 body[data-theme="dark"] .card,
@@ -272,14 +277,24 @@ div.d-flex.flex-row > i {
 }
 
 .bg-czqo-blue-light {
-    background-color: #cfeaff !important;
+    background-color: var(--czqo-light-blue) !important;
     color: #000;
 }
 
 .btn .bg-czqo-blue-light:not([disabled]):not(.disabled):active {
-    background-color: #cfeaff !important;
+    background-color: var(--czqo-light-blue) !important;
     color: var(--czqo-blue) !important;
 }
+
+.btn .bg-czqo-blue-light:not([disabled]):not(.disabled):active {
+    background-color: var(--czqo-light-blue) !important;
+    color: var(--czqo-blue) !important;
+}
+
+body[data-accent] .bg-czqo-blue-light {
+    color: #fff !important;
+}
+
 
 .list-group-item.active {
     background-color: var(--czqo-blue);
