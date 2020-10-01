@@ -187,28 +187,28 @@ Route::group(['middleware' => 'auth'], function () {
             //Training
             Route::prefix('training')->group(function () {
                 Route::name('training.admin.')->group(function () {
-                    Route::get('/', 'Training\TrainingAdminController@dashboard')->name('dashboard');
+                    Route::get('/', 'Training\TrainingAdminController@dashboard')->name('dashboard')->middleware('role:Training Team|Senior Staff|Administrator');
 
                     //Roster
-                    Route::get('/roster', 'Roster\RosterController@admin')->name('roster');
-                    Route::post('/roster/add', 'Roster\RosterController@addRosterMemberPost')->name('roster.add');
-                    Route::get('/roster/export', 'Roster\RosterController@exportRoster')->name('roster.export');
-                    Route::get('/roster/{cid}', 'Roster\RosterController@viewRosterMember')->name('roster.viewcontroller');
-                    Route::get('/roster/{cid}/delete', 'Roster\RosterController@removeRosterMember')->name('roster.removecontroller');
-                    Route::post('/roster/{cid}/edit', 'Roster\RosterController@editRosterMemberPost')->name('roster.editcontroller');
+                    Route::get('/roster', 'Roster\RosterController@admin')->name('roster')->middleware('can:view roster admin');
+                    Route::post('/roster/add', 'Roster\RosterController@addRosterMemberPost')->name('roster.add')->middleware('can:edit roster');;
+                    Route::get('/roster/export', 'Roster\RosterController@exportRoster')->name('roster.export')->middleware('can:view roster admin');;
+                    Route::get('/roster/{cid}', 'Roster\RosterController@viewRosterMember')->name('roster.viewcontroller')->middleware('can:view roster admin');;
+                    Route::get('/roster/{cid}/delete', 'Roster\RosterController@removeRosterMember')->name('roster.removecontroller')->middleware('can:edit roster');;
+                    Route::post('/roster/{cid}/edit', 'Roster\RosterController@editRosterMemberPost')->name('roster.editcontroller')->middleware('can:edit roster');;
 
                     //Solo certifications
-                    Route::get('/solocertifications', 'Training\SoloCertificationsController@admin')->name('solocertifications');
-                    Route::post('/solocertifications/add', 'Training\SoloCertificationsController@addSoloCertificationPost')->name('solocertifications.add');
+                    Route::get('/solocertifications', 'Training\SoloCertificationsController@admin')->name('solocertifications')->middleware('can:view roster admin');
+                    Route::post('/solocertifications/add', 'Training\SoloCertificationsController@addSoloCertificationPost')->name('solocertifications.add')->middleware('can:edit roster');
 
                     //Applications
-                    Route::get('/applications', 'Training\ApplicationsController@admin')->name('applications');
-                    Route::get('/applications/processed', 'Training\ApplicationsController@adminProcessedApplications')->name('applications.processed');
-                    Route::get('/applications/withdrawn', 'Training\ApplicationsController@adminWithdrawnApplications')->name('applications.withdrawn');
-                    Route::post('applications/comment/post', 'Training\ApplicationsController@adminCommentPost')->name('applications.comment.post');
-                    Route::get('/applications/{reference_id}', 'Training\ApplicationsController@adminViewApplication')->name('applications.view');
-                    Route::get('/applications/{reference_id}/accept', 'Training\ApplicationsController@adminAcceptApplication')->name('applications.accept');
-                    Route::get('/applications/{reference_id}/reject', 'Training\ApplicationsController@adminRejectApplication')->name('applications.reject');
+                    Route::get('/applications', 'Training\ApplicationsController@admin')->name('applications')->middleware('can:view applicaions');
+                    Route::get('/applications/processed', 'Training\ApplicationsController@adminProcessedApplications')->name('applications.processed')->middleware('can:view applicaions');
+                    Route::get('/applications/withdrawn', 'Training\ApplicationsController@adminWithdrawnApplications')->name('applications.withdrawn')->middleware('can:view applicaions');
+                    Route::post('applications/comment/post', 'Training\ApplicationsController@adminCommentPost')->name('applications.comment.post')->middleware('can:interact with applicaions');
+                    Route::get('/applications/{reference_id}', 'Training\ApplicationsController@adminViewApplication')->name('applications.view')->middleware('can:view applicaions');
+                    Route::get('/applications/{reference_id}/accept', 'Training\ApplicationsController@adminAcceptApplication')->name('applications.accept')->middleware('can:interact with applicaions');
+                    Route::get('/applications/{reference_id}/reject', 'Training\ApplicationsController@adminRejectApplication')->name('applications.reject')->middleware('can:interact with applicaions');
                 });
             });
 
