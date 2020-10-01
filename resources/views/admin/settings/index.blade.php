@@ -2,7 +2,7 @@
 
 @section('content')
     <div class="container py-4">
-        <a href="{{route('dashboard.index')}}" class="blue-text" style="font-size: 1.2em;"> <i class="fas fa-arrow-left"></i> Dashboard</a>
+        <a href="{{route('my.index')}}" class="blue-text" style="font-size: 1.2em;"> <i class="fas fa-arrow-left"></i> myCZQO</a>
         <h1 class="blue-text font-weight-bold mt-2">Settings</h1>
         <hr>
         <div class="row">
@@ -29,9 +29,9 @@
             </div>
             <div class="col-md-3 mb-3">
                 <div class="card h-100 p-4 bg-czqo-blue-light black-text shadow-none">
-                    <h3>Audit Log</h3>
-                    <p>Log of all Core events.<br>&nbsp;</p>
-                    <a class="black-text font-weight-bold" href="{{route('settings.auditlog')}}">Go <i class="fas fa-arrow-right"></i></a>
+                    <h3>Activity Log</h3>
+                    <p>Log of all events.<br>&nbsp;</p>
+                    <a class="black-text font-weight-bold" href="{{route('settings.activitylog')}}">Go <i class="fas fa-arrow-right"></i></a>
                 </div>
             </div>
             <div class="col-md-3 mb-3">

@@ -11,7 +11,7 @@
             @csrf
             @if($errors->createEventErrors->any())
             <div class="alert alert-danger">
-                <h4>There were errors creating the event</h4>
+                <h4>An error occurred creating the event.</h4>
                 <ul class="pl-0 ml-0 list-unstyled">
                     @foreach ($errors->createEventErrors->all() as $error)
                         <li>{{ $error }}</li>

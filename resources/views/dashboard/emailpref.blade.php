@@ -8,7 +8,7 @@
 
 @section('content')
     <div class="container" style="margin-top: 20px;">
-        <a href="{{route('dashboard.index')}}" class="blue-text" style="font-size: 1.2em;"> <i class="fas fa-arrow-left"></i> Dashboard</a>
+        <a href="{{route('my.index')}}" class="blue-text" style="font-size: 1.2em;"> <i class="fas fa-arrow-left"></i> myCZQO</a>
         <h1 class="blue-text font-weight-bold mt-2">Email Preferences</h1>
         <hr>
         <h5>Current subscription status:</h5>
@@ -24,13 +24,13 @@
         <br/>
         <h4>What does this mean?</h4>
         <p>
-            When you subscribe to emails, you allow Gander Oceanic FIR to send you what the EU GDPR describes as "promotional" emails.
-            These emails are typically not necessary to your continued participation in the FIR or holding an account on the Core system.<br/>
+            By subscribing to emails, you allow Gander Oceanic OCA to send you what the EU GDPR describes as "promotional" emails.
+            These emails are typically not necessary for your continued participation in the OCA or to hold an account on the Core system.<br/>
             Some examples could include:
         </p>
         <ul style="list-style: square">
             <li>Controller certifications for the month</li>
-            <li>News from the FIR Chief about non-critical matters</li>
+            <li>News from the OCA Chief about non-critical matters</li>
             <li>Updates from other staff members</li>
         </ul>
         <p><br/>

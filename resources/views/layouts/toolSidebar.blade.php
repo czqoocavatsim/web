@@ -16,6 +16,9 @@
     <a href="https://nattrak.vatsim.net" target="_blank" class="list-group-item list-group-item-action">
         natTRAK
     </a>
+    <a href="https://knowledgebase.ganderoceanic.com" target="_blank" class="list-group-item list-group-item-action">
+        Knowledge Base
+    </a>
     {{--<a href="{{url('/pilots/tutorial')}}" class="list-group-item list-group-item-action {{ Request::is('pilots/tutorial') ? 'active' : '' }}">
         Oceanic Tutorial
     </a>--}}
@@ -53,7 +56,7 @@
             </ul>
         </div>
         <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-light" data-dismiss="modal">Close</button>
         </div>
     </div>
     </div>

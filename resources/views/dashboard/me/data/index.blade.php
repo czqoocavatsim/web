@@ -1,7 +1,7 @@
 @extends('layouts.master')
 @section('content')
 <div class="container py-4">
-    <a href="{{route('dashboard.index')}}" class="blue-text" style="font-size: 1.2em;"> <i class="fas fa-arrow-left"></i> Dashboard</a>
+    <a href="{{route('my.index')}}" class="blue-text" style="font-size: 1.2em;"> <i class="fas fa-arrow-left"></i> myCZQO</a>
     <h1 class="blue-text font-weight-bold mt-2">Your Data</h1>
     <hr>
     <p>Under our <a href="{{route('privacy')}}">Privacy Policy</a>, you have the right to export and delete data from our service.</p>
@@ -53,7 +53,7 @@
                               <span class="label">or export specific data</span>
                             </a>
                             <div class="step-content grey lighten-3">
-                              <p>Please open a support ticket to the Web Team or email them to request specific pieces of data.</p>
+                              <p>Please open a support ticket with the Web Team or send them an email if you would like to request specific data.</p>
                                 <button onclick="location.href='{{route('tickets.index', ['create' => 'yes', 'department' => 'firchief', 'title' => 'Data request'])}}'" class="btn bg-czqo-blue-light">Support Ticket</button>
                             </div>
                           </li>

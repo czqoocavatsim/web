@@ -7,9 +7,12 @@ use Illuminate\Database\Eloquent\Model;
 use Parsedown;
 use Illuminate\Support\HtmlString;
 use App\Models\Users\User;
+use Spatie\Activitylog\Traits\LogsActivity;
 
 class EventUpdate extends Model
 {
+    use LogsActivity;
+
     protected $fillable = [
         'event_id', 'user_id', 'title', 'content', 'created_timestamp', 'slug'
     ];

@@ -8,18 +8,22 @@
         <div class="col-md-3">
             <h4 class="font-weight-bold blue-text">Actions</h4>
             <ul class="list-unstyled mt-3 mb-0" style="font-size: 1.05em;">
+                @can('edit event')
                 <li class="mb-2">
                     <a href="" data-toggle="modal" data-target="#editEvent" style="text-decoration:none;"><span class="blue-text"><i class="fas fa-chevron-right"></i></span> &nbsp; <span class="text-body">Edit event details</span></a>
                 </li>
                 <li class="mb-2">
                     <a href="" data-toggle="modal" data-target="#createUpdate" style="text-decoration:none;"><span class="blue-text"><i class="fas fa-chevron-right"></i></span> &nbsp; <span class="text-body">Create update</span></a>
                 </li>
+                @endcan
                 {{-- <li class="mb-2">
                     <a href="" style="text-decoration:none;"><span class="blue-text"><i class="fas fa-chevron-right"></i></span> &nbsp; <span class="text-body">Export controller applications</span></a>
                 </li> --}}
+                @can('delete event')
                 <li class="mb-2">
                     <a href="" data-toggle="modal" data-target="#deleteEvent" style="text-decoration:none;"><span class="red-text"><i class="fas fa-chevron-right"></i></span> &nbsp; <span class="text-body">Delete event</span></a>
                 </li>
+                @endcan
             </ul>
         </div>
         <div class="col-md-9">
@@ -92,6 +96,7 @@
     </div>
 </div>
 
+@can('delete event')
 <!--Delete event modal-->
 <div class="modal fade" id="deleteEvent" tabindex="-1" role="dialog">
     <div class="modal-dialog modal-dialog-centered" role="document">
@@ -115,7 +120,9 @@
     </div>
 </div>
 <!--End delete event modal-->
+@endcan
 
+@can('edit event')
 <!--Edit event modal-->
 <div class="modal fade" id="editEvent" tabindex="-1" role="dialog">
     <div class="modal-dialog modal-dialog-centered" role="document">
@@ -131,7 +138,7 @@
                 <div class="modal-body">
                     @if($errors->editEventErrors->any())
                     <div class="alert alert-danger">
-                        <h4>There were errors editing the event</h4>
+                        <h4>An error occurred whilst trying to edit the event</h4>
                         <ul class="pl-0 ml-0 list-unstyled">
                             @foreach ($errors->editEventErrors->all() as $error)
                                 <li>{{ $error }}</li>
@@ -152,11 +159,11 @@
                                 </div>
                                 <div class="form-group">
                                     <label for="">Start date and time</label>
-                                    <input type="datetime" name="start" value="{{$event->start_timestamp}}" placeholder="Put event start date/time here" class="form-control flatpickr" id="event_start">
+                                    <input type="datetime" name="start" value="{{$event->start_timestamp}}" placeholder="Event start date/time" class="form-control flatpickr" id="event_start">
                                 </div>
                                 <div class="form-group">
                                     <label for="">End date and time</label>
-                                    <input type="datetime" name="end" value="{{$event->end_timestamp}}" placeholder="Put event end date/time here" class="form-control flatpickr" id="event_end">
+                                    <input type="datetime" name="end" value="{{$event->end_timestamp}}" placeholder="Event end date/time" class="form-control flatpickr" id="event_end">
                                 </div>
                                 <div class="form-group">
                                     <label for="">Departure airport ICAO (optional)</label>
@@ -300,5 +307,7 @@
 @endif
 
 <!--End app update modal-->
+
+@endcan
 
 @endsection

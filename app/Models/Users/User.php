@@ -2,29 +2,39 @@
 
 namespace App\Models\Users;
 
-use App\Http\Controllers\RosterController;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Carbon;
-use App\Models\AtcTraining;
+use App\Models\Training;
+use App\Models\Community\Discord\DiscordBan;
 use App\Models\ControllerBookings;
 use App\Models\Events;
 use App\Models\Network;
 use App\Models\News;
 use App\Models\Publications;
+use App\Models\Roster\RosterMember;
 use App\Models\Settings;
 use App\Models\Tickets;
+use App\Models\Training\Application;
 use Exception;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
 use LasseRafn\InitialAvatarGenerator\InitialAvatar;
 use RestCord\DiscordClient;
+use Spatie\Activitylog\Traits\LogsActivity;
+use Spatie\Permission\Traits\HasRoles;
+use Throwable;
 
 class User extends Authenticatable
 {
     use Notifiable;
+    use HasRoles;
+    use LogsActivity;
+
+    protected static $logName = 'confidential';
+    protected static $logOnlyDirty = true;
 
     /**
      * The attributes that are mass assignable.
@@ -68,7 +78,7 @@ class User extends Authenticatable
 
     public function applications()
     {
-        return $this->hasMany(AtcTraining\Application::class);
+        return $this->hasMany(Training\Application::class);
     }
 
     public function instructorProfile()
@@ -98,7 +108,7 @@ class User extends Authenticatable
 
     public function rosterProfile()
     {
-        return $this->hasOne(AtcTraining\RosterMember::class);
+        return $this->hasOne(RosterMember::class);
     }
 
     public function notifications()
@@ -124,24 +134,18 @@ class User extends Authenticatable
         return $difference;
     }
 
-    public function permissions()
+    public function highestRole()
     {
-        switch ($this->permissions) {
-            case 0:
-                return "Guest";
-            break;
-            case 1:
-                return "Controller/Trainee";
-            break;
-            case 2:
-                return "Staff";
-            case 3:
-                return "Senior Staff";
-            case 4:
-                return "Administrator";
-            default:
-                return "Unknown";
+        //If the user doesnt have a role, then give them one temporarily.
+        if (count($this->roles) == 0) {
+            //Assign them guest
+            $this->assignRole('Guest');
+
+            //Should probably inform
+            Log::alert('User '.$this->id.' did not have any role assigned. Guest role assigned.');
         }
+
+        return $this->roles[0];
     }
 
     public function fullName($format)
@@ -235,7 +239,7 @@ class User extends Authenticatable
                 return true;
             }
         }
-        catch (Exception $ex) {
+        catch (Throwable $ex) {
             return false;
         }
         return false;
@@ -281,5 +285,11 @@ class User extends Authenticatable
     public function preferences()
     {
         return $this->hasOne(UserPreferences::class);
+    }
+
+    public function pendingApplication()
+    {
+        if ($pendingApp = Application::where('user_id', $this->id)->where('status', 0)->first()) { return $pendingApp; }
+        return null;
     }
 }

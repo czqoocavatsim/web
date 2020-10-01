@@ -40,9 +40,10 @@ class MassEmail extends Notification
      */
     public function toMail($notifiable)
     {
-        return (new MailMessage)->view(
+        // TODO: FIX
+       /* return (new MailMessage)->view(
             'emails.massemail', ['user' => $this->user]
-        )->subject($this->);
+        )->subject($this->);*/
     }
 
     /**

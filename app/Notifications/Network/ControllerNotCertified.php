@@ -46,10 +46,7 @@ class ControllerNotCertified extends Notification
                     ->line('An uncertified controller has signed onto a position.')
                     ->line('CID: '.$this->log->cid)
                     ->line('Session start: '.$this->log->session_start)
-                    ->line('Session end: '.$this->log->session_end)
                     ->line('Position: '. MonitoredPosition::find($this->log->monitored_position_id)->identifier)
-                    ->line('Duration: '.$this->log->duration)
-                    ->action('View Session (this is broken atm)', route('network.index'));
     }
 
     /**

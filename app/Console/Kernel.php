@@ -18,7 +18,6 @@ use App\Notifications\Network\ControllerInactive;
 use App\Notifications\Network\ControllerIsStudent;
 use App\Notifications\Network\ControllerNotCertified;
 use App\Notifications\Network\ControllerNotStaff;
-use App\Notifications\Network\OneMonthInactivityReminder;
 use App\Notifications\Network\OneWeekInactivityReminder;
 use App\Notifications\Network\TwoWeekInactivityReminder;
 use Illuminate\Support\Facades\DB;
@@ -82,7 +81,10 @@ class Kernel extends ConsoleKernel
                 // If it wasn't found, check if it has the correct callsign prefix
                 if (!$identFound) {
                     if (substr($controller['callsign'], 0, 4) == "CZQX" || substr($controller['callsign'], 0, 4) == "EGGX") {
-                        error_log("found");
+                        // Check if not CTR (otherwise will pick up Moncton)
+                        if (substr($controller['callsign'], 4, 4) != "_FSS") {
+                            continue; // If not FSS then continue
+                        }
                         // Add position to table if so, and email
                         $monPos = new MonitoredPosition();
                         $monPos->identifier = $controller["callsign"];
@@ -188,24 +190,30 @@ class Kernel extends ConsoleKernel
                             }
                         }
                     } else { // Send unauthorised notification to FIR Chief
-                        if ($user) $sessionLog->roster_member_id = $user->id;
-                        if (!$user->active) { // inactive
-                            if ($sessionLog->emails_sent < 1) {
-                                Notification::route('mail', CoreSettings::find(1)->emailfirchief)->notify(new ControllerInactive($sessionLog));
+                        if ($user) {
+                            $sessionLog->roster_member_id = $user->id;
+                            if (!$user->active) { // inactive
+                                if ($sessionLog->emails_sent < 1) {
+                                    Notification::route('mail', CoreSettings::find(1)->emailfirchief)->notify(new ControllerInactive($sessionLog));
+                                    $sessionLog->emails_sent++;
+                                    $sessionLog->save();
+                                }
+                            } else if ($user->status == 'training') {
+                                if ($sessionLog->emails_sent < 1) {
+                                    Notification::route('mail', CoreSettings::find(1)->emailfirchief)->notify(new ControllerIsStudent($sessionLog));
+                                    $sessionLog->emails_sent++;
+                                    $sessionLog->save();
+                                }
+                            } else if ($sessionLog->emails_sent < 1) {
+                                Notification::route('mail', CoreSettings::find(1)->emailfirchief)->notify(new ControllerNotCertified($sessionLog));
                                 $sessionLog->emails_sent++;
                                 $sessionLog->save();
                             }
-                        } else if ($user->status == 'training') {
-                            if ($sessionLog->emails_sent < 1) {
-                                Notification::route('mail', CoreSettings::find(1)->emailfirchief)->notify(new ControllerIsStudent($sessionLog));
-                                $sessionLog->emails_sent++;
-                                $sessionLog->save();
-                            }
-                        } else if ($sessionLog->emails_sent < 1) {
+                        } else {
                             Notification::route('mail', CoreSettings::find(1)->emailfirchief)->notify(new ControllerNotCertified($sessionLog));
                             $sessionLog->emails_sent++;
                             $sessionLog->save();
-                        }
+                        }                        
                     }
 
                     // Add session
@@ -221,11 +229,14 @@ class Kernel extends ConsoleKernel
                 // Loop through online controller list to find a match
                 foreach ($onlineControllers as $oc) {
                     if ($oc['cid'] == $log->cid) { // If CID matches
-                        $stillOnline = true;
+                        // If callsign matches
+                        if (MonitoredPosition::where('id', $sessionLog->monitored_position_id)->identifier == $oc['callsign']) {
+                            $stillOnline = true;
+                        }                           
                     }
                 }
 
-                // Check if the controller has indeed logged off
+                // Check if the controller has logged off
                 if (!$stillOnline) {
 
                     // Start and end values parsed so Carbon can understand them
@@ -266,7 +277,7 @@ class Kernel extends ConsoleKernel
             }
         })->everyMinute();
 
-        // 6 monthly currency wipe
+        // Quarterly currency wipe
         $schedule->call(function () {
             // Loop through all roster members
             foreach (RosterMember::all() as $rosterMember) {
@@ -274,10 +285,10 @@ class Kernel extends ConsoleKernel
                 $rosterMember->currency = 0.0;
                 $rosterMember->save();
             }
-        })->cron("0 0 1 */6 *");
+        })->cron("00 00 01 APR,JUL,OCT,JAN *");
 
         //// CRONS FOR INACTIVITY EMAILS
-        /// June
+        /// 2 weeks     
         $schedule->call(function () {
             //Loop through controllers
             $count = 0;
@@ -289,13 +300,14 @@ class Kernel extends ConsoleKernel
                 }
                 //Let's send them a notification
                 $count++;
-                $rosterMember->user->notify(new OneMonthInactivityReminder($rosterMember, 'june'));
+                $rosterMember->user->notify(new TwoWeekInactivityReminder($rosterMember, 'n/a'));
             }
             //Tell Discord all about it
             $discord = new DiscordClient(['token' => config('services.discord.token')]);
-            $discord->channel->createMessage(['channel.id' => 482817715489341441, 'content' => 'Sent '. $count . ' one month warning inactivty emails']);
-        })->cron("0 0 1 6 *"); // 1 month before end of period
-
+            $discord->channel->createMessage(['channel.id' => 482817715489341441, 'content' => 'Sent '. $count . ' two-week warning inactivity emails']);
+        })->cron("00 00 16 MAR,JUN,SEP,DEC *"); // 2 weeks before end of quarter
+        
+        /// 1 week
         $schedule->call(function () {
             //Loop through controllers
             $count = 0;
@@ -307,87 +319,14 @@ class Kernel extends ConsoleKernel
                 }
                 //Let's send them a notification
                 $count++;
-                $rosterMember->user->notify(new TwoWeekInactivityReminder($rosterMember, 'june'));
+                $rosterMember->user->notify(new OneWeekInactivityReminder($rosterMember, 'n/a'));
             }
             //Tell Discord all about it
             $discord = new DiscordClient(['token' => config('services.discord.token')]);
-            $discord->channel->createMessage(['channel.id' => 482817715489341441, 'content' => 'Sent '. $count . ' two week warning inactivty emails']);
-        })->cron("0 0 17 6 *"); // 2 weeks before end of period
+            $discord->channel->createMessage(['channel.id' => 482817715489341441, 'content' => 'Sent '. $count . ' one-week warning inactivity emails']);
+        })->cron("00 00 23 MAR,JUN,SEP,DEC *"); // 1 week before end of quarter
 
-        $schedule->call(function () {
-            //Loop through controllers
-            $count = 0;
-            foreach (RosterMember::all() as $rosterMember) {
-                //Do they meet the requirements?
-                if ($rosterMember->meetsActivityRequirement()) {
-                    //Yes... skip them
-                    continue;
-                }
-                //Let's send them a notification
-                $count++;
-                $rosterMember->user->notify(new OneWeekInactivityReminder($rosterMember, 'june'));
-            }
-            //Tell Discord all about it
-            $discord = new DiscordClient(['token' => config('services.discord.token')]);
-            $discord->channel->createMessage(['channel.id' => 482817715489341441, 'content' => 'Sent '. $count . ' one week warning inactivty emails']);
-        })->cron("0 0 24 6 *"); // 1 week before end of period
-
-        /// December
-        $schedule->call(function () {
-            //Loop through controllers
-            $count = 0;
-            foreach (RosterMember::all() as $rosterMember) {
-                //Do they meet the requirements?
-                if ($rosterMember->meetsActivityRequirement()) {
-                    //Yes... skip them
-                    continue;
-                }
-                //Let's send them a notification
-                $count++;
-                $rosterMember->user->notify(new OneMonthInactivityReminder($rosterMember, 'december'));
-            }
-            //Tell Discord all about it
-            $discord = new DiscordClient(['token' => config('services.discord.token')]);
-            $discord->channel->createMessage(['channel.id' => 482817715489341441, 'content' => 'Sent '. $count . ' one month warning inactivty emails']);
-        })->cron("0 0 1 12 *"); // 1 month before end of period
-
-        $schedule->call(function () {
-            //Loop through controllers
-            $count = 0;
-            foreach (RosterMember::all() as $rosterMember) {
-                //Do they meet the requirements?
-                if ($rosterMember->meetsActivityRequirement()) {
-                    //Yes... skip them
-                    continue;
-                }
-                //Let's send them a notification
-                $count++;
-                $rosterMember->user->notify(new TwoWeekInactivityReminder($rosterMember, 'december'));
-            }
-            //Tell Discord all about it
-            $discord = new DiscordClient(['token' => config('services.discord.token')]);
-            $discord->channel->createMessage(['channel.id' => 482817715489341441, 'content' => 'Sent '. $count . ' two week warning inactivty emails']);
-        })->cron("0 0 16 12 *"); // 2 weeks before end of period
-
-        $schedule->call(function () {
-            //Loop through controllers
-            $count = 0;
-            foreach (RosterMember::all() as $rosterMember) {
-                //Do they meet the requirements?
-                if ($rosterMember->meetsActivityRequirement()) {
-                    //Yes... skip them
-                    continue;
-                }
-                //Let's send them a notification
-                $count++;
-                $rosterMember->user->notify(new OneWeekInactivityReminder($rosterMember, 'december'));
-            }
-            //Tell Discord all about it
-            $discord = new DiscordClient(['token' => config('services.discord.token')]);
-            $discord->channel->createMessage(['channel.id' => 482817715489341441, 'content' => 'Sent '. $count . ' one week warning inactivty emails']);
-        })->cron("0 0 23 12 *"); // 1 week before end of period
-
-        // Monthly leaderboard wipe
+        /// Monthly leaderboard wipe
         $schedule->call(function () {
             // Loop through all roster members
             foreach (RosterMember::all() as $rosterMember) {
@@ -397,7 +336,7 @@ class Kernel extends ConsoleKernel
             }
         })->monthlyOn(1, '00:00');
 
-        // Daily roster rating check
+        /// Daily roster rating check
         $schedule->call(function () {
             // Loop through all roster members
             foreach (RosterMember::all() as $rosterMember) {
@@ -413,7 +352,7 @@ class Kernel extends ConsoleKernel
         })->dailyAt('00:00');
 
         // Discord role updating
-        //$schedule->job(new UpdateDiscordUserRoles)->twiceDaily(6, 18);
+        $schedule->job(new UpdateDiscordUserRoles)->twiceDaily(6, 18);
     }
 
     /**

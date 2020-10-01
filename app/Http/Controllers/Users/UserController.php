@@ -7,7 +7,7 @@ use App\Models\Settings\AuditLogEntry;
 use App\Models\ControllerBookings\ControllerBookingsBan;
 use App\Models\Users\DiscordBan;
 use App\Notifications\DiscordLinkCreated;
-use App\Notifications\DiscordWelcome;
+use App\Notifications\Discord\DiscordWelcome;
 use App\Notifications\PermissionsChanged;
 use App\Models\Users\User;
 use App\Models\Users\UserNote;
@@ -20,6 +20,8 @@ use RestCord\DiscordClient;
 use SocialiteProviders\Manager\Config;
 use function GuzzleHttp\Promise\all;
 use function GuzzleHttp\Psr7\str;
+use function PHPSTORM_META\map;
+
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use Mail;
@@ -29,17 +31,21 @@ use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Validator;
 use Laravel\Socialite\Facades\Socialite;
 use NotificationChannels\Discord\Discord;
-
+use Spatie\Permission\Models\Permission;
+use Spatie\Permission\Models\Role;
 
 class UserController extends Controller
 {
-    public function privacyAccept()
+    public function privacyAccept(Request $request)
     {
         $user = Auth::user();
         if ($user->init == 1) {
             return redirect()->route('index');
         }
         $user->init = 1;
+        if ($request->get('optInEmails')) {
+            $user->gdpr_subscribed_emails = 1;
+        }
         $user->save();
         $user->notify(new WelcomeNewUser($user));
         return redirect('/dashboard')->with('success', 'Welcome to CZQO, '.$user->fname.'! We are glad to have you on board.');
@@ -67,12 +73,10 @@ class UserController extends Controller
     public function viewUserProfile($id)
     {
         $user = User::where('id', $id)->firstOrFail();
-        $xml = [];
-        //$xml['return'] = file_get_contents('https://cert.vatsim.net/cert/vatsimnet/idstatus.php?cid=' . $user->id);
-        $xml['return'] = 'sausage';
-        $auditLog = AuditLogEntry::where('affected_id', $id)->get();
+        $assignableRoles = Role::all();
+        $assignablePermissions = Permission::all();
 
-        return view('admin.users.profile', compact('user', 'xml', 'auditLog'));
+        return view('admin.users.profile', compact('user', 'assignableRoles', 'assignablePermissions'));
     }
 
     public function deleteUser($id)
@@ -92,7 +96,7 @@ class UserController extends Controller
         $entry->save();
         $user->fname = 'Deleted';
         $user->lname = 'User';
-        $user->email = 'no-reply@czqo.vatcan.ca';
+        $user->email = 'no-reply@ganderoceanic.com';
         $user->rating = 'Deleted';
         $user->division = 'Deleted';
         $user->permissions = 0;
@@ -276,7 +280,7 @@ class UserController extends Controller
         $user->avatar_mode = 1;
         $user->save();
 
-        return redirect()->route('dashboard.index')->with('success', 'Avatar changed!');
+        return redirect()->route('my.index')->with('success', 'Avatar changed!');
     }
 
     public function changeAvatarDiscord()
@@ -284,7 +288,7 @@ class UserController extends Controller
         $user = Auth::user();
         $user->avatar_mode = 2;
         $user->save();
-        return redirect()->route('dashboard.index')->with('success', 'Avatar changed!');
+        return redirect()->route('my.index')->with('success', 'Avatar changed!');
     }
 
     public function resetAvatar()
@@ -324,28 +328,7 @@ class UserController extends Controller
 
     public function editBio(Request $request)
     {
-        $this->validate($request, [
-            'bio' => 'sometimes|max:5000',
-        ]);
 
-        //Get user
-        $user = Auth::user();
-
-        //Get input
-        $input = $request->get('bio');
-
-        //Run through profanity filter
-        $check = new Check();
-        if ($check->hasProfanity($input)) {
-            return redirect()->back()->withInput()->with('error-modal', 'Profanity was detected in your input, please remove it.');
-        }
-
-        //No swear words.. give them the new bio
-        $user->bio = $input;
-        $user->save();
-
-        //Redirect
-        return redirect()->back()->with('success', 'Biography saved!');
     }
 
     public function changeDisplayName(Request $request)
@@ -431,12 +414,12 @@ class UserController extends Controller
         }
         $user = Auth::user();
         if (User::where('discord_user_id', $discordUser->id)->first()) {
-            return redirect()->route('dashboard.index')->with('error-modal', 'This Discord account has already been linked by another user.');
+            return redirect()->route('my.index')->with('error-modal', 'This Discord account has already been linked by another user.');
         }
         $user->discord_user_id = $discordUser->id;
         $user->discord_dm_channel_id = app(Discord::class)->getPrivateChannel($discordUser->id);
         $user->save();
-        return redirect()->route('dashboard.index')->with('success', 'Linked with account '.$discordUser->nickname. '!');
+        return redirect()->route('my.index')->with('success', 'Linked with account '.$discordUser->nickname. '!');
     }
 
     public function joinDiscordServerRedirect()
@@ -455,7 +438,7 @@ class UserController extends Controller
             'user.id' => intval($discordUser->id),
             'access_token' => $discordUser->token,
              'nick' => Auth::user()->fullName('FLC')
-        );
+        );/*
         if (Auth::user()->rosterProfile) {
             if (Auth::user()->rosterProfile->status == 'training') {
                 $args['roles'] = array(482824058141016075);
@@ -464,13 +447,13 @@ class UserController extends Controller
                 $args['roles'] = array(482819739996127259);
             }
         }
-        else {
+        else { */
             $args['roles'] = array(482835389640343562);
-        }
+        // }
         $discord->guild->addGuildMember($args);
         Auth::user()->notify(new DiscordWelcome());
         $discord->channel->createMessage(['channel.id' => 482860026831175690, 'content' => '<@'.$discordUser->id.'> ('.Auth::id().') has joined.']);
-        return redirect()->route('dashboard.index')->with('success', 'You have joined the CZQO Discord server!');
+        return redirect()->route('my.index')->with('success', 'You have joined the CZQO Discord server!');
     }
 
     public function unlinkDiscord()
@@ -491,7 +474,7 @@ class UserController extends Controller
             $user->avatar_mode = 0;
         }
         $user->save();
-        return redirect()->route('dashboard.index')->with('info', 'Account unlinked.');
+        return redirect()->route('my.index')->with('info', 'Account unlinked.');
     }
 
     public function preferences()
@@ -504,12 +487,14 @@ class UserController extends Controller
     {
         //Define validator messages
         $messages = [
-            'ui_mode.required' => 'Please select a UI mode.'
+            'ui_mode.required' => 'Please select a UI mode.',
+            'accent_colour.required' => 'Please select an accent colour'
         ];
 
         //Validate
         $validator = Validator::make($request->all(), [
             'ui_mode' => 'required',
+            'accent_colour' => 'required'
         ], $messages);
 
         //Redirect if fails
@@ -522,6 +507,9 @@ class UserController extends Controller
 
         //UI mode
         $preferences->ui_mode = $request->get('ui_mode');
+
+        //Accent colour
+        $request->get('accent_colour') != "default" ? $preferences->accent_colour = $request->get('accent_colour') : $preferences->accent_colour = null;
 
         //Save and redirect
         $preferences->save();

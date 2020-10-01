@@ -13,7 +13,7 @@
 <div class="container" style="margin-top: 20px;">
         <h1 class="blue-text font-weight-bold">Controller Roster</h1>
         <hr>
-        <p>Please note that the 'full name' field on this roster is dependant on the controller's name settings on the CZQO Core. As such, it is best to rely on the CID to determine whether they are on the roster.</p>
+        <p>Please note that the 'full name' field on this roster is dependent on the controller's individual name settings on the CZQO Core system.<br><i class="fas fa-certificate"></i> = Solo Certification</p>
         <table id="rosterTable" class="table table-hover">
             <thead>
                 <tr>
@@ -31,6 +31,9 @@
                     <th scope="row"><b>{{$controller->cid}}</b></th>
                     <td>
                         {{$controller->user->fullName('FL')}}
+                        @if ($controller->activeSoloCertification())
+                        <i title="Solo certification active - expires {{$controller->activeSoloCertification()->expires->toDateString()}}" class="fas fa-certificate"></i>
+                    @endif
                     </td>
                     <td>
                         {{$controller->user->rating_short}}
@@ -43,25 +46,21 @@
                     @else
                         <td class="bg-danger text-white">Inactive</td>
                     @endif
-                    @if ($controller->status == "certified")
-                        <td class="bg-success text-white">
-                            Certified
-                        </td>
-                    @elseif ($controller->status == "not_certified")
+                    @if ($controller->certification == "certified")
+                    <td class="bg-success text-white">
+                        Certified
+                    </td>
+                    @elseif ($controller->certification == "not_certified")
                         <td class="bg-danger text-white">
                             Not Certified
                         </td>
-                    @elseif ($controller->status == "instructor")
-                        <td class="bg-info text-white">
-                            Instructor
-                        </td>
-                    @elseif ($controller->status == "training")
+                    @elseif ($controller->certification == "training")
                         <td class="bg-warning text-dark">
                             Training
                         </td>
                     @else
                         <td>
-                            {{$controller->status}}
+                            {{$controller->certification}}
                         </td>
                     @endif
                 </tr>

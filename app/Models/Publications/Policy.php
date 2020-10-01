@@ -2,13 +2,29 @@
 
 namespace App\Models\Publications;
 
+use App\Models\Users\User;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Support\HtmlString;
+use Parsedown;
+use Spatie\Activitylog\Traits\LogsActivity;
 
 class Policy extends Model
 {
-    protected $table = 'policies';
+    use LogsActivity;
+    use SoftDeletes;
 
     protected $fillable = [
-        'name', 'details', 'link', 'embed', 'author', 'releaseDate', 'staff_only',
+        'user_id', 'title', 'description', 'url'
     ];
+
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
+
+    public function descriptionHtml()
+    {
+        return new HtmlString(app(Parsedown::class)->text($this->description));
+    }
 }

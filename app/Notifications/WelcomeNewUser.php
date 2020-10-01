@@ -42,7 +42,7 @@ class WelcomeNewUser extends Notification
     {
         return (new MailMessage)->view(
             'emails.welcomenewuser', ['user' => $this->user]
-        )->subject('Welcome to CZQO, ' . $this->user->fullName('F') . '!')->from('chief@czqo.vatcan.ca', 'Andrew Ogden');
+        )->subject('Welcome to CZQO, ' . $this->user->fullName('F') . '!')->from('chief@ganderoceanic.com', 'Andrew Ogden');
     }
 
     /**

@@ -45,7 +45,15 @@ return [
         'client_id' => env('DISCORD_KEY'),
         'client_secret' => env('DISCORD_SECRET'),
         'redirect' => env('DISCORD_REDIRECT_URI'),
+        'redirect_server_join_process' => env('DISCORD_REDIRECT_URI').'/server_join_process',
         'redirect_join' => env('DISCORD_REDIRECT_URI_JOIN'),
-        'guild_id' => env('DISCORD_GUILD_ID')
+        'guild_id' => env('DISCORD_GUILD_ID'),
+        //Guild IDs
+        'web_logs' => env('DISCORD_WEB_LOGS'),
+        'guild_logs' => env('DISCORD_GUILD_LOGS'),
+        'announcements' => env('DISCORD_ANNOUNCEMENTS'),
+        'endorsements' => env('DISCORD_ENDORSEMENTS'),
+        'marketing' => env('DISCORD_MARKETING'),
+        'staff' => env('DISCORD_STAFF')
     ],
 ];

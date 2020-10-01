@@ -15,6 +15,7 @@ use Carbon\Carbon;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Str;
+use RestCord\DiscordClient;
 
 class EventController extends Controller
 {
@@ -61,10 +62,34 @@ class EventController extends Controller
             'submission_timestamp' => date('Y-m-d H:i:s'),
         ]);
         $application->save();
-        $webhook = $application->discord_webhook();
-        if (!$webhook) {
-            AuditLogEntry::insert(Auth::user(), 'Webhook failed', Auth::user(), 0);
-        }
+
+        //Discord client
+        $discord = new DiscordClient(['token' => config('services.discord.token')]);
+
+        //Send notification to marketing
+        $discord->channel->createMessage([
+            'channel.id' => intval(config('services.discord.marketing')),
+            "content" => "A controller has applied to control for " . $application->event->name,
+            'embed' => [
+                "title" => $application->user->fullName('FLC'),
+                "url" => route('events.admin.view', $application->event->slug),
+                "timestamp" => date('Y-m-d H:i:s'),
+                "color" => hexdec( "2196f3" ),
+                "fields" => [
+                    [
+                        "name" => "Timing",
+                        "value" => "From " . $application->start_availability_timestamp . " to " . $application->end_availability_timestamp,
+                        "inline" => false
+                    ],
+                    [
+                        "name" => "Comments",
+                        "value" => $application->comments,
+                        "inline" => true
+                    ],
+                ]
+            ]
+        ]);
+
         return redirect()->back()->with('success', 'Submitted!');
     }
 

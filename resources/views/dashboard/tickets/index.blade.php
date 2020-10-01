@@ -8,7 +8,7 @@
 
 @section('content')
         <div class="container" style="margin-top: 20px;">
-        <a href="{{route('dashboard.index')}}" class="blue-text" style="font-size: 1.2em;"> <i class="fas fa-arrow-left"></i> Dashboard</a>
+        <a href="{{route('my.index')}}" class="blue-text" style="font-size: 1.2em;"> <i class="fas fa-arrow-left"></i> myCZQO</a>
         <h1 class="blue-text font-weight-bold mt-2">Support Tickets</h1>
         <hr>
         <div class="mb-2">
@@ -105,7 +105,6 @@
                             <option value="{{$s->shortform}}">{{$s->position}} - {{$s->user->fullName('FLC')}}</option>
                             @endforeach
                         </select>
-                        <small>For general feedback, choose the Executive Team.</small>
                     </div>
                     <div class="form-group">
                         <label for="recipient-name" class="col-form-label">Title</label>

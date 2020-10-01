@@ -9,7 +9,7 @@ We would love you to help out with the website! If you find something and fix it
 
 #### Using this for your own VATSIM website
 
-czqo-core is licensed under the **MIT License**. You are free to use code from the repository within the reigns of that license. 
+czqo-core is licensed under the **MIT License**. You are free to use code from the repository within the reigns of that license.
 
 However, if you wish to use czqo-core as a basis for your own VATSIM related website (e.g. an FIR), we humbly ask the following:
 
@@ -85,4 +85,3 @@ This site uses the [Laravel Permissions](https://docs.spatie.be/laravel-permissi
 * Go to the `model_has_roles` table in your database.
 * Create a row where the `model_id` is the user's CID, `model_type` is `App\Models\Users\User`, and `role_id` is `1.`
 * Refresh on the website. You should now have administrator permissions.
-

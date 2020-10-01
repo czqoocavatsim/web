@@ -215,14 +215,14 @@
 <!--[if mso]><table width="100%" cellpadding="0" cellspacing="0" border="0"><tr><td style="padding-right: 10px; padding-left: 10px; padding-top: 10px; padding-bottom: 10px; font-family: Tahoma, Verdana, sans-serif"><![endif]-->
 <div style="color:#555555;font-family:'Source Sans Pro', Tahoma, Verdana, Segoe, sans-serif;line-height:1.2;padding-top:10px;padding-right:10px;padding-bottom:10px;padding-left:10px;">
 <div style="font-size: 14px; line-height: 1.2; color: #555555; font-family: 'Source Sans Pro', Tahoma, Verdana, Segoe, sans-serif; mso-line-height-alt: 17px;">
-<p style="font-size: 14px; line-height: 1.2; word-break: break-word; mso-line-height-alt: 17px; margin: 0;"><strong>This email was sent from an unmonitored address. Do not reply.</strong></p>
+<p style="font-size: 14px; line-height: 1.2; word-break: break-word; mso-line-height-alt: 17px; margin: 0;"><strong>Do not reply. This email was sent from an unmonitored address and replies will not be read.</strong></p>
 </div>
 </div>
 <!--[if mso]></td></tr></table><![endif]-->
 <!--[if mso]><table width="100%" cellpadding="0" cellspacing="0" border="0"><tr><td style="padding-right: 10px; padding-left: 10px; padding-top: 10px; padding-bottom: 10px; font-family: Tahoma, Verdana, sans-serif"><![endif]-->
 <div style="color:#555555;font-family:'Source Sans Pro', Tahoma, Verdana, Segoe, sans-serif;line-height:1.2;padding-top:10px;padding-right:10px;padding-bottom:10px;padding-left:10px;">
 <div style="line-height: 1.2; font-size: 12px; color: #555555; font-family: 'Source Sans Pro', Tahoma, Verdana, Segoe, sans-serif; mso-line-height-alt: 14px;">
-<p style="line-height: 1.2; word-break: break-word; font-size: 14px; mso-line-height-alt: 17px; margin: 0;"><span style="font-size: 14px;"><strong><a href="https://ganderoceanic.com" rel="noopener" style="text-decoration: underline; color: #0068A5;" target="_blank">https://ganderoceanic.com</a> |  <a href="https://ganderoceanic.com/staff" rel="noopener" style="text-decoration: underline; color: #0068A5;" target="_blank">Contact Us</a> |  <a href="https://czqo.vatcan.ca/privacy" rel="noopener" style="text-decoration: underline; color: #0068A5;" target="_blank">Privacy Policy</a></strong></span></p>
+<p style="line-height: 1.2; word-break: break-word; font-size: 14px; mso-line-height-alt: 17px; margin: 0;"><span style="font-size: 14px;"><strong><a href="https://ganderoceanic.com" rel="noopener" style="text-decoration: underline; color: #0068A5;" target="_blank">https://ganderoceanic.com</a> |  <a href="https://ganderoceanic.com/staff" rel="noopener" style="text-decoration: underline; color: #0068A5;" target="_blank">Contact Us</a> |  <a href="https://ganderoceanic.com/privacy" rel="noopener" style="text-decoration: underline; color: #0068A5;" target="_blank">Privacy Policy</a></strong></span></p>
 </div>
 </div>
 <!--[if mso]></td></tr></table><![endif]-->

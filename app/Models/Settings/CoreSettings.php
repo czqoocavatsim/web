@@ -3,9 +3,12 @@
 namespace App\Models\Settings;
 
 use Illuminate\Database\Eloquent\Model;
+use Spatie\Activitylog\Traits\LogsActivity;
 
 class CoreSettings extends Model
 {
+    use LogsActivity;
+
     protected $table = 'core_info';
 
     protected $fillable = [

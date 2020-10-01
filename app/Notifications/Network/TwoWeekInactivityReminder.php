@@ -43,7 +43,7 @@ class TwoWeekInactivityReminder extends Notification
     {
         return (new MailMessage)->view(
             'emails.network.twoweekinactivityreminder', ['rosterMember' => $this->rosterMember, 'cycle' => $this->cycle]
-        )->subject('[NOTICE] Two Weeks To Reach Activty Requirement');
+        )->subject('[NOTICE] Two Weeks To Fulfil Activity Requirement');
     }
 
     /**
