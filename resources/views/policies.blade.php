@@ -18,7 +18,7 @@
                         <a data-policy-id="{{$policy->id}}" href="javascript:void(0)" class="expandHidePolicyButton"><i class="fa fa-eye"></i>&nbsp;View Policy and Description</a>
                     </div>
                 </div>
-                <div class="pt-2" id="policyEmbed{{$policy->id}}">
+                <div class="pt-2 d-none" id="policyEmbed{{$policy->id}}">
                     <p>
                         {{$policy->descriptionHtml()}}
                     </p>
