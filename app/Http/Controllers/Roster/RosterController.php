@@ -174,7 +174,7 @@ class RosterController extends Controller
         $rosterMember->remarks = $request->get('remarks');
 
         //User
-        $user = User::whereId($request->get('cid'))->first();
+        $user = User::whereId($rosterMember->user->id)->first();
 
         //Date certified
         switch ($request->get('certification')) {
