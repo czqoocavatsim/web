@@ -35,7 +35,7 @@ class Application extends Model
                 return array('html' => '<i class="fas fa-check"></i>&nbsp;Accepted', 'class' => 'green white-text');
             break;
             case 2:
-                return array('html' => '<i class="fas fa-times"></i>&nbsp;Denied', 'class' => 'red white-text');
+                return array('html' => '<i class="fas fa-times"></i>&nbsp;Rejected', 'class' => 'red white-text');
             break;
             case 3:
                 return array('html' => '<i class="fas fa-times"></i>&nbsp;Withdrawn', 'class' => 'grey white-text');

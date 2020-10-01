@@ -4,7 +4,7 @@ namespace App\Listeners\Training;
 
 use App\Events\Training\ApplicationSubmitted;
 use App\Models\Settings\CoreSettings;
-use App\Notifications\Training\NewApplicationStaff;
+use App\Notifications\Training\Applications\NewApplicationStaff;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Support\Facades\Log;
@@ -31,7 +31,7 @@ class SendNewApplicationStaffNotification
     public function handle(ApplicationSubmitted $event)
     {
         //Send notification
-        //FIR Chief
+        //[Deputy] OCA Chief
         Notification::route('mail', CoreSettings::find(1)->emailfirchief)
                     ->route('mail', CoreSettings::find(1)->emaildepfirchief)
                     ->notify(new NewApplicationStaff($event->application));

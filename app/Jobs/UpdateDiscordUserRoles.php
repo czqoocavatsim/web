@@ -73,7 +73,7 @@ class UpdateDiscordUserRoles implements ShouldQueue
             } else {
                 //What status do they have?
                 $rosterProfile = $user->rosterProfile;
-                switch ($rosterProfile->status) {
+                switch ($rosterProfile->certification) {
                     case 'certified':
                         array_push($rolesToAdd, $discordRoleIds['certified']);
                         break;

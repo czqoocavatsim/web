@@ -12,10 +12,13 @@
             <div class="col-md-5">
                 <h1 class="font-weight-bold blue-text">Apply to join Gander Oceanic</h1>
                 <p style="font-size: 1.2em;" class="mt-3">
-                    Thank you for choosing to apply to be an oceanic controller with us! By applying for Gander, you have the opportunity to join our small yet exciting community of passionate people.
+                    Thank you for choosing to apply to be an oceanic controller with us! By applying for Gander, you have the opportunity to join our exciting community of passionate controllers.
                 </p>
                 <p style="font-size: 1.2em;" class="mt-3">
-                    If you have any questions you would like answered before applying, please don't hestiate to reach out via a support ticket or email. We also have a Discord community, which you can join on the Dashboard.
+                    If you have any questions you would like answered before applying, please don't hestiate to reach out via a support ticket or email. We also have a Discord community, which you can join through myCZQO.
+                </p>
+                <p style="font-size: 1.2em;" class="mt-3">
+                    To be able to apply, you require a C1 rating or higher and at least 80 hours controlling Enroute positions, 25 of which controlling a single Enroute position. If you do not yet meet these requirements, your application may be rejected.
                 </p>
                 <p style="font-size: 1.4em;" class="mt-3">
                     <a class="blue-text font-weight-bold" href="#applicationBody">Let's begin your application! &nbsp;&nbsp;<i class="fas fa-arrow-down"></i></a>
@@ -85,7 +88,7 @@
                 <span class="label">Finish your application</span>
             </a>
             <div class="step-content w-75 grey lighten-3">
-                <p>By applying to Gander Oceanic you acknowledge the activity requirements for after you receive your endorsement. You will be required to control 6 hours each half-year. Failure to do so could result in the removal of your endorsement.</p>
+                <p>By applying to Gander Oceanic you acknowledge the activity requirements for after you receive your endorsement. You will be required to control 3 hours each half-year. Failure to do so may result in the removal of your endorsement.</p>
                 <p>You also agree to comply with our General and Training policies.</p>
                 <div class="custom-control custom-checkbox">
                     <input type="checkbox" class="custom-control-input" required name="agreeActivity" id="agreeActivity">
@@ -108,13 +111,13 @@
             <div class="col-md-5">
                 <h1 class="font-weight-bold red-text">You do not yet meet the requirements to apply</h1>
                 <p style="font-size: 1.2em;" class="mt-3">
-                    Thank you for choosing to apply to be an oceanic controller with us! Unfortunately, you do not yet meet our hour requirement to apply.
+                    Thank you for showing your interest in becoming a Gander Oceanic controller. Unfortunately, you do not yet meet our application requirements.
                 </p>
                 <p style="font-size: 1.2em;" class="mt-3">
-                    To apply, you require <strong>80 hours</strong> on your <strong>C1+ rating.</strong> You currently have {{$hoursTotal}} hours towards that requirement.
+                    To apply, you require <strong>80 hours</strong> on your <strong>C1+ rating controlling Enroute positions, 25 of which controlling a single Enroute position.</strong> You currently have {{$hoursTotal}} hours towards that requirement.
                 </p>
                 <p style="font-size: 1.2em;" class="mt-3">
-                    If you believe there is a mistake, please contact us so we can investigate.
+                    If you believe there has been an error, please contact us so that we can investigate.
                 </p>
                 <div class="d-flex flex-row">
                     <a href="{{route('tickets.index', ['create' => 'yes', 'department' => 'firchief', 'title' => 'Issue with hour requirement check on application system'])}}" class="btn bg-czqo-blue-light" role="button">Create a support ticket</a>
@@ -135,13 +138,13 @@
             <div class="col-md-5">
                 <h1 class="font-weight-bold red-text">You do not yet meet the requirements to apply</h1>
                 <p style="font-size: 1.2em;" class="mt-3">
-                    Thank you for choosing to apply to be an oceanic controller with us! Unfortunately, you do not yet meet our rating requirement to apply.
+                    Thank you for showing your interest in becoming a Gander Oceanic controller. Unfortunately, you do not yet meet our application requirements.
                 </p>
                 <p style="font-size: 1.2em;" class="mt-3">
-                    To apply, you require a C1 rating or better, and <strong>80 hours</strong> on that <strong>C1+ rating.</strong>
+                    To be able to apply, you require a C1 rating or higher and at least 80 hours controlling Enroute positions, 25 of which controlling a single Enroute position.
                 </p>
                 <p style="font-size: 1.2em;" class="mt-3">
-                    If you believe there is a mistake, please contact us so we can investigate.
+                    If you believe there has been an error, please contact us so that we can investigate.
                 </p>
                 <div class="d-flex flex-row">
                     <a href="{{route('tickets.index', ['create' => 'yes', 'department' => 'firchief', 'title' => 'Issue with rating requirement check on application system'])}}" class="btn bg-czqo-blue-light" role="button">Create a support ticket</a>

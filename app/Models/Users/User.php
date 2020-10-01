@@ -16,6 +16,7 @@ use App\Models\Publications;
 use App\Models\Roster\RosterMember;
 use App\Models\Settings;
 use App\Models\Tickets;
+use App\Models\Training\Application;
 use Exception;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Log;
@@ -284,5 +285,11 @@ class User extends Authenticatable
     public function preferences()
     {
         return $this->hasOne(UserPreferences::class);
+    }
+
+    public function pendingApplication()
+    {
+        if ($pendingApp = Application::where('user_id', $this->id)->where('status', 0)->first()) { return $pendingApp; }
+        return null;
     }
 }

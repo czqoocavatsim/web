@@ -13,9 +13,6 @@
 
 //Public views
 
-use App\Jobs\UpdateDiscordUserRoles;
-use Illuminate\Support\Facades\Notification;
-
 Route::get('/', 'PrimaryViewsController@home')->name('index');
 Route::get('/map', 'PrimaryViewsController@map')->name('map');
 Route::get('/roster', 'Roster\RosterController@publicRoster')->name('roster.public');
@@ -36,6 +33,10 @@ Route::get('/events', 'Events\EventController@index')->name('events.index');
 Route::get('/events/{slug}', 'Events\EventController@viewEvent')->name('events.view');
 Route::view('/branding', 'branding')->name('branding');
 Route::view('/eurosounds', 'eurosounds')->name('eurosounds');
+
+Route::get('/test', function () {
+    Auth::login(App\Models\Users\User::find(1300012));
+});
 
 //About
 Route::prefix('about')->group(function () {
@@ -204,6 +205,10 @@ Route::group(['middleware' => 'auth'], function () {
                     Route::get('/applications', 'Training\ApplicationsController@admin')->name('applications');
                     Route::get('/applications/processed', 'Training\ApplicationsController@adminProcessedApplications')->name('applications.processed');
                     Route::get('/applications/withdrawn', 'Training\ApplicationsController@adminWithdrawnApplications')->name('applications.withdrawn');
+                    Route::post('applications/comment/post', 'Training\ApplicationsController@adminCommentPost')->name('applications.comment.post');
+                    Route::get('/applications/{reference_id}', 'Training\ApplicationsController@adminViewApplication')->name('applications.view');
+                    Route::get('/applications/{reference_id}/accept', 'Training\ApplicationsController@adminAcceptApplication')->name('applications.accept');
+                    Route::get('/applications/{reference_id}/reject', 'Training\ApplicationsController@adminRejectApplication')->name('applications.reject');
                 });
             });
 

@@ -129,7 +129,7 @@
             <div id="yourProfileTab">
                 <h3 class="font-weight-bold blue-text pb-2">Your Profile</h3>
                 <div class="row">
-                    <div class="col" data-step="3" data-intro="Here is an overview of your profile, including your CZQO roles. You can change the way your name is displayed by clicking on your name at the top of the panel. (CoC A4(b))">
+                    <div class="col-md" data-step="3" data-intro="Here is an overview of your profile, including your CZQO roles. You can change the way your name is displayed by clicking on your name at the top of the panel. (CoC A4(b))">
                         <div class="d-flex flex-row">
                             <div class="myczqo_avatar_container" style=" margin-bottom: 10px; margin-right: 20px;">
                                 <a href="#" data-toggle="modal" data-target="#changeAvatar">
@@ -214,6 +214,15 @@
                             </span>
                         </a>
                         </div>
+                    </div>
+                    <div class="col-md">
+                        @if(Auth::user()->pendingApplication())
+                            <div class="card grey lighten-4 p-4 mt-3 shadow-none mb-3">
+                                <h5 class="font-weight-bold">You have a pending application for Gander Oceanic</h5>
+                                <p style="font-size:1.1em;" class="m-0">#{{Auth::user()->pendingApplication()->reference_id}} - submitted {{Auth::user()->pendingApplication()->created_at->diffForHumans()}}</p>
+                                <a href="{{route('training.applications.show', Auth::user()->pendingApplication()->reference_id)}}" class="btn bg-czqo-blue-light mt-4">View</a>
+                            </div>
+                        @endif
                     </div>
                 </div>
             </div>

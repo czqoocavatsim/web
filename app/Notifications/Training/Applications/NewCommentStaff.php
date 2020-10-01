@@ -1,14 +1,15 @@
 <?php
 
-namespace App\Notifications\Training;
+namespace App\Notifications\Training\Applications;
 
 use App\Models\Training\Application;
+use App\Models\Training\ApplicationComment;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
 
-class NewApplicationStaff extends Notification
+class NewCommentStaff extends Notification
 {
     use Queueable;
 
@@ -17,9 +18,10 @@ class NewApplicationStaff extends Notification
      *
      * @return void
      */
-    public function __construct(Application $application)
+    public function __construct(Application $application, ApplicationComment $comment)
     {
         $this->application = $application;
+        $this->comment = $comment;
     }
 
     /**
@@ -42,9 +44,10 @@ class NewApplicationStaff extends Notification
     public function toMail($notifiable)
     {
         return (new MailMessage)->view(
-            'emails.training.newapplicationstaff', ['application' => $this->application]
-        )->subject('#'.$this->application->reference_id.' - New Controller Application');
+            'emails.training.applications.newcommentstaff', ['application' => $this->application, 'comment' => $this->comment]
+        )->subject('#'.$this->application->reference_id.' - New Comment From Applicant');
     }
+
 
     /**
      * Get the array representation of the notification.

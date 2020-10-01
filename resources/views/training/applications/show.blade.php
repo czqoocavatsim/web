@@ -52,6 +52,9 @@
                         <a href="" data-toggle="modal" data-target="#withdrawApplicationModal" style="text-decoration:none;"><span class="grey-text"><i class="fas fa-chevron-right"></i></span> &nbsp; <span class="text-body">Withdraw application</span></a>
                     </li>
                     @endif
+                    <li class="mb-2">
+                        <a href="" data-toggle="modal" data-target="#refereesModal" style="text-decoration:none;"><span class="blue-text"><i class="fas fa-chevron-right"></i></span> &nbsp; <span class="text-body">View referees</span></a>
+                    </li>
                 </ul>
             </div>
         </div>
@@ -71,9 +74,9 @@
                                 @if($comment->user_id != Auth::id())
                                     <div class="align-self-start mb-2" style="width: 75%;">
                                         <div class="d-flex flex-row align-items-centre">
-                                            <img src="{{Auth::user()->avatar()}}" style="height: 30px; width: 30px; margin-right: 7px; border-radius: 50%;">
+                                            <img src="{{$comment->user->avatar()}}" style="height: 30px; width: 30px; margin-right: 7px; border-radius: 50%;">
                                             <div style="width: 44%;" class="blue white-text rounded p-2">
-                                                <span class="font-weight-bold">{{$comment->user->fullName('FL')}}</span><br>
+                                                <span class="font-weight-bold">{{$comment->user->fullName('FL')}} @if($comment->user->staffProfile) ({{$comment->user->staffProfile->position}}) @endif</span><br>
                                                 {{$comment->content}}
                                             </div>
                                         </div>
@@ -134,5 +137,41 @@
     </div>
 </div>
 @endif
+
+<!--Begin referees modal-->
+<div class="modal fade" id="refereesModal" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Referees</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                @foreach($application->referees as $r)
+                <h5 class="font-weight-bold">{{$r->referee_full_name}}</h5>
+                <ul class="list-unstyled">
+                    <li>
+                        <p>
+                            <span class="font-weight-bold">Email</span>
+                            <br>
+                            {{$r->referee_email}}
+                        </p>
+                    </li>
+                    <li>
+                        <p>
+                            <span class="font-weight-bold">Staff position</span>
+                            <br>
+                            {{$r->referee_staff_position}}
+                        </p>
+                    </li>
+                </ul>
+                @endforeach
+            </div>
+        </div>
+    </div>
+</div>
+<!--End referees modal-->
 
 @endsection

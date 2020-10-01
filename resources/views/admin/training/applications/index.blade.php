@@ -3,11 +3,11 @@
 <h1 class="font-weight-bold blue-text pb-2">Applications</h1>
 <ul class="list-unstyled mt-2 mb-0">
 
-@if(count($applications['pending']) > 0)
+@if(count($applications) > 0)
 <h5>Pending Applications</h5>
     <div class="list-group rounded">
-        @foreach($applications['pending'] as $a)
-        <a href="#" class="list-group-item list-group-item-action p-3">
+        @foreach($applications as $a)
+        <a href="{{route('training.admin.applications.view', $a->reference_id)}}" class="list-group-item list-group-item-action p-3">
             <h5 class="font-weight-bold">
                 #{{$a->reference_id}}
             </h5>
