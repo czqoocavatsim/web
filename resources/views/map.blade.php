@@ -5,29 +5,10 @@
 
 @section('content')
     <script src="{{asset('js/leaflet.latlng.js')}}"></script>
-    <div id="map" style="height: calc(90vh - 59px); ">
-        <div class="container flex-left pt-5">
+    <div id="map" style="height: calc(100vh - 59px); ">
+        <div class="container flex-left pt-5" style="z-index:999">
             <h1 class="font-weight-bold" style="opacity: 0.5">OCA Map</h1>
         </div>
-    </div>
-
-    <div class="container py-4">
-        <h1 class="font-weight-bold blue-text">NAT Tracks</h1>
-        <table id="natTrackTable" class="table table-responsive table-striped">
-            <thead>
-            <tr>
-                <th scope="col">Letter</th>
-                <th scope="col">Fixes</th>
-                <th scope="col">Direction</th>
-                <th scope="col">Levels</th>
-                <th scope="col">Validity</th>
-            </tr>
-            </thead>
-            <tbody id="tableBody">
-            </tbody>
-        </table>
-        <a href="https://flightplandatabase.com"><img src="https://static.flightplandatabase.com/images/data-banner/light.min.png" alt="Data from the Flight Plan Database"></a>
-        <p>Special thank you to Christian Kovanen 1379372 for providing the map theme, boundaries, and fixes.</p>
     </div>
 
     <div class="modal fade bottom" id="modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">

@@ -5,6 +5,11 @@ function createMap(planes, ganderControllers, shanwickControllers) {
     const map = L.map('map', { minZoom: 4, maxZoom: 7 }).setView([60, -30], 1);
 const icon = L.icon({ iconUrl: '/img/oep.png', iconAnchor: [5, 5] });
 
+var OpenStreetMap_Mapnik = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        maxZoom: 19,
+        attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+    }).addTo(map);
+
 // Gander OEP's
 
 const pointsGander = [
@@ -582,6 +587,440 @@ L.polyline(NewYork, { color: '#777', weight: 0.5 }).addTo(map);
     }
 }
 
+
+function createNatTrackMap()
+{
+    const map = L.map('map', { minZoom: 4, maxZoom: 7 }).setView([52, -35], 1);
+    const icon = L.icon({ iconUrl: '/img/oep.png', iconAnchor: [5, 5] });
+
+    var OpenStreetMap_Mapnik = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        maxZoom: 19,
+        attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+    }).addTo(map);
+
+    //Get tracks
+    let api = "https://api.flightplandatabase.com/nav/NATS";
+    let xmlHttp = new XMLHttpRequest();
+    xmlHttp.open("GET", api, false);
+    xmlHttp.send(null);
+    let apiString = xmlHttp.responseText;
+    let apiJson = JSON.parse(apiString);
+    console.log(apiJson);
+
+    //Go through all the tracks
+    for (track in apiJson) {
+        //Go through the tracks and only use the good ones...
+        if (checkIfNatProcessed(apiJson[track].ident) == false) {
+            processedNats.push(apiJson[track].ident);
+            //Create some markers
+            let fixArray = [];
+            for (n in apiJson[track].route.nodes) {
+                if (apiJson[track].route.eastLevels.length == 0) {
+                    createMarker(apiJson[track].route.nodes[n], apiJson[track].ident, 'orange', map);
+                }
+                else
+                {
+                    createMarker(apiJson[track].route.nodes[n], apiJson[track].ident, 'blue', map);
+                }
+                fixArray.push([apiJson[track].route.nodes[n].lat, apiJson[track].route.nodes[n].lon]);
+            }
+            let polyline = new L.Polyline(fixArray,{
+                color: '#1c5fc9',
+                weight: 2,
+                opacity: 1,
+                smoothFactor: 1
+            });
+            if (apiJson[track].route.eastLevels.length == 0) {
+                polyline.setStyle({
+                    color: '#c92d1c'
+                });
+            }
+            polyline.addTo(map);
+        };
+    }
+
+    let table = document.getElementById('natTrackTable');
+    processedNats = [];
+    for (track in apiJson) {
+        if (checkIfNatProcessed(apiJson[track].ident) == false) {
+            processedNats.push(apiJson[track].ident);
+            //Create a row
+            let row = document.createElement('tr');
+            table.appendChild(row);
+
+            //Get the track ID
+            let identCol = document.createElement('th');
+            identCol.scope = 'row';
+            identCol.innerHTML = apiJson[track].ident;
+            row.appendChild(identCol);
+
+            //Get the fixes
+            let fixArray = [];
+            for (n in apiJson[track].route.nodes) {
+                fixArray.push(" " + apiJson[track].route.nodes[n].ident);
+            }
+            let fixesCol = document.createElement('td');
+            fixesCol.innerHTML = fixArray;
+            row.appendChild(fixesCol);
+
+            //figure out the direction and get levels
+            let levelArray = [];
+            let directionCol = document.createElement('td');
+            let levelsCol = document.createElement('td');
+            if (apiJson[track].route.eastLevels.length == 0) {
+                apiJson[track].route.westLevels.forEach(function (element) {
+                    levelArray.push(" " + element);
+                });
+                directionCol.innerHTML = "West";
+            } else {
+                apiJson[track].route.eastLevels.forEach(function (element) {
+                    levelArray.push(" " + element);
+                });
+                directionCol.innerHTML = "East";
+            }
+            levelsCol.innerHTML = levelArray;
+            row.appendChild(directionCol);
+            row.appendChild(levelsCol);
+
+            //validity
+            let validityCol = document.createElement('td');
+            let validFrom = " " + apiJson[track].validFrom;
+            let validTo = apiJson[track].validTo;
+            validityCol.innerHTML = validFrom + " to " + validTo;
+            row.appendChild(validityCol);
+        };
+    }
+
+    L.latlngGraticule({
+        showLabel: true,
+        dashArray: [5, 5],
+        zoomInterval: [ { start: 0, end: 10, interval: 5 } ]
+    }).addTo(map);
+
+    // OCA's, FIR's and delegated areas
+
+    const Gander = [
+        [ '45', '-51' ],
+        [ '45', '-50' ],
+        [ '44', '-50' ],
+        [ '44', '-40' ],
+        [ '45', '-40' ],
+        [ '45', '-30' ],
+        [ '61', '-30' ],
+        [ '63.5', '-39' ],
+        [ '58.5', '-43' ],
+        [ '58.5', '-50' ],
+        [ '65', '-57.75' ],
+        [ '65', '-60' ],
+        [ '64', '-63' ],
+        [ '61', '-63' ],
+        [ '58.471111111111114', '-60.35111111111111' ],
+        [ '57', '-59' ],
+        [ '53', '-54' ],
+        [ '49', '-51' ],
+        [ '45', '-51' ]
+    ];
+    L.polyline(Gander, { color: '#777', weight: 0.5 }).addTo(map);
+
+    const Shanwick = [
+        [ '45', '-30' ],
+        [ '45', '-8' ],
+        [ '51', '-8' ],
+        [ '51', '-15' ],
+        [ '54', '-15' ],
+        [ '54.56666666666667', '-10' ],
+        [ '61', '-10' ],
+        [ '61', '-30' ],
+        [ '45', '-30' ]
+    ];
+    L.polyline(Shanwick, { color: '#777', weight: 0.5 }).addTo(map);
+
+    const NOTA = [
+        [ '54', '-15' ],
+        [ '54.56666666666667', '-10' ],
+        [ '57', '-10' ],
+        [ '57', '-15' ],
+        [ '54', '-15' ]
+    ];
+    L.polyline(NOTA, { color: '#777', weight: 0.5 }).addTo(map);
+
+    const SOTA = [
+        [ '49', '-15' ],
+        [ '48.5769444444', '-8.75' ],
+        [ '48.5769444444', '-8' ],
+        [ '51', '-8' ],
+        [ '51', '-15' ],
+        [ '49', '-15' ]
+    ];
+    L.polyline(SOTA, { color: '#777', weight: 0.5 }).addTo(map);
+
+    const BOTA = [
+        [ '45', '-8.75' ],
+        [ '45', '-8' ],
+        [ '48.5769444444', '-8' ],
+        [ '48.5769444444', '-8.75' ],
+        [ '45', '-8.75' ]
+    ];
+    L.polyline(BOTA, { color: '#777', weight: 0.5 }).addTo(map);
+
+    const GOTA = [
+        [ '53.8', '-55' ],
+        [ '62.85', '-55' ],
+        [ '65', '-57.75' ],
+        [ '65', '-60' ],
+        [ '64', '-63' ],
+        [ '61', '-63' ],
+        [ '57', '-59' ],
+        [ '53.8', '-55' ]
+    ];
+    L.polyline(GOTA, { color: '#777', weight: 0.5 }).addTo(map);
+
+    const Nuuk = [
+        [ '58.5', '-50' ],
+        [ '58.5', '-43' ],
+        [ '63.5', '-39' ],
+        [ '63.5', '-55.80928' ],
+        [ '58.5', '-50' ]
+    ];
+    L.polyline(Nuuk, { color: '#777', weight: 0.5 }).addTo(map);
+
+    const GanderDomestic = [
+        [ '45', '-51' ],
+        [ '45', '-53' ],
+        [ '44.446666666666665', '-56.05166666666666' ],
+        [ '45.61194444444445', '-56.47361111111111' ],
+        [ '48.5', '-62' ],
+        [ '49.3', '-61' ],
+        [ '49.53333333333333', '-61' ],
+        [ '51', '-58' ],
+        [ '51.28333333333333', '-57' ],
+        [ '51.735', '-57' ],
+        [ '52.19638888888888', '-58.14277777777778' ],
+        [ '51.63333333333333', '-59.5' ],
+        [ '51.333333333333336', '-59.5' ],
+        [ '50.833333333333336', '-60' ],
+        [ '50.833333333333336', '-62.083333333333336' ],
+        [ '51.416666666666664', '-64' ],
+        [ '53.7', '-64.91666666666667' ],
+        [ '54.416666666666664', '-65.33333333333333' ],
+        [ '55.083333333333336', '-65.08333333333333' ],
+        [ '55.355555555555554', '-64' ],
+        [ '57.55', '-64' ],
+        [ '58.471111111111114', '-60.35111111111111' ],
+        [ '57', '-59' ],
+        [ '53', '-54' ],
+        [ '49', '-51' ],
+        [ '45', '-51' ]
+    ];
+    L.polyline(GanderDomestic, { color: '#777', weight: 0.5 }).addTo(map);
+
+    const GanderDomesticDelegated = [
+        [ '53.0833333333', '-54.0833333333' ],
+        [ '49', '-51' ],
+        [ '45', '-51' ],
+        [ '45', '-53' ],
+        [ '44.446666666666665', '-56.05166666666666' ],
+        [ '43.446666666666665', '-56.05166666666666' ],
+        [ '44', '-50' ],
+        [ '50', '-50' ],
+        [ '53.0833333333', '-54.0833333333' ]
+    ];
+    L.polyline(GanderDomesticDelegated, { color: '#777', weight: 0.5 }).addTo(map);
+
+    const Moncton = [
+        [ '44.446666666666665', '-56.05166666666666' ],
+        [ '43.6', '-60' ],
+        [ '41.86666666666667', '-67' ],
+        [ '44.5', '-67' ],
+        [ '44.5', '-67.11666666666666' ],
+        [ '44.776666666666664', '-66.9025' ],
+        [ '47.2875', '-68.57666666666667' ],
+        [ '47.525277777777774', '-68' ],
+        [ '47.733333333333334', '-67.95' ],
+        [ '47.88333333333333', '-66.89666666666668' ],
+        [ '48', '-65.94111111111111' ],
+        [ '47.848333333333336', '-64.62222222222222' ],
+        [ '48.5', '-62' ],
+        [ '45.61194444444445', '-56.47361111111111' ],
+        [ '44.446666666666665', '-56.05166666666666' ]
+    ];
+    L.polyline(Moncton, { color: '#777', weight: 0.5 }).addTo(map);
+
+    const Montreal = [
+        [ '47.459833333333336', '-69.22444444444444' ],
+        [ '44.22141666666667', '-76.19172222222223' ],
+        [ '45.837500000000006', '-76.26666666666667' ],
+        [ '45.961111111111116', '-76.92777777777778' ],
+        [ '46.13333333333333', '-77.25' ],
+        [ '46.94688055555555', '-77.25' ],
+        [ '47.11110277777778', '-77.54586388888889' ],
+        [ '47.55425833333333', '-78.11756944444444' ],
+        [ '47.84006388888889', '-78.56570555555555' ],
+        [ '48.587047222222225', '-79' ],
+        [ '49', '-79' ],
+        [ '53.46666666666667', '-80' ],
+        [ '62.75', '-80' ],
+        [ '65', '-68' ],
+        [ '65', '-60' ],
+        [ '64', '-63' ],
+        [ '61', '-63' ],
+        [ '58.471111111111114', '-60.35111111111111' ],
+        [ '57.55', '-64' ],
+        [ '55.355555555555554', '-64' ],
+        [ '55.083333333333336', '-65.08333333333333' ],
+        [ '54.416666666666664', '-65.33333333333333' ],
+        [ '53.7', '-64.91666666666667' ],
+        [ '51.416666666666664', '-64' ],
+        [ '50.833333333333336', '-62.083333333333336' ],
+        [ '50.833333333333336', '-60' ],
+        [ '51.333333333333336', '-59.5' ],
+        [ '51.63333333333333', '-59.5' ],
+        [ '52.19638888888888', '-58.14277777777778' ],
+        [ '51.735', '-57' ],
+        [ '51.28333333333333', '-57' ],
+        [ '51', '-58' ],
+        [ '49.53333333333333', '-61' ],
+        [ '49.3', '-61' ],
+        [ '48.5', '-62' ],
+        [ '47.848333333333336', '-64.62222222222222' ],
+        [ '48', '-65.94111111111111' ],
+        [ '47.88333333333333', '-66.89666666666668' ]
+    ];
+    L.polyline(Montreal, { color: '#777', weight: 0.5 }).addTo(map);
+
+    const Edmonton = [
+        [ '65', '-57.75' ],
+        [ '73', '-69.92' ],
+        [ '73', '-80' ],
+        [ '64.40833333333335', '-80' ],
+        [ '62.75', '-80' ],
+        [ '65', '-68' ],
+        [ '65', '-60' ]
+
+    ];
+    L.polyline(Edmonton, { color: '#777', weight: 0.5 }).addTo(map);
+
+    const Reykjavik = [
+        [ '63.5', '-55.80928' ],
+        [ '63.5', '-39' ],
+        [ '61', '-30' ],
+        [ '61', '0' ],
+        [ '73', '0' ],
+        [ '73', '-69.92' ],
+        [ '63.5', '-55.80928' ]
+
+    ];
+    L.polyline(Reykjavik, { color: '#777', weight: 0.5 }).addTo(map);
+
+    const Scottish = [
+        [ '61', '0' ],
+        [ '60', '0' ],
+        [ '57', '5' ],
+        [ '55', '5' ],
+        [ '55', '-5.5' ],
+        [ '53.916666666666664', '-5.5' ],
+        [ '54.416666666666664', '-8.166666666666666' ],
+        [ '55.333333333333336', '-6.916666666666667' ],
+        [ '55.416666666666664', '-7.333333333333333' ],
+        [ '55.333333333333336', '-8.25' ],
+        [ '54.75', '-9' ],
+        [ '54.56666666666667', '-10' ],
+        [ '61', '-10' ],
+        [ '61', '0' ]
+    ];
+    L.polyline(Scottish, { color: '#777', weight: 0.5 }).addTo(map);
+
+    const London = [
+        [ '55', '5' ],
+        [ '51.5', '2' ],
+        [ '51.11666666666667', '2' ],
+        [ '51', '1.4666666666666668' ],
+        [ '50.666666666666664', '1.4666666666666668' ],
+        [ '50', '-0.25' ],
+        [ '50', '-2' ],
+        [ '48.833333333333336', '-8' ],
+        [ '51', '-8' ],
+        [ '52.333333333333336', '-5.5' ],
+        [ '55', '-5.5' ],
+        [ '55', '5' ]
+    ];
+    L.polyline(London, { color: '#777', weight: 0.5 }).addTo(map);
+
+    const Brest = [
+        [ '50', '-0.25' ],
+        [ '46.5', '-0.25' ],
+        [ '46.5', '-1.6333333333333333' ],
+        [ '43.583333333333336', '-1.7833333333333332' ],
+        [ '44.333333333333336', '-4' ],
+        [ '45', '-8' ],
+        [ '48.833333333333336', '-8' ],
+        [ '50', '-2' ],
+        [ '50', '-0.25' ]
+    ];
+    L.polyline(Brest, { color: '#777', weight: 0.5 }).addTo(map);
+
+    const Madrid = [
+        [ '45', '-13' ],
+        [ '45', '-8' ],
+        [ '44.333333333333336', '-4' ],
+        [ '43.583333333333336', '-1.7833333333333332' ],
+        [ '43.38333333333333', '-1.7833333333333332' ],
+        [ '42.7', '-0.06666666666666667' ],
+        [ '39.733333333333334', '-1.1' ],
+        [ '35.833333333333336', '-2.1' ],
+        [ '35.833333333333336', '-7.383333333333334' ],
+        [ '35.96666666666667', '-7.383333333333334' ],
+        [ '42', '-10' ],
+        [ '43', '-13' ],
+        [ '45', '-13' ]
+    ];
+    L.polyline(Madrid, { color: '#777', weight: 0.5 }).addTo(map);
+
+    const Lisbon = [
+        [ '43', '-13' ],
+        [ '42', '-10' ],
+        [ '35.96666666666667', '-7.383333333333334' ],
+        [ '35.96666666666667', '-12' ],
+        [ '32.25', '-14.633333333333333' ],
+        [ '33.92500000', '-18.06916667' ],
+        [ '36.5', '-15' ],
+        [ '42', '-15' ],
+        [ '43', '-13' ]
+    ];
+    L.polyline(Lisbon, { color: '#777', weight: 0.5 }).addTo(map);
+
+    const SantaMaria = [
+        [ '45', '-40' ],
+        [ '45', '-13' ],
+        [ '43', '-13' ],
+        [ '42', '-15' ],
+        [ '36.5', '-15' ],
+        [ '33.92500000', '-18.06916667' ],
+        [ '30', '-20' ],
+        [ '30', '-25' ],
+        [ '24', '-25' ],
+        [ '17', '-37.5' ],
+        [ '22.3', '-40' ],
+        [ '44', '-40' ]
+    ];
+    L.polyline(SantaMaria, { color: '#777', weight: 0.5 }).addTo(map);
+
+    const NewYork = [
+        [ '44', '-40' ],
+        [ '22.3', '-40' ],
+        [ '18', '-45' ],
+        [ '18', '-61.5' ],
+        [ '38.331222', '-70.059528' ],
+        [ '39', '-67' ],
+        [ '42', '-67' ],
+        [ '43.446666666666665', '-56.05166666666666' ],
+        [ '44', '-50' ],
+        [ '44', '-40' ]
+    ];
+    L.polyline(NewYork, { color: '#777', weight: 0.5 }).addTo(map);
+}
+
+
 function checkIfNatProcessed(ident) {
     if (processedNats.indexOf(ident) > -1) {
         return true;
@@ -591,9 +1030,14 @@ function checkIfNatProcessed(ident) {
 }
 
 
-function createMarker(node, trackId, colour) {
-    let marker = L.marker([node.lat, node.lon], {icon: icon}).addTo(map);
-    marker.bindPopup("<b>"+node.ident+"</b><br/>"+node.type+"<br/>"+node.lat+" "+node.lon);
+function createMarker(node, trackId, colour, map) {
+    let markerIcon = L.icon({
+        iconUrl: 'https://nesa.com.au/wp-content/uploads/2017/05/Dot-points-1.png',
+        iconSize: [10, 10],
+        iconAnchor: [2, 4]
+    });
+    let marker = L.marker([node.lat, node.lon], {icon: markerIcon}).addTo(map);
+    marker.bindPopup("<b>"+node.ident+"</b><br/>"+node.type+"<br/>"+node.lat+" "+node.lon+"<br>Track "+trackId);
 }
 
 function createAboutPageMap() {
