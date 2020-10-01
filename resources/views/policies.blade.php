@@ -8,8 +8,7 @@
         <p style="font-size: 1.2em;">
             Policies and guidelines for operations in Gander Oceanic. These policies may be updated from time to time.
         </p>
-        <hr>
-        <div class="list-group">
+        <div class="list-group list-group-flush">
             @foreach ($policies as $policy)
             <div class="list-group-item">
                 <div class="row">
