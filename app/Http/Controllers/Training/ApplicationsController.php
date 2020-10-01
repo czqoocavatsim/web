@@ -28,6 +28,7 @@ use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Str;
 use mofodojodino\ProfanityFilter\Check;
 use NotificationChannels\Discord\DiscordMessage;
+use Spatie\Permission\Models\Role;
 
 class ApplicationsController extends Controller
 {
@@ -72,7 +73,7 @@ class ApplicationsController extends Controller
         $hoursTotal = intval($hoursObj->c1) + intval($hoursObj->c2) + intval($hoursObj->c3) + intval($hoursObj->i1) + intval($hoursObj->i2) + intval($hoursObj->i3) + intval($hoursObj->sup) + intval($hoursObj->adm);
 
         //Redirect if hours aren't 80
-        if ($hoursTotal < 80)
+        if ($hoursTotal > 80)
         {
             return view('training.applications.apply', compact('hoursTotal'))->with('allowed', 'hours');
         }
@@ -404,6 +405,10 @@ class ApplicationsController extends Controller
         $rosterMember->certification = "training";
         $rosterMember->active = 1;
         $rosterMember->save();
+
+        //Change their user role
+        $application->user->removeRole('Guest');
+        $application->user->assignRole('Trainee');
 
         //Notify user
         $application->user->notify(new ApplicationAcceptedApplicant($application));

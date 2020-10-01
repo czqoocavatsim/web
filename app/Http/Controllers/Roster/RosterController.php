@@ -13,6 +13,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Notification;
 use Illuminate\Support\Facades\Response;
 use Illuminate\Support\Facades\Validator;
+use Spatie\Permission\Models\Role;
 
 class RosterController extends Controller
 {
@@ -75,17 +76,26 @@ class RosterController extends Controller
         $rosterMember->active = ($request->get('active') === 'true');
         $rosterMember->remarks = $request->get('remarks');
 
-        //Date certified
-        if ($request->get('certification') == 'certified') {
-            $rosterMember->date_certified = $request->get('date_certified');
-        }
-
         //User associated
         $user = User::whereId($request->get('cid'))->first();
         if ($user) {
             $rosterMember->user_id = $user->id;
         } else {
             $rosterMember->user_id = 2;
+        }
+
+        //Date certified and roles
+        switch ($request->get('certification')) {
+            case 'certified':
+                $rosterMember->date_certified = $request->get('date_certified');
+                $user->assignRole('Certified Controller');
+                $user->removeRole('Guest');
+                $user->removeRole('Trainee');
+            break;
+            case 'training':
+                $user->removeRole('Guest');
+                $user->assignRole('Trainee');
+            break;
         }
 
         //Save
@@ -120,6 +130,11 @@ class RosterController extends Controller
             $cert->delete();
         }
         $rosterMember->delete();
+
+        //Roles
+        $user->removeRole('Certified Controller');
+        $user->assignRole('Guest');
+        $user->removeRole('Trainee');
 
         //Notify user
         Notification::send($user, new RemovedFromRoster($user));
@@ -158,14 +173,25 @@ class RosterController extends Controller
         $rosterMember->active = ($request->get('active') === 'true');
         $rosterMember->remarks = $request->get('remarks');
 
+        //User
+        $user = User::whereId($request->get('cid'))->first();
+
         //Date certified
-        if ($request->get('certification') == 'certified') {
-            $rosterMember->date_certified = $request->get('date_certified');
+        switch ($request->get('certification')) {
+            case 'certified':
+                $rosterMember->date_certified = $request->get('date_certified');
+                $user->assignRole('Certified Controller');
+                $user->removeRole('Guest');
+                $user->removeRole('Trainee');
+            break;
+            case 'training':
+                $user->removeRole('Guest');
+                $user->assignRole('Trainee');
+            break;
         }
 
         //Notify
         if ($rosterMember->isDirty('certification') || $rosterMember->isDirty('active')) {
-            $user = User::whereId($request->get('cid'))->first();
             if ($user) {
                 Notification::send($user, new RosterStatusChanged($rosterMember));
             }
