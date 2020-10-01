@@ -34,10 +34,6 @@ Route::get('/events/{slug}', 'Events\EventController@viewEvent')->name('events.v
 Route::view('/branding', 'branding')->name('branding');
 Route::view('/eurosounds', 'eurosounds')->name('eurosounds');
 
-Route::get('/test', function () {
-    Auth::login(App\Models\Users\User::find(1300012));
-});
-
 //About
 Route::prefix('about')->group(function () {
     Route::get('/', function() { return redirect(route('about.who-we-are'), 301); })->name('about.index');
