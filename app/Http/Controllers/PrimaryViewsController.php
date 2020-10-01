@@ -6,6 +6,7 @@ use App\Models\Events\Event;
 use App\Models\News\HomeNewControllerCert;
 use App\Models\News\News;
 use App\Models\Publications\AtcResource;
+use App\Models\Roster\RosterMember;
 use App\Models\Settings\RotationImage;
 use App\Models\Tickets\Ticket;
 use Carbon\Carbon;
@@ -35,7 +36,10 @@ class PrimaryViewsController extends Controller
         //Next event
         $nextEvent = Event::where('start_timestamp', '>', Carbon::now())->get()->sortByDesc('id')->first();
 
-        return view('index', compact('ganderControllers', 'shanwickControllers', 'news', 'certifications', 'nextEvent'));
+        //Top controllers
+        $topControllers = RosterMember::all()->sortByDesc('monthly_hours')->take(5);
+
+        return view('index', compact('ganderControllers', 'shanwickControllers', 'news', 'certifications', 'nextEvent', 'topControllers'));
     }
 
     /*

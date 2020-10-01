@@ -18,7 +18,7 @@ Route::get('/map', 'PrimaryViewsController@map')->name('map');
 Route::get('/roster', 'Roster\RosterController@publicRoster')->name('roster.public');
 Route::get('/roster/solo-certs', 'Training\SoloCertificationsController@public')->name('solocertifications.public');
 Route::get('/staff', function() { return redirect(route('staff'), 301); });
-Route::get('/atcresources', 'Publications\AtcResourcesController@index')->name('atcresources.index');
+Route::get('/atcresources', 'Publications\PublicationsController@index')->name('atcresources.index');
 Route::view('/pilots', 'pilots.index');
 Route::view('/pilots/oceanic-clearance', 'pilots.oceanic-clearance');
 Route::view('/pilots/position-report', 'pilots.position-report');
@@ -148,8 +148,8 @@ Route::group(['middleware' => 'auth'], function () {
         });
 
         //ATC Resources
-        Route::post('/atcresources', 'Publications\AtcResourcesController@uploadResource')->name('atcresources.upload');
-        Route::get('/atcresources/delete/{id}', 'Publications\AtcResourcesController@deleteResource')->name('atcresources.delete');
+        Route::post('/atcresources', 'Publications\PublicationsController@uploadResource')->name('atcresources.upload')->middleware('edit atc resources');
+                Route::get('/atcresources/delete/{id}', 'Publications\PublicationsController@deleteResource')->name('atcresources.delete')->middleware('edit atc resources');
 
         Route::group(['middleware' => 'can:view events'], function () {
             //Events

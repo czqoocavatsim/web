@@ -138,6 +138,26 @@
                         <a href="/pilots" class="btn bg-czqo-blue-light" role="button">Pilot Resources</a>
                     </div>
                 </div>
+                <div class="col-md-7 text-right">
+                    <h1 class="font-weight-bold blue-text mb-3">Top Controllers This Month</h1>
+                    <ul class="list-unstyled">
+                        @php $index = 1; @endphp
+                        @foreach($topControllers as $c)
+                        <li>
+                            <p class="mb-0">
+                                <span class="font-weight-bold" style="font-size: 1.9em;">
+                                {{$index}}.
+                                </span>
+                                <span style="font-size: 1.4em;">
+                                    <img src="{{$c->user->avatar()}}" style="height: 35px; !important; width: 35px !important; margin-left: 10px; margin-right: 5px; margin-bottom: 3px; border-radius: 50%;">
+                                    {{$c->user->fullName('FLC')}} - {{$c->monthly_hours}} hours
+                                </span>
+                            </p>
+                        </li>
+                        @php $index++; @endphp
+                        @endforeach
+                    </ul>
+                </div>
             </div>
         </div>
     </div>
