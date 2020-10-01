@@ -20,7 +20,7 @@
                     {{$g->name}}
                 </a>
                 @endforeach
-                <a href="#instructors" class="list-group-item list-group-item-action">Instructors</a>
+                {{-- <a href="#instructors" class="list-group-item list-group-item-action">Instructors</a> --}}
             </div>
         </div>
         <div class="col-md-9">
@@ -65,7 +65,7 @@
             </div>
             <hr>
             @endforeach
-            <a id="instructors"><h3 class="mb-3 blue-text font-weight-bold">Instructors</h3></a>
+            {{-- <a id="instructors"><h3 class="mb-3 blue-text font-weight-bold">Instructors</h3></a>
             <div class="row">
                 {{-- @foreach ($instructors as $instructor)
                     <div class="col-sm-4">
@@ -87,7 +87,7 @@
                         </div>
                     </div>
                 @endforeach --}}
-            </div>
+            </div> --}}
         </div>
     </div>
 </div>
@@ -115,7 +115,7 @@
             </div>
         </div>
     </div>
-@endforeach
+@endforeach{{--
 @foreach ($instructors as $member)
     <div class="modal fade" id="viewInstructorBio{{$member->id}}" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered" role="document">
@@ -139,5 +139,5 @@
             </div>
         </div>
     </div>
-@endforeach
+@endforeach --}}
 @stop

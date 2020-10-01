@@ -17,7 +17,7 @@ class StaffListController extends Controller
     {
         $staff = StaffMember::all();
 
-        // Instructor list
+        /* // Instructor list
         $instructors_temp = Instructor::all(); // Temp
         $instructors = array(); // Actual
 
@@ -33,11 +33,11 @@ class StaffListController extends Controller
             if ($instructor->qualification == "Instructor") {
                 array_push($instructors, $instructor);
             }
-        }
+        } */
 
         $groups = StaffGroup::all();
 
-        return view('about.staff', compact('staff', 'instructors','groups'));
+        return view('about.staff', compact('staff','groups'));
     }
 
     public function editIndex()

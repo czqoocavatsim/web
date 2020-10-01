@@ -77,10 +77,10 @@
                 </a>
                 <div class="dropdown-menu dropdown-menu-right dropdown-default py-0" aria-labelledby="navbarDropdownMenuLink-333">
                     <a class="dropdown-item {{ Request::is('my') || Request::is('my/*') ? 'active white-text' : '' }}" href="{{route('my.index')}}">
-                        <img style="height: 25px; margin-left:-3px;" src="{{ Request::is('my') || Request::is('my/*') ? 'https://resources.ganderoceanic.com/media/img/brand/sqr/ZQO_SQ_TSPWHITE.png' : 'https://resources.ganderoceanic.com/media/img/brand/sqr/ZQO_SQ_TSPBLUE.png' }}" alt="">&nbsp;<span class="float-right">myCZQO</span>
+                        <img style="height: 25px; margin-left:-3px;" src="{{ Request::is('my') || Request::is('my/*') ? 'https://resources.ganderoceanic.com/media/img/brand/sqr/ZQO_SQ_TSPWHITE.png' : 'https://resources.ganderoceanic.com/media/img/brand/sqr/ZQO_SQ_TSPBLUE.png' }}" alt=""><span class="float-right">myCZQO</span>
                     </a>
                     <a class="dropdown-item red-text" href="{{route('auth.logout')}}">
-                        <i class="fa fa-key mr-2"></i>&nbsp;<span class="float-right">Logout</span>
+                        <i class="fa fa-key"></i><span class="float-right">Logout</span>
                     </a>
                 </div>
             </li>

@@ -1462,7 +1462,7 @@ function createAboutPageMap() {
     ];
 
     pointsShanwick.forEach(point => {
-        L.marker([parseFloat(point[1][0]), parseFloat(point[1][1])], {icon: icon, opacity: 0.3}).addTo(map).bindPopup(point[0]);
+        L.marker([parseFloat(point[1][0]), parseFloat(point[1][1])], {icon: icon, opacity: 0.3}).addTo(map).bindPopup(point[0], {permanent:true});
     });
 
     // Coordinate grid

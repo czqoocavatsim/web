@@ -13,7 +13,7 @@
 <div class="container" style="margin-top: 20px;">
         <h1 class="blue-text font-weight-bold">Controller Roster</h1>
         <hr>
-        <p>Please note that the 'full name' field on this roster is dependent on the controller's individual name settings on the CZQO Core system.</p>
+        <p>Please note that the 'full name' field on this roster is dependent on the controller's individual name settings on the CZQO Core system.<br><i class="fas fa-certificate"></i> = Solo Certification</p>
         <table id="rosterTable" class="table table-hover">
             <thead>
                 <tr>
