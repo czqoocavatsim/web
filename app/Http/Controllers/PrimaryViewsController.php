@@ -37,7 +37,7 @@ class PrimaryViewsController extends Controller
         $nextEvent = Event::where('start_timestamp', '>', Carbon::now())->get()->sortByDesc('id')->first();
 
         //Top controllers
-        $topControllers = RosterMember::all()->sortByDesc('monthly_hours')->take(5);
+        $topControllers = RosterMember::where('monthly_hours', '>', 0)->sortByDesc('monthly_hours')->take(6);
 
         return view('index', compact('ganderControllers', 'shanwickControllers', 'news', 'certifications', 'nextEvent', 'topControllers'));
     }

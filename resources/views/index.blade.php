@@ -144,15 +144,21 @@
                         @php $index = 1; @endphp
                         @foreach($topControllers as $c)
                         <li>
-                            <p class="mb-0">
-                                <span class="font-weight-bold" style="font-size: 1.9em;">
-                                {{$index}}.
-                                </span>
-                                <span style="font-size: 1.4em;">
-                                    <img src="{{$c->user->avatar()}}" style="height: 35px; !important; width: 35px !important; margin-left: 10px; margin-right: 5px; margin-bottom: 3px; border-radius: 50%;">
-                                    {{$c->user->fullName('FLC')}} - {{$c->monthly_hours}} hours
-                                </span>
-                            </p>
+                            <div class="row">
+                                <div class="col-5">
+                                    <span class="font-weight-bold" style="font-size: 1.9em;">
+                                        {{$index}}.
+                                    </span>
+                                </div>
+                                <div class="col">
+                                    <p class="mb-0">
+                                        <span style="font-size: 1.4em;">
+                                            <img src="{{$c->user->avatar()}}" style="height: 35px; !important; width: 35px !important; margin-left: 10px; margin-right: 5px; margin-bottom: 3px; border-radius: 50%;">
+                                            {{$c->user->fullName('FLC')}} - {{$c->monthly_hours}} hours
+                                        </span>
+                                    </p>
+                                </div>
+                            </div>
                         </li>
                         @php $index++; @endphp
                         @endforeach
@@ -185,6 +191,13 @@
                             <div class="blue-grey lighten-5 home-quick-link" style="height: 80px; !important; width: 80px !important;">
                                 <div class="d-flex flex-row justify-content-center align-items-center h-100">
                                     <i class="fab fa-facebook fa-3x" style="vertical-align:middle;"></i>
+                                </div>
+                            </div>
+                        </a>
+                        <a href="https://knowledgebase.ganderoceanic.com" class="blue-text mr-1" style="text-decoration:none">
+                            <div class="blue-grey lighten-5 home-quick-link" style="height: 80px; !important; width: 80px !important;">
+                                <div class="d-flex flex-row justify-content-center align-items-center h-100">
+                                    <i class="fas fa-book fa-3x" style="vertical-align:middle;"></i>
                                 </div>
                             </div>
                         </a>
