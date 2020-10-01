@@ -132,9 +132,7 @@
                         Gander Oceanic is VATSIM's coolest, calmest and most collected provider of Oceanic control. With our worldwide team of skilled Oceanic controllers, we pride ourselves on our expert, high-quality service to pilots flying across the North Atlantic. Our incredible community of pilots and controllers extend their warmest welcome and wish you all the best for your oceanic crossings!
                     </p>
                     <div class="d-flex flex-row">
-                        @if(!Auth::check())
-                        <a href="{{route('application.start')}}" class="btn bg-czqo-blue-light" role="button">Apply Now</a>
-                        @endif
+                        
                         <a href="/pilots" class="btn bg-czqo-blue-light" role="button">Pilot Resources</a>
                     </div>
                 </div>
