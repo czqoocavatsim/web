@@ -47,7 +47,7 @@ class ProcessArticlePublishing implements ShouldQueue
                 'description' => $this->article->summary,
                 'color' => 0x80c9,
                 "image" => [
-                    "url" => $this->article->image ? "https://ganderoceanic.com/".$this->article->image : null
+                    "url" => $this->article->image ? "https://canary.ganderoceanic.com".$this->article->image : null
                 ],
                 "url" => route('news.articlepublic', $this->article->slug),
                 "author" => [
