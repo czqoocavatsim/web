@@ -47,7 +47,7 @@ class UpdateDiscordUserRoles implements ShouldQueue
                 continue;
             }
 
-            Log::info($user);
+
 
             //Get their current user, so we can compare changes
             $guildMember = $discord->guild->getGuildMember([
