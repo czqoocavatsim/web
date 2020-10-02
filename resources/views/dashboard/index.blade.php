@@ -335,7 +335,7 @@
                     {{Auth::user()->rosterProfile->currency}} hours recorded
                 </span></h3>
                 @endif
-                <p>You require 6 hours of activity every 6 months, unless you were certified within the current activity cycle.</p>
+                <p>You require 3 hours of activity every 6 months, unless you were certified within the current activity cycle.</p>
                 @endif
                 <ul class="list-unstyled mt-4 mb-0">
                     <li class="mb-2">
