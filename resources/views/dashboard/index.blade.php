@@ -317,6 +317,8 @@
                             @break
                         @endswitch
                         </h3>
+                    @else
+                    Not Gander Certified
                     @endif
                     </div>
                 </div>

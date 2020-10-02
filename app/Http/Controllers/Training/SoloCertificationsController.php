@@ -79,6 +79,7 @@ class SoloCertificationsController extends Controller
         Notification::send($cert->rosterMember->user, new SoloCertGranted($cert));
 
         //Redirect
-        return redirect()->route('training.admin.solocertifications.view', compact('cert'));
+        //return redirect()->route('training.admin.solocertifications.view', compact('cert'));
+        return redirect()->route('training.admin.solocertifications');
     }
 }
