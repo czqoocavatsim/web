@@ -4,7 +4,7 @@ namespace App\Console;
 
 use App\AuditLogEntry;
 use App\Jobs\UpdateDiscordUserRoles;
-use App\Models\AtcTraining\RosterMember;
+use App\Models\Roster\RosterMember;
 use App\Models\Network\MonitoredPosition;
 use App\Models\Network\SessionLog;
 use App\User;
@@ -117,7 +117,7 @@ class Kernel extends ConsoleKernel
 
                     // If a match is found
                     if ($ocLogon == $log->session_start) {
-                        if (!$log->roster_member_id || RosterMember::where('cid', $log->cid)->first()->status == 'not_certified') { // Check if they're naughty
+                        if (!$log->roster_member_id || RosterMember::where('cid', $log->cid)->first()->certification == 'not_certified') { // Check if they're naughty
                             if ($log->emails_sent < 1) {
                                 Notification::route('mail', CoreSettings::find(1)->emailfirchief)->notify(new ControllerNotCertified($log));
                                 $log->emails_sent++;
@@ -129,14 +129,14 @@ class Kernel extends ConsoleKernel
                                 $log->emails_sent++;
                                 $log->save();
                             }
-                        } else if (RosterMember::where('cid', $log->cid)->first()->status == 'training') {
+                        } else if (RosterMember::where('cid', $log->cid)->first()->certification == 'training') {
                             if ($log->emails_sent < 1) {
                                 Notification::route('mail', CoreSettings::find(1)->emailfirchief)->notify(new ControllerIsStudent($log));
                                 error_log('user in training');
                                 $log->emails_sent++;
                                 $log->save();
                             }
-                        } else if ($staffOnly && (RosterMember::where('cid', $log->cid)->first()->status != 'instructor')) { // instructor
+                        } else if ($staffOnly && (RosterMember::where('cid', $log->cid)->first()->certification != 'instructor')) { // instructor
                             if ($log->emails_sent < 1) {
                                 Notification::route('mail', CoreSettings::find(1)->emailfirchief)->notify(new ControllerNotStaff($log));
                                 $log->emails_sent++;
@@ -174,15 +174,15 @@ class Kernel extends ConsoleKernel
 
                     // Check the user's CID against the roster
                     $user = RosterMember::where('cid', $oc['cid'])->first();
-                    if ($user && $user->status != 'training' && $user->status != 'not_certified') { // Add if on roster, don't if not (big problem lmao)
+                    if ($user && $user->certification != 'training' && $user->certification != 'not_certified') { // Add if on roster, don't if not (big problem lmao)
                         $sessionLog->roster_member_id = $user->id;
-                        if ($staffOnly && ($user->status != 'instructor')) {
+                        /* if ($staffOnly && ($user->status != 'instructor')) {
                             if ($sessionLog->emails_sent < 1) {
                                 Notification::route('mail', CoreSettings::find(1)->emailfirchief)->notify(new ControllerNotStaff($sessionLog));
                                 $sessionLog->emails_sent++;
                                 $sessionLog->save();
                             }
-                        } else if (!$user->active) { // inactive
+                        } else  */if (!$user->active) { // inactive
                             if ($sessionLog->emails_sent < 1) {
                                 Notification::route('mail', CoreSettings::find(1)->emailfirchief)->notify(new ControllerInactive($sessionLog));
                                 $sessionLog->emails_sent++;
@@ -213,7 +213,7 @@ class Kernel extends ConsoleKernel
                             Notification::route('mail', CoreSettings::find(1)->emailfirchief)->notify(new ControllerNotCertified($sessionLog));
                             $sessionLog->emails_sent++;
                             $sessionLog->save();
-                        }                        
+                        }
                     }
 
                     // Add session
@@ -232,7 +232,7 @@ class Kernel extends ConsoleKernel
                         // If callsign matches
                         if (MonitoredPosition::where('id', $sessionLog->monitored_position_id)->identifier == $oc['callsign']) {
                             $stillOnline = true;
-                        }                           
+                        }
                     }
                 }
 
@@ -260,7 +260,7 @@ class Kernel extends ConsoleKernel
 
                     // check it exists
                     if ($roster_member) {
-                        if ($roster_member->status == 'certified' || $roster_member->status == 'instructor') {
+                        if ($roster_member->certification == 'certified') {
                             if ($roster_member->active) {
                                 // Add hours
                                 $roster_member->currency = $roster_member->currency + $difference;
@@ -288,7 +288,7 @@ class Kernel extends ConsoleKernel
         })->cron("00 00 01 APR,JUL,OCT,JAN *");
 
         //// CRONS FOR INACTIVITY EMAILS
-        /// 2 weeks     
+        /// 2 weeks
         $schedule->call(function () {
             //Loop through controllers
             $count = 0;
@@ -306,7 +306,7 @@ class Kernel extends ConsoleKernel
             $discord = new DiscordClient(['token' => config('services.discord.token')]);
             $discord->channel->createMessage(['channel.id' => 482817715489341441, 'content' => 'Sent '. $count . ' two-week warning inactivity emails']);
         })->cron("00 00 16 MAR,JUN,SEP,DEC *"); // 2 weeks before end of quarter
-        
+
         /// 1 week
         $schedule->call(function () {
             //Loop through controllers
@@ -335,21 +335,6 @@ class Kernel extends ConsoleKernel
                 $rosterMember->save();
             }
         })->monthlyOn(1, '00:00');
-
-        /// Daily roster rating check
-        $schedule->call(function () {
-            // Loop through all roster members
-            foreach (RosterMember::all() as $rosterMember) {
-                // Get corresponding user
-                $user = \App\Models\Users\User::all()->where('id', '==', $rosterMember->cid);
-
-                // Check if the rating is incorrect
-                if ($user->rating_short != $rosterMember->rating) {
-                    // If so, then reassign the rating
-                    $rosterMember->rating = $user->rating_short;
-                }
-            }
-        })->dailyAt('00:00');
 
         // Discord role updating
         $schedule->job(new UpdateDiscordUserRoles)->twiceDaily(6, 18);
