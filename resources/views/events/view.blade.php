@@ -11,23 +11,23 @@
 @endif
 
 @section('content')
-    <div class="container-fluid elegant-color-dark py-3">
+<div class="jarallax card card-image rounded-0"  data-jarallax data-speed="0.2">
+    <img class="jarallax-img" src="{{$event->image_url}}" alt="">
+    <div class="text-white text-left rgba-stylish-strong py-3 pt-5 px-4">
         <div class="container">
-            <a href="{{route('events.index')}}" class="white-text" style="font-size: 1.2em;"> <i class="fas fa-arrow-left"></i> All Events</a>
-        </div>
-    </div>
-    <div class="card card-image rounded-0 blue jarallax" style="@if($event->image_url)background-image: url({{$event->image_url}});@endif background-size: cover; background-position: center;">
-        <div class="text-white text-left py-1 px-4 mask rgba-blue-grey-strong">
-            <div class="container">
-                <div class="py-5">
-                    <h1 class="font-weight-bold" style="font-size: 3em;">{{$event->name}}</h1>
-                    @if ($event->departure_icao && $event->arrival_icao)
-                    <h3>{{$event->departure_icao_data()->name}} ({{$event->departure_icao_data()->ICAO}})&nbsp;&nbsp;<i class="fas fa-plane"></i>&nbsp;&nbsp;{{$event->arrival_icao_data()->name}} ({{$event->arrival_icao_data()->ICAO}})</h3>
-                    @endif
-                </div>
+            <div class="pt-5 pb-3">
+                <a href="{{route('events.index')}}" class="white-text" style="font-size: 1.2em;"> <i class="fas fa-arrow-left"></i> All Events</a>
+            </div>
+            <div class="pb-5">
+                <h1 class="font-weight-bold" style="font-size: 3em;">{{$event->name}}</h1>
+                @if ($event->departure_icao && $event->arrival_icao)
+                <h3>{{$event->departure_icao_data()->name}} ({{$event->departure_icao_data()->ICAO}})&nbsp;&nbsp;<i class="fas fa-plane"></i>&nbsp;&nbsp;{{$event->arrival_icao_data()->name}} ({{$event->arrival_icao_data()->ICAO}})</h3>
+                @endif
             </div>
         </div>
     </div>
+</div>
+
     <div class="container py-4">
         <div class="row">
             <div class="col-md-3">
