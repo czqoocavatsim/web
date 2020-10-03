@@ -13,6 +13,8 @@
 
 //Public views
 
+use Thujohn\Twitter\Facades\Twitter;
+
 Route::get('/', 'PrimaryViewsController@home')->name('index');
 Route::get('/map', 'PrimaryViewsController@map')->name('map');
 Route::get('/roster', 'Roster\RosterController@publicRoster')->name('roster.public');
@@ -102,12 +104,12 @@ Route::group(['middleware' => 'auth'], function () {
         Route::get('/notificationclear', 'Users\NotificationRedirectController@clearAll');
 
         //Tickets
-        Route::get('/dashboard/tickets', 'Tickets\TicketsController@index')->name('tickets.index');
+         Route::get('/dashboard/tickets', 'Tickets\TicketsController@index')->name('tickets.index'); /*
         Route::get('/dashboard/tickets/staff', 'Tickets\TicketsController@staffIndex')->name('tickets.staff')->middleware('can:view tickets');
         Route::get('/dashboard/tickets/{id}', 'Tickets\TicketsController@viewTicket')->name('tickets.viewticket');
         Route::post('/dashboard/tickets', 'Tickets\TicketsController@startNewTicket')->name('tickets.startticket');
         Route::post('/dashboard/tickets/{id}', 'Tickets\TicketsController@addReplyToTicket')->name('tickets.reply');
-        Route::get('/dashboard/tickets/{id}/close', 'Tickets\TicketsController@closeTicket')->name('tickets.closeticket');
+        Route::get('/dashboard/tickets/{id}/close', 'Tickets\TicketsController@closeTicket')->name('tickets.closeticket'); */
 
         //Feedback
         Route::get('/feedback', 'Feedback\FeedbackController@create')->name('feedback.create');
@@ -134,7 +136,7 @@ Route::group(['middleware' => 'auth'], function () {
             //Applications
             Route::get('applications', 'Training\ApplicationsController@showAll')->name('training.applications.showall');
             Route::get('applications/apply', 'Training\ApplicationsController@apply')->name('training.applications.apply');
-            Route::post('applications/apply', 'Training\ApplicationsController@applyPost')->name('training.applications.apply.post');
+            Route::post('applications/apply', 'Training\ApplicationsController@applyPost')->name('training.applications.apply.post');   
             Route::post('applications/withdraw', 'Training\ApplicationsController@withdraw')->name('training.applications.withdraw');
             Route::post('applications/comment/post', 'Training\ApplicationsController@commentPost')->name('training.applications.comment.post');
             Route::get('applications/{reference_id}', 'Training\ApplicationsController@show')->name('training.applications.show');
@@ -198,13 +200,13 @@ Route::group(['middleware' => 'auth'], function () {
                     Route::post('/solocertifications/add', 'Training\SoloCertificationsController@addSoloCertificationPost')->name('solocertifications.add')->middleware('can:edit roster');
 
                     //Applications
-                    Route::get('/applications', 'Training\ApplicationsController@admin')->name('applications')->middleware('can:view applicaions');
-                    Route::get('/applications/processed', 'Training\ApplicationsController@adminProcessedApplications')->name('applications.processed')->middleware('can:view applicaions');
-                    Route::get('/applications/withdrawn', 'Training\ApplicationsController@adminWithdrawnApplications')->name('applications.withdrawn')->middleware('can:view applicaions');
-                    Route::post('applications/comment/post', 'Training\ApplicationsController@adminCommentPost')->name('applications.comment.post')->middleware('can:interact with applicaions');
-                    Route::get('/applications/{reference_id}', 'Training\ApplicationsController@adminViewApplication')->name('applications.view')->middleware('can:view applicaions');
-                    Route::get('/applications/{reference_id}/accept', 'Training\ApplicationsController@adminAcceptApplication')->name('applications.accept')->middleware('can:interact with applicaions');
-                    Route::get('/applications/{reference_id}/reject', 'Training\ApplicationsController@adminRejectApplication')->name('applications.reject')->middleware('can:interact with applicaions');
+                    Route::get('/applications', 'Training\ApplicationsController@admin')->name('applications')->middleware('can:view applications');
+                    Route::get('/applications/processed', 'Training\ApplicationsController@adminProcessedApplications')->name('applications.processed')->middleware('can:view applications');
+                    Route::get('/applications/withdrawn', 'Training\ApplicationsController@adminWithdrawnApplications')->name('applications.withdrawn')->middleware('can:view applications');
+                    Route::post('applications/comment/post', 'Training\ApplicationsController@adminCommentPost')->name('applications.comment.post')->middleware('can:interact with applications');
+                    Route::get('/applications/{reference_id}', 'Training\ApplicationsController@adminViewApplication')->name('applications.view')->middleware('can:view applications');
+                    Route::get('/applications/{reference_id}/accept', 'Training\ApplicationsController@adminAcceptApplication')->name('applications.accept')->middleware('can:interact with applications');
+                    Route::get('/applications/{reference_id}/reject', 'Training\ApplicationsController@adminRejectApplication')->name('applications.reject')->middleware('can:interact with applications');
                 });
             });
 

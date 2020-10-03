@@ -10,7 +10,7 @@ Listed below is the data that you requested from Gander Oceanic. If you have any
 @endsection
 @section('from-line')
 Kind regards,<br/>
-<b>Gander Oceanic FIR</b><br>
+<b>Gander Oceanic OCA</b><br>
 @endsection
 @section('footer-to-line', $user->fullName('FLC').' ('.$user->email.')')
 @section('footer-reason-line', 'as they requested a data export')

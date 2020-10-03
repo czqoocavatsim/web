@@ -8,8 +8,7 @@
         <p style="font-size: 1.2em;">
             Policies and guidelines for operations in Gander Oceanic. These policies may be updated from time to time.
         </p>
-        <hr>
-        <div class="list-group">
+        <div class="list-group list-group-flush">
             @foreach ($policies as $policy)
             <div class="list-group-item">
                 <div class="row">
@@ -18,7 +17,7 @@
                         <a data-policy-id="{{$policy->id}}" href="javascript:void(0)" class="expandHidePolicyButton"><i class="fa fa-eye"></i>&nbsp;View Policy and Description</a>
                     </div>
                 </div>
-                <div class="pt-2" id="policyEmbed{{$policy->id}}">
+                <div class="pt-2 d-none" id="policyEmbed{{$policy->id}}">
                     <p>
                         {{$policy->descriptionHtml()}}
                     </p>

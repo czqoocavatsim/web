@@ -6,7 +6,7 @@ ENTRY at TIME. Request Flight Level FLIGHTLEVEL, Mach MACHSPEED.
 */
 
 //Generate result
-function generateOcenaicClearance(){
+function generateOceanicClearance(){
     //Get variables from form
     var callsign = document.getElementById('callsignB').value;
     var flightLevel = document.getElementById('flightLevelB').value;
@@ -98,7 +98,6 @@ function generatePositionReport(){
     var reporting = document.getElementById('reportingB').value;
     var time = document.getElementById('timeB').value;
     var flightLevel = document.getElementById('flightLevelB').value;
-    var mach = document.getElementById('machB').value;
     var next = document.getElementById('nextB').value;
     var estimating = document.getElementById('estimatingB').value;
     var thereafter = document.getElementById('thereafterB').value;
@@ -138,11 +137,8 @@ function generatePositionReport(){
     //Generate main request transcript.
     var transcript;
     //Create transcript
-    if (mach == '') {
-        transcript = callsign + ', position ' + reporting + ' at ' + time + ', Flight Level ' + flightLevel + ', Estimating ' + next + ' at ' + estimating + ', ' + thereafter + ' thereafter.';
-    } else {
-        transcript = callsign + ', position ' + reporting + ' at ' + time + ', Flight Level ' + flightLevel + ', Mach ' + mach + ', Estimating ' + next + ' at ' + estimating + ', ' + thereafter + ' thereafter.';
-    }
+    transcript = callsign + ', position ' + reporting + ' at ' + time + ', Flight Level ' + flightLevel + ', Estimating ' + next + ' at ' + estimating + ', ' + thereafter + ' thereafter.';
+
 
     //Display it!
     document.getElementById('errorA').style.display = 'none';
