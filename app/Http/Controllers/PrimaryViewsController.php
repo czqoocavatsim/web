@@ -13,6 +13,7 @@ use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Cache;
+use Thujohn\Twitter\Facades\Twitter;
 
 class PrimaryViewsController extends Controller
 {
@@ -39,7 +40,13 @@ class PrimaryViewsController extends Controller
         //Top controllers
         $topControllers = RosterMember::where('monthly_hours', '>', 0)->get()->sortByDesc('monthly_hours')->take(6);
 
-        return view('index', compact('ganderControllers', 'shanwickControllers', 'news', 'certifications', 'nextEvent', 'topControllers'));
+        //Twitter
+        $tweets = Cache::remember('twitter.timeline', 86400, function () {
+	        return Twitter::getUserTimeline(['screen_name' => 'ganderocavatsim', 'count' => 3, 'format' => 'array']);
+        });
+
+
+        return view('index', compact('ganderControllers', 'shanwickControllers', 'news', 'certifications', 'nextEvent', 'topControllers', 'tweets'));
     }
 
     /*

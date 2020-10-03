@@ -39,10 +39,6 @@
                     <input id="flightLevelB" maxlength="5" onblur="this.value = this.value.toUpperCase()" type="text" class="form-control" placeholder="380">
                 </div>
                 <div class="form-group col">
-                    <label>Mach Speed</label>
-                    <input id="machB" onblur="this.value = this.value.toUpperCase()" maxlength="4" type="text" class="form-control" placeholder=".85">
-                </div>
-                <div class="form-group col">
                     <label>Next Fix</label>
                     <input id="nextB" maxlength="7" onblur="this.value = this.value.toUpperCase()" type="text" class="form-control" placeholder="50N/20W">
                 </div>
@@ -60,7 +56,7 @@
                 </div>
             </div>
             <div class="form-row">
-                <button type="button" onclick="generate()" class="btn btn-primary">Generate</button>
+                <button type="button" onclick="generatePositionReport()" class="btn btn-primary">Generate</button>
             </div><br/>
             <div id="errorA" class="alert alert-dismissible  alert-danger" role="alert" style="display:none;">
                 <h4 id="errorHeading" class="alert-heading">Please fill the following fields:</h4>
@@ -95,5 +91,4 @@
     </div>
     </div>
 </div>
-<script src="{{ asset('js/positionReport.js') }}"></script>
 @stop

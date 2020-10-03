@@ -130,7 +130,7 @@
                 </div>
             </div>
         @endif
-        @if(Request::is('my') || Request::is('/'))
+        @if(Request::is('my') || Request::is('/') || Request::is('events/*') || Request::is('news/*'))
             <div class="d-none d-xl-block">
                 <nav id="czqoHeaderLight" class="navbar navbar-expand-xl navbar-dark transparent shadow-none p-0" style="min-height:59px; z-index:999;">
                     @include('layouts.navbar-main')
@@ -149,7 +149,7 @@
     </header>
     <!--End header-->
 
-    <div id="czqoContent" @if(Request::is('my') || Request::is('/')) style="margin-top: -59px;" @endif>
+    <div id="czqoContent" @if(Request::is('my') || Request::is('/') || Request::is('events/*') || Request::is('news/*')) style="margin-top: -59px;" @endif>
         @yield('content')
     </div>
     <!-- Footer -->

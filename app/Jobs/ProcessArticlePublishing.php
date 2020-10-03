@@ -45,7 +45,7 @@ class ProcessArticlePublishing implements ShouldQueue
             'channel.id' => config('app.env') == 'local' ? intval(config('services.discord.web_logs')) : intval(config('services.discord.announcements')),
             'embed' => [
                 'title' => $this->article->title,
-                'description' => $this->article->summary,
+                'description'    => $this->article->summary,
                 'color' => 0x80c9,
                 "image" => [
                     "url" => $this->article->image ? url('/').$this->article->image : null
@@ -55,7 +55,7 @@ class ProcessArticlePublishing implements ShouldQueue
                     "name" => $this->article->author_pretty(),
                     "icon_url" => $this->article->show_author ? $this->article->user->avatar() : null
                 ],
-                "timestamp" => date('Y-m-d H:i:s'),
+                //"timestamp" => date('Y-m-d H:i:s'),
             ]
         ]);
 
