@@ -45,7 +45,7 @@
                         <li>Region: {{$user->region_name}} ({{$user->region_code}})</li>
                         <li>Rating: {{$user->rating_GRP}} ({{$user->rating_short}})</li>
                     </ul>
-                    @can('view user deatils')
+                    @can('view user data')
                     <h5>Email</h5>
                     <a href="mailto:{{$user->email}}">{{$user->email}}</a>
                     @endcan
@@ -57,7 +57,7 @@
                         @foreach($user->roles as $role)
                         <li>
                             {{$role->name}}
-                            @if($user->can('edit user details') && $role != $user->highestRole())
+                            @if($user->can('edit user data') && $role != $user->highestRole())
                                 <form style="display: inline;" action="{{route('community.users.remove.role', $user->id)}}" method="POST">
                                     @csrf
                                     {{ method_field('DELETE')}}
