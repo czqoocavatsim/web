@@ -228,7 +228,7 @@
             </div>
             <div id="supportTab" style="display:none;">
                 <h3 class="font-weight-bold blue-text pb-2">Support</h3>
-                @if (count($openTickets) < 1)
+                {{-- @if (count($openTickets) < 1)
                     You have no open support tickets
                 @else
                     <div class="alert bg-czqo-blue-light">
@@ -247,12 +247,13 @@
                             @endforeach
                         </div>
                     </div>
-                @endif
+                @endif --}}
+                <p>Support tickets are disabled to allow for a re-write of the system. For now, please contact us via email.</p>
                 <ul class="list-unstyled mt-2 mb-0">
                     <li class="mb-2">
                         <a href="{{route('feedback.create')}}" style="text-decoration:none;"><span class="blue-text"><i class="fas fa-chevron-right"></i></span> &nbsp; <span class="black-text">Send feedback to staff</span></a>
                     </li>
-                    <li class="mb-2">
+                    {{-- <li class="mb-2">
                         <a href="{{route('tickets.index', ['create' => 'yes'])}}" style="text-decoration:none;"><span class="blue-text"><i class="fas fa-chevron-right"></i></span> &nbsp; <span class="black-text">Start a support ticket</span></a>
                     </li>
                     <li class="mb-2">
@@ -262,7 +263,7 @@
                     <li class="mb-2">
                         <a href="{{route('tickets.staff')}}" style="text-decoration:none;"><span class="blue-text"><i class="fas fa-chevron-right"></i></span> &nbsp; <span class="black-text">View staff ticket inbox</span></a>
                     </li>
-                    @endcan
+                    @endcan --}}
                     <li class="mb-2">
                         <a href="https://knowledgebase.ganderoceanic.com/" target="_blank" style="text-decoration:none;"><span class="blue-text"><i class="fas fa-chevron-right"></i></span> &nbsp; <span class="black-text">CZQO Knowledge Base</span></a>
                     </li>

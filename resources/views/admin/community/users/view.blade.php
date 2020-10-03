@@ -32,7 +32,7 @@
                     <h5>Identity</h5>
                     <ul class="list-unstyled">
                         <li>CID: {{$user->id}}</li>
-                        @can('view user details')
+                        @can('view user data')
                         <li>CERT First Name: {{$user->fname}}</li>
                         <li>CERT Last Name: {{$user->lname}}</li>
                         @endcan
@@ -57,17 +57,18 @@
                         @foreach($user->roles as $role)
                         <li>
                             {{$role->name}}
-                            @if($user->can('edit user data') && $role != $user->highestRole())
+                            @can('edit user data')
                                 <form style="display: inline;" action="{{route('community.users.remove.role', $user->id)}}" method="POST">
                                     @csrf
                                     {{ method_field('DELETE')}}
                                     <input type="hidden" name="role_id" value="{{$role->id}}">
                                     &nbsp;<button class="red-text btn btn-link m-0 p-0"><i class="fa fa-times"></i>   Remove</button>
                                 </form>
-                            @endif
+                            @endcan
                         </li>
                         @endforeach
                     </ul>
+                    @can('edit user data')
                     <h5>Assign Role</h5>
                     <form action="{{route('community.users.assign.role', $user->id)}}" method="POST">
                         @csrf
@@ -86,13 +87,14 @@
                             </div>
                         </div>
                     </form>
+                    @endcan
                     <hr>
                     <h5>Permissions</h5>
                     <ul class="list-unstyled">
                         @foreach($user->permissions as $perm)
                         <li>
                             {{ucfirst($perm->name)}}
-                            @if($user->can('edit user details'))
+                            @if($user->can('edit user data'))
                                 <form style="display: inline;" action="{{route('community.users.remove.permission', $user->id)}}" method="POST">
                                     @csrf
                                     {{ method_field('DELETE')}}
@@ -106,6 +108,7 @@
                             <li>None assigned.</li>
                         @endif
                     </ul>
+                    @can('edit user data')
                     <h5>Assign Permission</h5>
                     <p>This should be used to give someone temporary access to a function without giving them unneeded access to other functions.</p>
                     <form action="{{route('community.users.assign.permission', $user->id)}}" method="POST">
@@ -124,6 +127,7 @@
                             </div>
                         </div>
                     </form>
+                    @endcan
                 </div>
             </div>
             <div class="col-md-6">
