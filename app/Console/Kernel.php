@@ -230,7 +230,7 @@ class Kernel extends ConsoleKernel
                 foreach ($onlineControllers as $oc) {
                     if ($oc['cid'] == $log->cid) { // If CID matches
                         // If callsign matches
-                        if (MonitoredPosition::where('id', $sessionLog->monitored_position_id)->identifier == $oc['callsign']) {
+                        if (MonitoredPosition::where('id', $$log->monitored_position_id)->identifier == $oc['callsign']) {
                             $stillOnline = true;
                         }
                     }
