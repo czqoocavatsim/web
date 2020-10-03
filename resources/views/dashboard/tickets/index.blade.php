@@ -7,6 +7,14 @@
 @stop
 
 @section('content')
+
+<div class="container py-4">
+    <p>Support tickets are disabled to allow for a re-write of the system. For now, please contact us via email.</p>
+</div>
+
+@stop
+{{--
+@section('content')
         <div class="container" style="margin-top: 20px;">
         <a href="{{route('my.index')}}" class="blue-text" style="font-size: 1.2em;"> <i class="fas fa-arrow-left"></i> myCZQO</a>
         <h1 class="blue-text font-weight-bold mt-2">Support Tickets</h1>
@@ -134,4 +142,4 @@
             $("#startTicketModal").modal();
         }
     </script>
-@stop
+@stop --}}

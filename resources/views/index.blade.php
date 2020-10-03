@@ -168,7 +168,7 @@
     <div class="jumbtron">
         <div class="container py-5">
             <div class="row">
-                <div class="col-md-4">
+                <div class="col-lg-3">
                     <h2 class="font-weight-bold blue-text">Quick Links</h2>
                     <div class="d-flex flex-row mt-3">
                         <a data-toggle="modal" data-target="#discordTopModal" href="" class="blue-text mr-1" style="text-decoration:none">
@@ -203,7 +203,7 @@
                         </a>
                     </div>
                 </div>
-                <div class="col-md-6">
+                <div class="col-md-4">
                     <h2 class="font-weight-bold blue-text mb-3">Our Newest Controllers</h2>
                     <div class="row">
                     @foreach ($certifications as $cert)
@@ -217,6 +217,37 @@
                         </div>
                     </div>
                     @endforeach
+                    </div>
+                </div>
+                <div class="col-md-5">
+                    <div class="d-flex flex-row justify-content-between">
+                        <div>
+                            <h2 class="font-weight-bold blue-text">Latest Tweets</h2>
+                            <p class="mt-0" style="font-size: 1.2em;">@ganderocavatsim</p>
+                        </div>
+                        <img style="margin-top: -15px;height: 80px;" src="{{asset('img/Twitter_Logo_Blue.png')}}" alt="">
+                    </div>
+                    <div class="list-group">
+                        @foreach($tweets as $t)
+                            <a href="https://twitter.com/ganderocavatsim/status/{{$t['id']}}" target="_blank" class="list-group-item list-group-item-action">
+                                <p>
+                                    {{$t['text']}}
+                                </p>
+                                <p class="text-muted mb-0">
+                                    {{Carbon\Carbon::create($t['created_at'])->diffForHumans()}}
+                                    @if($t['retweeted'])
+                                    &nbsp;&nbsp;•&nbsp;&nbsp;
+                                    <i class="fas fa-retweet"></i>
+                                    Retweet of {{$t['retweeted_status']['user']['name']}}
+                                    @endif
+                                    @if($t['in_reply_to_user_id'])
+                                    &nbsp;&nbsp;•&nbsp;&nbsp;
+                                    <i class="fas fa-reply"></i>
+                                    In Reply To {{$t['in_reply_to_screen_name']}}
+                                    @endif
+                                </p>
+                            </a>
+                        @endforeach
                     </div>
                 </div>
             </div>
