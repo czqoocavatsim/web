@@ -2,17 +2,20 @@
 
 @section('title', $article->title.' - ')
 @section('description', $article->summary)
+@section('image', $article->image)
 
 @section('content')
-    <div class="card card-image blue rounded-0" style="background-image: url({{$article->image}}); background-size: cover; background-position: center;">
-        <div class="text-white text-left py-1 px-4 rgba-black-light">
-            <div class="container">
-                <div class="py-5">
-                    <h1 class="h1" style="font-size: 3em;">{{$article->title}}</h1>
-                </div>
+
+<div class="jarallax card card-image rounded-0"  data-jarallax data-speed="0.2">
+    <img class="jarallax-img" src="{{$article->image}}" alt="">
+    <div class="text-white text-left rgba-stylish-strong py-3 pt-5 px-4">
+        <div class="container">
+            <div class="py-5">
+                <h1 class="h1" style="font-size: 3em;">{{$article->title}}</h1>
             </div>
         </div>
     </div>
+</div>
     <div class="container py-4">
         <h4 class="blue-text">{{$article->summary}}</h4>
         <div class="d-flex flex-row align-items-center">
