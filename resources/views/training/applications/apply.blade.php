@@ -88,7 +88,7 @@
                 <span class="label">Finish your application</span>
             </a>
             <div class="step-content w-75 grey lighten-3">
-                <p>By applying to Gander Oceanic you acknowledge the activity requirements for after you receive your endorsement. You will be required to control 3 hours each half-year. Failure to do so may result in the removal of your endorsement.</p>
+                <p>By applying to Gander Oceanic you acknowledge the activity requirements for after you receive your endorsement. You will be required to control 3 hours each quarter. Failure to meet the requirement without justification may lead to the revokation of your endorsement.</p>
                 <p>You also agree to comply with our General and Training policies.</p>
                 <div class="custom-control custom-checkbox">
                     <input type="checkbox" class="custom-control-input" required name="agreeActivity" id="agreeActivity">
