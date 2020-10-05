@@ -71,7 +71,7 @@
                 </div>
                 <div class="modal-body">
                     <p>Gander Oceanic is happy to provide ATC coverage for your event crossing the North Atlantic.<br/>
-                        To request ATC for your event, contact the Events and Marketing Director via a <a href="{{route('tickets.index')}}">ticket</a> or via <a href="{{route('staff')}}">email.</a> If the position is vacant, instead contact the OCA Chief.</p>
+                        To request ATC for your event, contact the Events and Marketing Director via a <a href="{{route('TODO: TicketURL')}}">ticket</a> or via <a href="{{route('staff')}}">email.</a> If the position is vacant, instead contact the OCA Chief.</p>
                     <br/>
                     <p>Section 2.5 of the General Policy applies.</p>
                     <blockquote style="font-size: 12px !important;">

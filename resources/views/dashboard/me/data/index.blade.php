@@ -54,7 +54,7 @@
                             </a>
                             <div class="step-content grey lighten-3">
                               <p>Please open a support ticket with the Web Team or send them an email if you would like to request specific data.</p>
-                                <button onclick="location.href='{{route('tickets.index', ['create' => 'yes', 'department' => 'firchief', 'title' => 'Data request'])}}'" class="btn bg-czqo-blue-light">Support Ticket</button>
+                                <button onclick="location.href='{{route('TODO: TicketURL', ['create' => 'yes', 'department' => 'firchief', 'title' => 'Data request'])}}'" class="btn bg-czqo-blue-light">Support Ticket</button>
                             </div>
                           </li>
                       </ul>
@@ -66,7 +66,7 @@
                 <div class="card-header">Delete Data</div>
                 <div class="card-body">
                     <p>Please open a support ticket to the Web Team or email them to request deletion of your data.</p>
-                    <button onclick="location.href='{{route('tickets.index', ['create' => 'yes', 'department' => 'firchief', 'title' => 'Data request'])}}'" class="btn bg-czqo-blue-light">Support Ticket</button>
+                    <button onclick="location.href='{{route('TODO: TicketURL', ['create' => 'yes', 'department' => 'firchief', 'title' => 'Data request'])}}'" class="btn bg-czqo-blue-light">Support Ticket</button>
                 </div>
             </div>
             <div class="card mt-3">

@@ -256,7 +256,7 @@
                 <div class="modal-body">
                     To contact us, please do one of the following:
                     <ol>
-                        <li>Login and open a <a href="{{route('tickets.index')}}">support ticket.</a></li>
+                        <li>Login and open a <a href="{{route('TODO: TicketURL')}}">support ticket.</a></li>
                         <li>Head to the <a href="{{route('staff')}}">staff page</a> and email the relevant staff member.</li>
                         <li>Join our <a href="https://discord.gg/MvPVAHP">Discord server</a> and ask in the #westons-at-the-airport channel.</li>
                     </ol>
@@ -280,7 +280,7 @@
                 <div class="modal-body">
                     {{\Session::get('error-modal')}}
                     <div class="alert black-text bg-czqo-blue-light mt-4">
-                        If you believe this is a mistake, please create a <a target="_blank" class="black-text" href="{{route('tickets.index')}}">support ticket.</a>
+                        If you believe this is a mistake, please create a <a target="_blank" class="black-text" href="{{route('TODO: TicketURL')}}">support ticket.</a>
                     </div>
                 </div>
             </div>
