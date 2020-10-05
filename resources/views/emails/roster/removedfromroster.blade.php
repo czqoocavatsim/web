@@ -5,7 +5,7 @@
 @section('message-content')
 <p>You have been removed from the Gander Oceanic controller roster. This means you cannot control any Gander Oceanic position on the VATSIM network. You may apply to regain your certification at any time in the future.</p>
 <p>
-    If you believe this is a mistake or have any questions, please contact us via a <a href="{{route('TODO: TicketURL')}}">support ticket</a> or email the <a href="{{route('staff')}}">OCA Chief.</a>
+    If you believe this is a mistake or have any questions, please contact us via a <a href="TODO: TicketURL">support ticket</a> or email the <a href="{{route('staff')}}">OCA Chief.</a>
 </p>
 @endsection
 

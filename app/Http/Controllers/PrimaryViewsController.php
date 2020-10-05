@@ -74,8 +74,6 @@ class PrimaryViewsController extends Controller
     {
         $user = Auth::user();
 
-        $openTickets = Ticket::where('user_id', $user->id)->where('status', 0)->get();
-
         $atcResources = AtcResource::all()->sortBy('title');
 
         $bannerImg = RotationImage::all()->random();
@@ -92,10 +90,7 @@ class PrimaryViewsController extends Controller
             return json_decode($output);
         });
 
-        if ($user->preferences->enable_beta_features) {
-            return view('dashboard.indexnew', compact('openTickets', 'atcResources', 'bannerImg'));
-        } else {
-            return view('dashboard.index', compact('openTickets', 'atcResources', 'bannerImg', 'quote'));
-        }
+        return view('dashboard.index', compact('atcResources', 'bannerImg', 'quote'));
+
     }
 }

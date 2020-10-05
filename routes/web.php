@@ -134,12 +134,13 @@ Route::group(['middleware' => 'auth'], function () {
             Route::get('applications/{reference_id}', 'Training\ApplicationsController@show')->name('training.applications.show');
             Route::get('applications/{reference_id}/updates', 'Training\ApplicationsController@showUpdates')->name('training.applications.show.updates');
 
-
         });
 
-        //ATC Resources
-        Route::post('/atcresources', 'Publications\PublicationsController@uploadResource')->name('atcresources.upload')->middleware('edit atc resources');
-                Route::get('/atcresources/delete/{id}', 'Publications\PublicationsController@deleteResource')->name('atcresources.delete')->middleware('edit atc resources');
+        //Support
+        Route::prefix('support')->name('support.')->group(function () {
+            Route::get('/', 'Support\TicketsController@index')->name('index');
+        });
+
 
         Route::group(['middleware' => 'can:view events'], function () {
             //Events
