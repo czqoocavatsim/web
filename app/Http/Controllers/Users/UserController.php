@@ -362,7 +362,7 @@ class UserController extends Controller
         $user->save();
 
         //Redirect
-        return redirect()->back()->with('success', 'Display name saved!');
+        return redirect()->back()->with('success', 'Display name saved! If your avatar is set to default, it may take a while for the initials to update.');
     }
 
     public function viewUserProfilePublic($id)

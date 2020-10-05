@@ -403,6 +403,34 @@
                     </ul>
                     @endhasanyrole
 
+                    @canany('edit policies|edit atc resources')
+                    <h5 class="font-weight-bold blue-text mt-3">Publications</h5>
+                    <ul class="list-unstyled mt-2 mb-0">
+                        <li class="mb-2">
+                            <a href="{{(route('publications.policies'))}}" style="text-decoration:none;">
+                                <span class="blue-text">
+                                    <i class="fas fa-chevron-right"></i>
+                                </span>
+                                &nbsp;
+                                <span class="black-text">
+                                    Edit policies
+                                </span>
+                            </a>
+                        </li>
+                        <li class="mb-2">
+                            <a href="{{(route('training.admin.dashboard'))}}" style="text-decoration:none;">
+                                <span class="blue-text">
+                                    <i class="fas fa-chevron-right"></i>
+                                </span>
+                                &nbsp;
+                                <span class="black-text">
+                                    Edit ATC resources
+                                </span>
+                            </a>
+                        </li>
+                    </ul>
+                    @endcanany
+
                     @can('view users')
                     <h5 class="font-weight-bold blue-text mt-3">Users</h5>
                     <ul class="list-unstyled mt-2 mb-0">

@@ -83,7 +83,7 @@
                     </div>
                     @endif
                 </div>
-                <div class="col-md-6">
+                <div class="col-md-6 d-none d-md-block">
                     <h3 class="white-text">Online Controllers</h3>
                     <ul class="list-unstyled ml-0 mt-3 p-0 onlineControllers">
                         @if(count($ganderControllers) < 1 && count($shanwickControllers) < 1)
@@ -120,23 +120,56 @@
                         <a href="{{route('map')}}" class="float-right ml-auto mr-0 white-text" style="font-size: 1.2em;">View map&nbsp;&nbsp;<i class="fas fa-map"></i></a>
                     </div>
                 </div>
+                <div class="col-md-6 d-md-none mt-4">
+                    <h3 class="white-text">Online Controllers</h3>
+                    <ul class="list-unstyled ml-0 mt-3 p-0 onlineControllers">
+                        @if(count($ganderControllers) < 1 && count($shanwickControllers) < 1)
+                            <p class="white-text">No controllers online.</p>
+                        @endif
+                        @foreach($ganderControllers as $controller)
+                        <li class="mb-2">
+                            <div class="card shadow-none blue-grey lighten-5 p-3">
+                                <div class="d-flex flex-row justify-content-between align-items-center mb-1">
+                                    <h4 class="m-0">{{$controller['callsign']}}</h4>
+                                    <span><i class="far fa-user-circle"></i>&nbsp;&nbsp;{{$controller['realname']}} {{$controller['cid']}}</span>
+                                </div>
+                            </div>
+                        </li>
+                        @endforeach
+                        @foreach($shanwickControllers as $controller)
+                        <li class="mb-2">
+                            <div class="card shadow-none blue-grey lighten-5 p-3">
+                                <div class="d-flex flex-row justify-content-between align-items-center mb-1">
+                                    <h4 class="m-0">{{$controller['callsign']}}</h4>
+                                    <span><i class="far fa-user-circle"></i>&nbsp;&nbsp;{{$controller['realname']}} {{$controller['cid']}}</span>
+                                </div>
+                            </div>
+                        </li>
+                        @endforeach
+                    </ul>
+                    <div class="d-flex flex-row">
+                        <a href="{{route('map')}}" class="float-right ml-auto mr-0 white-text" style="font-size: 1.2em;">View map&nbsp;&nbsp;<i class="fas fa-map"></i></a>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
-    <div class="jumbtron" style=" background-size: cover; background-repeat: no-repeat; background-image:url({{asset('img/home-screen-backgrounds/czqosquarelightblue.png')}}); background-position: right;">
+    <div style="background-size: cover; background-repeat: no-repeat; background-image:url({{asset('img/home-screen-backgrounds/czqosquarelightblue.png')}}); background-position: right;">
         <div class="container py-5">
             <div class="row">
-                <div class="col-md-5">
+                <div class="col-lg-5">
                     <h1 class="font-weight-bold blue-text">We control the skies over the North Atlantic on VATSIM.</h1>
                     <p style="font-size: 1.2em;" class="mt-3">
                         Gander Oceanic is VATSIM's coolest, calmest and most collected provider of Oceanic control. With our worldwide team of skilled Oceanic controllers, we pride ourselves on our expert, high-quality service to pilots flying across the North Atlantic. Our incredible community of pilots and controllers extend their warmest welcome and wish you all the best for your oceanic crossings!
                     </p>
                     <div class="d-flex flex-row">
-
+                        @if(!Auth::check() || Auth::user()->can('start-application'))
+                        <a href="{{route('training.applications.apply')}}" role="button" class="btn bg-czqo-blue-light">Apply To Gander</a>
+                        @endif
                         <a href="/pilots" class="btn bg-czqo-blue-light" role="button">Pilot Resources</a>
                     </div>
                 </div>
-                <div class="col-md-7 text-right">
+                <div class="col-lg-7 text-right d-none d-lg-block">
                     <h1 class="font-weight-bold blue-text mb-3">Top Controllers This Month</h1>
                     <ul class="list-unstyled">
                         @php $index = 1; @endphp
@@ -148,7 +181,7 @@
                                         {{$index}}.
                                     </span>
                                 </div>
-                                <div class="col">
+                                <div class="col text-left">
                                     <p class="mb-0">
                                         <span style="font-size: 1.4em;">
                                             <img src="{{$c->user->avatar()}}" style="height: 35px; !important; width: 35px !important; margin-left: 10px; margin-right: 5px; margin-bottom: 3px; border-radius: 50%;">
@@ -163,69 +196,39 @@
                     </ul>
                 </div>
             </div>
+
+            <div class="d-lg-none mt-4">
+                <h1 class="font-weight-bold blue-text mb-3">Top Controllers This Month</h1>
+                <ul class="list-unstyled">
+                    @php $index = 1; @endphp
+                    @foreach($topControllers as $c)
+                    <li>
+                        <span class="font-weight-bold" style="font-size: 1.9em;">
+                            {{$index}}.
+                        </span>
+                        <span style="font-size: 1.4em;">
+                            <img src="{{$c->user->avatar()}}" style="height: 35px; !important; width: 35px !important; margin-left: 10px; margin-right: 5px; margin-bottom: 3px; border-radius: 50%;">
+                            {{$c->user->fullName('FL')}} - {{$c->monthly_hours}} hours
+                        </span>
+                    </li>
+                    @php $index++; @endphp
+                    @endforeach
+                </ul>
+            </div>
         </div>
     </div>
     <div class="jumbtron">
         <div class="container py-5">
             <div class="row">
-                <div class="col-lg-3">
-                    <h2 class="font-weight-bold blue-text">Quick Links</h2>
-                    <div class="d-flex flex-row mt-3">
-                        <a data-toggle="modal" data-target="#discordTopModal" href="" class="blue-text mr-1" style="text-decoration:none">
-                            <div class="blue-grey lighten-5 home-quick-link" style="height: 80px; !important; width: 80px !important;">
-                                <div class="d-flex flex-row justify-content-center align-items-center h-100">
-                                    <i class="fab fa-discord fa-3x" style="vertical-align:middle;"></i>
-                                </div>
-                            </div>
-                        </a>
-                        <a href="https://twitter.com/ganderocavatsim" class="blue-text mr-1" style="text-decoration:none">
-                            <div class="blue-grey lighten-5 home-quick-link" style="height: 80px; !important; width: 80px !important;">
-                                <div class="d-flex flex-row justify-content-center align-items-center h-100">
-                                    <i class="fab fa-twitter fa-3x" style="vertical-align:middle;"></i>
-                                </div>
-                            </div>
-                        </a>
-                    </div>
-                    <div class="d-flex flex-row mt-1">
-                        <a href="https://www.facebook.com/ganderocavatsim" class="blue-text mr-1" style="text-decoration:none">
-                            <div class="blue-grey lighten-5 home-quick-link" style="height: 80px; !important; width: 80px !important;">
-                                <div class="d-flex flex-row justify-content-center align-items-center h-100">
-                                    <i class="fab fa-facebook fa-3x" style="vertical-align:middle;"></i>
-                                </div>
-                            </div>
-                        </a>
-                        <a href="https://knowledgebase.ganderoceanic.com" class="blue-text mr-1" style="text-decoration:none">
-                            <div class="blue-grey lighten-5 home-quick-link" style="height: 80px; !important; width: 80px !important;">
-                                <div class="d-flex flex-row justify-content-center align-items-center h-100">
-                                    <i class="fas fa-book fa-3x" style="vertical-align:middle;"></i>
-                                </div>
-                            </div>
-                        </a>
-                    </div>
-                </div>
-                <div class="col-md-4">
-                    <h2 class="font-weight-bold blue-text mb-3">Our Newest Controllers</h2>
-                    <div class="row">
-                    @foreach ($certifications as $cert)
-                    <div class="col-lg-6">
-                        <div class="d-flex flex-row">
-                            <img src="{{$cert->controller->avatar()}}" style="height: 55px !important; width: 55px !important; margin-right: 10px; margin-bottom: 3px; border-radius: 50%;">
-                            <div class="d-flex flex-column">
-                                <h4 class="font-weight-bold">{{$cert->controller->fullName('FL')}}</h4>
-                                <p title="{{Carbon\Carbon::create($cert->timestamp)->toDayDateTimeString()}}">{{Carbon\Carbon::create($cert->timestamp)->diffForHumans()}}</p>
-                            </div>
-                        </div>
-                    </div>
-                    @endforeach
-                    </div>
-                </div>
-                <div class="col-md-5">
-                    <div class="d-flex flex-row justify-content-between">
+                <div class="col-md-4 mb-4">
+                    <div class="d-flex flex-row justify-content-left">
+                        <img style="margin-top: -7px;height: 80px;" src="{{asset('img/Twitter_Logo_Blue.png')}}" alt="">
                         <div>
                             <h2 class="font-weight-bold blue-text">Latest Tweets</h2>
-                            <p class="mt-0" style="font-size: 1.2em;">@ganderocavatsim</p>
+                            <a href="https://twitter.com/ganderocavatsim/" class="text-body">
+                                <p class="mt-0" style="font-size: 1.2em;">@ganderocavatsim</p>
+                            </a>
                         </div>
-                        <img style="margin-top: -15px;height: 80px;" src="{{asset('img/Twitter_Logo_Blue.png')}}" alt="">
                     </div>
                     <div class="list-group">
                         @foreach($tweets as $t)
@@ -249,6 +252,60 @@
                             </a>
                         @endforeach
                     </div>
+                </div>
+                <div class="col-md-4 mb-4">
+                    <h2 class="font-weight-bold blue-text mb-4">Our Newest Controllers</h2>
+                    @foreach ($certifications as $cert)
+                        <div class="d-flex flex-row mb-2">
+                            <img src="{{$cert->controller->avatar()}}" style="height: 55px !important; width: 55px !important; margin-right: 10px; margin-bottom: 3px; border-radius: 50%;">
+                            <div class="d-flex flex-column">
+                                <h4 class="font-weight-bold">{{$cert->controller->fullName('FL')}}</h4>
+                                <p title="{{Carbon\Carbon::create($cert->timestamp)->toDayDateTimeString()}}">{{Carbon\Carbon::create($cert->timestamp)->diffForHumans()}}</p>
+                            </div>
+                        </div>
+                    @endforeach
+                </div>
+
+                <div class="col-md-4">
+                    <h2 class="font-weight-bold blue-text">Quick Links</h2>
+                    <ul class="list-unstyled mt-4" style="font-size: 1.3em;">
+                        <li class="mb-3">
+                            <a data-toggle="modal" data-target="#discordTopModal" href="" style="text-decoration:none;">
+                                <span class="blue-text">
+                                    <i class="fab fa-discord fa-2x" style="vertical-align:middle;"></i>
+                                </span>
+                                &nbsp;
+                                <span class="black-text">Join Our Discord Community</span>
+                            </a>
+                        </li>
+                        <li class="mb-3">
+                            <a href="https://twitter.com/ganderocavatsim" style="text-decoration:none;">
+                                <span class="blue-text">
+                                    <i class="fab fa-twitter fa-2x" style="vertical-align:middle;"></i>
+                                </span>
+                                &nbsp;
+                                <span class="black-text">Twitter</span>
+                            </a>
+                        </li>
+                        <li class="mb-3">
+                            <a href="https://www.facebook.com/ganderocavatsim" style="text-decoration:none;">
+                                <span class="blue-text">
+                                    <i class="fab fa-facebook fa-2x" style="vertical-align:middle;"></i>
+                                </span>
+                                &nbsp;
+                                <span class="black-text">Facebook</span>
+                            </a>
+                        </li>
+                        <li class="mb-3">
+                            <a href="https://knowledgebase.ganderoceanic.com" style="text-decoration:none;">
+                                <span class="blue-text">
+                                    <i class="fas fa-book fa-2x" style="vertical-align:middle;"></i>
+                                </span>
+                                &nbsp;
+                                <span class="black-text">Knowledge Base</span>
+                            </a>
+                        </li>
+                    </ul>
                 </div>
             </div>
         </div>

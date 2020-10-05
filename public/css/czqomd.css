@@ -459,3 +459,12 @@ body[data-theme="dark"] .list-group-item.bg-czqo-blue-light {
 .modal-header, .modal-footer {
     border: none;
 }
+
+.toastify {
+    border-radius: 0.6em !important;
+    font-size: 1.2em;
+}
+
+.toastify .toast-close {
+    margin-left: 10px !important;
+}
