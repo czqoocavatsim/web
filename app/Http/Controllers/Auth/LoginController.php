@@ -116,6 +116,7 @@ class LoginController extends Controller
             $prefs->ui_mode = "light";
             $prefs->save();
         }
-        return redirect('/dashboard')->with('success', 'Logged in!');
+
+        return redirect()->route('my.index')->with('success', "Welcome back, {$user->fullName('F')}!");
     }
 }

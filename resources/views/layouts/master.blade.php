@@ -82,6 +82,9 @@
         <script src="https://unpkg.com/jarallax@1/dist/jarallax.min.js"></script>
         <script src="https://unpkg.com/jarallax@1/dist/jarallax-video.min.js"></script>
         <script src="https://unpkg.com/jarallax@1/dist/jarallax-element.min.js"></script>
+        <!--Toastify-->
+        <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css">
+        <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
         <!--Image picker and masonry-->
         <script src="{{asset('js/image-picker.min.js')}}"></script>
         <link rel="stylesheet" href="{{asset('css/image-picker.css')}}">
@@ -101,34 +104,74 @@
     @endif
     <header>
         @if ($errors->any())
-            <div class="alert alert-danger" style="margin: 0; border-radius: 0; border: none;">
-                <div class="container">
-                    @foreach ($errors->all() as $error)
-                        {{ $error }} <br>
-                    @endforeach
-                </div>
-            </div>
+            @foreach ($errors->all() as $error)
+                <script>
+                    Toastify({
+                        text: "Error - {{$error}}",
+                        duration: 5000,
+                        close: true,
+                        gravity: "bottom", // `top` or `bottom`
+                        position: 'right', // `left`, `center` or `right`
+                        backgroundColor: '#ff4444',
+                        offset: {
+                            x: 100, // horizontal axis - can be a number or a string indicating unity. eg: '2em'
+                            y: 50 // vertical axis - can be a number or a string indicating unity. eg: '2em'
+                        },
+                        stopOnFocus: true, // Prevents dismissing of toast on hover
+                    }).showToast();
+            </script>
+            @endforeach
         @endif
         @if (\Session::has('success'))
-            <div class="alert alert-success" style="margin: 0; border-radius: 0; border: none;">
-                <div class="container">
-                    {!! \Session::get('success') !!}
-                </div>
-            </div>
+            <script>
+                Toastify({
+                    text: "{{\Session::get('success')}}",
+                    duration: 5000,
+                    close: true,
+                    gravity: "bottom", // `top` or `bottom`
+                    position: 'right', // `left`, `center` or `right`
+                    backgroundColor: '#00C851',
+                    offset: {
+                        x: 100, // horizontal axis - can be a number or a string indicating unity. eg: '2em'
+                        y: 50 // vertical axis - can be a number or a string indicating unity. eg: '2em'
+                    },
+                    stopOnFocus: true, // Prevents dismissing of toast on hover
+                }).showToast();
+            </script>
         @endif
         @if (\Session::has('error'))
-            <div class="alert alert-danger" style="margin: 0; border-radius: 0; border: none;">
-                <div class="container">
-                    {!! \Session::get('error') !!}
-                </div>
-            </div>
+        <script>
+            Toastify({
+                text: "{{\Session::get('error')}}",
+                duration: 5000,
+                close: true,
+                gravity: "bottom", // `top` or `bottom`
+                position: 'right', // `left`, `center` or `right`
+                backgroundColor: '#ff4444',
+                offset: {
+                    x: 100, // horizontal axis - can be a number or a string indicating unity. eg: '2em'
+                    y: 50 // vertical axis - can be a number or a string indicating unity. eg: '2em'
+                },
+                stopOnFocus: true, // Prevents dismissing of toast on hover
+            }).showToast();
+        </script>
         @endif
         @if (\Session::has('info'))
-            <div class="alert alert-info" style="margin: 0; border-radius: 0; border: none;">
-                <div class="container">
-                    {!! \Session::get('info') !!}
-                </div>
-            </div>
+        <script>
+            Toastify({
+                text: "{{\Session::get('info')}}",
+                duration: 5000,
+                close: true,
+                gravity: "bottom", // `top` or `bottom`
+                position: 'right', // `left`, `center` or `right`
+                backgroundColor: '#33b5e5',
+                offset: {
+                    x: 100, // horizontal axis - can be a number or a string indicating unity. eg: '2em'
+                    y: 50 // vertical axis - can be a number or a string indicating unity. eg: '2em'
+                },
+                stopOnFocus: true, // Prevents dismissing of toast on hover
+            }).showToast();
+        </script>
         @endif
         @if(Request::is('my') || Request::is('/') || Request::is('events/*') || Request::is('news/*'))
             <div class="d-none d-xl-block">
@@ -148,7 +191,6 @@
         @endif
     </header>
     <!--End header-->
-
     <div id="czqoContent" @if(Request::is('my') || Request::is('/') || Request::is('events/*') || Request::is('news/*')) style="margin-top: -59px;" @endif>
         @yield('content')
     </div>
@@ -329,29 +371,8 @@
         </div>
     </div>
     <!-- End Connect modal -->
-    <script type="text/javascript">
-        Dropzone.options.dropzone =
-            {
-                maxFilesize: 12,
-                renameFile: function (file) {
-                    var dt = new Date();
-                    var time = dt.getTime();
-                    return time + file.name;
-                },
-                acceptedFiles: ".jpeg,.jpg,.png,.gif",
-                addRemoveLinks: true,
-                timeout: 5000,
-                success: function (file, response) {
-                    console.log(response);
-                },
-                error: function (file, response) {
-                    return false;
-                }
-            };
-    </script>
     <script>
         $("blockquote").addClass('blockquote');
-
 
         $.urlParam = function(name){
             var results = new RegExp('[\?&]' + name + '=([^&#]*)').exec(window.location.href);

@@ -20,15 +20,14 @@ Route::get('/map', 'PrimaryViewsController@map')->name('map');
 Route::get('/roster', 'Roster\RosterController@publicRoster')->name('roster.public');
 Route::get('/roster/solo-certs', 'Training\SoloCertificationsController@public')->name('solocertifications.public');
 Route::get('/staff', function() { return redirect(route('staff'), 301); });
-Route::get('/atcresources', 'Publications\PublicationsController@index')->name('atcresources.index');
+Route::get('/atcresources', 'Publications\PublicationsController@atcResources')->name('atcresources.index');
 Route::view('/pilots', 'pilots.index');
 Route::view('/pilots/oceanic-clearance', 'pilots.oceanic-clearance');
 Route::view('/pilots/position-report', 'pilots.position-report');
 Route::view('/pilots/tracks', 'pilots.tracks');
 Route::view('/pilots/tutorial', 'pilots.tutorial');
-Route::get('/policies', 'Publications\PublicationsController@policiesIndex')->name('policies');
+Route::get('/policies', 'Publications\PublicationsController@policies')->name('policies');
 //Route::get('/meetingminutes', 'News\NewsController@minutesIndex')->name('meetingminutes');
-Route::get('/bookings', 'ControllerBookings\ControllerBookingsController@indexPublic')->name('controllerbookings.public');
 Route::view('/privacy', 'privacy')->name('privacy');
 //Route::view('/changelog', 'changelog')->name('changelog');
 Route::get('/events', 'Events\EventController@index')->name('events.index');
@@ -136,7 +135,7 @@ Route::group(['middleware' => 'auth'], function () {
             //Applications
             Route::get('applications', 'Training\ApplicationsController@showAll')->name('training.applications.showall');
             Route::get('applications/apply', 'Training\ApplicationsController@apply')->name('training.applications.apply');
-            Route::post('applications/apply', 'Training\ApplicationsController@applyPost')->name('training.applications.apply.post');   
+            Route::post('applications/apply', 'Training\ApplicationsController@applyPost')->name('training.applications.apply.post');
             Route::post('applications/withdraw', 'Training\ApplicationsController@withdraw')->name('training.applications.withdraw');
             Route::post('applications/comment/post', 'Training\ApplicationsController@commentPost')->name('training.applications.comment.post');
             Route::get('applications/{reference_id}', 'Training\ApplicationsController@show')->name('training.applications.show');
@@ -226,10 +225,10 @@ Route::group(['middleware' => 'auth'], function () {
             //Publications
             Route::prefix('publications')->group(function () {
                 Route::group(['middleware' => ['permission:edit atc resources|edit policies']], function () {
-                    Route::get('/', 'Publications\PublicationsController@adminIndex')->name('publications.index');
-                    Route::get('/policy/create', 'Publications\PublicationsController@adminCreatePolicy')->name('publications.policies.create')->middleware('can:edit policies');
-                    Route::post('/policy/create', 'Publications\PublicationsController@adminCreatePolicyPost')->name('publications.policies.create.post')->middleware('can:edit policies');
-                    Route::get('/policy/{id}', 'Publications\PublicationsController@adminViewPolicy')->name('publications.policies.view')->middleware('can:edit policies');
+                    Route::get('/policies', 'Publications\PublicationsController@adminPolicies')->name('publications.policies');
+                    Route::post('/policies/create', 'Publications\PublicationsController@createPolicyPost')->name('publications.policies.create.post')->middleware('can:edit policies');
+                    Route::post('/policies/{id}/edit', 'Publications\PublicationsController@editPolicyPost')->name('publications.policies.edit.post')->middleware('can:edit policies');
+                    Route::get('/policies/{id}/delete', 'Publications\PublicationsController@deletePolicy')->name('publications.policies.delete')->middleware('can:edit policies');
                 });
             });
 

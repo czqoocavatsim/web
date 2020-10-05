@@ -18,7 +18,7 @@ use Thujohn\Twitter\Facades\Twitter;
 class PrimaryViewsController extends Controller
 {
     /* Home page */
-    public function home()
+    public function home(Request $request)
     {
         //VATSIM online controllers
         $vatsim = new \Vatsimphp\VatsimData();
@@ -44,7 +44,6 @@ class PrimaryViewsController extends Controller
         $tweets = Cache::remember('twitter.timeline', 86400, function () {
 	        return Twitter::getUserTimeline(['screen_name' => 'ganderocavatsim', 'count' => 3, 'format' => 'array']);
         });
-
 
         return view('index', compact('ganderControllers', 'shanwickControllers', 'news', 'certifications', 'nextEvent', 'topControllers', 'tweets'));
     }
