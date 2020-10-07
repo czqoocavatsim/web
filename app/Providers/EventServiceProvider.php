@@ -22,12 +22,6 @@ class EventServiceProvider extends ServiceProvider
             // add your listeners (aka providers) here
             'SocialiteProviders\\Discord\\DiscordExtendSocialite@handle',
         ],
-        'App\Events\Training\ApplicationSubmitted' => [
-            'App\Listeners\Training\SendNewApplicationStaffNotification',
-        ],
-        'App\Events\Training\ApplicationWithdrawn' => [
-            'App\Listeners\Training\SendWithdrawnApplicationStaffNotification',
-        ]
     ];
 
     /**
