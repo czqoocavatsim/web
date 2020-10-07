@@ -131,7 +131,7 @@ class ApplicationsController extends Controller
         //Dispatch event
         Notification::route('mail', CoreSettings::find(1)->emailfirchief)
         ->route('mail', CoreSettings::find(1)->emaildepfirchief)
-        ->notify(new NewApplicationStaff($event->application));
+        ->notify(new NewApplicationStaff($application));
 
         //Redirect to application page
         return redirect()->route('training.applications.show', $application->reference_id);
@@ -214,7 +214,7 @@ class ApplicationsController extends Controller
         //Dispatch event
         Notification::route('mail', CoreSettings::find(1)->emailfirchief)
         ->route('mail', CoreSettings::find(1)->emaildepfirchief)
-        ->notify(new ApplicationWithdrawn($event->application));
+        ->notify(new ApplicationWithdrawn($application));
 
         //Return
         $request->session()->flash('alreadyApplied', 'Application withdrawn.');
