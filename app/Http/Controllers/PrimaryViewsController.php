@@ -35,7 +35,7 @@ class PrimaryViewsController extends Controller
         $certifications = HomeNewControllerCert::all()->sortByDesc('timestamp')->take(4);
 
         //Next event
-        $nextEvent = Event::where('start_timestamp', '>', Carbon::now())->get()->sortByDesc('id')->first();
+        $nextEvent = Event::where('start_timestamp', '>', Carbon::now())->get()->sortBy('start_timestamp')->first();
 
         //Top controllers
         $topControllers = RosterMember::where('monthly_hours', '>', 0)->get()->sortByDesc('monthly_hours')->take(6);

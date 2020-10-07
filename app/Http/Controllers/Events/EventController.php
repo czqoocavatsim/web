@@ -26,7 +26,7 @@ class EventController extends Controller
     {
         $events = Event::cursor()->filter(function ($event) {
             return !$event->event_in_past();
-        })->sortByDesc('start_timestamp');
+        })->sortBy('start_timestamp');
 
         $pastEvents = Event::cursor()->filter(function ($event) {
             return $event->event_in_past();
@@ -83,7 +83,7 @@ class EventController extends Controller
                     ],
                     [
                         "name" => "Comments",
-                        "value" => $application->comments,
+                        "value" => $application->comments ? $application->comments : "No comments given",
                         "inline" => true
                     ],
                 ]
@@ -181,15 +181,33 @@ class EventController extends Controller
         }
 
         //If controller apps are open then lets make them open
-        if ($request->has('openControllerApps')) {
+        if ($request->get('openControllerApps') == 'on') {
             $event->controller_applications_open = true;
         }
 
         //Save it
         $event->save();
 
-        //Audit
-        AuditLogEntry::insert(Auth::user(), 'Created event '.$event->name, User::find(1), 0);
+        //Announce it on Discord?
+        if ($request->get('announceDiscord') == 'on') {
+            //Discord client
+            $discord = new DiscordClient(['token' => config('services.discord.token')]);
+
+            //Send notification to marketing
+            $discord->channel->createMessage([
+                'channel.id' => config('app.env') == 'local' ? intval(config('services.discord.web_logs')) : intval(config('services.discord.announcements')),
+                'embed' => [
+                    'title' => "Upcoming event: {$event->name}",
+                    'description' => "Starting {$event->start_timestamp_pretty()}",
+                    'color' => 0x80c9,
+                    "image" => [
+                        "url" => $event->image_url ? url('/').$event->image_url : null
+                    ],
+                    "url" => route('events.view', $event->slug),
+                    "timestamp" => date('Y-m-d H:i:s'),
+                ]
+            ]);
+        }
 
         //Redirect
         return redirect()->route('events.admin.view', $event->slug)->with('success', 'Event created!');
@@ -202,9 +220,6 @@ class EventController extends Controller
 
         //Delete it
         $event->delete();
-
-        //Audit it
-        AuditLogEntry::insert(Auth::user(), 'Deleted event '.$event->name, User::find(1), 0);
 
         //Redirect
         return redirect()->route('events.admin.index')->with('info', 'Event deleted.');
@@ -279,9 +294,6 @@ class EventController extends Controller
         //Save it
         $event->save();
 
-        //Audit it
-        AuditLogEntry::insert(Auth::user(), 'Edited event '.$event->name, User::find(1), 0);
-
         //Redirect
         return redirect()->route('events.admin.view', $event->slug)->with('success', 'Event edited!');
     }
@@ -319,9 +331,6 @@ class EventController extends Controller
         //Save it
         $update->save();
 
-        //Audit it
-        AuditLogEntry::insert(Auth::user(), 'Created event update for '.Event::where('slug', $event_slug)->firstOrFail()->name, User::find(1), 0);
-
         //Redirect
         return redirect()->route('events.admin.view', $event_slug)->with('success', 'Update created!');
     }
@@ -334,9 +343,6 @@ class EventController extends Controller
         //Delete it? Delete it!
         $app->delete();
 
-        //Audit it
-        AuditLogEntry::insert(Auth::user(), 'Deleted event controller app '.$app->id, User::find(1), 0);
-
         //Redirect
         return redirect()->route('events.admin.view', $event_slug)->with('info', 'Controller application from '.$app->user_id. 'deleted.');
     }
@@ -348,9 +354,6 @@ class EventController extends Controller
 
         //Delete it? Delete it!
         $update->delete();
-
-        //Audit it
-        AuditLogEntry::insert(Auth::user(), 'Deleted event update '.$update->id, User::find(1), 0);
 
         //Redirect
         return redirect()->route('events.admin.view', $event_slug)->with('info', 'Update \''.$update->title. '\'deleted.');

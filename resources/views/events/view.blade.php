@@ -66,51 +66,56 @@
             </div>
             <div class="col-md-9">
                 {{$event->html()}}
-                @if (Auth::check() && $event->controller_applications_open && Auth::user()->rosterProfile && !$event->userHasApplied())
-                <br>
-                <h4 class="font-weight-bold blue-text my-3">Apply to control</h4>
-                <div class="card p-3">
-                    <form id="app-form" method="POST" action="{{route('events.controllerapplication.ajax')}}">
-                        @csrf
-                        <input type="hidden" name="event_id" value={{$event->id}}>
-                        <p>Submit an application to control during this event through this form.</p>
-                        <label for="">Availability start time (zulu)</label>
-                        <input type="datetime" name="availability_start" class="form-control flatpickr" id="availability_start">
-                        <label class="mt-2" for="">Availability end time (zulu)</label>
-                        <input type="datetime" name="availability_end" class="form-control flatpickr" id="availability_end">
-                        <label for="" class="mt-2">Comments</label>
-                        <textarea name="comments" id="comments" rows="2" class="md-textarea form-control"></textarea>
-                        <input type="submit" id="app-form-submit" class="btn btn-outline-submit mt-3" value="Submit">
-                    </form>
-                    <script>
-                        flatpickr('#availability_start', {
-                            enableTime: true,
-                            noCalendar: true,
-                            dateFormat: "H:i",
-                            time_24hr: true,
-                            minTime: "{{$event->flatpickr_limits()[0]}}",
-                            maxTime: "{{$event->flatpickr_limits()[1]}}",
-                            defaultDate: "{{$event->flatpickr_limits()[0]}}"
-                        });
-                        flatpickr('#availability_end', {
-                            enableTime: true,
-                            noCalendar: true,
-                            dateFormat: "H:i",
-                            time_24hr: true,
-                            minTime: "{{$event->flatpickr_limits()[0]}}",
-                            maxTime: "{{$event->flatpickr_limits()[1]}}",
-                            defaultDate: "{{$event->flatpickr_limits()[1]}}"
-                        });
-                    </script>
-                </div>
-                @elseif (Auth::check() && $event->userHasApplied())
-                <br>
-                <h4 class="font-weight-bold blue-text my-3">Apply to control</h4>
-                <p>You have already applied. Contact the Events and Marketing Director to change times, or cancel.</p>
-                <h6 class="font-weight-bold">Your Availability</h6>
-                <p>{{$app->start_availability_timestamp}} to {{$app->end_availability_timestamp}}</p>
-                <h6 class="font-weight-bold">Comments</h6>
-                <p>{{$app->comments}}</p>
+                @if ($event->controller_applications_open)
+                    <br>
+                    <h4 class="font-weight-bold blue-text my-3">Sign up to control</h4>
+                    @if (Auth::check() && $event->userCanSignUp() && !$event->userHasApplied())
+                        <form id="app-form" method="POST" action="{{route('events.controllerapplication.ajax')}}">
+                            @csrf
+                            <input type="hidden" name="event_id" value={{$event->id}}>
+                            <p>Sign up to control during this event through this form.</p>
+                            @if($event->allow_not_certified_sign_ups)
+                            <p>C1+ controllers not yet certified on Gander can sign up for this event.</p>
+                            @endif
+                            <label for="">Availability start time (zulu)</label>
+                            <input type="datetime" name="availability_start" class="form-control flatpickr" id="availability_start">
+                            <label class="mt-2" for="">Availability end time (zulu)</label>
+                            <input type="datetime" name="availability_end" class="form-control flatpickr" id="availability_end">
+                            <label for="" class="mt-2">Comments</label>
+                            <textarea name="comments" id="comments" rows="2" class="md-textarea form-control"></textarea>
+                            <button id="app-form-submit" class="btn bg-czqo-blue-light mt-3"><i class="fas fa-check"></i>&nbsp;&nbsp;Sign Up</button>
+                        </form>
+                        <script>
+                            flatpickr('#availability_start', {
+                                enableTime: true,
+                                noCalendar: true,
+                                dateFormat: "H:i",
+                                time_24hr: true,
+                                minTime: "{{$event->flatpickr_limits()[0]}}",
+                                maxTime: "{{$event->flatpickr_limits()[1]}}",
+                                defaultDate: "{{$event->flatpickr_limits()[0]}}"
+                            });
+                            flatpickr('#availability_end', {
+                                enableTime: true,
+                                noCalendar: true,
+                                dateFormat: "H:i",
+                                time_24hr: true,
+                                minTime: "{{$event->flatpickr_limits()[0]}}",
+                                maxTime: "{{$event->flatpickr_limits()[1]}}",
+                                defaultDate: "{{$event->flatpickr_limits()[1]}}"
+                            });
+                        </script>
+                    @elseif (Auth::check() && $event->userHasApplied())
+                        <p>You have already signed up. Contact the Events and Marketing Director to change times or cancel.</p>
+                        <h6 class="font-weight-bold">Your Availability</h6>
+                        <p>{{$app->start_availability_timestamp}} to {{$app->end_availability_timestamp}}</p>
+                        <h6 class="font-weight-bold">Comments</h6>
+                        <p>{{$app->comments ? $app->comments : "None given"}}</p>
+                    @elseif (!Auth::check())
+                        <p>Please login to sign up for this event.  </p>
+                    @else
+                        <p>You cannot sign up for this event.</p>
+                    @endif
                 @endif
                 <br>
                 <h4 class="font-weight-bold blue-text my-3">Updates</h4>

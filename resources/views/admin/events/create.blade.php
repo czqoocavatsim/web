@@ -121,6 +121,12 @@
                                 <label class="" for="">Open controller applications</label>
                             </div>
                         </div>
+                        <div class="form-group">
+                            <div class="mr-2">
+                                <input type="checkbox" class="" name="announceDiscord" id="announceDiscord">
+                                <label class="" for="">Announce on Discord</label>
+                            </div>
+                        </div>
                     </div>
                 </li>
             </ul>

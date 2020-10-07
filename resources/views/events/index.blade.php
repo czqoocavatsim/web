@@ -10,8 +10,8 @@
         <hr>
         <div class="row">
             @foreach($events as $event)
-            <div class="col-md-6">
-                <div class="view" style="height: 330px !important; background-image:url({{$event->image_url}}); background-size: cover;">
+            <div class="col-md-6 mb-3">
+                <div class="view" style="height: 330px !important; @if($event->image_url) background-image:url({{$event->image_url}}); background-size: cover; @else background: var(--czqo-blue); @endif">
                     <div class="mask rgba-blue-grey-strong flex-left p-4 justify-content-end d-flex   flex-column h-100">
                         <h2 class="font-weight-bold white-text">
                             <a href="{{route('events.view', $event->slug)}}" class="white-text">
