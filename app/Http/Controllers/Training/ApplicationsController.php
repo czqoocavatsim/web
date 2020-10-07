@@ -14,6 +14,7 @@ use App\Models\Training\ApplicationUpdate;
 use App\Notifications\Training\Applications\ApplicationAcceptedApplicant;
 use App\Notifications\Training\Applications\ApplicationAcceptedStaff;
 use App\Notifications\Training\Applications\ApplicationRejectedApplicant;
+use App\Notifications\Training\Applications\NewApplicationStaff;
 use App\Notifications\Training\Applications\NewCommentApplicant;
 use App\Notifications\Training\Applications\NewCommentStaff;
 use Carbon\Carbon;
@@ -128,7 +129,9 @@ class ApplicationsController extends Controller
         $processingUpdate->save();
 
         //Dispatch event
-        event(new ApplicationSubmitted($application));
+        Notification::route('mail', CoreSettings::find(1)->emailfirchief)
+        ->route('mail', CoreSettings::find(1)->emaildepfirchief)
+        ->notify(new NewApplicationStaff($event->application));
 
         //Redirect to application page
         return redirect()->route('training.applications.show', $application->reference_id);
@@ -209,7 +212,9 @@ class ApplicationsController extends Controller
         $update->save();
 
         //Dispatch event
-        event(new ApplicationWithdrawn($application));
+        Notification::route('mail', CoreSettings::find(1)->emailfirchief)
+        ->route('mail', CoreSettings::find(1)->emaildepfirchief)
+        ->notify(new ApplicationWithdrawn($event->application));
 
         //Return
         $request->session()->flash('alreadyApplied', 'Application withdrawn.');
