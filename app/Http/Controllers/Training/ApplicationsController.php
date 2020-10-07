@@ -129,9 +129,8 @@ class ApplicationsController extends Controller
         $processingUpdate->save();
 
         //Dispatch event
-        Notification::route('mail', CoreSettings::find(1)->emailfirchief)
-        ->route('mail', CoreSettings::find(1)->emaildepfirchief)
-        ->notify(new NewApplicationStaff($application));
+        Notification::route('mail', CoreSettings::find(1)->emailfirchief)->notify(new NewApplicationStaff($application));
+        Notification::route('mail', CoreSettings::find(1)->emaildepfirchief)->notify(new NewApplicationStaff($application));
 
         //Redirect to application page
         return redirect()->route('training.applications.show', $application->reference_id);
@@ -212,9 +211,8 @@ class ApplicationsController extends Controller
         $update->save();
 
         //Dispatch event
-        Notification::route('mail', CoreSettings::find(1)->emailfirchief)
-        ->route('mail', CoreSettings::find(1)->emaildepfirchief)
-        ->notify(new ApplicationWithdrawn($application));
+        Notification::route('mail', CoreSettings::find(1)->emailfirchief)->notify(new ApplicationWithdrawn($application));
+        Notification::route('mail', CoreSettings::find(1)->emaildepfirchief)->notify(new ApplicationWithdrawn($application));
 
         //Return
         $request->session()->flash('alreadyApplied', 'Application withdrawn.');
@@ -265,9 +263,8 @@ class ApplicationsController extends Controller
         $comment->save();
 
         //Notify staff
-        Notification::route('mail', CoreSettings::find(1)->emailfirchief)
-        ->route('mail', CoreSettings::find(1)->emaildepfirchief)
-        ->notify(new NewCommentStaff($application, $comment));
+        Notification::route('mail', CoreSettings::find(1)->emailfirchief)->notify(new NewCommentStaff($application, $comment));
+        Notification::route('mail', CoreSettings::find(1)->emaildepfirchief)->notify(new NewCommentStaff($application, $comment));
 
         //Return
         $request->session()->flash('alreadyApplied', 'Comment added!');
@@ -419,10 +416,7 @@ class ApplicationsController extends Controller
         $application->user->notify(new ApplicationAcceptedApplicant($application));
 
         //Notify staff
-        Notification::route('mail', CoreSettings::find(1)->emailfirchief)
-        ->route('mail', CoreSettings::find(1)->emaildepfirchief)
-        ->route('mail', CoreSettings::find(1)->emailcinstructor)
-        ->notify(new ApplicationAcceptedStaff($application));
+        Notification::route('mail', CoreSettings::find(1)->cinstructor)->notify(new ApplicationAcceptedStaff($application));
 
         //Return
         $request->session()->flash('alreadyApplied', 'Accepted!');
