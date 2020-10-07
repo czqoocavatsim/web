@@ -290,6 +290,12 @@
                             var simplemde = new SimpleMDE({ element: document.getElementById("updateContent"), toolbar: false });
                         </script>
                     </div>
+                    <div class="form-group">
+                        <div class="mr-2">
+                            <input type="checkbox" class="" name="announceDiscord" id="announceDiscord">
+                            <label class="" for="">Announce on Discord</label>
+                        </div>
+                    </div>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-light" data-dismiss="modal">Dismiss</button>

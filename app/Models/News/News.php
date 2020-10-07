@@ -56,4 +56,8 @@ class News extends Model
     {
         return new HtmlString(app(Parsedown::class)->text($this->content));
     }
+
+    protected $dates = [
+        'published', 'edited'
+    ];
 }
