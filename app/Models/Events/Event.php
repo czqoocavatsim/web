@@ -22,7 +22,7 @@ class Event extends Model
     protected static $logUnguarded = true;
 
     protected $fillable = [
-        'id', 'name', 'start_timestamp', 'end_timestamp', 'user_id', 'description', 'image_url', 'controller_applications_open', 'departure_icao', 'arrival_icao', 'slug'
+        'id', 'name', 'start_timestamp', 'end_timestamp', 'user_id', 'description', 'image_url', 'controller_applications_open', 'departure_icao', 'arrival_icao', 'slug', 'allow_not_certified_sign_ups'
     ];
 
     public function user()
@@ -127,6 +127,17 @@ class Event extends Model
         if (ControllerApplication::where('event_id', $this->id)->where('user_id', Auth::id())->first()) {
             return true;
         }
+        return false;
+    }
+
+    public function userCanSignUp()
+    {
+        if ($this->allow_not_certified_sign_ups && Auth::user()->rating_id >= 5) {
+            return true;
+        } elseif (Auth::user()->rosterProfile) {
+            return true;
+        }
+
         return false;
     }
 }
