@@ -331,6 +331,28 @@ class EventController extends Controller
         //Save it
         $update->save();
 
+        //Announce it on Discord?
+        if ($request->get('announceDiscord') == 'on') {
+            //Discord client
+            $discord = new DiscordClient(['token' => config('services.discord.token')]);
+
+            //Send notification to marketing
+            $discord->channel->createMessage([
+                'channel.id' => config('app.env') == 'local' ? intval(config('services.discord.web_logs')) : intval(config('services.discord.announcements')),
+                'embed' => [
+                    'title' => "Update for event {$update->event->name}",
+                    'description' => $update->content,
+                    'color' => 0x80c9,
+                    "url" => route('events.view', $update->event->slug),
+                    "timestamp" => date('Y-m-d H:i:s'),
+                    "author" => [
+                        "name" => $update->user->fullName('FLC'),
+                        "icon_url" => $update->user->avatar()
+                    ],
+                ]
+            ]);
+        }
+
         //Redirect
         return redirect()->route('events.admin.view', $event_slug)->with('success', 'Update created!');
     }

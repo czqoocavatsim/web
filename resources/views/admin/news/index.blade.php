@@ -14,11 +14,13 @@
             <table class="table dt table-hover table-bordered">
                 <thead>
                     <th>Title</th>
+                    <th>Date Published</th>
                 </thead>
                 <tbody>
                     @foreach ($articles as $a)
                     <tr>
                         <td><a class="blue-text" href="{{route('news.articles.view', $a->slug)}}">{{$a->title}}</a></td>
+                        <td data-order="{{$a->published}}">{{$a->published->toDayDateTimeString()}}</td>
                     </tr>
                     @endforeach
                 </tbody>
@@ -32,11 +34,13 @@
             <table class="table dt table-hover table-bordered">
                 <thead>
                     <th>Title</th>
+                    <th>Date Published</th>
                 </thead>
                 <tbody>
                     @foreach ($announcements as $a)
                     <tr>
                         <td><a class="blue-text" href="{{route('news.announcements.view', $a->slug)}}">{{$a->title}}</a></td>
+                        <td data-order="{{$a->created_at}}">{{$a->created_at->toDayDateTimeString()}}</td>
                     </tr>
                     @endforeach
                 </tbody>
@@ -47,7 +51,7 @@
 </div>
 <script>
     $(document).ready(function() {
-        $('.table.dt').DataTable();
+        $('.table.dt').DataTable({ "order": [[ 1, "desc" ]]});
     } );
 </script>
 @endsection

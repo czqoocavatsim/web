@@ -19,7 +19,7 @@ class EventUpdate extends Model
 
     public function event()
     {
-        return $this->belongTo(Event::class);
+        return $this->belongsTo(Event::class);
     }
 
     public function html()
