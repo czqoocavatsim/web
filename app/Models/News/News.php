@@ -29,7 +29,7 @@ class News extends Model
 
     public function published_pretty()
     {
-        $t = Carbon::create($this->published);
+        $t = $this->published;
         return $t->day . ' ' . $t->monthName . ' ' . $t->year;
     }
 
@@ -39,7 +39,7 @@ class News extends Model
         {
             return null;
         }
-        return Carbon::create($this->edited)->toDayDateTimeString();
+        return $this->edited->toDayDateTimeString();
     }
 
     public function author_pretty()
