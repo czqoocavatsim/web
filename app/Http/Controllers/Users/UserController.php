@@ -40,7 +40,7 @@ class UserController extends Controller
     {
         $user = Auth::user();
         if ($user->init == 1) {
-            return redirect()->route('index');
+            return redirect()->route('my.index')->with('error', 'You have already accepted our privacy policy.');
         }
         $user->init = 1;
         if ($request->get('optInEmails')) {
@@ -48,7 +48,7 @@ class UserController extends Controller
         }
         $user->save();
         $user->notify(new WelcomeNewUser($user));
-        return redirect('/dashboard')->with('success', 'Welcome to CZQO, '.$user->fname.'! We are glad to have you on board.');
+        return redirect('/my')->with('success', 'Welcome to CZQO, '.$user->fname.'! We are glad to have you on board.');
     }
 
     public function privacyDeny()

@@ -191,7 +191,7 @@
         @endif
     </header>
     <!--End header-->
-    <div id="czqoContent" @if(Request::is('my') || Request::is('/') || Request::is('events/*') || Request::is('news/*')) style="margin-top: -59px;" @endif>
+    <div id="czqoContent" @if(Request::is('my') || Request::is('/') || Request::is('events/*') || Request::is('news/*')) style="margin-top: calc(-59px + -0.5rem);" @endif>
         @yield('content')
     </div>
     <!-- Footer -->

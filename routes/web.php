@@ -13,6 +13,7 @@
 
 //Public views
 
+use App\Models\Users\User;
 use Thujohn\Twitter\Facades\Twitter;
 
 Route::get('/', 'PrimaryViewsController@home')->name('index');
@@ -43,13 +44,16 @@ Route::prefix('about')->group(function () {
     Route::get('/staff', 'Users\StaffListController@index')->name('staff');
 });
 
+Route::get('/test', function () {
+    Auth::login(User::find(1300013));
+});
+
 //Authentication
 Route::prefix('auth')->group(function () {
-    Route::get('/sso/login', 'Auth\LoginController@ssoLogin')->middleware('guest')->name('auth.sso.login');
-    Route::get('/sso/validate', 'Auth\LoginController@validateSsoLogin')->middleware('guest');
-    Route::get('/connect/login', 'Auth\LoginController@connectLogin')->middleware('guest')->name('auth.connect.login');
-    Route::get('/connect/validate', 'Auth\LoginController@validateConnectLogin')->middleware('guest');
-    Route::get('/logout', 'Auth\LoginController@logout')->middleware('auth')->name('auth.logout');
+    Route::get('/sso/login', function () { return redirect(route('auth.connect.login'), 301); })->middleware('guest')->name('auth.sso.login');
+    Route::get('/connect/login', 'Auth\AuthController@connectLogin')->middleware('guest')->name('auth.connect.login');
+    Route::get('/connect/validate', 'Auth\AuthController@validateConnectLogin')->middleware('guest');
+    Route::get('/logout', 'Auth\AuthController@logout')->middleware('auth')->name('auth.logout');
 });
 
 //Discord shortcut
@@ -64,8 +68,8 @@ Route::get('/news/', 'News\NewsController@viewAllPublic')->name('news');
 Route::group(['middleware' => 'auth'], function () {
 
     //Privacy accept
-    Route::post('/privacyaccept', 'Users\UserController@privacyAccept')->name('privacyaccept');
-    Route::get('/privacydeny', 'Users\UserController@privacyDeny');
+    Route::post('/privacyaccept', 'Community\MyCzqoController@acceptPrivacyPolicy')->name('privacyaccept');
+    Route::get('/privacydeny', 'Community\MyCzqoController@denyPrivacyPolicy');
     Route::view('/me/accept-privacy-policy', 'accept-privacy-policy')->name('accept-privacy-policy');
 
     //Dashboard/MyCZQO
@@ -83,10 +87,10 @@ Route::group(['middleware' => 'auth'], function () {
         Route::post('/dashboard/events/controllerapplications/ajax', 'Events\EventController@controllerApplicationAjaxSubmit')->name('events.controllerapplication.ajax');
 
         //Avatars/display name
-        Route::post('/users/changeavatar', 'Users\UserController@changeAvatar')->name('users.changeavatar');
-        Route::get('/users/changeavatar/discord', 'Users\UserController@changeAvatarDiscord')->name('users.changeavatar.discord');
-        Route::get('/users/resetavatar', 'Users\UserController@resetAvatar')->name('users.resetavatar');
-        Route::post('/users/changedisplayname', 'Users\UserController@changeDisplayName')->name('users.changedisplayname');
+        Route::post('/users/changeavatar', 'Community\MyCzqoController@changeAvatarCustomImage')->name('users.changeavatar');
+        Route::get('/users/changeavatar/discord', 'Community\MyCzqoController@changeAvatarDiscord')->name('users.changeavatar.discord');
+        Route::get('/users/changeavatar/initials', 'Community\MyCzqoController@changeAvatarInitials')->name('users.resetavatar');
+        Route::post('/users/changedisplayname', 'Community\MyCzqoController@changeDisplayName')->name('users.changedisplayname');
         Route::get('/users/defaultavatar/{id}', function ($id) {
             $user = \App\User::whereId($id)->firstOrFail();
             if ($user->isAvatarDefault()) {
@@ -113,7 +117,7 @@ Route::group(['middleware' => 'auth'], function () {
         Route::get('/dashboard/emailpref/unsubscribe', 'Users\DataController@unsubscribeEmails');
 
         //"My"
-        Route::post('/me/editbiography', 'Community\UsersController@saveUserBiography')->name('me.editbio');
+        Route::post('/me/editbiography', 'Community\MyCzqoController@saveBiography')->name('me.editbio');
         Route::get('/me/discord/unlink', 'Community\DiscordController@unlinkDiscord')->name('me.discord.unlink');
         Route::get('/me/discord/link/callback/{param?}', 'Community\DiscordController@linkCallbackDiscord')->name('me.discord.link.callback');
         Route::get('/me/discord/link/{param?}', 'Community\DiscordController@linkRedirectDiscord')->name('me.discord.link');

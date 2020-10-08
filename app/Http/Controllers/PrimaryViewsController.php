@@ -25,9 +25,11 @@ class PrimaryViewsController extends Controller
         $vatsim->setConfig('cacheOnly', false);
         $ganderControllers = [];
         $shanwickControllers = [];
+        $controllers = [];
         if ($vatsim->loadData()) {
-            $ganderControllers = $vatsim->searchCallsign('CZQX_');
+            $ganderControllers = $vatsim->searchCallsign('LD_OBS');
             $shanwickControllers = $vatsim->searchCallsign('EGGX_');
+            $controllers = array_merge($ganderControllers->toArray(), $shanwickControllers->toArray());
         }
 
         //News
@@ -45,7 +47,7 @@ class PrimaryViewsController extends Controller
 	        return Twitter::getUserTimeline(['screen_name' => 'ganderocavatsim', 'count' => 3, 'format' => 'array']);
         });
 
-        return view('index', compact('ganderControllers', 'shanwickControllers', 'news', 'certifications', 'nextEvent', 'topControllers', 'tweets'));
+        return view('index', compact('controllers', 'news', 'certifications', 'nextEvent', 'topControllers', 'tweets'));
     }
 
     /*

@@ -7,7 +7,15 @@
             <div class="container">
                 <div class="py-5">
                     <h1 class="h1 my-4 py-2 font-weight-bold" style="font-size: 3em; width: 75%; color: #fff;">Cool, calm and collected oceanic control services over the North Atlantic.</h1>
-                    <h4><a href="#blueBannerMid" id="discoverMore" class="white-text" style="transition:fade 0.4s;">Find out more&nbsp;&nbsp;<i class="fas fa-arrow-down"></i></a></h4>
+                    <h4>
+                        <a href="#blueBannerMid" id="discoverMore" class="white-text" style="transition:fade 0.4s;">
+                        @if(Auth::check())
+                            Welcome back, {{Auth::user()->fullName('F')}}!
+                        @else
+                            Find out more&nbsp;&nbsp;<i class="fas fa-arrow-down"></i>
+                        @endif
+                        </a>
+                    </h4>
                 </div>
             </div>
             @if($nextEvent)
@@ -24,13 +32,6 @@
     </div>
     <div class="container-fluid py-4 blue" id="blueBannerMid">
         <div class="container">
-            <h1 class="font-weight-bold white-text pb-3">
-                @if(Auth::check())
-                    Welcome back, {{Auth::user()->fullName('F')}}!
-                @else
-                    Welcome!
-                @endif
-            </h1>
             <div class="row">
                 <div class="col-md-6">
                     @if(count($news) < 1)
@@ -84,77 +85,72 @@
                     @endif
                 </div>
                 <div class="col-md-6 d-none d-md-block">
-                    <h3 class="white-text">Online Controllers</h3>
+                    <div class="d-flex flex-row-justify-content-between align-items-center">
+                        <h2 class="white-text font-weight-bold">Online Oceanic Controllers</h2>
+                        <a href="{{route('map')}}" class="float-right ml-auto mr-0 white-text" style="font-size: 1.2em;">View map&nbsp;&nbsp;<i class="fas fa-map"></i></a>
+                    </div>
                     <ul class="list-unstyled ml-0 mt-3 p-0 onlineControllers">
-                        @if(count($ganderControllers) < 1 && count($shanwickControllers) < 1)
+                        @if(count($controllers) < 1)
                         <li class="mb-2">
-                            <div class="card shadow-none blue-grey lighten-5 p-3">
-                                <div class="d-flex flex-row justify-content-between align-items-center mb-1">
-                                    <h4 class="m-0">No controllers online</h4>
-                                </div>
+                            <div class="d-flex flex-row justify-content-between align-items-center mb-1">
+                                <h4 class="m-0 white-text"><i class="fas fa-sad-tear" style="margin-right: 1rem;"></i>No controllers online</h4>
                             </div>
                         </li>
                         @endif
-                        @foreach($ganderControllers as $controller)
-                        <li class="mb-2">
-                            <div class="card shadow-none blue-grey lighten-5 p-3">
-                                <div class="d-flex flex-row justify-content-between align-items-center mb-1">
-                                    <h4 class="m-0">{{$controller['callsign']}}</h4>
-                                    <span><i class="far fa-user-circle"></i>&nbsp;&nbsp;{{$controller['realname']}} {{$controller['cid']}}</span>
+                        @foreach($controllers as $controller)
+                        <li>
+                            <div class="white-text d-flex flex-row justify-content-between align-items-center">
+                                <h4 class="font-weight-bold m-0">{{$controller['callsign']}}</h4>
+                                <div style="font-size: 1.1em;">
+                                    @if ($rosterMember = App\Models\Roster\RosterMember::where('cid', $controller['cid'])->first())
+                                        <img src="{{$rosterMember->user->avatar()}}" style="height: 35px; !important; width: 35px !important; margin-left: 10px; margin-right: 5px; margin-bottom: 3px; border-radius: 50%;">
+                                        {{$rosterMember->user->fullName('FLC')}}
+                                    @else
+                                        <div class="my-1">
+                                            {{$controller['realname']}} {{$controller['cid']}}
+                                        </div>
+                                    @endif
                                 </div>
                             </div>
                         </li>
-                        @endforeach
-                        @foreach($shanwickControllers as $controller)
-                        <li class="mb-2">
-                            <div class="card shadow-none blue-grey lighten-5 p-3">
-                                <div class="d-flex flex-row justify-content-between align-items-center mb-1">
-                                    <h4 class="m-0">{{$controller['callsign']}}</h4>
-                                    <span><i class="far fa-user-circle"></i>&nbsp;&nbsp;{{$controller['realname']}} {{$controller['cid']}}</span>
-                                </div>
-                            </div>
-                        </li>
+                        <hr class="my-2">
                         @endforeach
                     </ul>
-                    <div class="d-flex flex-row">
-                        <a href="{{route('map')}}" class="float-right ml-auto mr-0 white-text" style="font-size: 1.2em;">View map&nbsp;&nbsp;<i class="fas fa-map"></i></a>
-                    </div>
                 </div>
                 <div class="col-md-6 d-md-none mt-4">
-                    <h3 class="white-text">Online Controllers</h3>
+                    <h2 class="white-text font-weight-bold">Online Oceanic Controllers</h2>
                     <ul class="list-unstyled ml-0 mt-3 p-0 onlineControllers">
-                        @if(count($ganderControllers) < 1 && count($shanwickControllers) < 1)
-                            <p class="white-text">No controllers online.</p>
+                        @if(count($controllers) < 1)
+                        <li class="mb-2">
+                            <div class="d-flex flex-row justify-content-between align-items-center mb-1">
+                                <h4 class="m-0 white-text"><i class="fas fa-sad-tear" style="margin-right: 1rem;"></i>No controllers online</h4>
+                            </div>
+                        </li>
                         @endif
-                        @foreach($ganderControllers as $controller)
-                        <li class="mb-2">
-                            <div class="card shadow-none blue-grey lighten-5 p-3">
-                                <div class="d-flex flex-row justify-content-between align-items-center mb-1">
-                                    <h4 class="m-0">{{$controller['callsign']}}</h4>
-                                    <span><i class="far fa-user-circle"></i>&nbsp;&nbsp;{{$controller['realname']}} {{$controller['cid']}}</span>
+                        @foreach($controllers as $controller)
+                        <li>
+                            <div class="white-text d-flex flex-row justify-content-between align-items-center">
+                                <h4 class="font-weight-bold m-0">{{$controller['callsign']}}</h4>
+                                <div style="font-size: 1.1em;">
+                                    @if ($rosterMember = App\Models\Roster\RosterMember::where('cid', $controller['cid'])->first())
+                                        <img src="{{$rosterMember->user->avatar()}}" style="height: 35px; !important; width: 35px !important; margin-left: 10px; margin-right: 5px; margin-bottom: 3px; border-radius: 50%;">
+                                        {{$rosterMember->user->fullName('FLC')}}
+                                    @else
+                                        <div class="my-1">
+                                            {{$controller['realname']}} {{$controller['cid']}}
+                                        </div>
+                                    @endif
                                 </div>
                             </div>
                         </li>
-                        @endforeach
-                        @foreach($shanwickControllers as $controller)
-                        <li class="mb-2">
-                            <div class="card shadow-none blue-grey lighten-5 p-3">
-                                <div class="d-flex flex-row justify-content-between align-items-center mb-1">
-                                    <h4 class="m-0">{{$controller['callsign']}}</h4>
-                                    <span><i class="far fa-user-circle"></i>&nbsp;&nbsp;{{$controller['realname']}} {{$controller['cid']}}</span>
-                                </div>
-                            </div>
-                        </li>
+                        <hr class="my-2">
                         @endforeach
                     </ul>
-                    <div class="d-flex flex-row">
-                        <a href="{{route('map')}}" class="float-right ml-auto mr-0 white-text" style="font-size: 1.2em;">View map&nbsp;&nbsp;<i class="fas fa-map"></i></a>
-                    </div>
                 </div>
             </div>
         </div>
     </div>
-    <div style="background-size: cover; background-repeat: no-repeat; background-image:url({{asset('img/home-screen-backgrounds/czqosquarelightblue.png')}}); background-position: right;">
+    <div style="background-size: cover; background-repeat: no-repeat; background-blend-mode:lighten; background-image:url({{asset('img/home-screen-backgrounds/czqosquarelightblue.png')}}); background-position: right;">
         <div class="container py-5">
             <div class="row">
                 <div class="col-lg-5">
@@ -174,10 +170,10 @@
                     <ul class="list-unstyled">
                         @php $index = 1; @endphp
                         @foreach($topControllers as $c)
-                        <li>
+                        <li class="mb-1">
                             <div class="row">
                                 <div class="col-5">
-                                    <span class="font-weight-bold" style="font-size: 1.9em;">
+                                    <span class="font-weight-bold blue-text" style="font-size: 1.9em;">
                                         {{$index}}.
                                     </span>
                                 </div>
@@ -202,8 +198,8 @@
                 <ul class="list-unstyled">
                     @php $index = 1; @endphp
                     @foreach($topControllers as $c)
-                    <li>
-                        <span class="font-weight-bold" style="font-size: 1.9em;">
+                    <li class="mb-1">
+                        <span class="font-weight-bold blue-text" style="font-size: 1.9em;">
                             {{$index}}.
                         </span>
                         <span style="font-size: 1.4em;">
@@ -259,7 +255,7 @@
                         <div class="d-flex flex-row mb-2">
                             <img src="{{$cert->controller->avatar()}}" style="height: 55px !important; width: 55px !important; margin-right: 10px; margin-bottom: 3px; border-radius: 50%;">
                             <div class="d-flex flex-column">
-                                <h4 class="font-weight-bold">{{$cert->controller->fullName('FL')}}</h4>
+                                <h4>{{$cert->controller->fullName('FL')}}</h4>
                                 <p title="{{Carbon\Carbon::create($cert->timestamp)->toDayDateTimeString()}}">{{Carbon\Carbon::create($cert->timestamp)->diffForHumans()}}</p>
                             </div>
                         </div>

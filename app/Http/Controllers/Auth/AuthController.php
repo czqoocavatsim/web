@@ -4,7 +4,9 @@ namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
 use App\Models\Users\User;
+use App\Models\Users\UserNotificationPreferences;
 use App\Models\Users\UserPreferences;
+use App\Models\Users\UserPrivacyPreferences;
 use DB;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
 use Illuminate\Http\Request;
@@ -15,9 +17,9 @@ use \GuzzleHttp\Client;
 use GuzzleHttp\Exception\ClientException;
 
 /**
- * Class LoginController.
+ * Class AuthController.
  */
-class LoginController extends Controller
+class AuthController extends Controller
 {
     use AuthenticatesUsers;
 
@@ -115,6 +117,16 @@ class LoginController extends Controller
             $prefs->user_id = $user->id;
             $prefs->ui_mode = "light";
             $prefs->save();
+        }
+        if (!UserPrivacyPreferences::where('user_id', $user->id)->first()) {
+            $priv = new UserPrivacyPreferences();
+            $priv->user_id = $user->id;
+            $priv->save();
+        }
+        if (!UserNotificationPreferences::where('user_id', $user->id)->first()) {
+            $notif = new UserNotificationPreferences();
+            $notif->user_id = $user->id;
+            $notif->save();
         }
 
         return redirect()->route('my.index')->with('success', "Welcome back, {$user->fullName('F')}!");
