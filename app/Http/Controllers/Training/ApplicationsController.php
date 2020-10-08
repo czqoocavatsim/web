@@ -14,6 +14,7 @@ use App\Models\Training\ApplicationUpdate;
 use App\Notifications\Training\Applications\ApplicationAcceptedApplicant;
 use App\Notifications\Training\Applications\ApplicationAcceptedStaff;
 use App\Notifications\Training\Applications\ApplicationRejectedApplicant;
+use App\Notifications\Training\Applications\ApplicationWithdrawnStaff;
 use App\Notifications\Training\Applications\NewApplicationStaff;
 use App\Notifications\Training\Applications\NewCommentApplicant;
 use App\Notifications\Training\Applications\NewCommentStaff;
@@ -211,8 +212,8 @@ class ApplicationsController extends Controller
         $update->save();
 
         //Dispatch event
-        Notification::route('mail', CoreSettings::find(1)->emailfirchief)->notify(new ApplicationWithdrawn($application));
-        Notification::route('mail', CoreSettings::find(1)->emaildepfirchief)->notify(new ApplicationWithdrawn($application));
+        Notification::route('mail', CoreSettings::find(1)->emailfirchief)->notify(new ApplicationWithdrawnStaff($application));
+        Notification::route('mail', CoreSettings::find(1)->emaildepfirchief)->notify(new ApplicationWithdrawnStaff($application));
 
         //Return
         $request->session()->flash('alreadyApplied', 'Application withdrawn.');
