@@ -347,7 +347,6 @@ class EventController extends Controller
                     "timestamp" => date('Y-m-d H:i:s'),
                     "author" => [
                         "name" => $update->user->fullName('FLC'),
-                        "icon_url" => $update->user->avatar()
                     ],
                 ]
             ]);

@@ -53,9 +53,8 @@ class ProcessArticlePublishing implements ShouldQueue
                 "url" => route('news.articlepublic', $this->article->slug),
                 "author" => [
                     "name" => $this->article->author_pretty(),
-                    "icon_url" => $this->article->show_author ? $this->article->user->avatar() : null
                 ],
-                //"timestamp" => date('Y-m-d H:i:s'),
+                "timestamp" => date('Y-m-d H:i:s'),
             ]
         ]);
 

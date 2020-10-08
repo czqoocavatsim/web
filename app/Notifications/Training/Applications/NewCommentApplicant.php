@@ -66,7 +66,6 @@ class NewCommentApplicant extends Notification
             'color' => 0x80c9,
             "author" => [
                 "name" => $this->comment->user->fullName('FLC'),
-                "icon_url" => $this->comment->user->avatar()
             ],
             'fields' => array(
                 [
