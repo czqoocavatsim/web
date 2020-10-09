@@ -72,7 +72,7 @@
             <div class="card mt-3">
                 <div class="card-header">Email Preferences</div>
                 <div class="card-body">
-                    <p>To edit your email preferences, visit the <a href="{{route('me.preferences')}}">preferences page.</a></p>
+                    <p>To edit your email preferences, visit the <a href="{{route('my.preferences')}}">preferences page.</a></p>
                 </div>
             </div>
             <div class="card mt-3">

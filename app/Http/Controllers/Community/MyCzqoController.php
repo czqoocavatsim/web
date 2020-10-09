@@ -10,6 +10,7 @@ use App\Notifications\WelcomeNewUser;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Validator;
 use mofodojodino\ProfanityFilter\Check;
 
 class MyCzqoController extends Controller
@@ -218,5 +219,44 @@ class MyCzqoController extends Controller
 
         //Redirect
         return redirect()->back()->with('success', 'Display name saved! If your avatar is set to default, it may take a while for the initials to update.');
+    }
+
+    /*
+    Preferences
+    */
+    public function preferences()
+    {
+        //Get preferences
+        $preferences = Auth::user()->preferences;
+
+        //return
+        return view('dashboard.me.preferences', compact('preferences'));
+    }
+
+    public function preferencesPost(Request $request)
+    {
+        //Validate
+        $validator = Validator::make($request->all(), [
+            'preference_name' => 'required',
+            'value' => 'required',
+            'table' => 'required'
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json(['message' => 'Validation failed'], 400);
+        }
+
+        //Get user's preferences object
+        switch ($request->get('table')) {
+            case 'main':
+                $preferences = Auth::user()->preferences;
+        }
+
+        //Change variable
+        $preferences->{$request->get('preference_name')} = $request->get('value');
+        $preferences->save();
+
+        //Return
+        return response()->json(['message' => 'Saved'], 200);
     }
 }

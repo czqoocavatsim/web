@@ -8,78 +8,62 @@
         Customise your experience
     </p>
     <hr>
-    <form action="{{route('me.preferences.post')}}" method="POST">
-        @if($errors->savePreferencesErrors->any())
-            <div class="alert alert-danger">
-                <h4>One or more errors occurred whilst saving your preferences</h4>
-                <ul class="pl-0 ml-0 list-unstyled">
-                    @foreach ($errors->savePreferencesErrors->all() as $error)
-                        <li>{{ $error }}</li>
-                    @endforeach
-                </ul>
-            </div>
-        @endif
-        @csrf
-        <div class="d-flex flex-row justify-content-between">
-            <div>
-                <h4 class="font-weight-bold blue-text">UI Mode <span class="badge blue">BETA</span></h4>
-                <p>Do you live on the light ☀ or the dark 🌙 side? (Dark mode is not yet complete)</p>
-            </div>
-            <div style="width: 25%;">
-                <select name="ui_mode" id="" class="form-control">
-                    <option value="light" selected>Light mode</option>
-                    <option value="dark">Dark mode</option>
-                </select>
-            </div>
+    <h5 class="mb-3">User Interface</h5>
+    @if($errors->savePreferencesErrors->any())
+        <div class="alert alert-danger">
+            <h4>One or more errors occurred whilst saving your preferences</h4>
+            <ul class="pl-0 ml-0 list-unstyled">
+                @foreach ($errors->savePreferencesErrors->all() as $error)
+                    <li>{{ $error }}</li>
+                @endforeach
+            </ul>
         </div>
-        <div class="d-flex flex-row justify-content-between mt-2">
-            <div>
-                <h4 class="font-weight-bold blue-text">Accent Colour</h4>
-                <p>Choose your flavour of text colour and backgrounds</p>
-            </div>
-            <div style="width: 25%;">
-                <select name="accent_colour" id="" class="form-control">
-                    <option value="default" selected>Gander Blue</option>
-                    <option value="red">Red</option>
-                    <option value="pink">Pink</option>
-                    <option value="light-pink">Light Pink</option>
-                    <option value="purple">Purple</option>
-                    <option value="green">Green</option>
-                    <option value="orange">Orange</option>
-                </select>
-            </div>
-        </div>
-
-        <button class="btn btn-primary mt-4">Save Settings</button>
-    </form>
-    <h3 class="font-weight-bold blue-text mt-4">Current email subscription status</h3>
-    @if (Auth::user()->gdpr_subscribed_emails == 0)
-        <h3>
-            <span class="badge badge-danger">Not subscribed</span>
-        </h3>
-    @else
-        <h3>
-            <span class="badge badge-success">Subscribed</span>
-        </h3>
     @endif
-    <br/>
-    <h4>What does this mean?</h4>
-    <p>
-        When you subscribe to emails, you allow Gander Oceanic OCA to send you "promotional" emails as described in the EU GDPR.
-        These emails are not necessary for your continued participation in the OCA or to continue holding an account on the Core system.<br/>
-        Some examples could include:
-    </p>
-    <ul style="list-style: square">
-        <li>Controller certifications for the month</li>
-        <li>News from the OCA Chief about non-critical matters</li>
-        <li>Updates from other staff members</li>
-    </ul>
-    <p><br/>
-        To see more info, check out our <a href="{{url('/privacy')}}">privacy policy!</a>
-    </p><br/>
-    <h4>Subscribe</h4>
-    <br/>
-    <a role="button" class="btn btn-success" href="{{url('/dashboard/emailpref/subscribe')}}">Subscribe to emails</a>
-    <a role="button" class="btn btn-danger" href="{{url('/dashboard/emailpref/unsubscribe')}}">Unsubscribe from emails</a>
+    @csrf
+    <div class="d-flex flex-row justify-content-between">
+        <div>
+            <h4 class="font-weight-bold blue-text">Appearance <span class="badge blue">BETA</span></h4>
+            <p>Do you live on the light ☀ or the dark 🌙 side? (Dark mode is not yet complete)</p>
+        </div>
+        <div style="width: 25%;">
+            <select data-pretty-name="Appearance" data-table="main" name="ui_mode" id="" class="form-control pref-dropdown">
+                <option value="light" @if($preferences->ui_mode == 'light') selected @endif>Light</option>
+                <option value="dark" @if($preferences->ui_mode == 'dark') selected @endif>Dark</option>
+            </select>
+            <div class="d-none float-right" id="ui_mode_loading">
+                <div class="d-flex flex-row align-items-center">
+                    <i class="fas fa-circle-notch fa-spin blue-text mr-3" style="font-size:30px;"></i>Saving...
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="d-flex flex-row justify-content-between mt-2">
+        <div>
+            <h4 class="font-weight-bold blue-text">Accent Colour</h4>
+            <p>Choose your flavour of text colour and backgrounds</p>
+        </div>
+        <div style="width: 25%;">
+            <select data-pretty-name="Accent colour" data-table="main" name="accent_colour" id="" class="form-control pref-dropdown">
+                <option value="default" @if($preferences->accent_colour == 'default') selected @endif>Gander Blue</option>
+                <option value="red" @if($preferences->accent_colour == 'red') selected @endif>Red</option>
+                <option value="pink" @if($preferences->accent_colour == 'pink') selected @endif>Pink</option>
+                <option value="light-pink" @if($preferences->accent_colour == 'light-pink') selected @endif>Light Pink</option>
+                <option value="purple" @if($preferences->accent_colour == 'purple') selected @endif>Purple</option>
+                <option value="green" @if($preferences->accent_colour == 'green') selected @endif>Green</option>
+                <option value="orange" @if($preferences->accent_colour == 'orange') selected @endif>Orange</option>
+            </select>
+            <div class="d-none float-right" id="accent_colour_loading">
+                <div class="d-flex flex-row align-items-center">
+                    <i class="fas fa-circle-notch fa-spin blue-text mr-3" style="font-size:30px;"></i>Saving...
+                </div>
+            </div>
+        </div>
+    </div>
+    <hr>
+    <h5 class="mb-3">Notifications</h5>
+
+    <hr>
+    <h5 class="mb-3">Privacy</h5>
+    <p class="mt-5 mb-0 text-muted">Changes are automatically saved.</p>
 </div>
 @endsection

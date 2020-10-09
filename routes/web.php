@@ -123,8 +123,8 @@ Route::group(['middleware' => 'auth'], function () {
         Route::get('/me/discord/link/{param?}', 'Community\DiscordController@linkRedirectDiscord')->name('me.discord.link');
         Route::get('/me/discord/server/join', 'Community\DiscordController@joinRedirectDiscord')->name('me.discord.join');
         Route::get('/me/discord/server/join/callback', 'Community\DiscordController@joinCallbackDiscord');
-        Route::get('/me/preferences', 'Users\UserController@preferences')->name('me.preferences');
-        Route::post('/me/preferences', 'Users\UserController@preferencesPost')->name('me.preferences.post');
+        Route::get('/my/preferences', 'Community\MyCzqoController@preferences')->name('my.preferences');
+        Route::post('/my/preferences', 'Community\MyCzqoController@preferencesPost')->name('my.preferences.post');
 
         //Training
         Route::prefix('training')->group(function () {
