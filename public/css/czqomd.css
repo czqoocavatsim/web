@@ -117,9 +117,6 @@ body[data-theme="dark"] .page-footer .black-text {
     color: #eee !important;
 }
 
-body[data-theme="dark"] #czqoHeaderLight {
-    background: rgb(47, 49, 54) !important;
-}
 
 
 body[data-theme="dark"] .modal-content {
@@ -139,7 +136,17 @@ body[data-theme="dark"] .modal-content .close {
     border-right: 3px solid #eeeeee;
 }
 
+body[data-theme="dark"] .myczqo-tab li {
+    height: 35px;
+    border-right: 3px solid rgb(59, 61, 68);
+}
+
 .myczqo-tab.active li {
+    border-right: 3px solid var(--czqo-blue);
+    color: var(--czqo-blue)
+}
+
+body[data-theme="dark"] .myczqo-tab.active li {
     border-right: 3px solid var(--czqo-blue);
     color: var(--czqo-blue)
 }
@@ -467,4 +474,14 @@ body[data-theme="dark"] .list-group-item.bg-czqo-blue-light {
 
 .toastify .toast-close {
     margin-left: 10px !important;
+}
+
+body[data-theme="dark"] .btn-light {
+    background: rgb(59, 61, 68) !important;
+    border-color:  rgb(47, 49, 54) !important;
+    border: 2px solid;
+}
+
+body[data-theme="dark"] .text-body {
+    color: #eee !important;
 }

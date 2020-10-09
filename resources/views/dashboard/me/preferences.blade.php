@@ -9,21 +9,10 @@
     </p>
     <hr>
     <h5 class="mb-3">User Interface</h5>
-    @if($errors->savePreferencesErrors->any())
-        <div class="alert alert-danger">
-            <h4>One or more errors occurred whilst saving your preferences</h4>
-            <ul class="pl-0 ml-0 list-unstyled">
-                @foreach ($errors->savePreferencesErrors->all() as $error)
-                    <li>{{ $error }}</li>
-                @endforeach
-            </ul>
-        </div>
-    @endif
-    @csrf
     <div class="d-flex flex-row justify-content-between">
         <div>
-            <h4 class="font-weight-bold blue-text">Appearance <span class="badge blue">BETA</span></h4>
-            <p>Do you live on the light ☀ or the dark 🌙 side? (Dark mode is not yet complete)</p>
+            <h4 class="font-weight-bold blue-text">Appearance</h4>
+            <p>Do you live on the light ☀ or the dark 🌙 side?</p>
         </div>
         <div style="width: 25%;">
             <select data-pretty-name="Appearance" data-table="main" name="ui_mode" id="" class="form-control pref-dropdown">
@@ -61,9 +50,133 @@
     </div>
     <hr>
     <h5 class="mb-3">Notifications</h5>
-
+    <div class="d-flex flex-row justify-content-between">
+        <div>
+            <h4 class="font-weight-bold blue-text">Training notifications</h4>
+            <p>Updates on scheduled sessions with instructors, etc</p>
+        </div>
+        <div style="width: 25%;">
+            <select data-pretty-name="Training notifications" data-table="notifications" name="training_notifications" id="" class="form-control pref-dropdown">
+                <option value="email">Email only</option>
+                <option @if(!Auth::user()->hasDiscord()) disabled @endif value="email+discord">Email and Discord DMs @if(!Auth::user()->hasDiscord()) (Please link your Discord account to select this option) @endif</option>
+            </select>
+            <div class="d-none float-right" id="training_notifications_loading">
+                <div class="d-flex flex-row align-items-center">
+                    <i class="fas fa-circle-notch fa-spin blue-text mr-3" style="font-size:30px;"></i>Saving...
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="d-flex flex-row justify-content-between">
+        <div>
+            <h4 class="font-weight-bold blue-text">Event notifications</h4>
+            <p>Updates on the latest events and event updates</p>
+        </div>
+        <div style="width: 25%;">
+            <select data-pretty-name="Event notifications" data-table="notifications" name="event_notifications" id="" class="form-control pref-dropdown">
+                <option value="off">Off</option>
+                <option value="email">Email</option>
+            </select>
+            <div class="d-none float-right" id="event_notifications_loading">
+                <div class="d-flex flex-row align-items-center">
+                    <i class="fas fa-circle-notch fa-spin blue-text mr-3" style="font-size:30px;"></i>Saving...
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="d-flex flex-row justify-content-between">
+        <div>
+            <h4 class="font-weight-bold blue-text">News notifications</h4>
+            <p>The latest news from Gander Oceanic</p>
+        </div>
+        <div style="width: 25%;">
+            <select data-pretty-name="News notifications" data-table="notifications" name="news_notifications" id="" class="form-control pref-dropdown">
+                <option value="off">Off</option>
+                <option value="email">Email</option>
+            </select>
+            <div class="d-none float-right" id="news_notifications_loading">
+                <div class="d-flex flex-row align-items-center">
+                    <i class="fas fa-circle-notch fa-spin blue-text mr-3" style="font-size:30px;"></i>Saving...
+                </div>
+            </div>
+        </div>
+    </div>
+    <p style="font-size: 1em;" class="mt-3">
+        <a style="text-decoration: underline; text-decoration-style:dotted;" class="text-body" href="#"><i class="fas fa-question blue-text"></i>&nbsp;&nbsp;What these notification types mean</a>
+    </p>
     <hr>
     <h5 class="mb-3">Privacy</h5>
+    <div class="d-flex flex-row justify-content-between">
+        <div>
+            <h4 class="font-weight-bold blue-text">Avatar</h4>
+            <p>Do you want others to be able to see your avatar?</p>
+        </div>
+        <div style="width: 25%;">
+            <select data-pretty-name="Avatar privacy" data-table="privacy" name="avatar_public" id="" class="form-control pref-dropdown">
+                <option value="0">No</option>
+                <option value="1">Yes</option>
+            </select>
+            <div class="d-none float-right" id="avatar_public_loading">
+                <div class="d-flex flex-row align-items-center">
+                    <i class="fas fa-circle-notch fa-spin blue-text mr-3" style="font-size:30px;"></i>Saving...
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="d-flex flex-row justify-content-between">
+        <div>
+            <h4 class="font-weight-bold blue-text">Biography</h4>
+            <p>Do you want others to be able to see your biography?</p>
+        </div>
+        <div style="width: 25%;">
+            <select data-pretty-name="Biography privacy" data-table="privacy" name="biography_public" id="" class="form-control pref-dropdown">
+                <option value="0">No</option>
+                <option value="1">Yes</option>
+            </select>
+            <div class="d-none float-right" id="biography_public_loading">
+                <div class="d-flex flex-row align-items-center">
+                    <i class="fas fa-circle-notch fa-spin blue-text mr-3" style="font-size:30px;"></i>Saving...
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="d-flex flex-row justify-content-between">
+        <div>
+            <h4 class="font-weight-bold blue-text">Session logs</h4>
+            <p>Do you want others to be able to see your session logs?</p>
+        </div>
+        <div style="width: 25%;">
+            <select data-pretty-name="Session logs privacy" data-table="privacy" name="session_logs_public" id="" class="form-control pref-dropdown">
+                <option value="0">No</option>
+                <option value="1">Yes</option>
+            </select>
+            <div class="d-none float-right" id="session_logs_public_loading">
+                <div class="d-flex flex-row align-items-center">
+                    <i class="fas fa-circle-notch fa-spin blue-text mr-3" style="font-size:30px;"></i>Saving...
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="d-flex flex-row justify-content-between">
+        <div>
+            <h4 class="font-weight-bold blue-text">Certification details</h4>
+            <p>Do you want others to be able to see your certification details (date certified for example)?</p>
+        </div>
+        <div style="width: 25%;">
+            <select data-pretty-name="Certification details privacy" data-table="privacy" name="certification_details_public" id="" class="form-control pref-dropdown">
+                <option value="0">No</option>
+                <option value="1">Yes</option>
+            </select>
+            <div class="d-none float-right" id="certification_details_public_loading">
+                <div class="d-flex flex-row align-items-center">
+                    <i class="fas fa-circle-notch fa-spin blue-text mr-3" style="font-size:30px;"></i>Saving...
+                </div>
+            </div>
+        </div>
+    </div>
+    <p style="font-size: 1em;" class="mt-3">
+        <a style="text-decoration: underline; text-decoration-style:dotted;" class="text-body" href="#"><i class="fas fa-question blue-text"></i>&nbsp;&nbsp;More about privacy options</a>
+    </p>
     <p class="mt-5 mb-0 text-muted">Changes are automatically saved.</p>
 </div>
 @endsection

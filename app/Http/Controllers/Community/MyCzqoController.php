@@ -250,6 +250,12 @@ class MyCzqoController extends Controller
         switch ($request->get('table')) {
             case 'main':
                 $preferences = Auth::user()->preferences;
+            break;
+            case 'notifications':
+                $preferences = UserNotificationPreferences::where('user_id', Auth::id())->first();
+                break;
+            case 'privacy':
+                $preferences = UserPrivacyPreferences::where('user_id', Auth::id())->first();
         }
 
         //Change variable
