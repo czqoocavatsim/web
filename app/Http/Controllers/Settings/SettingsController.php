@@ -114,8 +114,8 @@ class SettingsController extends Controller
 
         $image = new RotationImage();
 
-        $basePath = 'public/files/rotation/'.Carbon::now()->toDateString().'/'.rand(1000,2000);
-        $path = $request->file('file')->store($basePath);
+        $basePath = 'staff_uploads/rotation_images/'.Carbon::now()->toDateString().rand(1000,2000);
+        $path = Storage::disk('digitalocean')->put($basePath, $request->file('file'), 'public');
         $image->path = Storage::url($path);
 
         $image->user_id = Auth::id();

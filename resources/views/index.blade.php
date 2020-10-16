@@ -22,137 +22,96 @@
             @endif
         </div>
     </div>
-    <div class="container-fluid py-4 blue" id="blueBannerMid">
-        <div class="container">
-            <h1 class="font-weight-bold white-text pb-3">
-                @if(Auth::check())
-                    Welcome back, {{Auth::user()->fullName('F')}}!
-                @else
-                    Welcome!
-                @endif
-            </h1>
+    <div class="container-fluid blue" id="blueBannerMid">
             <div class="row">
-                <div class="col-md-6">
-                    @if(count($news) < 1)
+                <div class="col-md-6 pl-0 pr-0">
+                    @if(!$news)
                         <span class="white-text">No news found.</span>
                     @else
-                    <div class="carousel slide carousel-fade" style="height: 300px;" id="news-carousel" data-ride="carousel">
-                        <ol class="carousel-indicators">
-                            @php
-                            $carousel_iteration = 0;
-                            @endphp
-                            @foreach($news as $n)
-                            <li data-target="#news-carousel" data-slide-to="{{$carousel_iteration}}" @if($carousel_iteration == 0) class="active" @endif></li>
-                            @php
-                            $carousel_iteration++;
-                            @endphp
-                            @endforeach
-                        </ol>
-                        <div class="carousel-inner" role="listbox">
-                            @php
-                            $carousel_iteration = 0;
-                            @endphp
-                            @foreach($news as $n)
-                                <div class="carousel-item @if($carousel_iteration == 0) active @endif" style="height: 300px;">
-                                    <div class="view">
-                                        @if ($n->image)
-                                        <img class="d-block w-100" style="height: 300px !important;" src="{{$n->image}}" alt="{{$n->image}}">
-                                        @else
-                                        <div style="height:300px;" class="homepage-news-img blue waves-effect"></div>
-                                        @endif
-                                        <div class="mask rgba-black-light"></div>
-                                    </div>
-                                    <div class="carousel-caption">
-                                        <h2 class="h2-responsive"><a class="white-text" href="{{route('news.articlepublic', $n->slug)}}">{{$n->title}}</a></h2>
-                                        <h5>{{$n->summary}}</h5>
-                                    </div>
-                                </div>
-                            @php
-                            $carousel_iteration++;
-                            @endphp
-                            @endforeach
+                    <div class="view" style="height: 330px !important; @if($news->image) background-image:url({{$news->image}}); background-size: cover; @else background: var(--czqo-blue); @endif">
+                        <div class="mask rgba-blue-grey-strong flex-left p-4 justify-content-end d-flex   flex-column h-100">
+                            <div class="container">
+                                <h1 class="font-weight-bold white-text">
+                                    <a href="{{route('news.articlepublic', $news->slug)}}" class="white-text">
+                                        {{$news->title}}
+                                    </a>
+                                </h1>
+                                <p class="white-text" style="font-size: 1.3em;">
+                                    {{$news->summary}}
+                                </p>
+                            </div>
                         </div>
-                        <a class="carousel-control-prev" href="#news-carousel" role="button" data-slide="prev">
-                            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-                            <span class="sr-only">Previous</span>
-                        </a>
-                        <a class="carousel-control-next" href="#news-carousel" role="button" data-slide="next">
-                            <span class="carousel-control-next-icon" aria-hidden="true"></span>
-                            <span class="sr-only">Next</span>
-                        </a>
                     </div>
                     @endif
                 </div>
                 <div class="col-md-6 d-none d-md-block">
-                    <h3 class="white-text">Online Controllers</h3>
-                    <ul class="list-unstyled ml-0 mt-3 p-0 onlineControllers">
-                        @if(count($ganderControllers) < 1 && count($shanwickControllers) < 1)
-                        <li class="mb-2">
-                            <div class="card shadow-none blue-grey lighten-5 p-3">
+                    <div class="container py-4">
+                        <div class="d-flex flex-row-justify-content-between align-items-center">
+                            <h2 class="white-text font-weight-bold">Online Oceanic Controllers</h2>
+                            <a href="{{route('map')}}" class="float-right ml-auto mr-0 white-text" style="font-size: 1.2em;">View map&nbsp;&nbsp;<i class="fas fa-map"></i></a>
+                        </div>
+                        <ul class="list-unstyled ml-0 mt-3 p-0 onlineControllers">
+                            @if(count($controllers) < 1)
+                            <li class="mb-2">
                                 <div class="d-flex flex-row justify-content-between align-items-center mb-1">
-                                    <h4 class="m-0">No controllers online</h4>
+                                    <h4 class="m-0 white-text"><i class="fas fa-sad-tear" style="margin-right: 1rem;"></i>No controllers online</h4>
                                 </div>
-                            </div>
-                        </li>
-                        @endif
-                        @foreach($ganderControllers as $controller)
-                        <li class="mb-2">
-                            <div class="card shadow-none blue-grey lighten-5 p-3">
-                                <div class="d-flex flex-row justify-content-between align-items-center mb-1">
-                                    <h4 class="m-0">{{$controller['callsign']}}</h4>
-                                    <span><i class="far fa-user-circle"></i>&nbsp;&nbsp;{{$controller['realname']}} {{$controller['cid']}}</span>
+                            </li>
+                            @endif
+                            @foreach($controllers as $controller)
+                            <li>
+                                <div class="white-text d-flex flex-row justify-content-between align-items-center">
+                                    <h4 class="font-weight-bold m-0">{{$controller['callsign']}}</h4>
+                                    <div style="font-size: 1.1em;">
+                                        @if ($rosterMember = App\Models\Roster\RosterMember::where('cid', $controller['cid'])->first())
+                                            <img src="{{$rosterMember->user->avatar()}}" style="height: 35px; !important; width: 35px !important; margin-left: 10px; margin-right: 5px; margin-bottom: 3px; border-radius: 50%;">
+                                            {{$rosterMember->user->fullName('FLC')}}
+                                        @else
+                                            <div class="my-1">
+                                                {{$controller['realname']}} {{$controller['cid']}}
+                                            </div>
+                                        @endif
+                                    </div>
                                 </div>
-                            </div>
-                        </li>
-                        @endforeach
-                        @foreach($shanwickControllers as $controller)
-                        <li class="mb-2">
-                            <div class="card shadow-none blue-grey lighten-5 p-3">
-                                <div class="d-flex flex-row justify-content-between align-items-center mb-1">
-                                    <h4 class="m-0">{{$controller['callsign']}}</h4>
-                                    <span><i class="far fa-user-circle"></i>&nbsp;&nbsp;{{$controller['realname']}} {{$controller['cid']}}</span>
-                                </div>
-                            </div>
-                        </li>
-                        @endforeach
-                    </ul>
-                    <div class="d-flex flex-row">
-                        <a href="{{route('map')}}" class="float-right ml-auto mr-0 white-text" style="font-size: 1.2em;">View map&nbsp;&nbsp;<i class="fas fa-map"></i></a>
+                            </li>
+                            <hr class="my-2">
+                            @endforeach
+                        </ul>
                     </div>
                 </div>
-                <div class="col-md-6 d-md-none mt-4">
-                    <h3 class="white-text">Online Controllers</h3>
-                    <ul class="list-unstyled ml-0 mt-3 p-0 onlineControllers">
-                        @if(count($ganderControllers) < 1 && count($shanwickControllers) < 1)
-                            <p class="white-text">No controllers online.</p>
-                        @endif
-                        @foreach($ganderControllers as $controller)
-                        <li class="mb-2">
-                            <div class="card shadow-none blue-grey lighten-5 p-3">
+                <div class="col-md-6 d-md-none">
+                    <div class="container py-4">
+                        <h2 class="white-text font-weight-bold">Online Oceanic Controllers</h2>
+                        <ul class="list-unstyled ml-0 mt-3 p-0 onlineControllers">
+                            @if(count($controllers) < 1)
+                            <li class="mb-2">
                                 <div class="d-flex flex-row justify-content-between align-items-center mb-1">
-                                    <h4 class="m-0">{{$controller['callsign']}}</h4>
-                                    <span><i class="far fa-user-circle"></i>&nbsp;&nbsp;{{$controller['realname']}} {{$controller['cid']}}</span>
+                                    <h4 class="m-0 white-text"><i class="fas fa-sad-tear" style="margin-right: 1rem;"></i>No controllers online</h4>
                                 </div>
-                            </div>
-                        </li>
-                        @endforeach
-                        @foreach($shanwickControllers as $controller)
-                        <li class="mb-2">
-                            <div class="card shadow-none blue-grey lighten-5 p-3">
-                                <div class="d-flex flex-row justify-content-between align-items-center mb-1">
-                                    <h4 class="m-0">{{$controller['callsign']}}</h4>
-                                    <span><i class="far fa-user-circle"></i>&nbsp;&nbsp;{{$controller['realname']}} {{$controller['cid']}}</span>
+                            </li>
+                            @endif
+                            @foreach($controllers as $controller)
+                            <li>
+                                <div class="white-text d-flex flex-row justify-content-between align-items-center">
+                                    <h4 class="font-weight-bold m-0">{{$controller['callsign']}}</h4>
+                                    <div style="font-size: 1.1em;">
+                                        @if ($rosterMember = App\Models\Roster\RosterMember::where('cid', $controller['cid'])->first())
+                                            <img src="{{$rosterMember->user->avatar()}}" style="height: 35px; !important; width: 35px !important; margin-left: 10px; margin-right: 5px; margin-bottom: 3px; border-radius: 50%;">
+                                            {{$rosterMember->user->fullName('FLC')}}
+                                        @else
+                                            <div class="my-1">
+                                                {{$controller['realname']}} {{$controller['cid']}}
+                                            </div>
+                                        @endif
+                                    </div>
                                 </div>
-                            </div>
-                        </li>
-                        @endforeach
-                    </ul>
-                    <div class="d-flex flex-row">
-                        <a href="{{route('map')}}" class="float-right ml-auto mr-0 white-text" style="font-size: 1.2em;">View map&nbsp;&nbsp;<i class="fas fa-map"></i></a>
+                            </li>
+                            <hr class="my-2">
+                            @endforeach
+                        </ul>
                     </div>
                 </div>
             </div>
-        </div>
     </div>
     <div style="background-size: cover; background-repeat: no-repeat; background-image:url({{asset('img/home-screen-backgrounds/czqosquarelightblue.png')}}); background-position: right;">
         <div class="container py-5">

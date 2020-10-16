@@ -155,8 +155,7 @@ class EventController extends Controller
 
         //Upload image if it exists
         if ($request->file('image')) {
-            $basePath = 'public/files/'.Carbon::now()->toDateString().'/'.rand(1000,2000);
-            $path = $request->file('image')->store($basePath);
+            $path = Storage::disk('digitalocean')->put('staff_uploads/events' . Carbon::now()->toDateString(), $request->file('image'), 'public');
             $event->image_url = Storage::url($path);
 
             //Add to uploaded images
@@ -264,8 +263,7 @@ class EventController extends Controller
 
         //Upload image if it exists
         if ($request->file('image')) {
-            $basePath = 'public/files/'.Carbon::now()->toDateString().'/'.rand(1000,2000);
-            $path = $request->file('image')->store($basePath);
+            $path = Storage::disk('digitalocean')->put('staff_uploads/events' . Carbon::now()->toDateString(), $request->file('image'), 'public');
             $event->image_url = Storage::url($path);
 
             //Add to uploaded images
