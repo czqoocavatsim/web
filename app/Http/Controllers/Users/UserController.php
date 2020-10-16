@@ -265,43 +265,59 @@ class UserController extends Controller
 
     public function changeAvatar(Request $request)
     {
+        //Validate
+        $messages = [
+            'file.mimes' => 'The image must be either a JPEG, PNG, JPG, or GIF file.'
+        ];
+
         $this->validate($request, [
-            'file' => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
-        ]);
+            'file' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048',
+        ], $messages);
+
+        //Get user
         $user = Auth::user();
-        $uploadedFile = $request->file('file');
-        $filename = $uploadedFile->getClientOriginalName();
-        Storage::disk('local')->putFileAs(
-            'public/files/avatars/'.$user->id,
-            $uploadedFile,
-            $filename
-        );
-        $user->avatar = Storage::url('public/files/avatars/'.$user->id.'/'.$filename);
+
+        //Put it onto disk
+        $path = Storage::disk('digitalocean')->put('user_uploads/'.$user->id.'/avatars', $request->file('file'), 'public');
+
+        //Change the avatar url and mode
+        $user->avatar = Storage::url($path);
         $user->avatar_mode = 1;
         $user->save();
 
-        return redirect()->route('my.index')->with('success', 'Avatar changed!');
+        //Return
+        return redirect()->route('my.index')->with('success', 'Avatar changed to a custom image!');
     }
 
     public function changeAvatarDiscord()
     {
+        //Get user
         $user = Auth::user();
+
+        //They need Discord don't they
+        if (!$user->hasDiscord()) {
+            return redirect()->route('my.index')->with('error-modal', 'You must link your Discord account must.');
+        }
+
+        //Change avatar mode and save
         $user->avatar_mode = 2;
         $user->save();
-        return redirect()->route('my.index')->with('success', 'Avatar changed!');
+
+        //Return
+        return redirect()->route('my.index')->with('success', 'Avatar changed to your Discord avatar!');
     }
 
     public function resetAvatar()
     {
-        $user = Auth::user();
-        if ($user->isAvatarDefault()) {
-            abort(403, 'Your avatar is already the default avatar.');
-        }
+       //Get user
+       $user = Auth::user();
 
-        $user->avatar_mode = 0;
-        $user->save();
+       //Change mode and save
+       $user->avatar_mode = 0;
+       $user->save();
 
-        return redirect()->back()->with('success', 'Avatar reset!');
+       //Return
+       return redirect()->route('my.index')->with('success', 'Avatar changed to your initials!');
     }
 
     public function searchUsers(Request $request)
