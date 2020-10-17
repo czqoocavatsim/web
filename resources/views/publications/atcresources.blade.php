@@ -88,34 +88,5 @@
         @endforeach
     </div>
     <br/>
-    @can('edit atc resources')
-    <form method="POST" action="{{route('atcresources.upload')}}">
-        @csrf
-        <h5>Add resource</h5>
-        <div class="form-group">
-            <label>Title</label>
-            <input required class="form-control" type="text" placeholder="Sector files 1903" name="title">
-        </div>
-        <div class="form-group">
-            <label>Description</label>
-            <textarea id="descriptionField" name="description" cols="30" rows="10"></textarea>
-            <script>
-                var simplemde = new SimpleMDE({ element: document.getElementById("descriptionField") });
-            </script>
-        </div>
-        <div class="form-group">
-            <label>URL (Direct resources.ganderoceanic.com link preferred, ask Liesel to upload)</label>
-            <input type="url" class="form-control" name="url">
-        </div>
-        <div class="form-group">
-            <div class="custom-control custom-checkbox">
-                <input type="checkbox" class="custom-control-input" name="atc_only" id="atc_only">
-                <label class="custom-control-label" for="atc_only">ATC Only</label>
-            </div>
-        </div>
-        <br/>
-        <input value="Submit" type="submit" class="btn btn-sm btn-block btn-success">
-    </form>
-    @endcan
 </div>
 @stop

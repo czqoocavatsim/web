@@ -37,7 +37,7 @@ class DataController extends Controller
 
     public function index()
     {
-        return view('dashboard.me.data.index');
+        return view('my.data');
     }
 
     public function exportAllData(Request $request)

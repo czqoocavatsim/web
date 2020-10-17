@@ -49,7 +49,7 @@ body[data-accent="orange"] {
     --czqo-blue: var(--orange);
 }
 
-body[data-accent] {
+body[data-accent]:not([data-accent="default"]) {
     --czqo-light-blue: var(--czqo-blue);
 }
 
@@ -298,7 +298,7 @@ div.d-flex.flex-row > i {
     color: var(--czqo-blue) !important;
 }
 
-body[data-accent] .bg-czqo-blue-light {
+body[data-accent]:not([data-accent="default"]) .bg-czqo-blue-light {
     color: #fff !important;
 }
 

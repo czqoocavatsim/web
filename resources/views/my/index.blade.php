@@ -1,6 +1,6 @@
 @extends('layouts.master')
+@section('title', 'myCZQO - ')
 @section('content')
-
 <div class="jarallax card card-image rounded-0"  data-jarallax data-speed="0.2">
     <img class="jarallax-img" src="{{$bannerImg->path}}" alt="">
     <div class="text-white text-left rgba-stylish-strong py-3 pt-5 px-4">

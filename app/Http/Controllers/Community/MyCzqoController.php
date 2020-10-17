@@ -220,7 +220,7 @@ class MyCzqoController extends Controller
         $preferences = Auth::user()->preferences;
 
         //return
-        return view('dashboard.me.preferences', compact('preferences'));
+        return view('my.preferences', compact('preferences'));
     }
 
     public function preferencesPost(Request $request)

@@ -6,7 +6,7 @@
 
 @stop
 
-@section('title', 'ATC Roster - ')
+@section('title', 'Controller Roster - ')
 @section('description', "Gander Oceanic's Oceanic Controller Roster")
 
 @section('content')

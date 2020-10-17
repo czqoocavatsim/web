@@ -1,4 +1,5 @@
 @extends('layouts.master')
+@section('title', 'Home - ')
 @section('description', 'Cool, calm and collected oceanic control services in the North Atlantic on VATSIM.')
 
 @section('content')
@@ -37,7 +38,7 @@
                         <span class="white-text">No news found.</span>
                     @else
                     <div class="view" style="height: 330px !important; @if($news->image) background-image:url({{$news->image}}); background-size: cover; @else background: var(--czqo-blue); @endif">
-                        <div class="mask rgba-blue-grey-strong flex-left p-4 justify-content-end d-flex   flex-column h-100">
+                        <div class="mask rgba-stylish-light flex-left p-4 justify-content-end d-flex flex-column h-100">
                             <div class="container">
                                 <h1 class="font-weight-bold white-text">
                                     <a href="{{route('news.articlepublic', $news->slug)}}" class="white-text">
@@ -47,6 +48,7 @@
                                 <p class="white-text" style="font-size: 1.3em;">
                                     {{$news->summary}}
                                 </p>
+                                <a href="{{route('news')}}" class="white-text" style="font-size: 1.2em;">All Articles <i class="fas fa-arrow-right"></i> </a>
                             </div>
                         </div>
                     </div>
