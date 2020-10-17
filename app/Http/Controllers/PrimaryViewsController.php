@@ -27,7 +27,7 @@ class PrimaryViewsController extends Controller
         $shanwickControllers = [];
         $controllers = [];
         if ($vatsim->loadData()) {
-            $ganderControllers = $vatsim->searchCallsign('LD_OBS');
+            $ganderControllers = $vatsim->searchCallsign('CZQX_');
             $shanwickControllers = $vatsim->searchCallsign('EGGX_');
             $controllers = array_merge($ganderControllers->toArray(), $shanwickControllers->toArray());
         }
