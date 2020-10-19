@@ -50,7 +50,7 @@
         <div class="container">
             <div class="row justify-content-center">
                 <div class="col-md-12 text-center">
-                    <div class="mb-4 lead">Gander Oceanic FIR is currently offline for maintenance. If you need to reach us, <a href="mailto:chief@ganderoceanic.com">email us</a> or contact us via Discord.
+                    <div class="mb-4 lead">Gander Oceanic OCA is currently offline for maintenance. If you need to reach us, <a href="mailto:chief@ganderoceanic.com">email us</a> or contact us via Discord.
                     </div>
                 </div>
             </div>
