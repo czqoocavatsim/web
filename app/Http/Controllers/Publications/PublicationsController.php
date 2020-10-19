@@ -16,7 +16,7 @@ class PublicationsController extends Controller
     {
         $resources = AtcResource::all();
 
-        return view('atcresources', compact('resources'));
+        return view('publications.atcresources', compact('resources'));
     }
 
     public function policies()
@@ -25,7 +25,7 @@ class PublicationsController extends Controller
         $policies = Policy::all()->sortBy('title');
 
         //Return the view
-        return view('policies', compact('policies'));
+        return view('publications.policies', compact('policies'));
     }
 
     public function adminPolicies()

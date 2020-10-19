@@ -28,13 +28,13 @@ class PrimaryViewsController extends Controller
         $shanwickControllers = [];
         $controllers = [];
         if ($vatsim->loadData()) {
-            $ganderControllers = $vatsim->searchCallsign('LD_OBS');
+            $ganderControllers = $vatsim->searchCallsign('CZQX_');
             $shanwickControllers = $vatsim->searchCallsign('EGGX_');
             $controllers = array_merge($ganderControllers->toArray(), $shanwickControllers->toArray());
         }
 
         //News
-        $news = News::where('visible', true)->get()->sortByDesc('published')->take(3);
+        $news = News::where('visible', true)->get()->sortByDesc('published')->first();
         $certifications = HomeNewControllerCert::all()->sortByDesc('timestamp')->take(4);
 
         //Next event
@@ -97,7 +97,7 @@ class PrimaryViewsController extends Controller
             return json_decode($output);
         });
 
-        return view('dashboard.index', compact('atcResources', 'bannerImg', 'quote'));
+        return view('my.index', compact('atcResources', 'bannerImg', 'quote'));
 
     }
 }

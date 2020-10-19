@@ -28,6 +28,18 @@
     </div>
 </div>
 
+<div class="container-fluid grey lighten-4 py-4">
+    <div class="container">
+        <h4 class="blue-text font-weight-bold">
+            @if ($event->event_in_past())
+                This event has ended. Check back soon for more events!
+            @else
+                Starts in {{$event->start_timestamp->diffForHumans()}}
+            @endif
+        </h4>
+    </div>
+</div>
+
     <div class="container py-4">
         <div class="row">
             <div class="col-md-3">
@@ -88,20 +100,24 @@
                         <script>
                             flatpickr('#availability_start', {
                                 enableTime: true,
-                                noCalendar: true,
-                                dateFormat: "H:i",
+                                noCalendar: false,
+                                dateFormat: "H:i d-m-Y",
                                 time_24hr: true,
                                 minTime: "{{$event->flatpickr_limits()[0]}}",
                                 maxTime: "{{$event->flatpickr_limits()[1]}}",
+                                minDate: "{{$event->flatpickr_limits()[0]}}",
+                                maxDate: "{{$event->flatpickr_limits()[1]}}",
                                 defaultDate: "{{$event->flatpickr_limits()[0]}}"
                             });
                             flatpickr('#availability_end', {
                                 enableTime: true,
-                                noCalendar: true,
-                                dateFormat: "H:i",
+                                noCalendar: false,
+                                dateFormat: "H:i d-m-Y",
                                 time_24hr: true,
                                 minTime: "{{$event->flatpickr_limits()[0]}}",
                                 maxTime: "{{$event->flatpickr_limits()[1]}}",
+                                minDate: "{{$event->flatpickr_limits()[0]}}",
+                                maxDate: "{{$event->flatpickr_limits()[1]}}",
                                 defaultDate: "{{$event->flatpickr_limits()[1]}}"
                             });
                         </script>

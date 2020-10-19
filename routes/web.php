@@ -34,13 +34,12 @@ Route::view('/privacy', 'privacy')->name('privacy');
 Route::get('/events', 'Events\EventController@index')->name('events.index');
 Route::get('/events/{slug}', 'Events\EventController@viewEvent')->name('events.view');
 Route::view('/branding', 'branding')->name('branding');
-Route::view('/eurosounds', 'eurosounds')->name('eurosounds');
 
 //About
 Route::prefix('about')->group(function () {
     Route::get('/', function() { return redirect(route('about.who-we-are'), 301); })->name('about.index');
     Route::view('/who-we-are', 'about.who-we-are')->name('about.who-we-are');
-    Route::view('/core', 'about-core')->name('about.core');
+    Route::view('/core', 'about.about-core')->name('about.core');
     Route::get('/staff', 'Users\StaffListController@index')->name('staff');
 });
 
@@ -70,15 +69,15 @@ Route::group(['middleware' => 'auth'], function () {
     //Privacy accept
     Route::post('/privacyaccept', 'Community\MyCzqoController@acceptPrivacyPolicy')->name('privacyaccept');
     Route::get('/privacydeny', 'Community\MyCzqoController@denyPrivacyPolicy');
-    Route::view('/me/accept-privacy-policy', 'accept-privacy-policy')->name('accept-privacy-policy');
+    Route::view('/my/accept-privacy-policy', 'my.accept-privacy-policy')->name('accept-privacy-policy');
 
     //Dashboard/MyCZQO
     Route::get('/dashboard', function() { return redirect(route('my.index'), 301); });
     Route::get('/my', 'PrimaryViewsController@dashboard')->name('my.index');
 
     //GDPR
-    Route::get('/me/data', 'Users\DataController@index')->name('me.data');
-    Route::post('/me/data/export/all', 'Users\DataController@exportAllData')->name('me.data.export.all');
+    Route::get('/my/data', 'Users\DataController@index')->name('me.data');
+    Route::post('/my/data/export/all', 'Users\DataController@exportAllData')->name('me.data.export.all');
 
     //Restricted role prohibitation
     Route::group(['middleware' => 'restricted'], function () {
@@ -259,3 +258,7 @@ Route::group(['middleware' => 'auth'], function () {
     });
 
 });
+
+//Custom pages
+Route::get('/{page_slug}', 'Publications\CustomPagesController@viewPage')->name('publications.custompages.view');
+Route::post('/{page_slug}/response-submit', 'Publications\CustomPagesController@submitResponse')->name('publications.custompages.response-submit');

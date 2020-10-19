@@ -26,10 +26,10 @@
         <link rel="shortcut icon" href="{{ asset('favicon.ico') }}" type="image/x-icon">
         <meta name="csrf-token" content="{{ csrf_token() }}">
         <!--Rich Preview Meta-->
-        <title>@yield('title', '')Gander Oceanic VATSIM</title>
+        <title>@yield('title', '')Gander Oceanic OCA</title>
         <meta name="description" content="@yield('description', '')">
         <meta name="theme-color" content="#0080c9">
-        <meta name="og:title" content="@yield('title', '')Gander Oceanic VATSIM">
+        <meta name="og:title" content="@yield('title', '')Gander Oceanic OCA">
         <meta name="og:description" content="@yield('description', '')">
         <meta name="og:image" content="@yield('image','https://resources.ganderoceanic.com/media/img/brand/sqr/ZQO_SQ_TSPBLUE.png')">
         <link rel="shortcut icon" href="{{ asset('favicon.ico') }}" type="image/x-icon">
@@ -335,14 +335,14 @@
                             <p class="text-muted text-center mt-2">You will be redirected to Discord to allow us to add you to our server. Information collected is shown on the Discord authorisation screen. Read our privacy policy for details.</p>
                             @elseif (Auth::user()->hasDiscord() && Auth::user()->memberOfCzqoGuild())
                             <p class="mt-1"><img style="border-radius:50%; height: 30px;" class="img-fluid" src="{{Auth::user()->getDiscordAvatar()}}" alt="">&nbsp;&nbsp;{{Auth::user()->getDiscordUser()->username}}<span style="color: #d1d1d1;">#{{Auth::user()->getDiscordUser()->discriminator}}</span></p>
-                            <p class="text-muted text-center mt-2">You are already a member of the Gander Oceanic Discord. To unlink your account and leave the server, go to your Dashboard.</p>
+                            <p class="text-muted text-center mt-2">You are already a member of the Gander Oceanic Discord. To unlink your account and leave the server, go to myCZQO.</p>
                             @else
                                 <a href="{{route('me.discord.link', ['param' => 'server_join_process'])}}" class="class btn btn-primary mt-3">Link Your Discord To Join</a>
                                 <p class="text-muted text-center mt-2">You will be redirected to Discord to connect your account, and then prompted to allow us to add you to our server. Information collected is shown on the Discord authorisation screen. Read our privacy policy for details.</p>
                             @endif
                         @else
                         <a href="{{route('auth.connect.login')}}" class="class btn btn-primary mt-3">Login With VATSIM To Join</a>
-                        <p class="text-muted text-center mt-2">Once logged in, you can connect your Discord account and join the community in your Dashboard</p>
+                        <p class="text-muted text-center mt-2">Once logged in, you can connect your Discord account and join the community in myCZQO.</p>
                         @endauth
                     </div>
                 </div>

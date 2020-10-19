@@ -75,8 +75,7 @@ class NewsController extends Controller
 
         //Upload image if it exists
         if ($request->file('image')) {
-            $basePath = 'public/files/'.Carbon::now()->toDateString().'/'.rand(1000,2000);
-            $path = $request->file('image')->store($basePath);
+            $path = Storage::disk('digitalocean')->put('staff_uploads/news/' . Carbon::now()->toDateString(), $request->file('image'), 'public');
             $article->image = Storage::url($path);
 
             //Add to uploaded images
@@ -158,13 +157,13 @@ class NewsController extends Controller
                 abort(403, 'This article is hidden.');
             }
         }
-        return view('publicarticle', compact('article'));
+    return view('news.article', compact('article'));
     }
 
     public function viewAllPublic()
     {
         $news = News::where('visible', true)->get()->sortByDesc('id');
-        return view('publicnews', compact('news'));
+        return view('news.index', compact('news'));
     }
 
     public function minutesIndex()

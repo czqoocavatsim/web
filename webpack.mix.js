@@ -16,5 +16,6 @@ mix.scripts([
     'resources/js/policies.js',
     'resources/js/map.js',
     'resources/js/myczqo.js',
-    'resources/js/preferences.js'
+    'resources/js/preferences.js',
+    'resources/js/custom-pages.js'
 ], 'public/js/czqo.js');

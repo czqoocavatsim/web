@@ -44,7 +44,7 @@ class StaffListController extends Controller
     {
         $staff = StaffMember::all();
 
-        return view('dashboard.staff.index', compact('staff'));
+        return view('admin.settings.staff', compact('staff'));
     }
 
     public function editStaffMember(Request $request, $id)

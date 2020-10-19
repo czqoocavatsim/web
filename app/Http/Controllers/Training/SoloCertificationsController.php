@@ -20,7 +20,7 @@ class SoloCertificationsController extends Controller
         $certs = SoloCertification::where('expires', '>', Carbon::now())->get();
 
         //Return view
-        return view('solocerts', compact('certs'));
+        return view('roster.solocerts', compact('certs'));
     }
 
     public function admin()

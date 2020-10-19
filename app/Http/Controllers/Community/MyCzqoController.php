@@ -128,21 +128,11 @@ class MyCzqoController extends Controller
         //Get user
         $user = Auth::user();
 
-        //Get the file
-        $uploadedFile = $request->file('file');
-
-        //Create the file name
-        $filename = $uploadedFile->getClientOriginalName();
-
         //Put it onto disk
-        Storage::disk('local')->putFileAs(
-            'public/files/avatars/'.$user->id,
-            $uploadedFile,
-            $filename
-        );
+        $path = Storage::disk('digitalocean')->put('user_uploads/'.$user->id.'/avatars', $request->file('file'), 'public');
 
         //Change the avatar url and mode
-        $user->avatar = Storage::url('public/files/avatars/'.$user->id.'/'.$filename);
+        $user->avatar = Storage::url($path);
         $user->avatar_mode = 1;
         $user->save();
 
@@ -230,7 +220,7 @@ class MyCzqoController extends Controller
         $preferences = Auth::user()->preferences;
 
         //return
-        return view('dashboard.me.preferences', compact('preferences'));
+        return view('my.preferences', compact('preferences'));
     }
 
     public function preferencesPost(Request $request)

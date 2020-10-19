@@ -23,7 +23,7 @@ class RosterController extends Controller
         $roster = RosterMember::where('certification', '!=', 'not_certified')->get();
 
         //Return view
-        return view('roster', compact('roster'));
+        return view('roster.index', compact('roster'));
     }
 
     public function admin()
