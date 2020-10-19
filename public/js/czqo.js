@@ -1797,6 +1797,7 @@ tabs = [
     'yourProfileTab',
     'supportTab',
     'certificationTrainingTab',
+    'instructingTab',
     'staffTab'
 ]
 

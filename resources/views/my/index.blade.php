@@ -89,6 +89,16 @@
                         </div>
                     </li>
                 </a>
+                @hasanyrole('Administrator|Senior Staff|Training Team')
+                <a class="myczqo-tab" data-myczqo-tab="instructingTab" href="#instructing">
+                    <li class="w-100">
+                        <div class="d-flex h-100 flex-row justify-content-left align-items-center">
+                            <i style="font-size: 1.6em; margin-right: 10px;" class="fas fa-chalkboard-teacher"></i>
+                            <span style="font-size: 1.1em;">Instructing</span>
+                        </div>
+                    </li>
+                </a>
+                @endhasanyrole
                 @hasanyrole('Administrator|Senior Staff|Training Team|Marketing Team|Web Team')
                 <a class="myczqo-tab" data-myczqo-tab="staffTab" href="#staff">
                     <li class="w-100">
@@ -346,6 +356,11 @@
                     </li>
                 </ul>
             </div>
+            @hasanyrole('Administrator|Senior Staff|Training Team')
+            <div id="instructingTab" style="display:none;">
+                <h3 class="font-weight-bold blue-text pb-2">Instructing</h3>
+            </div>
+            @endhasanyrole
             <div id="staffTab" style="display:none">
                 @hasanyrole('Administrator|Senior Staff|Training Team|Marketing Team|Web Team')
                     <h3 class="font-weight-bold blue-text pb-2">Staff</h3>

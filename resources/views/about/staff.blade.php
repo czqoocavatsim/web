@@ -20,7 +20,7 @@
                     {{$g->name}}
                 </a>
                 @endforeach
-                {{-- <a href="#instructors" class="list-group-item list-group-item-action">Instructors</a> --}}
+                <a href="#instructors" class="list-group-item list-group-item-action">Instructors</a>
             </div>
         </div>
         <div class="col-md-9">
@@ -65,9 +65,9 @@
             </div>
             <hr>
             @endforeach
-            {{-- <a id="instructors"><h3 class="mb-3 blue-text font-weight-bold">Instructors</h3></a>
+            <a id="instructors"><h3 class="mb-3 blue-text font-weight-bold">Instructors</h3></a>
             <div class="row">
-                {{-- @foreach ($instructors as $instructor)
+                @foreach ($instructors as $instructor)
                     <div class="col-sm-4">
                         <div style="text-align: center;">
                             <div class="staff_img_container">
@@ -80,14 +80,14 @@
                                     </div>
                                 </div>
                             </div>                    <h4 style="margin-bottom: 2px;"><b>{{$instructor->user->fullName('FL')}}</b></h4>
-                            <p style="margin: 0;"><i>{{$instructor->qualification}}</i></p>
+                            <p style="margin: 0;"><i>{{$instructor->staffPageTagline()}}</i></p>
                             <p>
-                                <a href="mailto:{{$instructor->email}}"><i class="fa fa-envelope"></i>&nbsp;{{$instructor->email}}</a>
+                                <a href="mailto:{{$instructor->email()}}"><i class="fa fa-envelope"></i>&nbsp;{{$instructor->email()}}</a>
                             </p>
                         </div>
                     </div>
-                @endforeach --}}
-            </div> --}}
+                @endforeach
+            </div>
         </div>
     </div>
 </div>
@@ -109,13 +109,10 @@
                         This person has no biography :(
                     @endif
                 </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Dismiss</button>
-                </div>
             </div>
         </div>
     </div>
-@endforeach{{--
+@endforeach
 @foreach ($instructors as $member)
     <div class="modal fade" id="viewInstructorBio{{$member->id}}" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered" role="document">
@@ -133,11 +130,8 @@
                         This person has no biography :(
                     @endif
                 </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Dismiss</button>
-                </div>
             </div>
         </div>
     </div>
-@endforeach --}}
+@endforeach
 @stop
