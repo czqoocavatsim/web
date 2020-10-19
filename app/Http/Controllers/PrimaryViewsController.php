@@ -13,6 +13,7 @@ use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Cache;
+use Throwable;
 use Thujohn\Twitter\Facades\Twitter;
 
 class PrimaryViewsController extends Controller
@@ -44,7 +45,11 @@ class PrimaryViewsController extends Controller
 
         //Twitter
         $tweets = Cache::remember('twitter.timeline', 86400, function () {
-	        return Twitter::getUserTimeline(['screen_name' => 'ganderocavatsim', 'count' => 3, 'format' => 'array']);
+            try {
+                return Twitter::getUserTimeline(['screen_name' => 'ganderocavatsim', 'count' => 3, 'format' => 'array']);
+            } catch (Throwable $ex) {
+                return null;
+            }
         });
 
         return view('index', compact('controllers', 'news', 'certifications', 'nextEvent', 'topControllers', 'tweets'));
