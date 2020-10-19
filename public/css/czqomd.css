@@ -307,6 +307,10 @@ body[data-accent]:not([data-accent="default"]) .bg-czqo-blue-light {
     background-color: var(--czqo-blue);
 }
 
+.btn {
+    font-weight: 600;
+}
+
 .btn, .btn:hover, .btn:active {
     box-shadow: none !important;
     border-radius: .45em !important;

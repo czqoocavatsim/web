@@ -20,7 +20,7 @@ class CheckIfPrivacy
     {
         if (Auth::check()) {
             if (!Auth::user()->init) {
-                if (Request::is('me/accept-privacy-policy') || Request::is('privacydeny') || Request::is('privacyaccept')) {
+                if (Request::is('my/accept-privacy-policy') || Request::is('privacydeny') || Request::is('privacyaccept')) {
                     return $next($request);
                 } else {
                     return redirect()->route('accept-privacy-policy')->with('info', 'Please accept the Privacy Policy');

@@ -13,7 +13,7 @@
             <div class="pt-5 pb-3">
                 <a href="{{route('news')}}" class="white-text" style="font-size: 1.2em;"> <i class="fas fa-arrow-left"></i> News</a>
             </div>
-            <div class="py-5">
+            <div class="pb-5">
                 <h1 class="font-weight-bold" style="font-size: 3em;">{{$article->title}}</h1>
             </div>
         </div>

@@ -25,6 +25,10 @@ class Event extends Model
         'id', 'name', 'start_timestamp', 'end_timestamp', 'user_id', 'description', 'image_url', 'controller_applications_open', 'departure_icao', 'arrival_icao', 'slug', 'allow_not_certified_sign_ups'
     ];
 
+    protected $dates = [
+        'start_timestamp', 'end_timestamp'
+    ];
+
     public function user()
     {
         return $this->belongsTo(User::class);
@@ -42,29 +46,29 @@ class Event extends Model
 
     public function starts_in_pretty()
     {
-        $t = Carbon::create($this->start_timestamp);
+        $t = $this->start_timestamp;
         return $t->diffForHumans();
     }
 
     public function start_timestamp_pretty()
     {
-        $t = Carbon::create($this->start_timestamp);
+        $t = $this->start_timestamp;
         return $t->day . ' ' . $t->monthName . ' ' . $t->year . ' ' . $t->format('H:i') . ' Zulu';
     }
 
     public function flatpickr_limits()
     {
-        $start = Carbon::create($this->start_timestamp);
-        $end = Carbon::create($this->end_timestamp);
+        $start = $this->start_timestamp;
+        $end = $this->end_timestamp;
         return array(
-            $start->format('H:i'),
-            $end->format('H:i')
+            $start->format('H:i d-m-Y'),
+            $end->format('H:i d-m-Y')
         );
     }
 
     public function end_timestamp_pretty()
     {
-        $t = Carbon::create($this->end_timestamp);
+        $t = $this->end_timestamp;
         return $t->day . ' ' . $t->monthName . ' ' . $t->year . ' ' . $t->format('H:i') . ' Zulu';
     }
 
@@ -109,7 +113,7 @@ class Event extends Model
 
     public function event_in_past()
     {
-        $end = Carbon::create($this->end_timestamp);
+        $end = $this->end_timestamp;
         if (!$end->isPast())
         {
             return false;

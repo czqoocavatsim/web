@@ -34,7 +34,6 @@ Route::view('/privacy', 'privacy')->name('privacy');
 Route::get('/events', 'Events\EventController@index')->name('events.index');
 Route::get('/events/{slug}', 'Events\EventController@viewEvent')->name('events.view');
 Route::view('/branding', 'branding')->name('branding');
-Route::view('/eurosounds', 'eurosounds')->name('eurosounds');
 
 //About
 Route::prefix('about')->group(function () {
@@ -259,3 +258,7 @@ Route::group(['middleware' => 'auth'], function () {
     });
 
 });
+
+//Custom pages
+Route::get('/{page_slug}', 'Publications\CustomPagesController@viewPage')->name('publications.custompages.view');
+Route::post('/{page_slug}/response-submit', 'Publications\CustomPagesController@submitResponse')->name('publications.custompages.response-submit');
