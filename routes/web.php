@@ -29,7 +29,7 @@ Route::view('/pilots/tracks', 'pilots.tracks');
 Route::view('/pilots/tutorial', 'pilots.tutorial');
 Route::get('/policies', 'Publications\PublicationsController@policies')->name('policies');
 //Route::get('/meetingminutes', 'News\NewsController@minutesIndex')->name('meetingminutes');
-Route::view('/privacy', 'privacy')->name('privacy');
+Route::get('/privacy', function() { return redirect(route('policies'), 301); })->name('privacy');
 //Route::view('/changelog', 'changelog')->name('changelog');
 Route::get('/events', 'Events\EventController@index')->name('events.index');
 Route::get('/events/{slug}', 'Events\EventController@viewEvent')->name('events.view');
