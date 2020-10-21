@@ -6,6 +6,7 @@ use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
+use Illuminate\Support\HtmlString;
 
 class Announcement extends Notification
 {
@@ -41,9 +42,12 @@ class Announcement extends Notification
      */
     public function toMail($notifiable)
     {
-        return (new MailMessage)->view(
-            'emails.news.announcement', ['user' => $this->user, 'announcement' => $this->announcement]
-        )->subject($this->announcement->title);
+        return (new MailMessage)
+            ->greeting($this->announcement->title)
+            ->line(new Htmlstring($this->announcement->html()))
+            ->line("This announcement was sent to you for the following reason: {$this->announcement->reason_for_sending}")
+            ->subject($this->announcement->title)
+            ->salutation(new HtmlString("Sent by <b>{$this->announcement->user->fullName('FLC')} (" . $this->announcement->user->staffProfile->position . ")</b>" ?? 'No staff position found' . ")</b>"));
     }
 
     /**
