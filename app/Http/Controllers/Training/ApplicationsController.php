@@ -249,12 +249,6 @@ class ApplicationsController extends Controller
         //Create the comment
         $comment = new ApplicationComment();
 
-        //Profanity check it
-        $check = new Check();
-        if ($check->hasProfanity($request->get('comment'))) {
-            return redirect()->back()->withInput()->with('error-modal', 'Profanity was detected in your comment, please remove it.');
-        }
-
         //Assign values
         $comment->user_id = Auth::id();
         $comment->content = $request->get('comment');
@@ -354,12 +348,6 @@ class ApplicationsController extends Controller
 
         //Create the comment
         $comment = new ApplicationComment();
-
-        //Profanity check it
-        $check = new Check();
-        if ($check->hasProfanity($request->get('comment'))) {
-            return redirect()->back()->withInput()->with('error-modal', 'Profanity was detected in your comment, please remove it.');
-        }
 
         //Assign values
         $comment->user_id = Auth::id();
