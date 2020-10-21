@@ -15,7 +15,7 @@
 </p>
 <hr>
 <br/>
-You can view their application <a href="#">here.</a>
+You can view their application <a href="{{route('training.admin.applications.view', $application->reference_id)}}">here.</a>
 @endsection
 
 @section('from-line')
