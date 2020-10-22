@@ -405,7 +405,7 @@ class ApplicationsController extends Controller
         $application->user->notify(new ApplicationAcceptedApplicant($application));
 
         //Notify staff
-        Notification::route('mail', CoreSettings::find(1)->cinstructor)->notify(new ApplicationAcceptedStaff($application));
+        Notification::route('mail', CoreSettings::find(1)->emailcinstructor)->notify(new ApplicationAcceptedStaff($application));
 
         //Return
         $request->session()->flash('alreadyApplied', 'Accepted!');
