@@ -8,7 +8,7 @@ const monthNames = ["January", "February", "March", "April", "May", "June",
 ];
 
 
-$(document).ready(function () {
+createCalendar = function () {
     var calendar = new Calendar('#instructing-sessions-calendar', {
         defaultView: 'month',
         taskView: false,
@@ -58,4 +58,4 @@ $(document).ready(function () {
         calendar.next();
         $("#instructing-sessions-calendar-range").text(monthNames[calendar.getDate().toDate().getMonth()] + " " + calendar.getDate().toDate().getFullYear())
     })
-});
+}

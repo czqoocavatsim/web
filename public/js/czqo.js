@@ -43872,7 +43872,8 @@ __webpack_require__(/*! tui-date-picker/dist/tui-date-picker.css */ "./node_modu
 __webpack_require__(/*! tui-time-picker/dist/tui-time-picker.css */ "./node_modules/tui-time-picker/dist/tui-time-picker.css");
 
 var monthNames = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
-$(document).ready(function () {
+
+createCalendar = function createCalendar() {
   var calendar = new Calendar('#instructing-sessions-calendar', {
     defaultView: 'month',
     taskView: false,
@@ -43912,7 +43913,7 @@ $(document).ready(function () {
     calendar.next();
     $("#instructing-sessions-calendar-range").text(monthNames[calendar.getDate().toDate().getMonth()] + " " + calendar.getDate().toDate().getFullYear());
   });
-});
+};
 
 /***/ }),
 
