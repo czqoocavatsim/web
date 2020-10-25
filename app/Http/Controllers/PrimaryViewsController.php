@@ -65,13 +65,17 @@ class PrimaryViewsController extends Controller
         $vatsim->setConfig('cacheOnly', false);
         $ganderControllers = [];
         $shanwickControllers = [];
+        $controllerOnline = false;
         $planes = null;
         if ($vatsim->loadData()) {
             $ganderControllers = $vatsim->searchCallsign('CZQX_');
             $shanwickControllers = $vatsim->searchCallsign('EGGX_');
+            $controllers = array_merge($ganderControllers->toArray(), $shanwickControllers->toArray());
+            if (count($controllers) > 1) { $controllerOnline = true; }
             $planes = $vatsim->getPilots()->toArray();
         }
-        return view('map', compact('ganderControllers', 'shanwickControllers', 'planes'));
+
+        return view('pilots.map', compact('planes', 'controllerOnline'));
     }
 
     /*
