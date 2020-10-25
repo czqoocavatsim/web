@@ -49,10 +49,13 @@ The following values must be filled in the .env file
 MAILGUN_DOMAIN=
 MAILGUN_SECRET=
 
-#Webhooks for Discord channels if you want them to work
-DISCORD_STAFF_WEBHOOK= #Your FIR's general staff channel
-CONTROLLER_APP_WEBHOOK= #Event controller applications
-DISCORD_NEWS_WEBHOOK= #Your announcements channel
+#Channel IDs for Discord channels if you want them to work
+DISCORD_WEB_LOGS=
+DISCORD_GUILD_LOGS=
+DISCORD_ANNOUNCEMENTS=
+DISCORD_ENDORSEMENTS=
+DISCORD_MARKETING=
+DISCORD_STAFF=
 
 #Discord OAuth keys for linking/server joining
 DISCORD_KEY=
@@ -66,6 +69,19 @@ DISCORD_GUILD_ID= #your servers ID
 CONNECT_REDIRECT_URI=
 CONNECT_CLIENT_ID=
 CONNECT_SECRET=
+
+#Twitter
+TWITTER_CONSUMER_KEY=
+TWITTER_CONSUMER_SECRET=
+TWITTER_ACCESS_TOKEN=
+TWITTER_ACCESS_TOKEN_SECRET=
+
+#DO Spaces (you can replace DO spaces with Amazon S3 easily)
+DIGITALOCEAN_SPACES_KEY=
+DIGITALOCEAN_SPACES_SECRET=
+DIGITALOCEAN_SPACES_ENDPOINT=
+DIGITALOCEAN_SPACES_REGION=
+DIGITALOCEAN_SPACES_BUCKET=
 ```
 
 ##### Database seeding
