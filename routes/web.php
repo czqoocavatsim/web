@@ -203,6 +203,12 @@ Route::group(['middleware' => 'auth'], function () {
                     Route::get('/applications/{reference_id}', 'Training\ApplicationsController@adminViewApplication')->name('applications.view')->middleware('can:view applications');
                     Route::get('/applications/{reference_id}/accept', 'Training\ApplicationsController@adminAcceptApplication')->name('applications.accept')->middleware('can:interact with applications');
                     Route::get('/applications/{reference_id}/reject', 'Training\ApplicationsController@adminRejectApplication')->name('applications.reject')->middleware('can:interact with applications');
+
+                    //Instructing
+                    Route::prefix('instructing')->group(function () {
+                        //Calendar
+                        Route::get('/calendar', 'Training\InstructingController@calendar')->name('instructing.calendar');
+                    });
                 });
             });
 

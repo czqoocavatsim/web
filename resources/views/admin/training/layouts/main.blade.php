@@ -4,11 +4,6 @@
     <div class="row">
         <div class="col-md-3">
             <ul class="list-unstyled w-100">
-                <li class="w-100 mb-3" style="border:none;">
-                    <div class="d-flex h-100 flex-row justify-content-left align-items-center">
-                        <span style="font-size: 1em;" class="text-muted">TRAINING</span>
-                    </div>
-                </li>
                 <a class="myczqo-tab no-click" data-myczqo-tab="none" href="{{route('my.index')}}">
                     <li class="w-100" style="border:none;">
                         <div class="d-flex h-100 flex-row justify-content-left align-items-center">
@@ -25,6 +20,11 @@
                         </div>
                     </li>
                 </a>
+                <li class="w-100 my-3" style="border:none;">
+                    <div class="d-flex h-100 flex-row justify-content-left align-items-center">
+                        <span style="font-size: 1em;" class="text-muted">ADMIN</span>
+                    </div>
+                </li>
                 <a class="myczqo-tab {{Request::is('admin/training/roster') || Request::is('admin/training/roster/*') ? 'active' : ''}} no-click" data-myczqo-tab="none" href="{{route('training.admin.roster')}}">
                     <li class="w-100">
                         <div class="d-flex h-100 flex-row justify-content-left align-items-center">
@@ -46,6 +46,19 @@
                         <div class="d-flex h-100 flex-row justify-content-left align-items-center">
                             <i style="font-size: 1.6em; margin-right: 10px;" class="fas fa-clock fa-fw"></i>
                             <span style="font-size: 1.1em;">Applications</span>
+                        </div>
+                    </li>
+                </a>
+                <li class="w-100 my-3" style="border:none;">
+                    <div class="d-flex h-100 flex-row justify-content-left align-items-center">
+                        <span style="font-size: 1em;" class="text-muted">INSTRUCTING</span>
+                    </div>
+                </li>
+                <a class="myczqo-tab {{Request::is('admin/training/instructing/calendar') ? 'active' : ''}} no-click" data-myczqo-tab="none" href="{{route('training.admin.applications')}}">
+                    <li class="w-100">
+                        <div class="d-flex h-100 flex-row justify-content-left align-items-center">
+                            <i style="font-size: 1.6em; margin-right: 10px;" class="fas fa-clock fa-fw"></i>
+                            <span style="font-size: 1.1em;">Calendar</span>
                         </div>
                     </li>
                 </a>
