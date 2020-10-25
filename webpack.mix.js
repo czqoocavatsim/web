@@ -11,7 +11,7 @@ const mix = require('laravel-mix');
  |
  */
 
-mix.js([
+mix.scripts([
     'resources/js/pilot-tools.js',
     'resources/js/policies.js',
     'resources/js/maps.js',
@@ -20,3 +20,4 @@ mix.js([
     'resources/js/custom-pages.js',
     'resources/js/instructing.js'
 ], 'public/js/czqo.js');
+

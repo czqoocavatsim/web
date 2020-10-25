@@ -32,6 +32,6 @@ class TrainingSession extends Model
 
     public function position()
     {
-        return $this->hasOne(MonitoredPosition::class, 'position_id');
+        return $this->belongsTo(MonitoredPosition::class, 'position_id');
     }
 }

@@ -60,4 +60,9 @@ class Instructor extends Model
     {
         return $this->hasMany(OTSSession::class, 'instructor_id');
     }
+
+    public function studentsAssigned()
+    {
+        return $this->hasMany(InstructorStudentAssignment::class, 'instructor_id');
+    }
 }

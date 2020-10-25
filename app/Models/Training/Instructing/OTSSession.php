@@ -2,7 +2,9 @@
 
 namespace App\Models\Training\Instructing;
 
+use App\Models\Network\MonitoredPosition;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class OTSSession extends Model
 {
@@ -30,6 +32,6 @@ class OTSSession extends Model
 
     public function position()
     {
-        return $this->hasOne(MonitoredPosition::class, 'position_id');
+        return $this->belongsTo(MonitoredPosition::class, 'position_id');
     }
 }
