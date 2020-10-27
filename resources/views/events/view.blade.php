@@ -68,13 +68,13 @@
                 <h4 class="font-weight-bold blue-text mt-3">Arrival Airport</h4>
                 @if (!$event->departure_icao)
                 No arrival airport listed.
-                @else --}}
+                @else
                 <ul class="list-unstyled">
                     <li>{{$event->arrival_icao_data()->name}}</li>
                     <li>{{$event->arrival_icao_data()->ICAO}} ({{$event->arrival_icao_data()->IATA}})</li>
                     <li>{{$event->arrival_icao_data()->regionName}}</li>
                 </ul>
-                @endif
+                @endif --}}
             </div>
             <div class="col-md-9">
                 {{$event->html()}}
