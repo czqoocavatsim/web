@@ -1,9 +1,9 @@
 @extends('layouts.master')
 
-@section('title', $event->name.' - ')
+@section('title', $event->name.' - '){{--
 @section('description')
-@if ($event->departure_icao && $event->arrival_icao) {{$event->departure_icao_data()->name}} ({{$event->departure_icao_data()->ICAO}}) to {{$event->arrival_icao_data()->name}} ({{$event->arrival_icao_data()->ICAO}}). @endif Starting {{$event->start_timestamp_pretty()}}
-@endsection
+@if ($event->departure_icao && $event->arrival_icao) {{$event->departure_icao_data()->name}} ({{$event->departure_icao_data()->ICAO}}) to {{$event->arrival_icao_data()->name}} ({{$event->arrival_icao_data()->ICAO}}).-}} @endif Starting {{$event->start_timestamp_pretty()}}
+@endsection --}}
 @if($event->image_url)
 @section('image')
 {{$event->image_url}}
@@ -20,9 +20,9 @@
             </div>
             <div class="pb-5">
                 <h1 class="font-weight-bold" style="font-size: 3em;">{{$event->name}}</h1>
-                @if ($event->departure_icao && $event->arrival_icao)
+                {{-- @if ($event->departure_icao && $event->arrival_icao)
                 <h3>{{$event->departure_icao_data()->name}} ({{$event->departure_icao_data()->ICAO}})&nbsp;&nbsp;<i class="fas fa-plane"></i>&nbsp;&nbsp;{{$event->arrival_icao_data()->name}} ({{$event->arrival_icao_data()->ICAO}})</h3>
-                @endif
+                @endif --}}
             </div>
         </div>
     </div>
@@ -56,7 +56,7 @@
                 <h4 class="font-weight-bold blue-text mt-3">End Time</h4>
                 <p>{{$event->end_timestamp_pretty()}}</p>
                 <h4 class="font-weight-bold blue-text mt-3">Depature Airport</h4>
-                @if (!$event->departure_icao)
+               {{--  @if (!$event->departure_icao)
                 No departure airport listed.
                 @else
                 <ul class="list-unstyled">
@@ -68,7 +68,7 @@
                 <h4 class="font-weight-bold blue-text mt-3">Arrival Airport</h4>
                 @if (!$event->departure_icao)
                 No arrival airport listed.
-                @else
+                @else --}}
                 <ul class="list-unstyled">
                     <li>{{$event->arrival_icao_data()->name}}</li>
                     <li>{{$event->arrival_icao_data()->ICAO}} ({{$event->arrival_icao_data()->IATA}})</li>
