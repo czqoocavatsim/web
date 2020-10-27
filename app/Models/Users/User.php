@@ -17,6 +17,7 @@ use App\Models\Roster\RosterMember;
 use App\Models\Settings;
 use App\Models\Tickets;
 use App\Models\Training\Application;
+use App\Models\Training\Instructing\Instructor;
 use Exception;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Log;
@@ -84,7 +85,7 @@ class User extends Authenticatable
 
     public function instructorProfile()
     {
-        return $this->hasOne(AtcTraining\Instructor::class);
+        return $this->hasOne(Instructor::class);
     }
 
     public function studentProfile()

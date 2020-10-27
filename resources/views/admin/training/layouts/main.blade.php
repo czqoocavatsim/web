@@ -54,7 +54,7 @@
                     <div class="d-flex h-100 flex-row justify-content-left align-items-center">
                         <span style="font-size: 1em;" class="text-muted">INSTRUCTING</span>
                     </div>
-                </li>
+                </li>{{--
                 <a class="myczqo-tab {{Request::is('admin/training/instructing/calendar') ? 'active' : ''}} no-click" data-myczqo-tab="none" href="{{route('training.admin.applications')}}">
                     <li class="w-100">
                         <div class="d-flex h-100 flex-row justify-content-left align-items-center">
@@ -62,8 +62,8 @@
                             <span style="font-size: 1.1em;">Calendar</span>
                         </div>
                     </li>
-                </a>
-                <a class="myczqo-tab {{Request::is('admin/training/instructing/instructors') || Request::is('admin/training/instructing/instructors/*') ? 'active' : ''}} no-click" data-myczqo-tab="none" href="{{route('training.admin.applications')}}">
+                </a> --}}
+                <a class="myczqo-tab {{Request::is('admin/training/instructing/instructors') || Request::is('admin/training/instructing/instructors/*') ? 'active' : ''}} no-click" data-myczqo-tab="none" href="{{route('training.admin.instructing.instructors')}}">
                     <li class="w-100">
                         <div class="d-flex h-100 flex-row justify-content-left align-items-center">
                             <i style="font-size: 1.6em; margin-right: 10px;" class="fas fa-user-shield fa-fw"></i>

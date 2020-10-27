@@ -61,7 +61,7 @@
                 <div class="card-body">
                     <h4 class="font-weight-bold blue-text">Delete Data</h4>
                     <p>Please open a support ticket with the Webmaster or email them if you would like to delete any data.</p>
-                    <button class="btn btn-light">Support Ticket</button>
+                    <button onclick="javascript:alert('Please email the Webmaster')"  class="btn btn-light">Support Ticket</button>
                 </div>
             </div>
         </div>
@@ -110,7 +110,7 @@
                         </a>
                         <div class="step-content grey lighten-3">
                             <p>Please open a support ticket with the Webmaster or email them if you would like to request specific data.</p>
-                            <button class="btn btn-light">Support Ticket</button>
+                        <button onclick="javascript:alert('Please email the Webmaster')" class="btn btn-light">Support Ticket</button>
                         </div>
                         </li>
                     </ul>

@@ -100,12 +100,13 @@
                 </div>
             </div>
         </div>
-    </div>
+    </div>{{--
     <p style="font-size: 1em;" class="mt-3">
         <a style="text-decoration: underline; text-decoration-style:dotted;" class="text-body" href="#"><i class="fas fa-question blue-text"></i>&nbsp;&nbsp;What these notification types mean</a>
-    </p>
+    </p> --}}
     <hr>
     <h5 class="mb-3">Privacy</h5>
+    <p class="border my-3 p-4">These preferences are not implemented yet.</p>
     <div class="d-flex flex-row justify-content-between">
         <div>
             <h4 class="font-weight-bold blue-text">Avatar</h4>
@@ -173,10 +174,10 @@
                 </div>
             </div>
         </div>
-    </div>
+    </div>{{--
     <p style="font-size: 1em;" class="mt-3">
         <a style="text-decoration: underline; text-decoration-style:dotted;" class="text-body" href="#"><i class="fas fa-question blue-text"></i>&nbsp;&nbsp;More about privacy options</a>
-    </p>
+    </p> --}}
     <p class="mt-5 mb-0 text-muted">Changes are automatically saved.</p>
 </div>
 @endsection

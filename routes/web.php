@@ -207,7 +207,7 @@ Route::group(['middleware' => 'auth'], function () {
                     //Instructing
                     Route::prefix('instructing')->group(function () {
                         //Calendar
-                        Route::get('/calendar', 'Training\InstructingController@calendar')->name('instructing.calendar');
+                        //Route::get('/calendar', 'Training\InstructingController@calendar')->name('instructing.calendar');
 
                         //Instructors
                         Route::get('/instructors', 'Training\InstructingController@instructors')->name('instructing.instructors');

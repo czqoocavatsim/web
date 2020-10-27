@@ -88,7 +88,7 @@
                             <span style="font-size: 1.1em;">Support</span>
                         </div>
                     </li>
-                </a>
+                </a>{{--
                 @hasanyrole('Administrator|Senior Staff|Training Team')
                 <a class="myczqo-tab" data-myczqo-tab="instructingTab" href="#instructing">
                     <li class="w-100">
@@ -98,7 +98,7 @@
                         </div>
                     </li>
                 </a>
-                @endhasanyrole
+                @endhasanyrole --}}
                 @hasanyrole('Administrator|Senior Staff|Training Team|Marketing Team|Web Team')
                 <a class="myczqo-tab" data-myczqo-tab="staffTab" href="#staff">
                     <li class="w-100">
