@@ -41,9 +41,6 @@
                         {{$resource->html()}}
                     </div>
                     <div class="modal-footer">
-                        @can('edit atc resources')
-                        <a href="{{route('atcresources.delete', $resource->id)}}" role="button" class="btn btn-danger">Delete</a>
-                        @endcan
                         <a href="{{$resource->url}}" role="button" class="btn btn-success">View</a>
                         <button type="button" class="btn btn-secondary" data-dismiss="modal">Dismiss</button>
                     </div>
@@ -75,9 +72,6 @@
                         {{$resource->html()}}
                     </div>
                     <div class="modal-footer">
-                        @can('edit atc resources')
-                        <a href="{{route('atcresources.delete', $resource->id)}}" role="button" class="btn btn-danger">Delete</a>
-                        @endcan
                         <a href="{{$resource->url}}" role="button" class="btn btn-success">View</a>
                         <button type="button" class="btn btn-secondary" data-dismiss="modal">Dismiss</button>
                     </div>

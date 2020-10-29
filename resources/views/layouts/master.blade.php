@@ -217,7 +217,7 @@
                 &nbsp;
                 •
                 &nbsp;
-                <a href="{{route('branding')}}" class="font-weight-bold black-text">Branding</a>
+                <a href="{{url('/branding')}}" class="font-weight-bold black-text">Branding</a>
                 &nbsp;
                 •
                 &nbsp;
