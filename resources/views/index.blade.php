@@ -3,6 +3,7 @@
 @section('description', 'Cool, calm and collected oceanic control services in the North Atlantic on VATSIM.')
 
 @section('content')
+    @if(!$ctpMode)
     <div data-jarallax data-speed="0.2" class="jarallax" style="height: calc(100vh)">
         <div class="mask flex-center flex-column" style="position:absolute; top:0; left:0; z-index: 1; height: 100%; width: 100%; background: linear-gradient(40deg,rgba(3, 149, 233, 0.7),rgba(48,63,159,.4))!important;">
             <div class="container">
@@ -31,6 +32,16 @@
             @endif
         </div>
     </div>
+    @else
+    <iframe style="height: 100vh; margin-bottom: 0px;"
+    src="https://player.twitch.tv/?channel=czqo_vatsim&parent=ganderoceanic.com"
+    height="100vh"
+    width="100%"
+    frameborder="0"
+    scrolling="no"
+    allowfullscreen="true">
+    </iframe>
+    @endif
     <div class="container-fluid blue" id="blueBannerMid">
             <div class="row">
                 <div class="col-md-6 pl-0 pr-0">

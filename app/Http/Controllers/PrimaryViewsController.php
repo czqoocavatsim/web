@@ -52,7 +52,13 @@ class PrimaryViewsController extends Controller
             }
         });
 
-        return view('index', compact('controllers', 'news', 'certifications', 'nextEvent', 'topControllers', 'tweets'));
+        //CTP Mode?
+        $ctpMode = false;
+        if (config('app.ctp_home_page')) {
+            $ctpMode = true;
+        }
+
+        return view('index', compact('controllers', 'news', 'certifications', 'nextEvent', 'topControllers', 'tweets', 'ctpMode'));
     }
 
     /*
