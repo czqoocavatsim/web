@@ -11,4 +11,6 @@ class HomeNewControllerCert extends Model
     {
         return $this->belongsTo(User::class, 'controller_id');
     }
+
+    protected $dates = ['timestamp'];
 }

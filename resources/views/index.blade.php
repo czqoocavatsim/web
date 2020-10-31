@@ -240,7 +240,7 @@
                             <img src="{{$cert->controller->avatar()}}" style="height: 55px !important; width: 55px !important; margin-right: 10px; margin-bottom: 3px; border-radius: 50%;">
                             <div class="d-flex flex-column">
                                 <h4>{{$cert->controller->fullName('FL')}}</h4>
-                                <p title="{{Carbon\Carbon::create($cert->timestamp)->toDayDateTimeString()}}">{{Carbon\Carbon::create($cert->timestamp)->diffForHumans()}}</p>
+                                <p title="{{$cert->timestamp->toDayDateTimeString()}}">{{$cert->timestamp->diffForHumans()}}</p>
                             </div>
                         </div>
                     @endforeach

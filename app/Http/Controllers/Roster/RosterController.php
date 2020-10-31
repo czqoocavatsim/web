@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Roster;
 
 use App\Http\Controllers\Controller;
+use App\Models\News\HomeNewControllerCert;
 use App\Models\Roster\RosterMember;
 use App\Models\Roster\SoloCertification;
 use App\Models\Users\User;
@@ -14,6 +15,7 @@ use Illuminate\Support\Facades\Notification;
 use Illuminate\Support\Facades\Response;
 use Illuminate\Support\Facades\Validator;
 use Spatie\Permission\Models\Role;
+use Illuminate\Support\Facades\Auth;
 
 class RosterController extends Controller
 {
@@ -240,5 +242,58 @@ class RosterController extends Controller
 
         //Return
         return response()->stream($callback, 200, $headers);
+    }
+
+    public function homePageNewControllers()
+    {
+        //Get them
+        $entries = HomeNewControllerCert::all()->sortByDesc('id');
+
+        //Return view
+        return view('admin.training.roster.home-page-new-controllers', compact('entries'));
+    }
+
+    public function homePageNewControllersRemoveEntry(Request $request)
+    {
+        //Validate
+        $validator = Validator::make($request->all(), [
+            'entry_id' => 'required'
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json(['message' => 'Validation failed'], 400);
+        }
+
+        $entry = HomeNewControllerCert::whereId($request->get('entry_id'))->firstOrFail();
+        $entry->delete();
+
+        //Return
+        return response()->json(['message' => 'Saved'], 200);
+    }
+
+    public function homePageNewControllersAddEntry(Request $request)
+    {
+        //Validate
+        $validator = Validator::make($request->all(), [
+            'cid' => 'required'
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json(['message' => 'Validation failed'], 400);
+        }
+
+        //See if the controller exists
+        if (!User::whereId($request->get('cid'))->first()) {
+            return response()->json(['message' => 'No such user found'], 400);
+        }
+
+        $entry = new HomeNewControllerCert();
+        $entry->controller_id = $request->get('cid');
+        $entry->user_id = Auth::id();
+        $entry->timestamp = Carbon::now();
+        $entry->save();
+
+        //Return
+        return response()->json(['message' => 'Saved'], 200);
     }
 }

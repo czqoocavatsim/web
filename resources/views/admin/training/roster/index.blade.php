@@ -6,6 +6,9 @@
         <a href="#" data-target="#addRosterMemberModal" data-toggle="modal" style="text-decoration:none;"><span class="blue-text"><i class="fas fa-chevron-right"></i></span> &nbsp; <span class="black-text">Add controller to roster</span></a>
     </li>
     <li class="mb-2">
+        <a href="{{route('training.admin.roster.home-page-new-controllers')}}" style="text-decoration:none;"><span class="blue-text"><i class="fas fa-chevron-right"></i></span> &nbsp; <span class="black-text">Home page new controllers list</span></a>
+    </li>
+    <li class="mb-2">
         <a href="{{route('training.admin.roster.export')}}" target="_blank" style="text-decoration:none;"><span class="blue-text"><i class="fas fa-chevron-right"></i></span> &nbsp; <span class="black-text">Export roster</span></a>
     </li>
 </ul>
