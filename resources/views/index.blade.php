@@ -144,7 +144,7 @@
                     </p>
                     <div class="d-flex flex-row">
                         @if(!Auth::check() || Auth::user()->can('start-application'))
-                        <a href="{{route('training.applications.apply')}}" role="button" class="btn bg-czqo-blue-light">Apply To Gander</a>
+                        <a href="{{route('training.applications.apply')}}" role="button" class="btn bg-czqo-blue-light">Apply Now</a>
                         @endif
                         <a href="/pilots" class="btn bg-czqo-blue-light" role="button">Pilot Resources</a>
                     </div>
