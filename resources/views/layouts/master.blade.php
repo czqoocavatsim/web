@@ -92,7 +92,7 @@
         <!--Chart js-->
         <script src="https://cdn.jsdelivr.net/npm/chart.js@2.9.3/dist/Chart.min.js" integrity="sha256-R4pqcOYV8lt7snxMQO/HSbVCFRPMdrhAFMH+vr9giYI=" crossorigin="anonymous"></script>
     </head>
-    <body @if(Auth::check() && Auth::user()->preferences) @if(Auth::user()->preferences->accent_colour) data-accent="{{Auth::user()->preferences->accent_colour}}" @endif data-theme="{{Auth::user()->preferences->ui_mode}}" @else data-theme="light" @endif>
+    <body class="d-flex flex-column min-vh-100" @if(Auth::check() && Auth::user()->preferences) @if(Auth::user()->preferences->accent_colour) data-accent="{{Auth::user()->preferences->accent_colour}}" @endif data-theme="{{Auth::user()->preferences->ui_mode}}" @else data-theme="light" @endif>
     <!--Header-->
     @include('maintenancemode::notification')
     @if (\App\Models\Settings\CoreSettings::where('id', 1)->firstOrFail()->banner)
@@ -191,12 +191,12 @@
         @endif
     </header>
     <!--End header-->
-    <div id="czqoContent" @if(Request::is('my') || Request::is('/') || Request::is('events/*') || Request::is('news/*')) style="margin-top: calc(-59px + -0.5rem);" @endif>
+    <div class="flex-fill" id="czqoContent" @if(Request::is('my') || Request::is('/') || Request::is('events/*') || Request::is('news/*')) style="margin-top: calc(-59px + -0.5rem);" @endif>
         @yield('content')
     </div>
     <!-- Footer -->
     <!-- Footer -->
-    <footer class="page-footer text-dark font-small py-4">
+    <footer class="page-footer text-dark font-small py-4" style="bottom:0">
         <div class="container">
             <p style="font-size: 0.9em;">For Flight Simulation Use Only - Not To Be Used For Real World Navigation. Any and all proprietary content available on this website may not be shared, copied, reproduced or used in any way without providing credit to the Gander Oceanic OCA - VATCAN. If in doubt, contact the Deputy OCA Chief.</p>
             <p style="font-size: 0.9em;">Copyright © {{App\Models\Settings\CoreSettings::where('id', 1)->firstOrFail()->copyright_year}} Gander Oceanic - All Rights Reserved.</p>
