@@ -211,6 +211,7 @@
                         </div>
                     </div>
                     <div class="list-group">
+                        @if($tweets)
                         @foreach($tweets as $t)
                             <a href="https://twitter.com/ganderocavatsim/status/{{$t['id']}}" target="_blank" class="list-group-item list-group-item-action">
                                 <p>
@@ -231,6 +232,9 @@
                                 </p>
                             </a>
                         @endforeach
+                        @else
+                        No tweets found
+                        @endif
                     </div>
                 </div>
                 <div class="col-md-4 mb-4">

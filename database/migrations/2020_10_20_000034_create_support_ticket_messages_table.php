@@ -14,8 +14,24 @@ class CreateSupportTicketMessagesTable extends Migration
     public function up()
     {
         Schema::create('support_ticket_messages', function (Blueprint $table) {
+            //ID
             $table->id();
+
+            //User assignment
+            $table->unsignedInteger('user_id');
+            $table->foreign('user_id')->references('id')->on('users');
+
+            //Ticket
+            $table->unsignedBigInteger('ticket_id');
+            $table->foreign('ticket_id')->references('id')->on('support_tickets');
+
+            //Content
+            $table->longText('message');
+            $table->boolean('system_msg')->default(false);
+
+            //Timestamps and soft deletes
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 

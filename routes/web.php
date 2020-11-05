@@ -106,6 +106,12 @@ Route::group(['middleware' => 'auth'], function () {
         Route::get('/feedback', 'Feedback\FeedbackController@create')->name('feedback.create');
         Route::post('/feedback', 'Feedback\FeedbackController@createPost')->name('feedback.create.post');
 
+        //Support
+        Route::prefix('support')->group(function () {
+            //Support home
+            Route::get('/', 'Support\TicketsController@index')->name('support.index');
+        });
+
         //Email prefs
         Route::get('/dashboard/emailpref', 'Users\DataController@emailPref')->name('dashboard.emailpref');
         Route::get('/dashboard/emailpref/subscribe', 'Users\DataController@subscribeEmails');
