@@ -672,3 +672,17 @@ async function createMap(planes, controllerOnline) {
         L.polyline(Shanwick, { color: '#777', weight: 0.5 }).addTo(map);
     }
 }
+
+//Create about page map
+async function createAboutPageMap() {
+    const map = L.map('aboutPageMap').setView([55, -30], 3.48);
+    const icon = L.icon({ iconUrl: '/img/oep.png', iconAnchor: [5, 5] });
+
+    var OpenStreetMap_Mapnik = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        maxZoom: 19,
+        attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+    }).addTo(map);
+
+    //Add markers
+    createMapPointsBoundaries(map)
+}

@@ -1,4 +1,4 @@
-@extends('layouts.master')
+@extends('layouts.master', ['solidNavBar' => false])
 
 @section('title', $article->title.' - ')
 @section('description', $article->summary)

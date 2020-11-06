@@ -1,4 +1,4 @@
-@extends('layouts.master')
+@extends('layouts.master', ['solidNavBar' => false])
 @section('title', 'myCZQO - ')
 @section('content')
 <div class="jarallax card card-image rounded-0"  data-jarallax data-speed="0.2">

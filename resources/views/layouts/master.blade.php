@@ -1,4 +1,5 @@
 <!DOCTYPE HTML>
+@php if (!isset($solidNavBar)) $solidNavBar = true @endphp
 <html lang="en">
     <head>
         <!--
@@ -173,7 +174,7 @@
             }).showToast();
         </script>
         @endif
-        @if(Request::is('my') || Request::is('/') || Request::is('events/*') || Request::is('news/*'))
+        @if(!$solidNavBar)
             <div class="d-none d-xl-block">
                 <nav id="czqoHeaderLight" class="navbar navbar-expand-xl navbar-dark transparent shadow-none p-0" style="min-height:59px; z-index:999;">
                     @include('layouts.navbar-main')
@@ -191,7 +192,7 @@
         @endif
     </header>
     <!--End header-->
-    <div class="flex-fill" id="czqoContent" @if(Request::is('my') || Request::is('/') || Request::is('events/*') || Request::is('news/*')) style="margin-top: calc(-59px + -0.5rem);" @endif>
+    <div class="flex-fill" id="czqoContent" @if(!$solidNavBar) style="margin-top: calc(-59px + -0.5rem);" @endif>
         @yield('content')
     </div>
     <!-- Footer -->

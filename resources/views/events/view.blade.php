@@ -1,4 +1,4 @@
-@extends('layouts.master')
+@extends('layouts.master', ['solidNavBar' => false])
 
 @section('title', $event->name.' - ')
 @section('description')
