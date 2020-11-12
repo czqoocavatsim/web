@@ -142,6 +142,9 @@
                     <p style="font-size: 1.2em;" class="mt-3">
                         Gander Oceanic is VATSIM's coolest, calmest and most collected provider of Oceanic control. With our worldwide team of skilled Oceanic controllers, we pride ourselves on our expert, high-quality service to pilots flying across the North Atlantic. Our incredible community of pilots and controllers extend their warmest welcome and wish you all the best for your oceanic crossings!
                     </p>
+                    <p style="font-size: 1.2em;" class="mt-3">
+                        <a class="font-weight-bold text-body" href="{{route('about.who-we-are')}}">Who we are &nbsp;&nbsp;<i class="fas fa-arrow-right blue-text"></i></a>
+                    </p>
                     <div class="d-flex flex-row">
                         @if(!Auth::check() || Auth::user()->can('start-application'))
                         <a href="{{route('training.applications.apply')}}" role="button" class="btn bg-czqo-blue-light">Apply Now</a>
@@ -278,6 +281,15 @@
                                 </span>
                                 &nbsp;
                                 <span class="black-text">Facebook</span>
+                            </a>
+                        </li>
+                        <li class="mb-3">
+                            <a href="https://www.youtube.com/channel/UC3norFpW3Cw4ryGR7ourjcA" style="text-decoration:none;">
+                                <span class="blue-text">
+                                    <i class="fab fa-youtube fa-2x" style="vertical-align:middle;"></i>
+                                </span>
+                                &nbsp;
+                                <span class="black-text">YouTube Channel</span>
                             </a>
                         </li>
                         <li class="mb-3">

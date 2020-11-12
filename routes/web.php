@@ -21,7 +21,7 @@ Route::get('/map', 'PrimaryViewsController@map')->name('map');
 Route::get('/roster', 'Roster\RosterController@publicRoster')->name('roster.public');
 Route::get('/roster/solo-certs', 'Training\SoloCertificationsController@public')->name('solocertifications.public');
 Route::get('/staff', function() { return redirect(route('staff'), 301); });
-Route::get('/atcresources', 'Publications\PublicationsController@atcResources')->name('atcresources.index');
+Route::get('/atc-resources', 'Publications\PublicationsController@atcResources')->name('atcresources.index');
 Route::view('/pilots', 'pilots.index');
 Route::view('/pilots/oceanic-clearance', 'pilots.oceanic-clearance');
 Route::view('/pilots/position-report', 'pilots.position-report');
@@ -175,8 +175,7 @@ Route::group(['middleware' => 'auth'], function () {
                     Route::get('/rotation-images', 'Settings\SettingsController@rotationImages')->name('settings.rotationimages');
                     Route::get('/rotation-images/delete/{image_id}', 'Settings\SettingsController@deleteRotationImage')->name('settings.rotationimages.deleteimg');
                     Route::post('/rotation-images/uploadimg', 'Settings\SettingsController@uploadRotationImage')->name('settings.rotationimages.uploadimg');
-                    Route::get('/staff', 'Users\StaffListController@editIndex')->name('settings.staff');
-                    Route::post('/staff/{id}', 'Users\StaffListController@editStaffMember')->name('settings.staff.editmember');
+                    Route::get('/staff', 'Settings\StaffController@editStaff')->name('settings.staff');
                 });
             });
 

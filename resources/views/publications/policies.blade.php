@@ -1,10 +1,18 @@
-@extends('layouts.master')
+@extends('layouts.master', ['solidNavBar' => false])
 @section('title', 'Policies - ')
 @section('description', 'Policies and guidelines for operations in Gander Oceanic')
 
 @section('content')
+    <div class="card card-image blue rounded-0">
+        <div class="text-white text-left rgba-stylish-light pb-2 pt-5 px-4">
+            <div class="container">
+                <div class="py-5">
+                    <h1 class="font-weight-bold" style="font-size: 3em;">Policies</h1>
+                </div>
+            </div>
+        </div>
+    </div>
     <div class="container py-4">
-        <h1 class="font-weight-bold blue-text">Policies</h1>
         <p style="font-size: 1.2em;">
             Policies and guidelines for operations in Gander Oceanic. These policies may be updated from time to time.
         </p>

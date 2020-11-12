@@ -1,13 +1,18 @@
-@extends('layouts.master')
+@extends('layouts.master', ['solidNavBar' => false])
 @section('title', 'Events - ')
 @section('description', 'Check out events over the Northern Atlantic supported by CZQO')
 @section('content')
-    <div class="container pt-4 pb-4">
-        <div class="d-flex flex-row justify-content-between align-items-center mb-1">
-            <h1 class="blue-text font-weight-bold">Events</h1>
-            <a href="#" class="btn bg-czqo-blue-light float-right" data-toggle="modal" data-target="#requestModal">Request ATC Coverage</a>
+    <div class="card card-image blue rounded-0">
+        <div class="text-white text-left rgba-stylish-light pb-2 pt-5 px-4">
+            <div class="container">
+                <div class="py-5">
+                    <h1 class="font-weight-bold" style="font-size: 3em;">Events</h1>
+                </div>
+            </div>
         </div>
-        <hr>
+    </div>
+    <div class="container py-4">
+        <a href="#" class="btn bg-czqo-blue-light float-right" data-toggle="modal" data-target="#requestModal">Request ATC Coverage</a>
         <div class="row">
             @foreach($events as $event)
             <div class="col-md-6 mb-3">

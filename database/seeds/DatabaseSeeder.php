@@ -46,8 +46,8 @@ class DatabaseSeeder extends Seeder
 
         DB::table('staff_groups')->insert([
             'id' => 1,
-            'name' => 'Executive Team',
-            'slug' => 'executive',
+            'name' => 'Senior Staff',
+            'slug' => 'seniorstaff',
             'description' => 'CZQO\'s executive team oversees FIR operations',
             'can_receive_tickets' => true,
         ]);

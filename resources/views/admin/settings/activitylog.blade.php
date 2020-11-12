@@ -23,10 +23,10 @@
                     <tr>
                         <th data-order="{{$entry->created_at}}" scope="row">{{$entry->created_at->toDayDateTimeString()}}</th>
                         <td>
-                            {{$entry->subject->id}} ({{substr($entry->subject_type, strrpos($entry->subject_type, "\\") + 1)}})
+                            {{$entry->subject->id ?? ''}} ({{substr($entry->subject_type, strrpos($entry->subject_type, "\\") + 1)}})
                         </td>
                         <td>
-                            {{$entry->causer->id}} ({{substr($entry->causer_type, strrpos($entry->causer_type, "\\") + 1)}})
+                            {{$entry->causer->id ?? ''}} ({{substr($entry->causer_type, strrpos($entry->causer_type, "\\") + 1)}})
                         <td>
                             {{$entry->description}}
                         </td>

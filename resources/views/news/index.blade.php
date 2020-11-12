@@ -1,12 +1,19 @@
-@extends('layouts.master')
+@extends('layouts.master', ['solidNavBar' => false])
 
 @section('title', 'News - ')
 @section('description', 'News from Gander Oceanic')
 
 @section('content')
+    <div class="card card-image blue rounded-0">
+        <div class="text-white text-left rgba-stylish-light pb-2 pt-5 px-4">
+            <div class="container">
+                <div class="py-5">
+                    <h1 class="font-weight-bold" style="font-size: 3em;">News</h1>
+                </div>
+            </div>
+        </div>
+    </div>
     <div class="container py-4">
-        <h1 class="blue-text font-weight-bold">News</h1>
-        <hr>
         <div class="row">
             @foreach($news as $n)
                 <div class="col-md-6 mb-3">

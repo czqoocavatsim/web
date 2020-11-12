@@ -625,7 +625,6 @@ function createMapPointsBoundaries(map) {
 
 function parseTimeStamp(jsonDateStr)
 {
-    console.log(jsonDateStr)
     let datetime = new Date(jsonDateStr * 1000);
     let datetimeStr = datetime.getUTCFullYear().toString() + "-" +
         datetime.getUTCMonth().toString().padStart(2, '0') + "-" +
