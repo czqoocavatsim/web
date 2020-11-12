@@ -69,10 +69,12 @@
         </table>
     <script>
         $(document).ready(function() {
+            $.fn.dataTable.enum(['C1', 'C3', 'I1', 'I3', 'SUP', 'ADM'])
             $('#rosterTable').DataTable( {
                 "order": [[ 0, "asc" ]]
             } );
         } );
     </script>
+    <script src="https://cdn.datatables.net/plug-ins/1.10.21/sorting/enum.js"></script>
 </div>
 @stop
