@@ -623,6 +623,18 @@ function createMapPointsBoundaries(map) {
     L.polyline(NewYork, { color: '#777', weight: 0.5 }).addTo(map);
 }
 
+function parseTimeStamp(jsonDateStr)
+{
+    console.log(jsonDateStr)
+    let datetime = new Date(jsonDateStr * 1000);
+    let datetimeStr = datetime.getUTCFullYear().toString() + "-" +
+        datetime.getUTCMonth().toString().padStart(2, '0') + "-" +
+        datetime.getUTCDay().toString().padStart(2, '0') + " " +
+        datetime.getUTCHours().toString().padStart(2, '0') + ":" +
+        datetime.getUTCMinutes().toString().padStart(2, '0') + "Z";
+    return datetimeStr;
+}
+
 function checkIfNatProcessed(ident) {
     if (processedNats.indexOf(ident) > -1) {
         return true;
@@ -735,7 +747,7 @@ async function createNatTrackMap()
 
         //validity
         let validityCell = $("<td></td>").text(
-            `${track.validFrom} to ${track.validTo}`
+            `${parseTimeStamp(track.validFrom)} to ${parseTimeStamp(track.validTo)}`
         )
         $(row).append(validityCell)
 
@@ -840,6 +852,20 @@ async function createMap(planes, controllerOnline) {
         ];
         L.polyline(Shanwick, { color: '#777', weight: 0.5 }).addTo(map);
     }
+}
+
+//Create about page map
+async function createAboutPageMap() {
+    const map = L.map('aboutPageMap').setView([55, -30], 3.48);
+    const icon = L.icon({ iconUrl: '/img/oep.png', iconAnchor: [5, 5] });
+
+    var OpenStreetMap_Mapnik = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        maxZoom: 19,
+        attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+    }).addTo(map);
+
+    //Add markers
+    createMapPointsBoundaries(map)
 }
 
 

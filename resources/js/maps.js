@@ -454,6 +454,18 @@ function createMapPointsBoundaries(map) {
     L.polyline(NewYork, { color: '#777', weight: 0.5 }).addTo(map);
 }
 
+function parseTimeStamp(jsonDateStr)
+{
+    console.log(jsonDateStr)
+    let datetime = new Date(jsonDateStr * 1000);
+    let datetimeStr = datetime.getUTCFullYear().toString() + "-" +
+        datetime.getUTCMonth().toString().padStart(2, '0') + "-" +
+        datetime.getUTCDay().toString().padStart(2, '0') + " " +
+        datetime.getUTCHours().toString().padStart(2, '0') + ":" +
+        datetime.getUTCMinutes().toString().padStart(2, '0') + "Z";
+    return datetimeStr;
+}
+
 function checkIfNatProcessed(ident) {
     if (processedNats.indexOf(ident) > -1) {
         return true;
@@ -566,7 +578,7 @@ async function createNatTrackMap()
 
         //validity
         let validityCell = $("<td></td>").text(
-            `${track.validFrom} to ${track.validTo}`
+            `${parseTimeStamp(track.validFrom)} to ${parseTimeStamp(track.validTo)}`
         )
         $(row).append(validityCell)
 
