@@ -9,6 +9,17 @@ var OpenStreetMap_Mapnik = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{
         maxZoom: 19,
         attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
     }).addTo(map);
+    
+function parseTimestamp(jsonDateStr)
+{
+   let datetime = new Date(jsonDateStr);
+   let datetimeStr = datetime.getUTCFullYear().toString() + "-" + 
+       datetime.getUTCMonth().toString().padStart(2, '0') + "-" + 
+       datetime.getUTCDay().toString().padStart(2, '0') + " " + 
+       datetime.getUTCHours().toString().padStart(2, '0') + ":" + 
+       datetime.getUTCMinutes().toString().padStart(2, '0') + "Z";
+   return datetimeStr;
+}
 
 // Gander OEP's
 
@@ -579,9 +590,9 @@ L.polyline(NewYork, { color: '#777', weight: 0.5 }).addTo(map);
 
             //validity
             let validityCol = document.createElement('td');
-            let validFrom = " " + apiJson[track].validFrom;
-            let validTo = apiJson[track].validTo;
-            validityCol.innerHTML = validFrom + " to " + validTo;
+            let validFrom = parseTimestamp(apiJson[track].validFrom);
+            let validTo = parseTimestamp(apiJson[track].validTo);
+            validityCol.innerHTML = " " + validFrom + " to " + validTo;
             row.appendChild(validityCol);
         };
     }
@@ -684,9 +695,9 @@ function createNatTrackMap()
 
             //validity
             let validityCol = document.createElement('td');
-            let validFrom = " " + apiJson[track].validFrom;
-            let validTo = apiJson[track].validTo;
-            validityCol.innerHTML = validFrom + " to " + validTo;
+            let validFrom = parseTimestamp(apiJson[track].validFrom);
+            let validTo = parseTimestamp(apiJson[track].validTo);
+            validityCol.innerHTML = " " + validFrom + " to " + validTo;
             row.appendChild(validityCol);
         };
     }
