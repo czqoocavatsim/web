@@ -96,7 +96,7 @@
                                     </h4>
                                     <p>{{$instructor->staffPageTagline()}}</p>
                                     <p class="mb-0">
-                                        <a href="mailto:{{$instructor->email()}}"><i class="fa fa-envelope"></i>&nbsp;Email</a>&nbsp;&nbsp;•&nbsp;&nbsp;<a href=""  data-toggle="modal" data-target="#viewStaffBio{{$member->id}}"><i class="fas fa-user"></i>&nbsp;Biography</a>
+                                        <a href="mailto:{{$instructor->email()}}"><i class="fa fa-envelope"></i>&nbsp;Email</a>&nbsp;&nbsp;•&nbsp;&nbsp;<a href=""  data-toggle="modal" data-target="#viewInstructorBio{{$instructor->id}}"><i class="fas fa-user"></i>&nbsp;Biography</a>
                                     </p>
                                 </div>
                             </div>
