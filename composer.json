@@ -8,16 +8,16 @@
     "license": "MIT",
     "type": "project",
     "require": {
-        "php": "^7.2",
+        "php": "^7.3",
         "barryvdh/laravel-dompdf": "^0.8.5",
         "erusev/parsedown": "^1.7",
         "fideloper/proxy": "^4.0",
-        "guzzlehttp/guzzle": "^6.3",
+        "guzzlehttp/guzzle": "^7.0.1",
         "intervention/image": "^2.5",
         "laravel-notification-channels/discord": "^1.1",
-        "laravel/framework": "^7.0",
+        "laravel/framework": "^8.0",
         "laravel/tinker": "^2.0",
-        "laravel/ui": "^2.0",
+        "laravel/ui": "^3.0",
         "laravelcollective/html": "6.0.*",
         "lasserafn/php-initial-avatar-generator": "^4.0",
         "league/flysystem-aws-s3-v3": "~1.0",
@@ -34,12 +34,12 @@
         "wohali/oauth2-discord-new": "^1.0"
     },
     "require-dev": {
-        "facade/ignition": "^2.0",
+        "facade/ignition": "^2.3.6",
         "fzaninotto/faker": "^1.4",
         "laravel-shift/blueprint": "^1.6",
         "mockery/mockery": "^1.0",
-        "nunomaduro/collision": "^4.1",
-        "phpunit/phpunit": "^8.5"
+        "nunomaduro/collision": "^5.0",
+        "phpunit/phpunit": "^9.0"
     },
     "autoload": {
         "classmap": [

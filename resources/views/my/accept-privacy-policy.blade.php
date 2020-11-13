@@ -62,8 +62,8 @@
                 </button>
             </div>
             <div class="modal-body">
-                <iframe style="border: none; margin-top: 10px; margin-bottom: 10px; width: 100%; height: 100vh;" src="https://resources.ganderoceanic.com/files/policy/CZQOP3R3_Privacy.pdf"></iframe>
-                If the PDF is not displaying correctly, you can view it directly <a href="https://resources.ganderoceanic.com/files/policy/CZQOP3R3_Privacy.pdf">here.</a>
+                <iframe style="border: none; margin-top: 10px; margin-bottom: 10px; width: 100%; height: 100vh;" src="https://cdn.ganderoceanic.com/resources/files/policy/CZQOP3R3_Privacy.pdf"></iframe>
+                If the PDF is not displaying correctly, you can view it directly <a href="https://cdn.ganderoceanic.com/resources/files/policy/CZQOP3R3_Privacy.pdf">here.</a>
             </div>
         </div>
     </div>

@@ -3,7 +3,7 @@
 @section('description', 'Check out events over the Northern Atlantic supported by CZQO')
 @section('content')
     <div class="card card-image blue rounded-0">
-        <div class="text-white text-left rgba-stylish-light pb-2 pt-5 px-4">
+        <div class="text-white text-left pb-2 pt-5 px-4">
             <div class="container">
                 <div class="py-5">
                     <h1 class="font-weight-bold" style="font-size: 3em;">Events</h1>
