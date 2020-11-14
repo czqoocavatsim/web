@@ -95,12 +95,6 @@ class MyCzqoController extends Controller
         //Get input
         $input = $request->get('bio');
 
-        //Run through profanity filter
-        $check = new Check();
-        if ($check->hasProfanity($input)) {
-            return redirect()->back()->withInput()->with('error-modal', 'Profanity was detected in your input, please remove it.');
-        }
-
         //No swear words.. give them the new bio
         $user->bio = $input;
         $user->save();

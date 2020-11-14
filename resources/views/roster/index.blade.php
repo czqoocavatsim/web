@@ -16,7 +16,7 @@
     </div>
 </div>
 <div class="container py-4">
-        <p class="text-muted">Please note that the 'full name' field on this roster is dependent on the controller's individual name settings on the CZQO Core system.<br><i class="fas fa-certificate"></i> = Solo Certification</p>
+        <p class="text-muted">Please note that the 'full name' field on this roster is dependent on the controller's name settings on the CZQO Core system.<br><i class="fas fa-certificate"></i> = Solo Certification</p>
         <table id="rosterTable" class="table table-hover">
             <thead>
                 <tr>
