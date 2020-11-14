@@ -26,6 +26,7 @@ Route::view('/pilots', 'pilots.index');
 Route::view('/pilots/oceanic-clearance', 'pilots.oceanic-clearance');
 Route::view('/pilots/position-report', 'pilots.position-report');
 Route::view('/pilots/tracks', 'pilots.tracks');
+Route::view('/pilots/tracks/event', 'pilots.event-tracks');
 Route::get('/policies', 'Publications\PublicationsController@policies')->name('policies');
 Route::get('/privacy', function() { return redirect(route('policies'), 301); })->name('privacy');
 Route::get('/events', 'Events\EventController@index')->name('events.index');

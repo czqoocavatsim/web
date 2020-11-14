@@ -758,6 +758,101 @@ async function createNatTrackMap()
     createMapPointsBoundaries(map)
 }
 
+//Create Event NAT Tracks map
+async function createEventTrackMap()
+{
+    //Create map
+    const map = L.map('map', { minZoom: 4, maxZoom: 7 }).setView([52, -35], 1);
+
+    //Define table
+    let table = $("#natTrackTable")
+
+    //Create OSM Layer
+    var OpenStreetMap_Mapnik = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        maxZoom: 19,
+        attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+    }).addTo(map);
+
+    //Get tracks
+    let endpoint = "https://tracks.ganderoceanic.com/event"
+    const response = await fetch(endpoint)
+
+    //Create data object
+    const data = await response.json()
+
+    //Go through each NAT Track
+    data.forEach(track => {
+        //Create array of points latitudes/longitudes
+        let pointsLatLon = []
+        track.route.forEach(point => {
+            //Add point to array
+            pointsLatLon.push([point.latitude, point.longitude])
+            //Create map marker
+            createMapTrackPointMarker(point, track, map)
+        })
+
+        //Get colour for the polyline depending on track direction
+        let colour = '#00000';
+        if (track.direction == 1) {
+            colour = '#1c5fc9'
+        } else {
+            colour = '#c92d1c'
+        }
+
+        //Create polylines
+        let line = new L.Polyline(pointsLatLon, {
+            color: colour,
+            weight: 2,
+            opacity: 1,
+            smoothFactor: 1
+        }).addTo(map)
+
+        //Create row
+        let row = $("<tr></tr>")
+
+        //Add track id
+        let idCell = $("<td scope='row'></td>").text(track.id)
+        $(row).append(idCell)
+
+        //Add points
+        let pointsText = []
+        track.route.forEach(point => {
+            pointsText.push(" " + point.name)
+        })
+        let pointsCell = $("<td></td>").text(pointsText)
+        $(row).append(pointsCell)
+
+        //Add direction
+        let directionCell = $("<td></td>")
+        if (track.direction == 1) {
+            $(directionCell).text('Westbound')
+        } else {
+            $(directionCell).text('Eastbound')
+        }
+        $(row).append(directionCell)
+
+        //Add levels
+        let levelsText = []
+        track.flightLevels.forEach(level => {
+            levelsText.push(" " + level / 100)
+        })
+        let levelsCell = $("<td></td>").text(levelsText)
+        $(row).append(levelsCell)
+
+        //validity
+        let validityCell = $("<td></td>").text(
+            `${parseTimeStamp(track.validFrom)} to ${parseTimeStamp(track.validTo)}`
+        )
+        $(row).append(validityCell)
+
+        //Add row to table
+        $(table).append(row)
+    })
+
+    //Add points and boundaries
+    createMapPointsBoundaries(map)
+}
+
 //Create big map
 async function createMap(planes, controllerOnline) {
     //Create map and layer
