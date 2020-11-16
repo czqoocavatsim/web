@@ -119,9 +119,6 @@
                 <p style="font-size: 1.2em;" class="mt-3">
                     If you believe there has been an error, please contact us so that we can investigate.
                 </p>
-                <div class="d-flex flex-row">
-                    <a href="{{route('TODO: TicketURL', ['create' => 'yes', 'department' => 'firchief', 'title' => 'Issue with hour requirement check on application system'])}}" class="btn bg-czqo-blue-light" role="button">Create a support ticket</a>
-                </div>
             </div>
         </div>
     </div>
@@ -146,14 +143,36 @@
                 <p style="font-size: 1.2em;" class="mt-3">
                     If you believe there has been an error, please contact us so that we can investigate.
                 </p>
-                <div class="d-flex flex-row">
-                    <a href="{{route('TODO: TicketURL', ['create' => 'yes', 'department' => 'firchief', 'title' => 'Issue with rating requirement check on application system'])}}" class="btn bg-czqo-blue-light" role="button">Create a support ticket</a>
-                </div>
             </div>
         </div>
     </div>
 </div>
 
+@break
+
+@case('shanwick')
+
+<div class="jumbtron" style=" background-size: cover; background-repeat: no-repeat; background-image:url({{asset('img/home-screen-backgrounds/czqosquarelightblue.png')}}); background-position: right;">
+    <div class="container py-5">
+        <div class="row">
+            <div class="col-md-5">
+                <h1 class="font-weight-bold blue-text">You are already certified to control through VATUK</h1>
+                <p style="font-size: 1.2em;" class="mt-3">
+                    Thank you for showing your interest in becoming a Gander Oceanic controller. As we have detected you are already endorsed to control Shanwick/Gander Oceanic through the VATUK Training Department, you do not require a Gander Oceanic endorsement.
+                </p>
+                <p style="font-size: 1.2em;" class="mt-3">
+                    VATUK certified controllers can enjoy the same participation in Gander Oceanic's community and events as those certified here. If you are unable to access resources for certified controllers, please contact us.
+                </p>
+                <p style="font-size: 1.2em;" class="mt-3">
+                    If you believe there has been an error, please contact us so that we can investigate.
+                </p>
+                <p style="font-size: 1.2em;" class="mt-3">
+                    <a class="font-weight-bold text-body" href="https://cts.vatsim.uk/home/validations.php?view=16">View VATUK Shanwick roster &nbsp;&nbsp;<i class="fas fa-arrow-right blue-text"></i></a>
+                </p>
+            </div>
+        </div>
+    </div>
+</div>
 @break
 
 @endswitch

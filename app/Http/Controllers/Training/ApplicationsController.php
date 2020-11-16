@@ -23,6 +23,7 @@ use Illuminate\Http\Request;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Notification;
@@ -78,6 +79,22 @@ class ApplicationsController extends Controller
         if ($hoursTotal < 80)
         {
             return view('training.applications.apply', compact('hoursTotal'))->with('allowed', 'hours');
+        }
+
+        //Check Shanwick roster
+        $shanwickRoster = json_decode(Cache::remember('shanwickroster', 86400, function () {
+            $ch = curl_init();
+            curl_setopt($ch, CURLOPT_URL, 'https://www.vatsim.uk/api/validations?position=EGGX');
+            curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+            $output = curl_exec($ch);
+            curl_close($ch);
+            return $output;
+        }));
+
+        foreach ($shanwickRoster->validated_members as $member) {
+            if ($member->id == Auth::id()) {
+                return view('training.applications.apply')->with('allowed', 'shanwick');
+            }
         }
 
         return view('training.applications.apply')->with('allowed', 'true');
