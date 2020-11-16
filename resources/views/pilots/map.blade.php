@@ -16,7 +16,7 @@
             <div class="modal-content">
                 <div class="modal-body p-4">
                     <div class="d-flex justify-content-center align-items-center">
-                        <p class="pt-3 pr-2">This map updates approx. every 15 minutes with VATSIM network data, NAT tracks, and online sectors. It should not be taken as an up to date reflection of VATSIM.
+                        <p class="pt-3 pr-2">This map updates approx. every 1 minute with VATSIM network data, NAT tracks, and online sectors. It should not be taken as an up to date reflection of VATSIM.
                         </p>
                     </div>
                     <button type="button" class="btn btn-light" data-dismiss="modal">Close</button>
