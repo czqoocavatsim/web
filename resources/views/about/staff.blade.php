@@ -23,8 +23,27 @@
             @if ($g->slug == 'seniorstaff')
                 <div class="row">
                     @foreach($g->members as $member)
-                        <div class="@if($member->shortform == 'ocachief') col-md-12 @else col-md-6 @endif mb-3">
-                            <div class="card shadow-none grey lighten-4 p-4">
+                        @if($member->position == 'ocachief')
+                        <div class="col-md-12 mb-3">
+                            <div class="card shadow-none grey lighten-4 p-4" style="height: 100%;">
+                                <img @if(!$member->vacant()) src="{{$member->user->avatar()}}" @else src="https://cdn.ganderoceanic.com/resources/user.png" @endif class="mx-auto" style="height: 120px; width:120px;margin-bottom: 15px; border-radius: 50%;">      
+                                <h4 class="font-weight-bold">
+                                    @if($member->vacant())
+                                    Vacant
+                                    @else
+                                    {{$member->user->fullname('FL')}}
+                                    @endif
+                                </h4>
+                                <h5>{{$member->position}}</h5>
+                                <p>{{$member->description}}</p>
+                                <p class="mb-0">
+                                    <a href="mailto:{{$member->email}}"><i class="fa fa-envelope"></i>&nbsp;Email</a>@if(!$member->vacant())&nbsp;&nbsp;•&nbsp;&nbsp;<a href=""  data-toggle="modal" data-target="#viewStaffBio{{$member->id}}"><i class="fas fa-user"></i>&nbsp;Biography</a>@endif
+                                </p>
+                            </div>
+                        </div>
+                        @else
+                        <div class="col-md-6 mb-3">
+                            <div class="card shadow-none grey lighten-4 p-4" style="height: 100%;">
                                 <div class="d-flex flex-row">
                                     @if(!$member->vacant())
                                     <img src="{{$member->user->avatar()}}" style="height: 80px; width:80px;margin-right: 15px; border-radius: 50%;">
@@ -48,13 +67,14 @@
                                 </div>
                             </div>
                         </div>
+                        @endif 
                     @endforeach
                 </div>
             @else
             <div class="row">
                 @foreach($g->members as $member)
                     <div class="col-md-6 mb-3">
-                        <div class="card shadow-none grey lighten-4 p-4">
+                        <div class="card shadow-none grey lighten-4 p-4" style="height: 100%;">
                             <div class="d-flex flex-row">
                                 @if(!$member->vacant())
                                 <img src="{{$member->user->avatar()}}" style="height: 80px; width:80px;margin-right: 15px; border-radius: 50%;">
@@ -87,7 +107,7 @@
             <div class="row">
                 @foreach ($instructors as $instructor)
                     <div class="col-md-6 mb-3">
-                        <div class="card shadow-none grey lighten-4 p-4">
+                        <div class="card shadow-none grey lighten-4 p-4" style="height: 100%;">
                             <div class="d-flex flex-row">
                                 <img src="{{$instructor->user->avatar()}}" style="height: 80px; width:80px;margin-right: 15px; border-radius: 50%;">
                                 <div class="d-flex flex-column">
