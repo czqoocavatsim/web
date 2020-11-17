@@ -329,6 +329,10 @@ body[data-theme="dark"] .form-control {
     color: #eee !important;
 }
 
+body[data-theme="dark"] .form-control > option {
+    color: #000!important;
+}
+
 body[data-theme="dark"]  ::placeholder {
     color: rgb(184, 184, 184) !important;
     opacity: 1;
