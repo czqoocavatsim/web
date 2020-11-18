@@ -1,19 +1,22 @@
-@extends('layouts.master')
-
-@section('navbarprim')
-
-    @parent
-
-@stop
+@extends('layouts.master', ['solidNavBar' => false])
 
 @section('title', 'ATC Resources - ')
 @section('description', 'Sector files and resources for Gander controllers')
 
 @section('content')
-<div class="container" style="margin-top: 20px;">
-    <div class="container" style="margin-top: 20px;">
-    <h1 class="blue-text font-weight-bold mt-2">ATC Resources</h1>
-    <hr>
+<div class="card card-image blue rounded-0">
+    <div class="text-white text-left pb-2 pt-5 px-4">
+        <div class="container">
+            <div class="py-5">
+                <h1 class="font-weight-bold" style="font-size: 3em;">ATC Resources</h1>
+                <p style="font-size: 1.2em;" class="mt-3 mb-0">
+                    Official documents and files for use when controlling Gander Oceanic
+                </p>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="container py-4">
     <div class="list-group list-group-flush">
         @foreach ($resources as $resource)
         @if($resource->atc_only)
@@ -37,12 +40,11 @@
                         </button>
                     </div>
                     <div class="modal-body">
-                        <small>Description</small><br/>
                         {{$resource->html()}}
                     </div>
                     <div class="modal-footer">
+                        <button type="button" class="btn btn-light" data-dismiss="modal">Dismiss</button>
                         <a href="{{$resource->url}}" role="button" class="btn btn-success">View</a>
-                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Dismiss</button>
                     </div>
                 </div>
             </div>
@@ -81,6 +83,5 @@
         @endif
         @endforeach
     </div>
-    <br/>
 </div>
-@stop
+@endsection

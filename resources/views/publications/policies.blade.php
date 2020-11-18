@@ -8,14 +8,14 @@
             <div class="container">
                 <div class="py-5">
                     <h1 class="font-weight-bold" style="font-size: 3em;">Policies</h1>
+                    <p style="font-size: 1.2em;" class="mt-3 mb-0">
+                        Policies and guidelines for operations in Gander Oceanic. These policies may be updated from time to time.
+                    </p>
                 </div>
             </div>
         </div>
     </div>
     <div class="container py-4">
-        <p style="font-size: 1.2em;">
-            Policies and guidelines for operations in Gander Oceanic. These policies may be updated from time to time.
-        </p>
         <div class="list-group list-group-flush">
             @foreach ($policies as $policy)
             <div class="list-group-item">

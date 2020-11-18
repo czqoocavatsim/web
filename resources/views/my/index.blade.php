@@ -152,7 +152,7 @@
                             <div>
                                 <h5 class="card-title">
                                     <a href="" data-toggle="modal" data-target="#changeDisplayNameModal" class="text-dark text-decoration-underline">
-                                        {{ Auth::user()->fullName('FLC') }}
+                                        {{ Auth::user()->fullName('FLC') }} <i style="font-size: 0.8em;" class="ml-1 far fa-edit text-muted"></i>
                                     </a>
                                 </h5>
                                 <h6 class="card-subtitle mb-2 text-muted">
@@ -614,11 +614,13 @@
             <form method="POST" action="{{route('users.changedisplayname')}}">
             <div class="modal-body">
                     @csrf
+                    <p>Your display name will display everywhere on Gander Oceanic, including the controller roster. It is advised to use the same display name that you would use on the VATSIM network. All display names must comply with section A4 of the VATSIM Code of Conduct.</p>
                     <div class="form-group">
-                        <label>Display first name</label>
-                        <input type="text" class="form-control" value="{{Auth::user()->display_fname}}" name="display_fname" id="input_display_fname">
-                        <br/>
-                        <a class="btn bg-czqo-blue-light btn-sm" role="button" onclick="resetToCertFirstName()"><span style="color: #000">Reset to your CERT first name</span></a>
+                        <div class="md-form">
+                            <input type="text" class="form-control" value="{{Auth::user()->display_fname}}" name="display_fname" id="input_display_fname">
+                            <label for="input_display_fname" class="active">Display first name</label>
+                        </div>
+                        <a class="btn btn-light btn-sm" role="button" onclick="resetToCertFirstName()"><span style="color: #000">Reset to your CERT first name</span></a>
                         <script>
                             function resetToCertFirstName() {
                                 $("#input_display_fname").val("{{Auth::user()->fname}}")
@@ -626,11 +628,11 @@
                         </script>
                     </div>
                     <div class="form-group">
-                        <label>Format</label>
+                        <label class="text-muted">Format</label>
                         <select name="format" class="custom-select">
-                            <option value="showall">Show first name, last name, and CID (e.g. {{Auth::user()->display_fname}} {{Auth::user()->lname}} {{Auth::id()}})</option>
-                            <option value="showfirstcid">Show first name and CID (e.g. {{Auth::user()->display_fname}} {{Auth::id()}})</option>
-                            <option value="showcid">Show CID only (e.g. {{Auth::id()}})</option>
+                            <option value="showall">First name, last name, and CID ({{Auth::user()->display_fname}} {{Auth::user()->lname}} {{Auth::id()}})</option>
+                            <option value="showfirstcid">First name and CID ({{Auth::user()->display_fname}} {{Auth::id()}})</option>
+                            <option value="showcid">CID only ({{Auth::id()}})</option>
                         </select>
                     </div>
             </div>
