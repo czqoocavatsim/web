@@ -25,7 +25,7 @@
                     @foreach($g->members as $member)
                         @if($member->shortform == 'ocachief')
                         <div class="col-md-12 mb-3">
-                            <div class="card shadow-none grey lighten-4 p-4" style="height: 100%;">
+                            <div class="card shadow-none grey lighten-4 p-4 text-center" style="height: 100%;">
                                 <img @if(!$member->vacant()) src="{{$member->user->avatar()}}" @else src="https://cdn.ganderoceanic.com/resources/user.png" @endif class="mx-auto" style="height: 120px; width:120px;margin-bottom: 15px; border-radius: 50%;">
                                 <h4 class="font-weight-bold">
                                     @if($member->vacant())
