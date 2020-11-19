@@ -41,6 +41,7 @@
                                 <option value="roster">Controller roster</option>
                                 <option value="staff">Staff members</option>
                                 <option value="students">Current students</option>
+                                <option value="instructors">Instructors</option>
                             </select>
                         </div>
                     </div>

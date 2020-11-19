@@ -19,7 +19,7 @@
 </div>
 <ul class="list-unstyled mt-3">
     <li class="mb-2">
-        <a href="#" class="blue-text" style="font-size: 1.1em;"><i class="fas fa-plus"></i>&nbsp;&nbsp;Add an instructor</a>
+        <a href="#" data-toggle="modal" data-target="#addInstructorModal" class="blue-text" style="font-size: 1.1em;"><i class="fas fa-plus"></i>&nbsp;&nbsp;Add an instructor</a>
     </li>
     @can('send announcements')
     <li>
@@ -27,4 +27,62 @@
     </li>
     @endcan
 </ul>
+
+<!--Start add instructor modal-->
+<div class="modal fade" id="addInstructorModal" tabindex="-1" role="dialog">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Add Instructor</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <form action="{{route('training.admin.instructing.instructors.add')}}" method="POST">
+                @csrf
+                <div class="modal-body">
+                    @if($errors->addInstructorErrors->any())
+                    <div class="alert alert-danger">
+                        <h4>There were errors</h4>
+                        <ul class="pl-0 ml-0 list-unstyled">
+                            @foreach ($errors->addInstructorErrors->all() as $error)
+                                <li>{{ $error }}</li>
+                            @endforeach
+                        </ul>
+                    </div>
+                    @endif
+                    <div class="form-group">
+                        <label for="">Their CID</label>
+                        <input required type="text" value="{{old('cid')}}" name="cid" maxlength="9" id="" class="form-control" placeholder="1300001">
+                    </div>
+                    <div class="form-group">
+                        <label for="">Their staff email addresss</label>
+                        <input required type="email" value="{{old('staff_email')}}" name="staff_email" class="form-control" placeholder="j.doe@ganderoceanic.com">
+                    </div>
+                    <p>Adding this person as an instructor will give them automatic access to all resources and administrative tools. Are you sure the information entered is correct?</p>
+                    <div class="custom-control custom-checkbox">
+                        <input type="checkbox" class="custom-control-input" required name="agree" id="agree">
+                        <label class="custom-control-label" for="agree">I'm sure (required)</label>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-light" data-dismiss="modal">Close</button>
+                    <input type="submit" class="btn btn-primary" value="Add">
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+<!--End add instructor modal-->
+
+<script>
+    $.urlParam = function(name){
+        var results = new RegExp('[\?&]' + name + '=([^&#]*)').exec(window.location.href);
+        return results[1] || 0;
+    }
+
+    if ($.urlParam('addInstructorModal') == '1') {
+        $("#addInstructorModal").modal();
+    }
+</script>
 @endsection

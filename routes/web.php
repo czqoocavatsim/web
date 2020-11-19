@@ -217,6 +217,7 @@ Route::group(['middleware' => 'auth'], function () {
 
                         //Instructors
                         Route::get('/instructors', 'Training\InstructingController@instructors')->name('instructing.instructors');
+                        Route::post('/instructors/add', 'Training\InstructingController@addInstructor')->name('instructing.instructors.add');
                         Route::get('/instructors/{cid}', 'Training\InstructingController@viewInstructor')->name('instructing.instructors.view');
                     });
                 });

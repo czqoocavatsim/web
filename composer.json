@@ -25,6 +25,7 @@
         "misterphilip/maintenance-mode": "~2.0",
         "mofodojodino/profanity-filter": "^1.3",
         "restcord/restcord": "dev-master",
+        "s-ichikawa/laravel-sendgrid-driver": "^3.0",
         "sentry/sentry-laravel": "1.7.1",
         "skymeyer/vatsimphp": "^2.0",
         "socialiteproviders/discord": "^2.0",
