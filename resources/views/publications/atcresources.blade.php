@@ -70,12 +70,11 @@
                         </button>
                     </div>
                     <div class="modal-body">
-                        <small>Description</small><br/>
                         {{$resource->html()}}
                     </div>
                     <div class="modal-footer">
+                        <button type="button" class="btn btn-light" data-dismiss="modal">Dismiss</button>
                         <a href="{{$resource->url}}" role="button" class="btn btn-success">View</a>
-                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Dismiss</button>
                     </div>
                 </div>
             </div>

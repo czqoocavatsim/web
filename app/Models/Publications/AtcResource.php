@@ -2,6 +2,7 @@
 
 namespace App\Models\Publications;
 
+use App\Models\Users\User;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\HtmlString;
 use Parsedown;
@@ -15,8 +16,15 @@ class AtcResource extends Model
         'user_id', 'title', 'description', 'url', 'atc_only'
     ];
 
+    protected $hidden = ['id'];
+
     public function html()
     {
         return new HtmlString(app(Parsedown::class)->text($this->description));
+    }
+
+    public function user()
+    {
+        return $this->belongsTo(User::class);
     }
 }

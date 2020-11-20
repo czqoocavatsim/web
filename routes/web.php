@@ -228,11 +228,17 @@ Route::group(['middleware' => 'auth'], function () {
 
             //Publications
             Route::prefix('publications')->group(function () {
-                Route::group(['middleware' => ['permission:edit atc resources|edit policies']], function () {
+                Route::group(['middleware' => ['permission:edit policies']], function () {
                     Route::get('/policies', 'Publications\PublicationsController@adminPolicies')->name('publications.policies');
                     Route::post('/policies/create', 'Publications\PublicationsController@createPolicyPost')->name('publications.policies.create.post')->middleware('can:edit policies');
                     Route::post('/policies/{id}/edit', 'Publications\PublicationsController@editPolicyPost')->name('publications.policies.edit.post')->middleware('can:edit policies');
                     Route::get('/policies/{id}/delete', 'Publications\PublicationsController@deletePolicy')->name('publications.policies.delete')->middleware('can:edit policies');
+                });
+                Route::group(['middleware' => ['permission:edit atc resources']], function () {
+                    Route::get('/atc-resources', 'Publications\PublicationsController@adminAtcResources')->name('publications.atc-resources');
+                    Route::post('/atc-resources/create', 'Publications\PublicationsController@createAtcResourcePost')->name('publications.atc-resources.create.post')->middleware('can:edit atc resources');
+                    Route::post('/atc-resources/{id}/edit', 'Publications\PublicationsController@editAtcResourcePost')->name('publications.atc-resources.edit.post')->middleware('can:edit atc resources');
+                    Route::get('/atc-resources/{id}/delete', 'Publications\PublicationsController@deleteAtcResource')->name('publications.atc-resources.delete')->middleware('can:edit atc resources');
                 });
             });
 

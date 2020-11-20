@@ -123,4 +123,106 @@ class PublicationsController extends Controller
         //Return
         return redirect()->route('publications.policies')->with('info', 'Policy deleted');
     }
+
+    public function adminAtcResources()
+    {
+        //Find ATC Resources
+        $atcResources = AtcResource::all()->sortBy('id');
+
+        //Return view
+        return view('admin.publications.atc-resources.index', compact('atcResources'));
+    }
+
+    public function createAtcResourcePost(Request $request)
+    {
+        //Define validator messages
+        $messages = [
+            'title.required' => 'A title is required.',
+            'title.max' => 'A title may not be more than 100 characters long.',
+            'description.required' => 'A description is required.',
+            'visibility.required' => 'A visibility option is required.',
+            'url.required' => 'A PDF URL is required.',
+        ];
+
+        //Validate
+        $validator = Validator::make($request->all(), [
+            'title' => 'required|max:100',
+            'description' => 'required',
+            'visibility' => 'required',
+            'url' => 'required',
+        ], $messages);
+
+        //Redirect if fails
+        if ($validator->fails()) {
+            return redirect()->route('publications.atc-resources', ['createAtcResourceModal' => 1])->withInput()->withErrors($validator, 'createAtcResourceErrors');
+        }
+
+        //Create object
+        $atcResource = new AtcResource([
+            'user_id' => Auth::id(),
+            'title' => $request->get('title'),
+            'description' => $request->get('description'),
+            'atc_only' => $request->get('visibility'),
+            'url' => $request->get('url')
+        ]);
+
+        //Save it
+        $atcResource->save();
+
+        //Redirect
+        return redirect()->route('publications.atc-resources')->with('success', 'ATC resource created!');
+    }
+
+    public function editAtcResourcePost(Request $request, $id)
+    {
+        //Get polic
+        $atcResource = AtcResource::whereId($id)->firstOrFail();
+
+        //Define validator messages
+        $messages = [
+            'title.required' => 'A title is required.',
+            'title.max' => 'A title may not be more than 100 characters long.',
+            'description.required' => 'A description is required.',
+            'visibility.required' => 'A visibility option is required.',
+            'url.required' => 'A PDF URL is required.',
+        ];
+
+        //Validate
+        $validator = Validator::make($request->all(), [
+            'title' => 'required|max:100',
+            'description' => 'required',
+            'visibility' => 'required',
+            'url' => 'required',
+        ], $messages);
+
+
+        //Redirect if fails
+        if ($validator->fails()) {
+            return redirect()->route('publications.atc-resources', ["editAtcResource{$atcResource->id}Modal" => 1])->withInput()->withErrors($validator, 'editAtcResourceErrors');
+        }
+
+        //Edit object
+        $atcResource->title = $request->get('title');
+        $atcResource->description = $request->get('description');
+        $atcResource->atc_only = $request->get('visibility');
+        $atcResource->url = $request->get('url');
+
+        //Save it
+        $atcResource->save();
+
+        //Redirect
+        return redirect()->route('publications.atc-resources')->with('success', 'ATC resource edited!');
+    }
+
+    public function deleteAtcResource($id)
+    {
+        //Find resource
+        $atcResource = AtcResource::whereId($id)->firstOrFail();
+
+        //Delete it
+        $atcResource->delete();
+
+        //Return
+        return redirect()->route('publications.atc-resources')->with('info', 'ATC resource deleted');
+    }
 }
