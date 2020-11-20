@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Roster;
 
 use App\Http\Controllers\Controller;
+use App\Models\Network\SessionLog;
 use App\Models\News\HomeNewControllerCert;
 use App\Models\Roster\RosterMember;
 use App\Models\Roster\SoloCertification;
@@ -130,6 +131,10 @@ class RosterController extends Controller
         //Delete and its dependencies
         foreach (SoloCertification::where('roster_member_id', $rosterMember->id)->get() as $cert) {
             $cert->delete();
+        }
+        foreach (SessionLog::where('roster_member_id', $rosterMember->id)->get() as $session) {
+            $session->roster_member_id = 1;
+            $session->save();
         }
         $rosterMember->delete();
 
