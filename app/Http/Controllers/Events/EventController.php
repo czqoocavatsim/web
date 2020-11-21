@@ -9,6 +9,7 @@ use App\Models\Events\Event;
 use App\Models\Events\EventUpdate;
 use App\Models\Publications\UploadedImage;
 use App\Models\Settings\AuditLogEntry;
+use App\Notifications\Events\NewControllerSignUp;
 use Illuminate\Http\Request;
 use Auth;
 use Carbon\Carbon;
@@ -16,6 +17,7 @@ use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Str;
 use RestCord\DiscordClient;
+use Spatie\Permission\Models\Role;
 
 class EventController extends Controller
 {
@@ -63,13 +65,22 @@ class EventController extends Controller
         ]);
         $application->save();
 
+        //Send email notification to Marketing Team
+        $marketingTeam = Role::whereName('Marketing Team')->first();
+        if ($marketingTeam)
+        {
+            foreach ($marketingTeam->users as $user) {
+                $user->notify(new NewControllerSignUp($application));
+            }
+        }
+
         //Discord client
         $discord = new DiscordClient(['token' => config('services.discord.token')]);
 
         //Send notification to marketing
         $discord->channel->createMessage([
             'channel.id' => intval(config('services.discord.marketing')),
-            "content" => "A controller has applied to control for " . $application->event->name,
+            "content" => "A controller has signed up to control for " . $application->event->name,
             'embed' => [
                 "title" => $application->user->fullName('FLC'),
                 "url" => route('events.admin.view', $application->event->slug),
@@ -88,7 +99,7 @@ class EventController extends Controller
                     ],
                 ]
             ]
-        ]);
+        ]); 
 
         return redirect()->back()->with('success', 'Submitted!');
     }
