@@ -37,6 +37,16 @@
                     </li>
                 </a>
                 @endcan
+                @can('edit atc resources')
+                <a class="myczqo-tab {{Request::is('admin/publications/custom-pages') || Request::is('admin/publications/custom-pages/*') ? 'active' : ''}} no-click" data-myczqo-tab="none" href="{{route('publications.custom-pages')}}">
+                    <li class="w-100">
+                        <div class="d-flex h-100 flex-row justify-content-left align-items-center">
+                            <i style="font-size: 1.6em; margin-right: 10px;" class="fas fa-file-alt fa-fw"></i>
+                            <span style="font-size: 1.1em;">Custom Pages</span>
+                        </div>
+                    </li>
+                </a>
+                @endcan
             </ul>
         </div>
         <div class="col-md-9">

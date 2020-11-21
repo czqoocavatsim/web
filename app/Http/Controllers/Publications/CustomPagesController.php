@@ -25,13 +25,27 @@ class CustomPagesController extends Controller
         //Permissions
         if (count($page->permissions) > 0)
         {
-            dd($page->permissions);
+            if (!Auth::check()) {
+                return redirect()->route('auth.connect.login');
+            }
+
+            $hasPermission = false;
+
+            foreach ($page->permissions as $perm)
+            {
+                $role = $perm->role;
+                if (Auth::user()->hasRole($role) || Auth::user()->hasAnyRole('Senior Staff|Administrator')) {
+                    $hasPermission = true;
+                }
+            }
+
+            if (!$hasPermission) {
+                abort(403, 'Insufficent role to access page. If you believe you should have access, contact the Webmaster.');
+            }
         }
-        else
-        {
-            //Return the view
-            return view('publications/custom-page', compact('page'));
-        }
+
+        //Return the view
+        return view('publications/custom-page', compact('page'));
     }
 
     //Repsonse submission
@@ -62,5 +76,26 @@ class CustomPagesController extends Controller
 
         //Response
         return response()->json(['message' => 'Sent'], 200);
+    }
+
+    /*
+    Admin
+    */
+    public function admin()
+    {
+        //Get all custom pages
+        $pages = CustomPage::all();
+
+        //Return view
+        return view('admin.publications.custom-pages.index', compact('pages'));
+    }
+
+    public function adminViewPage($page_slug)
+    {
+        //Find page
+        $page = CustomPage::where('slug', $page_slug)->firstOrFail();
+
+        //Return view
+        return view('admin.publications.custom-pages.view', compact('page'));
     }
 }
