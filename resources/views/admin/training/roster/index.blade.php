@@ -18,6 +18,7 @@
         <th>Name</th>
         <th>Status</th>
         <th>Active</th>
+        <th>Action</th>
     </thead>
     <tbody>
         @foreach ($roster as $r)
@@ -60,6 +61,9 @@
                         Inactive
                     </td>
                 @endif
+                <td>
+                    <a href="{{route('training.admin.roster.viewcontroller', $r->cid)}}"><i class="fas fa-eye"></i>&nbsp;View</a>
+                </td>
             </tr>
         @endforeach
     </tbody>

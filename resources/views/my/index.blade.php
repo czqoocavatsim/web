@@ -433,7 +433,7 @@
                             </a>
                         </li>
                         <li class="mb-2">
-                            <a href="{{(route('training.admin.dashboard'))}}" style="text-decoration:none;">
+                            <a href="{{(route('publications.atc-resources'))}}" style="text-decoration:none;">
                                 <span class="blue-text">
                                     <i class="fas fa-chevron-right"></i>
                                 </span>
