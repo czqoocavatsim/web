@@ -62,7 +62,7 @@
                             <span style="font-size: 1.1em;">Calendar</span>
                         </div>
                     </li>
-                </a>
+                </a> --}}
                 <a class="myczqo-tab {{Request::is('admin/training/instructing/instructors') || Request::is('admin/training/instructing/instructors/*') ? 'active' : ''}} no-click" data-myczqo-tab="none" href="{{route('training.admin.instructing.instructors')}}">
                     <li class="w-100">
                         <div class="d-flex h-100 flex-row justify-content-left align-items-center">
