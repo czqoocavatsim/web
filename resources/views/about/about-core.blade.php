@@ -17,7 +17,7 @@
                 <a href="https://github.com/czqoocavatsim/czqo-core/releases" class="text-body d-flex flex-row align-items-center">
                     <i class="fas fa-history fa-2x mr-2"></i> Change Log
                 </a>
-                <a href="https://canary.ganderoceanic.com" class="text-body d-flex flex-row align-items-center">
+                <a href="https://dev.ganderoceanic.com" class="text-body d-flex flex-row align-items-center">
                     <i class="fas fa-2x mr-2 fa-feather-alt"></i> Beta
                 </a>
             </div>
