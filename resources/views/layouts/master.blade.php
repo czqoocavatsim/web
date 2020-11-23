@@ -66,7 +66,7 @@
         <script src="https://unpkg.com/leaflet@1.4.0/dist/leaflet.js" integrity="sha512-QVftwZFqvtRNi0ZyCtsznlKSWOStnDORoefr1enyq5mVL4tmKB3S/EnC3rRJcxCPavG10IcrVGSmPh6Qw5lwrg==" crossorigin=""></script>
         <script src="{{asset('/js/leaflet.rotatedMarker.js')}}"></script>
         <!--TinyMCE-->
-        <script src='https://cloud.tinymce.com/5/tinymce.min.js?apiKey=k2zv68a3b4m423op71lnifx4a9lm0a2ee96o58zafhrdnddb'></script>
+        <script src="https://cdn.tiny.cloud/1/f3uqjs9q4n1tj4k8m8xwcz4yptz6wvgw2mn1jg2cf4iuaqkw/tinymce/5/tinymce.min.js" referrerpolicy="origin"></script>
         <!--DataTables-->
         <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/v/bs4/dt-1.10.18/datatables.min.css"/>
         <script type="text/javascript" src="https://cdn.datatables.net/v/bs4/dt-1.10.18/datatables.min.js"></script>
