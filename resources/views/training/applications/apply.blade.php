@@ -47,7 +47,7 @@
                 <span class="label">Why do you wish to be an oceanic controller?</span>
             </a>
             <div class="step-content w-75 grey lighten-3">
-                <p>Enter your reason here. We want to here about your motivation for choosing Gander, and what you can bring to our OCA.</p>
+                <p>Enter your reason here. We want to hear about your motivation for choosing Gander, and what you can bring to our OCA.</p>
                 {!! Form::textarea('applicant_statement', null, ['class' => 'w-100', 'id' => 'justificationField', 'onkeyup' => 'countChar(this)']) !!}
                 <script>
                     var simplemde = new SimpleMDE({ element: document.getElementById("justificationField"), toolbar:false });
