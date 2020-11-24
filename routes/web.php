@@ -211,6 +211,12 @@ Route::group(['middleware' => 'auth'], function () {
                         Route::post('/instructors/{cid}/edit', 'Training\InstructingController@editInstructor')->name('instructing.instructors.edit');
                         Route::get('/instructors/{cid}', 'Training\InstructingController@viewInstructor')->name('instructing.instructors.view');
                         Route::get('/instructors/{cid}/remove', 'Training\InstructingController@removeInstructor')->name('instructing.instructors.remove');
+
+                        //Students
+                        Route::get('/students', 'Training\InstructingController@students')->name('instructing.students');
+                        Route::post('/students/add', 'Training\InstructingController@addStudent')->name('instructing.students.add');
+                        Route::get('/students/{cid}', 'Training\InstructingController@viewStudent')->name('instructing.students.view');
+                        Route::get('/students/{cid}/remove', 'Training\InstructingController@removeStudent')->name('instructing.students.remove');
                     });
                 });
             });

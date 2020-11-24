@@ -1,4 +1,5 @@
 @extends('admin.training.layouts.main')
+@section('title', "Instructor {$instructor->user->fullName('FLC')} - ")
 @section('training-content')
     <a href="{{route('training.admin.instructing.instructors')}}" class="blue-text" style="font-size: 1.2em;"> <i class="fas fa-arrow-left"></i> Instructors</a>
     <div class="d-flex flex-row align-items-center">

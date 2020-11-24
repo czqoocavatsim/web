@@ -59,7 +59,7 @@
                         <label for="">Their staff email addresss</label>
                         <input required type="email" value="{{old('staff_email')}}" name="staff_email" class="form-control" placeholder="j.doe@ganderoceanic.com">
                     </div>
-                    <p>Adding this person as an instructor will give them automatic access to all resources and administrative tools. Are you sure the information entered is correct?</p>
+                    <p>Adding this person as an instructor will give them automatic access to Discord channels, resources and administrative tools. Are you sure the information entered is correct?</p>
                     <div class="custom-control custom-checkbox">
                         <input type="checkbox" class="custom-control-input" required name="agree" id="agree">
                         <label class="custom-control-label" for="agree">I'm sure (required)</label>
