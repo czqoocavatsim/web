@@ -70,15 +70,12 @@
         <!--DataTables-->
         <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/v/bs4/dt-1.10.18/datatables.min.css"/>
         <script type="text/javascript" src="https://cdn.datatables.net/v/bs4/dt-1.10.18/datatables.min.js"></script>
-        <!--IntroJS-->
-        <link rel="stylesheet" href="{{asset('introjs/introjs.min.css')}}">
-        <script src="{{asset('introjs/intro.min.js')}}"></script>
         <!--Date picker-->
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
         <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
         <!--SimpleMDE-->
-        <link rel="stylesheet" href="https://cdn.jsdelivr.net/simplemde/latest/simplemde.min.css">
-        <script src="https://cdn.jsdelivr.net/simplemde/latest/simplemde.min.js"></script>
+        <link rel="stylesheet" href="https://unpkg.com/easymde/dist/easymde.min.css">
+        <script src="https://unpkg.com/easymde/dist/easymde.min.js"></script>
         <!--Jarallax-->
         <script src="https://unpkg.com/jarallax@1/dist/jarallax.min.js"></script>
         <script src="https://unpkg.com/jarallax@1/dist/jarallax-video.min.js"></script>
@@ -240,10 +237,29 @@
                 <img style="height: 20px;" src="https://upload.wikimedia.org/wikipedia/commons/thumb/b/b0/Transgender_Pride_flag.svg/1280px-Transgender_Pride_flag.svg.png" alt="">
                 <img src="https://cdn.discordapp.com/attachments/482817676067209217/695255571623837837/220px-Bisexual_Pride_Flag.png" style="height:20px;" alt="">
             </div>
-            <p class="text-muted mt-3">Gander Oceanic stands with the LGBTIQ+ community on VATSIM</p>
+            <a href="" data-toggle="modal" data-target="#lgbtModal" class="text-muted mt-3" style="display:block;">Gander Oceanic stands with the LGBTIQA+ community on VATSIM</p>
         </div>
     </footer>
     <!-- Footer -->
+    <!-- LGBT modal-->
+    <div class="modal fade" id="lgbtModal" tabindex="-1" role="dialog" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <p>Gander Oceanic displays the rainbow, transgender, and bisexual flags to remind LGBTIQA+ VATSIM members who may feel out of place in this community that they are welcome and celebrated here.</p>
+                    <p>As an organisation with LGBTIQA+ members, we recognise the importance of creating an welcoming environment, and a small symbol can go a long way to achieve that.</p>
+                    <p>It is not a political statement nor an act of protest and we appreciate your support in creating a VATSIM community open to all, regardless of gender identity, sexuality, age, or background.</p>
+                    <p>Thank you to the Jacksonville and Cleveland ARTCCs in VATUSA for joining us in this!</p>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- End LGBT modal-->
     <!-- Contact us modal-->
     <div class="modal fade" id="contactUsModal" tabindex="-1" role="dialog" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered" role="document">

@@ -19,7 +19,7 @@
                     <label for="">Enter your response here:</label>
                     <textarea id="contentMD" name="content"></textarea>
                     <script>
-                        var simplemde = new SimpleMDE({ element: document.getElementById("contentMD") });
+                        var simplemde = new EasyMDE({ element: document.getElementById("contentMD") });
                     </script>
                     <p class="text-muted">Your response must comply with the VATSIM Code of Conduct.</p>
                     <button class="btn btn-primary" style="font-size: 1.1em; font-weight: 600;"><i class="fas fa-paper-plane"></i>&nbsp;&nbsp;Submit</button>

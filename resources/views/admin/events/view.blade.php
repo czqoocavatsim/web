@@ -199,7 +199,7 @@
                                     <label for="">Use Markdown</label>
                                     <textarea id="contentMD" name="description" class="w-75">{{$event->description}}</textarea>
                                     <script>
-                                        var simplemde = new SimpleMDE({ element: document.getElementById("contentMD"), toolbar: false });
+                                        var simplemde = new EasyMDE({ element: document.getElementById("contentMD"), toolbar: false });
                                     </script>
                                 </div>
                             </div>
@@ -287,7 +287,7 @@
                         <label for="">Use Markdown</label>
                         <textarea id="updateContent" name="updateContent"></textarea>
                         <script>
-                            var simplemde = new SimpleMDE({ element: document.getElementById("updateContent"), toolbar: false });
+                            var simplemde = new EasyMDE({ element: document.getElementById("updateContent"), toolbar: false });
                         </script>
                     </div>
                     <div class="form-group">

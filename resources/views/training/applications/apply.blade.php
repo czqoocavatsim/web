@@ -50,7 +50,7 @@
                 <p>Enter your reason here. We want to hear about your motivation for choosing Gander, and what you can bring to our OCA.</p>
                 {!! Form::textarea('applicant_statement', null, ['class' => 'w-100', 'id' => 'justificationField', 'onkeyup' => 'countChar(this)']) !!}
                 <script>
-                    var simplemde = new SimpleMDE({ element: document.getElementById("justificationField"), toolbar:false });
+                    var simplemde = new EasyMDE({ element: document.getElementById("justificationField"), toolbar:false });
                 </script>
             </div>
         </li>

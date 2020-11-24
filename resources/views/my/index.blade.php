@@ -573,8 +573,8 @@
 
 <!--Biography modal-->
 <div class="modal fade" id="bioModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered" role="document">
-        <div class="modal-content">
+    <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+        <div class="modal-content p-2">
             <div class="modal-header">
                 <h5 class="modal-title" id="exampleModalLongTitle">Edit your biography</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
@@ -585,9 +585,10 @@
             <div class="modal-body">
                 @csrf
                 <p>Your biography must comply with the VATSIM Code of Conduct. Markdown styling is disabled.</p>
-                <textarea id="contentMD" name="bio" class="w-75">{{Auth::user()->bio}}</textarea>
+                <textarea id="contentMD" name="bio" style="display:none;" ></textarea>
                 <script>
-                    var simplemde = new SimpleMDE({ element: document.getElementById("contentMD"), toolbar: false });
+                    var simplemde = new EasyMDE({ autofocus: true, autoRefresh: true, element: document.getElementById("contentMD"), toolbar: false, initialValue: '{{Auth::user()->bio}}' });
+                    simplemde.value('{{Auth::user()->bio}}')
                 </script>
                 <p>Wonder what the purpose of a biography is? <a href="https://knowledgebase.ganderoceanic.com/en/website/myczqo" target="_blank">Find out here.</a></p>
             </div>

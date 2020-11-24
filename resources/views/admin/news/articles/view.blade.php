@@ -71,7 +71,7 @@
                         {{-- <label for="">Use Markdown</label>
                         <textarea id="contentMD" name="content" class="w-75"></textarea>
                         <script>
-                            var simplemde = new SimpleMDE({ element: document.getElementById("contentMD"), toolbar: false, disabled: true });
+                            var simplemde = new EasyMDE({ element: document.getElementById("contentMD"), toolbar: false, disabled: true });
                         </script> --}}
                     </div>
                 </li>
