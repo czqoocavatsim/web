@@ -685,21 +685,21 @@
         </div>
         @else
         <div class="modal-content">
-            <div class="modal-header pb-2" style="border:none; text-align:center;">
+            <div class="modal-header pb-2">
+                <h5 class="modal-title" id="exampleModalLongTitle">Unlink your Discord account</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
             <div class="modal-body">
-                <div class="d-flex flex-center flex-column">
-                    <h3 class="font-weight-bold blue-text">Unlink your Discord account</h3>
-                    <p>Unlinking your account will:</p>
-                    <ul class="mt-2 list-unstyled">
-                        <li class="mb-2">Remove you from the CZQO Discord, if you're a member</li>
-                        <li class="mb-2">Remove your Discord avatar if you have it selected</li>
-                    </ul>
-                    <a href="{{route('me.discord.unlink')}}" class="class btn btn-danger mt-3">Unlink</a>
-                </div>
+                <p>Unlinking your account will:</p>
+                <ul class="mt-2">
+                    <li class="mb-2">Remove you from the CZQO Discord, if you're a member</li>
+                    <li>Remove your Discord avatar if you have it selected</li>
+                </ul>
+            </div>
+            <div class="modal-footer">
+                <a href="{{route('me.discord.unlink')}}" class="class btn btn-danger">Unlink</a>
             </div>
         </div>
         @endif

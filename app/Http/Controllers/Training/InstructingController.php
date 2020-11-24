@@ -8,6 +8,8 @@ use App\Models\Training\Instructing\OTSSession;
 use App\Models\Training\Instructing\TrainingSession;
 use App\Models\Users\User;
 use App\Notifications\Training\Instructing\AddedAsInstructor;
+use App\Notifications\Training\Instructing\RemovedAsInstructor;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 
@@ -68,7 +70,9 @@ class InstructingController extends Controller
 
         //If they're already an instructor...
         if ($instructor = Instructor::where('user_id', $request->get('cid'))->first()) {
-            return redirect()->route('training.admin.instructing.instructors.view', $instructor->user_id)->with('error', 'This person is already an instructor.');
+            if ($instructor->current) {
+                return redirect()->route('training.admin.instructing.instructors.view', $instructor->user_id)->with('error', 'This person is already an instructor.');
+            }
         }
 
         //Redirect if it fails
@@ -77,11 +81,19 @@ class InstructingController extends Controller
         }
 
         //Create instructor obj
-        $instructor = new Instructor();
-        $instructor->user_id = $request->get('cid');
-        $instructor->assessor = false;
-        $instructor->staff_email = $request->get('staff_email');
-        $instructor->save();
+        if ($instructor = Instructor::where('user_id', $request->get('cid'))->first()) {
+            $instructor->current = true;
+            $instructor->created_at = Carbon::now();
+            $instructor->assessor = false;
+            $instructor->staff_email = $request->get('staff_email');
+            $instructor->save();
+        } else {
+            $instructor = new Instructor();
+            $instructor->user_id = $request->get('cid');
+            $instructor->assessor = false;
+            $instructor->staff_email = $request->get('staff_email');
+            $instructor->save();
+        }
 
         //Give them role
         $instructor->user->assignRole('Training Team');
@@ -91,5 +103,31 @@ class InstructingController extends Controller
 
         //Return view
         return redirect()->route('training.admin.instructing.instructors.view', $instructor->user_id)->with('success', 'Added!');
+    }
+
+    public function removeInstructor($cid)
+    {
+        //Get the instructor
+        $instructor = Instructor::where('user_id', $cid)->firstOrFail();
+
+        //If they have students, ask user to do that
+        if (count($instructor->studentsAssigned) > 0) {
+            return redirect()->back()->with('error', 'This instructor has students assigned to them. Please reassign those students before removing the instructor.');
+        }
+
+        //Mark as uncurrent
+        $instructor->current = false;
+
+        //Remove permissions
+        $instructor->user->removeRole('Training Team');
+
+        //Tell them
+        $instructor->user->notify(new RemovedAsInstructor());
+
+        //Save instructor obj
+        $instructor->save();
+
+        //Return
+        return redirect()->route('training.admin.instructing.instructors')->with('info', 'Instructor removed.');
     }
 }
