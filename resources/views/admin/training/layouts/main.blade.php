@@ -63,6 +63,14 @@
                         </div>
                     </li>
                 </a>
+                <a class="myczqo-tab {{Request::is('admin/training/instructing/board') ? 'active' : ''}} no-click" data-myczqo-tab="none" href="{{route('training.admin.instructing.board')}}">
+                    <li class="w-100">
+                        <div class="d-flex h-100 flex-row justify-content-left align-items-center">
+                            <i style="font-size: 1.6em; margin-right: 10px;" class="fas fa-stream fa-fw"></i>
+                            <span style="font-size: 1.1em;">Board</span>
+                        </div>
+                    </li>
+                </a>
                 <a class="myczqo-tab {{Request::is('admin/training/instructing/instructors') || Request::is('admin/training/instructing/instructors/*') ? 'active' : ''}} no-click" data-myczqo-tab="none" href="{{route('training.admin.instructing.instructors')}}">
                     <li class="w-100">
                         <div class="d-flex h-100 flex-row justify-content-left align-items-center">

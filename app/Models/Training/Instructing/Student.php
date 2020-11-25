@@ -2,6 +2,7 @@
 
 namespace App\Models\Training\Instructing;
 
+use App\Models\Training\Application;
 use App\Models\Users\User;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -13,6 +14,12 @@ class Student extends Model
     protected $fillable = [
         'user_id', 'current'
     ];
+
+    public function instructor()
+    {
+        //Find instructor this user is assigned to
+        return InstructorStudentAssignment::where('student_id', $this->id)->first();
+    }
 
     public function user()
     {
@@ -32,5 +39,11 @@ class Student extends Model
     public function otsSessions()
     {
         return $this->hasMany(OTSSession::class, 'student_id');
+    }
+
+    public function application()
+    {
+        //Find latest accepted application from user
+        return Application::where('user_id', $this->user_id)->where('status', 1)->latest('created_at')->first();
     }
 }

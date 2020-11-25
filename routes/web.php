@@ -205,6 +205,9 @@ Route::group(['middleware' => 'auth'], function () {
                         //Calendar
                         Route::get('/calendar', 'Training\InstructingController@calendar')->name('instructing.calendar');
 
+                        //Boards
+                        Route::get('/board', 'Training\InstructingController@board')->name('instructing.board');
+
                         //Instructors
                         Route::get('/instructors', 'Training\InstructingController@instructors')->name('instructing.instructors');
                         Route::post('/instructors/add', 'Training\InstructingController@addInstructor')->name('instructing.instructors.add');
@@ -217,6 +220,9 @@ Route::group(['middleware' => 'auth'], function () {
                         Route::post('/students/add', 'Training\InstructingController@addStudent')->name('instructing.students.add');
                         Route::get('/students/{cid}', 'Training\InstructingController@viewStudent')->name('instructing.students.view');
                         Route::get('/students/{cid}/remove', 'Training\InstructingController@removeStudent')->name('instructing.students.remove');
+
+                        //Assign student to instructor
+                        Route::post('/students/{cid}/assign/instructor', 'Training\InstructingController@assignStudentToInstructor')->name('instructing.students.assign.instructor');
                     });
                 });
             });

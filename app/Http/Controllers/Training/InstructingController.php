@@ -3,7 +3,9 @@
 namespace App\Http\Controllers\Training;
 
 use App\Http\Controllers\Controller;
+use App\Models\Training\Instructing\BoardList;
 use App\Models\Training\Instructing\Instructor;
+use App\Models\Training\Instructing\InstructorStudentAssignment;
 use App\Models\Training\Instructing\OTSSession;
 use App\Models\Training\Instructing\Student;
 use App\Models\Training\Instructing\TrainingSession;
@@ -12,6 +14,7 @@ use App\Notifications\Training\Instructing\AddedAsInstructor;
 use App\Notifications\Training\Instructing\AddedAsStudent;
 use App\Notifications\Training\Instructing\RemovedAsInstructor;
 use App\Notifications\Training\Instructing\RemovedAsStudent;
+use App\Notifications\Training\Instructing\StudentAssignedToYou;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Session;
@@ -27,6 +30,18 @@ class InstructingController extends Controller
         $otsSessions = OTSSession::with('student.user')->with('instructor.user')->with('position')->get()->sortBy('scheduled_time');
 
         return view('admin.training.instructing.calendar', compact('trainingSessions', 'otsSessions'));
+    }
+
+    public function board()
+    {
+        //Get all instructors
+        $instructors = Instructor::whereCurrent(true)->get();
+
+        //Get all lists
+        $lists = BoardList::whereVisible(true)->get();
+
+        //Return view
+        return view('admin.training.instructing.board', compact('instructors', 'lists'));
     }
 
     public function instructors()
@@ -50,7 +65,7 @@ class InstructingController extends Controller
     public function viewInstructor($cid)
     {
         //Get the instructor
-        $instructor = Instructor::where('user_id', $cid)->firstOrFail();
+        $instructor = Instructor::whereCurrent(true)->where('user_id', $cid)->firstOrFail();
 
         //Return view
         return view('admin.training.instructing.instructors.instructor', compact('instructor'));
@@ -59,10 +74,13 @@ class InstructingController extends Controller
     public function viewStudent($cid)
     {
         //Get the student
-        $student = Student::where('user_id', $cid)->firstOrFail();
+        $student = Student::whereCurrent(true)->where('user_id', $cid)->firstOrFail();
+
+        //Get instructors for assignment modal
+        $instructors = Instructor::whereCurrent(true)->get();
 
         //Return view
-        return view('admin.training.instructing.students.student', compact('student'));
+        return view('admin.training.instructing.students.student', compact('student', 'instructors'));
     }
 
     public function addInstructor(Request $request)
@@ -330,7 +348,53 @@ class InstructingController extends Controller
         //Save
         $student->save();
 
+        //Remove assignments
+        $links = InstructorStudentAssignment::where('student_id', $student->id);
+        foreach ($links as $l) {
+            $l->delete();
+        }
+
         //Return
         return redirect()->route('training.admin.instructing.students')->with('info', 'Student removed.');
+    }
+
+    public function assignStudentToInstructor(Request $request, $student_id)
+    {
+        //Get the instructor
+        $student = Student::whereCurrent(true)->where('user_id', $student_id)->firstOrFail();
+
+        //If student already has instructor...
+        if ($student->instructor()) {
+            return redirect()->route('training.admin.instructing.students.view', ['cid' => $student->user->id, 'assignInstructorModal' => 1])->withInput()->with('error', 'Student is already assigned to an instructor');
+        }
+
+        //Define validator messages
+        $messages = [
+            'instructor_id.required' => 'Please select an instructor.',
+            'instructor_id.integer' => 'Please select an instructor.'
+        ];
+
+        //Validate
+        $validator = Validator::make($request->all(), [
+            'instructor_id' => 'required|integer',
+        ], $messages);
+
+        //Redirect if it fails
+        if ($validator->fails()) {
+            return redirect()->route('training.admin.instructing.students.view', ['cid' => $student->user->id, 'assignInstructorModal' => 1])->withInput()->withErrors($validator, 'assignInstructorErrors');
+        }
+
+        //Assign student to instructor
+        $link = new InstructorStudentAssignment();
+        $link->instructor_id = $request->get('instructor_id');
+        $link->student_id = $student->id;
+        $link->save();
+
+        //Notify instructor
+        $instructor = Instructor::whereId($request->get('instructor_id'))->first();
+        $instructor->user->notify(new StudentAssignedToYou($student));
+
+        //Return
+        return redirect()->route('training.admin.instructing.students.view', $student->user->id)->with('success', 'Assigned to instructor!');
     }
 }

@@ -41,7 +41,7 @@
             <div class="list-group">
                 @if (count($instructor->studentsAssigned) < 1) None assigned. @endif
                 @foreach($instructor->studentsAssigned as $student)
-                    <a href="#" class="list-group-item list-group-item-action">
+                    <a href="{{route('training.admin.instructing.students.view', $student->student->user->id)}}" class="list-group-item list-group-item-action">
                         <div class="d-flex flex-row w-100 align-items-center h-100 justify-content-between">
                             <div class="d-flex flex-row align-items-center">
                                 <img src="{{$student->student->user->avatar()}}" style="height: 30px; width:30px;margin-right: 15px; border-radius: 50%;">
