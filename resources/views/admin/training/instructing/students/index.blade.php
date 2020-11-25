@@ -15,7 +15,7 @@
         @foreach ($students as $s)
             <tr>
                 <td>{{$s->user->fullName('FLC')}}</td>
-                <td class="{{$s->created_at->diffInDays(Carbon\Carbon::now()) < 60 ? 'orange lighten-4' : ''}}">{{$s->created_at->toFormattedDateString()}} ({{$s->created_at->diffForHumans()}})</td>
+                <td class="{{$s->created_at->diffInDays(Carbon\Carbon::now()) > 60 ? 'orange lighten-4' : ''}}">{{$s->created_at->toFormattedDateString()}} ({{$s->created_at->diffForHumans()}})</td>
                 <td>
                     <a class="blue-text" href="{{route('training.admin.instructing.students.view', $s->user->id)}}">
                         <i class="fas fa-eye"></i>&nbsp;View Profile

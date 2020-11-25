@@ -9,7 +9,9 @@ use App\Models\Training\Instructing\Student;
 use App\Models\Training\Instructing\TrainingSession;
 use App\Models\Users\User;
 use App\Notifications\Training\Instructing\AddedAsInstructor;
+use App\Notifications\Training\Instructing\AddedAsStudent;
 use App\Notifications\Training\Instructing\RemovedAsInstructor;
+use App\Notifications\Training\Instructing\RemovedAsStudent;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Session;
@@ -147,6 +149,76 @@ class InstructingController extends Controller
         return redirect()->route('training.admin.instructing.instructors.view', $instructor->user_id)->with('success', 'Added!');
     }
 
+    public function addStudent(Request $request)
+    {
+        //Define validator messages
+        $messages = [
+            'cid.required' => 'A controller CID is required.',
+            'cid.min' => 'CIDs are a minimum of 8 characters.',
+            'cid.integer' => 'CIDs must be an integer.',
+        ];
+
+        //Validate
+        $validator = Validator::make($request->all(), [
+            'cid' => 'required|integer|min:8',
+        ], $messages);
+
+        //If there is no user with this CID....
+        $validator->after(function ($validator) use($request) {
+            if (!User::where('id', $request->get('cid'))->first()) {
+                $validator->errors()->add('cid', 'User with this CID not found.');
+            }
+        });
+
+
+        //If they're already an instructor...
+        if ($student = Student::where('user_id', $request->get('cid'))->first()) {
+            if ($student->current) {
+                return redirect()->route('training.admin.instructing.students.view', $student->user_id)->with('error', 'This person is already a student.');
+            }
+        }
+
+        //Redirect if it fails
+        if ($validator->fails()) {
+            return redirect()->route('training.admin.instructing.students', ['addStudentModal' => 1])->withInput()->withErrors($validator, 'addStudentErrors');
+        }
+
+        //Create student
+        if ($student = Student::where('user_id', $request->get('cid'))->first()) {
+            $student->current = true;
+            $student->created_at = Carbon::now();
+            $student->save();
+        } else {
+            $student = new Student();
+            $student->user_id = $request->get('cid');
+            $student->save();
+        }
+
+        //Give role
+        $student->user->assignRole('Student');
+
+        //Give Discord role
+        if ($student->user->hasDiscord() && $student->user->memberOfCzqoGuild()) {
+            //Get Discord client
+            $discord = new DiscordClient(['token' => config('services.discord.token')]);
+
+            //Remove student role
+            $discord->guild->addGuildMemberRole([
+                'guild.id' => intval(config('services.discord.guild_id')),
+                'user.id' => $student->user->discord_user_id,
+                'role.id' => 482824058141016075
+            ]);
+        } else {
+            Session::flash('info', 'Unable to add Discord permissions automatically.');
+        }
+
+        //Notify
+        $student->user->notify(new AddedAsStudent());
+
+        //Return
+        return redirect()->route('training.admin.instructing.students.view', $student->user->id)->with('success', 'Student added!');
+    }
+
     public function editInstructor($cid, Request $request)
     {
         //Get the instructor
@@ -224,5 +296,41 @@ class InstructingController extends Controller
 
         //Return
         return redirect()->route('training.admin.instructing.instructors')->with('info', 'Instructor removed.');
+    }
+
+    public function removeStudent($cid)
+    {
+        //Find student
+        $student = Student::where('user_id', $cid)->firstOrFail();
+
+        //Make as not current
+        $student->current = false;
+
+        //Remove role
+        $student->user->removeRole('Student');
+
+        //Remove role on Discord if able
+        if ($student->user->hasDiscord() && $student->user->memberOfCzqoGuild()) {
+            //Get Discord client
+            $discord = new DiscordClient(['token' => config('services.discord.token')]);
+
+            //Remove student role
+            $discord->guild->removeGuildMemberRole([
+                'guild.id' => intval(config('services.discord.guild_id')),
+                'user.id' => $student->user->discord_user_id,
+                'role.id' => 482824058141016075
+            ]);
+        } else {
+            Session::flash('info', 'Unable to remove Discord permissions automatically.');
+        }
+
+        //notify
+        $student->user->notify(new RemovedAsStudent());
+
+        //Save
+        $student->save();
+
+        //Return
+        return redirect()->route('training.admin.instructing.students')->with('info', 'Student removed.');
     }
 }
