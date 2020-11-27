@@ -1,5 +1,6 @@
 <!DOCTYPE HTML>
 @php if (!isset($solidNavBar)) $solidNavBar = true @endphp
+@php if (!isset($adminNavBar)) $adminNavBar = false @endphp
 <html lang="en">
     <head>
         <!--
@@ -171,7 +172,11 @@
             }).showToast();
         </script>
         @endif
-        @if(!$solidNavBar)
+        @if($adminNavBar)
+            <nav class="navbar navbar-expand-xl navbar-light transparent shadow-none p-0" style="min-height:59px; z-index:999;">
+                @include('layouts.navbar-admin')
+            </nav>
+        @elseif(!$solidNavBar)
             <div class="d-none d-xl-block">
                 <nav id="czqoHeaderLight" class="navbar navbar-expand-xl navbar-dark transparent shadow-none p-0" style="min-height:59px; z-index:999;">
                     @include('layouts.navbar-main')

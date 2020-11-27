@@ -2,15 +2,22 @@
 @section('title', "Student {$student->user->fullName('FLC')} - ")
 @section('training-content')
     <a href="{{route('training.admin.instructing.students')}}" class="blue-text" style="font-size: 1.2em;"> <i class="fas fa-arrow-left"></i> Students</a>
-    <div class="d-flex flex-row align-items-center">
+    <div class="d-flex flex-row align-items-center mt-3">
         <img src="{{$student->user->avatar()}}" style="height: 50px; width:50px;margin-right: 15px; margin-bottom: 3px; border-radius: 50%;">
         <div>
-            <h2 class="blue-text font-weight-bold mt-2 mb-1">{{$student->user->fullName('FLC')}}</h2>
+            <h2 class="blue-text mt-2 mb-1">{{$student->user->fullName('FLC')}}</h2>
+            <h5>
+                @foreach($student->labels as $label)
+                    <span class="mr-2">
+                        {{$label->label()->labelHtml()}}
+                    </span>
+                @endforeach
+            </h5>
         </div>
     </div>
     <div class="row mt-3">
         <div class="col-md-6">
-            <h5 class="font-weight-bold blue-text">Information</h5>
+            <h5 class="blue-text">Information</h5>
             <ul class="list-unstyled">
                 <li>Email: @if(Auth::user()->hasAnyRole('Senior Staff|Administrator') || ($student->instructor() && $student->instructor()->user == Auth::user()))<a href="mailto:{{$student->user->email}}">{{$student->user->email}}</a>@else Private @endif</li>
                 <li>Discord:
@@ -26,13 +33,13 @@
                 </li>
                 <li>Student since: {{$student->created_at->toFormattedDateString()}}, {{$student->created_at->diffForHumans()}}</li>
             </ul>
-            <h5 class="font-weight-bold blue-text">Actions</h5>
+            <h5 class="blue-text">Actions</h5>
             <ul class="list-unstyled mt-2">
                 <li class="mb-2">
                     <a data-target="#deleteStudentModal" data-toggle="modal" style="text-decoration:none;"><span class="red-text"><i class="fas fa-chevron-right"></i></span> &nbsp; <span class="black-text">Remove as student</span></a>
                 </li>
             </ul>
-            <h5 class="font-weight-bold blue-text">Instructor</h5>
+            <h5 class="blue-text">Instructor</h5>
             @if ($student->instructor())
                 <a href="{{route('training.admin.instructing.instructors.view', $student->instructor()->instructor->user->id)}}" class="list-group-item list-group-item-action">
                     <div class="d-flex flex-row w-100 align-items-center h-100 justify-content-between">
@@ -54,7 +61,7 @@
             @endif
         </div>
         <div class="col-md-6">
-            <h5 class="font-weight-bold blue-text">Application</h5>
+            <h5 class="blue-text">Application</h5>
             <div class="mt-3 card p-3 shadow-none grey lighten-5">
                 @if ($student->application())
                     <h5>#{{$student->application()->reference_id}}</h5>

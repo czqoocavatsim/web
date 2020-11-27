@@ -1,8 +1,10 @@
 <?php
 
-namespace App\Models\Training\Instructing;
+namespace App\Models\Training\Instructing\Students;
 
 use App\Models\Training\Application;
+use App\Models\Training\Instructing\Links\InstructorStudentAssignment;
+use App\Models\Training\Instructing\Links\StudentStatusLabelLink;
 use App\Models\Users\User;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -19,6 +21,11 @@ class Student extends Model
     {
         //Find instructor this user is assigned to
         return InstructorStudentAssignment::where('student_id', $this->id)->first();
+    }
+
+    public function labels()
+    {
+        return $this->hasMany(StudentStatusLabelLink::class);
     }
 
     public function user()

@@ -1,7 +1,7 @@
 @extends('admin.training.layouts.main')
 @section('training-content')
 <a href="{{route('training.admin.applications')}}" class="blue-text" style="font-size: 1.2em;"> <i class="fas fa-arrow-left"></i> Applications</a>
-<h2 class="blue-text font-weight-bold mt-2 pb-2">Withdrawn Applications</h2>
+<h2 class="blue-text mt-2 pb-2">Withdrawn Applications</h2>
 <table id="dataTable" class="table table-hover">
     <thead>
     <tr>

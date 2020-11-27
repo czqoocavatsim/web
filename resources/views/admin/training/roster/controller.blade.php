@@ -1,7 +1,7 @@
 @extends('admin.training.layouts.main')
 @section('training-content')
 <a href="{{route('training.admin.roster')}}" class="blue-text" style="font-size: 1.2em;"> <i class="fas fa-arrow-left"></i> Roster</a>
-<h2 class="blue-text font-weight-bold mt-2 pb-2">{{$rosterMember->user->fullName('FLC')}}</h2>
+<h2 class="blue-text mt-2 pb-2">{{$rosterMember->user->fullName('FLC')}}</h2>
 <div class="row">
     <div class="col-sm">
         <h5>Rating & Division</h5>

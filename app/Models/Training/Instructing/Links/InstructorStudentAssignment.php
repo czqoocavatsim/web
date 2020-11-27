@@ -1,18 +1,17 @@
 <?php
 
-namespace App\Models\Training\Instructing;
+namespace App\Models\Training\Instructing\Links;
 
+use App\Models\Training\Instructing\Instructors\Instructor;
+use App\Models\Training\Instructing\Students\Student;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\SoftDeletes;
 
-class StudentNote extends Model
+class InstructorStudentAssignment extends Model
 {
-    use SoftDeletes;
-
     protected $hidden = ['id'];
 
     protected $fillable = [
-        'student_id', 'instructor_id', 'content'
+        'student_id', 'instructor_id'
     ];
 
     public function student()

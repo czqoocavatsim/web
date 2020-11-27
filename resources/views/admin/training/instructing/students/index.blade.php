@@ -1,7 +1,7 @@
 @extends('admin.training.layouts.main')
 @section('training-content')
-<h1 class="font-weight-bold blue-text pb-2">Students</h1>
-<p class="my-2">Click on a student to see their training records, upcoming sessions, and their contact details.</p>
+<h1 class="blue-text pb-2">Students</h1>
+<p class="my-2 mb-4">Click on a student to see their training records, upcoming sessions, and their contact details.</p>
 <p>
     <span class="p-3 rounded yellow lighten-5 d-block" style="width: 150px; text-align:center;">Long Term Student</span>
 </p>
@@ -25,7 +25,7 @@
         @endforeach
     </tbody>
 </table>
-<ul class="list-unstyled mt-3">
+<ul class="list-unstyled mt-4">
     <li class="mb-2">
         <a href="#" data-toggle="modal" data-target="#addStudentModal" class="blue-text" style="font-size: 1.1em;"><i class="fas fa-plus"></i>&nbsp;&nbsp;Add a student</a>
     </li>

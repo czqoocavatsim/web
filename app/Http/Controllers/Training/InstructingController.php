@@ -3,12 +3,13 @@
 namespace App\Http\Controllers\Training;
 
 use App\Http\Controllers\Controller;
-use App\Models\Training\Instructing\BoardList;
-use App\Models\Training\Instructing\Instructor;
-use App\Models\Training\Instructing\InstructorStudentAssignment;
-use App\Models\Training\Instructing\OTSSession;
-use App\Models\Training\Instructing\Student;
-use App\Models\Training\Instructing\TrainingSession;
+use App\Models\Training\Instructing\Board\BoardList;
+use App\Models\Training\Instructing\Instructors\Instructor;
+use App\Models\Training\Instructing\Links\InstructorStudentAssignment;
+use App\Models\Training\Instructing\Records\OTSSession;
+use App\Models\Training\Instructing\Students\Student;
+use App\Models\Training\Instructing\Records\TrainingSession;
+use App\Models\Training\Instructing\Students\StudentStatusLabel;
 use App\Models\Users\User;
 use App\Notifications\Training\Instructing\AddedAsInstructor;
 use App\Notifications\Training\Instructing\AddedAsStudent;
@@ -38,7 +39,7 @@ class InstructingController extends Controller
         $instructors = Instructor::whereCurrent(true)->get();
 
         //Get all lists
-        $lists = BoardList::whereVisible(true)->get();
+        $lists = StudentStatusLabel::whereName('Ready For Pick-up')->orWhere('name', 'Not Ready')->orWhere('name', 'Solo Certification')->orWhere('name', 'Ready for Assessment')->orWhere('name', 'Inactive')->get();
 
         //Return view
         return view('admin.training.instructing.board', compact('instructors', 'lists'));

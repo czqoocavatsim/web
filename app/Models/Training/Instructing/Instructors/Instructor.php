@@ -1,7 +1,10 @@
 <?php
 
-namespace App\Models\Training\Instructing;
+namespace App\Models\Training\Instructing\Instructors;
 
+use App\Models\Training\Instructing\Links\InstructorStudentAssignment;
+use App\Models\Training\Instructing\Records\OTSSession;
+use App\Models\Training\Instructing\Records\TrainingSession;
 use App\Models\Users\User;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;

@@ -1,19 +1,19 @@
 <?php
 
-namespace App\Models\Training\Instructing;
+namespace App\Models\Training\Instructing\Records;
 
 use App\Models\Network\MonitoredPosition;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
-class OTSSession extends Model
+class TrainingSession extends Model
 {
     use SoftDeletes;
 
     protected $hidden = ['id'];
 
     protected $fillable = [
-        'student_id', 'instructor_id', 'scheduled_time', 'remarks', 'results', 'position_id'
+        'student_id', 'instructor_id', 'scheduled_time', 'remarks', 'position_id'
     ];
 
     protected $dates = [

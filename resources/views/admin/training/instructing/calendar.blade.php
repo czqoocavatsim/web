@@ -1,6 +1,7 @@
 @extends('admin.training.layouts.main')
 @section('training-content')
-<h1 class="font-weight-bold blue-text pb-2">Calendar</h1>
+<h1 class="blue-text pb-2">Calendar</h1>
+<p class="lead">Upcoming training and OTS sessions</p>
 <div id="instructing-sessions-calendar">
 </div>
 <div class="mt-2">

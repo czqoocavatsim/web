@@ -1,6 +1,6 @@
 @extends('admin.training.layouts.main')
 @section('training-content')
-<h1 class="font-weight-bold blue-text pb-2">Controller Roster</h1>
+<h1 class="blue-text pb-2">Controller Roster</h1>
 <ul class="list-unstyled mt-2 mb-0">
     <li class="mb-2">
         <a href="#" data-target="#addRosterMemberModal" data-toggle="modal" style="text-decoration:none;"><span class="blue-text"><i class="fas fa-chevron-right"></i></span> &nbsp; <span class="black-text">Add controller to roster</span></a>
@@ -8,7 +8,7 @@
     <li class="mb-2">
         <a href="{{route('training.admin.roster.home-page-new-controllers')}}" style="text-decoration:none;"><span class="blue-text"><i class="fas fa-chevron-right"></i></span> &nbsp; <span class="black-text">Home page new controllers list</span></a>
     </li>
-    <li class="mb-2">
+    <li class="mb-4">
         <a href="{{route('training.admin.roster.export')}}" target="_blank" style="text-decoration:none;"><span class="blue-text"><i class="fas fa-chevron-right"></i></span> &nbsp; <span class="black-text">Export roster</span></a>
     </li>
 </ul>
