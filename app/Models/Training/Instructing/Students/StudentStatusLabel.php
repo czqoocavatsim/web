@@ -32,7 +32,7 @@ class StudentStatusLabel extends Model
 
         //Icon
         if ($this->fa_icon) {
-            $html .= "<i class='fa " . $this->fa_icon . " fa-fw'></i>&nbsp;";
+            $html .= "<i class='" . $this->fa_icon . " fa-fw'></i>&nbsp;";
         }
 
         $html .= $this->name . "</span>";

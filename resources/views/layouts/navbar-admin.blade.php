@@ -47,10 +47,12 @@
                     <div class="d-flex flex-column">
                         <span>{{Auth::user()->fullName('F')}}</span>
                         <span class="text-muted">
-                            @if(!Auth::user()->staffProfile)
+                            @if(Auth::user()->staffProfile)
                                 {{Auth::user()->staffProfile->position}}
                             @elseif (Auth::user()->instructorProfile)
                                 {{Auth::user()->instructorProfile->staffPageTagline()}}
+                            @else
+                                {{Auth::user()->highestRole()->name}}
                             @endif
                         </span>
                     </div>

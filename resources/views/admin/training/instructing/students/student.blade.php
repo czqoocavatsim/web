@@ -39,9 +39,23 @@
                     <a data-target="#deleteStudentModal" data-toggle="modal" style="text-decoration:none;"><span class="red-text"><i class="fas fa-chevron-right"></i></span> &nbsp; <span class="black-text">Remove as student</span></a>
                 </li>
             </ul>
+            <h5 class="blue-text">Records</h5>
+            <ul class="list-unstyled mt-2">
+                <li class="mb-2">
+                    <a href="#" style="text-decoration:none;"><span class="blue-text"><i class="fas fa-chevron-right"></i></span> &nbsp; <span class="black-text">Training/OTS Sessions</span></a>
+                </li>
+                <li class="mb-2">
+                    <a href="#" style="text-decoration:none;"><span class="blue-text"><i class="fas fa-chevron-right"></i></span> &nbsp; <span class="black-text">Student History</span></a>
+                </li>
+                <li class="mb-2">
+                    <a href="{{route('training.admin.instructing.students.records.training-notes', $student->user_id)}}" style="text-decoration:none;"><span class="blue-text"><i class="fas fa-chevron-right"></i></span> &nbsp; <span class="black-text">Training Notes</span></a>
+                </li>
+            </ul>
+        </div>
+        <div class="col-md-6">
             <h5 class="blue-text">Instructor</h5>
             @if ($student->instructor())
-                <a href="{{route('training.admin.instructing.instructors.view', $student->instructor()->instructor->user->id)}}" class="list-group-item list-group-item-action">
+                <a href="{{route('training.admin.instructing.instructors.view', $student->instructor()->instructor->user->id)}}" class="list-group-item list-group-item-action z-depth-1 rounded waves-effect">
                     <div class="d-flex flex-row w-100 align-items-center h-100 justify-content-between">
                         <div class="d-flex flex-row align-items-center">
                             <img src="{{$student->instructor()->instructor->user->avatar()}}" style="height: 30px; width:30px;margin-right: 15px; border-radius: 50%;">
@@ -59,10 +73,8 @@
                     </li>
                 </ul>
             @endif
-        </div>
-        <div class="col-md-6">
-            <h5 class="blue-text">Application</h5>
-            <div class="mt-3 card p-3 shadow-none grey lighten-5">
+            <h5 class="blue-text mt-3">Application</h5>
+            <div class="mt-3 card p-3 z-depth-1 lighten-5">
                 @if ($student->application())
                     <h5>#{{$student->application()->reference_id}}</h5>
                     <p>Submitted {{$student->application()->created_at->diffForHumans()}} ({{$student->application()->created_at->toFormattedDateString()}})</p>

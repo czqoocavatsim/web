@@ -38,10 +38,10 @@
         </div>
         <div class="col-md-6">
             <h5 class="blue-text">Assigned Students</h5>
-            <div class="list-group">
+            <div class="list-group z-depth-1 rounded">
                 @if (count($instructor->studentsAssigned) < 1) None assigned. @endif
                 @foreach($instructor->studentsAssigned as $student)
-                    <a href="{{route('training.admin.instructing.students.view', $student->student->user->id)}}" class="list-group-item list-group-item-action">
+                    <a href="{{route('training.admin.instructing.students.view', $student->student->user->id)}}" class="list-group-item list-group-item-action waves-effect">
                         <div class="d-flex flex-row w-100 align-items-center h-100 justify-content-between">
                             <div class="d-flex flex-row justify-content-left align-items-center">
                                 <img src="{{$student->student->user->avatar()}}" style="height: 30px; width:30px;margin-right: 15px; border-radius: 50%;">

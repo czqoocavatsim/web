@@ -208,6 +208,9 @@ Route::group(['middleware' => 'auth'], function () {
                         //Boards
                         Route::get('/board', 'Training\InstructingController@board')->name('instructing.board');
 
+                        //Your Students/Sessions
+                        Route::get('/your-students', 'Training\InstructingController@yourStudents')->name('instructing.your-students');
+
                         //Instructors
                         Route::get('/instructors', 'Training\InstructingController@instructors')->name('instructing.instructors');
                         Route::post('/instructors/add', 'Training\InstructingController@addInstructor')->name('instructing.instructors.add');
@@ -219,6 +222,7 @@ Route::group(['middleware' => 'auth'], function () {
                         Route::get('/students', 'Training\InstructingController@students')->name('instructing.students');
                         Route::post('/students/add', 'Training\InstructingController@addStudent')->name('instructing.students.add');
                         Route::get('/students/{cid}', 'Training\InstructingController@viewStudent')->name('instructing.students.view');
+                        Route::get('/students/{cid}/records/training-notes', 'Training\RecordsController@studentTrainingNotes')->name('instructing.students.records.training-notes');
                         Route::get('/students/{cid}/remove', 'Training\InstructingController@removeStudent')->name('instructing.students.remove');
 
                         //Assign student to instructor

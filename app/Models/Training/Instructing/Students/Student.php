@@ -5,6 +5,7 @@ namespace App\Models\Training\Instructing\Students;
 use App\Models\Training\Application;
 use App\Models\Training\Instructing\Links\InstructorStudentAssignment;
 use App\Models\Training\Instructing\Links\StudentStatusLabelLink;
+use App\Models\Training\Instructing\Records\StudentNote;
 use App\Models\Users\User;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;

@@ -21,6 +21,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Validator;
 use RestCord\DiscordClient;
+use Illuminate\Support\Facades\Auth;
 
 class InstructingController extends Controller
 {
@@ -61,6 +62,18 @@ class InstructingController extends Controller
 
         //Return view
         return view('admin.training.instructing.students.index', compact('students'));
+    }
+
+    public function yourStudents()
+    {
+        //Get all students assigned to user
+        $students = Student::whereCurrent(true)->cursor()->filter(function ($student) {
+            if ($student->instructor() && $student->instructor()->instructor == Auth::user()->instructorProfile) return true;
+            return false;
+        });
+
+        //Return view
+        return view('admin.training.instructing.students.your-students', compact('students'));
     }
 
     public function viewInstructor($cid)
