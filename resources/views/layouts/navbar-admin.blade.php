@@ -6,37 +6,37 @@
     </button>
     <div class="collapse navbar-collapse" id="navbarSupportedContent">
         <ul class="navbar-nav ml-auto d-flex flex-row align-items-center">
-            <li class="nav-item {{ Request::is('my') ? 'active' : '' }} {{ Request::is('my/*') ? 'active' : '' }}">
-                <a class="nav-link" href="{{route('my.index')}}">
+            <li class="nav-item mr-2">
+                <a class="nav-link" href="{{route('publications.policies')}}">
                     Publications
                 </a>
             </li>
-            <li class="nav-item mr-2 {{ Request::is('my') ? 'active' : '' }} {{ Request::is('my/*') ? 'active' : '' }}">
-                <a class="nav-link" href="{{route('my.index')}}">
+            <li class="nav-item mr-2">
+                <a class="nav-link" href="{{route('community.users.index')}}">
                     Community
                 </a>
             </li>
-            <li class="nav-item mr-2 {{ Request::is('my') ? 'active' : '' }} {{ Request::is('my/*') ? 'active' : '' }}">
-                <a class="nav-link" href="{{route('my.index')}}">
+            <li class="nav-item mr-2">
+                <a class="nav-link" href="{{route('training.admin.dashboard')}}">
                     Training
                 </a>
             </li>
-            <li class="nav-item mr-2 {{ Request::is('my') ? 'active' : '' }} {{ Request::is('my/*') ? 'active' : '' }}">
-                <a class="nav-link" href="{{route('my.index')}}">
+            <li class="nav-item mr-2">
+                <a class="nav-link" href="{{route('news.index')}}">
                     News
                 </a>
             </li>
-            <li class="nav-item mr-2 {{ Request::is('my') ? 'active' : '' }} {{ Request::is('my/*') ? 'active' : '' }}">
-                <a class="nav-link" href="{{route('my.index')}}">
+            <li class="nav-item mr-2">
+                <a class="nav-link" href="{{route('events.admin.index')}}">
                     Events
                 </a>
             </li>
-            <li class="nav-item mr-2 {{ Request::is('my') ? 'active' : '' }} {{ Request::is('my/*') ? 'active' : '' }}">
-                <a class="nav-link" href="{{route('my.index')}}">
+            <li class="nav-item mr-2">
+                <a class="nav-link" href="{{route('settings.index')}}">
                     Settings
                 </a>
             </li>
-            <li class="nav-item mr-4 {{ Request::is('my') ? 'active' : '' }} {{ Request::is('my/*') ? 'active' : '' }}">
+            <li class="nav-item mr-2">
                 <a class="nav-link" href="{{route('my.index')}}">
                     myCZQO
                 </a>

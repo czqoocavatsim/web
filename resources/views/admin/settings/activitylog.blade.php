@@ -1,5 +1,5 @@
-@extends('layouts.master')
-@section('content')
+@extends('admin.settings.layouts.main')
+@section('settings-content')
     <div class="container py-4">
         <a href="{{route('settings.index')}}" class="blue-text" style="font-size: 1.2em;"> <i class="fas fa-arrow-left"></i> Settings</a>
         <h1 class="blue-text font-weight-bold mt-2">Activity Log</h1>

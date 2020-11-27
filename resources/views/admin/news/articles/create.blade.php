@@ -1,4 +1,4 @@
-@extends('layouts.master')
+@extends('layouts.master', ['adminNavBar'=>true])
 @section('content')
 <div class="container py-4">
     <a href="{{route('news.index')}}" class="blue-text" style="font-size: 1.2em;"> <i class="fas fa-arrow-left"></i> News</a>
