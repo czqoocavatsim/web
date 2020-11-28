@@ -178,23 +178,23 @@
             </nav>
         @elseif(!$solidNavBar)
             <div class="d-none d-xl-block">
-                <nav id="czqoHeaderLight" class="navbar navbar-expand-xl navbar-dark transparent shadow-none p-0" style="min-height:59px; z-index:999;">
+                <nav id="czqoHeaderLight" class="navbar navbar-expand-xl navbar-dark transparent shadow-none p-0" style="min-height:74px; z-index:999;">
                     @include('layouts.navbar-main')
                 </nav>
             </div>
             <div class="d-xl-none">
-                <nav id="czqoHeaderLight" class="navbar navbar-expand-lg navbar-dark blue p-0 shadow-none" style="min-height:59px; z-index:999">
+                <nav id="czqoHeaderLight" class="navbar navbar-expand-lg navbar-dark blue p-0 shadow-none" style="min-height:74px; z-index:999">
                     @include('layouts.navbar-main')
                 </nav>
             </div>
         @else
-            <nav id="czqoHeaderLight" class="navbar navbar-expand-lg navbar-dark blue p-0 shadow-none" style="min-height:59px;">
+            <nav id="czqoHeaderLight" class="navbar navbar-expand-lg navbar-dark blue p-0 shadow-none" style="min-height:74x;">
                 @include('layouts.navbar-main')
             </nav>
         @endif
     </header>
     <!--End header-->
-    <div class="flex-fill" id="czqoContent" @if(!$solidNavBar) style="margin-top: calc(-59px + -0.5rem);" @endif>
+    <div class="flex-fill" id="czqoContent" @if(!$solidNavBar) style="margin-top: calc(-74px + -0.5rem);" @endif>
         @yield('content')
     </div>
     <!-- Footer -->

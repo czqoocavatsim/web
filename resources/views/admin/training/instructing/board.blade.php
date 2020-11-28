@@ -12,7 +12,7 @@
                     @foreach($list->students as $student)
                         <a href="{{route('training.admin.instructing.students.view', $student->student->user->id)}}" class="list-group-item rounded list-group-item-action waves-effect">
                             <div class="d-flex flex-column">
-                                <p class="mb-1">{{$student->student->user->fullName('FLC')}}</p>
+                                <p class="mb-1">{{$student->student->created_at->format('d M')}} - {{$student->student->user->fullName('FLC')}}</p>
                                 <div class="d-flex flex-row">
                                     @foreach($student->student->labels as $label)
                                         <div class="mr-1 pb-0">
@@ -34,7 +34,7 @@
     @foreach($instructors as $list)
         <div class="card p-4 z-depth-1 shadow-none mb-3" style="min-height: 160px;">
             <div class="d-flex flex-row align-items-center">
-                <img src="{{$list->user->avatar()}}" style="height: 30px; width:30px;margin-right: 10px; border-radius: 50%;">
+                <a title="View Instructor Profile" href="{{route('training.admin.instructing.instructors.view', $list->user_id)}}"><img src="{{$list->user->avatar()}}" style="height: 30px; width:30px;margin-right: 10px; border-radius: 50%;"></a>
                 <div class="d-flex flex-column align-items-center h-100">
                     <h5 class="mb-0">{{$list->user->fullName('F')}}'s Students</h5>
                 </div>
@@ -44,7 +44,7 @@
                     @foreach($list->studentsAssigned as $student)
                         <a href="{{route('training.admin.instructing.students.view', $student->student->user->id)}}" class="list-group-item rounded list-group-item-action waves-effect">
                             <div class="d-flex flex-column">
-                                <p class="mb-0">{{$student->student->user->fullName('FLC')}}</p>
+                                <p class="mb-0">{{$student->student->created_at->format('d M')}} - {{$student->student->user->fullName('FLC')}}</p>
                                 <div class="d-flex flex-row">
                                     @foreach($student->student->labels as $label)
                                         <div class="mr-1 pb-0">
@@ -57,7 +57,9 @@
                     @endforeach
                 </div>
             @else
-                No students assigned.
+                <p class="mt-3">
+                    No students assigned.
+                </p>
             @endif
         </div>
     </div>

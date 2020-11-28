@@ -18,9 +18,11 @@
     @endforeach
 </div>
 <ul class="list-unstyled mt-4">
+    @can('edit instructors')
     <li class="mb-2">
         <a href="#" data-toggle="modal" data-target="#addInstructorModal" class="blue-text" style="font-size: 1.1em;"><i class="fas fa-plus"></i>&nbsp;&nbsp;Add an instructor</a>
     </li>
+    @endcan
     @can('send announcements')
     <li>
         <a href="{{route('news.announcements.create')}}" class="blue-text" style="font-size: 1.1em;"><i class="fas fa-envelope"></i>&nbsp;&nbsp;Send message to all</a>

@@ -28,18 +28,25 @@
             </ul>
             <h5 class="blue-text">Actions</h5>
             <ul class="list-unstyled mt-2 mb-0">
+                @can ('view users')
+                <li class="mb-2">
+                    <a href="{{route('community.users.view', $instructor->user)}}" style="text-decoration:none;"><span class="blue-text"><i class="fas fa-chevron-right"></i></span> &nbsp; <span class="black-text">View user profile</span></a>
+                </li>
+                @endcan
+                @can('edit instructors')
                 <li class="mb-2">
                     <a href="#" data-target="#editInstructorModal" data-toggle="modal" style="text-decoration:none;"><span class="blue-text"><i class="fas fa-chevron-right"></i></span> &nbsp; <span class="black-text">Edit profile</span></a>
                 </li>
                 <li class="mb-2">
                     <a href="#" data-target="#deleteInstructorModal" data-toggle="modal" style="text-decoration:none;"><span class="red-text"><i class="fas fa-chevron-right"></i></span> &nbsp; <span class="black-text">Remove as instructor</span></a>
                 </li>
+                @endcan
             </ul>
         </div>
         <div class="col-md-6">
             <h5 class="blue-text">Assigned Students</h5>
-            <div class="list-group z-depth-1 rounded">
-                @if (count($instructor->studentsAssigned) < 1) None assigned. @endif
+            <div class="list-group mt-3 z-depth-1 rounded">
+                @if (count($instructor->studentsAssigned) < 1) <p class="p-4 m-0"> None assigned. </p>@endif
                 @foreach($instructor->studentsAssigned as $student)
                     <a href="{{route('training.admin.instructing.students.view', $student->student->user->id)}}" class="list-group-item list-group-item-action waves-effect">
                         <div class="d-flex flex-row w-100 align-items-center h-100 justify-content-between">

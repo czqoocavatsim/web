@@ -17,7 +17,8 @@ class PermissionsSeeder extends Seeder
         //Create the roles
         $admin = Role::create(['name' => 'Administrator']);
         $seniorStaff = Role::create(['name' => 'Senior Staff']);
-        $trainingTeam = Role::create(['name' => 'Training Team']);
+        $assessor = Role::create(['name' => 'Assessor']);
+        $trainingTeam = Role::create(['name' => 'Instructor']);
         $webTeam = Role::create(['name' => 'Web Team']);
         $marketingTeam = Role::create(['name' => 'Marketing Team']);
         $certifiedController = Role::create(['name' => 'Certified Controller']);

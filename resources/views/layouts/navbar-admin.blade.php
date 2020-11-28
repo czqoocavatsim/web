@@ -36,7 +36,7 @@
                     Settings
                 </a>
             </li>
-            <li class="nav-item mr-2">
+            <li class="nav-item mr-4">
                 <a class="nav-link" href="{{route('my.index')}}">
                     myCZQO
                 </a>

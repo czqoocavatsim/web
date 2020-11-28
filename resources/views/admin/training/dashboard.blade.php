@@ -2,10 +2,10 @@
 @section('title', 'Dashboard - Training - ')
 @section('training-content')
 <h1 class="blue-text mb-2"><span id="greeting">Hello</span>, {{Auth::user()->fullName('F')}}!</h1>
-<p class="lead mb-4">@if(Auth::user()->instructorProfile->current)You are a <span class="blue-text">{{Auth::user()->instructorProfile->staffPageTagline()}}</span> with <span class="blue-text">{{count(Auth::user()->instructorProfile->studentsAssigned)}}</span> students assigned to you.@else Welcome. @endif</p>
+<p class="lead mb-4">@if(Auth::user()->instructorProfile && Auth::user()->instructorProfile->current)You are a <span class="blue-text">{{Auth::user()->instructorProfile->staffPageTagline()}}</span> with <span class="blue-text">{{count(Auth::user()->instructorProfile->studentsAssigned)}}</span> students assigned to you.@else Welcome. @endif</p>
 <div class="row">
+    @can('view applications')
     <div class="col-md-6">
-        @can('view applications')
         <div class="card p-4 z-depth-1 shadow-none">
             <h4 class="blue-text mb-3">{{count($applications)}} pending applications</h4>
             @if(count($applications) < 1)
@@ -31,7 +31,7 @@
                 </li>
             </ul>
         </div>
-        @endcan
+    @endcan
     </div>
     <div class="col-md-6">
         <div class="card p-4 z-depth-1 shadow-none">
@@ -44,7 +44,7 @@
                         <a href="{{route('training.admin.instructing.students.view', $s->user->id)}}" class="list-group-item rounded waves-effect list-group-item-action">
                             <div class="d-flex flex-row w-100 justify-content-between align-items-center">
                                 <div>
-                                    <h5>{{$s->user->fullName('FLC')}}</h5>
+                                    <h5>{{$s->created_at->format('d M')}} - {{$s->user->fullName('FLC')}}</h5>
                                     <p class="mb-0">Waiting for {{$s->created_at->diffInDays()}} days</p>
                                 </div>
                                 <i style="font-size: 1.6em;" class="blue-text fas fa-chevron-right fa-fw"></i>

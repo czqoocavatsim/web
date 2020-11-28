@@ -173,7 +173,7 @@ Route::group(['middleware' => 'auth'], function () {
             //Training
             Route::prefix('training')->group(function () {
                 Route::name('training.admin.')->group(function () {
-                    Route::get('/', 'Training\TrainingAdminController@dashboard')->name('dashboard')->middleware('role:Training Team|Senior Staff|Administrator');
+                    Route::get('/', 'Training\TrainingAdminController@dashboard')->name('dashboard')->middleware('role:Instructor|Senior Staff|Administrator');
 
                     //Roster
                     Route::get('/roster', 'Roster\RosterController@admin')->name('roster')->middleware('can:view roster admin');

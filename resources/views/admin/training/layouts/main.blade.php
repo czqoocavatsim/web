@@ -13,7 +13,7 @@
                         </div>
                     </li>
                 </a>
-                @if(Auth::user()->instructorProfile->current)
+                @if(Auth::user()->instructorProfile && Auth::user()->instructorProfile->current)
                 <a class="myczqo-tab {{Request::is('admin/training/instructing/your-students') ? 'active' : ''}} no-click" data-myczqo-tab="none" href="{{route('training.admin.instructing.your-students')}}">
                     <li class="w-100">
                         <div class="d-flex h-100 flex-row justify-content-left align-items-center">
@@ -68,11 +68,14 @@
                         </div>
                     </li>
                 </a>
+                @canany('edit roster|view applications')
                 <li class="w-100 my-3" style="border:none;">
                     <div class="d-flex h-100 flex-row justify-content-left align-items-center">
                         <span style="font-size: 1em;" class="text-muted">ROSTER</span>
                     </div>
                 </li>
+                @endcan
+                @can('edit roster')
                 <a class="myczqo-tab {{Request::is('admin/training/roster') || Request::is('admin/training/roster/*') ? 'active' : ''}} no-click" data-myczqo-tab="none" href="{{route('training.admin.roster')}}">
                     <li class="w-100">
                         <div class="d-flex h-100 flex-row justify-content-left align-items-center">
@@ -89,6 +92,8 @@
                         </div>
                     </li>
                 </a>
+                @endcan
+                @can('view applications')
                 <a class="myczqo-tab {{Request::is('admin/training/applications')|| Request::is('admin/training/applications/*') ? 'active' : ''}} no-click" data-myczqo-tab="none" href="{{route('training.admin.applications')}}">
                     <li class="w-100">
                         <div class="d-flex h-100 flex-row justify-content-left align-items-center">
@@ -97,6 +102,7 @@
                         </div>
                     </li>
                 </a>
+                @endcan
             </ul>
         </div>
         <div class="col-md-9 pl-5 pt-3  ">

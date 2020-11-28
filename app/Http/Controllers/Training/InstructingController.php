@@ -59,9 +59,10 @@ class InstructingController extends Controller
     {
         //Get all students
         $students = Student::whereCurrent(true)->get();
+        $pastStudents = Student::whereCurrent(false)->get();
 
         //Return view
-        return view('admin.training.instructing.students.index', compact('students'));
+        return view('admin.training.instructing.students.index', compact('students', 'pastStudents'));
     }
 
     public function yourStudents()
@@ -150,7 +151,7 @@ class InstructingController extends Controller
         }
 
         //Give them role
-        $instructor->user->assignRole('Training Team');
+        $instructor->user->assignRole('Instructor');
 
         //Give them role on Discord if able
         if ($instructor->user->hasDiscord() && $instructor->user->memberOfCzqoGuild()) {
@@ -278,6 +279,13 @@ class InstructingController extends Controller
         $instructor->staff_email = $request->get('staff_email');
         $instructor->save();
 
+        //If assessor, give role, vice versa
+        if ($instructor->assessor) {
+            $instructor->user->assignRole('Assessor');
+        } else {
+            $instructor->user->removeRole('Assessor');
+        }
+
         //Return view
         return redirect()->route('training.admin.instructing.instructors.view', $instructor->user_id)->with('success', 'Edited!');
     }
@@ -296,7 +304,8 @@ class InstructingController extends Controller
         $instructor->current = false;
 
         //Remove permissions
-        $instructor->user->removeRole('Training Team');
+        $instructor->user->removeRole('Instructor');
+        $instructor->user->removeRole('Assessor');
 
          //Remove role on Discord if able
          if ($instructor->user->hasDiscord() && $instructor->user->memberOfCzqoGuild()) {

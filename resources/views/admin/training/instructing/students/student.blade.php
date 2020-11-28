@@ -35,9 +35,11 @@
             </ul>
             <h5 class="blue-text">Actions</h5>
             <ul class="list-unstyled mt-2">
+                @can('edit students')
                 <li class="mb-2">
                     <a data-target="#deleteStudentModal" data-toggle="modal" style="text-decoration:none;"><span class="red-text"><i class="fas fa-chevron-right"></i></span> &nbsp; <span class="black-text">Remove as student</span></a>
                 </li>
+                @endcan
             </ul>
             <h5 class="blue-text">Records</h5>
             <ul class="list-unstyled mt-2">
@@ -68,9 +70,11 @@
             @else
                 This student is not assigned to an instructor.
                 <ul class="list-unstyled mt-2">
+                    @can('assign instructor to student')
                     <li class="mb-2">
                         <a data-target="#assignInstructorModal" data-toggle="modal" style="text-decoration:none;"><span class="blue-text"><i class="fas fa-chevron-right"></i></span> &nbsp; <span class="black-text">Assign</span></a>
                     </li>
+                    @endcan
                 </ul>
             @endif
             <h5 class="blue-text mt-3">Application</h5>
