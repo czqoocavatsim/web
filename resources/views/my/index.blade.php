@@ -89,8 +89,8 @@
                         </div>
                     </li>
                 </a>
-                @hasanyrole('Administrator|Senior Staff|Training Team')
-                <a class="myczqo-tab" data-myczqo-tab="instructingTab" href="#instructing">
+                @hasanyrole('Administrator|Senior Staff|Instructor')
+                <a class="myczqo-tab no-click" data-myczqo-tab="none" href="{{route('training.admin.dashboard')}}">
                     <li class="w-100">
                         <div class="d-flex h-100 flex-row justify-content-left align-items-center">
                             <i style="font-size: 1.6em; margin-right: 10px;" class="fas fa-chalkboard-teacher"></i>
@@ -99,7 +99,7 @@
                     </li>
                 </a>
                 @endhasanyrole
-                @hasanyrole('Administrator|Senior Staff|Training Team|Marketing Team|Web Team')
+                @hasanyrole('Administrator|Senior Staff|Marketing Team|Web Team')
                 <a class="myczqo-tab" data-myczqo-tab="staffTab" href="#staff">
                     <li class="w-100">
                         <div class="d-flex h-100 flex-row justify-content-left align-items-center">

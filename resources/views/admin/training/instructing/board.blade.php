@@ -12,7 +12,7 @@
                     @foreach($list->students as $student)
                         <a href="{{route('training.admin.instructing.students.view', $student->student->user->id)}}" class="list-group-item rounded list-group-item-action waves-effect">
                             <div class="d-flex flex-column">
-                                <p class="mb-1">{{$student->student->created_at->format('d M')}} - {{$student->student->user->fullName('FLC')}}</p>
+                                <p class="mb-1">{{$student->student->created_at->format('d M')}} - {{$student->student->user->fullName('FL')}}</p>
                                 <div class="d-flex flex-row">
                                     @foreach($student->student->labels as $label)
                                         <div class="mr-1 pb-0">
@@ -44,7 +44,7 @@
                     @foreach($list->studentsAssigned as $student)
                         <a href="{{route('training.admin.instructing.students.view', $student->student->user->id)}}" class="list-group-item rounded list-group-item-action waves-effect">
                             <div class="d-flex flex-column">
-                                <p class="mb-0">{{$student->student->created_at->format('d M')}} - {{$student->student->user->fullName('FLC')}}</p>
+                                <p class="mb-0">{{$student->student->created_at->format('d M')}} - {{$student->student->user->fullName('FL')}}</p>
                                 <div class="d-flex flex-row">
                                     @foreach($student->student->labels as $label)
                                         <div class="mr-1 pb-0">

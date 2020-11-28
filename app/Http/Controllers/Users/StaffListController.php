@@ -4,7 +4,7 @@ namespace App\Http\Controllers\Users;
 
 use App\Http\Controllers\Controller;
 use App\Models\Settings\AuditLogEntry;
-use App\Models\Training\Instructing\Instructor;
+use App\Models\Training\Instructing\Instructors\Instructor;
 use App\Models\Users\StaffGroup;
 use App\Models\Users\StaffMember;
 use App\Models\Users\User;
