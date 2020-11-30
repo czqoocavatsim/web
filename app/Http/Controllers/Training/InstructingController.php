@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Training\Instructing\Board\BoardList;
 use App\Models\Training\Instructing\Instructors\Instructor;
 use App\Models\Training\Instructing\Links\InstructorStudentAssignment;
+use App\Models\Training\Instructing\Links\StudentStatusLabelLink;
 use App\Models\Training\Instructing\Records\OTSSession;
 use App\Models\Training\Instructing\Students\Student;
 use App\Models\Training\Instructing\Records\TrainingSession;
@@ -89,7 +90,7 @@ class InstructingController extends Controller
     public function viewStudent($cid)
     {
         //Get the student
-        $student = Student::whereCurrent(true)->where('user_id', $cid)->firstOrFail();
+        $student = Student::where('user_id', $cid)->firstOrFail();
 
         //Get instructors for assignment modal
         $instructors = Instructor::whereCurrent(true)->get();
@@ -365,6 +366,15 @@ class InstructingController extends Controller
             Session::flash('info', 'Unable to remove Discord permissions automatically.');
         }
 
+        //Remove labels and instructor links and availability
+        foreach ($student->labels as $label) {
+            if (!in_array($label->label()->name, ['Completed', 'Inactive'])) {
+                $label->delete();
+            }
+        }
+        if ($student->instructor()) $student->instructor()->delete();
+        foreach ($student->availability as $a) $a->delete();
+
         //notify
         $student->user->notify(new RemovedAsStudent());
 
@@ -387,8 +397,8 @@ class InstructingController extends Controller
         $student = Student::whereCurrent(true)->where('user_id', $student_id)->firstOrFail();
 
         //If student already has instructor...
-        if ($student->instructor()) {
-            return redirect()->route('training.admin.instructing.students.view', ['cid' => $student->user->id, 'assignInstructorModal' => 1])->withInput()->with('error', 'Student is already assigned to an instructor');
+        if ($student->instructor() && $student->instructor()->instructor->id == $request->get('instructor_id')) {
+            return redirect()->route('training.admin.instructing.students.view', ['cid' => $student->user->id, 'assignInstructorModal' => 1])->withInput()->with('error', 'Student is already assigned to an instructor or you are trying to assign them to who they\'re already assigned to');
         }
 
         //Define validator messages
@@ -407,11 +417,32 @@ class InstructingController extends Controller
             return redirect()->route('training.admin.instructing.students.view', ['cid' => $student->user->id, 'assignInstructorModal' => 1])->withInput()->withErrors($validator, 'assignInstructorErrors');
         }
 
+        //Remove existing links
+        if ($student->instructor()) {
+            $link = InstructorStudentAssignment::where('student_id', $student->id);
+            $link->delete();
+        }
+
         //Assign student to instructor
         $link = new InstructorStudentAssignment();
         $link->instructor_id = $request->get('instructor_id');
         $link->student_id = $student->id;
         $link->save();
+
+        //If student has ready for pick up, remove and add In Progress
+        foreach ($student->labels as $label) {
+            //Find label
+            if (strtolower($label->label()->name) == 'ready for pick-up') {
+                $label->delete();
+
+                //Assign it with link
+                $link = new StudentStatusLabelLink([
+                    'student_id' => $student->id,
+                    'student_status_label_id' => StudentStatusLabel::whereName('In Progress')->first()->id
+                ]);
+                $link->save();
+            }
+        }
 
         //Notify instructor
         $instructor = Instructor::whereId($request->get('instructor_id'))->first();
@@ -419,5 +450,45 @@ class InstructingController extends Controller
 
         //Return
         return redirect()->route('training.admin.instructing.students.view', $student->user->id)->with('success', 'Assigned to instructor!');
+    }
+
+    public function dropStudentFromInstructor($student_id)
+    {
+        //Get the student
+        $student = Student::whereCurrent(true)->where('user_id', $student_id)->firstOrFail();
+
+        //Find the link
+        $link = InstructorStudentAssignment::where('student_id', $student->id)->where('instructor_id', Auth::user()->instructorProfile->id)->firstOrFail();
+
+        //Remove
+        $link->delete();
+
+        //Relabelling process
+        foreach ($student->labels as $label) {
+            $label->delete();
+        }
+
+        //Assign it with link
+        $link = new StudentStatusLabelLink([
+            'student_id' => $student->id,
+            'student_status_label_id' => StudentStatusLabel::whereName('Ready For Pick-Up')->first()->id
+        ]);
+        $link->save();
+
+        //Discord notification in instructors channel
+        $discord = new DiscordClient(['token' => config('services.discord.token')]);
+        $discord->channel->createMessage([
+            'channel.id' => intval(config('services.discord.instructors')),
+            "content" => "",
+            'embed' => [
+                "title" => "A new student is available for pick-up by an Instructor",
+                "url" => route('training.admin.instructing.students.view', $student->user_id),
+                "timestamp" => Carbon::now(),
+                "color" => hexdec( "2196f3" ),
+                "description" => $student->user->fullName('FLC')
+            ]
+        ]);
+
+        return redirect()->route('training.admin.instructing.students.view', $student->user_id)->with('info', 'Student dropped');
     }
 }

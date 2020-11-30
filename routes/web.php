@@ -133,6 +133,10 @@ Route::group(['middleware' => 'auth'], function () {
             //Portal
             Route::name('training.portal.')->group(function () {
                 Route::get('portal', 'Training\TrainingPortalController@index')->name('index');
+
+                //Training availability
+                Route::get('availability', 'Training\TrainingPortalController@viewAvailability')->name('availability');
+                Route::post('availability', 'Training\TrainingPortalController@submitAvailabilityPost')->name('availability.submit.post');
             });
         });
 
@@ -231,6 +235,7 @@ Route::group(['middleware' => 'auth'], function () {
 
                         //Assign student to instructor
                         Route::post('/students/{cid}/assign/instructor', 'Training\InstructingController@assignStudentToInstructor')->name('instructing.students.assign.instructor');
+                        Route::get('/students/{cid}/drop/instructor', 'Training\InstructingController@dropStudentFromInstructor')->name('instructing.students.drop.instructor');
                     });
                 });
             });

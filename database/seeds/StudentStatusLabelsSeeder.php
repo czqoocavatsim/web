@@ -61,7 +61,7 @@ class StudentStatusLabelsSeeder extends Seeder
         $completed = new StudentStatusLabel([
             'name' => 'Completed',
             'colour' => 'green darken-4',
-            'fa_icon' => 'fa fa-double-check',
+            'fa_icon' => 'fa fa-check-double',
             'description' => 'Student has completed training.',
             'restricted' => true
         ]);

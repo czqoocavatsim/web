@@ -15,6 +15,22 @@
             </h5>
         </div>
     </div>
+
+    @if(!$student->current)
+        <h5 class="blue-text mt-3">Records</h5>
+        <ul class="list-unstyled mt-2">
+            <li class="mb-2">
+                <a href="#" style="text-decoration:none;"><span class="blue-text"><i class="fas fa-chevron-right"></i></span> &nbsp; <span class="black-text">Training/OTS Sessions</span></a>
+            </li>
+            <li class="mb-2">
+                <a href="#" style="text-decoration:none;"><span class="blue-text"><i class="fas fa-chevron-right"></i></span> &nbsp; <span class="black-text">Student History</span></a>
+            </li>
+            <li class="mb-2">
+                <a href="{{route('training.admin.instructing.students.records.training-notes', $student->user_id)}}" style="text-decoration:none;"><span class="blue-text"><i class="fas fa-chevron-right"></i></span> &nbsp; <span class="black-text">Training Notes</span></a>
+            </li>
+        </ul>
+    @else
+
     <div class="row mt-3">
         <div class="col-md-6">
             <h5 class="blue-text">Information</h5>
@@ -53,9 +69,14 @@
                     <a href="{{route('training.admin.instructing.students.records.training-notes', $student->user_id)}}" style="text-decoration:none;"><span class="blue-text"><i class="fas fa-chevron-right"></i></span> &nbsp; <span class="black-text">Training Notes</span></a>
                 </li>
             </ul>
-            <h5 class="blue-text">Submitted Availability</h5>
-            @if (count($student->availability) > 1)
-
+            <h5 class="blue-text">Availability</h5>
+            @if (count($student->availability) > 0)
+                @foreach($student->availability as $a)
+                <div class="border p-2">
+                    <p>Submitted on {{$a->created_at->toFormattedDateString()}}</p>
+                    {{ $a->submissionHtml() }}
+                </div>
+                @endforeach
             @else
                 <p>Availability not yet submitted by student.</p>
             @endif
@@ -68,11 +89,23 @@
                         <div class="d-flex flex-row align-items-center">
                             <img src="{{$student->instructor()->instructor->user->avatar()}}" style="height: 30px; width:30px;margin-right: 15px; border-radius: 50%;">
                             <div class="d-flex flex-column align-items-center h-100">
-                                <h5 class="mb-0">{{$student->instructor()->instructor->user->fullName('FLC')}}</h5>
+                                <h5 class="mb-0">{{$student->instructor()->instructor->user->fullName('FL')}}</h5>
                             </div>
                         </div>
                     </div>
                 </a>
+                <ul class="list-unstyled mt-3">
+                    @can('assign instructor to student')
+                    <li class="mb-2">
+                        <a data-target="#assignInstructorModal" data-toggle="modal" style="text-decoration:none;"><span class="blue-text"><i class="fas fa-chevron-right"></i></span> &nbsp; <span class="black-text">Reassign student</span></a>
+                    </li>
+                    @endcan
+                    @if(Auth::user()->instructorProfile == $student->instructor()->instructor)
+                    <li class="mb-2">
+                        <a data-target="#dropStudentModal" data-toggle="modal" style="text-decoration:none;"><span class="blue-text"><i class="fas fa-chevron-right"></i></span> &nbsp; <span class="black-text">Drop student</span></a>
+                    </li>
+                    @endif
+                </ul>
             @else
                 This student is not assigned to an instructor.
                 <ul class="list-unstyled mt-2">
@@ -80,6 +113,7 @@
                     <li class="mb-2">
                         <a data-target="#assignInstructorModal" data-toggle="modal" style="text-decoration:none;"><span class="blue-text"><i class="fas fa-chevron-right"></i></span> &nbsp; <span class="black-text">Assign</span></a>
                     </li>
+                    <p class="text-muted">Use this function to assign yourself.</p>
                     @endcan
                 </ul>
             @endif
@@ -124,6 +158,29 @@
     </div>
     <!--End delete modal-->
 
+    <!--Drop modal-->
+    <div class="modal fade" id="dropStudentModal" tabindex="-1" role="dialog">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLongTitle">Are you sure?</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <p>Try to find another instructor to reassign this student to first before dropping them. Once they are unassigned, they will go back to Ready for Pick-Up Status.</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-light" data-dismiss="modal">Dismiss</button>
+                    <a href="{{route('training.admin.instructing.students.drop.instructor', $student->user->id)}}" role="button" class="btn btn-danger">Drop Student</a>
+                </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    <!--End drop modal-->
+
     <!--Start assign instructor modal-->
     <div class="modal fade" id="assignInstructorModal" role="dialog">
         <div class="modal-dialog modal-dialog-centered model-lg" role="document">
@@ -167,7 +224,7 @@
         </div>
     </div>
 
-
+    @endif
 
     <script>
         $.urlParam = function(name){

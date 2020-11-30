@@ -130,5 +130,6 @@ class PermissionsSeeder extends Seeder
         //Give the bot users the roles they deserve!
         User::find(1)->assignRole('Administrator');
         User::find(2)->assignRole('Administrator');
+
     }
 }

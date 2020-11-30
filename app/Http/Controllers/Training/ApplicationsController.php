@@ -30,10 +30,12 @@ use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Notification;
+use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Str;
 use mofodojodino\ProfanityFilter\Check;
 use NotificationChannels\Discord\DiscordMessage;
+use RestCord\DiscordClient;
 use Spatie\Permission\Models\Role;
 
 class ApplicationsController extends Controller
@@ -417,12 +419,36 @@ class ApplicationsController extends Controller
         $rosterMember->active = 1;
         $rosterMember->save();
 
-        //Setup Student
-        $student = new Student([
-            'user_id' => $application->user_id,
-            'current' => true
-        ]);
-        $student->save();
+        //Create student
+        if ($student = Student::where('user_id', $application->user_id)->first()) {
+            $student->current = true;
+            $student->created_at = Carbon::now();
+            $student->save();
+        } else {
+            $student = new Student();
+            $student->user_id = $application->user_id;
+            $student->save();
+        }
+
+        //Give role
+        $student->user->assignRole('Student');
+
+        //Give Discord role
+        if ($student->user->hasDiscord() && $student->user->memberOfCzqoGuild()) {
+            //Get Discord client
+            $discord = new DiscordClient(['token' => config('services.discord.token')]);
+
+            //Remove student role
+            $discord->guild->addGuildMemberRole([
+                'guild.id' => intval(config('services.discord.guild_id')),
+                'user.id' => $student->user->discord_user_id,
+                'role.id' => 482824058141016075
+            ]);
+        } else {
+            Session::flash('info', 'Unable to add Discord permissions automatically.');
+        }
+
+        //Status label
         $label = new StudentStatusLabelLink([
             'student_status_label_id' => StudentStatusLabel::whereName('Not Ready')->first()->id,
             'student_id' => $student->id
@@ -434,7 +460,7 @@ class ApplicationsController extends Controller
         $application->user->assignRole('Student');
 
         //Notify user
-        //$application->user->notify(new ApplicationAcceptedApplicant($application));
+        $application->user->notify(new ApplicationAcceptedApplicant($application));
 
         //Notify staff
         //Notification::route('mail', CoreSettings::find(1)->emailcinstructor)->notify(new ApplicationAcceptedStaff($application));

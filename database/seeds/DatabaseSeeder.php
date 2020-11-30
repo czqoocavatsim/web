@@ -117,5 +117,12 @@ class DatabaseSeeder extends Seeder
             'shortform' => 'fengineer',
 
         ]);
+
+
+        $this->call([
+            PermissionsSeeder::class,
+            TrainingPermissionsSeeder::class,
+            StudentStatusLabelsSeeder::class
+        ]);
     }
 }

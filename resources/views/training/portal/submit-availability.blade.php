@@ -10,9 +10,22 @@
         Welcome to Gander Oceanic, {{Auth::user()->fullName('F')}}! We're excited to have you with us. Before we start your training, we need you to submit your availability for training sessions for the next couple of weeks. This allows us to assign you an Instructor who is best suited to your timezone.
     </p>
     <p>To begin, enter your availability for the next 2 weeks, using the Zulu/GMT time zone.</p>
-    <textarea id="contentMD" style="display:none; height:" ></textarea>
-    <script>
-        var simplemde = new EasyMDE({ maxHeight: '200px', autofocus: true, autoRefresh: true, element: document.getElementById("contentMD"), placeholder: 'I\'m available most days between 0100 zulu and 0500 zulu. My timezone is Australia/Adelaide.'});
-    </script>
+    @if ($errors->submitAvailabilityErrors->any())
+    <div class="alert alert-danger">
+        <ul class="mb-0 list-unstyled">
+            @foreach ($errors->submitAvailabilityErrors->all() as $error)
+                <li>{{ $error }}</li>
+            @endforeach
+        </ul>
+    </div>
+    @endif
+    <form action="{{route('training.portal.availability.submit.post')}}" method="POST">
+        @csrf
+        <textarea id="contentMD" name="submission" style="display:none; height:" ></textarea>
+        <script>
+            var simplemde = new EasyMDE({ maxHeight: '200px', autofocus: true, autoRefresh: true, element: document.getElementById("contentMD"), placeholder: 'I\'m available most days between 0100 zulu and 0500 zulu. My timezone is Australia/Adelaide.'});
+        </script>
+        <button class="btn btn-success" style="font-size: 1.1em;"><i class="fas fa-check"></i>&nbsp;&nbsp;Submit Availability</button>
+    </form>
 </div>
 @endsection

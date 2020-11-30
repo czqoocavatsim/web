@@ -10,7 +10,7 @@ class StudentAvailabilitySubmission extends Model
 {
     protected $hidden = ['id'];
 
-    protected $protected = [
+    protected $fillable = [
         'student_id', 'submission', 'extra_comments'
     ];
 
