@@ -315,9 +315,6 @@ body[data-accent]:not([data-accent="default"]) .bg-czqo-blue-light {
     background-color: var(--czqo-blue);
 }
 
-.btn {
-    font-weight: 600;
-}
 
 .btn, .btn:hover, .btn:active {
     box-shadow: none !important;
@@ -500,4 +497,16 @@ body[data-theme="dark"] .btn-light {
 
 body[data-theme="dark"] .text-body {
     color: #eee !important;
+}
+
+h1,h2,h3,h4,h5,h6 .font-weight-bold {
+    font-weight: 400 !important;
+}
+
+.modal-content .modal-header h5.modal-title {
+  font-weight: 400 !important;
+}
+
+.font-weight-bold {
+  font-weight: 400 !important;
 }

@@ -90,7 +90,7 @@ class User extends Authenticatable
 
     public function studentProfile()
     {
-        return $this->hasOne(AtcTraining\Student::class);
+        return $this->hasOne(Training\Instructing\Students\Student::class);
     }
 
     public function tickets()

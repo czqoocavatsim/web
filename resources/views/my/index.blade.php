@@ -280,8 +280,7 @@
                 </ul>
             </div>
             <div id="certificationTrainingTab" style="display:none">
-                <h3 class="font-weight-bold blue-text pb-2">Certification and Training</h3>
-                <h5 class="card-title">Status</h5>
+                <h3 class="font-weight-bold blue-text pb-2">Certification</h3>
                 <div class="card-text">
                     <div class="d-flex flex-row justify-content-left">
                         @if (Auth::user()->rosterProfile)
@@ -328,9 +327,9 @@
                             @break
                         @endswitch
                         </h3>
-                    @else
-                    Not Gander Certified
-                    @endif
+                        @else
+                        Not Gander Certified
+                        @endif
                     </div>
                 </div>
                 @if (Auth::user()->rosterProfile)
@@ -350,9 +349,15 @@
                 @endif
                 <p>You require 3 hours of activity every 6 months, unless you were certified within the current activity cycle.</p>
                 @endif
-                <ul class="list-unstyled mt-4 mb-0">
+                <ul class="list-unstyled mt-4 mb-4">
                     <li class="mb-2">
                         <a href="{{route('training.applications.showall')}}" style="text-decoration:none;"><span class="blue-text"><i class="fas fa-chevron-right"></i></span> &nbsp; <span class="black-text">View Your Applications</span></a>
+                    </li>
+                </ul>
+                <h3 class="blue-text">Training</h3>
+                <ul class="list-unstyled mb-4">
+                    <li class="mb-2">
+                        <a href="{{route('training.applications.showall')}}" style="text-decoration:none;"><span class="blue-text"><i class="fas fa-chevron-right"></i></span> &nbsp; <span class="black-text">Training Portal</span></a>
                     </li>
                 </ul>
             </div>

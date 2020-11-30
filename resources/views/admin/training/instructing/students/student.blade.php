@@ -53,6 +53,12 @@
                     <a href="{{route('training.admin.instructing.students.records.training-notes', $student->user_id)}}" style="text-decoration:none;"><span class="blue-text"><i class="fas fa-chevron-right"></i></span> &nbsp; <span class="black-text">Training Notes</span></a>
                 </li>
             </ul>
+            <h5 class="blue-text">Submitted Availability</h5>
+            @if (count($student->availability) > 1)
+
+            @else
+                <p>Availability not yet submitted by student.</p>
+            @endif
         </div>
         <div class="col-md-6">
             <h5 class="blue-text">Instructor</h5>

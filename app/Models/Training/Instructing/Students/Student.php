@@ -54,4 +54,9 @@ class Student extends Model
         //Find latest accepted application from user
         return Application::where('user_id', $this->user_id)->where('status', 1)->latest('created_at')->first();
     }
+
+    public function availability()
+    {
+        return $this->hasMany(StudentAvailabilitySubmission::class);
+    }
 }

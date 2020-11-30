@@ -11,6 +11,9 @@ use App\Models\Training\Application;
 use App\Models\Training\ApplicationComment;
 use App\Models\Training\ApplicationReferee;
 use App\Models\Training\ApplicationUpdate;
+use App\Models\Training\Instructing\Links\StudentStatusLabelLink;
+use App\Models\Training\Instructing\Students\Student;
+use App\Models\Training\Instructing\Students\StudentStatusLabel;
 use App\Notifications\Training\Applications\ApplicationAcceptedApplicant;
 use App\Notifications\Training\Applications\ApplicationAcceptedStaff;
 use App\Notifications\Training\Applications\ApplicationRejectedApplicant;
@@ -395,7 +398,7 @@ class ApplicationsController extends Controller
         $update = new ApplicationUpdate([
             'application_id' => $application->id,
             'update_title' => 'Your application has been accepted!',
-            'update_content' => 'You will be contacted by the Chief Instructor to start your training. Congratulations!',
+            'update_content' => 'Congratulations! Check out the myCZQO Training portal for more information on how to continue with getting your Gander Oceanic certification.',
             'update_type' => 'green'
         ]);
         $update->save();
@@ -414,15 +417,27 @@ class ApplicationsController extends Controller
         $rosterMember->active = 1;
         $rosterMember->save();
 
+        //Setup Student
+        $student = new Student([
+            'user_id' => $application->user_id,
+            'current' => true
+        ]);
+        $student->save();
+        $label = new StudentStatusLabelLink([
+            'student_status_label_id' => StudentStatusLabel::whereName('Not Ready')->first()->id,
+            'student_id' => $student->id
+        ]);
+        $label->save();
+
         //Change their user role
         $application->user->removeRole('Guest');
-        $application->user->assignRole('Trainee');
+        $application->user->assignRole('Student');
 
         //Notify user
-        $application->user->notify(new ApplicationAcceptedApplicant($application));
+        //$application->user->notify(new ApplicationAcceptedApplicant($application));
 
         //Notify staff
-        Notification::route('mail', CoreSettings::find(1)->emailcinstructor)->notify(new ApplicationAcceptedStaff($application));
+        //Notification::route('mail', CoreSettings::find(1)->emailcinstructor)->notify(new ApplicationAcceptedStaff($application));
 
         //Return
         $request->session()->flash('alreadyApplied', 'Accepted!');

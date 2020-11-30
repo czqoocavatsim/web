@@ -130,6 +130,10 @@ Route::group(['middleware' => 'auth'], function () {
             Route::get('applications/{reference_id}', 'Training\ApplicationsController@show')->name('training.applications.show');
             Route::get('applications/{reference_id}/updates', 'Training\ApplicationsController@showUpdates')->name('training.applications.show.updates');
 
+            //Portal
+            Route::name('training.portal.')->group(function () {
+                Route::get('portal', 'Training\TrainingPortalController@index')->name('index');
+            });
         });
 
         //Support

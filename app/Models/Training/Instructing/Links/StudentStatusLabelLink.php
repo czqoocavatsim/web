@@ -8,6 +8,10 @@ use Illuminate\Database\Eloquent\Model;
 
 class StudentStatusLabelLink extends Model
 {
+    protected $fillable = [
+        'student_status_label_id', 'student_id'
+    ];
+
     public function student()
     {
         return $this->belongsTo(Student::class);
