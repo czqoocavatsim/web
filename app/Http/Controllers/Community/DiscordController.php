@@ -8,6 +8,7 @@ use App\Models\Users\User;
 use App\Notifications\Discord\BanNotification;
 use App\Notifications\Discord\DiscordWelcome;
 use Carbon\Carbon;
+use GuzzleHttp\Command\Exception\CommandClientException;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
@@ -224,7 +225,12 @@ class DiscordController extends Controller
         );
 
         //Add them to guild
-        $discord->guild->addGuildMember($arguments);
+        try {
+            $discord->guild->addGuildMember($arguments);
+            return redirect()->route('my.index')->with('error-modal', 'There was an error adding you to the server. Please try again later. If it still doesn\'t work, report it to the Web Team via the Feedback page. (CommandClientException)');
+        } catch (CommandClientException $ex) {
+            return redirect()->route('my.index')->with('error-modal', 'There was an error adding you to the server. Please try again later. If it still doesn\'t work, report it to the Web Team via the Feedback page. (CommandClientException)');
+        }
 
         //DM them
         Auth::user()->notify(new DiscordWelcome());

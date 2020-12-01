@@ -69,15 +69,23 @@
                     <li class="w-100">
                         <div class="d-flex h-100 flex-row justify-content-left align-items-center">
                             <i style="font-size: 1.6em; margin-right: 10px;" class="fas fa-user-circle fa-fw"></i>
-                            <span style="font-size: 1.1em;">Your Profile</span>
+                            <span style="font-size: 1.1em;">{{Auth::user()->fullName('F')}}</span>
                         </div>
                     </li>
                 </a>
                 <a class="myczqo-tab" data-myczqo-tab="certificationTrainingTab" href="#certificationTraining">
                     <li class="w-100">
                         <div class="d-flex h-100 flex-row justify-content-left align-items-center">
-                            <i style="font-size: 1.6em; margin-right: 10px;" class="fas fa-graduation-cap fa-fw"></i>
-                            <span style="font-size: 1.1em;">Certfication and Training</span>
+                            <i style="font-size: 1.6em; margin-right: 10px;" class="fas fa-id-card-alt fa-fw"></i>
+                            <span style="font-size: 1.1em;">Certfication and Activity</span>
+                        </div>
+                    </li>
+                </a>
+                <a class="myczqo-tab no-click" data-myczqo-tab="none" href="{{route('training.portal.index')}}">
+                    <li class="w-100">
+                        <div class="d-flex h-100 flex-row justify-content-left align-items-center">
+                            <i style="font-size: 1.6em; margin-right: 10px;" class="fas fa-graduation-cap"></i>
+                            <span style="font-size: 1.1em;">Training Portal</span>
                         </div>
                     </li>
                 </a>
@@ -89,6 +97,11 @@
                         </div>
                     </li>
                 </a>
+                <li class="w-100 my-3" style="border:none;">
+                    <div class="d-flex h-100 flex-row justify-content-left align-items-center">
+                        <span style="font-size: 1em;" class="text-muted">STAFF</span>
+                    </div>
+                </li>
                 @hasanyrole('Administrator|Senior Staff|Instructor')
                 <a class="myczqo-tab no-click" data-myczqo-tab="none" href="{{route('training.admin.dashboard')}}">
                     <li class="w-100">
@@ -117,6 +130,11 @@
                         </div>
                     </li>
                 </a>
+                <li class="w-100 my-3" style="border:none;">
+                    <div class="d-flex h-100 flex-row justify-content-left align-items-center">
+                        <span style="font-size: 1em;" class="text-muted">SETTINGS</span>
+                    </div>
+                </li>
                 <a class="myczqo-tab no-click" data-myczqo-tab="none" href="{{route('me.data')}}">
                     <li class="w-100">
                         <div class="d-flex h-100 flex-row justify-content-left align-items-center">
@@ -194,7 +212,7 @@
                             <span class="black-text">
                                 Join Our Discord
                             </span>
-                        </a>
+                        </a>&nbsp;
                         @endif
                         <a href="#" data-toggle="modal" data-target="#discordModal"  style="text-decoration:none;">
                             <span class="blue-text">
@@ -283,9 +301,9 @@
                 <h3 class="font-weight-bold blue-text pb-2">Certification</h3>
                 <div class="card-text">
                     <div class="d-flex flex-row justify-content-left">
-                        @if (Auth::user()->rosterProfile)
-                        <h3 class="mr-2">
-                        @switch (Auth::user()->rosterProfile->certification)
+                        @if(Auth::user()->rosterProfile)
+                        <h3 class="mr-3">
+                            @switch (Auth::user()->rosterProfile->certification)
                             @case("certified")
                             <span class="badge badge-success rounded shadow-none">
                                 <i class="fa fa-check"></i>&nbsp;
@@ -309,10 +327,10 @@
                                 <i class="fa fa-question"></i>&nbsp;
                                 Unknown
                             </span>
-                        @endswitch
+                            @endswitch
                         </h3>
                         <h3>
-                        @switch (Auth::user()->rosterProfile->active)
+                            @switch (Auth::user()->rosterProfile->active)
                             @case(true)
                             <span class="badge badge-success rounded shadow-none">
                                 <i class="fa fa-check"></i>&nbsp;
@@ -325,7 +343,7 @@
                                 Inactive
                             </span>
                             @break
-                        @endswitch
+                            @endswitch
                         </h3>
                         @else
                         Not Gander Certified
@@ -349,150 +367,122 @@
                 @endif
                 <p>You require 3 hours of activity every 6 months, unless you were certified within the current activity cycle.</p>
                 @endif
-                <ul class="list-unstyled mt-4 mb-4">
-                    <li class="mb-2">
-                        <a href="{{route('training.applications.showall')}}" style="text-decoration:none;"><span class="blue-text"><i class="fas fa-chevron-right"></i></span> &nbsp; <span class="black-text">View Your Applications</span></a>
-                    </li>
-                </ul>
-                <h3 class="blue-text">Training</h3>
-                <ul class="list-unstyled mb-4">
-                    <li class="mb-2">
-                        <a href="{{route('training.applications.showall')}}" style="text-decoration:none;"><span class="blue-text"><i class="fas fa-chevron-right"></i></span> &nbsp; <span class="black-text">Training Portal</span></a>
-                    </li>
-                </ul>
             </div>
-            @hasanyrole('Administrator|Senior Staff|Training Team')
+            @hasanyrole('Administrator|Senior Staff|Instructor')
             <div id="instructingTab" style="display:none;">
                 <h3 class="font-weight-bold blue-text pb-2">Instructing</h3>
             </div>
             @endhasanyrole
             <div id="staffTab" style="display:none">
-                @hasanyrole('Administrator|Senior Staff|Training Team|Marketing Team|Web Team')
-                    <h3 class="font-weight-bold blue-text pb-2">Staff</h3>
-                    <ul class="list-unstyled mt-2 mb-0">
-                        @can('view events')
-                        <li class="mb-2">
-                            <a href="{{route('events.admin.index')}}" style="text-decoration:none;"><span class="blue-text"><i class="fas fa-chevron-right"></i></span> &nbsp; <span class="black-text">Events</span></a>
-                        </li>
+                @hasanyrole('Administrator|Senior Staff|Instructor|Marketing Team|Web Team')
+                    <h2 class="font-weight-bold blue-text pb-2">Staff</h2>
+                    <div class="row">
+                        @canany('view events|view articles')
+                        <div class="col-md-4">
+                            <div class="card mb-3 shadow-none">
+                                <h4 class="blue-text mb-3">Events and News</h4>
+                                <div class="list-group z-depth-1">
+                                    @can('view events')
+                                    <a href="{{route('events.admin.index')}}" class="waves-effect list-group-item list-group-item-action">
+                                        <i style="margin-right: 10px;" class="fas fa-calendar"></i>
+                                        Events
+                                    </a>
+                                    @endcan
+                                    @can('view articles')
+                                    <a href="{{route('news.index')}}" class="waves-effect list-group-item list-group-item-action">
+                                        <i style="margin-right: 10px;" class="fas fa-newspaper"></i>
+                                        News
+                                    </a>
+                                    @endcan
+                                </div>
+                            </div>
+                        </div>
+                        @endcanany
+                        @canany('edit policies|edit atc resources')
+                        <div class="col-md-4">
+                            <div class="card mb-3 shadow-none">
+                                <h4 class="blue-text mb-3">Publications</h4>
+                                <div class="list-group z-depth-1">
+                                    @can('edit policies')
+                                    <a href="{{route('publications.policies')}}" class="waves-effect list-group-item list-group-item-action">
+                                        <i style="margin-right: 10px;" class="fas fa-file-alt fa-fw"></i>Policies
+                                    </a>
+                                    @endcan
+                                    @can('edit atc resources')
+                                    <a href="{{route('publications.atc-resources')}}" class="waves-effect list-group-item list-group-item-action">
+                                        <i style="margin-right: 10px;" class="fas fa-file-alt fa-fw"></i>ATC Resources
+                                    </a>
+                                    @endcan
+                                </div>
+                            </div>
+                        </div>
+                        @endcanany
+                        @hasanyrole('Administrator|Senior Staff|Instructor')
+                        <div class="col-md-4">
+                            <div class="card mb-3 shadow-none">
+                                <h4 class="blue-text mb-3">Training</h4>
+                                <div class="list-group z-depth-1">
+                                    <a href="{{route('training.admin.dashboard')}}" class="waves-effect list-group-item list-group-item-action">
+                                        <i style="margin-right: 10px;" class="fas fa-tachometer-alt fa-fw"></i>Dashboard
+                                    </a>
+                                    @can('view roster admin')
+                                    <a href="{{route('training.admin.roster')}}" class="waves-effect list-group-item list-group-item-action">
+                                        <i style="margin-right: 10px;" class="fas fa-users fa-fw"></i>Roster
+                                    </a>
+                                    <a href="{{route('training.admin.solocertifications')}}" class="waves-effect list-group-item list-group-item-action">
+                                        <i style="margin-right: 10px;" class="fas fa-certificate fa-fw"></i>Solo Certifications
+                                    </a>
+                                    @endcan
+                                    @can('view applications')
+                                    <a href="{{route('training.admin.applications')}}" class="waves-effect list-group-item list-group-item-action">
+                                        <i style="margin-right: 10px;" class="fas fa-clock fa-fw"></i>Applications
+                                    </a>
+                                    @endcan
+                                </div>
+                            </div>
+                        </div>
+                        @endhasanyrole
+                        @hasanyrole('Administrator|Senior Staff')
+                        <div class="col-md-4">
+                            <div class="card mb-3 shadow-none">
+                                <h4 class="blue-text mb-3">Community</h4>
+                                <div class="list-group z-depth-1">
+                                    @can('view users')
+                                    <a href="{{route('community.users.index')}}" class="waves-effect list-group-item list-group-item-action">
+                                        <i style="margin-right: 10px;" class="fas fa-users fa-fw"></i>Users
+                                    </a>
+                                    @endcan
+                                </div>
+                            </div>
+                        </div>
+                        @endhasanyrole
+                        @can('view network data')
+                        <div class="col-md-4">
+                            <div class="card mb-3 shadow-none">
+                                <h4 class="blue-text mb-3">Network</h4>
+                                <div class="list-group z-depth-1">
+                                    @can('view users')
+                                    <a href="{{route('network.index')}}" class="waves-effect list-group-item list-group-item-action">
+                                        <i style="margin-right: 10px;" class="fas fa-wifi fa-fw"></i>View Network Data
+                                    </a>
+                                    @endcan
+                                </div>
+                            </div>
+                        </div>
                         @endcan
-                        @can('view articles')
-                        <li class="mb-2">
-                            <a href="{{route('news.index')}}" style="text-decoration:none;"><span class="blue-text"><i class="fas fa-chevron-right"></i></span> &nbsp; <span class="black-text">News</span></a>
-                        </li>
+                        @can('edit settings')
+                        <div class="col-md-4">
+                            <div class="card mb-3 shadow-none">
+                                <h4 class="blue-text mb-3">Admin</h4>
+                                <div class="list-group z-depth-1">
+                                    <a href="{{route('settings.index')}}" class="waves-effect list-group-item list-group-item-action">
+                                        <i style="margin-right: 10px;" class="fas fa-cog fa-fw"></i>Site Settings
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
                         @endcan
-                    </ul>
-
-                    @hasanyrole('Administrator|Senior Staff|Training Team')
-                    <h5 class="font-weight-bold blue-text mt-3">Training</h5>
-                    <ul class="list-unstyled mt-2 mb-0">
-                        <li class="mb-2">
-                            <a href="{{(route('training.admin.dashboard'))}}" style="text-decoration:none;">
-                                <span class="blue-text">
-                                    <i class="fas fa-chevron-right"></i>
-                                </span>
-                                &nbsp;
-                                <span class="black-text">
-                                    Dashboard
-                                </span>
-                            </a>
-                        </li>
-                        @can('view roster admin')
-                        <li class="mb-2">
-                            <a href="{{(route('training.admin.roster'))}}" style="text-decoration:none;">
-                                <span class="blue-text">
-                                    <i class="fas fa-chevron-right"></i>
-                                </span>
-                                &nbsp;
-                                <span class="black-text">
-                                    Roster
-                                </span>
-                            </a>
-                        </li>
-                        <li class="mb-2">
-                            <a href="{{(route('training.admin.solocertifications'))}}" style="text-decoration:none;">
-                                <span class="blue-text">
-                                    <i class="fas fa-chevron-right"></i>
-                                </span>
-                                &nbsp;
-                                <span class="black-text">
-                                    Solo Certifications
-                                </span>
-                            </a>
-                        </li>
-                        @endcan
-                    </ul>
-                    @endhasanyrole
-
-                    @canany('edit policies|edit atc resources')
-                    <h5 class="font-weight-bold blue-text mt-3">Publications</h5>
-                    <ul class="list-unstyled mt-2 mb-0">
-                        <li class="mb-2">
-                            <a href="{{(route('publications.policies'))}}" style="text-decoration:none;">
-                                <span class="blue-text">
-                                    <i class="fas fa-chevron-right"></i>
-                                </span>
-                                &nbsp;
-                                <span class="black-text">
-                                    Edit policies
-                                </span>
-                            </a>
-                        </li>
-                        <li class="mb-2">
-                            <a href="{{(route('publications.atc-resources'))}}" style="text-decoration:none;">
-                                <span class="blue-text">
-                                    <i class="fas fa-chevron-right"></i>
-                                </span>
-                                &nbsp;
-                                <span class="black-text">
-                                    Edit ATC resources
-                                </span>
-                            </a>
-                        </li>
-                    </ul>
-                    @endcanany
-
-                    @can('view users')
-                    <h5 class="font-weight-bold blue-text mt-3">Users</h5>
-                    <ul class="list-unstyled mt-2 mb-0">
-                        <li class="mb-2">
-                            <a href="{{(route('community.users.index'))}}" style="text-decoration:none;">
-                                <span class="blue-text">
-                                    <i class="fas fa-chevron-right"></i>
-                                </span>
-                                &nbsp;
-                                <span class="black-text">
-                                    View users
-                                </span>
-                            </a>
-                        </li>
-                    </ul>
-                    @endcan
-
-                    @can('view network data')
-                    <h5 class="font-weight-bold blue-text mt-3">Network</h5>
-                    <ul class="list-unstyled mt-2 mb-0">
-                        <li class="mb-2">
-                            <a href="{{route('network.index')}}" style="text-decoration:none;">
-                                <span class="blue-text">
-                                    <i class="fas fa-chevron-right"></i>
-                                </span>
-                                &nbsp;
-                                <span class="black-text">
-                                    View network data
-                                </span>
-                            </a>
-                        </li>
-                    </ul>
-                    @endcan
-
-                    @can('edit settings')
-                    <h5 class="font-weight-bold blue-text mt-3">Admin</h5>
-                    <ul class="list-unstyled mt-0 mb-0">
-                        <li class="mb-2">
-                            <a href="{{route('settings.index')}}" style="text-decoration:none;"><span class="blue-text"><i class="fas fa-chevron-right"></i></span> &nbsp; <span class="black-text">Settings</span></a>
-                        </li>
-                    </ul>
-                    @endcan
+                    </div>
                 @endhasanyrole
             </div>
             <br/>

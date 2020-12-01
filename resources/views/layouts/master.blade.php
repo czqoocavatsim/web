@@ -298,9 +298,6 @@
                 </div>
                 <div class="modal-body">
                     {{\Session::get('error-modal')}}
-                    <div class="alert black-text bg-czqo-blue-light mt-4">
-                        If you believe this is a mistake, please create a <a target="_blank" class="black-text" href="TODO: TicketURL">support ticket.</a>
-                    </div>
                 </div>
             </div>
         </div>
