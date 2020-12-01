@@ -236,6 +236,14 @@ Route::group(['middleware' => 'auth'], function () {
                         //Assign student to instructor
                         Route::post('/students/{cid}/assign/instructor', 'Training\InstructingController@assignStudentToInstructor')->name('instructing.students.assign.instructor');
                         Route::get('/students/{cid}/drop/instructor', 'Training\InstructingController@dropStudentFromInstructor')->name('instructing.students.drop.instructor');
+
+                        //Student status labels
+                        Route::get('/students/{cid}/drop/label/{label_link_id}', 'Training\InstructingController@dropStatusLabelFromStudent')->name('instructing.students.drop.label');
+                        Route::post('/students/{cid}/assign/label', 'training\InstructingController@assignStatusLabelToStudent')->name('instructing.student.assign.label');
+
+                        //Student recommendation requests
+                        Route::get('/students/{cid}/request/recommend/solocert', 'Training\InstructingController@recommendSoloCertification')->name('instructing.students.request.recommend.solocert');
+                        Route::get('/students/{cid}/request/recommend/assessment', 'Training\InstructingController@recommendAssessment')->name('instructing.students.request.recommend.assessment');
                     });
                 });
             });

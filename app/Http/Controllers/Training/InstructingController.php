@@ -7,6 +7,7 @@ use App\Models\Training\Instructing\Board\BoardList;
 use App\Models\Training\Instructing\Instructors\Instructor;
 use App\Models\Training\Instructing\Links\InstructorStudentAssignment;
 use App\Models\Training\Instructing\Links\StudentStatusLabelLink;
+use App\Models\Training\Instructing\Records\InstuctorRecommendation;
 use App\Models\Training\Instructing\Records\OTSSession;
 use App\Models\Training\Instructing\Students\Student;
 use App\Models\Training\Instructing\Records\TrainingSession;
@@ -17,6 +18,7 @@ use App\Notifications\Training\Instructing\AddedAsStudent;
 use App\Notifications\Training\Instructing\RemovedAsInstructor;
 use App\Notifications\Training\Instructing\RemovedAsStudent;
 use App\Notifications\Training\Instructing\StudentAssignedToYou;
+use App\Notifications\Training\Instructing\StudentRecommendedForSoloCert;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Session;
@@ -95,8 +97,16 @@ class InstructingController extends Controller
         //Get instructors for assignment modal
         $instructors = Instructor::whereCurrent(true)->get();
 
+        //Get labels for assignment modal
+        $labels = StudentStatusLabel::cursor()->filter(function ($l) use ($student) {
+            if (StudentStatusLabelLink::where('student_id', $student->id)->where('student_status_label_id', $l->id)->first()) {
+                return false;
+            }
+            return true;
+        });
+
         //Return view
-        return view('admin.training.instructing.students.student', compact('student', 'instructors'));
+        return view('admin.training.instructing.students.student', compact('student', 'instructors', 'labels'));
     }
 
     public function addInstructor(Request $request)
@@ -245,6 +255,9 @@ class InstructingController extends Controller
         } else {
             Session::flash('info', 'Unable to add Discord permissions automatically.');
         }
+
+        //Give not ready status label
+        $student->assignStatusLabel(StudentStatusLabel::whereName('Not Ready')->first());
 
         //Notify
         $student->user->notify(new AddedAsStudent());
@@ -490,5 +503,88 @@ class InstructingController extends Controller
         ]);
 
         return redirect()->route('training.admin.instructing.students.view', $student->user_id)->with('info', 'Student dropped');
+    }
+
+    public function dropStatusLabelFromStudent($student_id, $label_link_id)
+    {
+        //Get the student
+        $student = Student::whereCurrent(true)->where('user_id', $student_id)->firstOrFail();
+
+        //Find the link
+        $link = StudentStatusLabelLink::where('student_id', $student->id)->whereId($label_link_id)->firstOrFail();
+
+        //Does user have any labels left?
+        if (count($student->labels) == 1) {
+            //Tell them to assign another label first
+            return redirect()->back()->with('error', 'Please assign another label before deleting this one.');
+        }
+
+        //Delete the link
+        $link->delete();
+
+        //Return
+        return redirect()->back()->with('success', 'Label removed!');
+    }
+
+    public function assignStatusLabelToStudent(Request $request, $student_id)
+    {
+        //Get the student
+        $student = Student::whereCurrent(true)->where('user_id', $student_id)->firstOrFail();
+
+        //Validate
+        $validator = Validator::make($request->all(), [
+            'label_id' => 'required|integer',
+        ]);
+
+        //Redirect if it fails
+        if ($validator->fails()) {
+            return redirect()->route('training.admin.instructing.students.view', ['cid' => $student->user->id, 'assignLabelModal' => 1])->withInput()->withErrors($validator, 'assignLabelErrors');
+        }
+
+        //Find the label
+        $label = StudentStatusLabel::whereId($request->get('label_id'))->firstOrFail();
+
+        //Does user already have this label?
+        if ($l = StudentStatusLabelLink::where('student_id', $student->id)->where('student_status_label_id', $label->id)->first()) {
+            //Return error
+            return redirect()->back()->with('error', "Label {$label->name} already assigned.");
+        }
+
+        //Create the link
+        $link = new StudentStatusLabelLink([
+            'student_id' => $student->id,
+            'student_status_label_id' => $label->id
+        ]);
+        $link->save();
+
+        //Return
+        return redirect()->back()->with('success', 'Label added!');
+    }
+
+    public function recommendSoloCertification($student_id)
+    {
+        //Get the student
+        $student = Student::whereCurrent(true)->where('user_id', $student_id)->firstOrFail();
+
+        //Is student on solo cert?
+        if ($student->soloCertification()) {
+            return redirect()->back()->with('error', 'Student is already on a solo certification. Check if their status labels are correctly setup.');
+        }
+
+        //Notify via email
+        foreach (Instructor::whereAssessor(true)->whereCurrent(true)->get() as $instructor) {
+            $instructor->user->notify(new StudentRecommendedForSoloCert($student, Auth::user()->instructorProfile));
+        }
+
+        //Create object
+        $recommendation = new InstuctorRecommendation([
+            'student_id' => $student->id,
+            'instructor_id' => Auth::user()->instructorProfile->id,
+            'type' => 'Solo Certification'
+        ]);
+        $recommendation->save();
+
+        //Return
+        return redirect()->back()->with('success', 'Recommendation sent!');
     }
 }

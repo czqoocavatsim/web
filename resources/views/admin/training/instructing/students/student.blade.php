@@ -8,10 +8,15 @@
             <h2 class="blue-text mt-2 mb-1">{{$student->user->fullName('FLC')}}</h2>
             <h5>
                 @foreach($student->labels as $label)
-                    <span class="mr-2">
+                    <span class="mr-2 student-label-span">
+                        <a href="{{route('training.admin.instructing.students.drop.label', [$student->user_id, $label->id])}}" title="Remove label">
                         {{$label->label()->labelHtml()}}
+                        </a>
                     </span>
                 @endforeach
+                <a data-toggle="modal" data-target="#assignLabelModal" title="Add label">
+                    <i style="font-size: 0.7em;" class="fas fa-plus text-muted"></i>
+                </a>
             </h5>
         </div>
     </div>
@@ -35,10 +40,10 @@
         <div class="col-md-6">
             <h5 class="blue-text">Information</h5>
             <ul class="list-unstyled">
-                <li>Email: @if(Auth::user()->hasAnyRole('Senior Staff|Administrator') || ($student->instructor() && $student->instructor()->user == Auth::user()))<a href="mailto:{{$student->user->email}}">{{$student->user->email}}</a>@else Private @endif</li>
+                <li>Email: @if(Auth::user()->hasAnyRole('Senior Staff|Administrator') || ($student->instructor() && $student->instructor()->instructor == Auth::user()->instructorProfile))<a href="mailto:{{$student->user->email}}">{{$student->user->email}}</a>@else Private @endif</li>
                 <li>Discord:
                     @if($student->user->hasDiscord())
-                        @if(Auth::user()->hasAnyRole('Senior Staff|Administrator') || ($student->instructor() && $student->instructor()->user == Auth::user()))
+                        @if(Auth::user()->hasAnyRole('Senior Staff|Administrator') || ($student->instructor() && $student->instructor()->instructor == Auth::user()->instructorProfile))
                             {{$student->user->getDiscordUser()->username}}<span style="color: #797979;">#{{$student->user->getDiscordUser()->discriminator}}
                         @else
                             Private
@@ -131,6 +136,15 @@
                     No application found.
                 @endif
             </div>
+            @if(Auth::user()->hasAnyRole('Senior Staff|Administrator') || ($student->instructor() && $student->instructor()->instructor == Auth::user()->instructorProfile))
+            <h5 class="mt-4 blue-text">Requests</h5>
+                <div class="list-group z-depth-1">
+                    @if(!$student->soloCertification())
+                        <a href="{{route('training.admin.instructing.students.request.recommend.solocert', $student->user_id)}}" data-toggle="tooltip" title="This will notify assessors that you recommend this student be placed on a solo certification. They will notify you of the action taken." class="list-group-item list-group-item-action purple-text"><i class="fas fa-user mr-3"></i>Recommend for Solo Certification</a>
+                    @endif
+                    <a href="{{route('training.admin.instructing.students.request.recommend.assessment', $student->user_id)}}" data-toggle="tooltip" title="This will notify the Chief Instructor that you recommend this student be put up for assessment via OTS. They will notify you of the action taken." class="list-group-item list-group-item-action green-text"><i class="fas fa-check mr-3"></i>Recommend for Assessment</a>
+                </div>
+            @endif
         </div>
     </div>
 
@@ -224,6 +238,48 @@
         </div>
     </div>
 
+    <!--Start assign label modal-->
+    <div class="modal fade" id="assignLabelModal" role="dialog">
+        <div class="modal-dialog modal-dialog-centered model-lg" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Assign status label to {{$student->user->fullName('F')}}</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <form action="{{route('training.admin.instructing.student.assign.label', $student->user->id)}}" method="POST">
+                    @csrf
+                    <div class="modal-body">
+                        @if($errors->assignLabelErrors->any())
+                            <div class="alert alert-danger">
+                                <h4>There were errors</h4>
+                                <ul class="pl-0 ml-0 list-unstyled">
+                                    @foreach ($errors->assignLabelErrors->all() as $error)
+                                        <li>{{ $error }}</li>
+                                    @endforeach
+                                </ul>
+                            </div>
+                        @endif
+                        <div class="form-group">
+                            <label for="">Select status label</label>
+                            <select name="label_id" class="form-control">
+                                <option hidden>Select one..</option>
+                                @foreach ($labels as $l)
+                                    <option value="{{$l->id}}">{{$l->name}}</option>
+                                @endforeach
+                            </select>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-light" data-dismiss="modal">Dismiss</button>
+                        <button class="btn btn-primary">Assign</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
     @endif
 
     <script>
@@ -235,5 +291,18 @@
         if ($.urlParam('assignInstructorModal') == '1') {
             $("#assignInstructorModal").modal();
         }
+
+        if ($.urlParam('assignLabelModal') == '1') {
+            $("#assignLabelModal").modal();
+        }
     </script>
+
+    <style>
+        .student-label-span:hover:after {
+            cursor: pointer;
+            color: red;
+            content: '\00d7';
+            font-size: 15px;
+        }
+    </style>
 @endsection

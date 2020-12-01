@@ -52,6 +52,7 @@ class TrainingPermissionsSeeder extends Seeder
 
         $assessor = Role::whereName('Assessor')->first();
         $assessor->givePermissionTo('edit ots sessions');
+        $assessor->givePermissionTo('edit roster');
 
         $instructor = Role::whereName('Instructor')->first();
         $instructor->givePermissionTo('view instructing admin');

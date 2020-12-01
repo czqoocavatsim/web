@@ -21,7 +21,7 @@ class TrainingPortalController extends Controller
         {
             return view('training.portal.submit-availability');
         }
-        return 'sad';
+
         return view('training.portal.index');
     }
 

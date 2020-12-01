@@ -2,11 +2,13 @@
 
 namespace App\Models\Training\Instructing\Students;
 
+use App\Models\Roster\SoloCertification;
 use App\Models\Training\Application;
 use App\Models\Training\Instructing\Links\InstructorStudentAssignment;
 use App\Models\Training\Instructing\Links\StudentStatusLabelLink;
 use App\Models\Training\Instructing\Records\StudentNote;
 use App\Models\Users\User;
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
@@ -58,5 +60,21 @@ class Student extends Model
     public function availability()
     {
         return $this->hasMany(StudentAvailabilitySubmission::class);
+    }
+
+    public function assignStatusLabel(StudentStatusLabel $label)
+    {
+        //Create link
+        $link = new StudentStatusLabelLink([
+            'student_id' => $this->id,
+            'student_status_label_id' => $label->id
+        ]);
+        $link->save();
+    }
+
+    public function soloCertification()
+    {
+        //Find solo certification for student
+        return SoloCertification::where('roster_member_id', $this->user->rosterProfile)->where('expires', '>', Carbon::now())->first();
     }
 }
