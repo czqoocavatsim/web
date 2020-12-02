@@ -218,6 +218,7 @@ Route::group(['middleware' => 'auth'], function () {
 
                         //Your Students/Sessions
                         Route::get('/your-students', 'Training\InstructingController@yourStudents')->name('instructing.your-students');
+                        Route::get('/your-upcoming-sessions', 'Training\SessionsController@yourUpcomingSessions')->name('instructing.your-upcoming-sessions');
 
                         //Instructors
                         Route::get('/instructors', 'Training\InstructingController@instructors')->name('instructing.instructors');
@@ -249,6 +250,14 @@ Route::group(['middleware' => 'auth'], function () {
                         //Student recommendation requests
                         Route::get('/students/{cid}/request/recommend/solocert', 'Training\InstructingController@recommendSoloCertification')->name('instructing.students.request.recommend.solocert');
                         Route::get('/students/{cid}/request/recommend/assessment', 'Training\InstructingController@recommendAssessment')->name('instructing.students.request.recommend.assessment');
+
+                        //Training sessions
+                        Route::get('/training-sessions', 'Training\SessionsController@trainingSessionsIndex')->name('instructing.training-sessions');
+                        Route::get('/training-sessions/{id}', 'Training\SessionsController@viewTrainingSession')->name('instructing.training-sessions.view');
+                        Route::post('/training-sessions/{id}/edit/time', 'Training\SessionsController@editTrainingSessionTime')->name('instructing.training-sessions.edit.time');
+
+                        //OTS sessions
+                        Route::get('/ots-sessions', 'Training\SessionsController@otsSessionsIndex')->name('instructing.ots-sessions');
                     });
                 });
             });

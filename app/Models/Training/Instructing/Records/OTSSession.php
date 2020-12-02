@@ -13,7 +13,7 @@ class OTSSession extends Model
     protected $hidden = ['id'];
 
     protected $fillable = [
-        'student_id', 'instructor_id', 'scheduled_time', 'remarks', 'results', 'position_id'
+        'student_id', 'assessor_id', 'scheduled_time', 'remarks', 'results', 'position_id'
     ];
 
     protected $dates = [
@@ -27,7 +27,7 @@ class OTSSession extends Model
 
     public function instructor()
     {
-        return $this->belongsTo(Instructor::class, 'instructor_id');
+        return $this->belongsTo(Instructor::class, 'assessor_id');
     }
 
     public function position()

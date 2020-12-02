@@ -3,6 +3,8 @@
 namespace App\Models\Training\Instructing\Records;
 
 use App\Models\Network\MonitoredPosition;
+use App\Models\Training\Instructing\Instructors\Instructor;
+use App\Models\Training\Instructing\Students\Student;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 

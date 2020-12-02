@@ -12,6 +12,7 @@
     </button>
     <div class="collapse navbar-collapse" id="navbarSupportedContent">
         <ul class="navbar-nav ml-auto d-flex flex-row align-items-center">
+            @hasanyrole('Senior Staff|Administrator')
             <li class="nav-item mr-2">
                 <a class="nav-link" href="{{route('publications.policies')}}">
                     Publications
@@ -22,11 +23,15 @@
                     Community
                 </a>
             </li>
+            @endhasanyrole
+            @hasanyrole('Senior Staff|Administrator|Instructor')
             <li class="nav-item mr-2">
                 <a class="nav-link" href="{{route('training.admin.dashboard')}}">
                     Training
                 </a>
             </li>
+            @endhasanyrole
+            @hasanyrole('Senior Staff|Administrator|Marketing Team')
             <li class="nav-item mr-2">
                 <a class="nav-link" href="{{route('news.index')}}">
                     News
@@ -37,11 +42,14 @@
                     Events
                 </a>
             </li>
+            @endhasanyrole
+            @hasanyrole('Administrator|Web Team')
             <li class="nav-item mr-2">
                 <a class="nav-link" href="{{route('settings.index')}}">
                     Settings
                 </a>
             </li>
+            @endhasanyrole
             <li class="nav-item mr-4">
                 <a class="nav-link" href="{{route('my.index')}}">
                     myCZQO

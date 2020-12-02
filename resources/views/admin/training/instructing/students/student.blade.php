@@ -148,7 +148,7 @@
                         <div class="list-group-item text-muted"><i>Already recommended for solo certification/solo certification in progress</i></div>
                     @endif
                     @if (!$student->setAsReadyForAssessment())
-                        <a href="{{route('training.admin.instructing.students.request.recommend.assessment', $student->user_id)}}" data-toggle="tooltip" title="This will notify the Chief Instructor that you recommend this student be put up for assessment via OTS. They will notify you of the action taken." class="list-group-item list-group-item-action green-text"><i class="fas fa-check mr-3"></i>Recommend for Assessment</a>
+                        <a href="{{route('training.admin.instructing.students.request.recommend.assessment', $student->user_id)}}" data-toggle="tooltip" title="This will notify Assessors that you recommend this student be put up for assessment via OTS. They will notify you of the action taken." class="list-group-item list-group-item-action green-text"><i class="fas fa-check mr-3"></i>Recommend for Assessment</a>
                     @else
                         <div class="list-group-item text-muted"><i>Already recommended for assessment/assessment in progress</i></div>
                     @endif

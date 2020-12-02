@@ -54,9 +54,11 @@
     </div>
 </div>
 <ul class="list-unstyled mt-5">
+    @can('edit students')
     <li class="mb-2">
         <a href="#" data-toggle="modal" data-target="#addStudentModal" class="blue-text" style="font-size: 1.1em;"><i class="fas fa-plus"></i>&nbsp;&nbsp;Add a student</a>
     </li>
+    @endcan
     @can('send announcements')
     <li>
         <a href="{{route('news.announcements.create')}}" class="blue-text" style="font-size: 1.1em;"><i class="fas fa-envelope"></i>&nbsp;&nbsp;Send message to all</a>

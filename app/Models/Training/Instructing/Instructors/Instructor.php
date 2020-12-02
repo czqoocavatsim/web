@@ -6,6 +6,7 @@ use App\Models\Training\Instructing\Links\InstructorStudentAssignment;
 use App\Models\Training\Instructing\Records\OTSSession;
 use App\Models\Training\Instructing\Records\TrainingSession;
 use App\Models\Users\User;
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
@@ -57,6 +58,16 @@ class Instructor extends Model
     public function trainingSessions()
     {
         return $this->hasMany(TrainingSession::class, 'instructor_id');
+    }
+
+    public function upcomingTrainingSessions()
+    {
+        return TrainingSession::where('instructor_id', $this->id)->where('scheduled_time', '>', Carbon::now())->get();
+    }
+
+    public function upcomingOtsSessions()
+    {
+        return OTSSession::where('assessor_id', $this->id)->where('scheduled_time', '>', Carbon::now())->get();
     }
 
     public function otsSessions()
