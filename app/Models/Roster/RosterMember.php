@@ -7,6 +7,7 @@ use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\HtmlString;
 use Spatie\Activitylog\Traits\LogsActivity;
 
 class RosterMember extends Model
@@ -46,7 +47,7 @@ class RosterMember extends Model
                 return "Not Certified";
             break;
             case "training":
-                return "Training";
+                return "Student";
             break;
             default:
                 "Unknown";
@@ -109,5 +110,49 @@ class RosterMember extends Model
         }
 
         return false;
+    }
+
+    public function certificationLabelHtml()
+    {
+        $html = "<span style='font-weight: 400' class='badge rounded p-2 shadow-none ";
+
+        //Colour
+        switch ($this->certification)
+        {
+            case "certified":
+                $html .= "green text-white'><i class='fas fa-check-double mr-2'></i>";
+            break;
+            case "not_certified":
+                $html .= "red text-white'><i class='fas fa-times mr-2'></i>";
+            break;
+            case "training":
+                $html .= "orange text-white'><i class='fas fa-graduation-cap mr-2'></i>";
+            break;
+            default:
+                $html .= "grey text-white'><i class='fas fa-question mr-2'></i>";
+        }
+
+        $html .= $this->certificationPretty() . "</span>";
+
+        return new HtmlString($html);
+    }
+
+    public function activeLabelHtml()
+    {
+        $html = "<span style='font-weight: 400' class='badge rounded p-2 shadow-none ";
+
+        //Colour
+        if ($this->active)
+        {
+            $html .= "green text-white'><i class='fas fa-check mr-2'></i>";
+        }
+        else
+        {
+            $html .= "red text-white'><i class='fas fa-times mr-2'></i>";
+        }
+
+        $html .= $this->activePretty() . "</span>";
+
+        return new HtmlString($html);
     }
 }

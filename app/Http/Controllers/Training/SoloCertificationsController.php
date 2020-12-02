@@ -5,6 +5,8 @@ namespace App\Http\Controllers\Training;
 use App\Http\Controllers\Controller;
 use App\Models\Roster\RosterMember;
 use App\Models\Roster\SoloCertification;
+use App\Models\Training\Instructing\Students\Student;
+use App\Models\Training\Instructing\Students\StudentStatusLabel;
 use App\Notifications\Training\SoloCertifications\SoloCertGranted;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
@@ -77,6 +79,13 @@ class SoloCertificationsController extends Controller
 
         //Notify
         Notification::send($cert->rosterMember->user, new SoloCertGranted($cert));
+
+        //Are they a student? If so, add solo cert label
+        if ($student = $cert->rosterMember->user->studentProfile) {
+            if (!$student->hasLabel("Solo Certification")) {
+                $student->assignStatusLabel(StudentStatusLabel::whereName("Solo Certification")->first());
+            }
+        }
 
         //Redirect
         //return redirect()->route('training.admin.solocertifications.view', compact('cert'));

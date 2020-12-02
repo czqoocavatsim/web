@@ -68,9 +68,6 @@
                     <a href="#" style="text-decoration:none;"><span class="blue-text"><i class="fas fa-chevron-right"></i></span> &nbsp; <span class="black-text">Training/OTS Sessions</span></a>
                 </li>
                 <li class="mb-2">
-                    <a href="#" style="text-decoration:none;"><span class="blue-text"><i class="fas fa-chevron-right"></i></span> &nbsp; <span class="black-text">Student History</span></a>
-                </li>
-                <li class="mb-2">
                     <a href="{{route('training.admin.instructing.students.records.training-notes', $student->user_id)}}" style="text-decoration:none;"><span class="blue-text"><i class="fas fa-chevron-right"></i></span> &nbsp; <span class="black-text">Training Notes</span></a>
                 </li>
             </ul>
@@ -136,13 +133,25 @@
                     No application found.
                 @endif
             </div>
+            @if($student->soloCertification())
+            <h5 class="blue-text mt-3">Solo Certification Active</h5>
+            <div class="mt-3 card p-3 z-depth-1">
+                Expires on {{$student->soloCertification()->expires->toFormattedDateString()}}
+            </div>
+            @endif
             @if(Auth::user()->hasAnyRole('Senior Staff|Administrator') || ($student->instructor() && $student->instructor()->instructor == Auth::user()->instructorProfile))
             <h5 class="mt-4 blue-text">Requests</h5>
                 <div class="list-group z-depth-1">
-                    @if(!$student->soloCertification())
+                    @if(!$student->soloCertification() && !$student->setAsReadyForAssessment())
                         <a href="{{route('training.admin.instructing.students.request.recommend.solocert', $student->user_id)}}" data-toggle="tooltip" title="This will notify assessors that you recommend this student be placed on a solo certification. They will notify you of the action taken." class="list-group-item list-group-item-action purple-text"><i class="fas fa-user mr-3"></i>Recommend for Solo Certification</a>
+                    @else
+                        <div class="list-group-item text-muted"><i>Already recommended for solo certification/solo certification in progress</i></div>
                     @endif
-                    <a href="{{route('training.admin.instructing.students.request.recommend.assessment', $student->user_id)}}" data-toggle="tooltip" title="This will notify the Chief Instructor that you recommend this student be put up for assessment via OTS. They will notify you of the action taken." class="list-group-item list-group-item-action green-text"><i class="fas fa-check mr-3"></i>Recommend for Assessment</a>
+                    @if (!$student->setAsReadyForAssessment())
+                        <a href="{{route('training.admin.instructing.students.request.recommend.assessment', $student->user_id)}}" data-toggle="tooltip" title="This will notify the Chief Instructor that you recommend this student be put up for assessment via OTS. They will notify you of the action taken." class="list-group-item list-group-item-action green-text"><i class="fas fa-check mr-3"></i>Recommend for Assessment</a>
+                    @else
+                        <div class="list-group-item text-muted"><i>Already recommended for assessment/assessment in progress</i></div>
+                    @endif
                 </div>
             @endif
         </div>

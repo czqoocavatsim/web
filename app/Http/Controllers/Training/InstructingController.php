@@ -18,6 +18,7 @@ use App\Notifications\Training\Instructing\AddedAsStudent;
 use App\Notifications\Training\Instructing\RemovedAsInstructor;
 use App\Notifications\Training\Instructing\RemovedAsStudent;
 use App\Notifications\Training\Instructing\StudentAssignedToYou;
+use App\Notifications\Training\Instructing\StudentRecommendedForAssessment;
 use App\Notifications\Training\Instructing\StudentRecommendedForSoloCert;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
@@ -583,6 +584,41 @@ class InstructingController extends Controller
             'type' => 'Solo Certification'
         ]);
         $recommendation->save();
+
+        //Return
+        return redirect()->back()->with('success', 'Recommendation sent!');
+    }
+
+    public function recommendAssessment($student_id)
+    {
+        //Get the student
+        $student = Student::whereCurrent(true)->where('user_id', $student_id)->firstOrFail();
+
+        //Is student already ready for assessment?
+        if ($student->hasLabel("Ready for Assessment") || $student->hasLabel("Complete")) {
+            return redirect()->back()->with('error', 'Student is already set as ready for assessment. Check if their status labels are correctly setup.');
+        }
+
+        //Notify via email
+        foreach (Instructor::whereAssessor(true)->whereCurrent(true)->get() as $instructor) {
+            $instructor->user->notify(new StudentRecommendedForAssessment($student, Auth::user()->instructorProfile));
+        }
+
+        //Create object
+        $recommendation = new InstuctorRecommendation([
+            'student_id' => $student->id,
+            'instructor_id' => Auth::user()->instructorProfile->id,
+            'type' => 'Ready For Assessment'
+        ]);
+        $recommendation->save();
+
+        //Assign ready for assessment label
+        $student->assignStatusLabel(StudentStatusLabel::whereName('Ready for Assessment')->first());
+
+        //Remove in progress
+        if ($inProgress = StudentStatusLabelLink::where('student_id', $student->id)->where('student_status_label_id', StudentStatusLabel::whereName('In Progress')->first()->id)->first()) {
+            $inProgress->delete();
+        }
 
         //Return
         return redirect()->back()->with('success', 'Recommendation sent!');

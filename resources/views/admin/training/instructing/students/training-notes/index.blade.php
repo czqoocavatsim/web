@@ -20,9 +20,9 @@
             </div>
             <div class="d-none" id="policyEmbed{{$note->id}}">
                 <div class="d-flex flex-row justify-content-between">
-                    <p class="text-muted mt-3">Added by {{$note->instructor->user->fullName('FLC')}}, last edited <span style="text-decoration: underline; text-decoration-style:dotted; cursor: help;" title="{{$note->updated_at ?? ''}}">{{$note->updated_at ? $note->updated_at->diffForHumans() : 'never'}}</span>, {{$note->staffOnly ? 'staff only' : 'visible to student'}}</p>
+                    <p class="text-muted mt-3">Added by {{$note->instructor->user->fullName('FLC')}}, last edited <span style="text-decoration: underline; text-decoration-style:dotted; cursor: help;" title="{{$note->updated_at ?? ''}}">{{$note->updated_at ? $note->updated_at->diffForHumans() : 'never'}}</span>, {{$note->staff_only ? 'staff only' : 'visible to student'}}</p>
                     <p class="mt-3">
-                        <a href="#" class="blue-text"><i class="fa fa-edit"></i>&nbsp;Edit</a>
+                        <a class="text-muted" style="cursor:not-allowed"><i class="fa fa-edit"></i>&nbsp;Edit</a>
                         <a data-toggle="modal" data-target="#deleteNote{{$note->id}}Modal" class="red-text ml-2"><i class="fa fa-trash-alt"></i>&nbsp;Delete</a>
                     </p>
                 </div>
@@ -35,14 +35,37 @@
         @endforeach
     </div>
 
-    <ul class="list-unstyled mt-5">
+    <ul class="list-unstyled mt-4">
         <li class="mb-2">
-            <a href="#" data-toggle="modal" data-target="#addStudentModal" class="blue-text" style="font-size: 1.1em;"><i class="fas fa-plus"></i>&nbsp;&nbsp;Add a note</a>
-        </li>
+            <a href="{{route('training.admin.instructing.students.records.training-notes.create', $student->user_id)}}" class="blue-text" style="font-size: 1.1em;"><i class="fas fa-plus"></i>&nbsp;&nbsp;Add a note</a>
+        </li>{{--
         <li class="mb-2">
             <a href="#" data-toggle="modal" data-target="#addStudentModal" class="blue-text" style="font-size: 1.1em;"><i class="fas fa-cloud-download-alt"></i>&nbsp;&nbsp;Export notes</a>
-        </li>
+        </li> --}}
     </ul>
+
+    <h4 class="blue-text mt-5">Instructor Recommendations</h4>
+    <div class="list-group list-group-flush z-depth-1 rounded mt-4">
+        @foreach ($recommendations as $note)
+        <div class="list-group-item">
+            <div class="d-flex flex-row justify-content-between">
+                <div>{{$note->created_at->toFormattedDateString()}} - {{$note->type}}</div>
+                <div>
+                    <a data-policy-id="{{$note->id}}9999" href="javascript:void(0)" class="expandHidePolicyButton"><i class="fa fa-eye"></i>&nbsp;View</a>
+                </div>
+            </div>
+            <div class="d-none" id="policyEmbed{{$note->id}}9999">
+                <div class="d-flex flex-row justify-content-between">
+                    <p class="text-muted mt-3">Added by {{$note->instructor->user->fullName('FLC')}}, last edited <span style="text-decoration: underline; text-decoration-style:dotted; cursor: help;" title="{{$note->updated_at ?? ''}}">{{$note->updated_at ? $note->updated_at->diffForHumans() : 'never'}}</span></p>
+                </div>
+                <hr>
+                <p>
+                    {{$note->type}}
+                </p>
+            </div>
+        </div>
+        @endforeach
+    </div>
 
     <!--Delete modal-->
     @foreach($notes as $n)
@@ -60,7 +83,7 @@
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-light" data-dismiss="modal">Dismiss</button>
-                    <a href="{{route('training.admin.instructing.students.remove', $student->user->id)}}" role="button" class="btn btn-danger"><i class="fa fa-trash-alt mr-2"></i>Delete</a>
+                    <a href="{{route('training.admin.instructing.students.records.training-notes.delete', [$student->user_id, $n->id])}}" role="button" class="btn btn-danger"><i class="fa fa-trash-alt mr-2"></i>Delete</a>
                 </div>
                 </form>
             </div>

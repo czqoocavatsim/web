@@ -6,6 +6,7 @@ use App\Models\Roster\SoloCertification;
 use App\Models\Training\Application;
 use App\Models\Training\Instructing\Links\InstructorStudentAssignment;
 use App\Models\Training\Instructing\Links\StudentStatusLabelLink;
+use App\Models\Training\Instructing\Records\InstuctorRecommendation;
 use App\Models\Training\Instructing\Records\StudentNote;
 use App\Models\Users\User;
 use Carbon\Carbon;
@@ -62,6 +63,11 @@ class Student extends Model
         return $this->hasMany(StudentAvailabilitySubmission::class);
     }
 
+    public function recommendations()
+    {
+        return $this->hasMany(InstuctorRecommendation::class);
+    }
+
     public function assignStatusLabel(StudentStatusLabel $label)
     {
         //Create link
@@ -75,6 +81,29 @@ class Student extends Model
     public function soloCertification()
     {
         //Find solo certification for student
-        return SoloCertification::where('roster_member_id', $this->user->rosterProfile)->where('expires', '>', Carbon::now())->first();
+        return SoloCertification::where('roster_member_id', $this->user->rosterProfile->id)->where('expires', '>', Carbon::now())->first();
+    }
+
+    public function setAsReadyForAssessment()
+    {
+        if ($this->hasLabel("Ready for Assessment")) {
+            return true;
+        }
+
+        return false;
+    }
+
+    public function hasLabel($label_text)
+    {
+        if (!StudentStatusLabel::whereName($label_text)->first()) return false;
+        if ($label = StudentStatusLabelLink
+            ::where('student_id', $this->id)
+            ->where('student_status_label_id',
+                StudentStatusLabel::whereName($label_text)->first()->id
+            )->first()
+        ) {
+            return true;
+        }
+        return false;
     }
 }

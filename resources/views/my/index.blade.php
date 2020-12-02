@@ -299,73 +299,49 @@
             </div>
             <div id="certificationTrainingTab" style="display:none">
                 <h3 class="font-weight-bold blue-text pb-2">Certification</h3>
-                <div class="card-text">
+                @if(!$rosterProfile = Auth::user()->rosterProfile)
                     <div class="d-flex flex-row justify-content-left">
-                        @if(Auth::user()->rosterProfile)
                         <h3 class="mr-3">
-                            @switch (Auth::user()->rosterProfile->certification)
-                            @case("certified")
-                            <span class="badge badge-success rounded shadow-none">
-                                <i class="fa fa-check"></i>&nbsp;
-                                Certified
-                            </span>
-                            @break
-                            @case("not_certified")
-                            <span class="badge badge-danger rounded shadow-none">
-                                <i class="fa fa-times"></i>&nbsp;
-                                Not Certified
-                            </span>
-                            @break
-                            @case("training")
-                            <span class="badge badge-warning rounded shadow-none">
-                                <i class="fa fa-book-open"></i>&nbsp;
-                                Training
-                            </span>
-                            @break
-                            @default
-                            <span class="badge badge-dark rounded shadow-none">
-                                <i class="fa fa-question"></i>&nbsp;
-                                Unknown
-                            </span>
-                            @endswitch
+                            {{Auth::user()->rosterProfile->certificationLabelHtml()}}
                         </h3>
                         <h3>
-                            @switch (Auth::user()->rosterProfile->active)
-                            @case(true)
-                            <span class="badge badge-success rounded shadow-none">
-                                <i class="fa fa-check"></i>&nbsp;
-                                Active
-                            </span>
-                            @break
-                            @case(false)
-                            <span class="badge badge-danger rounded shadow-none">
-                                <i class="fa fa-times"></i>&nbsp;
-                                Inactive
-                            </span>
-                            @break
-                            @endswitch
+                            {{$rosterProfile->activeLabelHtml()}}
                         </h3>
-                        @else
-                        Not Gander Certified
-                        @endif
                     </div>
-                </div>
-                @if (Auth::user()->rosterProfile)
-                <h5 class="card-title mt-2">Activity</h5>
-                @if (Auth::user()->rosterProfile->currency < 0.1)
-                <h3><span class="badge rounded shadow-none red">
-                    No hours recorded
-                </span></h3>
-                @elseif (Auth::user()->rosterProfile->currency < 3.0)
-                <h3><span class="badge rounded shadow-none blue">
-                    {{Auth::user()->rosterProfile->currency}} hours recorded
-                </span></h3>
-                @elseif (Auth::user()->rosterProfile->currency >= 3.0)
-                <h3><span class="badge rounded shadow-none green">
-                    {{Auth::user()->rosterProfile->currency}} hours recorded
-                </span></h3>
-                @endif
-                <p>You require 3 hours of activity every 6 months, unless you were certified within the current activity cycle.</p>
+                    <h3 class="font-weight-bold blue-text mt-3 pb-2">Activity</h3>
+                    @if (Auth::user()->rosterProfile->currency < 0.1)
+                        <h3>
+                            <span style='font-weight: 400' class='badge rounded p-2 red text-white shadow-none'>
+                            No hours recorded
+                            </span>
+                        </h3>
+                    @elseif (Auth::user()->rosterProfile->currency < 3.0)
+                        <h3>
+                            <span style='font-weight: 400' class='badge rounded blue text-white p-2 shadow-none'>
+                                {{Auth::user()->rosterProfile->currency}} hours recorded
+                            </span>
+                        </h3>
+                    @elseif (Auth::user()->rosterProfile->currency >= 3.0)
+                        <h3>
+                            <span style='font-weight: 400' class='badge rounded green text-white p-2 shadow-none'>
+                                {{Auth::user()->rosterProfile->currency}} hours recorded
+                            </span>
+                        </h3>
+                    @endif
+                    <p class="mt-4">You require 3 hours of activity every 6 months, unless you were certified within the current activity cycle.</p>
+                @else
+                    <h3>
+                        <span style='font-weight: 400' class='badge rounded p-2 red text-white shadow-none'>
+                            <i class="fas fa-times mr-2"></i>&nbsp;Not Gander Certified
+                        </span>
+                    </h3>
+                    @if (Auth::user()->rating_id >= 5 && Auth::user()->can('start application'))
+                        <div class="card p-4 z-depth-1 mt-4">
+                            <h4 class="blue-text">Want to become Gander certified?</h4>
+                            <p style="font-size: 1.1em;">We're always looking for new controllers to join our ranks of Oceanic Controllers.</p>
+                            <a href="{{route('training.applications.apply')}}" class="btn btn-primary w-50" style="font-size: 1.1em;"><i class="fas fa-play mr-2"></i>Start Your Application</a>
+                        </div>
+                    @endif
                 @endif
             </div>
             @hasanyrole('Administrator|Senior Staff|Instructor')

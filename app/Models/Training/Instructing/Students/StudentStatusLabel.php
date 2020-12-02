@@ -25,7 +25,7 @@ class StudentStatusLabel extends Model
 
         //Colour
         if ($this->colour) {
-            $html .= $this->colour . " text-white '>";
+            $html .= $this->colour . " text-white'>";
         } else {
             $html .= "grey lighten-3 text-black'>";
         }
