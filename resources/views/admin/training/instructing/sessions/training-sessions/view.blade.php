@@ -68,7 +68,7 @@
         <ul class="list-unstyled mt-3">
             @can('edit training sessions')
             <li class="mb-2">
-                <a href="javascript:alert('Please recreate the session for now')" style="text-decoration:none;"><span class="blue-text"><i class="fas fa-chevron-right"></i></span> &nbsp; <span class="black-text">Assign to another instructor</span></a>
+                <a data-target="#reassignInstructorModal" data-toggle="modal" style="text-decoration:none;"><span class="blue-text"><i class="fas fa-chevron-right"></i></span> &nbsp; <span class="black-text">Assign to another instructor</span></a>
             </li>
             @endcan
         </ul>
@@ -107,7 +107,18 @@
             <form action="{{route('training.admin.instructing.training-sessions.edit.time', $session->id)}}" method="POST">
                 @csrf
                 <div class="modal-body">
-                    <input type="datetime" name="new_time" class="form-control flatpickr" id="new_time">
+                    @if($errors->editTimeErrors->any())
+                        <div class="alert alert-danger">
+                            <h4>There were errors</h4>
+                            <ul class="pl-0 ml-0 list-unstyled">
+                                @foreach ($errors->editTimeErrors->all() as $error)
+                                    <li>{{ $error }}</li>
+                                @endforeach
+                            </ul>
+                        </div>
+                    @endif
+                    <label>New time</label>
+                    <input type="datetime" name="new_time" class="form-control border pl-3 flatpickr" id="new_time">
                     <script>
                         flatpickr('#new_time', {
                             enableTime: true,
@@ -120,12 +131,70 @@
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-light" data-dismiss="modal">Dismiss</button>
-                    <button class="btn btn-primary">Change</button>
+                    <button class="btn btn-success">Change</button>
                 </div>
             </form>
         </div>
     </div>
 </div>
 
+<!--Start assign instructor modal-->
+<div class="modal fade" id="reassignInstructorModal" role="dialog">
+    <div class="modal-dialog modal-dialog-centered model-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Reassign instructor</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <form action="{{route('training.admin.instructing.training-sessions.edit.instructor', $session->id)}}" method="POST">
+                @csrf
+                <div class="modal-body">
+                    @if($errors->reassignInstructorErrors->any())
+                        <div class="alert alert-danger">
+                            <h4>There were errors</h4>
+                            <ul class="pl-0 ml-0 list-unstyled">
+                                @foreach ($errors->reassignInstructorErrors->all() as $error)
+                                    <li>{{ $error }}</li>
+                                @endforeach
+                            </ul>
+                        </div>
+                    @endif
+                    <div class="form-group">
+                        <label for="">Select instructor</label>
+                        <select name="instructor_id" class="form-control">
+                            <option hidden>Select one..</option>
+                            @foreach ($instructors as $i)
+                                <option value="{{$i->id}}">{{$i->user->fullName('FLC')}} - {{$i->staffPageTagline()}}</option>
+                            @endforeach
+                        </select>
+                    </div>
+                    <p>The assigned Instructor will be notified of the assignment and the session's details. It will be their responsibility to establish contact with the student.</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-light" data-dismiss="modal">Dismiss</button>
+                    <button class="btn btn-success">Assign</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<script>
+    $.urlParam = function(name){
+        var results = new RegExp('[\?&]' + name + '=([^&#]*)').exec(window.location.href);
+        return results[1] || 0;
+    }
+
+    if ($.urlParam('editTimeModal') && $.urlParam('editTimeModal') == '1') {
+        $("#editTimeModal").modal();
+    }
+
+    if ($.urlParam('reassignInstructorModal') == '1') {
+        $("#reassignInstructorModal").modal();
+    }
+
+</script>
 
 @endsection
