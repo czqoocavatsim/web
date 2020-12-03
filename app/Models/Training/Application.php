@@ -29,16 +29,16 @@ class Application extends Model
     {
         switch ($this->status) {
             case 0:
-                return array('html' => '<i class="far fa-clock"></i>&nbsp;Pending', 'class' => 'orange white-text');
+                return array('html' => '<i class="far fa-clock mr-2"></i>&nbsp;Pending', 'class' => 'orange white-text');
             break;
             case 1:
-                return array('html' => '<i class="fas fa-check"></i>&nbsp;Accepted', 'class' => 'green white-text');
+                return array('html' => '<i class="fas fa-check mr-3"></i>&nbsp;Accepted', 'class' => 'green white-text');
             break;
             case 2:
-                return array('html' => '<i class="fas fa-times"></i>&nbsp;Rejected', 'class' => 'red white-text');
+                return array('html' => '<i class="fas fa-times mr-3"></i>&nbsp;Rejected', 'class' => 'red white-text');
             break;
             case 3:
-                return array('html' => '<i class="fas fa-times"></i>&nbsp;Withdrawn', 'class' => 'grey white-text');
+                return array('html' => '<i class="fas fa-times mr-3"></i>&nbsp;Withdrawn', 'class' => 'grey white-text');
             break;
             case 4:
                 return array('html' => 'Deleted', 'class' => 'grey white-text');

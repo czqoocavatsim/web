@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Training;
 
 use App\Http\Controllers\Controller;
+use App\Models\Publications\Policy;
 use App\Models\Training\Instructing\Links\StudentStatusLabelLink;
 use App\Models\Training\Instructing\Students\StudentAvailabilitySubmission;
 use App\Models\Training\Instructing\Students\StudentStatusLabel;
@@ -87,5 +88,16 @@ class TrainingPortalController extends Controller
         }
 
         dd($request);
+    }
+
+    public function helpPolicies()
+    {
+        //Get all training policies
+        $policies = Policy::cursor()->filter(function ($p) {
+            return (in_array($p->title, ['Training', 'Controller', 'Currency']));
+        });
+
+        //Return view
+        return view('training.portal.help-policies', compact('policies'));
     }
 }

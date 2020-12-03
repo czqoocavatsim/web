@@ -97,11 +97,21 @@
                         </div>
                     </li>
                 </a>
+                <a class="myczqo-tab no-click" data-myczqo-tab="none" href="https://knowledgebase.ganderoceanic.com">
+                    <li class="w-100">
+                        <div class="d-flex h-100 flex-row justify-content-left align-items-center">
+                            <i style="font-size: 1.6em; margin-right: 10px;" class="fas fa-book fa-fw"></i>
+                            <span style="font-size: 1.1em;">Knowledge Base</span>
+                        </div>
+                    </li>
+                </a>
+                @hasanyrole('Administrator|Senior Staff|Marketing Team|Web Team')
                 <li class="w-100 my-3" style="border:none;">
                     <div class="d-flex h-100 flex-row justify-content-left align-items-center">
                         <span style="font-size: 1em;" class="text-muted">STAFF</span>
                     </div>
                 </li>
+                @endhasanyrole
                 @hasanyrole('Administrator|Senior Staff|Instructor')
                 <a class="myczqo-tab no-click" data-myczqo-tab="none" href="{{route('training.admin.dashboard')}}">
                     <li class="w-100">
@@ -122,14 +132,6 @@
                     </li>
                 </a>
                 @endhasanyrole
-                <a class="myczqo-tab no-click" data-myczqo-tab="none" href="https://knowledgebase.ganderoceanic.com">
-                    <li class="w-100">
-                        <div class="d-flex h-100 flex-row justify-content-left align-items-center">
-                            <i style="font-size: 1.6em; margin-right: 10px;" class="fas fa-book fa-fw"></i>
-                            <span style="font-size: 1.1em;">Knowledge Base</span>
-                        </div>
-                    </li>
-                </a>
                 <li class="w-100 my-3" style="border:none;">
                     <div class="d-flex h-100 flex-row justify-content-left align-items-center">
                         <span style="font-size: 1em;" class="text-muted">SETTINGS</span>
@@ -335,8 +337,8 @@
                             <i class="fas fa-times mr-2"></i>&nbsp;Not Gander Certified
                         </span>
                     </h3>
-                    @if (Auth::user()->rating_id >= 5 && Auth::user()->can('start application'))
-                        <div class="card p-4 z-depth-1 mt-4">
+                    @if (Auth::user()->rating_id >= 5 && Auth::user()->can('start applications'))
+                        <div class="card p-4 z-depth-1 mt-4 w-75">
                             <h4 class="blue-text">Want to become Gander certified?</h4>
                             <p style="font-size: 1.1em;">We're always looking for new controllers to join our ranks of Oceanic Controllers.</p>
                             <a href="{{route('training.applications.apply')}}" class="btn btn-primary w-50" style="font-size: 1.1em;"><i class="fas fa-play mr-2"></i>Start Your Application</a>
