@@ -13,7 +13,7 @@
         </p>
     </div>
     @endcan
-    @if(Auth::user()->studentProfile->current)
+    @if(Auth::user()->studentProfile && Auth::user()->studentProfile->current)
     @php ($studentProfile = Auth::user()->studentProfile)
     <div class="list-group-item rounded p-4 my-3 z-depth-1 shadow-none">
         <h4 class="blue-text"><i class="fas fa-graduation-cap mr-2"></i>Your progress</h4>

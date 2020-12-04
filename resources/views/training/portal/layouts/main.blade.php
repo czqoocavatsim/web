@@ -79,7 +79,7 @@
                         </div>
                     </li>
                 </a>
-                @if($studentProfile = Auth::user()->studentProfile->current)
+                @if(Auth::user()->studentProfile && $studentProfile = Auth::user()->studentProfile->current)
                 <li class="w-100 my-3" style="border:none;">
                     <div class="d-flex h-100 flex-row justify-content-left align-items-center">
                         <span style="font-size: 1em;" class="text-muted">YOUR TRAINING</span>
@@ -101,7 +101,7 @@
                         </div>
                     </li>
                 </a>
-                @if(Auth::user()->studentProfile->instructor())
+                @if(Auth::user()->studentProfile && Auth::user()->studentProfile->instructor())
                 <a class="myczqo-tab {{Request::is('training/portal/your-instructor') ? 'active' : ''}} no-click" data-myczqo-tab="none" href="{{route('training.portal.your-instructor')}}">
                     <li class="w-100">
                         <div class="d-flex h-100 flex-row justify-content-left align-items-center">
