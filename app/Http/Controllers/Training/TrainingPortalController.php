@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Training;
 use App\Http\Controllers\Controller;
 use App\Models\Publications\Policy;
 use App\Models\Training\Instructing\Links\StudentStatusLabelLink;
+use App\Models\Training\Instructing\Records\StudentNote;
 use App\Models\Training\Instructing\Students\StudentAvailabilitySubmission;
 use App\Models\Training\Instructing\Students\StudentStatusLabel;
 use Carbon\Carbon;
@@ -87,7 +88,8 @@ class TrainingPortalController extends Controller
             }
         }
 
-        dd($request);
+        //Return
+        return redirect()->route('training.portal.index')->with('success', "Thank you for submitting your availability, " . Auth::user()->fullName("F") . '!');
     }
 
     public function helpPolicies()
@@ -99,5 +101,50 @@ class TrainingPortalController extends Controller
 
         //Return view
         return view('training.portal.help-policies', compact('policies'));
+    }
+
+    public function viewAvailability()
+    {
+        //get their availability
+        $availability = Auth::user()->studentProfile->availability;
+
+        //Return view
+        return view('training.portal.availability', compact('availability'));
+    }
+
+    public function yourProgress()
+    {
+        //Get their student profile
+        $studentProfile = Auth::user()->studentProfile;
+
+        //Return view
+        return view('training.portal.progress', compact('studentProfile'));
+    }
+
+    public function yourInstructor()
+    {
+        //Get their instructor
+        $instructor = Auth::user()->studentProfile->instructor()->instructor;
+
+        //Return view
+        return view('training.portal.your-instructor', compact('instructor'));
+    }
+
+    public function yourTrainingNotes()
+    {
+        //Get their training notes
+        $notes = StudentNote::where('staff_only', false)->where('student_id', Auth::user()->studentProfile->id)->get()->sortByDesc('created_at');
+
+        //Get their recommendations
+        $recommendations = Auth::user()->studentProfile->recommendations->sortByDesc('created_at');
+
+        //Return view
+        return view('training.portal.training-notes', compact('notes', 'recommendations'));
+    }
+
+    public function actions()
+    {
+        //return view
+        return view('training.portal.actions');
     }
 }

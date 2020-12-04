@@ -140,8 +140,16 @@ Route::group(['middleware' => 'auth'], function () {
                 Route::get('portal', 'Training\TrainingPortalController@index')->name('index');
                 Route::get('portal/help-policies', 'Training\TrainingPortalController@helpPolicies')->name('help-policies');
                 //Training availability
-                Route::get('availability', 'Training\TrainingPortalController@viewAvailability')->name('availability');
-                Route::post('availability', 'Training\TrainingPortalController@submitAvailabilityPost')->name('availability.submit.post');
+                Route::get('portal/availability', 'Training\TrainingPortalController@viewAvailability')->name('availability');
+                Route::post('portal/availability', 'Training\TrainingPortalController@submitAvailabilityPost')->name('availability.submit.post');
+                //Progress
+                Route::get('portal/progress', 'Training\TrainingPortalController@yourProgress')->name('progress');
+                //Instructor
+                Route::get('portal/your-instructor', 'Training\TrainingPortalController@yourInstructor')->name('your-instructor');
+                //Training notes
+                Route::get('portal/training-notes', 'Training\TrainingPortalController@yourTrainingNotes')->name('training-notes');
+                //Actions
+                Route::get('portal/actions', 'Training\TrainingPortalController@actions')->name('actions');
             });
         });
 

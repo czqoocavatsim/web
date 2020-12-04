@@ -38,6 +38,14 @@
                         </div>
                     </li>
                 </a>
+                <a class="myczqo-tab no-click" data-myczqo-tab="none" href="https://knowledgebase.ganderoceanic.com">
+                    <li class="w-100">
+                        <div class="d-flex h-100 flex-row justify-content-left align-items-center">
+                            <i style="font-size: 1.6em; margin-right: 10px;" class="fas fa-book fa-fw"></i>
+                            <span style="font-size: 1.1em;">Knowledge Base</span>
+                        </div>
+                    </li>
+                </a>
                 <li class="w-100 my-3" style="border:none;">
                     <div class="d-flex h-100 flex-row justify-content-left align-items-center">
                         <span style="font-size: 1em;" class="text-muted">APPLY</span>
@@ -71,12 +79,54 @@
                         </div>
                     </li>
                 </a>
-                @if($studentProfile = Auth::user()->studentProfile)
+                @if($studentProfile = Auth::user()->studentProfile->current)
                 <li class="w-100 my-3" style="border:none;">
                     <div class="d-flex h-100 flex-row justify-content-left align-items-center">
-                        <span style="font-size: 1em;" class="text-muted">Your Training</span>
+                        <span style="font-size: 1em;" class="text-muted">YOUR TRAINING</span>
                     </div>
                 </li>
+                <a class="myczqo-tab {{Request::is('training/portal/progress') ? 'active' : ''}} no-click" data-myczqo-tab="none" href="{{route('training.portal.progress')}}">
+                    <li class="w-100">
+                        <div class="d-flex h-100 flex-row justify-content-left align-items-center">
+                            <i style="font-size: 1.6em; margin-right: 10px;" class="fas fa-graduation-cap fa-fw"></i>
+                            <span style="font-size: 1.1em;">Your progress</span>
+                        </div>
+                    </li>
+                </a>
+                <a class="myczqo-tab {{Request::is('training/portal/availability') ? 'active' : ''}} no-click" data-myczqo-tab="none" href="{{route('training.portal.availability')}}">
+                    <li class="w-100">
+                        <div class="d-flex h-100 flex-row justify-content-left align-items-center">
+                            <i style="font-size: 1.6em; margin-right: 10px;" class="far fa-clock fa-fw"></i>
+                            <span style="font-size: 1.1em;">Your availability</span>
+                        </div>
+                    </li>
+                </a>
+                @if(Auth::user()->studentProfile->instructor())
+                <a class="myczqo-tab {{Request::is('training/portal/your-instructor') ? 'active' : ''}} no-click" data-myczqo-tab="none" href="{{route('training.portal.your-instructor')}}">
+                    <li class="w-100">
+                        <div class="d-flex h-100 flex-row justify-content-left align-items-center">
+                            <i style="font-size: 1.6em; margin-right: 10px;" class="fas fa-user fa-fw"></i>
+                            <span style="font-size: 1.1em;">Your instructor</span>
+                        </div>
+                    </li>
+                </a>
+                @endif
+                <a class="myczqo-tab {{Request::is('training/portal/training-notes') ? 'active' : ''}} no-click" data-myczqo-tab="none" href="{{route('training.portal.training-notes')}}">
+                    <li class="w-100">
+                        <div class="d-flex h-100 flex-row justify-content-left align-items-center">
+                            <i style="font-size: 1.6em; margin-right: 10px;" class="fas fa-file-alt fa-fw"></i>
+                            <span style="font-size: 1.1em;">Your training notes</span>
+                        </div>
+                    </li>
+                </a>
+                <a class="myczqo-tab {{Request::is('training/portal/actions') ? 'active' : ''}} no-click" data-myczqo-tab="none" href="{{route('training.portal.actions')}}">
+                    <li class="w-100">
+                        <div class="d-flex h-100 flex-row justify-content-left align-items-center">
+                            <i style="font-size: 1.6em; margin-right: 10px;" class="fas fa-cog fa-fw"></i>
+                            <span style="font-size: 1.1em;">Actions</span>
+                        </div>
+                    </li>
+                </a>
                 @endif
             </ul>
         </div>
