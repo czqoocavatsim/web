@@ -259,7 +259,7 @@ Route::group(['middleware' => 'auth'], function () {
 
                             //Student status labels
                             Route::get('/students/{cid}/drop/label/{label_link_id}', 'Training\InstructingController@dropStatusLabelFromStudent')->name('instructing.students.drop.label')->middleware('role:Instructor');
-                            Route::post('/students/{cid}/assign/label', 'training\InstructingController@assignStatusLabelToStudent')->name('instructing.student.assign.label')->middleware('role:Instructor');
+                            Route::post('/students/{cid}/assign/label', 'Training\InstructingController@assignStatusLabelToStudent')->name('instructing.student.assign.label')->middleware('role:Instructor');
 
                             //Student recommendation requests
                             Route::get('/students/{cid}/request/recommend/solocert', 'Training\InstructingController@recommendSoloCertification')->name('instructing.students.request.recommend.solocert')->middleware('role:Instructor');
