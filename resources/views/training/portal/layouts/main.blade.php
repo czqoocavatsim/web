@@ -66,7 +66,7 @@
                     <li class="w-100">
                         <div class="d-flex h-100 flex-row justify-content-left align-items-center">
                             <i style="font-size: 1.6em; margin-right: 13px;" >👋</i>
-                            <span style="font-size: 1.1em;">Apply to Gander</span>
+                            <span style="font-size: 1.1em;">Apply for Gander</span>
                         </div>
                     </li>
                 </a>

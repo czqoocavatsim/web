@@ -105,7 +105,7 @@
                         </div>
                     </li>
                 </a>
-                @hasanyrole('Administrator|Senior Staff|Marketing Team|Web Team')
+                @hasanyrole('Administrator|Senior Staff|Marketing Team|Web Team|Instructor')
                 <li class="w-100 my-3" style="border:none;">
                     <div class="d-flex h-100 flex-row justify-content-left align-items-center">
                         <span style="font-size: 1em;" class="text-muted">STAFF</span>
@@ -247,11 +247,10 @@
                     </div>
                     <div class="col-md">
                         @if(Auth::user()->pendingApplication())
-                            <div class="card grey lighten-4 p-4 mt-3 shadow-none mb-3">
-                                <h5 class="font-weight-bold">You have a pending application for Gander Oceanic</h5>
+                            <a href="{{route('training.applications.show', Auth::user()->pendingApplication()->reference_id)}}" class="list-group-item list-group-item-action p-4 z-depth-1 shadow-none mb-3">
+                                <h5 class="blue-text">You have a pending application for Gander Oceanic</h5>
                                 <p style="font-size:1.1em;" class="m-0">#{{Auth::user()->pendingApplication()->reference_id}} - submitted {{Auth::user()->pendingApplication()->created_at->diffForHumans()}}</p>
-                                <a href="{{route('training.applications.show', Auth::user()->pendingApplication()->reference_id)}}" class="btn bg-czqo-blue-light mt-4">View</a>
-                            </div>
+                            </a>
                         @endif
                     </div>
                 </div>
@@ -301,7 +300,7 @@
             </div>
             <div id="certificationTrainingTab" style="display:none">
                 <h3 class="font-weight-bold blue-text pb-2">Certification</h3>
-                @if(!$rosterProfile = Auth::user()->rosterProfile)
+                @if($rosterProfile = Auth::user()->rosterProfile)
                     <div class="d-flex flex-row justify-content-left">
                         <h3 class="mr-3">
                             {{Auth::user()->rosterProfile->certificationLabelHtml()}}
@@ -338,10 +337,12 @@
                         </span>
                     </h3>
                     @if (Auth::user()->rating_id >= 5 && Auth::user()->can('start applications'))
-                        <div class="card p-4 z-depth-1 mt-4 w-75">
-                            <h4 class="blue-text">Want to become Gander certified?</h4>
-                            <p style="font-size: 1.1em;">We're always looking for new controllers to join our ranks of Oceanic Controllers.</p>
-                            <a href="{{route('training.applications.apply')}}" class="btn btn-primary w-50" style="font-size: 1.1em;"><i class="fas fa-play mr-2"></i>Start Your Application</a>
+                        <div class="list-group-item rounded p-4 my-3 z-depth-1 shadow-none w-50 mt-4">
+                            <h4 class="blue-text"><i style="margin-right: 10px;" >👋</i>Apply for Gander Oceanic Certification</h4>
+                            <p style="font-size: 1.1em;">Interested in joining our team of oceanic controllers?</p>
+                            <p style="font-size: 1.2em;" class="mt-3 mb-0">
+                                <a class="font-weight-bold text-body" href="{{route('training.applications.apply')}}">Start your application &nbsp;&nbsp;<i class="fas fa-arrow-right blue-text"></i></a>
+                            </p>
                         </div>
                     @endif
                 @endif

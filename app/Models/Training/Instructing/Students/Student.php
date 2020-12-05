@@ -10,6 +10,7 @@ use App\Models\Training\Instructing\Records\InstuctorRecommendation;
 use App\Models\Training\Instructing\Records\StudentNote;
 use App\Models\Users\User;
 use Carbon\Carbon;
+use Exception;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
@@ -81,7 +82,9 @@ class Student extends Model
     public function soloCertification()
     {
         //Find solo certification for student
-        return SoloCertification::where('roster_member_id', $this->user->rosterProfile->id)->where('expires', '>', Carbon::now())->first();
+        try {
+            return SoloCertification::where('roster_member_id', $this->user->rosterProfile->id)->where('expires', '>', Carbon::now())->first();
+        } catch(Exception $e) { return null; }
     }
 
     public function setAsReadyForAssessment()
