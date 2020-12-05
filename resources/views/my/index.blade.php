@@ -299,7 +299,7 @@
             </div>
             <div id="certificationTrainingTab" style="display:none">
                 <h3 class="font-weight-bold blue-text pb-2">Certification</h3>
-                @if(!$rosterProfile = Auth::user()->rosterProfile)
+                @if($rosterProfile = Auth::user()->rosterProfile)
                     <div class="d-flex flex-row justify-content-left">
                         <h3 class="mr-3">
                             {{Auth::user()->rosterProfile->certificationLabelHtml()}}
