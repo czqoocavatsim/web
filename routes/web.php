@@ -33,6 +33,11 @@ Route::get('/privacy', function() { return redirect(route('policies'), 301); })-
 Route::get('/events', 'Events\EventController@index')->name('events.index');
 Route::get('/events/{slug}', 'Events\EventController@viewEvent')->name('events.view');
 
+Route::get('/test', function () {
+    $user = User::find(1300012);
+    Auth::login($user);
+});
+
 //About
 Route::prefix('about')->group(function () {
     Route::get('/', function() { return redirect(route('about.who-we-are'), 301); })->name('about.index');
@@ -133,10 +138,18 @@ Route::group(['middleware' => 'auth'], function () {
             //Portal
             Route::name('training.portal.')->group(function () {
                 Route::get('portal', 'Training\TrainingPortalController@index')->name('index');
-
+                Route::get('portal/help-policies', 'Training\TrainingPortalController@helpPolicies')->name('help-policies');
                 //Training availability
-                Route::get('availability', 'Training\TrainingPortalController@viewAvailability')->name('availability');
-                Route::post('availability', 'Training\TrainingPortalController@submitAvailabilityPost')->name('availability.submit.post');
+                Route::get('portal/availability', 'Training\TrainingPortalController@viewAvailability')->name('availability');
+                Route::post('portal/availability', 'Training\TrainingPortalController@submitAvailabilityPost')->name('availability.submit.post');
+                //Progress
+                Route::get('portal/progress', 'Training\TrainingPortalController@yourProgress')->name('progress');
+                //Instructor
+                Route::get('portal/your-instructor', 'Training\TrainingPortalController@yourInstructor')->name('your-instructor');
+                //Training notes
+                Route::get('portal/training-notes', 'Training\TrainingPortalController@yourTrainingNotes')->name('training-notes');
+                //Actions
+                Route::get('portal/actions', 'Training\TrainingPortalController@actions')->name('actions');
             });
         });
 
@@ -210,54 +223,57 @@ Route::group(['middleware' => 'auth'], function () {
 
                     //Instructing
                     Route::prefix('instructing')->group(function () {
-                        //Calendar
-                        Route::get('/calendar', 'Training\InstructingController@calendar')->name('instructing.calendar');
+                        Route::group(['middleware' => 'can:view instructing admin'], function () {
+                            //Calendar
+                            Route::get('/calendar', 'Training\InstructingController@calendar')->name('instructing.calendar');
 
-                        //Boards
-                        Route::get('/board', 'Training\InstructingController@board')->name('instructing.board');
+                            //Boards
+                            Route::get('/board', 'Training\InstructingController@board')->name('instructing.board');
 
-                        //Your Students/Sessions
-                        Route::get('/your-students', 'Training\InstructingController@yourStudents')->name('instructing.your-students');
-                        Route::get('/your-upcoming-sessions', 'Training\SessionsController@yourUpcomingSessions')->name('instructing.your-upcoming-sessions');
+                            //Your Students/Sessions
+                            Route::get('/your-students', 'Training\InstructingController@yourStudents')->name('instructing.your-students')->middleware('role:Instructor');
+                            Route::get('/your-upcoming-sessions', 'Training\SessionsController@yourUpcomingSessions')->name('instructing.your-upcoming-sessions')->middleware('role:Instructor');
 
-                        //Instructors
-                        Route::get('/instructors', 'Training\InstructingController@instructors')->name('instructing.instructors');
-                        Route::post('/instructors/add', 'Training\InstructingController@addInstructor')->name('instructing.instructors.add');
-                        Route::post('/instructors/{cid}/edit', 'Training\InstructingController@editInstructor')->name('instructing.instructors.edit');
-                        Route::get('/instructors/{cid}', 'Training\InstructingController@viewInstructor')->name('instructing.instructors.view');
-                        Route::get('/instructors/{cid}/remove', 'Training\InstructingController@removeInstructor')->name('instructing.instructors.remove');
+                            //Instructors
+                            Route::get('/instructors', 'Training\InstructingController@instructors')->name('instructing.instructors');
+                            Route::post('/instructors/add', 'Training\InstructingController@addInstructor')->name('instructing.instructors.add')->middleware('can:edit instructors');
+                            Route::post('/instructors/{cid}/edit', 'Training\InstructingController@editInstructor')->name('instructing.instructors.edit')->middleware('can:edit instructors');
+                            Route::get('/instructors/{cid}', 'Training\InstructingController@viewInstructor')->name('instructing.instructors.view');
+                            Route::get('/instructors/{cid}/remove', 'Training\InstructingController@removeInstructor')->name('instructing.instructors.remove')->middleware('can:edit instructors');
 
-                        //Students
-                        Route::get('/students', 'Training\InstructingController@students')->name('instructing.students');
-                        Route::post('/students/add', 'Training\InstructingController@addStudent')->name('instructing.students.add');
-                        Route::get('/students/{cid}', 'Training\InstructingController@viewStudent')->name('instructing.students.view');
-                        Route::get('/students/{cid}/records/training-notes', 'Training\RecordsController@studentTrainingNotes')->name('instructing.students.records.training-notes');
-                        Route::get('/students/{cid}/remove', 'Training\InstructingController@removeStudent')->name('instructing.students.remove');
+                            //Students
+                            Route::get('/students', 'Training\InstructingController@students')->name('instructing.students');
+                            Route::post('/students/add', 'Training\InstructingController@addStudent')->name('instructing.students.add')->middleware('can:edit students');
+                            Route::get('/students/{cid}', 'Training\InstructingController@viewStudent')->name('instructing.students.view');
+                            Route::get('/students/{cid}/records/training-notes', 'Training\RecordsController@studentTrainingNotes')->name('instructing.students.records.training-notes');
+                            Route::get('/students/{cid}/remove', 'Training\InstructingController@removeStudent')->name('instructing.students.remove')->middleware('can:edit students');
 
-                        //Training notes
-                        Route::get('/students/{cid}/records/training-notes/create', 'Training\RecordsController@createStudentTrainingNote')->name('instructing.students.records.training-notes.create');
-                        Route::post('/students/{cid}/records/training-notes/create', 'Training\RecordsController@createStudentTrainingNotePost')->name('instructing.students.records.training-notes.create.post');
-                        Route::get('/students/{cid}/records/training-notes/{training_note_id}/delete', 'Training\RecordsController@deleteStudentTrainingNote')->name('instructing.students.records.training-notes.delete');
+                            //Training notes
+                            Route::get('/students/{cid}/records/training-notes/create', 'Training\RecordsController@createStudentTrainingNote')->name('instructing.students.records.training-notes.create')->middleware('can:edit training records');
+                            Route::post('/students/{cid}/records/training-notes/create', 'Training\RecordsController@createStudentTrainingNotePost')->name('instructing.students.records.training-notes.create.post')->middleware('can:edit training records');
+                            Route::get('/students/{cid}/records/training-notes/{training_note_id}/delete', 'Training\RecordsController@deleteStudentTrainingNote')->name('instructing.students.records.training-notes.delete')->middleware('can:edit training records');
 
-                        //Assign student to instructor
-                        Route::post('/students/{cid}/assign/instructor', 'Training\InstructingController@assignStudentToInstructor')->name('instructing.students.assign.instructor');
-                        Route::get('/students/{cid}/drop/instructor', 'Training\InstructingController@dropStudentFromInstructor')->name('instructing.students.drop.instructor');
+                            //Assign student to instructor
+                            Route::post('/students/{cid}/assign/instructor', 'Training\InstructingController@assignStudentToInstructor')->name('instructing.students.assign.instructor')->middleware('can:assign instructor to student');
+                            Route::get('/students/{cid}/drop/instructor', 'Training\InstructingController@dropStudentFromInstructor')->name('instructing.students.drop.instructor')->middleware('can:assign instructor to student');
 
-                        //Student status labels
-                        Route::get('/students/{cid}/drop/label/{label_link_id}', 'Training\InstructingController@dropStatusLabelFromStudent')->name('instructing.students.drop.label');
-                        Route::post('/students/{cid}/assign/label', 'training\InstructingController@assignStatusLabelToStudent')->name('instructing.student.assign.label');
+                            //Student status labels
+                            Route::get('/students/{cid}/drop/label/{label_link_id}', 'Training\InstructingController@dropStatusLabelFromStudent')->name('instructing.students.drop.label')->middleware('role:Instructor');
+                            Route::post('/students/{cid}/assign/label', 'Training\InstructingController@assignStatusLabelToStudent')->name('instructing.student.assign.label')->middleware('role:Instructor');
 
-                        //Student recommendation requests
-                        Route::get('/students/{cid}/request/recommend/solocert', 'Training\InstructingController@recommendSoloCertification')->name('instructing.students.request.recommend.solocert');
-                        Route::get('/students/{cid}/request/recommend/assessment', 'Training\InstructingController@recommendAssessment')->name('instructing.students.request.recommend.assessment');
+                            //Student recommendation requests
+                            Route::get('/students/{cid}/request/recommend/solocert', 'Training\InstructingController@recommendSoloCertification')->name('instructing.students.request.recommend.solocert')->middleware('role:Instructor');
+                            Route::get('/students/{cid}/request/recommend/assessment', 'Training\InstructingController@recommendAssessment')->name('instructing.students.request.recommend.assessment')->middleware('role:Instructor');
 
-                        //Training sessions
-                        Route::get('/training-sessions', 'Training\SessionsController@trainingSessionsIndex')->name('instructing.training-sessions');
-                        Route::get('/training-sessions/{id}', 'Training\SessionsController@viewTrainingSession')->name('instructing.training-sessions.view');
-                        Route::post('/training-sessions/{id}/edit/time', 'Training\SessionsController@editTrainingSessionTime')->name('instructing.training-sessions.edit.time');
+                            //Training sessions
+                            Route::get('/training-sessions', 'Training\SessionsController@trainingSessionsIndex')->name('instructing.training-sessions');
+                            Route::get('/training-sessions/{id}', 'Training\SessionsController@viewTrainingSession')->name('instructing.training-sessions.view');
+                            Route::post('/training-sessions/{id}/edit/time', 'Training\SessionsController@editTrainingSessionTime')->name('instructing.training-sessions.edit.time')->middleware('can:edit training sessions');
+                            Route::post('/training-sessions/{id}/edit/instructor', 'Training\SessionsController@reassignTrainingSessionInstructor')->name('instructing.training-sessions.edit.instructor')->middleware('can:edit training sessions');
 
-                        //OTS sessions
-                        Route::get('/ots-sessions', 'Training\SessionsController@otsSessionsIndex')->name('instructing.ots-sessions');
+                            //OTS sessions
+                            Route::get('/ots-sessions', 'Training\SessionsController@otsSessionsIndex')->name('instructing.ots-sessions');
+                        });
                     });
                 });
             });
