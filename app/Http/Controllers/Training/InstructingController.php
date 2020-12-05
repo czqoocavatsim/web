@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Training;
 
 use App\Http\Controllers\Controller;
+use App\Models\Roster\RosterMember;
 use App\Models\Training\Instructing\Board\BoardList;
 use App\Models\Training\Instructing\Instructors\Instructor;
 use App\Models\Training\Instructing\Links\InstructorStudentAssignment;
@@ -188,7 +189,7 @@ class InstructingController extends Controller
         }
 
         //Tell them
-        $instructor->user->notify(new AddedAsInstructor());
+        $instructor->notify(new AddedAsInstructor());
 
         //Return view
         return redirect()->route('training.admin.instructing.instructors.view', $instructor->user_id)->with('success', 'Added!');
@@ -259,6 +260,20 @@ class InstructingController extends Controller
 
         //Give not ready status label
         $student->assignStatusLabel(StudentStatusLabel::whereName('Not Ready')->first());
+
+        //Create roster object
+        if (!RosterMember::where('cid', $student->user_id)->first()) {
+            $rosterMember = new RosterMember();
+        } else {
+            $rosterMember = RosterMember::where('cid', $student->user_id)->first();
+        }
+
+        //Setup roster member
+        $rosterMember->cid = $student->user_id;
+        $rosterMember->user_id = $student->user_id;
+        $rosterMember->certification = "training";
+        $rosterMember->active = 1;
+        $rosterMember->save();
 
         //Notify
         $student->user->notify(new AddedAsStudent());
@@ -345,7 +360,7 @@ class InstructingController extends Controller
         }
 
         //Tell them
-        $instructor->user->notify(new RemovedAsInstructor());
+        $instructor->notify(new RemovedAsInstructor());
 
         //Save instructor obj
         $instructor->save();
@@ -460,7 +475,7 @@ class InstructingController extends Controller
 
         //Notify instructor
         $instructor = Instructor::whereId($request->get('instructor_id'))->first();
-        $instructor->user->notify(new StudentAssignedToYou($student));
+        $instructor->notify(new StudentAssignedToYou($student));
 
         //Return
         return redirect()->route('training.admin.instructing.students.view', $student->user->id)->with('success', 'Assigned to instructor!');
@@ -574,7 +589,7 @@ class InstructingController extends Controller
 
         //Notify via email
         foreach (Instructor::whereAssessor(true)->whereCurrent(true)->get() as $instructor) {
-            $instructor->user->notify(new StudentRecommendedForSoloCert($student, Auth::user()->instructorProfile));
+            $instructor->notify(new StudentRecommendedForSoloCert($student, Auth::user()->instructorProfile));
         }
 
         //Create object
@@ -601,7 +616,7 @@ class InstructingController extends Controller
 
         //Notify via email
         foreach (Instructor::whereAssessor(true)->whereCurrent(true)->get() as $instructor) {
-            $instructor->user->notify(new StudentRecommendedForAssessment($student, Auth::user()->instructorProfile));
+            $instructor->notify(new StudentRecommendedForAssessment($student, Auth::user()->instructorProfile));
         }
 
         //Create object

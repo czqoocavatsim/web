@@ -9,10 +9,13 @@ use App\Models\Users\User;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Notifications\Notifiable;
 
 class Instructor extends Model
 {
     protected $hidden = ['id'];
+
+    use Notifiable;
 
     protected $fillable = [
         'user_id', 'current', 'assessor', 'staff_email', 'staff_page_tagline'
@@ -78,5 +81,10 @@ class Instructor extends Model
     public function studentsAssigned()
     {
         return $this->hasMany(InstructorStudentAssignment::class, 'instructor_id');
+    }
+
+    public function routeNotificationForMail($notification)
+    {
+        return $this->user->email;
     }
 }

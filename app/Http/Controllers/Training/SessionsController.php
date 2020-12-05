@@ -96,7 +96,7 @@ class SessionsController extends Controller
         $session->save();
 
         //Notify instructor
-        $instructor->user->notify(new SessionAssignedToYou($session, 'training'));
+        $instructor->notify(new SessionAssignedToYou($session, 'training'));
 
         //Return
         return redirect()->route('training.admin.instructing.training-sessions.view', $session)->with('success', 'Assigned instructor changed!');
