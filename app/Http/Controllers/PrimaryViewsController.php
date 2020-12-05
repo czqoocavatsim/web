@@ -13,6 +13,7 @@ use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Cache;
+use Throwable;
 use Thujohn\Twitter\Facades\Twitter;
 
 class PrimaryViewsController extends Controller
@@ -44,10 +45,20 @@ class PrimaryViewsController extends Controller
 
         //Twitter
         $tweets = Cache::remember('twitter.timeline', 86400, function () {
-	        return Twitter::getUserTimeline(['screen_name' => 'ganderocavatsim', 'count' => 3, 'format' => 'array']);
+            try {
+                return Twitter::getUserTimeline(['screen_name' => 'ganderocavatsim', 'count' => 3, 'format' => 'array']);
+            } catch (Throwable $ex) {
+                return null;
+            }
         });
 
-        return view('index', compact('controllers', 'news', 'certifications', 'nextEvent', 'topControllers', 'tweets'));
+        //CTP Mode?
+        $ctpMode = false;
+        if (config('app.ctp_home_page')) {
+            $ctpMode = true;
+        }
+
+        return view('index', compact('controllers', 'news', 'certifications', 'nextEvent', 'topControllers', 'tweets', 'ctpMode'));
     }
 
     /*
@@ -60,13 +71,17 @@ class PrimaryViewsController extends Controller
         $vatsim->setConfig('cacheOnly', false);
         $ganderControllers = [];
         $shanwickControllers = [];
+        $controllerOnline = false;
         $planes = null;
         if ($vatsim->loadData()) {
             $ganderControllers = $vatsim->searchCallsign('CZQX_');
             $shanwickControllers = $vatsim->searchCallsign('EGGX_');
+            $controllers = array_merge($ganderControllers->toArray(), $shanwickControllers->toArray());
+            if (count($controllers) > 1) { $controllerOnline = true; }
             $planes = $vatsim->getPilots()->toArray();
         }
-        return view('map', compact('ganderControllers', 'shanwickControllers', 'planes'));
+
+        return view('pilots.map', compact('planes', 'controllerOnline'));
     }
 
     /*
@@ -75,8 +90,6 @@ class PrimaryViewsController extends Controller
     public function dashboard(Request $request)
     {
         $user = Auth::user();
-
-        $openTickets = Ticket::where('user_id', $user->id)->where('status', 0)->get();
 
         $atcResources = AtcResource::all()->sortBy('title');
 
@@ -94,10 +107,7 @@ class PrimaryViewsController extends Controller
             return json_decode($output);
         });
 
-        if ($user->preferences->enable_beta_features) {
-            return view('dashboard.indexnew', compact('openTickets', 'atcResources', 'bannerImg'));
-        } else {
-            return view('dashboard.index', compact('openTickets', 'atcResources', 'bannerImg', 'quote'));
-        }
+        return view('my.index', compact('atcResources', 'bannerImg', 'quote'));
+
     }
 }

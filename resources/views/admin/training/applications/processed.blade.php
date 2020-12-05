@@ -1,7 +1,7 @@
 @extends('admin.training.layouts.main')
 @section('training-content')
 <a href="{{route('training.admin.applications')}}" class="blue-text" style="font-size: 1.2em;"> <i class="fas fa-arrow-left"></i> Applications</a>
-<h2 class="blue-text font-weight-bold mt-2 pb-2">Processed Applications</h2>
+<h2 class="blue-text mt-2 pb-2">Processed Applications</h2>
 <table id="dataTable" class="table table-hover">
     <thead>
     <tr>
@@ -16,7 +16,7 @@
         <tr>
             <th scope="row"><b>#{{$a->reference_id}}</b></th>
             <td>{{$a->user->fullName('FL')}}</td>
-            <td>{{$a->updated_at->toDayDateTimeString()}}</td>
+            <td data-order="{{$a->updated_at}}">{{$a->updated_at->toDayDateTimeString()}}</td>
             <td>
                 <a class="blue-text" href="{{route('training.admin.applications.view', $a->reference_id)}}"><i class="fa fa-eye"></i> View</a>
             </td>

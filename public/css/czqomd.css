@@ -19,6 +19,14 @@ body, html {
     scroll-behavior: smooth;
 }
 
+.modal-dialog .modal-content {
+    box-shadow: none !important;
+}
+
+.modal-content {
+    padding: 0.5rem !important;
+}
+
 body[data-theme="dark"] {
     background-color: rgb(47, 49, 54) !important;
     color: #eee;
@@ -49,7 +57,7 @@ body[data-accent="orange"] {
     --czqo-blue: var(--orange);
 }
 
-body[data-accent] {
+body[data-accent]:not([data-accent="default"]) {
     --czqo-light-blue: var(--czqo-blue);
 }
 
@@ -117,9 +125,6 @@ body[data-theme="dark"] .page-footer .black-text {
     color: #eee !important;
 }
 
-body[data-theme="dark"] #czqoHeaderLight {
-    background: rgb(47, 49, 54) !important;
-}
 
 
 body[data-theme="dark"] .modal-content {
@@ -139,7 +144,17 @@ body[data-theme="dark"] .modal-content .close {
     border-right: 3px solid #eeeeee;
 }
 
+body[data-theme="dark"] .myczqo-tab li {
+    height: 35px;
+    border-right: 3px solid rgb(59, 61, 68);
+}
+
 .myczqo-tab.active li {
+    border-right: 3px solid var(--czqo-blue);
+    color: var(--czqo-blue)
+}
+
+body[data-theme="dark"] .myczqo-tab.active li {
     border-right: 3px solid var(--czqo-blue);
     color: var(--czqo-blue)
 }
@@ -291,7 +306,7 @@ div.d-flex.flex-row > i {
     color: var(--czqo-blue) !important;
 }
 
-body[data-accent] .bg-czqo-blue-light {
+body[data-accent]:not([data-accent="default"]) .bg-czqo-blue-light {
     color: #fff !important;
 }
 
@@ -299,6 +314,7 @@ body[data-accent] .bg-czqo-blue-light {
 .list-group-item.active {
     background-color: var(--czqo-blue);
 }
+
 
 .btn, .btn:hover, .btn:active {
     box-shadow: none !important;
@@ -316,6 +332,10 @@ body[data-theme="dark"] .custom-file-label, body[data-theme="dark"] .custom-file
 
 body[data-theme="dark"] .form-control {
     color: #eee !important;
+}
+
+body[data-theme="dark"] .form-control > option {
+    color: #000!important;
 }
 
 body[data-theme="dark"]  ::placeholder {
@@ -467,4 +487,26 @@ body[data-theme="dark"] .list-group-item.bg-czqo-blue-light {
 
 .toastify .toast-close {
     margin-left: 10px !important;
+}
+
+body[data-theme="dark"] .btn-light {
+    background: rgb(59, 61, 68) !important;
+    border-color:  rgb(47, 49, 54) !important;
+    border: 2px solid;
+}
+
+body[data-theme="dark"] .text-body {
+    color: #eee !important;
+}
+
+h1,h2,h3,h4,h5,h6 .font-weight-bold {
+    font-weight: 400 !important;
+}
+
+.modal-content .modal-header h5.modal-title {
+  font-weight: 400 !important;
+}
+
+.font-weight-bold {
+  font-weight: 400 !important;
 }

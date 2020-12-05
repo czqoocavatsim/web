@@ -1,6 +1,6 @@
 @extends('admin.training.layouts.main')
 @section('training-content')
-<h1 class="font-weight-bold blue-text pb-2">Solo Certifications</h1>
+<h1 class="blue-text pb-2">Solo Certifications</h1>
 <ul class="list-unstyled mt-2 mb-0">
     <li class="mb-2">
         <a href="#" data-target="#addSoloCertificationModal" data-toggle="modal" style="text-decoration:none;"><span class="blue-text"><i class="fas fa-chevron-right"></i></span> &nbsp; <span class="black-text">Add solo certification</span></a>

@@ -1,5 +1,5 @@
-@extends('layouts.master')
-@section('content')
+@extends('admin.settings.layouts.main')
+@section('settings-content')
     <div class="container py-4">
         <a href="{{route('settings.index')}}" class="blue-text" style="font-size: 1.2em;"> <i class="fas fa-arrow-left"></i> Settings</a>
         <h1 class="blue-text font-weight-bold mt-2">Activity Log</h1>
@@ -23,10 +23,10 @@
                     <tr>
                         <th data-order="{{$entry->created_at}}" scope="row">{{$entry->created_at->toDayDateTimeString()}}</th>
                         <td>
-                            {{$entry->subject->id}} ({{substr($entry->subject_type, strrpos($entry->subject_type, "\\") + 1)}})
+                            {{$entry->subject->id ?? ''}} ({{substr($entry->subject_type, strrpos($entry->subject_type, "\\") + 1)}})
                         </td>
                         <td>
-                            {{$entry->causer->id}} ({{substr($entry->causer_type, strrpos($entry->causer_type, "\\") + 1)}})
+                            {{$entry->causer->id ?? ''}} ({{substr($entry->causer_type, strrpos($entry->causer_type, "\\") + 1)}})
                         <td>
                             {{$entry->description}}
                         </td>

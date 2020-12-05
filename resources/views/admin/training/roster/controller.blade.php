@@ -1,7 +1,7 @@
 @extends('admin.training.layouts.main')
 @section('training-content')
 <a href="{{route('training.admin.roster')}}" class="blue-text" style="font-size: 1.2em;"> <i class="fas fa-arrow-left"></i> Roster</a>
-<h2 class="blue-text font-weight-bold mt-2 pb-2">{{$rosterMember->user->fullName('FLC')}}</h2>
+<h2 class="blue-text mt-2 pb-2">{{$rosterMember->user->fullName('FLC')}}</h2>
 <div class="row">
     <div class="col-sm">
         <h5>Rating & Division</h5>
@@ -24,47 +24,10 @@
     <div class="col-sm">
         <h5>Status</h5>
         <h3>
-            @switch ($rosterMember->certification)
-            @case("certified")
-            <span class="badge badge-success rounded shadow-none">
-                <i class="fa fa-check"></i>&nbsp;
-                Certified
-            </span>
-            @break
-            @case("not_certified")
-            <span class="badge badge-danger rounded shadow-none">
-                <i class="fa fa-times"></i>&nbsp;
-                Not Certified
-            </span>
-            @break
-            @case("training")
-            <span class="badge badge-warning rounded shadow-none">
-                <i class="fa fa-book-open"></i>&nbsp;
-                Training
-            </span>
-            @break
-            @default
-            <span class="badge badge-dark rounded shadow-none">
-                <i class="fa fa-question"></i>&nbsp;
-                Unknown
-            </span>
-            @endswitch
+            {{$rosterMember->certificationLabelHtml()}}
         </h3>
         <h3>
-            @switch ($rosterMember->active)
-            @case(true)
-            <span class="badge badge-success rounded shadow-none">
-                <i class="fa fa-check"></i>&nbsp;
-                Active
-            </span>
-            @break
-            @case(false)
-            <span class="badge badge-danger rounded shadow-none">
-                <i class="fa fa-times"></i>&nbsp;
-                Inactive
-            </span>
-            @break
-            @endswitch
+            {{$rosterMember->activeLabelHtml()}}
         </h3>
     </div>
 </div>

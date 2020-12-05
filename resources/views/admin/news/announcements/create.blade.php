@@ -1,4 +1,4 @@
-@extends('layouts.master')
+@extends('layouts.master', ['adminNavBar'=>true])
 @section('content')
 <div class="container py-4">
     <a href="{{route('news.index')}}" class="blue-text" style="font-size: 1.2em;"> <i class="fas fa-arrow-left"></i> News</a>
@@ -37,10 +37,11 @@
                             <select name="target_group" id="" class="form-control" required>
                                 <option hidden>Select one</option>
                                 <option value="everyone">Every user</option>
-                                <option disabled value="subscribed">Subscribed users</option>
+                                <option disabled value="subscribed">Users subscribed to news notifications</option>
                                 <option value="roster">Controller roster</option>
-                                <option disabled value="staff">Staff members</option>
-                                <option disabled value="students">Current students (disabled for now)</option>
+                                <option value="staff">Staff members</option>
+                                <option value="students">Current students</option>
+                                <option value="instructors">Instructors</option>
                             </select>
                         </div>
                     </div>
@@ -54,7 +55,7 @@
                         <label for="">Use Markdown</label>
                         <textarea id="contentMD" name="content" class="w-75"></textarea>
                         <script>
-                            var simplemde = new SimpleMDE({ element: document.getElementById("contentMD"), toolbar: false });
+                            var simplemde = new EasyMDE({ element: document.getElementById("contentMD"), toolbar: false });
                         </script>
                     </div>
                 </li>

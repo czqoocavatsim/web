@@ -23,12 +23,35 @@
                 <tbody id="tableBody">
                 </tbody>
             </table>
-            <a href="https://flightplandatabase.com"><img src="https://static.flightplandatabase.com/images/data-banner/light.min.png" alt="Data from the Flight Plan Database"></a>
-            <p>Special thank you to Christian Kovanen 1379372 for providing the map theme, boundaries, and fixes.</p>
+            <p class="mt-3 text-muted">Special thank you to Christian Kovanen 1379372 for the boundaries and fixes.</p>
         </div>
         <script>
             createNatTrackMap();
         </script>
     </div>
 </div>
+<style>
+    .leaflet-tooltip {
+    position: absolute;
+    padding: 6px;
+    background: none !important;
+    border: none !important;
+    border-radius: none !important;
+    color: #222;
+    white-space: nowrap;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    pointer-events: none;
+    box-shadow: none !important;
+    }
+    .leaflet-tooltip-top:before, .leaflet-tooltip-bottom:before, .leaflet-tooltip-left:before, .leaflet-tooltip-right:before {
+    position: absolute;
+    pointer-events: none;
+    border: none !important;
+    background: transparent;
+    content: "";
+    }
+</style>
 @endsection

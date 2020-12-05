@@ -1,4 +1,4 @@
-@extends('layouts.master')
+@extends('layouts.master', ['adminNavBar'=>true])
 @section('content')
 <div class="container py-4">
     <a href="{{route('news.index')}}" class="blue-text" style="font-size: 1.2em;"> <i class="fas fa-arrow-left"></i> News</a>
@@ -71,7 +71,7 @@
                         {{-- <label for="">Use Markdown</label>
                         <textarea id="contentMD" name="content" class="w-75"></textarea>
                         <script>
-                            var simplemde = new SimpleMDE({ element: document.getElementById("contentMD"), toolbar: false, disabled: true });
+                            var simplemde = new EasyMDE({ element: document.getElementById("contentMD"), toolbar: false, disabled: true });
                         </script> --}}
                     </div>
                 </li>

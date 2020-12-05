@@ -1,4 +1,4 @@
-<p align="center"><img src="https://resources.ganderoceanic.com/media/img/brand/sqr/ZQO_SQ_TSPBLUE.png"height="100"></p>
+<p align="center"><img src="https://cdn.ganderoceanic.com/resources/media/img/brand/sqr/ZQO_SQ_TSPBLUE.png"height="100"></p>
 
 <p align="center">The website for VATSIM's Gander Oceanic OCA<br>https://ganderoceanic.com</p>
 

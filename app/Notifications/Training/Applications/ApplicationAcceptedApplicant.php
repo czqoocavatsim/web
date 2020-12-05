@@ -44,9 +44,15 @@ class ApplicationAcceptedApplicant extends Notification
      */
     public function toMail($notifiable)
     {
-        return (new MailMessage)->view(
-            'emails.training.applications.applicationacceptedapplicant', ['application' => $this->application]
-        )->subject('#'.$this->application->reference_id.' - Application Accepted');
+        return (new MailMessage)
+        ->subject('Your Application Has Been Accepted!')
+        ->greeting("Hello {$this->application->user->fullName('FLC')},")
+        ->line("Congratulations! Your application for Gander Oceanic has been accepted. You can now take the next steps to achieving your oceanic certification.")
+        ->line("**How to get started**")
+        ->line("To begin your training, head to the Training Portal in myCZQO and submit your availability for the next two weeks. This will allow us to assign you an Instructor who is best suited to your time zone.")
+        ->action("Submit Your Availability", route('training.portal.index'))
+        ->salutation("Kind regards, Gander Oceanic OCA")
+        ->line("You received this email as there is an important update to your status with Gander Oceanic.");
     }
 
     /**
@@ -60,7 +66,7 @@ class ApplicationAcceptedApplicant extends Notification
         $message->embed([
             'title' => 'Your application for Gander Oceanic has been accepted!',
             'url' => route('training.applications.show', $this->application->reference_id),
-            'description' => "Congratulations! The Chief Instructor will contact you via email to start your training.",
+            'description' => "Congratulations! Please check your email inbox for further instructions.",
             'color' => 0x80c9,
             "timestamp" => date('Y-m-d H:i:s'),
         ]);

@@ -157,13 +157,13 @@ class NewsController extends Controller
                 abort(403, 'This article is hidden.');
             }
         }
-        return view('publicarticle', compact('article'));
+    return view('news.article', compact('article'));
     }
 
     public function viewAllPublic()
     {
         $news = News::where('visible', true)->get()->sortByDesc('id');
-        return view('publicnews', compact('news'));
+        return view('news.index', compact('news'));
     }
 
     public function minutesIndex()

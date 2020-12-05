@@ -11,9 +11,13 @@ use App\Models\Training\Application;
 use App\Models\Training\ApplicationComment;
 use App\Models\Training\ApplicationReferee;
 use App\Models\Training\ApplicationUpdate;
+use App\Models\Training\Instructing\Links\StudentStatusLabelLink;
+use App\Models\Training\Instructing\Students\Student;
+use App\Models\Training\Instructing\Students\StudentStatusLabel;
 use App\Notifications\Training\Applications\ApplicationAcceptedApplicant;
 use App\Notifications\Training\Applications\ApplicationAcceptedStaff;
 use App\Notifications\Training\Applications\ApplicationRejectedApplicant;
+use App\Notifications\Training\Applications\ApplicationWithdrawnStaff;
 use App\Notifications\Training\Applications\NewApplicationStaff;
 use App\Notifications\Training\Applications\NewCommentApplicant;
 use App\Notifications\Training\Applications\NewCommentStaff;
@@ -22,13 +26,16 @@ use Illuminate\Http\Request;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Notification;
+use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Str;
 use mofodojodino\ProfanityFilter\Check;
 use NotificationChannels\Discord\DiscordMessage;
+use RestCord\DiscordClient;
 use Spatie\Permission\Models\Role;
 
 class ApplicationsController extends Controller
@@ -77,6 +84,22 @@ class ApplicationsController extends Controller
         if ($hoursTotal < 80)
         {
             return view('training.applications.apply', compact('hoursTotal'))->with('allowed', 'hours');
+        }
+
+        //Check Shanwick roster
+        $shanwickRoster = json_decode(Cache::remember('shanwickroster', 86400, function () {
+            $ch = curl_init();
+            curl_setopt($ch, CURLOPT_URL, 'https://www.vatsim.uk/api/validations?position=EGGX');
+            curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+            $output = curl_exec($ch);
+            curl_close($ch);
+            return $output;
+        }));
+
+        foreach ($shanwickRoster->validated_members as $member) {
+            if ($member->id == Auth::id()) {
+                return view('training.applications.apply')->with('allowed', 'shanwick');
+            }
         }
 
         return view('training.applications.apply')->with('allowed', 'true');
@@ -211,8 +234,8 @@ class ApplicationsController extends Controller
         $update->save();
 
         //Dispatch event
-        Notification::route('mail', CoreSettings::find(1)->emailfirchief)->notify(new ApplicationWithdrawn($application));
-        Notification::route('mail', CoreSettings::find(1)->emaildepfirchief)->notify(new ApplicationWithdrawn($application));
+        Notification::route('mail', CoreSettings::find(1)->emailfirchief)->notify(new ApplicationWithdrawnStaff($application));
+        Notification::route('mail', CoreSettings::find(1)->emaildepfirchief)->notify(new ApplicationWithdrawnStaff($application));
 
         //Return
         $request->session()->flash('alreadyApplied', 'Application withdrawn.');
@@ -377,7 +400,7 @@ class ApplicationsController extends Controller
         $update = new ApplicationUpdate([
             'application_id' => $application->id,
             'update_title' => 'Your application has been accepted!',
-            'update_content' => 'You will be contacted by the Chief Instructor to start your training. Congratulations!',
+            'update_content' => 'Congratulations! Check out the myCZQO Training portal for more information on how to continue with getting your Gander Oceanic certification.',
             'update_type' => 'green'
         ]);
         $update->save();
@@ -396,15 +419,51 @@ class ApplicationsController extends Controller
         $rosterMember->active = 1;
         $rosterMember->save();
 
+        //Create student
+        if ($student = Student::where('user_id', $application->user_id)->first()) {
+            $student->current = true;
+            $student->created_at = Carbon::now();
+            $student->save();
+        } else {
+            $student = new Student();
+            $student->user_id = $application->user_id;
+            $student->save();
+        }
+
+        //Give role
+        $student->user->assignRole('Student');
+
+        //Give Discord role
+        if ($student->user->hasDiscord() && $student->user->memberOfCzqoGuild()) {
+            //Get Discord client
+            $discord = new DiscordClient(['token' => config('services.discord.token')]);
+
+            //Remove student role
+            $discord->guild->addGuildMemberRole([
+                'guild.id' => intval(config('services.discord.guild_id')),
+                'user.id' => $student->user->discord_user_id,
+                'role.id' => 482824058141016075
+            ]);
+        } else {
+            Session::flash('info', 'Unable to add Discord permissions automatically.');
+        }
+
+        //Status label
+        $label = new StudentStatusLabelLink([
+            'student_status_label_id' => StudentStatusLabel::whereName('Not Ready')->first()->id,
+            'student_id' => $student->id
+        ]);
+        $label->save();
+
         //Change their user role
         $application->user->removeRole('Guest');
-        $application->user->assignRole('Trainee');
+        $application->user->assignRole('Student');
 
         //Notify user
         $application->user->notify(new ApplicationAcceptedApplicant($application));
 
         //Notify staff
-        Notification::route('mail', CoreSettings::find(1)->emailcinstructor)->notify(new ApplicationAcceptedStaff($application));
+        //Notification::route('mail', CoreSettings::find(1)->emailcinstructor)->notify(new ApplicationAcceptedStaff($application));
 
         //Return
         $request->session()->flash('alreadyApplied', 'Accepted!');

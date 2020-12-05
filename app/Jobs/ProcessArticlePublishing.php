@@ -15,6 +15,7 @@ use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Log;
 use NotificationChannels\Discord\DiscordMessage;
 use RestCord\DiscordClient;
+use Throwable;
 
 class ProcessArticlePublishing implements ShouldQueue
 {
@@ -41,23 +42,29 @@ class ProcessArticlePublishing implements ShouldQueue
         $discord = new DiscordClient(['token' => config('services.discord.token')]);
 
         //Send announcement
-        $discord->channel->createMessage([
-            'channel.id' => config('app.env') == 'local' ? intval(config('services.discord.web_logs')) : intval(config('services.discord.announcements')),
-            'embed' => [
-                'title' => $this->article->title,
-                'description'    => $this->article->summary,
-                'color' => 0x80c9,
-                "image" => [
-                    "url" => $this->article->image ? url('/').$this->article->image : null
-                ],
-                "url" => route('news.articlepublic', $this->article->slug),
-                "author" => [
-                    "name" => $this->article->author_pretty(),
-                    "icon_url" => $this->article->show_author ? $this->article->user->avatar() : null
-                ],
-                //"timestamp" => date('Y-m-d H:i:s'),
-            ]
-        ]);
+        try
+        {
+            $discord->channel->createMessage([
+                'channel.id' => config('app.env') == 'local' ? intval(config('services.discord.web_logs')) : intval(config('services.discord.announcements')),
+                'embed' => [
+                    'title' => $this->article->title,
+                    'description'    => $this->article->summary,
+                    'color' => 0x80c9,
+                    "image" => [
+                        "url" => $this->article->image ? url('/').$this->article->image : null
+                    ],
+                    "url" => route('news.articlepublic', $this->article->slug),
+                    "author" => [
+                        "name" => $this->article->author_pretty(),
+                    ],
+                    "timestamp" => date('Y-m-d H:i:s'),
+                ]
+            ]);
+        }
+        catch (Throwable $ex)
+        {
+            error_log("Webhook failed");
+        }
 
         //Send emails as appropirate
         switch ($this->article->email_level) {

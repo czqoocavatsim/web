@@ -11,7 +11,7 @@
     </ul>
 </p>
 <p>
-    If you believe this is a mistake or have any questions, please contact us via a <a href="{{route('tickets.index')}}">support ticket</a> or email the <a href="{{route('staff')}}">Chief Instructor.</a>
+    If you believe this is a mistake or have any questions, please contact us via a <a href="TODO: TicketURL">support ticket</a> or email the <a href="{{route('staff')}}">Chief Instructor.</a>
 </p>
 @endsection
 

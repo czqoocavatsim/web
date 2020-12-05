@@ -1,5 +1,5 @@
-<div class="container">
-    <a class="navbar-brand" href="{{route('index')}}"><img style="height: 40px; width:auto;" id="czqoHeaderImg" src="https://resources.ganderoceanic.com/media/img/brand/bnr/ZQO_BNR_TSPWHITE.png" alt=""></a>
+<div class="container py-2">
+    <a class="navbar-brand" href="{{route('index')}}"><img style="height: 40px; width:auto;" id="czqoHeaderImg" src="https://cdn.ganderoceanic.com/resources/media/img/brand/bnr/ZQO_BNR_TSPWHITE.png" alt=""></a>
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
             aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
@@ -32,7 +32,7 @@
                 <a class="nav-link dropdown-toggle" style="cursor:pointer" id="dropdown01" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">ATC</a>
                 <div class="dropdown-menu" aria-labelledby="dropdown01">
                     <a class="dropdown-item {{ Request::is('atcresources') ? 'active white-text' : '' }}" href="{{route('atcresources.index')}}">ATC Resources</a>
-                    <a href="{{route('eurosounds')}}" class="dropdown-item {{ Request::is('eurosounds') ? 'active white-text' : '' }}">EuroSounds</a>
+                    <a href="{{URL('/eurosounds')}}" class="dropdown-item {{ Request::is('eurosounds') ? 'active white-text' : '' }}">EuroSounds</a>
                 </div>
             </li>
             <li class="nav-item dropdown {{ Request::is('pilots/oceanic-clearance') || Request::is('pilots/position-report') || Request::is('pilots/vatsim-resources') || Request::is('pilots/tutorial') || Request::is('pilots/tracks') ? 'active' : '' }}">
@@ -41,6 +41,7 @@
                     <a class="dropdown-item {{ Request::is('pilots/oceanic-clearance') ? 'active white-text' : '' }}" href="{{url('/pilots/oceanic-clearance')}}">Oceanic Clearance Generator</a>
                     <a class="dropdown-item {{ Request::is('pilots/position-report') ? 'active white-text' : '' }}" href="{{url('/pilots/position-report')}}">Position Report Generator</a>
                     <a class="dropdown-item {{ Request::is('pilots/tracks') ? 'active white-text' : ''}}" href="{{url('/pilots/tracks')}}">Current NAT Tracks</a>
+                    <a class="dropdown-item {{ Request::is('pilots/tracks/event') ? 'active white-text' : ''}}" href="{{url('/pilots/tracks/event')}}">Event NAT Tracks</a>
                     <a class="dropdown-item" href="https://www.vatsim.net/pilots/resources" target="_blank">VATSIM Resources</a>
                     <a class="dropdown-item" href="https://nattrak.vatsim.net" target="_blank">natTRAK</a>
                     <a class="dropdown-item" href="{{url('/map')}}">Map</a>
@@ -72,11 +73,11 @@
             @auth
             <li class="nav-item dropdown">
                 <a class="nav-link dropdown-toggle" id="navbarDropdownMenuLink-333" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                    <img src="{{Auth::user()->avatar()}}" style="height: 27px; width: 27px; margin-right: 7px; margin-bottom: 3px; border-radius: 50%;">&nbsp;<span class="font-weight-bold">{{Auth::user()->fullName("F")}}</span>
+                    <img src="{{Auth::user()->avatar()}}" style="height: 27px; width: 27px; margin-right: 7px; margin-bottom: 3px; border-radius: 50%;">&nbsp;<span>{{Auth::user()->fullName("F")}}</span>
                 </a>
                 <div class="dropdown-menu dropdown-menu-right dropdown-default py-0" aria-labelledby="navbarDropdownMenuLink-333">
                     <a class="dropdown-item {{ Request::is('my') || Request::is('my/*') ? 'active white-text' : '' }}" href="{{route('my.index')}}">
-                        <img style="height: 25px; margin-left:-3px;" src="{{ Request::is('my') || Request::is('my/*') ? 'https://resources.ganderoceanic.com/media/img/brand/sqr/ZQO_SQ_TSPWHITE.png' : 'https://resources.ganderoceanic.com/media/img/brand/sqr/ZQO_SQ_TSPBLUE.png' }}" alt=""><span class="float-right">myCZQO</span>
+                        <img style="height: 25px; margin-left:-3px;" src="{{ Request::is('my') || Request::is('my/*') ? 'https://cdn.ganderoceanic.com/resources/media/img/brand/sqr/ZQO_SQ_TSPWHITE.png' : 'https://cdn.ganderoceanic.com/resources/media/img/brand/sqr/ZQO_SQ_TSPBLUE.png' }}" alt=""><span class="float-right">myCZQO</span>
                     </a>
                     <a class="dropdown-item red-text" href="{{route('auth.logout')}}">
                         <i class="fa fa-key"></i><span class="float-right">Logout</span>

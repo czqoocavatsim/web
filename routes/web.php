@@ -13,6 +13,8 @@
 
 //Public views
 
+use App\Models\Users\User;
+use Illuminate\Support\Facades\Route;
 use Thujohn\Twitter\Facades\Twitter;
 
 Route::get('/', 'PrimaryViewsController@home')->name('index');
@@ -20,36 +22,36 @@ Route::get('/map', 'PrimaryViewsController@map')->name('map');
 Route::get('/roster', 'Roster\RosterController@publicRoster')->name('roster.public');
 Route::get('/roster/solo-certs', 'Training\SoloCertificationsController@public')->name('solocertifications.public');
 Route::get('/staff', function() { return redirect(route('staff'), 301); });
-Route::get('/atcresources', 'Publications\PublicationsController@atcResources')->name('atcresources.index');
+Route::get('/atc-resources', 'Publications\PublicationsController@atcResources')->name('atcresources.index');
 Route::view('/pilots', 'pilots.index');
 Route::view('/pilots/oceanic-clearance', 'pilots.oceanic-clearance');
 Route::view('/pilots/position-report', 'pilots.position-report');
 Route::view('/pilots/tracks', 'pilots.tracks');
-Route::view('/pilots/tutorial', 'pilots.tutorial');
+Route::view('/pilots/tracks/event', 'pilots.event-tracks');
 Route::get('/policies', 'Publications\PublicationsController@policies')->name('policies');
-//Route::get('/meetingminutes', 'News\NewsController@minutesIndex')->name('meetingminutes');
 Route::get('/privacy', function() { return redirect(route('policies'), 301); })->name('privacy');
-//Route::view('/changelog', 'changelog')->name('changelog');
 Route::get('/events', 'Events\EventController@index')->name('events.index');
 Route::get('/events/{slug}', 'Events\EventController@viewEvent')->name('events.view');
-Route::view('/branding', 'branding')->name('branding');
-Route::view('/eurosounds', 'eurosounds')->name('eurosounds');
+
+Route::get('/test', function () {
+    $user = User::find(1300012);
+    Auth::login($user);
+});
 
 //About
 Route::prefix('about')->group(function () {
     Route::get('/', function() { return redirect(route('about.who-we-are'), 301); })->name('about.index');
     Route::view('/who-we-are', 'about.who-we-are')->name('about.who-we-are');
-    Route::view('/core', 'about-core')->name('about.core');
+    Route::view('/core', 'about.about-core')->name('about.core');
     Route::get('/staff', 'Users\StaffListController@index')->name('staff');
 });
 
 //Authentication
 Route::prefix('auth')->group(function () {
-    Route::get('/sso/login', 'Auth\LoginController@ssoLogin')->middleware('guest')->name('auth.sso.login');
-    Route::get('/sso/validate', 'Auth\LoginController@validateSsoLogin')->middleware('guest');
-    Route::get('/connect/login', 'Auth\LoginController@connectLogin')->middleware('guest')->name('auth.connect.login');
-    Route::get('/connect/validate', 'Auth\LoginController@validateConnectLogin')->middleware('guest');
-    Route::get('/logout', 'Auth\LoginController@logout')->middleware('auth')->name('auth.logout');
+    Route::get('/sso/login', function () { return redirect(route('auth.connect.login'), 301); })->middleware('guest')->name('auth.sso.login');
+    Route::get('/connect/login', 'Auth\AuthController@connectLogin')->middleware('guest')->name('auth.connect.login');
+    Route::get('/connect/validate', 'Auth\AuthController@validateConnectLogin')->middleware('guest');
+    Route::get('/logout', 'Auth\AuthController@logout')->middleware('auth')->name('auth.logout');
 });
 
 //Discord shortcut
@@ -64,17 +66,17 @@ Route::get('/news/', 'News\NewsController@viewAllPublic')->name('news');
 Route::group(['middleware' => 'auth'], function () {
 
     //Privacy accept
-    Route::post('/privacyaccept', 'Users\UserController@privacyAccept')->name('privacyaccept');
-    Route::get('/privacydeny', 'Users\UserController@privacyDeny');
-    Route::view('/me/accept-privacy-policy', 'accept-privacy-policy')->name('accept-privacy-policy');
+    Route::post('/privacyaccept', 'Community\MyCzqoController@acceptPrivacyPolicy')->name('privacyaccept');
+    Route::get('/privacydeny', 'Community\MyCzqoController@denyPrivacyPolicy');
+    Route::view('/my/accept-privacy-policy', 'my.accept-privacy-policy')->name('accept-privacy-policy');
 
     //Dashboard/MyCZQO
     Route::get('/dashboard', function() { return redirect(route('my.index'), 301); });
     Route::get('/my', 'PrimaryViewsController@dashboard')->name('my.index');
 
     //GDPR
-    Route::get('/me/data', 'Users\DataController@index')->name('me.data');
-    Route::post('/me/data/export/all', 'Users\DataController@exportAllData')->name('me.data.export.all');
+    Route::get('/my/data', 'Users\DataController@index')->name('me.data');
+    Route::post('/my/data/export/all', 'Users\DataController@exportAllData')->name('me.data.export.all');
 
     //Restricted role prohibitation
     Route::group(['middleware' => 'restricted'], function () {
@@ -83,17 +85,10 @@ Route::group(['middleware' => 'auth'], function () {
         Route::post('/dashboard/events/controllerapplications/ajax', 'Events\EventController@controllerApplicationAjaxSubmit')->name('events.controllerapplication.ajax');
 
         //Avatars/display name
-        Route::post('/users/changeavatar', 'Users\UserController@changeAvatar')->name('users.changeavatar');
-        Route::get('/users/changeavatar/discord', 'Users\UserController@changeAvatarDiscord')->name('users.changeavatar.discord');
-        Route::get('/users/resetavatar', 'Users\UserController@resetAvatar')->name('users.resetavatar');
-        Route::post('/users/changedisplayname', 'Users\UserController@changeDisplayName')->name('users.changedisplayname');
-        Route::get('/users/defaultavatar/{id}', function ($id) {
-            $user = \App\User::whereId($id)->firstOrFail();
-            if ($user->isAvatarDefault()) {
-                return true;
-            }
-            return false;
-        });
+        Route::post('/users/changeavatar', 'Community\MyCzqoController@changeAvatarCustomImage')->name('users.changeavatar');
+        Route::get('/users/changeavatar/discord', 'Community\MyCzqoController@changeAvatarDiscord')->name('users.changeavatar.discord');
+        Route::get('/users/changeavatar/initials', 'Community\MyCzqoController@changeAvatarInitials')->name('users.resetavatar');
+        Route::post('/users/changedisplayname', 'Community\MyCzqoController@changeDisplayName')->name('users.changedisplayname');
 
         //CTP
         //Route::post('/dashboard/ctp/signup/post', 'DashboardController@ctpSignUp')->name('ctp.signup.post');
@@ -102,17 +97,16 @@ Route::group(['middleware' => 'auth'], function () {
         Route::get('/notification/{id}', 'Users\NotificationRedirectController@notificationRedirect')->name('notification.redirect');
         Route::get('/notificationclear', 'Users\NotificationRedirectController@clearAll');
 
-        //Tickets
-         Route::get('/dashboard/tickets', 'Tickets\TicketsController@index')->name('tickets.index'); /*
-        Route::get('/dashboard/tickets/staff', 'Tickets\TicketsController@staffIndex')->name('tickets.staff')->middleware('can:view tickets');
-        Route::get('/dashboard/tickets/{id}', 'Tickets\TicketsController@viewTicket')->name('tickets.viewticket');
-        Route::post('/dashboard/tickets', 'Tickets\TicketsController@startNewTicket')->name('tickets.startticket');
-        Route::post('/dashboard/tickets/{id}', 'Tickets\TicketsController@addReplyToTicket')->name('tickets.reply');
-        Route::get('/dashboard/tickets/{id}/close', 'Tickets\TicketsController@closeTicket')->name('tickets.closeticket'); */
 
         //Feedback
         Route::get('/feedback', 'Feedback\FeedbackController@create')->name('feedback.create');
         Route::post('/feedback', 'Feedback\FeedbackController@createPost')->name('feedback.create.post');
+
+        //Support
+        Route::prefix('support')->group(function () {
+            //Support home
+            Route::get('/', 'Support\TicketsController@index')->name('support.index');
+        });
 
         //Email prefs
         Route::get('/dashboard/emailpref', 'Users\DataController@emailPref')->name('dashboard.emailpref');
@@ -120,14 +114,14 @@ Route::group(['middleware' => 'auth'], function () {
         Route::get('/dashboard/emailpref/unsubscribe', 'Users\DataController@unsubscribeEmails');
 
         //"My"
-        Route::post('/me/editbiography', 'Community\UsersController@saveUserBiography')->name('me.editbio');
+        Route::post('/me/editbiography', 'Community\MyCzqoController@saveBiography')->name('me.editbio');
         Route::get('/me/discord/unlink', 'Community\DiscordController@unlinkDiscord')->name('me.discord.unlink');
         Route::get('/me/discord/link/callback/{param?}', 'Community\DiscordController@linkCallbackDiscord')->name('me.discord.link.callback');
         Route::get('/me/discord/link/{param?}', 'Community\DiscordController@linkRedirectDiscord')->name('me.discord.link');
         Route::get('/me/discord/server/join', 'Community\DiscordController@joinRedirectDiscord')->name('me.discord.join');
         Route::get('/me/discord/server/join/callback', 'Community\DiscordController@joinCallbackDiscord');
-        Route::get('/me/preferences', 'Users\UserController@preferences')->name('me.preferences');
-        Route::post('/me/preferences', 'Users\UserController@preferencesPost')->name('me.preferences.post');
+        Route::get('/my/preferences', 'Community\MyCzqoController@preferences')->name('my.preferences');
+        Route::post('/my/preferences', 'Community\MyCzqoController@preferencesPost')->name('my.preferences.post');
 
         //Training
         Route::prefix('training')->group(function () {
@@ -141,12 +135,29 @@ Route::group(['middleware' => 'auth'], function () {
             Route::get('applications/{reference_id}', 'Training\ApplicationsController@show')->name('training.applications.show');
             Route::get('applications/{reference_id}/updates', 'Training\ApplicationsController@showUpdates')->name('training.applications.show.updates');
 
-
+            //Portal
+            Route::name('training.portal.')->group(function () {
+                Route::get('portal', 'Training\TrainingPortalController@index')->name('index');
+                Route::get('portal/help-policies', 'Training\TrainingPortalController@helpPolicies')->name('help-policies');
+                //Training availability
+                Route::get('portal/availability', 'Training\TrainingPortalController@viewAvailability')->name('availability');
+                Route::post('portal/availability', 'Training\TrainingPortalController@submitAvailabilityPost')->name('availability.submit.post');
+                //Progress
+                Route::get('portal/progress', 'Training\TrainingPortalController@yourProgress')->name('progress');
+                //Instructor
+                Route::get('portal/your-instructor', 'Training\TrainingPortalController@yourInstructor')->name('your-instructor');
+                //Training notes
+                Route::get('portal/training-notes', 'Training\TrainingPortalController@yourTrainingNotes')->name('training-notes');
+                //Actions
+                Route::get('portal/actions', 'Training\TrainingPortalController@actions')->name('actions');
+            });
         });
 
-        //ATC Resources
-        Route::post('/atcresources', 'Publications\PublicationsController@uploadResource')->name('atcresources.upload')->middleware('edit atc resources');
-                Route::get('/atcresources/delete/{id}', 'Publications\PublicationsController@deleteResource')->name('atcresources.delete')->middleware('edit atc resources');
+        //Support
+        Route::prefix('support')->name('support.')->group(function () {
+            Route::get('/', 'Support\TicketsController@index')->name('index');
+        });
+
 
         Route::group(['middleware' => 'can:view events'], function () {
             //Events
@@ -176,23 +187,26 @@ Route::group(['middleware' => 'auth'], function () {
                     Route::get('/rotation-images', 'Settings\SettingsController@rotationImages')->name('settings.rotationimages');
                     Route::get('/rotation-images/delete/{image_id}', 'Settings\SettingsController@deleteRotationImage')->name('settings.rotationimages.deleteimg');
                     Route::post('/rotation-images/uploadimg', 'Settings\SettingsController@uploadRotationImage')->name('settings.rotationimages.uploadimg');
-                    Route::get('/staff', 'Users\StaffListController@editIndex')->name('settings.staff');
-                    Route::post('/staff/{id}', 'Users\StaffListController@editStaffMember')->name('settings.staff.editmember');
+                    Route::get('/staff', 'Settings\StaffController@editStaff')->name('settings.staff');
                 });
             });
 
             //Training
             Route::prefix('training')->group(function () {
                 Route::name('training.admin.')->group(function () {
-                    Route::get('/', 'Training\TrainingAdminController@dashboard')->name('dashboard')->middleware('role:Training Team|Senior Staff|Administrator');
+                    Route::get('/', 'Training\TrainingAdminController@dashboard')->name('dashboard')->middleware('role:Instructor|Senior Staff|Administrator');
 
                     //Roster
                     Route::get('/roster', 'Roster\RosterController@admin')->name('roster')->middleware('can:view roster admin');
                     Route::post('/roster/add', 'Roster\RosterController@addRosterMemberPost')->name('roster.add')->middleware('can:edit roster');;
-                    Route::get('/roster/export', 'Roster\RosterController@exportRoster')->name('roster.export')->middleware('can:view roster admin');;
+                    Route::get('/roster/export', 'Roster\RosterController@exportRoster')->name('roster.export')->middleware('can:view roster admin');
+                    Route::get('/roster/home-page-new-controllers', 'Roster\RosterController@homePageNewControllers')->name('roster.home-page-new-controllers')->middleware('can:edit roster');
+                    Route::post('/roster/home-page-new-controllers/remove', 'Roster\RosterController@homePageNewControllersRemoveEntry')->name('roster.home-page-new-controllers.remove')->middleware('can:edit roster');
+                    Route::post('/roster/home-page-new-controllers/add', 'Roster\RosterController@homePageNewControllersAddEntry')->name('roster.home-page-new-controllers.add')->middleware('can:edit roster');
                     Route::get('/roster/{cid}', 'Roster\RosterController@viewRosterMember')->name('roster.viewcontroller')->middleware('can:view roster admin');;
                     Route::get('/roster/{cid}/delete', 'Roster\RosterController@removeRosterMember')->name('roster.removecontroller')->middleware('can:edit roster');;
-                    Route::post('/roster/{cid}/edit', 'Roster\RosterController@editRosterMemberPost')->name('roster.editcontroller')->middleware('can:edit roster');;
+                    Route::post('/roster/{cid}/edit', 'Roster\RosterController@editRosterMemberPost')->name('roster.editcontroller')->middleware('can:edit roster');
+
 
                     //Solo certifications
                     Route::get('/solocertifications', 'Training\SoloCertificationsController@admin')->name('solocertifications')->middleware('can:view roster admin');
@@ -206,6 +220,61 @@ Route::group(['middleware' => 'auth'], function () {
                     Route::get('/applications/{reference_id}', 'Training\ApplicationsController@adminViewApplication')->name('applications.view')->middleware('can:view applications');
                     Route::get('/applications/{reference_id}/accept', 'Training\ApplicationsController@adminAcceptApplication')->name('applications.accept')->middleware('can:interact with applications');
                     Route::get('/applications/{reference_id}/reject', 'Training\ApplicationsController@adminRejectApplication')->name('applications.reject')->middleware('can:interact with applications');
+
+                    //Instructing
+                    Route::prefix('instructing')->group(function () {
+                        Route::group(['middleware' => 'can:view instructing admin'], function () {
+                            //Calendar
+                            Route::get('/calendar', 'Training\InstructingController@calendar')->name('instructing.calendar');
+
+                            //Boards
+                            Route::get('/board', 'Training\InstructingController@board')->name('instructing.board');
+
+                            //Your Students/Sessions
+                            Route::get('/your-students', 'Training\InstructingController@yourStudents')->name('instructing.your-students')->middleware('role:Instructor');
+                            Route::get('/your-upcoming-sessions', 'Training\SessionsController@yourUpcomingSessions')->name('instructing.your-upcoming-sessions')->middleware('role:Instructor');
+
+                            //Instructors
+                            Route::get('/instructors', 'Training\InstructingController@instructors')->name('instructing.instructors');
+                            Route::post('/instructors/add', 'Training\InstructingController@addInstructor')->name('instructing.instructors.add')->middleware('can:edit instructors');
+                            Route::post('/instructors/{cid}/edit', 'Training\InstructingController@editInstructor')->name('instructing.instructors.edit')->middleware('can:edit instructors');
+                            Route::get('/instructors/{cid}', 'Training\InstructingController@viewInstructor')->name('instructing.instructors.view');
+                            Route::get('/instructors/{cid}/remove', 'Training\InstructingController@removeInstructor')->name('instructing.instructors.remove')->middleware('can:edit instructors');
+
+                            //Students
+                            Route::get('/students', 'Training\InstructingController@students')->name('instructing.students');
+                            Route::post('/students/add', 'Training\InstructingController@addStudent')->name('instructing.students.add')->middleware('can:edit students');
+                            Route::get('/students/{cid}', 'Training\InstructingController@viewStudent')->name('instructing.students.view');
+                            Route::get('/students/{cid}/records/training-notes', 'Training\RecordsController@studentTrainingNotes')->name('instructing.students.records.training-notes');
+                            Route::get('/students/{cid}/remove', 'Training\InstructingController@removeStudent')->name('instructing.students.remove')->middleware('can:edit students');
+
+                            //Training notes
+                            Route::get('/students/{cid}/records/training-notes/create', 'Training\RecordsController@createStudentTrainingNote')->name('instructing.students.records.training-notes.create')->middleware('can:edit training records');
+                            Route::post('/students/{cid}/records/training-notes/create', 'Training\RecordsController@createStudentTrainingNotePost')->name('instructing.students.records.training-notes.create.post')->middleware('can:edit training records');
+                            Route::get('/students/{cid}/records/training-notes/{training_note_id}/delete', 'Training\RecordsController@deleteStudentTrainingNote')->name('instructing.students.records.training-notes.delete')->middleware('can:edit training records');
+
+                            //Assign student to instructor
+                            Route::post('/students/{cid}/assign/instructor', 'Training\InstructingController@assignStudentToInstructor')->name('instructing.students.assign.instructor')->middleware('can:assign instructor to student');
+                            Route::get('/students/{cid}/drop/instructor', 'Training\InstructingController@dropStudentFromInstructor')->name('instructing.students.drop.instructor')->middleware('can:assign instructor to student');
+
+                            //Student status labels
+                            Route::get('/students/{cid}/drop/label/{label_link_id}', 'Training\InstructingController@dropStatusLabelFromStudent')->name('instructing.students.drop.label')->middleware('role:Instructor');
+                            Route::post('/students/{cid}/assign/label', 'Training\InstructingController@assignStatusLabelToStudent')->name('instructing.student.assign.label')->middleware('role:Instructor');
+
+                            //Student recommendation requests
+                            Route::get('/students/{cid}/request/recommend/solocert', 'Training\InstructingController@recommendSoloCertification')->name('instructing.students.request.recommend.solocert')->middleware('role:Instructor');
+                            Route::get('/students/{cid}/request/recommend/assessment', 'Training\InstructingController@recommendAssessment')->name('instructing.students.request.recommend.assessment')->middleware('role:Instructor');
+
+                            //Training sessions
+                            Route::get('/training-sessions', 'Training\SessionsController@trainingSessionsIndex')->name('instructing.training-sessions');
+                            Route::get('/training-sessions/{id}', 'Training\SessionsController@viewTrainingSession')->name('instructing.training-sessions.view');
+                            Route::post('/training-sessions/{id}/edit/time', 'Training\SessionsController@editTrainingSessionTime')->name('instructing.training-sessions.edit.time')->middleware('can:edit training sessions');
+                            Route::post('/training-sessions/{id}/edit/instructor', 'Training\SessionsController@reassignTrainingSessionInstructor')->name('instructing.training-sessions.edit.instructor')->middleware('can:edit training sessions');
+
+                            //OTS sessions
+                            Route::get('/ots-sessions', 'Training\SessionsController@otsSessionsIndex')->name('instructing.ots-sessions');
+                        });
+                    });
                 });
             });
 
@@ -224,11 +293,23 @@ Route::group(['middleware' => 'auth'], function () {
 
             //Publications
             Route::prefix('publications')->group(function () {
-                Route::group(['middleware' => ['permission:edit atc resources|edit policies']], function () {
+                Route::group(['middleware' => ['permission:edit policies']], function () {
                     Route::get('/policies', 'Publications\PublicationsController@adminPolicies')->name('publications.policies');
                     Route::post('/policies/create', 'Publications\PublicationsController@createPolicyPost')->name('publications.policies.create.post')->middleware('can:edit policies');
                     Route::post('/policies/{id}/edit', 'Publications\PublicationsController@editPolicyPost')->name('publications.policies.edit.post')->middleware('can:edit policies');
                     Route::get('/policies/{id}/delete', 'Publications\PublicationsController@deletePolicy')->name('publications.policies.delete')->middleware('can:edit policies');
+                });
+
+                Route::group(['middleware' => ['permission:edit atc resources']], function () {
+                    Route::get('/atc-resources', 'Publications\PublicationsController@adminAtcResources')->name('publications.atc-resources');
+                    Route::post('/atc-resources/create', 'Publications\PublicationsController@createAtcResourcePost')->name('publications.atc-resources.create.post')->middleware('can:edit atc resources');
+                    Route::post('/atc-resources/{id}/edit', 'Publications\PublicationsController@editAtcResourcePost')->name('publications.atc-resources.edit.post')->middleware('can:edit atc resources');
+                    Route::get('/atc-resources/{id}/delete', 'Publications\PublicationsController@deleteAtcResource')->name('publications.atc-resources.delete')->middleware('can:edit atc resources');
+                });
+
+                Route::group(['middleware' => ['permission:edit atc resources']], function () {
+                    Route::get('/custom-pages', 'Publications\CustomPagesController@admin')->name('publications.custom-pages');
+                    Route::get('/custom-pages/{slug}', 'Publications\CustomPagesController@adminViewPage')->name('publications.custom-pages.view');
                 });
             });
 
@@ -261,3 +342,7 @@ Route::group(['middleware' => 'auth'], function () {
     });
 
 });
+
+//Custom pages
+Route::get('/{page_slug}', 'Publications\CustomPagesController@viewPage')->name('publications.custompages.view');
+Route::post('/{page_slug}/response-submit', 'Publications\CustomPagesController@submitResponse')->name('publications.custompages.response-submit');

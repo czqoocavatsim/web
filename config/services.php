@@ -54,6 +54,7 @@ return [
         'announcements' => env('DISCORD_ANNOUNCEMENTS'),
         'endorsements' => env('DISCORD_ENDORSEMENTS'),
         'marketing' => env('DISCORD_MARKETING'),
-        'staff' => env('DISCORD_STAFF')
+        'staff' => env('DISCORD_STAFF'),
+        'instructors' => env('DISCORD_INSTRUCTORS')
     ],
 ];

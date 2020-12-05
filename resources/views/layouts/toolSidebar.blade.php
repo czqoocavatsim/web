@@ -25,6 +25,9 @@
     <a href="{{url('/pilots/tracks')}}" class="list-group-item list-group-item-action {{ Request::is('pilots/tracks') ? 'active' : '' }}">
         Current NAT Tracks
     </a>
+    <a href="{{url('/pilots/tracks/event')}}" class="list-group-item list-group-item-action {{ Request::is('pilots/tracks/event') ? 'active' : '' }}">
+        Event NAT Tracks
+    </a>
     <a href="{{url('/map')}}" class="list-group-item list-group-item-action">Map</a>
 </div>
 <br/>

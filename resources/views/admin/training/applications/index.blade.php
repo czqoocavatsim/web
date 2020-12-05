@@ -1,6 +1,6 @@
 @extends('admin.training.layouts.main')
 @section('training-content')
-<h1 class="font-weight-bold blue-text pb-2">Applications</h1>
+<h1 class="blue-text pb-2">Applications</h1>
 <ul class="list-unstyled mt-2 mb-0">
 
 @if(count($applications) > 0)

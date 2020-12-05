@@ -1,9 +1,9 @@
 @extends('admin.training.layouts.main')
 @section('training-content')
 <a href="{{route('training.admin.applications')}}" class="blue-text" style="font-size: 1.2em;"> <i class="fas fa-arrow-left"></i> Applications</a>
-<h2 class="blue-text font-weight-bold mt-2 pb-2">#{{$application->reference_id}} - {{$application->user->fullName('FLC')}}</h2>
+<h2 class="blue-text mt-2 pb-2">#{{$application->reference_id}} - {{$application->user->fullName('FLC')}}</h2>
 <div class="py-2">
-    <h3 class="font-weight-bold blue-text mb-3">Details</h3>
+    <h3 class="blue-text mb-3">Details</h3>
     <div class="row ">
         <div class="col-md-2">
             <h6>Status</h6>
@@ -43,7 +43,7 @@
 </div>
 
 <div class="py-2">
-    <h3 class="font-weight-bold blue-text mb-3">Applicant</h3>
+    <h3 class="blue-text mb-3">Applicant</h3>
     <div class="row">
         <div class="col-md">
             <h5>Identity</h5>
@@ -71,7 +71,7 @@
 </div>
 
 <div class="py-2">
-    <h3 class="font-weight-bold blue-text mb-3">Comments</h3>
+    <h3 class="blue-text mb-3">Comments</h3>
     <div class="row">
         <div class="col-md-8">
             <div class="card shadow-none  grey lighten-3 p-4 mb-3">
@@ -113,7 +113,7 @@
                     @csrf
                     <input type="hidden" name="reference_id" value="{{$application->reference_id}}">
                     <textarea name="comment" required id="" style="height: 100px; width: 100%; border-radius: 2.5%; border: 1px solid #eeeeee;">{{old('comment')}}</textarea>
-                    <button class="btn btn-sm btn-primary">Submit Staff Comment</button>
+                    <button class="btn btn-sm btn-light" style="font-weight: 400;">Submit Staff Comment</button>
                 </form>
                 @endif
             </div>

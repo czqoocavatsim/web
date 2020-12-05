@@ -17,11 +17,12 @@ class PermissionsSeeder extends Seeder
         //Create the roles
         $admin = Role::create(['name' => 'Administrator']);
         $seniorStaff = Role::create(['name' => 'Senior Staff']);
-        $trainingTeam = Role::create(['name' => 'Training Team']);
+        $assessor = Role::create(['name' => 'Assessor']);
+        $trainingTeam = Role::create(['name' => 'Instructor']);
         $webTeam = Role::create(['name' => 'Web Team']);
         $marketingTeam = Role::create(['name' => 'Marketing Team']);
         $certifiedController = Role::create(['name' => 'Certified Controller']);
-        $trainee = Role::create(['name' => 'Trainee']);
+        $trainee = Role::create(['name' => 'Student']);
         $guest = Role::create(['name' => 'Guest']);
         $restricted = Role::create(['name' => 'Restricted']);
 
@@ -129,5 +130,6 @@ class PermissionsSeeder extends Seeder
         //Give the bot users the roles they deserve!
         User::find(1)->assignRole('Administrator');
         User::find(2)->assignRole('Administrator');
+
     }
 }

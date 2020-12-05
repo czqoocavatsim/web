@@ -19,4 +19,10 @@ class StaffMember extends Model
     {
         return $this->belongsTo(User::class);
     }
+
+    public function vacant()
+    {
+        if ($this->user_id == 1) return true;
+        return false;
+    }
 }

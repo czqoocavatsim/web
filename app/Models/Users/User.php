@@ -17,10 +17,12 @@ use App\Models\Roster\RosterMember;
 use App\Models\Settings;
 use App\Models\Tickets;
 use App\Models\Training\Application;
+use App\Models\Training\Instructing\Records\TrainingSession;
 use Exception;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\URL;
 use LasseRafn\InitialAvatarGenerator\InitialAvatar;
 use RestCord\DiscordClient;
 use Spatie\Activitylog\Traits\LogsActivity;
@@ -83,12 +85,12 @@ class User extends Authenticatable
 
     public function instructorProfile()
     {
-        return $this->hasOne(AtcTraining\Instructor::class);
+        return $this->hasOne(Training\Instructing\Instructors\Instructor::class);
     }
 
     public function studentProfile()
     {
-        return $this->hasOne(AtcTraining\Student::class);
+        return $this->hasOne(Training\Instructing\Students\Student::class);
     }
 
     public function tickets()
@@ -260,10 +262,10 @@ class User extends Authenticatable
         return $this->hasMany(DiscordBan::class);
     }
 
-    public function avatar()
+    public function avatar($external = false)
     {
         if ($this->avatar_mode == 0) {
-            return Cache::remember('users.'.$this->id.'.initialsavatar', 172800, function () {
+            $avatar = Cache::remember('users.'.$this->id.'.initialsavatar', 172800, function () {
                 $avatar = new InitialAvatar();
                 $image = $avatar
                     ->name($this->fullName('FL'))
@@ -275,8 +277,17 @@ class User extends Authenticatable
                 return Storage::url('public/files/avatars/'.$this->id.'/initials.png');
                 imagedestroy($image);
             });
+            if ($external) {
+                return URL('/').$avatar;
+            } else {
+                return $avatar;
+            }
         } elseif ($this->avatar_mode == 1) {
-            return $this->avatar;
+            if ($external) {
+                return URL('/').$this->avatar;
+            } else {
+                return $this->avatar;
+            }
         } else {
             return $this->getDiscordAvatar();
         }

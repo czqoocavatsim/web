@@ -1,4 +1,6 @@
 <!DOCTYPE HTML>
+@php if (!isset($solidNavBar)) $solidNavBar = true @endphp
+@php if (!isset($adminNavBar)) $adminNavBar = false @endphp
 <html lang="en">
     <head>
         <!--
@@ -26,12 +28,12 @@
         <link rel="shortcut icon" href="{{ asset('favicon.ico') }}" type="image/x-icon">
         <meta name="csrf-token" content="{{ csrf_token() }}">
         <!--Rich Preview Meta-->
-        <title>@yield('title', '')Gander Oceanic VATSIM</title>
+        <title>@yield('title', '')Gander Oceanic OCA</title>
         <meta name="description" content="@yield('description', '')">
         <meta name="theme-color" content="#0080c9">
-        <meta name="og:title" content="@yield('title', '')Gander Oceanic VATSIM">
+        <meta name="og:title" content="@yield('title', '')Gander Oceanic OCA">
         <meta name="og:description" content="@yield('description', '')">
-        <meta name="og:image" content="@yield('image','https://resources.ganderoceanic.com/media/img/brand/sqr/ZQO_SQ_TSPBLUE.png')">
+        <meta name="og:image" content="@yield('image','https://cdn.ganderoceanic.com/resources/media/img/brand/sqr/ZQO_SQ_TSPBLUE.png')">
         <link rel="shortcut icon" href="{{ asset('favicon.ico') }}" type="image/x-icon">
         <!-- Font Awesome -->
         <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.2/css/all.css">
@@ -65,19 +67,16 @@
         <script src="https://unpkg.com/leaflet@1.4.0/dist/leaflet.js" integrity="sha512-QVftwZFqvtRNi0ZyCtsznlKSWOStnDORoefr1enyq5mVL4tmKB3S/EnC3rRJcxCPavG10IcrVGSmPh6Qw5lwrg==" crossorigin=""></script>
         <script src="{{asset('/js/leaflet.rotatedMarker.js')}}"></script>
         <!--TinyMCE-->
-        <script src='https://cloud.tinymce.com/5/tinymce.min.js?apiKey=k2zv68a3b4m423op71lnifx4a9lm0a2ee96o58zafhrdnddb'></script>
+        <script src="https://cdn.tiny.cloud/1/f3uqjs9q4n1tj4k8m8xwcz4yptz6wvgw2mn1jg2cf4iuaqkw/tinymce/5/tinymce.min.js" referrerpolicy="origin"></script>
         <!--DataTables-->
         <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/v/bs4/dt-1.10.18/datatables.min.css"/>
         <script type="text/javascript" src="https://cdn.datatables.net/v/bs4/dt-1.10.18/datatables.min.js"></script>
-        <!--IntroJS-->
-        <link rel="stylesheet" href="{{asset('introjs/introjs.min.css')}}">
-        <script src="{{asset('introjs/intro.min.js')}}"></script>
         <!--Date picker-->
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
         <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
         <!--SimpleMDE-->
-        <link rel="stylesheet" href="https://cdn.jsdelivr.net/simplemde/latest/simplemde.min.css">
-        <script src="https://cdn.jsdelivr.net/simplemde/latest/simplemde.min.js"></script>
+        <link rel="stylesheet" href="https://unpkg.com/easymde/dist/easymde.min.css">
+        <script src="https://unpkg.com/easymde/dist/easymde.min.js"></script>
         <!--Jarallax-->
         <script src="https://unpkg.com/jarallax@1/dist/jarallax.min.js"></script>
         <script src="https://unpkg.com/jarallax@1/dist/jarallax-video.min.js"></script>
@@ -92,7 +91,7 @@
         <!--Chart js-->
         <script src="https://cdn.jsdelivr.net/npm/chart.js@2.9.3/dist/Chart.min.js" integrity="sha256-R4pqcOYV8lt7snxMQO/HSbVCFRPMdrhAFMH+vr9giYI=" crossorigin="anonymous"></script>
     </head>
-    <body @if(Auth::check() && Auth::user()->preferences) @if(Auth::user()->preferences->accent_colour) data-accent="{{Auth::user()->preferences->accent_colour}}" @endif data-theme="{{Auth::user()->preferences->ui_mode}}" @else data-theme="light" @endif>
+    <body class="d-flex flex-column min-vh-100" @if(Auth::check() && Auth::user()->preferences) @if(Auth::user()->preferences->accent_colour) data-accent="{{Auth::user()->preferences->accent_colour}}" @endif data-theme="{{Auth::user()->preferences->ui_mode}}" @else data-theme="light" @endif>
     <!--Header-->
     @include('maintenancemode::notification')
     @if (\App\Models\Settings\CoreSettings::where('id', 1)->firstOrFail()->banner)
@@ -173,33 +172,37 @@
             }).showToast();
         </script>
         @endif
-        @if(Request::is('my') || Request::is('/') || Request::is('events/*') || Request::is('news/*'))
+        @if($adminNavBar)
+            <nav class="navbar navbar-expand-xl navbar-light transparent shadow-none p-0" style="min-height:59px; z-index:999;">
+                @include('layouts.navbar-admin')
+            </nav>
+        @elseif(!$solidNavBar)
             <div class="d-none d-xl-block">
-                <nav id="czqoHeaderLight" class="navbar navbar-expand-xl navbar-dark transparent shadow-none p-0" style="min-height:59px; z-index:999;">
+                <nav id="czqoHeaderLight" class="navbar navbar-expand-xl navbar-dark transparent shadow-none p-0" style="min-height:74px; z-index:999;">
                     @include('layouts.navbar-main')
                 </nav>
             </div>
             <div class="d-xl-none">
-                <nav id="czqoHeaderLight" class="navbar navbar-expand-lg navbar-dark blue p-0" style="min-height:59px; z-index:999">
+                <nav id="czqoHeaderLight" class="navbar navbar-expand-lg navbar-dark blue p-0 shadow-none" style="min-height:74px; z-index:999">
                     @include('layouts.navbar-main')
                 </nav>
             </div>
         @else
-            <nav id="czqoHeaderLight" class="navbar navbar-expand-lg navbar-dark blue p-0" style="min-height:59px;">
+            <nav id="czqoHeaderLight" class="navbar navbar-expand-lg navbar-dark blue p-0 shadow-none" style="min-height:74x;">
                 @include('layouts.navbar-main')
             </nav>
         @endif
     </header>
     <!--End header-->
-    <div id="czqoContent" @if(Request::is('my') || Request::is('/') || Request::is('events/*') || Request::is('news/*')) style="margin-top: -59px;" @endif>
+    <div class="flex-fill" id="czqoContent" @if(!$solidNavBar) style="margin-top: calc(-74px + -0.5rem);" @endif>
         @yield('content')
     </div>
     <!-- Footer -->
     <!-- Footer -->
-    <footer class="page-footer text-dark font-small py-4 mt-5">
+    <footer class="page-footer text-dark font-small py-4" style="bottom:0">
         <div class="container">
-            <p style="font-size: 0.9em;">For Flight Simulation Use Only - Not To Be Used For Real World Navigation. Any and all proprietary content available on this website may not be shared, copied, reproduced or used in any way without providing credit to the Gander Oceanic OCA - VATCAN. If in doubt, contact the Deputy OCA Chief.</p>
-            <p style="font-size: 0.9em;">Copyright © {{App\Models\Settings\CoreSettings::where('id', 1)->firstOrFail()->copyright_year}} Gander Oceanic - All Rights Reserved.</p>
+            <p style="font-size: 0.9em;">For Flight Simulation Use Only - Not To Be Used For Real World Navigation. Any and all proprietary content available on this website may not be shared, copied, reproduced or used in any way without providing credit to the Gander Oceanic OCA.</p>
+            <p style="font-size: 0.9em;">Copyright © {{App\Models\Settings\CoreSettings::where('id', 1)->firstOrFail()->copyright_year}} Gander Oceanic OCA - All Rights Reserved.</p>
             <div class="flex-left mt-3">
                 <a href="{{route('feedback.create')}}" class="font-weight-bold black-text">Feedback</a>
                 &nbsp;
@@ -217,7 +220,7 @@
                 &nbsp;
                 •
                 &nbsp;
-                <a href="{{route('branding')}}" class="font-weight-bold black-text">Branding</a>
+                <a href="{{url('/branding')}}" class="font-weight-bold black-text">Branding</a>
                 &nbsp;
                 •
                 &nbsp;
@@ -231,18 +234,34 @@
                 &nbsp;
                 <a href="https://vatcan.ca" class="font-weight-bold black-text">VATCAN</a>
             </div>
-            <div class="mt-3">
-                <a href="{{route('about.core')}}"><small class="text-muted">{{App\Models\Settings\CoreSettings::where('id', 1)->firstOrFail()->sys_name}} {{App\Models\Settings\CoreSettings::where('id', 1)->firstOrFail()->release}} ({{App\Models\Settings\CoreSettings::where('id', 1)->firstOrFail()->sys_build}})</small></a> <small>- <a target="_blank" href="https://blog.ganderoceanic.com/gander-oceanic-core-update-log/" class="text-muted">Update Log</a></small>
-            </div>
             <div style="margin-top: 40px;">
                 <img style="height: 20px;" src="https://upload.wikimedia.org/wikipedia/commons/8/8a/LGBT_Rainbow_Flag.png" alt="">
                 <img style="height: 20px;" src="https://upload.wikimedia.org/wikipedia/commons/thumb/b/b0/Transgender_Pride_flag.svg/1280px-Transgender_Pride_flag.svg.png" alt="">
                 <img src="https://cdn.discordapp.com/attachments/482817676067209217/695255571623837837/220px-Bisexual_Pride_Flag.png" style="height:20px;" alt="">
             </div>
-            <p class="text-muted mt-3">Gander Oceanic stands with the LGBTIQ+ community on VATSIM</p>
+            <a href="" data-toggle="modal" data-target="#lgbtModal" class="text-muted mt-3" style="display:block;">Gander Oceanic stands with the LGBTIQA+ community on VATSIM</p>
         </div>
     </footer>
     <!-- Footer -->
+    <!-- LGBT modal-->
+    <div class="modal fade" id="lgbtModal" tabindex="-1" role="dialog" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <p>Gander Oceanic displays the rainbow, transgender, and bisexual flags to remind LGBTIQA+ VATSIM members who may feel out of place in this community that they are welcome and celebrated here.</p>
+                    <p>As an organisation with LGBTIQA+ members, we recognise the importance of creating an welcoming environment, and a small symbol can go a long way to achieve that.</p>
+                    <p>It is not a political statement nor an act of protest and we appreciate your support in creating a VATSIM community open to all, regardless of gender identity, sexuality, age, or background.</p>
+                    <p>Thank you to the Jacksonville and Cleveland ARTCCs in VATUSA for joining us in this!</p>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- End LGBT modal-->
     <!-- Contact us modal-->
     <div class="modal fade" id="contactUsModal" tabindex="-1" role="dialog" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered" role="document">
@@ -256,7 +275,7 @@
                 <div class="modal-body">
                     To contact us, please do one of the following:
                     <ol>
-                        <li>Login and open a <a href="{{route('tickets.index')}}">support ticket.</a></li>
+                        <li>Login and open a <a href="TODO: TicketURL">support ticket.</a></li>
                         <li>Head to the <a href="{{route('staff')}}">staff page</a> and email the relevant staff member.</li>
                         <li>Join our <a href="https://discord.gg/MvPVAHP">Discord server</a> and ask in the #westons-at-the-airport channel.</li>
                     </ol>
@@ -279,9 +298,6 @@
                 </div>
                 <div class="modal-body">
                     {{\Session::get('error-modal')}}
-                    <div class="alert black-text bg-czqo-blue-light mt-4">
-                        If you believe this is a mistake, please create a <a target="_blank" class="black-text" href="{{route('tickets.index')}}">support ticket.</a>
-                    </div>
                 </div>
             </div>
         </div>
@@ -307,7 +323,7 @@
                             <li class="w-100">
                                 <div class="grey lighten-3 p-4" style="border-radius: 20px;">
                                     <div class="d-flex flex-row">
-                                        <img style="height: 40px; margin-right: 20px;" src="https://resources.ganderoceanic.com/media/img/brand/sqr/ZQO_SQ_TSPBLUE.png" alt="">
+                                        <img style="height: 40px; margin-right: 20px;" src="https://cdn.ganderoceanic.com/resources/media/img/brand/sqr/ZQO_SQ_TSPBLUE.png" alt="">
                                         <p class="font-weight-bold" style="width: 75%; text-align:left; font-size: 1.1em;">Chat with our Gander Oceanic controller and pilot community</p>
                                     </div>
                                 </div>
@@ -335,14 +351,14 @@
                             <p class="text-muted text-center mt-2">You will be redirected to Discord to allow us to add you to our server. Information collected is shown on the Discord authorisation screen. Read our privacy policy for details.</p>
                             @elseif (Auth::user()->hasDiscord() && Auth::user()->memberOfCzqoGuild())
                             <p class="mt-1"><img style="border-radius:50%; height: 30px;" class="img-fluid" src="{{Auth::user()->getDiscordAvatar()}}" alt="">&nbsp;&nbsp;{{Auth::user()->getDiscordUser()->username}}<span style="color: #d1d1d1;">#{{Auth::user()->getDiscordUser()->discriminator}}</span></p>
-                            <p class="text-muted text-center mt-2">You are already a member of the Gander Oceanic Discord. To unlink your account and leave the server, go to your Dashboard.</p>
+                            <p class="text-muted text-center mt-2">You are already a member of the Gander Oceanic Discord. To unlink your account and leave the server, go to myCZQO.</p>
                             @else
                                 <a href="{{route('me.discord.link', ['param' => 'server_join_process'])}}" class="class btn btn-primary mt-3">Link Your Discord To Join</a>
                                 <p class="text-muted text-center mt-2">You will be redirected to Discord to connect your account, and then prompted to allow us to add you to our server. Information collected is shown on the Discord authorisation screen. Read our privacy policy for details.</p>
                             @endif
                         @else
                         <a href="{{route('auth.connect.login')}}" class="class btn btn-primary mt-3">Login With VATSIM To Join</a>
-                        <p class="text-muted text-center mt-2">Once logged in, you can connect your Discord account and join the community in your Dashboard</p>
+                        <p class="text-muted text-center mt-2">Once logged in, you can connect your Discord account and join the community in myCZQO.</p>
                         @endauth
                     </div>
                 </div>
@@ -373,7 +389,9 @@
     <!-- End Connect modal -->
     <script>
         $("blockquote").addClass('blockquote');
-
+        $(function () {
+        $('[data-toggle="tooltip"]').tooltip()
+        })
         $.urlParam = function(name){
             var results = new RegExp('[\?&]' + name + '=([^&#]*)').exec(window.location.href);
             return results[1] || 0;
@@ -382,6 +400,8 @@
         if ($.urlParam('discord') == '1') {
             $("#discordTopModal").modal();
         }
+
+
     </script>
     </body>
 </html>

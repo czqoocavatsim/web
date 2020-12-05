@@ -1,10 +1,4 @@
-@extends('layouts.master')
-
-@section('navbarprim')
-
-    @parent
-
-@stop
+@extends('layouts.master', ['adminNavBar' => true])
 
 @section('content')
     <div class="container py-4">
@@ -245,7 +239,7 @@
                         <label for="">Ban reason (in markdown)</label>
                         <textarea id="contentMD" name="reason" class="w-75"></textarea>
                         <script>
-                            var simplemde = new SimpleMDE({ element: document.getElementById("contentMD"), toolbar: false });
+                            var simplemde = new EasyMDE({ element: document.getElementById("contentMD"), toolbar: false });
                         </script>
                     </div>
                     <div class="form-group">

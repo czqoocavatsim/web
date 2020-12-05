@@ -25,7 +25,15 @@ class TrainingPermissionsSeeder extends Seeder
         Permission::create(['name' => 'edit roster']);
 
         //Training admin
-        //TODO: add this
+        //Instructing
+        Permission::create(['name' => 'view instructing admin']);
+        Permission::create(['name' => 'edit instructors']);
+        Permission::create(['name' => 'edit students']);
+        Permission::create(['name' => 'edit training records']);
+        Permission::create(['name' => 'assign instructor to student']);
+        Permission::create(['name' => 'edit student status labels']);
+        Permission::create(['name' => 'edit training sessions']);
+        Permission::create(['name' => 'edit ots sessions']);
 
         //Add to roles
         $seniorStaff = Role::where('name', 'Senior Staff')->first();
@@ -33,6 +41,24 @@ class TrainingPermissionsSeeder extends Seeder
         $seniorStaff->givePermissionTo('view applications');
         $seniorStaff->givePermissionTo('view roster admin');
         $seniorStaff->givePermissionTo('edit roster');
+        $seniorStaff->givePermissionTo('view instructing admin');
+        $seniorStaff->givePermissionTo('edit instructors');
+        $seniorStaff->givePermissionTo('edit students');
+        $seniorStaff->givePermissionTo('edit training records');
+        $seniorStaff->givePermissionTo('assign instructor to student');
+        $seniorStaff->givePermissionTo('edit student status labels');
+        $seniorStaff->givePermissionTo('edit training sessions');
+        $seniorStaff->givePermissionTo('edit ots sessions');
+
+        $assessor = Role::whereName('Assessor')->first();
+        $assessor->givePermissionTo('edit ots sessions');
+        $assessor->givePermissionTo('edit roster');
+
+        $instructor = Role::whereName('Instructor')->first();
+        $instructor->givePermissionTo('view instructing admin');
+        $instructor->givePermissionTo('edit training records');
+        $instructor->givePermissionTo('assign instructor to student');
+        $instructor->givePermissionTo('edit training sessions');
 
         $guest = Role::where('name', 'Guest')->first();
         $guest->givePermissionTo('start applications');

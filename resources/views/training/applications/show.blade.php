@@ -1,6 +1,7 @@
-@extends('layouts.master')
-
-@section('content')
+@extends('training.portal.layouts.main')
+@section('page-header-title', "Your application (#{$application->reference_id})")
+@section('page-header-colour', 'blue')
+@section('portal-content')
 
 <div class="container py-4">
     @if (\Session::has('alreadyApplied'))
@@ -8,14 +9,12 @@
             {{\Session::get('alreadyApplied')}}
         </div>
     @endif
-    <a href="{{route('training.applications.showall')}}" class="blue-text" style="font-size: 1.2em;"> <i class="fas fa-arrow-left"></i>  Applications</a>
-    <h1 class="font-weight-bold blue-text">Your application (#{{$application->reference_id}})</h1>
     <h5>Submitted {{$application->created_at->toDayDateTimeString()}}</h5>
     <div id="latestUpdate">
         @if (!$latestUpdate)
             No update found
         @else
-            <div class="card grey lighten-3 p-4 mt-3 shadow-none mb-3">
+            <div class="list-group-item z-depth-1 p-4 mt-3 shadow-none mb-3">
                 <p style="font-size: 1.02rem;" title="{{$latestUpdate->created_at}} GMT">Latest update - {{$latestUpdate->created_at->diffForHumans()}}</p>
                 <h3 class="font-weight-bold {{$latestUpdate->update_type}}-text">{{$latestUpdate->update_title}}</h3>
                 <div>{{$latestUpdate->updateContentHtml()}}</div>
@@ -29,7 +28,7 @@
             <div class="col-md-2">
                 <h6>Status</h6>
                 <h3>
-                    <span class="badge {{$application->statusBadgeHtml()['class']}} rounded shadow-none">
+                    <span class="badge {{$application->statusBadgeHtml()['class']}} rounded shadow-none" style="font-weight:400">
                         {!! $application->statusBadgeHtml()['html'] !!}
                     </span>
                 </h3>
@@ -65,7 +64,7 @@
         <p>Use comments to communicate with staff about your application. Typically staff will use this function to request further clarification on something.</p>
         <div class="row">
             <div class="col-md-8">
-                <div class="card shadow-none  grey lighten-3 p-4 mb-3">
+                <div class="list-group-item z-depth-1 shadow-none p-4 mb-3">
                     @if(count($comments) < 1 )
                         <p>No comments yet.</p>
                     @else

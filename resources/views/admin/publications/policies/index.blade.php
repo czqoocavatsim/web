@@ -1,9 +1,6 @@
-@extends('layouts.master')
-@section('content')
-<div class="container py-4">
-    <a href="{{route('my.index')}}" class="blue-text" style="font-size: 1.2em;"> <i class="fas fa-arrow-left"></i> myCZQO</a>
-    <h1 class="font-weight-bold blue-text">Policies</h1>
-    <hr>
+@extends('admin.publications.layouts.main')
+@section('publications-content')
+    <h1 class="font-weight-bold blue-text pb-2">Policies</h1>
     <div class="row">
         <div class="col-md-3">
             <h4 class="font-weight-bold blue-text">Actions</h4>

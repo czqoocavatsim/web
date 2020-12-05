@@ -4,7 +4,7 @@ namespace App\Http\Controllers\Users;
 
 use App\Http\Controllers\Controller;
 use App\Models\Settings\AuditLogEntry;
-use App\Models\AtcTraining\Instructor;
+use App\Models\Training\Instructing\Instructors\Instructor;
 use App\Models\Users\StaffGroup;
 use App\Models\Users\StaffMember;
 use App\Models\Users\User;
@@ -17,34 +17,34 @@ class StaffListController extends Controller
     {
         $staff = StaffMember::all();
 
-        /* // Instructor list
-        $instructors_temp = Instructor::all(); // Temp
+        // Instructor list
+        $instructors_temp = Instructor::where('current', true)->get(); // Temp
         $instructors = array(); // Actual
 
         // Sort assessors to top of array
         foreach ($instructors_temp as $instructor) {
-            if ($instructor->qualification == "Assessor") {
+            if ($instructor->assessor) {
                 array_push($instructors, $instructor);
             }
         }
 
         // Sort the instructors at the bottom of the array
         foreach ($instructors_temp as $instructor) {
-            if ($instructor->qualification == "Instructor") {
+            if (!$instructor->assessor) {
                 array_push($instructors, $instructor);
             }
-        } */
+        }
 
         $groups = StaffGroup::all();
 
-        return view('about.staff', compact('staff','groups'));
+        return view('about.staff', compact('staff','groups','instructors'));
     }
 
     public function editIndex()
     {
         $staff = StaffMember::all();
 
-        return view('dashboard.staff.index', compact('staff'));
+        return view('admin.settings.staff', compact('staff'));
     }
 
     public function editStaffMember(Request $request, $id)
