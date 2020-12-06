@@ -329,11 +329,11 @@ Route::group(['middleware' => 'auth'], function () {
                 Route::group(['middleware' => ['permission:view users']], function () {
                     Route::get('/users', 'Community\UsersController@index')->name('community.users.index');
                     Route::get('/users/{id}', 'Community\UsersController@viewUser')->name('community.users.view');
+                    Route::get('/users/{id}/reset/avatar', 'Community\UsersController@resetUserAvatar')->name('community.users.reset.avatar')->middleware('can:edit user data');
                     Route::post('/users/{id}/assign/role', 'Community\UsersController@assignUserRole')->name('community.users.assign.role')->middleware('can:edit user data');
                     Route::post('/users/{id}/assign/permission', 'Community\UsersController@assignUserPermission')->name('community.users.assign.permission')->middleware('can:edit user data');
                     Route::delete('/users/{id}/remove/role', 'Community\UsersController@removeUserRole')->name('community.users.remove.role')->middleware('can:edit user data');
                     Route::delete('/users/{id}/remove/permission', 'Community\UsersController@removeUserPermission')->name('community.users.remove.permission')->middleware('can:edit user data');
-                    Route::post('/discord/discordban', 'Community\DiscordController@createDiscordBan')->name('discord.createban');
                 });
             });
 

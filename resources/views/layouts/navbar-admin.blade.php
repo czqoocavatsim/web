@@ -1,8 +1,8 @@
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Rubik&display=swap');
-* {
+/* * {
     font-family: 'Rubik', 'Lato', 'Segoe UI', 'Arial', sans-serif;
-}
+} */
 </style>
 <div class="container pt-3 pb-1">
     <a class="navbar-brand" href="{{route('index')}}"><img style="height: 50px; width:auto;" id="czqoHeaderImg" src="https://cdn.ganderoceanic.com/resources/media/img/brand/sqr/ZQO_SQ_TSPBLUE.png" alt=""></a>
