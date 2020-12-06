@@ -18,6 +18,7 @@ mix.scripts([
     'resources/js/myczqo.js',
     'resources/js/preferences.js',
     'resources/js/custom-pages.js',
-    'resources/js/instructing.js'
+    'resources/js/instructing.js',
+    'resources/js/misc.js'
 ], 'public/js/czqo.js');
 
