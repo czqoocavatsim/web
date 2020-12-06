@@ -197,11 +197,29 @@ class UsersController extends Controller
 
         //Reset their biography
         $user->bio = null;
+        $user->save();
 
         //Log it
         activity()->causedBy(Auth::user())->performedOn($user)->log('Biography reset');
 
         //Return
         return redirect()->back()->with('info', 'User biography reset');
+    }
+
+    public function resetUserAvatar($user_id)
+    {
+        //Get user
+        $user = User::whereId($user_id)->firstOrFail();
+
+        //Reset their avatar
+        $user->avatar = '';
+        $user->avatar_mode = 0;
+        $user->save();
+
+        //Log it
+        activity()->causedBy(Auth::user())->performedOn($user)->log('Avatar reset');
+
+        //Return
+        return redirect()->back()->with('info', 'User avatar reset');
     }
 }

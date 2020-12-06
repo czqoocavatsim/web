@@ -354,8 +354,33 @@
             @endhasanyrole
             <div id="staffTab" style="display:none">
                 @hasanyrole('Administrator|Senior Staff|Instructor|Marketing Team|Web Team')
-                    <h2 class="font-weight-bold blue-text pb-2">Staff</h2>
+                    <h2 class="font-weight-bold blue-text pb-2">Administration</h2>
                     <div class="row">
+                        @hasanyrole('Administrator|Senior Staff|Instructor')
+                        <div class="col-md-4">
+                            <div class="card mb-3 shadow-none">
+                                <h4 class="blue-text mb-3">Training</h4>
+                                <div class="list-group z-depth-1">
+                                    <a href="{{route('training.admin.dashboard')}}" class="waves-effect list-group-item list-group-item-action">
+                                        <i style="margin-right: 10px;" class="fas fa-tachometer-alt fa-fw"></i>Dashboard
+                                    </a>
+                                    @can('view roster admin')
+                                    <a href="{{route('training.admin.roster')}}" class="waves-effect list-group-item list-group-item-action">
+                                        <i style="margin-right: 10px;" class="fas fa-users fa-fw"></i>Roster
+                                    </a>
+                                    <a href="{{route('training.admin.solocertifications')}}" class="waves-effect list-group-item list-group-item-action">
+                                        <i style="margin-right: 10px;" class="fas fa-certificate fa-fw"></i>Solo Certifications
+                                    </a>
+                                    @endcan
+                                    @can('view applications')
+                                    <a href="{{route('training.admin.applications')}}" class="waves-effect list-group-item list-group-item-action">
+                                        <i style="margin-right: 10px;" class="fas fa-clock fa-fw"></i>Applications
+                                    </a>
+                                    @endcan
+                                </div>
+                            </div>
+                        </div>
+                        @endhasanyrole
                         @canany('view events|view articles')
                         <div class="col-md-4">
                             <div class="card mb-3 shadow-none">
@@ -396,31 +421,6 @@
                             </div>
                         </div>
                         @endcanany
-                        @hasanyrole('Administrator|Senior Staff|Instructor')
-                        <div class="col-md-4">
-                            <div class="card mb-3 shadow-none">
-                                <h4 class="blue-text mb-3">Training</h4>
-                                <div class="list-group z-depth-1">
-                                    <a href="{{route('training.admin.dashboard')}}" class="waves-effect list-group-item list-group-item-action">
-                                        <i style="margin-right: 10px;" class="fas fa-tachometer-alt fa-fw"></i>Dashboard
-                                    </a>
-                                    @can('view roster admin')
-                                    <a href="{{route('training.admin.roster')}}" class="waves-effect list-group-item list-group-item-action">
-                                        <i style="margin-right: 10px;" class="fas fa-users fa-fw"></i>Roster
-                                    </a>
-                                    <a href="{{route('training.admin.solocertifications')}}" class="waves-effect list-group-item list-group-item-action">
-                                        <i style="margin-right: 10px;" class="fas fa-certificate fa-fw"></i>Solo Certifications
-                                    </a>
-                                    @endcan
-                                    @can('view applications')
-                                    <a href="{{route('training.admin.applications')}}" class="waves-effect list-group-item list-group-item-action">
-                                        <i style="margin-right: 10px;" class="fas fa-clock fa-fw"></i>Applications
-                                    </a>
-                                    @endcan
-                                </div>
-                            </div>
-                        </div>
-                        @endhasanyrole
                         @hasanyrole('Administrator|Senior Staff')
                         <div class="col-md-4">
                             <div class="card mb-3 shadow-none">

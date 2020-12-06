@@ -1,10 +1,7 @@
-@extends('layouts.master', ['adminNavBar'=>true])
-@section('content')
-
+@extends('admin.community.layouts.main')
+@section('community-content')
     <div class="container py-4">
-        <a href="{{route('my.index')}}" class="blue-text" style="font-size: 1.2em;"> <i class="fas fa-arrow-left"></i> Community</a>
         <h1 class="blue-text font-weight-bold mt-2">Users</h1>
-        <hr>
         <h4 class="mb-3">There are <span class="font-weight-bold blue-text">{{$userCount}}</span> users</h4>
         @if (empty($users))
             <div class="alert alert-danger">No users found</div>
@@ -24,7 +21,7 @@
                     <tr>
                         <th scope="row"><b>{{$user->id}}</b></th>
                         <td>{{$user->fullName('FL')}}</td>
-                        <td>{{$user->rating_short}}</td>
+                        <td>{{$user->rating_short ?? 'N/A'}}</td>
                         <td>
                             {{$user->highestRole()->name}}
                         </td>
@@ -42,5 +39,5 @@
             $('#dataTable').DataTable();
         } );
     </script>
-
+</div>
 @endsection
