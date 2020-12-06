@@ -4,7 +4,7 @@
 
 @section('content')
     @if(!$ctpMode)
-    <div data-jarallax data-speed="0.2" class="jarallax" style="height: calc(100vh)">
+    <div data-jarallax data-speed="0.2" id="homePageJarallax" class="jarallax" style="height: calc(100vh)">
         <div class="mask flex-center flex-column" style="position:absolute; top:0; left:0; z-index: 1; height: 100%; width: 100%; background: linear-gradient(40deg,rgba(3, 149, 233, 0.7),rgba(48,63,159,.4))!important;">
             <div class="container">
                 <div class="py-5">
@@ -312,7 +312,8 @@
             videoSrc: 'mp4:https://cdn.ganderoceanic.com/resources/media/video/ZQO_SITE_TIMELAPSE.mp4',
             videoLoop: true
         });
-
+        snowStorm();
     </script>
+
 @endsection
 
