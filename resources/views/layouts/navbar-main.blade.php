@@ -1,6 +1,6 @@
 <div class="container py-2">
     <a class="navbar-brand" href="{{route('index')}}"><img style="height: 50px; width:auto;" id="czqoHeaderImg" src="https://ams3.digitaloceanspaces.com/ganderoceanicoca/resources/media/img/brand/bnr/ZQO_XMAS_BNR_TSPWHITE.png" alt=""></a>
-    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
+    <button class="navbar-toggler" type="button" data-toggle="modal" data-target="#mobileNavBarModal"
             aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
     </button>
@@ -17,7 +17,7 @@
                 <a class="nav-link dropdown-toggle" style="cursor:pointer" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Roster</a>
                 <div class="dropdown-menu" aria-labelledby="dropdown01">
                     <a class="dropdown-item {{ Request::is('roster') ? 'active white-text' : '' }}" href="{{route('roster.public')}}" aria-expanded="false">Controller Roster</a>
-                    <a class="dropdown-item {{ Request::is('roster/solo-certs') ? 'active white-text' : '' }}"" href="{{route('solocertifications.public')}}" aria-expanded="false">Solo Certifications</a>
+                    <a class="dropdown-item {{ Request::is('roster/solo-certs') ? 'active white-text' : '' }}" href="{{route('solocertifications.public')}}" aria-expanded="false">Solo Certifications</a>
                 </div>
             </li>
             <li class="nav-item {{ Request::is('news') ? 'active white-text' : '' }} {{ Request::is('news/*') ? 'active white-text' : '' }}">
@@ -56,7 +56,7 @@
                 </div>
             </li>
             <li class="nav-item  {{ Request::is('feedback') ? 'active' : '' }}">
-            <a class="nav-link" href="{{route('feedback.create')}}" aria-expanded="false">Submit Feedback</a>
+            <a class="nav-link" href="{{route('feedback.create')}}" aria-expanded="false">Feedback</a>
             </li>
         </ul>
         <ul class="navbar-nav ml-auto nav-flex-icons">
@@ -85,7 +85,7 @@
                 </div>
             </li>
             @endauth
-            <li class="nav-item d-flex align-items-center">
+            {{-- <li class="nav-item d-flex align-items-center">
                 <a href="https://twitter.com/ganderocavatsim" class="nav-link waves-effect waves-light">
                     <i style="font-size: 1.7em;" class="fab fa-twitter"></i>
                 </a>
@@ -99,7 +99,7 @@
                 <a class="nav-link waves-effect waves-light" data-toggle="modal" data-target="#discordTopModal">
                     <i style="height: 22px; font-size: 1.7em;width: 28px;padding-left: 5px;padding-top: 2px;" class="fab fa-discord"></i>
                 </a>
-            </li>
+            </li> --}}
         </ul>
     </div>
 </div>
