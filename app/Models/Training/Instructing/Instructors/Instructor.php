@@ -85,6 +85,6 @@ class Instructor extends Model
 
     public function routeNotificationForMail($notification)
     {
-        return $this->user->email;
+        return $this->email();
     }
 }
