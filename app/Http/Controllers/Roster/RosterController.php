@@ -141,7 +141,7 @@ class RosterController extends Controller
         //Roles
         $user->removeRole('Certified Controller');
         $user->assignRole('Guest');
-        $user->removeRole('Trainee');
+        $user->removeRole('Student');
 
         //Notify user
         Notification::send($user, new RemovedFromRoster($user));
@@ -189,11 +189,11 @@ class RosterController extends Controller
                 $rosterMember->date_certified = $request->get('date_certified');
                 $user->assignRole('Certified Controller');
                 $user->removeRole('Guest');
-                $user->removeRole('Trainee');
+                $user->removeRole('Student');
             break;
             case 'training':
                 $user->removeRole('Guest');
-                $user->assignRole('Trainee');
+                $user->assignRole('Student');
             break;
         }
 
