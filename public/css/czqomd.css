@@ -33,6 +33,10 @@ body[data-theme="dark"] {
     --czqo-blue: #2db2ff;
 }
 
+body[data-theme="dark"] .editor-toolbar button {
+    color: white;
+}
+
 body[data-accent="red"] {
     --czqo-blue: var(--red);
 }
