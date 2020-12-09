@@ -1,4 +1,4 @@
-@extends('layouts.master')
+@extends('layouts.primary')
 @section('title', 'Error 403 - ')
 
 @section('content')

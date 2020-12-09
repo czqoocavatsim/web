@@ -1,4 +1,4 @@
-@extends('layouts.master', ['solidNavBar' => false])
+@extends('layouts.primary', ['solidNavBar' => false])
 @section('title', 'myCZQO - ')
 @section('content')
 <div class="jarallax card card-image rounded-0"  data-jarallax data-speed="0.2">
@@ -53,7 +53,7 @@
     </div>
 </div>
 <div class="container py-4">
-    <h1 data-step="1" data-intro="" class="blue-text font-weight-bold">myCZQO</h1>
+    <h1 data-step="1" data-intro="" class="blue-text fw-800">myCZQO</h1>
     @if (Auth::user()->rating_id >= 5)
     @endif
     <br class="my-2">
@@ -107,7 +107,7 @@
                 </a>
                 @hasanyrole('Administrator|Senior Staff|Marketing Team|Web Team|Instructor')
                 <li class="w-100 my-3" style="border:none;">
-                    <div class="d-flex h-100 flex-row justify-content-left align-items-center">
+                    <div class="d-flex h-100 fw-400 flex-row justify-content-left align-items-center">
                         <span style="font-size: 1em;" class="text-muted">STAFF</span>
                     </div>
                 </li>
@@ -133,7 +133,7 @@
                 </a>
                 @endhasanyrole
                 <li class="w-100 my-3" style="border:none;">
-                    <div class="d-flex h-100 flex-row justify-content-left align-items-center">
+                    <div class="d-flex h-100 fw-400 flex-row justify-content-left align-items-center">
                         <span style="font-size: 1em;" class="text-muted">SETTINGS</span>
                     </div>
                 </li>
@@ -153,11 +153,19 @@
                         </div>
                     </li>
                 </a>
+                <a class="myczqo-tab no-click" data-myczqo-tab="none" href="{{route('auth.logout')}}">
+                    <li class="w-100">
+                        <div class="d-flex h-100 flex-row justify-content-left align-items-center">
+                            <i style="font-size: 1.6em; margin-right: 10px;" class="fas fa-sign-out-alt fa-fw"></i>
+                            <span style="font-size: 1.1em;">Log out</span>
+                        </div>
+                    </li>
+                </a>
             </ul>
         </div>
         <div class="col-md-9">
             <div id="yourProfileTab">
-                <h3 class="font-weight-bold blue-text pb-2">Your Profile</h3>
+                <h3 class="fw-700 blue-text pb-2">Your Profile</h3>
                 <div class="row">
                     <div class="col-md" data-step="3" data-intro="Here is an overview of your profile, including your CZQO roles. You can change the way your name is displayed by clicking on your name at the top of the panel. (CoC A4(b))">
                         <div class="d-flex flex-row">
@@ -171,11 +179,11 @@
                             </div>
                             <div>
                                 <h5 class="card-title">
-                                    <a href="" data-toggle="modal" data-target="#changeDisplayNameModal" class="text-dark text-decoration-underline">
+                                    <a href="" data-toggle="modal" data-target="#changeDisplayNameModal" class="text-dark text-decoration-underline fw-500">
                                         {{ Auth::user()->fullName('FLC') }} <i style="font-size: 0.8em;" class="ml-1 far fa-edit text-muted"></i>
                                     </a>
                                 </h5>
-                                <h6 class="card-subtitle mb-2 text-muted">
+                                <h6 class="card-subtitle mb-2 text-muted fw-500">
                                     {{Auth::user()->rating_GRP}} ({{Auth::user()->rating_short}})
                                 </h6>
                                 Region: {{ Auth::user()->region_name }}<br/>
@@ -191,7 +199,7 @@
                         </div>
                         <br/>
                         <div data-step="4" data-intro="Here you can link your Discord account to receive training session reminders and to gain access to the CZQO Discord.">
-                        <h3 class="mt-2" style="font-size: 1.3em;">Discord</h3>
+                        <h3 class="mt-2 fw-600" style="font-size: 1.3em;">Discord</h3>
                         @if (!Auth::user()->hasDiscord())
                         <p class="mt-1">You have not linked your Discord account.</p>
                         <a href="#" data-toggle="modal" data-target="#discordModal" style="text-decoration:none;">
@@ -226,7 +234,7 @@
                             </span>
                         </a>
                         @endif
-                        <h3 class="mt-4" style="font-size: 1.3em;">Biography</h3>
+                        <h3 class="mt-4 fw-600" style="font-size: 1.3em;">Biography</h3>
                         <p>
                         @if (Auth::user()->bio)
                         {{Auth::user()->bio}}

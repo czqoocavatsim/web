@@ -1,4 +1,4 @@
-@extends('layouts.master')
+@extends('layouts.primary')
 @section('content')
 <div class="container py-4">
     <a href="{{route('network.monitoredpositions.index')}}" class="blue-text" style="font-size: 1.2em;"> <i class="fas fa-arrow-left"></i> Monitored Positions</a>

@@ -1,4 +1,4 @@
-@extends('layouts.master', ['solidNavBar' => false])
+@extends('layouts.primary', ['solidNavBar' => false])
 @section('title', 'Home - ')
 @section('description', 'Cool, calm and collected oceanic control services in the North Atlantic on VATSIM.')
 

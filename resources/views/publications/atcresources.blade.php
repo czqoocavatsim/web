@@ -1,11 +1,12 @@
-@extends('layouts.master', ['solidNavBar' => false])
+@extends('layouts.primary', ['solidNavBar' => false])
 
 @section('title', 'ATC Resources - ')
 @section('description', 'Sector files and resources for Gander controllers')
 
 @section('content')
-<div class="card card-image blue rounded-0">
-    <div class="text-white text-left pb-2 pt-5 px-4">
+<div class="jarallax card card-image rounded-0"  data-jarallax data-speed="0.2">
+    <img class="jarallax-img" src="https://images.thestar.com/tpWKLTZ4lJ1WTB--7inZbspeJKM=/1200x808/smart/filters:cb(2700061000)/https://www.thestar.com/content/dam/thestar/news/canada/2018/03/03/not-enough-air-traffic-controllers-are-women-minorities-nav-canada-says/assil_bedewi.jpg" alt="">
+    <div class="text-white text-left pb-2 pt-5 px-4 mask rgba-stylish-strong">
         <div class="container">
             <div class="py-5">
                 <h1 class="font-weight-bold" style="font-size: 3em;">ATC Resources</h1>
@@ -17,69 +18,22 @@
     </div>
 </div>
 <div class="container py-4">
-    <div class="list-group list-group-flush">
-        @foreach ($resources as $resource)
-        @if($resource->atc_only)
-        @can('view certified only atc resource')
-        <div class="list-group-item">
-            <div class="row">
-                <div class="col"><b>{{$resource->title}} - Certified Controllers Only</b></div>
-                <div class="col-sm-4">
-                    <a href="#" data-toggle="modal" data-target="#detailsModal{{$resource->id}}"><i class="fa fa-info-circle"></i>&nbsp Details</a>&nbsp;&nbsp;
-                    <a href="{{$resource->url}}" target="_blank"><i class="fa fa-eye"></i>&nbsp;View Resource</a>
-                </div>
-            </div>
-        </div>
-        <div class="modal fade" id="detailsModal{{$resource->id}}" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
-            <div class="modal-dialog modal-dialog-centered" role="document">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title" id="exampleModalLongTitle">{{$resource->title}}</h5>
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                            <span aria-hidden="true">&times;</span>
-                        </button>
-                    </div>
-                    <div class="modal-body">
-                        {{$resource->html()}}
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-light" data-dismiss="modal">Dismiss</button>
-                        <a href="{{$resource->url}}" role="button" class="btn btn-success">View</a>
+    <div class="list-group mt-2">
+        @foreach($resources as $resource)
+            @if(Auth::check() && Auth::user()->cannot('view atc only resources') && $resource->atc_only)
+                @continue
+            @endif
+            <a href="{{$resource->url}}" class="list-group-item rounded mb-3 list-group-item-action z-depth-1 waves-effect shadow-none p-3">
+                <div class="d-flex flex-row justify-content-between">
+                    <div class="d-flex flex-row align-items-center">
+                        <i class="far fa-file-alt fa-fw mr-3 blue-text" style="font-size: 3em;"></i>
+                        <div class="d-flex flex-column text-left">
+                            <h4 class="fw-700">{{$resource->title}}</h4>
+                            <p class="mb-0">{{$resource->description}}</p>
+                        </div>
                     </div>
                 </div>
-            </div>
-        </div>
-        @endcan
-        @else
-        <div class="list-group-item">
-            <div class="row">
-                <div class="col"><b>{{$resource->title}}</b></div>
-                <div class="col-sm-4">
-                    <a href="#" data-toggle="modal" data-target="#detailsModal{{$resource->id}}"><i class="fa fa-info-circle"></i>&nbsp Details</a>&nbsp;&nbsp;
-                    <a href="{{$resource->url}}" target="_blank"><i class="fa fa-eye"></i>&nbsp;View Resource</a>
-                </div>
-            </div>
-        </div>
-        <div class="modal fade" id="detailsModal{{$resource->id}}" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
-            <div class="modal-dialog modal-dialog-centered" role="document">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title" id="exampleModalLongTitle">{{$resource->title}}</h5>
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                            <span aria-hidden="true">&times;</span>
-                        </button>
-                    </div>
-                    <div class="modal-body">
-                        {{$resource->html()}}
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-light" data-dismiss="modal">Dismiss</button>
-                        <a href="{{$resource->url}}" role="button" class="btn btn-success">View</a>
-                    </div>
-                </div>
-            </div>
-        </div>
-        @endif
+            </a>
         @endforeach
     </div>
 </div>

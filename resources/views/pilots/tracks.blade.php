@@ -1,4 +1,4 @@
-@extends('layouts.master')
+@extends('layouts.primary')
 @section('content')
 <script src="{{asset('js/leaflet.latlng.js')}}"></script>
 <div class="container py-4">
