@@ -459,12 +459,22 @@
                 </ul>
                 <hr>
                 <div class="d-flex flex-row justify-content-between">
-                    <div>
-                        <img src="{{Auth::user()->avatar()}}" style="height: 27px; width: 27px; margin-right: 7px; margin-bottom: 3px; border-radius: 50%;">&nbsp;<span>{{Auth::user()->fullName("FL")}}</span>
-                    </div>
-                    <div>
-                        <a href="{{ route('auth.logout') }}" class="red-text"><i class="fas fa-sign-out-alt mr-2"></i>Log Out</a>
-                    </div>
+                    @auth
+                        <div>
+                            <img src="{{Auth::user()->avatar()}}" style="height: 27px; width: 27px; margin-right: 7px; margin-bottom: 3px; border-radius: 50%;">&nbsp;<span>{{Auth::user()->fullName("FL")}}</span>
+                        </div>
+                        <div>
+                            <a href="{{ route('auth.logout') }}" class="red-text"><i class="fas fa-sign-out-alt mr-2"></i>Log Out</a>
+                        </div>
+                    @endguest
+                    @guest
+                        <div>
+                            Not Logged In
+                        </div>
+                        <div>
+                            <a href="{{ route('auth.connect.login') }}" class="blue-text"><i class="fas fa-sign-in-alt mr-2"></i>Log In</a>
+                        </div>
+                    @endguest
                 </div>
             </div>
         </div>
