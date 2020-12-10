@@ -74,13 +74,8 @@
                 </nav>
             @elseif(!$solidNavBar)
                 <!--Non solid nav bar-->
-                <div class="d-none d-xl-block">
+                <div>
                     <nav id="czqoHeaderLight" class="navbar navbar-expand-xl navbar-dark transparent shadow-none p-0" style="min-height:74px; z-index:999;">
-                        @include('layouts.navbar-main')
-                    </nav>
-                </div>
-                <div class="d-xl-none">
-                    <nav id="czqoHeaderLight" class="navbar navbar-expand-lg navbar-dark transparent p-0 shadow-none" style="min-height:74px; z-index:999">
                         @include('layouts.navbar-main')
                     </nav>
                 </div>
