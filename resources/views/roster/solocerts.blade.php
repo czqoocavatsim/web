@@ -1,4 +1,4 @@
-@extends('layouts.primary')
+@extends('layouts.primary', ['solidNavBar' => false])
 
 @section('navbarprim')
 
@@ -9,9 +9,17 @@
 @section('title', 'Solo Certifications - ')
 
 @section('content')
-<div class="container" style="margin-top: 20px;">
-        <h1 class="blue-text font-weight-bold">Solo Certifications</h1>
-        <hr>
+
+<div class="card card-image blue rounded-0">
+    <div class="text-white text-left pb-2 pt-5 px-4">
+        <div class="container">
+            <div class="py-5">
+                <h1 class="font-weight-bold" style="font-size: 3em;">Solo Certification</h1>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="container py-4">
         <p>Please note that the 'full name' field on this table is dependent on the controller's individual name settings on the CZQO Core system.</p>
         <table id="rosterTable" class="table table-hover">
             <thead>

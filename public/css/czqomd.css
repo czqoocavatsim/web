@@ -564,7 +564,7 @@ body[data-theme="dark"] .text-body {
     border-bottom: 2px solid var(--czqo-blue) !important;
 }
 
-#czqoHeaderLight.navbar-light .nav-item:not(#accountDropdown):active > .nav-link {
+#czqoHeaderLight.navbar-light .nav-item:not(#accountDropdown).active > .nav-link {
     border-bottom: 2px solid var(--czqo-blue) !important;
 }
 

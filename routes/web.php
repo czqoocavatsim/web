@@ -175,6 +175,8 @@ Route::group(['middleware' => 'auth'], function () {
         //Admin
         Route::prefix('admin')->group(function () {
 
+            Route::view('/', 'admin.index')->name('admin.index');
+
             //Settings
             Route::prefix('settings')->group(function () {
                 Route::group(['middleware' => ['permission:edit settings']], function () {

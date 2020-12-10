@@ -69,7 +69,7 @@
         <header>
             @if($adminNavBar)
                 <!--Admin nav bar-->
-                <nav class="navbar navbar-expand-xl navbar-light transparent shadow-none p-0" style="min-height:59px; z-index:999;">
+                <nav id="czqoHeaderLight" class="navbar navbar-expand-xl navbar-light transparent shadow-none p-0" style="min-height:59px; z-index:999;">
                     @include('layouts.navbar-admin')
                 </nav>
             @elseif(!$solidNavBar)
@@ -403,6 +403,8 @@
         </div>
     </div>
     <!-- End Discord (top nav) modal -->
+
+    @include('layouts.nav-mobile')
 
     <!-- Misc scripts -->
     <script>
