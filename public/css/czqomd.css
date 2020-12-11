@@ -154,7 +154,7 @@ body[data-theme="dark"] .onlineControllers .card.black-text h4 span p {
 }
 
 body[data-theme="dark"] .page-footer {
-    background-color: #000;
+    background-color: #000 !important;
 }
 
 
@@ -162,6 +162,9 @@ body[data-theme="dark"] .page-footer .black-text {
     color: #eee !important;
 }
 
+body[data-theme="dark"] pre {
+    color: #eee !important;
+}
 
 
 body[data-theme="dark"] .modal-content {
@@ -570,4 +573,8 @@ body[data-theme="dark"] .text-body {
 
 #czqoHeaderLight.navbar-light .nav-item#accountDropdown > .nav-link {
     color: var(--czqo-blue) !important;
+}
+
+body[data-theme="dark"]#czqoHeaderLight.navbar-light .nav-item:not(#accountDropdown) > .nav-link {
+    color: #fff;
 }
