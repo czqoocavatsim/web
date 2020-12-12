@@ -81,7 +81,7 @@
                 </div>
             @else
                 <!--Solid nav bar-->
-                <nav id="czqoHeaderLight" class="navbar navbar-expand-lg navbar-light p-0 shadow-none" style="min-height:74x;">
+                <nav id="czqoHeaderLight" class="navbar navbar-expand-lg navbar-light p-0 z-depth-1 shadow-none" style="min-height:74x;">
                     @include('layouts.navbar-main', ['logo' => 'blue'])
                 </nav>
             @endif

@@ -4,7 +4,7 @@
 
 @section('content')
     <div style="height: calc(100vh - 74px); z-index: -1" class="z-depth-0 jarallax">
-        <img src="https://image.prntscr.com/image/YMeYou_cThqazmkpsJgebw.png" alt="" class="jarallax-img">
+        <img src="https://media.discordapp.net/attachments/498332235154456579/776750234592083968/unknown.png?width=922&height=519" alt="" class="jarallax-img">
         <div class="flex-center flex-column">
             <div class="container">
                 <h1 class="display-2 fw-700 white-text">Cool. Calm. Collected.</h1>
@@ -87,7 +87,7 @@
                     <div>
                         <h2 class="font-weight-bold blue-text">Latest Tweets</h2>
                         <a href="https://twitter.com/ganderocavatsim/" class="text-body">
-                            <p class="mt-0" style="font-size: 1.2em;">@ganderocavatsim</p>
+                            <p class="mt-0 fw-400" style="font-size: 1.2em;">@ganderocavatsim</p>
                         </a>
                     </div>
                 </div>
@@ -124,17 +124,69 @@
                     <div class="d-flex flex-row mb-2">
                         <img src="{{$cert->controller->avatar()}}" style="height: 55px !important; width: 55px !important; margin-right: 10px; margin-bottom: 3px; border-radius: 50%;">
                         <div class="d-flex flex-column">
-                            <h4>{{$cert->controller->fullName('FL')}}</h4>
+                            <h4 class="fw-400">{{$cert->controller->fullName('FL')}}</h4>
                             <p title="{{$cert->timestamp->toDayDateTimeString()}}">{{$cert->timestamp->diffForHumans()}}</p>
                         </div>
                     </div>
                 @endforeach
             </div>
+            <div class="col-md-4 mb-4">
+                <h2 class="font-weight-bold blue-text mb-4">Top Controllers</h2>
+                <ul class="list-unstyled">
+                    @php $index = 1; @endphp
+                    @foreach($topControllers as $c)
+                    <li class="mb-1">
+                        <div class="d-flex flex-row">
+                            <span class="font-weight-bold blue-text" style="font-size: 1.9em;">
+                                @if($index == 1)
+                                <i class="fas fa-trophy amber-text fa-fw"></i>
+                                @elseif ($index == 2)
+                                <i class="fas fa-trophy blue-grey-text fa-fw"></i>
+                                @elseif ($index == 3)
+                                <i class="fas fa-trophy brown-text fa-fw"></i>
+                                @else
+                                {{$index}}.
+                                @endif
+                            </span>
+                            <p class="mb-0 ml-1">
+                                <span style="font-size: 1.4em;">
+                                    <img src="{{$c->user->avatar()}}" style="height: 35px; !important; width: 35px !important; margin-left: 10px; margin-right: 5px; margin-bottom: 3px; border-radius: 50%;">
+                                    <div class="d-flex flex-column ml-2">
+                                        <h4 class="fw-400">{{$c->user->fullName('FL')}}</h4>
+                                        <p>{{$c->monthly_hours}} hours this month</p>
+                                    </div>
+                                </span>
+                            </p>
+                        </div>
+                    </li>
+                    @php $index++; @endphp
+                    @endforeach
+                </ul>
+            </div>
+        </div>
+    </div>
+    <div class="container pb-5">
+        <div class="row">
+            <div class="col-lg-7 mb-4">
+                <h1 class="font-weight-bold blue-text">We control the skies over the North Atlantic on VATSIM.</h1>
+                <p style="font-size: 1.2em;" class="mt-3">
+                    Gander Oceanic is VATSIM's coolest, calmest and most collected provider of Oceanic control. With our worldwide team of skilled Oceanic controllers, we pride ourselves on our expert, high-quality service to pilots flying across the North Atlantic. Our incredible community of pilots and controllers extend their warmest welcome and wish you all the best for your oceanic crossings!
+                </p>
+                <p style="font-size: 1.2em;" class="mt-3">
+                    <a class="font-weight-bold text-body" href="{{route('about.who-we-are')}}">Who we are &nbsp;&nbsp;<i class="fas fa-arrow-right blue-text"></i></a>
+                </p>
+                <div class="d-flex flex-row">
+                    @if(!Auth::check() || Auth::user()->can('start-application'))
+                    <a href="{{route('training.applications.apply')}}" role="button" class="btn bg-czqo-blue-light">Apply Now</a>
+                    @endif
+                    <a href="/pilots" class="btn bg-czqo-blue-light" role="button">Pilot Resources</a>
+                </div>
+            </div>
 
-            <div class="col-md-4">
-                <h2 class="font-weight-bold blue-text">Quick Links</h2>
-                <ul class="list-unstyled mt-4" style="font-size: 1.3em;">
-                    <li class="mb-3">
+            <div class="col-lg-5 text-right">
+                <h2 class="font-weight-bold mb-3 blue-text">Quick Links</h2>
+                <div clss="list-group mt-4 z-depth-2" style="font-size: 1.3em;">
+                    <div class="list-group-item">
                         <a data-toggle="modal" data-target="#discordTopModal" href="" style="text-decoration:none;">
                             <span class="blue-text">
                                 <i class="fab fa-discord fa-2x" style="vertical-align:middle;"></i>
@@ -142,8 +194,8 @@
                             &nbsp;
                             <span class="blue-text">Join Our Discord Community</span>
                         </a>
-                    </li>
-                    <li class="mb-3">
+                    </div>
+                    <div class="list-group-item">
                         <a href="https://twitter.com/ganderocavatsim" style="text-decoration:none;">
                             <span class="blue-text">
                                 <i class="fab fa-twitter fa-2x" style="vertical-align:middle;"></i>
@@ -151,8 +203,8 @@
                             &nbsp;
                             <span class="blue-text">Twitter</span>
                         </a>
-                    </li>
-                    <li class="mb-3">
+                    </div>
+                    <div class="list-group-item">
                         <a href="https://www.facebook.com/ganderocavatsim" style="text-decoration:none;">
                             <span class="blue-text">
                                 <i class="fab fa-facebook fa-2x" style="vertical-align:middle;"></i>
@@ -160,8 +212,8 @@
                             &nbsp;
                             <span class="blue-text">Facebook</span>
                         </a>
-                    </li>
-                    <li class="mb-3">
+                    </div>
+                    <div class="list-group-item">
                         <a href="https://www.youtube.com/channel/UC3norFpW3Cw4ryGR7ourjcA" style="text-decoration:none;">
                             <span class="blue-text">
                                 <i class="fab fa-youtube fa-2x" style="vertical-align:middle;"></i>
@@ -169,8 +221,8 @@
                             &nbsp;
                             <span class="blue-text">YouTube Channel</span>
                         </a>
-                    </li>
-                    <li class="mb-3">
+                    </div>
+                    <div class="list-group-item">
                         <a href="https://knowledgebase.ganderoceanic.com" style="text-decoration:none;">
                             <span class="blue-text">
                                 <i class="fas fa-book fa-2x" style="vertical-align:middle;"></i>
@@ -178,73 +230,7 @@
                             &nbsp;
                             <span class="blue-text">Knowledge Base</span>
                         </a>
-                    </li>
-                </ul>
-            </div>
-        </div>
-    </div>
-    <div style="background-size: cover; background-repeat: no-repeat; background-blend-mode:lighten; background-image:url({{asset('img/home-screen-backgrounds/czqosquarelightblue.png')}}); background-position: right;">
-        <div class="container py-5">
-            <div class="row">
-                <div class="col-lg-5">
-                    <h1 class="font-weight-bold blue-text">We control the skies over the North Atlantic on VATSIM.</h1>
-                    <p style="font-size: 1.2em;" class="mt-3">
-                        Gander Oceanic is VATSIM's coolest, calmest and most collected provider of Oceanic control. With our worldwide team of skilled Oceanic controllers, we pride ourselves on our expert, high-quality service to pilots flying across the North Atlantic. Our incredible community of pilots and controllers extend their warmest welcome and wish you all the best for your oceanic crossings!
-                    </p>
-                    <p style="font-size: 1.2em;" class="mt-3">
-                        <a class="font-weight-bold text-body" href="{{route('about.who-we-are')}}">Who we are &nbsp;&nbsp;<i class="fas fa-arrow-right blue-text"></i></a>
-                    </p>
-                    <div class="d-flex flex-row">
-                        @if(!Auth::check() || Auth::user()->can('start-application'))
-                        <a href="{{route('training.applications.apply')}}" role="button" class="btn bg-czqo-blue-light">Apply Now</a>
-                        @endif
-                        <a href="/pilots" class="btn bg-czqo-blue-light" role="button">Pilot Resources</a>
                     </div>
-                </div>
-                <div class="col-lg-7 text-right d-none d-lg-block">
-                    <h1 class="font-weight-bold blue-text mb-3">Top Controllers This Month</h1>
-                    <ul class="list-unstyled">
-                        @php $index = 1; @endphp
-                        @foreach($topControllers as $c)
-                        <li class="mb-1">
-                            <div class="row">
-                                <div class="col-5">
-                                    <span class="font-weight-bold blue-text" style="font-size: 1.9em;">
-                                        {{$index}}.
-                                    </span>
-                                </div>
-                                <div class="col text-left">
-                                    <p class="mb-0">
-                                        <span style="font-size: 1.4em;">
-                                            <img src="{{$c->user->avatar()}}" style="height: 35px; !important; width: 35px !important; margin-left: 10px; margin-right: 5px; margin-bottom: 3px; border-radius: 50%;">
-                                            {{$c->user->fullName('FL')}} - {{$c->monthly_hours}} hours
-                                        </span>
-                                    </p>
-                                </div>
-                            </div>
-                        </li>
-                        @php $index++; @endphp
-                        @endforeach
-                    </ul>
-                </div>
-            </div>
-
-            <div class="d-lg-none mt-4">
-                <h1 class="font-weight-bold blue-text mb-3">Top Controllers This Month</h1>
-                <ul class="list-unstyled">
-                    @php $index = 1; @endphp
-                    @foreach($topControllers as $c)
-                    <li class="mb-1">
-                        <span class="font-weight-bold blue-text" style="font-size: 1.9em;">
-                            {{$index}}.
-                        </span>
-                        <span style="font-size: 1.4em;">
-                            <img src="{{$c->user->avatar()}}" style="height: 35px; !important; width: 35px !important; margin-left: 10px; margin-right: 5px; margin-bottom: 3px; border-radius: 50%;">
-                            {{$c->user->fullName('FL')}} - {{$c->monthly_hours}} hours
-                        </span>
-                    </li>
-                    @php $index++; @endphp
-                    @endforeach
                 </ul>
             </div>
         </div>
