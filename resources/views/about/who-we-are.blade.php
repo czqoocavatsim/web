@@ -1,4 +1,4 @@
-@extends('layouts.master')
+@extends('layouts.primary')
 @section('title', 'Who We Are - ')
 @section('content')
 <div class="d-none d-md-block jarallax card card-image shadow-none rounded-0" data-jarallax data-speed="0.2" style="height: 60vh">

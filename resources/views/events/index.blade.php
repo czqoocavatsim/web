@@ -1,4 +1,4 @@
-@extends('layouts.master', ['solidNavBar' => false])
+@extends('layouts.primary', ['solidNavBar' => false])
 @section('title', 'Events - ')
 @section('description', 'Check out events over the Northern Atlantic supported by CZQO')
 @section('content')

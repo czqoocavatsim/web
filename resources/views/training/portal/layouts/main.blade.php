@@ -1,4 +1,4 @@
-@extends('layouts.master', ['solidNavBar' => false])
+@extends('layouts.primary', ['solidNavBar' => false])
 
 @section('content')
 <div class="card card-image @yield('page-header-colour', 'blue') rounded-0" style="background-url:url(@yield('page-header-background')">

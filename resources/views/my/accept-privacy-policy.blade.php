@@ -1,4 +1,4 @@
-@extends('layouts.master')
+@extends('layouts.primary')
 @section('content')
 <div class="container py-5">
     <div class="d-flex flex-center flex-column">

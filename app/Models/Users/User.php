@@ -298,6 +298,11 @@ class User extends Authenticatable
         return $this->hasOne(UserPreferences::class);
     }
 
+    public function notificationPreferences()
+    {
+        return $this->hasOne(UserNotificationPreferences::class);
+    }
+
     public function pendingApplication()
     {
         if ($pendingApp = Application::where('user_id', $this->id)->where('status', 0)->first()) { return $pendingApp; }

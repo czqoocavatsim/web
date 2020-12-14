@@ -1,4 +1,4 @@
-@extends('layouts.master')
+@extends('layouts.primary')
 @section('title', 'About CZQO Core - ')
 @section('content')
 <div class="container py-5">

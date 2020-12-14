@@ -1,4 +1,4 @@
-@extends('layouts.master', ['solidNavBar' => false])
+@extends('layouts.primary', ['solidNavBar' => false])
 @section('title', 'Policies - ')
 @section('description', 'Policies and guidelines for operations in Gander Oceanic')
 
@@ -16,12 +16,12 @@
         </div>
     </div>
     <div class="container py-4">
-        <div class="list-group list-group-flush">
+        <div class="list-group">
             @foreach ($policies as $policy)
-            <div class="list-group-item">
-                <div class="row">
-                    <div class="col">{{$policy->title}}</div>
-                    <div class="col-sm-4">
+            <div class="list-group-item z-depth-1 rounded shadow-none mb-3 p-3">
+                <div class="d-flex flex-row justify-content-between">
+                    <div class=" fw-700">{{$policy->title}}</div>
+                    <div class="fw-700">
                         <a data-policy-id="{{$policy->id}}" href="javascript:void(0)" class="expandHidePolicyButton"><i class="fa fa-eye"></i>&nbsp;View Policy and Description</a>
                     </div>
                 </div>

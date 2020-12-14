@@ -1,4 +1,4 @@
-@extends('layouts.master')
+@extends('layouts.primary')
 
 @section('title', 'OCA Map - ')
 @section('description', 'Map of the Gander and Shanwick OCAs, with pilots, online sectors, and NAT Tracks updated every 15 minutes.')

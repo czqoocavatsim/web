@@ -1,4 +1,4 @@
-@extends('layouts.master', ['solidNavBar' => false])
+@extends('layouts.primary', ['solidNavBar' => false])
 
 @section('title', 'Staff - ')
 

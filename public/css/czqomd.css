@@ -1,6 +1,6 @@
-@import url('https://fonts.googleapis.com/css?family=Muli:500&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Mulish:wght@200;300;400;500;600;700;800;900&display=swap');
 * {
-    font-family: 'Muli', 'Lato', 'Segoe UI', 'Arial', sans-serif;
+    font-family: 'Mulish', 'Lato', 'Segoe UI', 'Arial', sans-serif;
 }
 
 :root{
@@ -18,6 +18,39 @@ body, html {
     height: 100vh;
     scroll-behavior: smooth;
 }
+
+.fw-400 {
+    font-weight: 400;
+}
+
+.fw-200 {
+    font-weight: 200;
+}
+
+.fw-300 {
+    font-weight: 300;
+}
+
+.fw-500 {
+    font-weight: 500;
+}
+
+.fw-600 {
+    font-weight: 600;
+}
+
+.fw-700 {
+    font-weight: 700;
+}
+
+.fw-800 {
+    font-weight: 800;
+}
+
+.fw-900 {
+    font-weight: 900;
+}
+
 
 .modal-dialog .modal-content {
     box-shadow: none !important;
@@ -121,7 +154,7 @@ body[data-theme="dark"] .onlineControllers .card.black-text h4 span p {
 }
 
 body[data-theme="dark"] .page-footer {
-    background-color: #000;
+    background-color: #000 !important;
 }
 
 
@@ -129,6 +162,9 @@ body[data-theme="dark"] .page-footer .black-text {
     color: #eee !important;
 }
 
+body[data-theme="dark"] pre {
+    color: #eee !important;
+}
 
 
 body[data-theme="dark"] .modal-content {
@@ -146,6 +182,7 @@ body[data-theme="dark"] .modal-content .close {
 .myczqo-tab li {
     height: 35px;
     border-right: 3px solid #eeeeee;
+    font-weight: 400;
 }
 
 body[data-theme="dark"] .myczqo-tab li {
@@ -503,14 +540,41 @@ body[data-theme="dark"] .text-body {
     color: #eee !important;
 }
 
-h1,h2,h3,h4,h5,h6 .font-weight-bold {
-    font-weight: 400 !important;
+.btn {
+    font-weight: 600 !important;
 }
 
-.modal-content .modal-header h5.modal-title {
-  font-weight: 400 !important;
+.nav-item:not(#accountDropdown).active > .nav-link {
+    background: none !important;
+    border-bottom: 2px solid white;
 }
 
-.font-weight-bold {
-  font-weight: 400 !important;
+.nav-item:not(#accountDropdown):hover > .nav-link {
+    background: none !important;
+    border-bottom: 2px solid white;
+    font-weight: 600 !important;
+}
+
+.nav-item:hover > .nav-link {
+    transition: 0.2s !important;;
+}
+
+.nav-link {
+    font-weight: 600 !important;
+}
+
+#czqoHeaderLight.navbar-light .nav-item:not(#accountDropdown):hover > .nav-link {
+    border-bottom: 2px solid var(--czqo-blue) !important;
+}
+
+#czqoHeaderLight.navbar-light .nav-item:not(#accountDropdown).active > .nav-link {
+    border-bottom: 2px solid var(--czqo-blue) !important;
+}
+
+#czqoHeaderLight.navbar-light .nav-item#accountDropdown > .nav-link {
+    color: var(--czqo-blue) !important;
+}
+
+body[data-theme="dark"]#czqoHeaderLight.navbar-light .nav-item:not(#accountDropdown) > .nav-link {
+    color: #fff;
 }

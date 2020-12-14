@@ -1,4 +1,4 @@
-@extends('layouts.master', ['adminNavBar' => true])
+@extends('layouts.primary', ['adminNavBar' => true])
 @section('content')
 <script src="{{asset('js/instructing.js')}}"></script>
 <div class="container py-4" style="padding-bottom: 5rem !important;">
