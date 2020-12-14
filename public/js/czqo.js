@@ -913,7 +913,7 @@ async function createMap(planes, controllerOnline) {
     })
 
     //Add Gander/Shanwick bubbles if they're online
-    if (!controllerOnline) {
+    if (controllerOnline) {
         var ganderOca = L.polygon([
             [45.0, -30],
             [45.0, -40],

@@ -4,8 +4,8 @@
 
 @section('content')
     <div style="height: calc(100vh - 74px); z-index: -1" class="z-depth-0 jarallax">
-        <img src="https://media.discordapp.net/attachments/498332235154456579/776750234592083968/unknown.png?width=922&height=519" alt="" class="jarallax-img">
-        <div class="flex-center flex-column">
+        <img src="https://media.discordapp.net/attachments/498332235154456579/695982036346994708/unknown.png" alt="" class="jarallax-img">
+        <div class="flex-center mask rgba-black-light flex-column">
             <div class="container">
                 <h1 class="display-2 fw-700 white-text">Cool. Calm. Collected.</h1>
                 <h2 style="font-size:3em;" class="fw-500 mt-4 white-text">Welcome to Gander Oceanic.</h2>

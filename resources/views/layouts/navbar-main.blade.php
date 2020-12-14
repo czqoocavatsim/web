@@ -66,7 +66,7 @@
         <ul class="navbar-nav nav-flex-icons">
             @unless (Auth::check())
             <li class="nav-item d-flex align-items-center">
-                <a href="{{route('auth.connect.login')}}" class="nav-link waves-effect waves-light">
+                <a href="{{route('auth.connect.login')}}" class="nav-link blue-text fw-800 waves-effect waves-light">
                     <i class="fas fa-sign-in-alt"></i>&nbsp;Log In
                 </a>
             </li>
