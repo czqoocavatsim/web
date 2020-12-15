@@ -32,7 +32,7 @@ class AuthController extends Controller
     {
         Auth::logout();
 
-        return redirect('/');
+        return redirect('/')->with('info', 'Logged out.');
     }
 
     /*

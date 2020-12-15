@@ -95,22 +95,37 @@
         <footer class="page-footer text-dark font-small" style="bottom:0; background: rgb(239, 239, 239)">
             <div class="container py-5">
                 <div class="d-none d-md-block">
-                    <div class="d-flex flex-row justify-content-between">
-                        <p class="mb-3">Copyright (C) Gander Oceanic OCA {{App\Models\Settings\CoreSettings::where('id', 1)->firstOrFail()->copyright_year}}. All Rights Reserved.<br>Not to be used for real world navigation. Flight simulation only.</p>
-                        <ul class="text-right list-unstyled">
-                            <li>
-                                <a class="text-body fw-600" href="https://vatcan.ca">VATCAN</a>
-                            </li>
-                            <li>
-                                <a class="text-body fw-600" href="https://vatsim.net">VATSIM</a>
-                            </li>
-                            <li class="mt-3">
-                                <a class="text-body fw-600" href="" data-target="#aboutCoreModal" data-toggle="modal">About CZQO Core</a>
-                            </li>
-                            <li>
-                                <a class="text-body fw-600" href="{{route('policies')}}#policyEmbed3">Privacy Policy</a>
-                            </li>
-                        </ul>
+                    <p class="mb-3">Copyright (C) Gander Oceanic OCA {{App\Models\Settings\CoreSettings::where('id', 1)->firstOrFail()->copyright_year}}. All Rights Reserved.<br>Not to be used for real world navigation. Flight simulation only.</p>
+                    <div class="flex-left my-4">
+                        <a href="{{route('feedback.create')}}" class="font-weight-bold black-text">Feedback</a>
+                        &nbsp;
+                        •
+                        &nbsp;
+                        <a href="{{route('about.core')}}" class="font-weight-bold black-text">About</a>
+                        &nbsp;
+                        •
+                        &nbsp;
+                        <a href="{{route('privacy')}}" class="font-weight-bold black-text">Privacy Policy</a>
+                        &nbsp;
+                        •
+                        &nbsp;
+                        <a href="https://github.com/gander-oceanic-fir-vatsim/czqo-core" class="font-weight-bold black-text">GitHub</a>
+                        &nbsp;
+                        •
+                        &nbsp;
+                        <a href="{{url('/branding')}}" class="font-weight-bold black-text">Branding</a>
+                        &nbsp;
+                        •
+                        &nbsp;
+                        <a href="#" data-toggle="modal" data-target="#contactUsModal" class="font-weight-bold black-text">Contact Us</a>
+                        &nbsp;
+                        •
+                        &nbsp;
+                        <a href="https://vatsim.net" class="font-weight-bold black-text">VATSIM</a>
+                        &nbsp;
+                        •
+                        &nbsp;
+                        <a href="https://vatcan.ca" class="font-weight-bold black-text">VATCAN</a>
                     </div>
                     <div class="d-flex flex-row justify-content-between align-items-end">
                         <div>
