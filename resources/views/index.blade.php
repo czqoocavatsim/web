@@ -10,13 +10,25 @@
                 <h1 class="display-2 fw-700 white-text">Cool. Calm. Collected.</h1>
                 <h2 style="font-size:3em;" class="fw-500 mt-4 white-text">Welcome to Gander Oceanic.</h2>
             </div>
-            <div class="container d-sm-none px-5">
-                <h1 class="display-2 fw-700 white-text">Cool. Calm. Collected.</h1>
-                <h2 style="font-size:3em;" class="fw-500 mt-4 white-text">Welcome to Gander Oceanic.</h2>
+            <div class="container d-sm-none">
+                <h1 class="display-2 fw-700 white-text" style="font-size: 4.5em;">Cool. Calm. Collected.</h1>
+                <h2 style="font-size:2em;" class="fw-500 mt-4 white-text">Welcome to Gander Oceanic.</h2>
             </div>
         </div>
     </div>
     <div class="jumbtron" style="margin-top: -100px; z-index: 999;">
+        @if($nextEvent)
+        <div class="container px-5 py-3 mb-0 blue darken-2 white-text">
+            <p style="font-size: 1.4em;" class="font-weight-bold mb-0">
+                <a href="{{route('events.view', $nextEvent->slug)}}" class="white-text">
+                    <i class="fa fa-calendar"></i>&nbsp;&nbsp;Upcoming: {{$nextEvent->name}}
+                </a>
+                <span class="fw-400">
+                    {{$nextEvent->start_timestamp_pretty()}}
+                </span>
+            </p>
+        </div>
+        @endif
         <div class="container blue z-depth-2 px-5 pt-5 pb-3 mb-5">
             <div class="row">
                 <div class="col-md-6 mb-4">
