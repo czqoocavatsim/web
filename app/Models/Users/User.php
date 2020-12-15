@@ -15,7 +15,7 @@ use App\Models\News;
 use App\Models\Publications;
 use App\Models\Roster\RosterMember;
 use App\Models\Settings;
-use App\Models\Tickets;
+use App\Models\Support;
 use App\Models\Training\Application;
 use App\Models\Training\Instructing\Records\TrainingSession;
 use Exception;
@@ -95,12 +95,12 @@ class User extends Authenticatable
 
     public function tickets()
     {
-        return $this->hasMany(Tickets\Ticket::class);
+        return $this->hasMany(Support\SupportTicket::class);
     }
 
     public function ticketReplies()
     {
-        return $this->hasMany(Tickets\TicketReply::class);
+        return $this->hasMany(Support\SupportTicketMessage::class);
     }
 
     public function staffProfile()
