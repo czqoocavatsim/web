@@ -47,7 +47,7 @@ class ProcessSoloCertExpiryWarnings implements ShouldQueue
                 //Discord notification in instructors channel
                 $discord = new DiscordClient(['token' => config('services.discord.token')]);
                 $discord->channel->createMessage([
-                    'channel.id' => intval(config('services.discord.web_logs')),
+                    'channel.id' => intval(config('services.discord.instructors')),
                     "content" => "",
                     'embed' => [
                         "title" => "Solo certification for " . $cert->rosterMember->user->fullName('FLC') . " is about to expire.",
