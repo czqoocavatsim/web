@@ -338,7 +338,7 @@ class Kernel extends ConsoleKernel
         })->monthlyOn(1, '00:00');
 
         //Solo cert expiry warning
-        //$schedule->job(new ProcessSoloCertExpiryWarnings)->daily()->days([0, 2, 4, 6]);
+        $schedule->job(new ProcessSoloCertExpiryWarnings)->daily()->days([0, 2, 4, 6]);
 
         // Discord role updating
         //$schedule->job(new UpdateDiscordUserRoles)->twiceDaily(6, 18);
