@@ -27,6 +27,16 @@ class ProcessSoloCertExpiryWarnings implements ShouldQueue
      */
     public function __construct()
     {
+    }
+
+    /**
+     * Execute the job.
+     *
+     * @return void
+     */
+    public function handle()
+    {
+
         //Get all active solo certs
         $certs = SoloCertification::where('expires', '>', Carbon::now())->get();
 
@@ -37,7 +47,7 @@ class ProcessSoloCertExpiryWarnings implements ShouldQueue
                 //Discord notification in instructors channel
                 $discord = new DiscordClient(['token' => config('services.discord.token')]);
                 $discord->channel->createMessage([
-                    'channel.id' => intval(config('services.discord.instructors')),
+                    'channel.id' => intval(config('services.discord.web_logs')),
                     "content" => "",
                     'embed' => [
                         "title" => "Solo certification for " . $cert->rosterMember->user->fullName('FLC') . " is about to expire.",
@@ -63,15 +73,5 @@ class ProcessSoloCertExpiryWarnings implements ShouldQueue
                 $cert->rosterMember->user->notify(new SoloCertExpiringUser($cert));
             }
         }
-    }
-
-    /**
-     * Execute the job.
-     *
-     * @return void
-     */
-    public function handle()
-    {
-        //
     }
 }
