@@ -3,6 +3,7 @@
 namespace App\Console;
 
 use App\AuditLogEntry;
+use App\Jobs\ProcessSoloCertExpiryWarnings;
 use App\Jobs\UpdateDiscordUserRoles;
 use App\Models\Roster\RosterMember;
 use App\Models\Network\MonitoredPosition;
@@ -335,6 +336,9 @@ class Kernel extends ConsoleKernel
                 $rosterMember->save();
             }
         })->monthlyOn(1, '00:00');
+
+        //Solo cert expiry warning
+        $schedule->job(new ProcessSoloCertExpiryWarnings)->daily()->days([0, 2, 4, 6]);
 
         // Discord role updating
         //$schedule->job(new UpdateDiscordUserRoles)->twiceDaily(6, 18);

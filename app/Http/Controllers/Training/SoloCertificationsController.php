@@ -89,6 +89,18 @@ class SoloCertificationsController extends Controller
 
         //Redirect
         //return redirect()->route('training.admin.solocertifications.view', compact('cert'));
-        return redirect()->route('training.admin.solocertifications');
+        return redirect()->route('training.admin.solocertifications')->with('success', 'Solo certification granted!');
+    }
+
+    public function revokeSoloCert($cert_id)
+    {
+        //Get cert
+        $cert = SoloCertification::whereId($cert_id)->firstOrFail();
+
+        //Delete
+        $cert->delete();
+
+        //Return
+        return redirect()->route('training.admin.solocertifications')->with('info', 'Solo certification revoked');
     }
 }

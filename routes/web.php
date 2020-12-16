@@ -28,6 +28,7 @@ Route::view('/pilots/oceanic-clearance', 'pilots.oceanic-clearance');
 Route::view('/pilots/position-report', 'pilots.position-report');
 Route::view('/pilots/tracks', 'pilots.tracks');
 Route::view('/pilots/tracks/event', 'pilots.event-tracks');
+Route::view('/pilots/tracks/concorde', 'pilots.concorde-tracks');
 Route::get('/policies', 'Publications\PublicationsController@policies')->name('policies');
 Route::get('/privacy', function() { return redirect(route('policies'), 301); })->name('privacy');
 Route::get('/events', 'Events\EventController@index')->name('events.index');
@@ -213,6 +214,7 @@ Route::group(['middleware' => 'auth'], function () {
                     //Solo certifications
                     Route::get('/solocertifications', 'Training\SoloCertificationsController@admin')->name('solocertifications')->middleware('can:view roster admin');
                     Route::post('/solocertifications/add', 'Training\SoloCertificationsController@addSoloCertificationPost')->name('solocertifications.add')->middleware('can:edit roster');
+                    Route::get('/solocertifications/{cert_id}/revoke', 'Training\SoloCertificationsController@revokeSoloCert')->name('solocertifications.revoke')->middleware('can:edit roster');
 
                     //Applications
                     Route::get('/applications', 'Training\ApplicationsController@admin')->name('applications')->middleware('can:view applications');

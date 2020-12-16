@@ -1,4 +1,6 @@
 @extends('layouts.primary')
+@section('title', 'Concorde Tracks - ')
+@section('description', 'Legacy Concorde NAT Tracks')
 @section('content')
 <script src="{{asset('js/leaflet.latlng.js')}}"></script>
 <div class="container py-4">
@@ -7,10 +9,9 @@
             @include('layouts.toolSidebar')
         </div>
         <div class="col-md-9">
-            <h1 class="font-weight-bold blue-text mb-3">Event NAT Tracks</h1>
-            <p>The tracks utlised for our latest event.</p>
+            <h1 class="font-weight-bold blue-text mb-3">Concorde NAT Tracks</h1>
             <div style="height: 400px;" id="map"></div>
-            <p>Red = Westbound, Blue = Eastbound</p>
+            <p>Blue = Westbound, Red = Eastbound</p>
             <table id="natTrackTable" class="table table-responsive table-striped">
                 <thead>
                 <tr>
@@ -24,11 +25,11 @@
                 <tbody id="tableBody">
                 </tbody>
             </table>
-
+            <p>For more information about Concorde tracks, check out this page: https://www.heritageconcorde.com/air-traffic-control-of-concorde-</p>
             <p class="mt-3 text-muted">Special thank you to Christian Kovanen 1379372 for the boundaries and fixes.</p>
         </div>
         <script>
-            createEventTrackMap();
+            createConcordeTrackMap();
         </script>
     </div>
 </div>

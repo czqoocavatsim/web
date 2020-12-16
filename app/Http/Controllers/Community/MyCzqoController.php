@@ -18,6 +18,11 @@ class MyCzqoController extends Controller
     /*
     Privacy Policy/Account Init
     */
+    /**
+     * POST route for accepting the privacy policy.
+     * @param  Request $request
+     * @return redirect to myczqo
+     */
     public function acceptPrivacyPolicy(Request $request)
     {
         //Get the user
@@ -51,6 +56,10 @@ class MyCzqoController extends Controller
         return redirect()->route('my.index')->with('success', "Welcome to Gander Oceanic, {$user->fullName('F')}! We are glad to have you on board.");
     }
 
+    /**
+     * GET request for denying privacy policy
+     * @return redirect Logout
+     */
     public function denyPrivacyPolicy()
     {
         //Get the user
@@ -80,9 +89,11 @@ class MyCzqoController extends Controller
         return redirect()->route('index')->with('info', 'Your account has been removed from Gander Oceanic as you did not accept our Privacy Policy.');
     }
 
-    /*
-    Biography
-    */
+    /**
+     * POST request for saving biography
+     * @param  Request $request
+     * @return redirect to myczqo
+     */
     public function saveBiography(Request $request)
     {
         $this->validate($request, [
@@ -107,7 +118,11 @@ class MyCzqoController extends Controller
     Avatars
     */
 
-    //Change avatar (custom image)
+    /**
+     * POST request for changing avatar to a custom image
+     * @param  Request $request
+     * @return redirect
+     */
     public function changeAvatarCustomImage(Request $request)
     {
         //Validate
@@ -134,7 +149,10 @@ class MyCzqoController extends Controller
         return redirect()->route('my.index')->with('success', 'Avatar changed to a custom image!');
     }
 
-    //Change avatar (Discord)
+    /**
+     * GET request for changing avatar to Discord avatar
+     * @return redirect
+     */
     public function changeAvatarDiscord()
     {
         //Get user
@@ -153,7 +171,10 @@ class MyCzqoController extends Controller
         return redirect()->route('my.index')->with('success', 'Avatar changed to your Discord avatar!');
     }
 
-    //Change avatar initials
+    /**
+     * GET request for changing avatar to initials
+     * @return redirect
+     */
     public function changeAvatarInitials()
     {
         //Get user
@@ -167,9 +188,11 @@ class MyCzqoController extends Controller
         return redirect()->route('my.index')->with('success', 'Avatar changed to your initials!');
     }
 
-    /*
-    Display name
-    */
+    /**
+     * POST request for changing user display name
+     * @param  Request $request
+     * @return redirect
+     */
     public function changeDisplayName(Request $request)
     {
         //Validate
@@ -205,9 +228,10 @@ class MyCzqoController extends Controller
         return redirect()->back()->with('success', 'Display name saved! If your avatar is set to default, it may take a while for the initials to update.');
     }
 
-    /*
-    Preferences
-    */
+    /**
+     * GET request for accessing preferences
+     * @return view
+     */
     public function preferences()
     {
         //Get preferences
@@ -217,6 +241,11 @@ class MyCzqoController extends Controller
         return view('my.preferences', compact('preferences'));
     }
 
+    /**
+     * POST AJAX request for updating preferneces
+     * @param  Request $request
+     * @return response
+     */
     public function preferencesPost(Request $request)
     {
         //Validate

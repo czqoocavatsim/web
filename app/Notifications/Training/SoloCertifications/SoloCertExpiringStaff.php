@@ -7,7 +7,7 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
 
-class SoloCertGranted extends Notification
+class SoloCertExpiringStaff extends Notification
 {
     use Queueable;
 
@@ -41,16 +41,15 @@ class SoloCertGranted extends Notification
     public function toMail($notifiable)
     {
         return (new MailMessage)
-            ->subject("Solo Certification Granted")
+            ->subject("Solo Certification Expiring ({$this->cert->rosterMember->user->id})")
             ->greeting("Hi there,")
-            ->line("You have been granted a solo certification.")
+            ->line("A solo certification is about to expire.")
             ->line("Expiry: {$this->cert->expires->toFormattedDateString()}")
             ->line("Granted by: {$this->cert->instructor->fullName('FLC')}")
-            ->line("Your use of this solo certification is bound to our policies and VATSIM's GRP. Your instructor will give you more information.")
-            ->line("If you believe this is a mistake or have any questions, please email the Chief Instructor.")
-            ->line("*You were sent this email as your training status with Gander Oceanic has been updated.*")
+            ->line("Student: {$this->cert->rosterMember->user->fullName('FLC')}")
             ->salutation("Gander Oceanic OCA");
     }
+
 
     /**
      * Get the array representation of the notification.

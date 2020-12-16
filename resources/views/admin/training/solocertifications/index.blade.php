@@ -1,6 +1,6 @@
 @extends('admin.training.layouts.main')
 @section('training-content')
-<h1 class="blue-text pb-2">Solo Certifications</h1>
+<h1 class="blue-text font-weight-bold pb-2">Solo Certifications</h1>
 <ul class="list-unstyled mt-2 mb-0">
     <li class="mb-2">
         <a href="#" data-target="#addSoloCertificationModal" data-toggle="modal" style="text-decoration:none;"><span class="blue-text"><i class="fas fa-chevron-right"></i></span> &nbsp; <span class="black-text">Add solo certification</span></a>
@@ -11,16 +11,20 @@
         <th>CID</th>
         <th>Name</th>
         <th>Expires</th>
+        <th>Revoke</th>
     </thead>
     <tbody>
         @foreach ($certs as $c)
             <tr>
-                <th scope="row" class="font-weight-bold"><a href="#">{{$c->rosterMember->cid}}</a></th>
+                <th scope="row" class="font-weight-bold">{{$c->rosterMember->cid}}</th>
                 <td>
                     {{$c->rosterMember->user->fullName('FL')}}
                 </td>
                 <td>
                     {{$c->expires->toDateString()}}
+                </td>
+                <td>
+                    <a class="red-text" href="{{route('training.admin.solocertifications.revoke', $c->id)}}"><i class="fa fa-trash-alt"></i> Revoke</a>
                 </td>
             </tr>
         @endforeach
