@@ -65,50 +65,30 @@ class RosterMember extends Model
 
     public function meetsActivityRequirement()
     {
-        // Get date certified
-        try {
-            $certifiedDate = Carbon::createFromFormat('Y-m-d H:i:s', $this->date_certified);
-            error_log($certifiedDate);
-        } catch (\InvalidArgumentException $e) { // Catch exception if date is null
-            $certifiedDate = null;
+        //If not active
+        if (!$this->active) {
+            return false;
         }
 
-        if($this->active) {
+        //If meets requirement outright
+        if ($this->currency >= 3.0) {
+            return true;
+        }
 
-            // Check if certified in last 6mo
-            $diff = $certifiedDate != null ? Carbon::now()->diffInMonths($certifiedDate) : null; // Get date diff
+        //Check if its due to certified date
+        if ($this->date_certified) {
+            $certifiedDate = Carbon::create($this->date_certified);
 
-            // If less than 6 months
-            if ($diff != null && $diff <= 6) {
-                switch($diff) { // Switch the activity and check appropriate hours based on number
-                    case 0:
-                        break;
-                    case 1: // 1 month
-                        return $this->currency >= 1.0 ?: false;
-                        break;
-                    case 2: // 2 months
-                        return $this->currency >= 2.0 ?: false;
-                        break;
-                    case 3: // 3 months
-                        return $this->currency >= 3.0 ?: false;
-                        break;
-                    case 4: // 4 months
-                        return $this->currency >= 4.0 ?: false;
-                        break;
-                    case 5: // 5 months
-                        return $this->currency >= 5.0 ?: false;
-                        break;
-                    default: // Default
-                        $isActive = true;
-                        break;
-                }
-            }
-            else {
-                //Does not meet requirement
-                return false;
+            //Get difference
+            $diff = Carbon::now()->diffInMonths($certifiedDate);
+
+            //If difference is equal to or less than 3 months
+            if ($diff <= 3) {
+                return true; //Exempt as per policy
             }
         }
 
+        //No
         return false;
     }
 
