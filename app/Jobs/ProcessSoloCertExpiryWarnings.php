@@ -38,7 +38,7 @@ class ProcessSoloCertExpiryWarnings implements ShouldQueue
     {
 
         //Get all active solo certs
-        $certs = SoloCertification::where('expires', '>', Carbon::now())->get();
+        $certs = SoloCertification::where('expires', '>', Carbon::now())->where('expiry_notification_sent', false)->get();
 
         //Go through certs
         foreach ($certs as $cert) {
@@ -71,6 +71,11 @@ class ProcessSoloCertExpiryWarnings implements ShouldQueue
 
                 //Notify user
                 $cert->rosterMember->user->notify(new SoloCertExpiringUser($cert));
+
+                //Add time to cert
+                $cert->expiry_notification_sent = true;
+                $cert->expiry_notification_time = Carbon::now();
+                $cert->save();
             }
         }
     }
