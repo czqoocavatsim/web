@@ -1,12 +1,8 @@
-@extends('layouts.primary')
-@section('content')
-<script src="{{asset('js/leaflet.latlng.js')}}"></script>
+@extends('pilots.layout')
+@section('title', 'Event Tracks - ')
+@section('description', 'Gander Oceanic special event NAT Tracks')
+@section('pilot-content')
 <div class="container py-4">
-    <div class="row">
-        <div class="col-md-3">
-            @include('layouts.toolSidebar')
-        </div>
-        <div class="col-md-9">
             <h1 class="font-weight-bold blue-text mb-3">Event NAT Tracks</h1>
             <p>The tracks utlised for our latest event.</p>
             <div style="height: 400px;" id="map"></div>
@@ -31,7 +27,6 @@
             createEventTrackMap();
         </script>
     </div>
-</div>
 <style>
     .leaflet-tooltip {
     position: absolute;

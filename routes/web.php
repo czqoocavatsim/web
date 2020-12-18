@@ -24,11 +24,11 @@ Route::get('/roster/solo-certs', 'Training\SoloCertificationsController@public')
 Route::get('/staff', function() { return redirect(route('staff'), 301); });
 Route::get('/atc/resources', 'Publications\PublicationsController@atcResources')->name('atcresources.index');
 Route::view('/pilots', 'pilots.index');
-Route::view('/pilots/oceanic-clearance', 'pilots.oceanic-clearance');
-Route::view('/pilots/position-report', 'pilots.position-report');
-Route::view('/pilots/tracks', 'pilots.tracks');
-Route::view('/pilots/tracks/event', 'pilots.event-tracks');
-Route::view('/pilots/tracks/concorde', 'pilots.concorde-tracks');
+Route::view('/pilots/oceanic-clearance', 'pilots.oceanic-clearance')->name('pilots.oceanic-clearance');
+Route::view('/pilots/position-report', 'pilots.position-report')->name('pilots.position-report');
+Route::view('/pilots/tracks', 'pilots.tracks')->name('pilots.tracks');
+Route::view('/pilots/tracks/event', 'pilots.event-tracks')->name('pilots.event-tracks');
+Route::view('/pilots/tracks/concorde', 'pilots.concorde-tracks')->name('pilots.concorde-tracks');
 Route::get('/policies', 'Publications\PublicationsController@policies')->name('policies');
 Route::get('/privacy', function() { return redirect(route('policies'), 301); })->name('privacy');
 Route::get('/events', 'Events\EventController@index')->name('events.index');

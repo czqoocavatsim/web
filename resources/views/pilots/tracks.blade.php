@@ -1,12 +1,8 @@
-@extends('layouts.primary')
-@section('content')
-<script src="{{asset('js/leaflet.latlng.js')}}"></script>
+@extends('pilots.layout')
+@section('title', 'Current Tracks - ')
+@section('description', 'Current NAT Tracks')
+@section('pilot-content')
 <div class="container py-4">
-    <div class="row">
-        <div class="col-md-3">
-            @include('layouts.toolSidebar')
-        </div>
-        <div class="col-md-9">
             <h1 class="font-weight-bold blue-text mb-3">Current NAT Tracks</h1>
             <div style="height: 400px;" id="map"></div>
             <p>Red = Westbound, Blue = Eastbound</p>
@@ -29,7 +25,6 @@
             createNatTrackMap();
         </script>
     </div>
-</div>
 <style>
     .leaflet-tooltip {
     position: absolute;
