@@ -3,6 +3,8 @@
 @section('description', 'Gander Oceanic special event NAT Tracks')
 @section('pilot-content')
 <div class="container py-4">
+    <script src="{{asset('js/leaflet.latlng.js')}}"></script>
+
             <h1 class="font-weight-bold blue-text mb-3">Event NAT Tracks</h1>
             <p>The tracks utlised for our latest event.</p>
             <div style="height: 400px;" id="map"></div>

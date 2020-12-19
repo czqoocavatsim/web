@@ -3,6 +3,7 @@
 @section('description', 'Current NAT Tracks')
 @section('pilot-content')
 <div class="container py-4">
+    <script src="{{asset('js/leaflet.latlng.js')}}"></script>
             <h1 class="font-weight-bold blue-text mb-3">Current NAT Tracks</h1>
             <div style="height: 400px;" id="map"></div>
             <p>Red = Westbound, Blue = Eastbound</p>

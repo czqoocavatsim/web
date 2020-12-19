@@ -127,7 +127,10 @@ class MyCzqoController extends Controller
     {
         //Validate
         $messages = [
-            'file.mimes' => 'The image must be either a JPEG, PNG, JPG, or GIF file.'
+            'file.mimes' => 'The image must be either a JPEG, PNG, JPG, or GIF file.',
+            'file.required' => 'Please select an image to upload.',
+            'file.max' => 'Images must be 2MB in size or below.',
+            'file.images' => 'The image must be either a JPEG, PNG, JPG, or GIF file.'
         ];
 
         $this->validate($request, [
@@ -160,7 +163,7 @@ class MyCzqoController extends Controller
 
         //They need Discord don't they
         if (!$user->hasDiscord()) {
-            return redirect()->route('my.index')->with('error-modal', 'You must link your Discord account must.');
+            return redirect()->route('my.index')->with('error-modal', 'You must link your Discord account first.');
         }
 
         //Change avatar mode and save
