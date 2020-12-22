@@ -227,7 +227,6 @@ class DiscordController extends Controller
         //Add them to guild
         try {
             $discord->guild->addGuildMember($arguments);
-            return redirect()->route('my.index')->with('error-modal', 'There was an error adding you to the server. Please try again later. If it still doesn\'t work, report it to the Web Team via the Feedback page. (CommandClientException)');
         } catch (CommandClientException $ex) {
             return redirect()->route('my.index')->with('error-modal', 'There was an error adding you to the server. Please try again later. If it still doesn\'t work, report it to the Web Team via the Feedback page. (CommandClientException)');
         }

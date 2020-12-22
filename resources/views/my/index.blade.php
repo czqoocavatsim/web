@@ -256,9 +256,17 @@
                     <div class="col-md">
                         @if(Auth::user()->pendingApplication())
                             <a href="{{route('training.applications.show', Auth::user()->pendingApplication()->reference_id)}}" class="list-group-item list-group-item-action p-4 z-depth-1 shadow-none mb-3">
-                                <h5 class="blue-text">You have a pending application for Gander Oceanic</h5>
+                                <h4 class="blue-text fw-600">You have a pending application for Gander Oceanic</h4>
                                 <p style="font-size:1.1em;" class="m-0">#{{Auth::user()->pendingApplication()->reference_id}} - submitted {{Auth::user()->pendingApplication()->created_at->diffForHumans()}}</p>
                             </a>
+                        @endif
+                        @if ($studentProfile = Auth::user()->studentProfile && $cert = Auth::user()->studentProfile->soloCertification())
+                        <div class="list-group-item rounded p-4 mb-3 z-depth-1 shadow-none">
+                            <h4 class="fw-600 blue-text">{{ $cert->expires->diffInDays(Carbon\Carbon::now()) <= 2 ? 'Your solo certification is about to expire' : 'Your active solo certification'}}</h4>
+                            <h6 class="fw-500">Expires: {{$cert->expires->toFormattedDateString()}} (in {{$cert->expires->diffForHumans()}})</h6>
+                            <h6 class="fw-500">Granted by: {{$cert->instructor->fullName('FL')}}</h6>
+                            <p class="mt-3 mb-0">{{ $cert->expires->diffInDays(Carbon\Carbon::now()) <= 2 ? 'Contact your instructor to request an extension or proceed to an OTS assessment.' : 'Your use of this solo certification is bound to our policies and VATSIM\'s GRP. Your instructor will give you more information.'}}</p>
+                        </div>
                         @endif
                     </div>
                 </div>
