@@ -1,7 +1,7 @@
 @php if (!isset($logo)) $logo = 'white' @endphp
 <div class="container py-2">
     @if ($logo == 'white')
-    <a class="navbar-brand" href="{{route('index')}}"><img style="height: 50px; width:auto;" id="czqoHeaderImg" src="https://ams3.digitaloceanspaces.com/ganderoceanicoca/resources/media/img/brand/bnr/ZQO_XMAS_BNR_TSPWHITE.png" alt=""></a>
+    <a class="navbar-brand" href="{{route('index')}}"><img style="height: 45px; width:auto;" id="czqoHeaderImg" src="https://ams3.digitaloceanspaces.com/ganderoceanicoca/resources/media/img/brand/bnr/ZQO_BNR_TSPWHITE.png" alt=""></a>
     @else
     <a class="navbar-brand" href="{{route('index')}}"><img style="height: 45px; width:auto;" id="czqoHeaderImg" src="https://ams3.digitaloceanspaces.com/ganderoceanicoca/resources/media/img/brand/bnr/ZQO_BNR_TSPBLUE.png" alt=""></a>
     @endif
