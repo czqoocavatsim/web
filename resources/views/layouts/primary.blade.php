@@ -97,7 +97,7 @@
                 <div class="d-none d-md-block">
                     <p class="mb-3">Copyright (C) Gander Oceanic OCA {{App\Models\Settings\CoreSettings::where('id', 1)->firstOrFail()->copyright_year}}. All Rights Reserved.<br>Not to be used for real world navigation. Flight simulation only.</p>
                     <div class="flex-left my-4">
-                        <a href="{{route('feedback.create')}}" class="font-weight-bold black-text">Feedback</a>
+                        <a href="{{route('index')}}" class="font-weight-bold black-text">Feedback</a>
                         &nbsp;
                         •
                         &nbsp;

@@ -17,7 +17,7 @@
                 </ul>
             </div>
         @endif
-        <form action="{{route('feedback.create.post')}}" method="POST">
+        <form action="{{route('index.post')}}" method="POST">
             @csrf
             <ul class="mt-0 pt-0 pl-0 stepper stepper-vertical">
                 <li class="active">

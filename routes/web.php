@@ -99,10 +99,6 @@ Route::group(['middleware' => 'auth'], function () {
         Route::get('/notificationclear', 'Users\NotificationRedirectController@clearAll');
 
 
-        //Feedback
-        Route::get('/feedback', 'Feedback\FeedbackController@create')->name('feedback.create');
-        Route::post('/feedback', 'Feedback\FeedbackController@createPost')->name('feedback.create.post');
-
         //Support
         Route::prefix('support')->group(function () {
             //Support home
@@ -153,12 +149,6 @@ Route::group(['middleware' => 'auth'], function () {
                 Route::get('portal/actions', 'Training\TrainingPortalController@actions')->name('actions');
             });
         });
-
-        //Support
-        Route::prefix('support')->name('support.')->group(function () {
-            Route::get('/', 'Support\TicketsController@index')->name('index');
-        });
-
 
         Route::group(['middleware' => 'can:view events'], function () {
             //Events
