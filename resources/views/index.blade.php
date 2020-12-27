@@ -262,7 +262,6 @@
             speed: 0.2,
             zIndex: -1
         });
-        snowStorm();
     </script>
 
 @endsection
