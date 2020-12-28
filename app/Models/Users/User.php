@@ -11,13 +11,15 @@ use App\Models\Community\Discord\DiscordBan;
 use App\Models\ControllerBookings;
 use App\Models\Events;
 use App\Models\Network;
-use App\Models\News;
+use App\Models\News\News;
 use App\Models\Publications;
 use App\Models\Roster\RosterMember;
 use App\Models\Settings;
 use App\Models\Tickets;
 use App\Models\Training\Application;
+use App\Models\Training\Instructing\Instructors\Instructor;
 use App\Models\Training\Instructing\Records\TrainingSession;
+use App\Models\Training\Instructing\Students\Student;
 use Exception;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Log;
@@ -59,6 +61,11 @@ class User extends Authenticatable
         'password', 'remember_token',
     ];
 
+    /**
+     * Is the user a bot?
+     *
+     * @return boolean
+     */
     public function isBot()
     {
         if ($this->id == 1 || $this->id == 2) {
@@ -75,60 +82,66 @@ class User extends Authenticatable
      */
     public function news()
     {
-        return $this->hasMany(News\News::class);
+        return $this->hasMany(News::class);
     }
 
+    /**
+     * Return the users applications.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
     public function applications()
     {
-        return $this->hasMany(Training\Application::class);
+        return $this->hasMany(Application::class);
     }
 
+    /**
+     * Return their instructor profile, if they have one.
+     *
+     * @return App\Models\Training\Instructing\Instructors\Instructor
+     */
     public function instructorProfile()
     {
-        return $this->hasOne(Training\Instructing\Instructors\Instructor::class);
+        return $this->hasOne(Instructor::class);
     }
 
+    /**
+     * Return their student profile, if they have one.
+     *
+     * @return App\Models\Training\Instructing\Students\Student
+     */
     public function studentProfile()
     {
-        return $this->hasOne(Training\Instructing\Students\Student::class);
+        return $this->hasOne(Student::class);
     }
 
-    public function tickets()
-    {
-        return $this->hasMany(Tickets\Ticket::class);
-    }
-
-    public function ticketReplies()
-    {
-        return $this->hasMany(Tickets\TicketReply::class);
-    }
-
+    /**
+     * Return their staff member profile, if they're a staff member.
+     *
+     * @return App\Models\Users\StaffProfile
+     */
     public function staffProfile()
     {
         return $this->hasOne(StaffMember::class);
     }
 
+    /**
+     * Return their roster member profile, if they're on the roster.
+     *
+     * @return App\Models\Roster\RosterMember
+     */
     public function rosterProfile()
     {
         return $this->hasOne(RosterMember::class);
     }
 
-    public function notifications()
+    /**
+     * Days user has existed.
+     *
+     * @return integer
+     */
+    public function userSinceInDays()
     {
-        return $this->hasMany(UserNotification::class);
-    }
-
-    public function notes()
-    {
-        return $this->hasMany(UserNote::class);
-    }
-
-    public function bookingBanObj()
-    {
-        return $this->hasOne(ControllerBookings\ControllerBookingsBan::class);
-    }
-
-    public function userSinceInDays(){
         $created = $this->created_at;
         $now = Carbon::now();
         $difference = $created->diff($now)->days;
@@ -136,6 +149,11 @@ class User extends Authenticatable
         return $difference;
     }
 
+    /**
+     * The user's highest assigned role.
+     *
+     * @return Spatie\Permission\Models\Role
+     */
     public function highestRole()
     {
         //If the user doesnt have a role, then give them one temporarily.
@@ -150,6 +168,15 @@ class User extends Authenticatable
         return $this->roles[0];
     }
 
+    /**
+     * Get the user's name in requested format.
+     * FLC - First, Last, CID
+     * FL - First, Last
+     * F - First
+     *
+     * @param string $format
+     * @return string|null
+     */
     public function fullName($format)
     {
         //display name check
@@ -176,6 +203,11 @@ class User extends Authenticatable
         return null;
     }
 
+    /**
+     * Is the user's avatar the default (initials) avatar?
+     *
+     * @return boolean
+     */
     public function isAvatarDefault()
     {
         if ($this->avatar_mode == 0) {
@@ -185,35 +217,32 @@ class User extends Authenticatable
         return false;
     }
 
-    public function certified()
-    {
-        if (!$this->rosterProfile()) {
-            return false;
-        }
-
-        return true;
-    }
-
-    public function bookingBanned()
-    {
-        if (!ControllerBookings\ControllerBookingsBan::where('user_id', $this->id)->first()) {
-            return false;
-        }
-
-        return true;
-    }
-
+    /**
+     * Returns their Discord DM channel snowflake ID for notifications.
+     *
+     * @return integer|null
+     */
     public function routeNotificationForDiscord()
     {
         return $this->discord_dm_channel_id;
     }
 
+    /**
+     * Does the user have a linked Discord account?
+     *
+     * @return boolean
+     */
     public function hasDiscord()
     {
         if (!$this->discord_user_id) { return false; }
         return true;
     }
 
+    /**
+     * Returns the user's Discord account data.
+     *
+     * @return \RestCord\Model\User\User|null
+     */
     public function getDiscordUser()
     {
         return Cache::remember('users.discorduserdata.'.$this->id, 84600, function () {
@@ -223,6 +252,11 @@ class User extends Authenticatable
         });
     }
 
+    /**
+     * Returns the user's Discord avatar URL.
+     *
+     * @return string|null
+     */
     public function getDiscordAvatar()
     {
         return Cache::remember('users.discorduserdata.'.$this->id.'.avatar', 21600, function () {
@@ -233,6 +267,11 @@ class User extends Authenticatable
         });
     }
 
+    /**
+     * Returns a true/false of whether the user is a member of the Discord guild.
+     *
+     * @return boolean
+     */
     public function memberOfCzqoGuild()
     {
         $discord = new DiscordClient(['token' => config('services.discord.token')]);
@@ -247,21 +286,12 @@ class User extends Authenticatable
         return false;
     }
 
-    public function currentDiscordBan()
-    {
-        $ban = DiscordBan::whereDate('ban_end_timestamp','>',Carbon::now())->where('user_id', $this->id)->first();
-        if ($ban) {
-            return $ban;
-        } else {
-            return null;
-        }
-    }
-
-    public function discordBans()
-    {
-        return $this->hasMany(DiscordBan::class);
-    }
-
+    /**
+     * Returns the user's avatar.
+     *
+     * @param boolean $external If URL should be an external URL.
+     * @return string URL to avatar image.
+     */
     public function avatar($external = false)
     {
         if ($this->avatar_mode == 0) {
@@ -293,16 +323,41 @@ class User extends Authenticatable
         }
     }
 
+    /**
+     * Returns the user's preferences (general).
+     *
+     * @return App\Models\Users\UserPreferences
+     */
     public function preferences()
     {
         return $this->hasOne(UserPreferences::class);
     }
 
+    /**
+     * Returns the user's notification preferences.
+     *
+     * @return App\Models\Users\UserNotificationPreferences
+     */
     public function notificationPreferences()
     {
         return $this->hasOne(UserNotificationPreferences::class);
     }
 
+    /**
+     * Returns the user's privacy preferences.
+     *
+     * @return App\Models\Users\UserPrivacyPreferences
+     */
+    public function privacyPreferences()
+    {
+        return $this->hasOne(UserPrivacyPreferences::class);
+    }
+
+    /**
+     * Return's a pending application from the user if there is one.
+     *
+     * @return App\Models\Training\Application|null
+     */
     public function pendingApplication()
     {
         if ($pendingApp = Application::where('user_id', $this->id)->where('status', 0)->first()) { return $pendingApp; }

@@ -1,12 +1,13 @@
 @extends('admin.training.layouts.main')
+@section('title', 'Training Session with ' . $session->student->user->fullName('FLC') . ' - Instructing - ')
 @section('training-content')
 <a href="{{route('training.admin.instructing.training-sessions')}}" class="blue-text" style="font-size: 1.2em;"> <i class="fas fa-arrow-left"></i> Training Sessions</a>
 <div class="d-flex flex-row align-items-center mt-3">
     <img src="{{$session->instructor->user->avatar()}}" class="z-depth-1" style="height: 50px; width:50px;margin-right: 15px; margin-bottom: 3px; border-radius: 50%;">
     <img src="{{$session->student->user->avatar()}}" class="z-depth-1" style="height: 50px; z-index: 50; margin-left: -30px; width:50px;margin-right: 15px; margin-bottom: 3px; border-radius: 50%;">
     <div>
-        <h2 class="blue-text mt-2 mb-1">Training Session with {{$session->student->user->fullName('F')}}</h2>
-        <h5>
+        <h2 class="blue-text mt-2 mb-1 font-weight-bold">Training Session with {{$session->student->user->fullName('F')}}</h2>
+        <h5 class="fw-500">
             Scheduled for {{$session->scheduled_time->toDayDateTimeString()}}
         </h5>
     </div>
@@ -14,21 +15,21 @@
 
 <div class="row mt-3">
     <div class="col-md-6">
-        <h5 class="blue-text">Scheduled start</h5>
+        <h5 class="blue-text fw-500">Scheduled start</h5>
         <h5 class="d-flex flex-row align-items-center">
             {{$session->scheduled_time->toDayDateTimeString()}}
             <a data-toggle="modal" data-target="#editTimeModal">
                 <i class="fas fa-edit ml-2 text-muted"></i>
             </a>
         </h5>
-        <h5 class="mt-4 blue-text">Position</h5>
+        <h5 class="mt-4 blue-text fw-500">Position</h5>
         @if ($session->position)
             <div class="list-group-item z-depth-1 rounded">
                 <div class="d-flex flex-row w-100 align-items-center h-100 justify-content-between">
                     <div class="d-flex flex-row align-items-center">
                         <i class="fas fa-wifi fa-fw mr-2"></i>
                         <div class="d-flex flex-column align-items-center h-100">
-                            <h5 class="mb-0">{{$session->position->identifier}}</h5>
+                            <h5 class="mb-0 fw-500">{{$session->position->identifier}}</h5>
                         </div>
                     </div>
                 </div>
@@ -54,13 +55,13 @@
         @endif
     </div>
     <div class="col-md-6">
-        <h5 class="blue-text">Instructor</h5>
+        <h5 class="blue-text fw-500">Instructor</h5>
         <a href="{{route('training.admin.instructing.instructors.view', $session->instructor->user->id)}}" class="list-group-item list-group-item-action z-depth-1 rounded waves-effect">
             <div class="d-flex flex-row w-100 align-items-center h-100 justify-content-between">
                 <div class="d-flex flex-row align-items-center">
                     <img src="{{$session->instructor->user->avatar()}}" style="height: 30px; width:30px;margin-right: 15px; border-radius: 50%;">
                     <div class="d-flex flex-column align-items-center h-100">
-                        <h5 class="mb-0">{{$session->instructor->user->fullName('FL')}}</h5>
+                        <h5 class="mb-0 fw-500">{{$session->instructor->user->fullName('FL')}}</h5>
                     </div>
                 </div>
             </div>
@@ -72,13 +73,13 @@
             </li>
             @endcan
         </ul>
-        <h5 class="blue-text mt-4">Student</h5>
+        <h5 class="blue-text mt-4 fw-500">Student</h5>
         <a href="{{route('training.admin.instructing.students.view', $session->student->user->id)}}" class="list-group-item list-group-item-action z-depth-1 rounded waves-effect">
             <div class="d-flex flex-row w-100 align-items-center h-100 justify-content-between">
                 <div class="d-flex flex-row align-items-center">
                     <img src="{{$session->student->user->avatar()}}" style="height: 30px; width:30px;margin-right: 15px; border-radius: 50%;">
                     <div class="d-flex flex-column align-items-left h-100">
-                        <h5 class="mb-0">{{$session->student->user->fullName('FLC')}}</h5>
+                        <h5 class="mb-0 fw-500">{{$session->student->user->fullName('FLC')}}</h5>
                         <div class="d-flex flex-row">
                             @foreach($session->student->labels as $label)
                                 <span class="mr-2">
@@ -92,6 +93,29 @@
         </a>
     </div>
 </div>
+
+<hr class="mt-5 mb-4">
+<h3 class="font-weight-bold blue-text mb-3">Remarks</h3>
+<p>You must include a summary of the session here after completing it for record keeping purposes. The student will be able to see these remarks.</p>
+<textarea id="contentMD" name="content" style="display:none; height:" ></textarea>
+<ul class="list-unstyled">
+    <li class="mb-2 fw-500">
+        <a href="" id="enableRemarkEditB" class="green-text fw-600" style="font-size: 1.1em;"><i class="fas fa-edit"></i>&nbsp;&nbsp;Enable editing of remarks</a>
+    </li>
+</ul>
+<script>
+    var simplemde = new EasyMDE({ maxHeight: '200px', autofocus: true, autoRefresh: true, element: document.getElementById("contentMD")});
+    simplemde.codemirror.setOption('readOnly', true);
+    simplemde.codemirror.on("changes", function(){
+        console.log(simplemde.value());
+    });
+
+    $("#enableRemarkEditB").click(function (e) {
+        simplemde.codemirror.setOption('readOnly', false);
+        $("#enableRemarkEditB").text("Edit mode on.").toggle("green-text").toggle("text-muted");
+        e.preventDefault();
+    })
+</script>
 
 
 <!--Edit time modal-->

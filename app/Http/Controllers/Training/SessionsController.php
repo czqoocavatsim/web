@@ -5,10 +5,14 @@ namespace App\Http\Controllers\Training;
 use App\Http\Controllers\Controller;
 use App\Models\Training\Instructing\Instructors\Instructor;
 use App\Models\Training\Instructing\Records\TrainingSession;
+use App\Notifications\Training\Instructing\NewSessionScheduledStudent;
 use App\Notifications\Training\Instructing\SessionAssignedToYou;
 use App\Notifications\Training\Instructing\SessionScheduledTimeChanged;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
+use RestCord\DiscordClient;
 
 class SessionsController extends Controller
 {
@@ -24,6 +28,66 @@ class SessionsController extends Controller
 
         //Return view
         return view('admin.training.instructing.sessions.training-sessions.index', compact('sessions'));
+    }
+
+    public function createTrainingSession(Request $request)
+    {
+        //Define validator messages
+        $messages = [
+            'student_id.required' => 'A student is required.',
+            'student_id.integer' => 'A student is required.',
+            'scheduled_time.required' => 'A scheduled time is required.'
+        ];
+
+        //Validate
+        $validator = Validator::make($request->all(), [
+            'student_id' => 'required|integer',
+            'scheduled_time' => 'required'
+        ], $messages);
+
+        //Redirect if it fails
+        if ($validator->fails()) {
+            return redirect()->route('training.admin.instructing.training-sessions', ['createSessionModal' => 1])->withInput()->withErrors($validator, 'createSessionErrors');
+        }
+
+        //Create session
+        $session = new TrainingSession([
+            'student_id' => $request->get('student_id'),
+            'instructor_id' => Auth::user()->instructorProfile->id,
+            'scheduled_time' => $request->get('scheduled_time')
+        ]);
+        $session->save();
+
+        //Notify student
+        $session->student->user->notify(new NewSessionScheduledStudent($session, 'training'));
+
+        //Discord notification in instructors channel
+        $discord = new DiscordClient(['token' => config('services.discord.token')]);
+        $discord->channel->createMessage([
+            'channel.id' => config('app.env') == 'local' ? intval(config('services.discord.web_logs')) : intval(config('services.discord.instructors')),
+            "content" => "",
+            'embed' => [
+                "title" => "New training session scheduled",
+                "url" => route('training.admin.instructing.training-sessions.view', $session->id),
+                "timestamp" => Carbon::now(),
+                "color" => hexdec( "2196f3" ),
+                'fields' => array(
+                    [
+                        'name' => 'Student',
+                        'value' => $session->student->user->fullName('FLC'),
+                        'inline' => false
+                    ],
+                    [
+                        'name' => 'Instructor',
+                        'value' => $session->instructor->user->fullName('FLC'),
+                        'inline' => false
+                    ],
+                )
+            ]
+        ]);
+
+        //Return
+        return redirect()->route('training.admin.instructing.training-sessions.view', $session->id)->with('success', 'Session created!');
     }
 
     public function viewTrainingSession($session_id)
@@ -53,7 +117,7 @@ class SessionsController extends Controller
             'new_time' => 'required'
         ], $messages);
 
-        //Redirect if it fails
+           //Redirect if it fails
         if ($validator->fails()) {
             return redirect()->route('training.admin.instructing.training-sessions.view', ['id' => $session->id, 'editTimeModal' => 1])->withInput()->withErrors($validator, 'editTimeErrors');
         }

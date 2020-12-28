@@ -1,8 +1,8 @@
 @extends('admin.training.layouts.main')
 @section('title', 'Dashboard - Training - ')
 @section('training-content')
-<h1 class="blue-text mb-2"><span id="greeting">Hello</span>, {{Auth::user()->fullName('F')}}!</h1>
-<p class="lead mb-4">@if(Auth::user()->instructorProfile && Auth::user()->instructorProfile->current)You are a <span class="blue-text">{{Auth::user()->instructorProfile->staffPageTagline()}}</span> with <span class="blue-text">{{count(Auth::user()->instructorProfile->studentsAssigned)}}</span> students assigned to you.@else Welcome. @endif</p>
+<h1 class="blue-text mb-2 font-weight-bold"><span id="greeting">Hello</span>, {{Auth::user()->fullName('F')}}!</h1>
+<p class="lead mb-4 fw-500">@if(Auth::user()->instructorProfile && Auth::user()->instructorProfile->current)You are a <span class="blue-text">{{Auth::user()->instructorProfile->staffPageTagline()}}</span> with <span class="blue-text">{{count(Auth::user()->instructorProfile->studentsAssigned)}}</span> students assigned to you.@else Welcome. @endif</p>
 <div class="row">
     @can('view applications')
     <div class="col-md-6">
