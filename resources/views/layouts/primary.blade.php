@@ -66,7 +66,6 @@
     </head>
 
     <body class="d-flex flex-column min-vh-100" @if(Auth::check() && Auth::user()->preferences) @if(Auth::user()->preferences->accent_colour) data-accent="{{Auth::user()->preferences->accent_colour}}" @endif data-theme="{{Auth::user()->preferences->ui_mode}}" @else data-theme="light" @endif>
-
         <header>
             @if($adminNavBar)
                 <!--Admin nav bar-->

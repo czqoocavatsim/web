@@ -2,7 +2,11 @@
 
 namespace App\Http\Livewire\Training\Instructing;
 
+use App\Models\Training\Instructing\Instructors\Instructor;
+use App\Models\Training\Instructing\Records\TrainingSession;
 use App\Models\Training\Instructing\Students\Student;
+use Carbon\Carbon;
+use Illuminate\Database\Eloquent\Builder;
 use Livewire\Component;
 
 class Search extends Component
@@ -11,10 +15,47 @@ class Search extends Component
 
     public function render()
     {
-        //Create results
-        $results = strlen($this->search) > 2 ? Student::where('user_id', 'LIKE', '%' . $this->search . '%')->get()->take(6) : array();
+        //Create results for students
+        $resultsStudents =
+            strlen($this->search) > 2 ?
+            Student::whereHas('user', function (Builder $query) {
+                $query
+                ->where('display_fname', 'like', '%' . $this->search . '%')
+                ->orWhere('lname', 'like', '%' . $this->search . '%');
+            })
+            ->orWhere('user_id', 'LIKE', '%' . $this->search . '%')
+            ->get()
+            ->take(6)
+            : array();
+
+        //Create results for students
+        $resultsInstructors =
+        strlen($this->search) > 2 ?
+        Instructor::whereHas('user', function (Builder $query) {
+            $query
+            ->where('display_fname', 'like', '%' . $this->search . '%')
+            ->orWhere('lname', 'like', '%' . $this->search . '%');
+        })
+        ->orWhere('user_id', 'LIKE', '%' . $this->search . '%')
+        ->get()
+        ->take(6)
+        : array();
+
+        //Create results for training sessions
+        $resultsTrainingSessions =
+        strlen($this->search) > 2 ?
+        TrainingSession::whereHas('student.user', function (Builder $query) {
+            $query
+            ->where('display_fname', 'like', '%' . $this->search . '%')
+            ->orWhere('lname', 'like', '%' . $this->search . '%')
+            ->orWhere('id', 'like', '%' . $this->search . '%');
+        })
+        ->where('scheduled_time', '>', Carbon::now())
+        ->get()
+        ->take(6)
+        : array();
 
         //Return view
-        return view('livewire.training.instructing.search', compact('results'));
+        return view('livewire.training.instructing.search', compact('resultsStudents', 'resultsInstructors', 'resultsTrainingSessions'));
     }
 }
