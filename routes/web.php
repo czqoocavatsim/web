@@ -120,6 +120,13 @@ Route::group(['middleware' => 'auth'], function () {
         Route::get('/my/preferences', 'Community\MyCzqoController@preferences')->name('my.preferences');
         Route::post('/my/preferences', 'Community\MyCzqoController@preferencesPost')->name('my.preferences.post');
 
+        //Feedbacl
+        Route::prefix('my/feedback')->group(function () {
+            Route::get('/new', 'Feedback\FeedbackController@newFeedback')->name('my.feedback.new');
+            Route::get('/new/{type_slug}', 'Feedback\FeedbackController@newFeedbackWrite')->name('my.feedback.new.write');
+            Route::post('/new/{type_slug}', 'Feedback\FeedbackController@newFeedbackWritePost')->name('my.feedback.new.write.post');
+        });
+
         //Training
         Route::prefix('training')->group(function () {
 
