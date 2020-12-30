@@ -1,16 +1,16 @@
 @extends('admin.training.layouts.main')
 @section('title', 'Training Sessions - Instructing - ')
 @section('training-content')
-<h1 class="blue-text pb-2 font-weight-bold">Training Sessions</h1>
+<h1 class="blue-text pb-2 font-weight-bold">OTS Sessions</h1>
 
 @if($profile = Auth::user()->instructorProfile)
     <h4 class="blue-text mb-3 fw-500">Your Upcoming Sessions</h4>
-    @if(count($profile->upcomingTrainingSessions()) == 0)
+    @if(count($profile->upcomingOtsSessions()) == 0)
         None upcoming!
     @endif
     <div class="list-group z-depth-1 mb-4 rounded">
-        @foreach($profile->upcomingTrainingSessions() as $s)
-            <a href="{{route('training.admin.instructing.training-sessions.view', $s->id)}}" class="list-group-item list-group-item-action waves-effect">
+        @foreach($profile->upcomingOtsSessions() as $s)
+            <a href="{{route('training.admin.instructing.ots-sessions.view', $s->id)}}" class="list-group-item list-group-item-action waves-effect">
                 <div class="d-flex flex-row w-100 align-items-center h-100">
                     <img src="{{$s->student->user->avatar()}}" style="height: 50px; width:50px;margin-right: 15px; margin-bottom: 3px; border-radius: 50%;">
                     <div class="d-flex flex-column h-100">
@@ -27,7 +27,7 @@
 <table class="table dt table-hover table-bordered">
     <thead>
         <th>Student</th>
-        <th>Instructor</th>
+        <th>Assessor</th>
         <th>Scheduled Time</th>
         <th>Action</th>
     </thead>
@@ -38,7 +38,7 @@
                 <td>{{$s->instructor->user->fullName('FLC')}}</td>
                 <td>{{$s->scheduled_time->toDayDateTimeString()}} UTC</td>
                 <td>
-                    <a class="blue-text" href="{{route('training.admin.instructing.training-sessions.view', $s->id)}}">
+                    <a class="blue-text" href="{{route('training.admin.instructing.ots-sessions.view', $s->id)}}">
                         <i class="fas fa-eye"></i>&nbsp;View
                     </a>
                 </td>
@@ -47,9 +47,9 @@
     </tbody>
 </table>
 <ul class="list-unstyled mt-5">
-    @can('edit training sessions')
+    @can('edit ots sessions')
     <li class="mb-2 fw-500">
-        <a href="" data-toggle="modal" data-target="#createSessionModal" class="blue-text" style="font-size: 1.1em;"><i class="fas fa-plus"></i>&nbsp;&nbsp;Create a training session</a>
+        <a href="" data-toggle="modal" data-target="#createSessionModal" class="blue-text" style="font-size: 1.1em;"><i class="fas fa-plus"></i>&nbsp;&nbsp;Create an OTS session</a>
     </li>
     @endcan
 </ul>
@@ -61,12 +61,12 @@
     <div class="modal-dialog modal-dialog-centered" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLabel">Create training session</h5>
+                <h5 class="modal-title" id="exampleModalLabel">Create an OTS session</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
-            <form action="{{route('training.admin.instructing.training-sessions.create')}}" method="POST">
+            <form action="{{route('training.admin.instructing.ots-sessions.create')}}" method="POST">
                 @csrf
                 <div class="modal-body">
                     <p>You can also create sessions through your student's profile.</p>

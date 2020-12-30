@@ -92,8 +92,7 @@
                         </div>
                     </li>
                 </a>
-                @can('edit ots sessions')
-                <a class="myczqo-tab {{Request::is('admin/training/instructing/ots-sessiobs') || Request::is('admin/training/instructing/ots-sessions/*') ? 'active' : ''}} no-click" data-myczqo-tab="none" href="{{route('training.admin.instructing.ots-sessions')}}">
+                <a class="myczqo-tab {{Request::is('admin/training/instructing/ots-sessions') || Request::is('admin/training/instructing/ots-sessions/*') ? 'active' : ''}} no-click" data-myczqo-tab="none" href="{{route('training.admin.instructing.ots-sessions')}}">
                     <li class="w-100">
                         <div class="d-flex h-100 flex-row justify-content-left align-items-center">
                             <i style="font-size: 1.6em; margin-right: 10px;" class="fas fa-user-check fa-fw"></i>
@@ -101,7 +100,6 @@
                         </div>
                     </li>
                 </a>
-                @endcan
                 @can('edit roster')
                 <li class="w-100 my-3" style="border:none;">
                     <div class="d-flex h-100 flex-row justify-content-left align-items-center">

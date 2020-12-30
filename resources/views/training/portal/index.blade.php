@@ -12,6 +12,20 @@
         <p class="mt-3 mb-0">{{ $cert->expires->diffInDays(Carbon\Carbon::now()) <= 2 ? 'Contact your instructor to request an extension or proceed to an OTS assessment.' : 'Your use of this solo certification is bound to our policies and VATSIM\'s GRP. Your instructor will give you more information.'}}</p>
     </div>
     @endif
+    @if ($studentProfile = Auth::user()->studentProfile && $session = Auth::user()->studentProfile->upcomingTrainingSession())
+    <div class="list-group-item rounded p-4 my-3 z-depth-1 shadow-none">
+        <h4 class="fw-600 blue-text"><i class="far fa-calendar-check mr-2"></i>Your upcoming training session</h4>
+        <h6 class="fw-500">Scheduled for {{$session->scheduled_time->toFormattedDateString()}} (in {{$session->scheduled_time->diffForHumans()}})</h6>
+        <h6 class="fw-500 mb-0">With {{$session->instructor->user->fullName('FL')}}</h6>
+    </div>
+    @endif
+    @if ($studentProfile = Auth::user()->studentProfile && $session = Auth::user()->studentProfile->upcomingOtsSession())
+    <div class="list-group-item rounded p-4 my-3 z-depth-1 shadow-none">
+        <h4 class="fw-600 blue-text"><i class="far fa-calendar-check mr-2"></i>Your upcoming OTS session</h4>
+        <h6 class="fw-500">Scheduled for {{$session->scheduled_time->toFormattedDateString()}} (in {{$session->scheduled_time->diffForHumans()}})</h6>
+        <h6 class="fw-500 mb-0">With {{$session->instructor->user->fullName('FL')}}</h6>
+    </div>
+    @endif
     @can('start applications')
     <div class="list-group-item rounded p-4 my-3 z-depth-1 shadow-none">
         <h4 class="blue-text fw-600"><i style="margin-right: 10px;" >👋</i>Apply for Gander Oceanic Certification</h4>

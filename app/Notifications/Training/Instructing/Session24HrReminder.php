@@ -7,11 +7,10 @@ use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
-use NotificationChannels\Discord\Discord;
 use NotificationChannels\Discord\DiscordChannel;
 use NotificationChannels\Discord\DiscordMessage;
 
-class NewSessionScheduledStudent extends Notification
+class Session24HrReminder extends Notification
 {
     use Queueable;
 
@@ -47,17 +46,17 @@ class NewSessionScheduledStudent extends Notification
     {
         if ($this->type == 'training') {
             return (new MailMessage)
-                ->subject("New Training Session Scheduled")
+                ->subject("Reminder: Your Training Session Today")
                 ->greeting("Hi {$this->session->student->user->fullName('F')},")
-                ->line("{$this->session->instructor->user->fullName('FL')} has scheduled a training session with you for {$this->session->scheduled_time->toDayDateTimeString()}.")
+                ->line("This is a reminder that {$this->session->instructor->user->fullName('FL')} has scheduled a training session with you for {$this->session->scheduled_time->toDayDateTimeString()}.")
                 ->line("If you have any questions, please contact your Instructor.")
                 ->action('View Session', '')
                 ->salutation("Gander Oceanic OCA");
         } elseif ($this->type == 'ots') {
             return (new MailMessage)
-                ->subject("New OTS Session Scheduled")
+                ->subject("Reminder: Your OTS Session Today")
                 ->greeting("Hi {$this->session->student->user->fullName('F')},")
-                ->line("{$this->session->instructor->user->fullName('FL')} has scheduled an OTS session with you for {$this->session->scheduled_time->toDayDateTimeString()}.")
+                ->line("This is a reminder that {$this->session->instructor->user->fullName('FL')} has scheduled an OTS session with you for {$this->session->scheduled_time->toDayDateTimeString()}.")
                 ->line("If you have any questions, please contact your Assessor.")
                 ->action('View Session', '')
                 ->salutation("Gander Oceanic OCA");
@@ -76,8 +75,8 @@ class NewSessionScheduledStudent extends Notification
 
         if ($this->type == 'training') {
             $message->embed([
-                'title' => 'New Training Session Scheduled',
-                'description' => "{$this->session->instructor->user->fullName('FL')} has scheduled a training session with you for {$this->session->scheduled_time->toDayDateTimeString()}. If you have any questions, please contact your Instructor.",
+                'title' => 'Reminder: Your Training Session Today',
+                'description' => "This is a reminder that {$this->session->instructor->user->fullName('FL')} has scheduled a training session with you for {$this->session->scheduled_time->toDayDateTimeString()}. If you have any questions, please contact your Instructor.",
                 'color' => 0x80c9,
                 "timestamp" => Carbon::now(),
                 'footer' => array(
@@ -86,8 +85,8 @@ class NewSessionScheduledStudent extends Notification
             ]);
         } elseif ($this->type == 'ots') {
             $message->embed([
-                'title' => 'New OTS Session Scheduled',
-                'description' => "{$this->session->instructor->user->fullName('FL')} has scheduled an OTS session with you for {$this->session->scheduled_time->toDayDateTimeString()}. If you have any questions, please contact your Assessor.",
+                'title' => 'Reminder: Your OTS Session Today',
+                'description' => "This is a reminder that {$this->session->instructor->user->fullName('FL')} has scheduled an OTS session with you for {$this->session->scheduled_time->toDayDateTimeString()}. If you have any questions, please contact your Assessor.",
                 'color' => 0x80c9,
                 "timestamp" => Carbon::now(),
                 'footer' => array(

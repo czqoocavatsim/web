@@ -7,11 +7,10 @@ use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
-use NotificationChannels\Discord\Discord;
 use NotificationChannels\Discord\DiscordChannel;
 use NotificationChannels\Discord\DiscordMessage;
 
-class NewSessionScheduledStudent extends Notification
+class SessionCancelled extends Notification
 {
     use Queueable;
 
@@ -47,17 +46,17 @@ class NewSessionScheduledStudent extends Notification
     {
         if ($this->type == 'training') {
             return (new MailMessage)
-                ->subject("New Training Session Scheduled")
+                ->subject("Training Session Cancelled")
                 ->greeting("Hi {$this->session->student->user->fullName('F')},")
-                ->line("{$this->session->instructor->user->fullName('FL')} has scheduled a training session with you for {$this->session->scheduled_time->toDayDateTimeString()}.")
+                ->line("{$this->session->instructor->user->fullName('FL')} has cancelled your upcoming training session.")
                 ->line("If you have any questions, please contact your Instructor.")
                 ->action('View Session', '')
                 ->salutation("Gander Oceanic OCA");
         } elseif ($this->type == 'ots') {
             return (new MailMessage)
-                ->subject("New OTS Session Scheduled")
+                ->subject("OTS Session Cancelled")
                 ->greeting("Hi {$this->session->student->user->fullName('F')},")
-                ->line("{$this->session->instructor->user->fullName('FL')} has scheduled an OTS session with you for {$this->session->scheduled_time->toDayDateTimeString()}.")
+                ->line("{$this->session->instructor->user->fullName('FL')} has cancelled your upcoming OTS session.")
                 ->line("If you have any questions, please contact your Assessor.")
                 ->action('View Session', '')
                 ->salutation("Gander Oceanic OCA");
@@ -73,11 +72,10 @@ class NewSessionScheduledStudent extends Notification
     public function toDiscord($notifiable)
     {
         $message = new DiscordMessage();
-
         if ($this->type == 'training') {
             $message->embed([
-                'title' => 'New Training Session Scheduled',
-                'description' => "{$this->session->instructor->user->fullName('FL')} has scheduled a training session with you for {$this->session->scheduled_time->toDayDateTimeString()}. If you have any questions, please contact your Instructor.",
+                'title' => 'Training Session Cancelled',
+                'description' => "{$this->session->instructor->user->fullName('FL')} has cancelled your upcoming training session. If you have any questions, please contact your Instructor.",
                 'color' => 0x80c9,
                 "timestamp" => Carbon::now(),
                 'footer' => array(
@@ -86,8 +84,8 @@ class NewSessionScheduledStudent extends Notification
             ]);
         } elseif ($this->type == 'ots') {
             $message->embed([
-                'title' => 'New OTS Session Scheduled',
-                'description' => "{$this->session->instructor->user->fullName('FL')} has scheduled an OTS session with you for {$this->session->scheduled_time->toDayDateTimeString()}. If you have any questions, please contact your Assessor.",
+                'title' => 'OTS Session Cancelled',
+                'description' => "{$this->session->instructor->user->fullName('FL')} has cancelled your upcoming OTS session. If you have any questions, please contact your Assessor.",
                 'color' => 0x80c9,
                 "timestamp" => Carbon::now(),
                 'footer' => array(

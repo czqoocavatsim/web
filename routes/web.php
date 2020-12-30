@@ -154,6 +154,10 @@ Route::group(['middleware' => 'auth'], function () {
                 Route::get('portal/training-notes', 'Training\TrainingPortalController@yourTrainingNotes')->name('training-notes');
                 //Actions
                 Route::get('portal/actions', 'Training\TrainingPortalController@actions')->name('actions');
+                //Training sessions
+                Route::get('portal/sessions', 'Training\TrainingPortalController@yourSessions')->name('sessions');
+                Route::get('portal/sessions/training/{id}', 'Training\TrainingPortalController@viewTrainingSession')->name('sessions.view-training-session');
+                Route::get('portal/sessions/ots/{id}', 'Training\TrainingPortalController@viewOtsSession')->name('sessions.view-ots-session');
             });
         });
 
@@ -269,12 +273,22 @@ Route::group(['middleware' => 'auth'], function () {
                             //Training sessions
                             Route::get('/training-sessions', 'Training\SessionsController@trainingSessionsIndex')->name('instructing.training-sessions');
                             Route::post('/training-sessions/create', 'Training\SessionsController@createTrainingSession')->name('instructing.training-sessions.create');
+                            Route::post('/training-sessions/ajax/remarks', 'Training\SessionsController@saveTrainingSessionRemarks')->name('instructing.training-sessions.ajax.remarks');
                             Route::get('/training-sessions/{id}', 'Training\SessionsController@viewTrainingSession')->name('instructing.training-sessions.view');
                             Route::post('/training-sessions/{id}/edit/time', 'Training\SessionsController@editTrainingSessionTime')->name('instructing.training-sessions.edit.time')->middleware('can:edit training sessions');
                             Route::post('/training-sessions/{id}/edit/instructor', 'Training\SessionsController@reassignTrainingSessionInstructor')->name('instructing.training-sessions.edit.instructor')->middleware('can:edit training sessions');
+                            Route::get('/training-sessions/{id}/cancel', 'Training\SessionsController@cancelTrainingSession')->name('instructing.training-sessions.cancel')->middleware('can:edit training sessions');
+                            Route::post('/training-sessions/{id}/edit/position', 'Training\SessionsController@assignTrainingSessionPosition')->name('instructing.training-sessions.edit.position')->middleware('can:edit training session');
 
                             //OTS sessions
                             Route::get('/ots-sessions', 'Training\SessionsController@otsSessionsIndex')->name('instructing.ots-sessions');
+                            Route::post('/ots-sessions/create', 'Training\SessionsController@createOtsSession')->name('instructing.ots-sessions.create');
+                            Route::post('/ots-sessions/ajax/remarks', 'Training\SessionsController@saveOtsSessionRemarks')->name('instructing.ots-sessions.ajax.remarks');
+                            Route::get('/ots-sessions/{id}', 'Training\SessionsController@viewOtsSession')->name('instructing.ots-sessions.view');
+                            Route::post('/ots-sessions/{id}/edit/time', 'Training\SessionsController@editOtsSessionTime')->name('instructing.ots-sessions.edit.time')->middleware('can:edit ots sessions');
+                            Route::post('/ots-sessions/{id}/edit/instructor', 'Training\SessionsController@reassignOtsSessionInstructor')->name('instructing.ots-sessions.edit.instructor')->middleware('can:edit ots sessions');
+                            Route::get('/ots-sessions/{id}/cancel', 'Training\SessionsController@cancelOtsSession')->name('instructing.ots-sessions.cancel')->middleware('can:edit ots sessions');
+                            Route::post('/ots-sessions/{id}/edit/position', 'Training\SessionsController@assignOtsSessionPosition')->name('instructing.ots-sessions.edit.position')->middleware('can:edit ots session');
                         });
                     });
                 });

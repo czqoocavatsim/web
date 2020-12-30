@@ -111,6 +111,14 @@
                     </li>
                 </a>
                 @endif
+                <a class="myczqo-tab {{request()->routeIs('training.portal.sessions*') ? 'active' : ''}} no-click" data-myczqo-tab="none" href="{{route('training.portal.sessions')}}">
+                    <li class="w-100">
+                        <div class="d-flex h-100 flex-row justify-content-left align-items-center">
+                            <i style="font-size: 1.6em; margin-right: 10px;" class="far fa-calendar-check fa-fw"></i>
+                            <span style="font-size: 1.1em;">Your training sessions</span>
+                        </div>
+                    </li>
+                </a>
                 <a class="myczqo-tab {{Request::is('training/portal/training-notes') ? 'active' : ''}} no-click" data-myczqo-tab="none" href="{{route('training.portal.training-notes')}}">
                     <li class="w-100">
                         <div class="d-flex h-100 flex-row justify-content-left align-items-center">

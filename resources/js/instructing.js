@@ -17,3 +17,17 @@ function createInstructingSessionsCal() {
 
     return calendar;
 }
+
+function trainingSessionRemarksInit() {
+    var simplemde = new EasyMDE({ maxHeight: '200px', autofocus: true, autoRefresh: true, element: document.getElementById("contentMD")});
+    simplemde.codemirror.setOption('readOnly', true);
+    simplemde.codemirror.on("changes", function(){
+
+    });
+
+    $("#enableRemarkEditB").click(function (e) {
+        simplemde.codemirror.setOption('readOnly', false)
+        $("#enableRemarkEditB").text("Edit mode on.").addClass("text-muted").removeClass("green-text")
+        e.preventDefault()
+    })
+}
