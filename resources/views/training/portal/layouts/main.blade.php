@@ -79,12 +79,13 @@
                         </div>
                     </li>
                 </a>
-                @if(Auth::user()->studentProfile && $studentProfile = Auth::user()->studentProfile->current)
+                @if(Auth::user()->studentProfile)
                 <li class="w-100 my-3" style="border:none;">
                     <div class="d-flex h-100 flex-row justify-content-left align-items-center">
                         <span style="font-size: 1em;" class="text-muted">YOUR TRAINING</span>
                     </div>
                 </li>
+                @if(Auth::user()->studentProfile && Auth::user()->studentProfile->current)
                 <a class="myczqo-tab {{Request::is('training/portal/progress') ? 'active' : ''}} no-click" data-myczqo-tab="none" href="{{route('training.portal.progress')}}">
                     <li class="w-100">
                         <div class="d-flex h-100 flex-row justify-content-left align-items-center">
@@ -111,6 +112,7 @@
                     </li>
                 </a>
                 @endif
+                @endif
                 <a class="myczqo-tab {{request()->routeIs('training.portal.sessions*') ? 'active' : ''}} no-click" data-myczqo-tab="none" href="{{route('training.portal.sessions')}}">
                     <li class="w-100">
                         <div class="d-flex h-100 flex-row justify-content-left align-items-center">
@@ -127,6 +129,7 @@
                         </div>
                     </li>
                 </a>
+                @if(Auth::user()->studentProfile && Auth::user()->studentProfile->current)
                 <a class="myczqo-tab {{Request::is('training/portal/actions') ? 'active' : ''}} no-click" data-myczqo-tab="none" href="{{route('training.portal.actions')}}">
                     <li class="w-100">
                         <div class="d-flex h-100 flex-row justify-content-left align-items-center">
@@ -135,6 +138,7 @@
                         </div>
                     </li>
                 </a>
+                @endif
                 @endif
             </ul>
         </div>

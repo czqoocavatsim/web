@@ -38,6 +38,51 @@
                 <p>Not assigned by assessor.</p>
             </div>
         @endif
+        <h5 class="mt-4 blue-text fw-500">Pass/Fail</h5>
+        @if($session->result == 'pending')
+            <ul class="list-unstyled mt-2">
+                <li class="mb-2">
+                    <a data-target="#passModal" data-toggle="modal" style="text-decoration:none;"><i class="fas fa-chevron-right green-text"></i> &nbsp; <span class="black-text">Mark session as a pass</span></a>
+                </li>
+                <li class="mb-2">
+                    <a data-target="#failModal" data-toggle="modal" style="text-decoration:none;"><i class="fas fa-chevron-right red-text"></i> &nbsp; <span class="black-text">Mark session as a fail</span></a>
+                </li>
+            </ul>
+        @elseif ($session->result == 'failed')
+            <h3>
+                <span style='font-weight: 400' class='badge rounded red text-white p-2 shadow-none'>
+                    Failed
+                </span>
+            </h3>
+            <ul class="list-unstyled mt-3">
+                @if($session->passFailRecord->report_url)
+                <li class="mb-3">
+                    <a href="{{$session->passFailRecord->report_url}}" style="text-decoration:none;"><i class="fas fa-chevron-right"></i> &nbsp; <span class="black-text">View report</span></a>
+                </li>
+                @endif
+                <li class="mb-2">
+                    <p>Remarks:</p>
+                    {{$session->passFailRecord->remarksHtml()}}
+                </li>
+            </ul>
+        @elseif ($session->result == 'passed')
+            <h3>
+                <span style='font-weight: 400' class='badge rounded green text-white p-2 shadow-none'>
+                    Passed
+                </span>
+            </h3>
+            <ul class="list-unstyled mt-3">
+                @if($session->passFailRecord->report_url)
+                <li class="mb-3">
+                    <a href="{{$session->passFailRecord->report_url}}" style="text-decoration:none;"><i class="fas fa-chevron-right"></i> &nbsp; <span class="black-text">View report</span></a>
+                </li>
+                @endif
+                <li class="mb-2">
+                    <p>Remarks:</p>
+                    {{$session->passFailRecord->remarksHtml()}}
+                </li>
+            </ul>
+        @endif
     </div>
     <div class="col-md-6">
         <h5 class="blue-text fw-500">Assessor</h5>

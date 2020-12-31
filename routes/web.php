@@ -125,6 +125,8 @@ Route::group(['middleware' => 'auth'], function () {
             Route::get('/new', 'Feedback\FeedbackController@newFeedback')->name('my.feedback.new');
             Route::get('/new/{type_slug}', 'Feedback\FeedbackController@newFeedbackWrite')->name('my.feedback.new.write');
             Route::post('/new/{type_slug}', 'Feedback\FeedbackController@newFeedbackWritePost')->name('my.feedback.new.write.post');
+            Route::get('/', 'Feedback\FeedbackController@myFeedback')->name('my.feedback');
+            Route::get('/{slug}', 'Feedback\FeedbackController@viewSubmission')->name('my.feedback.submission');
         });
 
         //Training
@@ -288,7 +290,9 @@ Route::group(['middleware' => 'auth'], function () {
                             Route::post('/ots-sessions/{id}/edit/time', 'Training\SessionsController@editOtsSessionTime')->name('instructing.ots-sessions.edit.time')->middleware('can:edit ots sessions');
                             Route::post('/ots-sessions/{id}/edit/instructor', 'Training\SessionsController@reassignOtsSessionInstructor')->name('instructing.ots-sessions.edit.instructor')->middleware('can:edit ots sessions');
                             Route::get('/ots-sessions/{id}/cancel', 'Training\SessionsController@cancelOtsSession')->name('instructing.ots-sessions.cancel')->middleware('can:edit ots sessions');
-                            Route::post('/ots-sessions/{id}/edit/position', 'Training\SessionsController@assignOtsSessionPosition')->name('instructing.ots-sessions.edit.position')->middleware('can:edit ots session');
+                            Route::post('/ots-sessions/{id}/edit/position', 'Training\SessionsController@assignOtsSessionPosition')->name('instructing.ots-sessions.edit.position')->middleware('can:edit ots sessions');
+                            Route::post('/ots-sessions/{id}/result/pass', 'Training\SessionsController@markOtsSessionAsPassed')->name('instructing.ots-sessions.result.pass')->middleware('can:edit ots sessions');
+                            Route::post('/ots-sessions/{id}/result/fail', 'Training\SessionsController@markOtsSessionAsFailed')->name('instructing.ots-sessions.result.fail')->middleware('can:edit ots sessions');
                         });
                     });
                 });

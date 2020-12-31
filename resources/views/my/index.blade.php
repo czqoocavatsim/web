@@ -295,7 +295,10 @@
                 <h3 class="mt-4 mb-3 fw-600" style="font-size: 1.3em;">Feedback</h3>
                 <p>We love feedback! Submit feedback on controllers or our operations here.</p>
                 <p style="font-size: 1em;" class="mt-2">
-                    <a class="font-weight-bold text-body" href="{{route('index')}}">Submit feedback &nbsp;&nbsp;<i class="fas fa-arrow-right blue-text"></i></a>
+                    <a class="font-weight-bold text-body" href="{{route('my.feedback.new')}}">Submit feedback &nbsp;&nbsp;<i class="fas fa-arrow-right blue-text"></i></a>
+                </p>
+                <p style="font-size: 1em;" class="mt-2">
+                    <a class="font-weight-bold text-body" href="{{route('my.feedback')}}">Your previous feedback &nbsp;&nbsp;<i class="fas fa-arrow-right blue-text"></i></a>
                 </p>
             </div>
             <div id="certificationTrainingTab" style="display:none">

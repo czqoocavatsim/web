@@ -70,4 +70,14 @@ class FeedbackSubmission extends Model
     {
         return new HtmlString(app(Parsedown::class)->text($this->submission_content));
     }
+
+    /**
+     * Return the fields of the submission.
+     *
+     * @return \App\Models\Feedback\FeedbackTypeFieldSubmission
+     */
+    public function fields()
+    {
+        return $this->hasMany(FeedbackTypeFieldSubmission::class, 'submission_id');
+    }
 }

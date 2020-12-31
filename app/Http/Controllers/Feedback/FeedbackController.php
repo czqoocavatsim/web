@@ -5,6 +5,8 @@ namespace App\Http\Controllers\Feedback;
 use App\Http\Controllers\Controller;
 use App\Models\Feedback\FeedbackSubmission;
 use App\Models\Feedback\FeedbackType;
+use App\Models\Feedback\FeedbackTypeFieldSubmission;
+use App\Notifications\Feedback\NewFeedbackStaff;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -43,6 +45,13 @@ class FeedbackController extends Controller
         return view('my.feedback.new-write', compact('type'));
     }
 
+    /**
+     * POST request for submitting new feedback of a speific type.
+     *
+     * @param Request $request
+     * @param string $type_slug
+     * @return redirect
+     */
     public function newFeedbackWritePost(Request $request, $type_slug)
     {
         //Get feedback type
@@ -69,10 +78,54 @@ class FeedbackController extends Controller
             'type_id' => $type->id,
             'submission_content' => $request->get('submission_content'),
             'permission_to_publish' => $request->get('publishPermission') == 'on' ? true : false,
-            'slug' => Str::slug(new Initials(Auth::user()->fullName('FL')) . '-' . Carbon::now()->toDayDateTimeString()),
+            'slug' => Str::slug(Auth::user()->display_fname[0] . Auth::user()->lname[0] . '-' . Carbon::now()->toDayDateTimeString()),
         ]);
         $feedback->save();
 
-        dd($feedback);
+        //Deal with fields
+        foreach ($type->fields as $field) {
+            $fieldSubmission = new FeedbackTypeFieldSubmission([
+                'type_id' => $type->id,
+                'submission_id' => $feedback->id,
+                'name' => $field->name,
+                'content' => $request->get($field->id)
+            ]);
+            $fieldSubmission->save();
+        }
+
+        //Notify those in role
+        if ($type->role->users) {
+            $staffToNotify = $type->role->users;
+            foreach ($staffToNotify as $user) {
+                $user->notify(new NewFeedbackStaff($feedback));
+            }
+        }
+
+        //Return
+        return redirect()->route('my.feedback.submission', $feedback->slug)->with('success', 'Feedback submitted! Thank you for helping improve Gander Oceanic.');
+    }
+
+    /**
+     * GET request to view a feedback submission.
+     *
+     * @param string $slug
+     * @return view
+     */
+    public function viewSubmission($slug)
+    {
+        //Get feedback submission
+        $submission = FeedbackSubmission::whereSlug($slug)->firstOrFail();
+
+        //Return view
+        return view('my.feedback.submission', compact('submission'));
+    }
+
+    public function myFeedback()
+    {
+        //Get all submissions belonging to user
+        $submissions = FeedbackSubmission::where('user_id', Auth::id())->get()->sortByDesc('created_at');
+
+        //Return view
+        return view('my.feedback.index', compact('submissions'));
     }
 }

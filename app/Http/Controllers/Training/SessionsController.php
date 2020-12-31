@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Network\MonitoredPosition;
 use App\Models\Training\Instructing\Instructors\Instructor;
 use App\Models\Training\Instructing\Records\OTSSession as OtsSession;
+use App\Models\Training\Instructing\Records\OTSSessionPassFailRecord;
 use App\Models\Training\Instructing\Records\TrainingSession;
 use App\Notifications\Training\Instructing\NewSessionScheduledStudent;
 use App\Notifications\Training\Instructing\SessionAssignedToYou;
@@ -14,6 +15,7 @@ use App\Notifications\Training\Instructing\SessionScheduledTimeChanged;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
 use RestCord\DiscordClient;
 
@@ -495,5 +497,109 @@ class SessionsController extends Controller
 
         //Return
         return response()->json(['message' => 'Saved'], 200);
+    }
+
+    /**
+     * POST request to mark an OTS session as passed.
+     *
+     * @param Request $request
+     * @param integer $session_id
+     * @return void
+     */
+    public function markOtsSessionAsPassed(Request $request, $session_id)
+    {
+        //Get session
+        $session = OtsSession::whereId($session_id)->firstOrFail();
+
+        //Define validator messages
+        $messages = [
+            'reportFile.mimes' => 'Please upload a PDF or DOCX/DOC/RTF document for the report.',
+            'reportFile.files' => 'Please upload a PDF or DOCX/DOC/RTF document for the report.',
+        ];
+
+        //Validate
+        $validator = Validator::make($request->all(), [
+            'reportFile' => 'mimes:pdf,docx,doc,rtf|file',
+        ], $messages);
+
+        //Redirect if it fails
+        if ($validator->fails()) {
+            return redirect()->route('training.admin.instructing.ots-sessions.view', ['id' => $session->id, 'passModal' => 1])->withInput()->withErrors($validator, 'markPassedErrors');
+        }
+
+        //Put the report onto disk
+        $reportPath = null;
+        if ($request->file('reportFile')) {
+            $reportPath = Storage::disk('digitalocean')->put('staff_uploads/training/otsreports/' . uniqid(), $request->file('reportFile'), 'public');
+        }
+
+        //Create record
+        $record = new OTSSessionPassFailRecord([
+            'ots_session_id' => $session->id,
+            'result' => 'passed',
+            'assessor_id' => Auth::user()->instructorProfile->id,
+            'report_url' => $reportPath ? Storage::url($reportPath) : null,
+            'remarks' => $request->get('remarks')
+        ]);
+        $record->save();
+
+        //Adjust session
+        $session->result = 'passed';
+        $session->save();
+
+        //Return
+        return redirect()->route('training.admin.instructing.ots-sessions.view', $session)->with('success', 'Session marked as Passed! Be sure to inform the student of their result and update the roster and their student status accordingly.');
+    }
+
+    /**
+     * POST request to mark an OTS session as failed.
+     *
+     * @param Request $request
+     * @param integer $session_id
+     * @return void
+     */
+    public function markOtsSessionAsFailed(Request $request, $session_id)
+    {
+        //Get session
+        $session = OtsSession::whereId($session_id)->firstOrFail();
+
+        //Define validator messages
+        $messages = [
+            'reportFile.mimes' => 'Please upload a PDF or DOCX/DOC/RTF document for the report.',
+            'reportFile.files' => 'Please upload a PDF or DOCX/DOC/RTF document for the report.',
+        ];
+
+        //Validate
+        $validator = Validator::make($request->all(), [
+            'reportFile' => 'mimes:pdf,docx,doc,rtf|file',
+        ], $messages);
+
+        //Redirect if it fails
+        if ($validator->fails()) {
+            return redirect()->route('training.admin.instructing.ots-sessions.view', ['id' => $session->id, 'passModal' => 1])->withInput()->withErrors($validator, 'markPassedErrors');
+        }
+
+        //Put the report onto disk
+        $reportPath = null;
+        if ($request->file('reportFile')) {
+            $reportPath = Storage::disk('digitalocean')->put('staff_uploads/training/otsreports/' . uniqid(), $request->file('reportFile'), 'public');
+        }
+
+        //Create record
+        $record = new OTSSessionPassFailRecord([
+            'ots_session_id' => $session->id,
+            'result' => 'failed',
+            'assessor_id' => Auth::user()->instructorProfile->id,
+            'report_url' => $reportPath ? Storage::url($reportPath) : null,
+            'remarks' => $request->get('remarks')
+        ]);
+        $record->save();
+
+        //Adjust session
+        $session->result = 'failed';
+        $session->save();
+
+        //Return
+        return redirect()->route('training.admin.instructing.ots-sessions.view', $session)->with('info', 'Session marked as failed.');
     }
 }

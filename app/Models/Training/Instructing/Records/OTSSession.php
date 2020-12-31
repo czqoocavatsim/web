@@ -39,6 +39,11 @@ class OTSSession extends Model
         return $this->belongsTo(MonitoredPosition::class, 'position_id');
     }
 
+    public function passFailRecord()
+    {
+        return $this->hasOne(OTSSessionPassFailRecord::class, 'ots_session_id');
+    }
+
     public function remarksHtml()
     {
         return new HtmlString(app(Parsedown::class)->text($this->remarks));

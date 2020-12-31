@@ -56,12 +56,57 @@
         @can('edit ots sessions')
             <h5 class="mt-4 blue-text fw-500">Actions</h5>
             <ul class="list-unstyled mt-2">
-                @if ($session->scheduled_time > Carbon\Carbon::now())
+                @if ($session->scheduled_time > Carbon\Carbon::now() && $session->result == 'pending')
                 <li class="mb-2">
                     <a data-target="#cancelSessionModal" data-toggle="modal" style="text-decoration:none;"><span class="red-text"><i class="fas fa-chevron-right"></i></span> &nbsp; <span class="black-text">Cancel session</span></a>
                 </li>
                 @endif
             </ul>
+            <h5 class="mt-4 blue-text fw-500">Pass/Fail</h5>
+            @if($session->result == 'pending')
+                <ul class="list-unstyled mt-2">
+                    <li class="mb-2">
+                        <a data-target="#passModal" data-toggle="modal" style="text-decoration:none;"><i class="fas fa-chevron-right green-text"></i> &nbsp; <span class="black-text">Mark session as a pass</span></a>
+                    </li>
+                    <li class="mb-2">
+                        <a data-target="#failModal" data-toggle="modal" style="text-decoration:none;"><i class="fas fa-chevron-right red-text"></i> &nbsp; <span class="black-text">Mark session as a fail</span></a>
+                    </li>
+                </ul>
+            @elseif ($session->result == 'failed')
+                <h3>
+                    <span style='font-weight: 400' class='badge rounded red text-white p-2 shadow-none'>
+                        Failed
+                    </span>
+                </h3>
+                <ul class="list-unstyled mt-3">
+                    @if($session->passFailRecord->report_url)
+                    <li class="mb-3">
+                        <a href="{{$session->passFailRecord->report_url}}" style="text-decoration:none;"><i class="fas fa-chevron-right"></i> &nbsp; <span class="black-text">View report</span></a>
+                    </li>
+                    @endif
+                    <li class="mb-2">
+                        <p>Remarks:</p>
+                        {{$session->passFailRecord->remarksHtml()}}
+                    </li>
+                </ul>
+            @elseif ($session->result == 'passed')
+                <h3>
+                    <span style='font-weight: 400' class='badge rounded green text-white p-2 shadow-none'>
+                        Passed
+                    </span>
+                </h3>
+                <ul class="list-unstyled mt-3">
+                    @if($session->passFailRecord->report_url)
+                    <li class="mb-3">
+                        <a href="{{$session->passFailRecord->report_url}}" style="text-decoration:none;"><i class="fas fa-chevron-right"></i> &nbsp; <span class="black-text">View report</span></a>
+                    </li>
+                    @endif
+                    <li class="mb-2">
+                        <p>Remarks:</p>
+                        {{$session->passFailRecord->remarksHtml()}}
+                    </li>
+                </ul>
+            @endif
         @endcan
     </div>
     <div class="col-md-6">
@@ -297,6 +342,106 @@
     </div>
 </div>
 
+
+<!--Start marked as passed modal-->
+<div class="modal fade" id="passModal" role="dialog">
+    <div class="modal-dialog modal-dialog-centered model-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Mark session as passed</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <form action="{{route('training.admin.instructing.ots-sessions.result.pass', $session->id)}}" method="POST" enctype="multipart/form-data">
+                @csrf
+                <div class="modal-body">
+                    @if($errors->markPassedErrors->any())
+                        <div class="alert alert-danger">
+                            <h4>There were errors</h4>
+                            <ul class="pl-0 ml-0 list-unstyled">
+                                @foreach ($errors->markPassedErrors->all() as $error)
+                                    <li>{{ $error }}</li>
+                                @endforeach
+                            </ul>
+                        </div>
+                    @endif
+                    <div class="form-group">
+                        <label>The report PDF/DOCX file for this OTS session</label>
+                        <div class="input-group pb-3">
+                            <div class="custom-file">
+                                <input type="file" class="custom-file-input" name="reportFile">
+                                <label class="custom-file-label">Choose document/PDF file</label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label>Remarks</label>
+                        <textarea id="contentMD2" name="remarks" style="display:none; height:"></textarea>
+                        <script>
+                            var simplemde = new EasyMDE({ maxHeight: '200px', autofocus: true, autoRefresh: true, element: document.getElementById("contentMD2")});
+                        </script>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-light" data-dismiss="modal">Dismiss</button>
+                    <button class="btn btn-success">Pass</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+
+<!--Start marked as failed modal-->
+<div class="modal fade" id="failModal" role="dialog">
+    <div class="modal-dialog modal-dialog-centered model-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Mark session as failed</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <form action="{{route('training.admin.instructing.ots-sessions.result.fail', $session->id)}}" method="POST" enctype="multipart/form-data">
+                @csrf
+                <div class="modal-body">
+                    @if($errors->markPassedErrors->any())
+                        <div class="alert alert-danger">
+                            <h4>There were errors</h4>
+                            <ul class="pl-0 ml-0 list-unstyled">
+                                @foreach ($errors->markPassedErrors->all() as $error)
+                                    <li>{{ $error }}</li>
+                                @endforeach
+                            </ul>
+                        </div>
+                    @endif
+                    <div class="form-group">
+                        <label>The report PDF/DOCX file for this OTS session</label>
+                        <div class="input-group pb-3">
+                            <div class="custom-file">
+                                <input type="file" class="custom-file-input" name="reportFile">
+                                <label class="custom-file-label">Choose document/PDF file</label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label>Remarks</label>
+                        <textarea id="contentMD3" name="remarks" style="display:none; height:"></textarea>
+                        <script>
+                            var simplemde = new EasyMDE({ maxHeight: '200px', autofocus: true, autoRefresh: true, element: document.getElementById("contentMD3")});
+                        </script>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-light" data-dismiss="modal">Dismiss</button>
+                    <button class="btn btn-danger">Fail</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
 <!--Cancel modal-->
 <div class="modal fade" id="cancelSessionModal" tabindex="-1" role="dialog">
     <div class="modal-dialog modal-dialog-centered" role="document">
@@ -340,6 +485,9 @@
         $("#assignPositionModal").modal();
     }
 
+    if ($.urlParam('passModal') == '1') {
+        $("#passModal").modal();
+    }
 </script>
 
 @endsection

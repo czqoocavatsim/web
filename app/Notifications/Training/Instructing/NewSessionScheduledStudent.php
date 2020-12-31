@@ -51,7 +51,7 @@ class NewSessionScheduledStudent extends Notification
                 ->greeting("Hi {$this->session->student->user->fullName('F')},")
                 ->line("{$this->session->instructor->user->fullName('FL')} has scheduled a training session with you for {$this->session->scheduled_time->toDayDateTimeString()}.")
                 ->line("If you have any questions, please contact your Instructor.")
-                ->action('View Session', '')
+                ->action('View Session', route('training.portal.sessions.view-training-session', $this->session))
                 ->salutation("Gander Oceanic OCA");
         } elseif ($this->type == 'ots') {
             return (new MailMessage)
@@ -59,7 +59,7 @@ class NewSessionScheduledStudent extends Notification
                 ->greeting("Hi {$this->session->student->user->fullName('F')},")
                 ->line("{$this->session->instructor->user->fullName('FL')} has scheduled an OTS session with you for {$this->session->scheduled_time->toDayDateTimeString()}.")
                 ->line("If you have any questions, please contact your Assessor.")
-                ->action('View Session', '')
+                ->action('View Session', route('training.portal.sessions.view-ots-session', $this->session))
                 ->salutation("Gander Oceanic OCA");
         }
     }
