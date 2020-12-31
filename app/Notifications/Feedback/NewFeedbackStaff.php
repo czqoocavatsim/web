@@ -40,11 +40,16 @@ class NewFeedbackStaff extends Notification
      */
     public function toMail($notifiable)
     {
-        return (new MailMessage)
-                    ->subject("New {$this->submission->type->name}")
-                    ->greeting('Hello!')
-                    ->line("{$this->submission->user->fullName('FLC')} has submitted {$this->submission->type->name}.")
-                    ->salutation("Gander Oceanic OCA");
+        $message = new MailMessage;
+        $message->subject("New {$this->submission->type->name}");
+        $message->greeting('Hello!');
+        $message->line("{$this->submission->user->fullName('FLC')} has submitted {$this->submission->type->name}.");
+        foreach ($this->submission->fields as $f) {
+            $message->line("**{$f->name}:** {$f->content}");
+        }
+        $message->line($this->submission->submission_content);
+        $message->salutation("Gander Oceanic OCA");
+        return $message;
     }
 
     /**
