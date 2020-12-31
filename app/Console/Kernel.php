@@ -342,7 +342,7 @@ class Kernel extends ConsoleKernel
         $schedule->job(new ProcessSoloCertExpiryWarnings)->daily();
 
         //Training/OTS session reminders
-        $schedule->job(new ProcessSessionReminders)->everyMinute();
+        $schedule->job(new ProcessSessionReminders)->daily();
 
         // Discord role updating
         //$schedule->job(new UpdateDiscordUserRoles)->twiceDaily(6, 18);
