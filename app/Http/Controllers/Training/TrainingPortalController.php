@@ -5,7 +5,9 @@ namespace App\Http\Controllers\Training;
 use App\Http\Controllers\Controller;
 use App\Models\Publications\Policy;
 use App\Models\Training\Instructing\Links\StudentStatusLabelLink;
+use App\Models\Training\Instructing\Records\OTSSession;
 use App\Models\Training\Instructing\Records\StudentNote;
+use App\Models\Training\Instructing\Records\TrainingSession;
 use App\Models\Training\Instructing\Students\StudentAvailabilitySubmission;
 use App\Models\Training\Instructing\Students\StudentStatusLabel;
 use Carbon\Carbon;
@@ -140,6 +142,36 @@ class TrainingPortalController extends Controller
 
         //Return view
         return view('training.portal.training-notes', compact('notes', 'recommendations'));
+    }
+
+    public function yourSessions()
+    {
+        //Get their training sessions
+        $trainingSessions = Auth::user()->studentProfile->trainingSessions->sortByDesc('scheduled_time');
+
+        //Get their OTS sessions
+        $otsSessions = Auth::user()->studentProfile->otsSessions->sortByDesc('scheduled_time');
+
+        //Return view
+        return view('training.portal.sessions.index', compact('trainingSessions', 'otsSessions'));
+    }
+
+    public function viewTrainingSession($session_id)
+    {
+        //Get session
+        $session = TrainingSession::whereId($session_id)->where('student_id', Auth::user()->studentProfile->id)->firstOrFail();
+
+        //Return view
+        return view('training.portal.sessions.view-training-session', compact('session'));
+    }
+
+    public function viewOtsSession($session_id)
+    {
+        //Get session
+        $session = OTSSession::whereId($session_id)->where('student_id', Auth::user()->studentProfile->id)->firstOrFail();
+
+        //Return view
+        return view('training.portal.sessions.view-ots-session', compact('session'));
     }
 
     public function actions()

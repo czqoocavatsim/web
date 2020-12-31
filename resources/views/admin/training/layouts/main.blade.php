@@ -1,4 +1,4 @@
-@extends('layouts.master', ['adminNavBar' => true])
+@extends('layouts.primary', ['adminNavBar' => true])
 @section('content')
 <script src="{{asset('js/instructing.js')}}"></script>
 <div class="container py-4" style="padding-bottom: 5rem !important;">
@@ -44,19 +44,27 @@
                         <span style="font-size: 1em;" class="text-muted">INSTRUCTING</span>
                     </div>
                 </li>
-                {{-- <a class="myczqo-tab {{Request::is('admin/training/instructing/calendar') ? 'active' : ''}} no-click" data-myczqo-tab="none" href="{{route('training.admin.instructing.calendar')}}">
+                <a class="myczqo-tab no-click" data-myczqo-tab="none" href="" data-toggle="modal" data-target="#searchModal">
+                    <li class="w-100">
+                        <div class="d-flex h-100 flex-row justify-content-left align-items-center">
+                            <i style="font-size: 1.6em; margin-right: 10px;" class="fas fa-search fa-fw"></i>
+                            <span style="font-size: 1.1em;">Search</span>
+                        </div>
+                    </li>
+                </a>
+                <a class="myczqo-tab {{Request::is('admin/training/instructing/calendar') ? 'active' : ''}} no-click" data-myczqo-tab="none" href="{{route('training.admin.instructing.calendar')}}">
                     <li class="w-100">
                         <div class="d-flex h-100 flex-row justify-content-left align-items-center">
                             <i style="font-size: 1.6em; margin-right: 10px;" class="fas fa-clock fa-fw"></i>
                             <span style="font-size: 1.1em;">Calendar</span>
                         </div>
                     </li>
-                </a> --}}
+                </a>
                 <a class="myczqo-tab {{Request::is('admin/training/instructing/board') ? 'active' : ''}} no-click" data-myczqo-tab="none" href="{{route('training.admin.instructing.board')}}">
                     <li class="w-100">
                         <div class="d-flex h-100 flex-row justify-content-left align-items-center">
                             <i style="font-size: 1.6em; margin-right: 10px;" class="fas fa-stream fa-fw"></i>
-                            <span style="font-size: 1.1em;">Board</span>
+                            <span style="font-size: 1.1em;">Overview</span>
                         </div>
                     </li>
                 </a>
@@ -76,7 +84,7 @@
                         </div>
                     </li>
                 </a>
-                {{-- <a class="myczqo-tab {{Request::is('admin/training/instructing/training-sessions') || Request::is('admin/training/instructing/training-sessions/*') ? 'active' : ''}} no-click" data-myczqo-tab="none" href="{{route('training.admin.instructing.training-sessions')}}">
+                <a class="myczqo-tab {{Request::is('admin/training/instructing/training-sessions') || Request::is('admin/training/instructing/training-sessions/*') ? 'active' : ''}} no-click" data-myczqo-tab="none" href="{{route('training.admin.instructing.training-sessions')}}">
                     <li class="w-100">
                         <div class="d-flex h-100 flex-row justify-content-left align-items-center">
                             <i style="font-size: 1.6em; margin-right: 10px;" class="fas fa-user-friends fa-fw"></i>
@@ -84,8 +92,7 @@
                         </div>
                     </li>
                 </a>
-                @can('edit ots sessions')
-                <a class="myczqo-tab {{Request::is('admin/training/instructing/ots-sessiobs') || Request::is('admin/training/instructing/ots-sessions/*') ? 'active' : ''}} no-click" data-myczqo-tab="none" href="{{route('training.admin.instructing.ots-sessions')}}">
+                <a class="myczqo-tab {{Request::is('admin/training/instructing/ots-sessions') || Request::is('admin/training/instructing/ots-sessions/*') ? 'active' : ''}} no-click" data-myczqo-tab="none" href="{{route('training.admin.instructing.ots-sessions')}}">
                     <li class="w-100">
                         <div class="d-flex h-100 flex-row justify-content-left align-items-center">
                             <i style="font-size: 1.6em; margin-right: 10px;" class="fas fa-user-check fa-fw"></i>
@@ -93,7 +100,6 @@
                         </div>
                     </li>
                 </a>
-                @endcan --}}
                 @can('edit roster')
                 <li class="w-100 my-3" style="border:none;">
                     <div class="d-flex h-100 flex-row justify-content-left align-items-center">
@@ -139,4 +145,23 @@
         </div>
     </div>
 </div>
+
+<!-- Search modal-->
+<div class="modal fade" id="searchModal" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span data-toggle="tooltip" title="Close dialog" aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body fw-500">
+                <h3 class="fw-800 mb-3 blue-text">Search for students, instructors, etc.</h3>
+                @livewire('training.instructing.search')
+            </div>
+        </div>
+    </div>
+</div>
+<!-- End search modal-->
+
 @endsection

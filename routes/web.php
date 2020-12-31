@@ -22,12 +22,13 @@ Route::get('/map', 'PrimaryViewsController@map')->name('map');
 Route::get('/roster', 'Roster\RosterController@publicRoster')->name('roster.public');
 Route::get('/roster/solo-certs', 'Training\SoloCertificationsController@public')->name('solocertifications.public');
 Route::get('/staff', function() { return redirect(route('staff'), 301); });
-Route::get('/atc-resources', 'Publications\PublicationsController@atcResources')->name('atcresources.index');
+Route::get('/atc/resources', 'Publications\PublicationsController@atcResources')->name('atcresources.index');
 Route::view('/pilots', 'pilots.index');
-Route::view('/pilots/oceanic-clearance', 'pilots.oceanic-clearance');
-Route::view('/pilots/position-report', 'pilots.position-report');
-Route::view('/pilots/tracks', 'pilots.tracks');
-Route::view('/pilots/tracks/event', 'pilots.event-tracks');
+Route::view('/pilots/oceanic-clearance', 'pilots.oceanic-clearance')->name('pilots.oceanic-clearance');
+Route::view('/pilots/position-report', 'pilots.position-report')->name('pilots.position-report');
+Route::view('/pilots/tracks', 'pilots.tracks')->name('pilots.tracks');
+Route::view('/pilots/tracks/event', 'pilots.event-tracks')->name('pilots.event-tracks');
+Route::view('/pilots/tracks/concorde', 'pilots.concorde-tracks')->name('pilots.concorde-tracks');
 Route::get('/policies', 'Publications\PublicationsController@policies')->name('policies');
 Route::get('/privacy', function() { return redirect(route('policies'), 301); })->name('privacy');
 Route::get('/events', 'Events\EventController@index')->name('events.index');
@@ -98,10 +99,6 @@ Route::group(['middleware' => 'auth'], function () {
         Route::get('/notificationclear', 'Users\NotificationRedirectController@clearAll');
 
 
-        //Feedback
-        Route::get('/feedback', 'Feedback\FeedbackController@create')->name('feedback.create');
-        Route::post('/feedback', 'Feedback\FeedbackController@createPost')->name('feedback.create.post');
-
         //Support
         Route::prefix('support')->group(function () {
             //Support home
@@ -122,6 +119,15 @@ Route::group(['middleware' => 'auth'], function () {
         Route::get('/me/discord/server/join/callback', 'Community\DiscordController@joinCallbackDiscord');
         Route::get('/my/preferences', 'Community\MyCzqoController@preferences')->name('my.preferences');
         Route::post('/my/preferences', 'Community\MyCzqoController@preferencesPost')->name('my.preferences.post');
+
+        //Feedbacl
+        Route::prefix('my/feedback')->group(function () {
+            Route::get('/new', 'Feedback\FeedbackController@newFeedback')->name('my.feedback.new');
+            Route::get('/new/{type_slug}', 'Feedback\FeedbackController@newFeedbackWrite')->name('my.feedback.new.write');
+            Route::post('/new/{type_slug}', 'Feedback\FeedbackController@newFeedbackWritePost')->name('my.feedback.new.write.post');
+            Route::get('/', 'Feedback\FeedbackController@myFeedback')->name('my.feedback');
+            Route::get('/{slug}', 'Feedback\FeedbackController@viewSubmission')->name('my.feedback.submission');
+        });
 
         //Training
         Route::prefix('training')->group(function () {
@@ -150,14 +156,12 @@ Route::group(['middleware' => 'auth'], function () {
                 Route::get('portal/training-notes', 'Training\TrainingPortalController@yourTrainingNotes')->name('training-notes');
                 //Actions
                 Route::get('portal/actions', 'Training\TrainingPortalController@actions')->name('actions');
+                //Training sessions
+                Route::get('portal/sessions', 'Training\TrainingPortalController@yourSessions')->name('sessions');
+                Route::get('portal/sessions/training/{id}', 'Training\TrainingPortalController@viewTrainingSession')->name('sessions.view-training-session');
+                Route::get('portal/sessions/ots/{id}', 'Training\TrainingPortalController@viewOtsSession')->name('sessions.view-ots-session');
             });
         });
-
-        //Support
-        Route::prefix('support')->name('support.')->group(function () {
-            Route::get('/', 'Support\TicketsController@index')->name('index');
-        });
-
 
         Route::group(['middleware' => 'can:view events'], function () {
             //Events
@@ -174,6 +178,8 @@ Route::group(['middleware' => 'auth'], function () {
 
         //Admin
         Route::prefix('admin')->group(function () {
+
+            Route::view('/', 'admin.index')->name('admin.index');
 
             //Settings
             Route::prefix('settings')->group(function () {
@@ -211,6 +217,7 @@ Route::group(['middleware' => 'auth'], function () {
                     //Solo certifications
                     Route::get('/solocertifications', 'Training\SoloCertificationsController@admin')->name('solocertifications')->middleware('can:view roster admin');
                     Route::post('/solocertifications/add', 'Training\SoloCertificationsController@addSoloCertificationPost')->name('solocertifications.add')->middleware('can:edit roster');
+                    Route::get('/solocertifications/{cert_id}/revoke', 'Training\SoloCertificationsController@revokeSoloCert')->name('solocertifications.revoke')->middleware('can:edit roster');
 
                     //Applications
                     Route::get('/applications', 'Training\ApplicationsController@admin')->name('applications')->middleware('can:view applications');
@@ -267,12 +274,25 @@ Route::group(['middleware' => 'auth'], function () {
 
                             //Training sessions
                             Route::get('/training-sessions', 'Training\SessionsController@trainingSessionsIndex')->name('instructing.training-sessions');
+                            Route::post('/training-sessions/create', 'Training\SessionsController@createTrainingSession')->name('instructing.training-sessions.create');
+                            Route::post('/training-sessions/ajax/remarks', 'Training\SessionsController@saveTrainingSessionRemarks')->name('instructing.training-sessions.ajax.remarks');
                             Route::get('/training-sessions/{id}', 'Training\SessionsController@viewTrainingSession')->name('instructing.training-sessions.view');
                             Route::post('/training-sessions/{id}/edit/time', 'Training\SessionsController@editTrainingSessionTime')->name('instructing.training-sessions.edit.time')->middleware('can:edit training sessions');
                             Route::post('/training-sessions/{id}/edit/instructor', 'Training\SessionsController@reassignTrainingSessionInstructor')->name('instructing.training-sessions.edit.instructor')->middleware('can:edit training sessions');
+                            Route::get('/training-sessions/{id}/cancel', 'Training\SessionsController@cancelTrainingSession')->name('instructing.training-sessions.cancel')->middleware('can:edit training sessions');
+                            Route::post('/training-sessions/{id}/edit/position', 'Training\SessionsController@assignTrainingSessionPosition')->name('instructing.training-sessions.edit.position')->middleware('can:edit training session');
 
                             //OTS sessions
                             Route::get('/ots-sessions', 'Training\SessionsController@otsSessionsIndex')->name('instructing.ots-sessions');
+                            Route::post('/ots-sessions/create', 'Training\SessionsController@createOtsSession')->name('instructing.ots-sessions.create');
+                            Route::post('/ots-sessions/ajax/remarks', 'Training\SessionsController@saveOtsSessionRemarks')->name('instructing.ots-sessions.ajax.remarks');
+                            Route::get('/ots-sessions/{id}', 'Training\SessionsController@viewOtsSession')->name('instructing.ots-sessions.view');
+                            Route::post('/ots-sessions/{id}/edit/time', 'Training\SessionsController@editOtsSessionTime')->name('instructing.ots-sessions.edit.time')->middleware('can:edit ots sessions');
+                            Route::post('/ots-sessions/{id}/edit/instructor', 'Training\SessionsController@reassignOtsSessionInstructor')->name('instructing.ots-sessions.edit.instructor')->middleware('can:edit ots sessions');
+                            Route::get('/ots-sessions/{id}/cancel', 'Training\SessionsController@cancelOtsSession')->name('instructing.ots-sessions.cancel')->middleware('can:edit ots sessions');
+                            Route::post('/ots-sessions/{id}/edit/position', 'Training\SessionsController@assignOtsSessionPosition')->name('instructing.ots-sessions.edit.position')->middleware('can:edit ots sessions');
+                            Route::post('/ots-sessions/{id}/result/pass', 'Training\SessionsController@markOtsSessionAsPassed')->name('instructing.ots-sessions.result.pass')->middleware('can:edit ots sessions');
+                            Route::post('/ots-sessions/{id}/result/fail', 'Training\SessionsController@markOtsSessionAsFailed')->name('instructing.ots-sessions.result.fail')->middleware('can:edit ots sessions');
                         });
                     });
                 });
@@ -329,11 +349,11 @@ Route::group(['middleware' => 'auth'], function () {
                 Route::group(['middleware' => ['permission:view users']], function () {
                     Route::get('/users', 'Community\UsersController@index')->name('community.users.index');
                     Route::get('/users/{id}', 'Community\UsersController@viewUser')->name('community.users.view');
+                    Route::get('/users/{id}/reset/avatar', 'Community\UsersController@resetUserAvatar')->name('community.users.reset.avatar')->middleware('can:edit user data');
                     Route::post('/users/{id}/assign/role', 'Community\UsersController@assignUserRole')->name('community.users.assign.role')->middleware('can:edit user data');
                     Route::post('/users/{id}/assign/permission', 'Community\UsersController@assignUserPermission')->name('community.users.assign.permission')->middleware('can:edit user data');
                     Route::delete('/users/{id}/remove/role', 'Community\UsersController@removeUserRole')->name('community.users.remove.role')->middleware('can:edit user data');
                     Route::delete('/users/{id}/remove/permission', 'Community\UsersController@removeUserPermission')->name('community.users.remove.permission')->middleware('can:edit user data');
-                    Route::post('/discord/discordban', 'Community\DiscordController@createDiscordBan')->name('discord.createban');
                 });
             });
 

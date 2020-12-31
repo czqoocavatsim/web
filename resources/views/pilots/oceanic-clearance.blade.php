@@ -1,22 +1,10 @@
-@extends('layouts.master')
-
-@section('navbarprim')
-
-    @parent
-
-@stop
-@section('title', 'Oceanic Clearance Tool - ')
-@section('description', 'Generate oceanic clearances')
-@section('content')
-<div class="container" style="margin-top: 20px;">
-    <div class="row">
-        <div class="col-md-3">
-            @include('layouts.toolSidebar')
-        </div>
-        <div class="col-md-9">
+@extends('pilots.layout')
+@section('title', 'Oceanic Clearance Generator - ')
+@section('description', 'Generate oceanic clearances to read out over voice to your oceanic controller')
+@section('pilot-content')
+<div class="container py-4">
             <h1 class="font-weight-bold blue-text">Oceanic Clearance Generator</h1>
-            <hr>
-            <div class="alert bg-czqo-blue-light my-3">
+            <div class="alert bg-czqo-blue-light my-4">
                 This tool <span class="font-weight-bold">does not</span> submit your oceanic clearance request to the Oceanic controller. This tool provides you with an idea of what to say to the controller when requesting it via voice or text.
             </div>
             <div class="form-row">
@@ -85,8 +73,6 @@
             </div>
             <p class="border" id="results" style="padding: 1rem;">No results yet.</p>
         </div>
-    </div>
-</div>
 <!-- Modal -->
 <div class="modal fade" id="routingModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered" role="document">
@@ -109,4 +95,4 @@
     </div>
     </div>
 </div>
-@stop
+@endsection

@@ -2,7 +2,7 @@
 
 namespace App\Jobs;
 
-use App\Models\AtcTraining\RosterMember;
+use App\Models\Roster\RosterMember;
 use Carbon\Carbon;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
@@ -31,7 +31,7 @@ class ProcessInactivityEmail implements ShouldQueue
      */
     public function handle()
     {
-        $rosterMembers = RosterMember::all()->whereNotIn('status', ['not_certified', 'training']);
+        $rosterMembers = RosterMember::all()->whereNotIn('certification', ['not_certified', 'training']);
 
         foreach ($rosterMembers as $rosterMember) {
 

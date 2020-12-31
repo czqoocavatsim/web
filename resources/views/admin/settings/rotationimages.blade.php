@@ -2,15 +2,12 @@
 
 @section('settings-content')
     <div class="container py-4">
-        <a href="{{route('settings.index')}}" class="blue-text" style="font-size: 1.2em;"> <i class="fas fa-arrow-left"></i> Settings</a>
         <h1 class="blue-text font-weight-bold mt-2">Rotation Images</h1>
-        <hr>
         <h5 class="font-weight-bold blue-text">Current Images</h5>
         <div class="row">
             @foreach ($images as $image)
                 <div class="col-md-3">
-                    <div class="card">
-                        <div class="card-body">
+                    <div class="list-group-item rounded z-depth-1 shadow-none">
                             <img src="{{$image->path}}" alt="" class="img-fluid">
                             <div class="mt-2 d-flex flex-row justify-content-between align-items-center">
                                 <div>
@@ -20,7 +17,6 @@
                                     <a href="{{route('settings.rotationimages.deleteimg', $image->id)}}" class="btn btn-sm btn-danger">Delete</a>
                                 </div>
                             </div>
-                        </div>
                     </div>
                 </div>
             @endforeach

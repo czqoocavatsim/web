@@ -24,4 +24,6 @@ $(document).ready(function () {
         //make new tab active
         $(".myczqo-tab[data-myczqo-tab="+tab+']').addClass('active')
     });
+
+
 })

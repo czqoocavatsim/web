@@ -3,8 +3,12 @@
 namespace App\Models\Training\Instructing\Records;
 
 use App\Models\Network\MonitoredPosition;
+use App\Models\Training\Instructing\Instructors\Instructor;
+use App\Models\Training\Instructing\Students\Student;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Support\HtmlString;
+use Parsedown;
 
 class OTSSession extends Model
 {
@@ -13,7 +17,7 @@ class OTSSession extends Model
     protected $hidden = ['id'];
 
     protected $fillable = [
-        'student_id', 'assessor_id', 'scheduled_time', 'remarks', 'results', 'position_id'
+        'student_id', 'assessor_id', 'scheduled_time', 'remarks', 'result', 'position_id'
     ];
 
     protected $dates = [
@@ -33,5 +37,15 @@ class OTSSession extends Model
     public function position()
     {
         return $this->belongsTo(MonitoredPosition::class, 'position_id');
+    }
+
+    public function passFailRecord()
+    {
+        return $this->hasOne(OTSSessionPassFailRecord::class, 'ots_session_id');
+    }
+
+    public function remarksHtml()
+    {
+        return new HtmlString(app(Parsedown::class)->text($this->remarks));
     }
 }

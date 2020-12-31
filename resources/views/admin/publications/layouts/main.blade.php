@@ -1,4 +1,4 @@
-@extends('layouts.master', ['adminNavBar' => true])
+@extends('layouts.primary', ['adminNavBar' => true])
 @section('content')
 <div class="container py-4">
     <div class="row">

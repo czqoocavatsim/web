@@ -2,8 +2,7 @@
 
 namespace App\Jobs;
 
-use App\Models\AtcTraining\RosterMember;
-use App\Models\Roster\RosterMember as RosterRosterMember;
+use App\Models\Roster\RosterMember as RosterMember;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
@@ -76,7 +75,7 @@ class ProcessArticlePublishing implements ShouldQueue
             break;
             case 1:
                 //Send to controllers
-                $roster = RosterRosterMember::where('certification', '!=', 'not_certified')->get();
+                $roster = RosterMember::where('certification', '!=', 'not_certified')->get();
                 foreach ($roster as $member) {
                     $member->user->notify(new NewsNotification($member->user, $this->article));
                 }
@@ -87,7 +86,12 @@ class ProcessArticlePublishing implements ShouldQueue
             break;
             case 2:
                 //Send to subscribed users
-                $users = User::where('gdpr_subscribed_emails', 1)->get();
+                $users = User::cursor()->filter(function ($user) {
+                    if ($prefs = $user->notificationPreferences) {
+                        return $prefs->news_notifications == 'email';
+                    }
+                    return false;
+                });
                 foreach ($users as $user) {
                     $user->notify(new NewsNotification($user, $this->article));
                 }

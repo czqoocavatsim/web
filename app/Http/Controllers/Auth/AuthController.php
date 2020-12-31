@@ -32,7 +32,7 @@ class AuthController extends Controller
     {
         Auth::logout();
 
-        return redirect('/');
+        return redirect('/')->with('info', 'Logged out.');
     }
 
     /*
@@ -49,6 +49,7 @@ class AuthController extends Controller
             'redirect_uri' => config('connect.redirect'),
             'response_type' => 'code',
             'scope' => 'full_name vatsim_details email',
+            'required_scopes' => 'vatsim_details',
             'state' => $state,
         ]);
 

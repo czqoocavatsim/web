@@ -1,4 +1,4 @@
-@extends('layouts.master')
+@extends('layouts.primary')
 
 @section('content')
 <div class="container py-4">
@@ -18,6 +18,7 @@
             <select data-pretty-name="Appearance" data-table="main" name="ui_mode" id="" class="form-control pref-dropdown">
                 <option value="light" @if($preferences->ui_mode == 'light') selected @endif>Light</option>
                 <option value="dark" @if($preferences->ui_mode == 'dark') selected @endif>Dark</option>
+                <option value="system" @if($preferences->ui_mode == 'system') selected @endif>System mode (requires Windows 10, iOS 13+, Android 10+, or macOS 10.14 Mojave+)</option>
             </select>
             <div class="d-none float-right" id="ui_mode_loading">
                 <div class="d-flex flex-row align-items-center">

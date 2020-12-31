@@ -3,20 +3,42 @@
 
 @section('portal-content')
 <div class="container py-4">
-    <h2 class="blue-text mb-4"><span id="greeting">Hello</span>, {{Auth::user()->fullName('F')}}!</h2>
+    <h2 class="blue-text mb-4 fw-700"><span id="greeting">Hello</span>, {{Auth::user()->fullName('F')}}!</h2>
+    @if ($studentProfile = Auth::user()->studentProfile && $cert = Auth::user()->studentProfile->soloCertification())
+    <div class="list-group-item rounded p-4 my-3 z-depth-1 shadow-none white-text {{ $cert->expires->diffInDays(Carbon\Carbon::now()) <= 2 ? 'red' : 'blue'}}">
+        <h4 class="fw-600">{{ $cert->expires->diffInDays(Carbon\Carbon::now()) <= 2 ? 'Your solo certification is about to expire' : 'Your active solo certification'}}</h4>
+        <h5 class="fw-500">Expires: {{$cert->expires->toFormattedDateString()}} (in {{$cert->expires->diffForHumans()}})</h5>
+        <h5 class="fw-500">Granted by: {{$cert->instructor->fullName('FL')}}</h5>
+        <p class="mt-3 mb-0">{{ $cert->expires->diffInDays(Carbon\Carbon::now()) <= 2 ? 'Contact your instructor to request an extension or proceed to an OTS assessment.' : 'Your use of this solo certification is bound to our policies and VATSIM\'s GRP. Your instructor will give you more information.'}}</p>
+    </div>
+    @endif
+    @if ($studentProfile = Auth::user()->studentProfile && $session = Auth::user()->studentProfile->upcomingTrainingSession())
+    <div class="list-group-item rounded p-4 my-3 z-depth-1 shadow-none">
+        <h4 class="fw-600 blue-text"><i class="far fa-calendar-check mr-2"></i>Your upcoming training session</h4>
+        <h6 class="fw-500">Scheduled for {{$session->scheduled_time->toFormattedDateString()}} (in {{$session->scheduled_time->diffForHumans()}})</h6>
+        <h6 class="fw-500 mb-0">With {{$session->instructor->user->fullName('FL')}}</h6>
+    </div>
+    @endif
+    @if ($studentProfile = Auth::user()->studentProfile && $session = Auth::user()->studentProfile->upcomingOtsSession())
+    <div class="list-group-item rounded p-4 my-3 z-depth-1 shadow-none">
+        <h4 class="fw-600 blue-text"><i class="far fa-calendar-check mr-2"></i>Your upcoming OTS session</h4>
+        <h6 class="fw-500">Scheduled for {{$session->scheduled_time->toFormattedDateString()}} (in {{$session->scheduled_time->diffForHumans()}})</h6>
+        <h6 class="fw-500 mb-0">With {{$session->instructor->user->fullName('FL')}}</h6>
+    </div>
+    @endif
     @can('start applications')
     <div class="list-group-item rounded p-4 my-3 z-depth-1 shadow-none">
-        <h4 class="blue-text"><i style="margin-right: 10px;" >👋</i>Apply for Gander Oceanic Certification</h4>
+        <h4 class="blue-text fw-600"><i style="margin-right: 10px;" >👋</i>Apply for Gander Oceanic Certification</h4>
         <p style="font-size: 1.1em;">Interested in joining our team of oceanic controllers?</p>
         <p style="font-size: 1.2em;" class="mt-3 mb-0">
-            <a class="font-weight-bold text-body" href="{{route('training.applications.apply')}}">Start your application &nbsp;&nbsp;<i class="fas fa-arrow-right blue-text"></i></a>
+            <a class="fw-500 text-body" href="{{route('training.applications.apply')}}">Start your application &nbsp;&nbsp;<i class="fas fa-arrow-right blue-text"></i></a>
         </p>
     </div>
     @endcan
     @if(Auth::user()->studentProfile && Auth::user()->studentProfile->current)
     @php ($studentProfile = Auth::user()->studentProfile)
     <div class="list-group-item rounded p-4 my-3 z-depth-1 shadow-none">
-        <h4 class="blue-text"><i class="fas fa-graduation-cap mr-2"></i>Your progress</h4>
+        <h4 class="blue-text fw-600"><i class="fas fa-graduation-cap mr-2"></i>Your progress</h4>
         <h4 class="my-3">
         @foreach($studentProfile->labels as $label)
             <span class="mr-2">
@@ -77,10 +99,10 @@
     </div>
     @endif
     <div class="list-group-item rounded p-4 my-3 z-depth-1 shadow-none">
-        <h4 class="blue-text"><i class="fas fa-paper-plane mr-2"></i>Check out our resources on oceanic flight</h4>
+        <h4 class="blue-text fw-600"><i class="fas fa-paper-plane mr-2"></i>Check out our resources on oceanic flight</h4>
         <p style="font-size: 1.1em;">We've created a large range of tutorials and resources on what it takes to fly and control over the North Atlanic Ocean. Check it for yourself!</p>
         <p style="font-size: 1.2em;" class="mt-3 mb-0">
-            <a class="font-weight-bold text-body" href="https://knowledgebase.ganderoceanic.com">CZQO Knowledge Base &nbsp;&nbsp;<i class="fas fa-arrow-right blue-text"></i></a>
+            <a class="fw-500 text-body" href="https://knowledgebase.ganderoceanic.com">CZQO Knowledge Base &nbsp;&nbsp;<i class="fas fa-arrow-right blue-text"></i></a>
         </p>
     </div>
 </div>

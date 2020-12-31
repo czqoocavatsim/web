@@ -34,7 +34,7 @@ class ProcessDataExport implements ShouldQueue
      */
     public function handle()
     {
-        $user = User::whereId($this->user->id)->with(['notes', 'applications', 'staffProfile', 'rosterProfile', 'tickets', 'ticketReplies'])->firstOrFail();
+        $user = User::whereId($this->user->id)->with(['applications', 'staffProfile', 'rosterProfile', 'instructorProfile', 'studentProfile'])->firstOrFail();
         $userArray = $user->toArray();
         $discord = null;
         if ($user->hasDiscord()) {

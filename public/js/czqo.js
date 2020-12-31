@@ -673,10 +673,17 @@ async function createNatTrackMap()
     let table = $("#natTrackTable")
 
     //Create OSM Layer
-    var OpenStreetMap_Mapnik = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-        maxZoom: 19,
-        attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-    }).addTo(map);
+    if ($('body').data('theme') === 'dark') {
+        var OpenStreetMap_Mapnik = L.tileLayer('https://cartodb-basemaps-{s}.global.ssl.fastly.net/dark_all/{z}/{x}/{y}.png', {
+            maxZoom: 19,
+            attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+        }).addTo(map);
+    } else {
+        var OpenStreetMap_Mapnik = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            maxZoom: 19,
+            attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+        }).addTo(map);
+    }
 
     //Get tracks
     let endpoint = "https://tracks.ganderoceanic.com/data"
@@ -768,10 +775,17 @@ async function createEventTrackMap()
     let table = $("#natTrackTable")
 
     //Create OSM Layer
-    var OpenStreetMap_Mapnik = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-        maxZoom: 19,
-        attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-    }).addTo(map);
+    if ($('body').data('theme') === 'dark') {
+        var OpenStreetMap_Mapnik = L.tileLayer('https://cartodb-basemaps-{s}.global.ssl.fastly.net/dark_all/{z}/{x}/{y}.png', {
+            maxZoom: 19,
+            attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+        }).addTo(map);
+    } else {
+        var OpenStreetMap_Mapnik = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            maxZoom: 19,
+            attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+        }).addTo(map);
+    }
 
     //Get tracks
     let endpoint = "https://tracks.ganderoceanic.com/event"
@@ -818,6 +832,108 @@ async function createEventTrackMap()
         let pointsText = []
         track.route.forEach(point => {
             pointsText.push(" " + point.name)
+        })
+        let pointsCell = $("<td></td>").text(pointsText)
+        $(row).append(pointsCell)
+
+        //Add direction
+        let directionCell = $("<td></td>")
+        if (track.direction == 1) {
+            $(directionCell).text('Westbound')
+        } else {
+            $(directionCell).text('Eastbound')
+        }
+        $(row).append(directionCell)
+
+        //Add levels
+        let levelsText = []
+        track.flightLevels.forEach(level => {
+            levelsText.push(" " + level / 100)
+        })
+        let levelsCell = $("<td></td>").text(levelsText)
+        $(row).append(levelsCell)
+
+        //validity
+        let validityCell = $("<td></td>").text(
+            `${parseTimeStamp(track.validFrom)} to ${parseTimeStamp(track.validTo)}`
+        )
+        $(row).append(validityCell)
+
+        //Add row to table
+        $(table).append(row)
+    })
+
+    //Add points and boundaries
+    createMapPointsBoundaries(map)
+}
+
+//Create concorde track map
+async function createConcordeTrackMap()
+{
+    //Create map
+    const map = L.map('map', { minZoom: 4, maxZoom: 7 }).setView([52, -35], 1);
+
+    //Define table
+    let table = $("#natTrackTable")
+
+    //Create OSM Layer
+    if ($('body').data('theme') === 'dark') {
+        var OpenStreetMap_Mapnik = L.tileLayer('https://cartodb-basemaps-{s}.global.ssl.fastly.net/dark_all/{z}/{x}/{y}.png', {
+            maxZoom: 19,
+            attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+        }).addTo(map);
+    } else {
+        var OpenStreetMap_Mapnik = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            maxZoom: 19,
+            attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+        }).addTo(map);
+    }
+
+    //Get tracks
+    let endpoint = "https://tracks.ganderoceanic.com/concorde"
+    const response = await fetch(endpoint)
+
+    //Create data object
+    const data = await response.json()
+
+    //Go through each NAT Track
+    data.forEach(track => {
+        //Create array of points latitudes/longitudes
+        let pointsLatLon = []
+        track.route.forEach(point => {
+            //Add point to array
+            pointsLatLon.push([point.latitude, point.longitude])
+            //Create map marker
+            createMapTrackPointMarker(point, track, map)
+        })
+
+        //Get colour for the polyline depending on track direction
+        let colour = '#00000';
+        if (track.direction == 1) {
+            colour = '#1c5fc9'
+        } else {
+            colour = '#c92d1c'
+        }
+
+        //Create polylines
+        let line = new L.Polyline(pointsLatLon, {
+            color: colour,
+            weight: 2,
+            opacity: 1,
+            smoothFactor: 1
+        }).addTo(map)
+
+        //Create row
+        let row = $("<tr></tr>")
+
+        //Add track id
+        let idCell = $("<td scope='row'></td>").text(track.id)
+        $(row).append(idCell)
+
+        //Add points
+        let pointsText = []
+        track.route.forEach(point => {
+            pointsText.push(" " + point.name + " (" + point.latitude + "N " + point.longitude + "W)")
         })
         let pointsCell = $("<td></td>").text(pointsText)
         $(row).append(pointsCell)
@@ -913,7 +1029,7 @@ async function createMap(planes, controllerOnline) {
     })
 
     //Add Gander/Shanwick bubbles if they're online
-    if (!controllerOnline) {
+    if (controllerOnline) {
         var ganderOca = L.polygon([
             [45.0, -30],
             [45.0, -40],
@@ -988,6 +1104,8 @@ $(document).ready(function () {
         //make new tab active
         $(".myczqo-tab[data-myczqo-tab="+tab+']').addClass('active')
     });
+
+
 })
 
 $(document).ready(function () {
@@ -1066,6 +1184,19 @@ $(document).ready(function () {
                     $('body').attr('data-theme', select.value)
                 } else if (select.name == 'accent_colour') {
                     $('body').attr('data-accent', select.value)
+                }
+
+                //If it's system UI mode...
+                if ($('body').data('theme') == 'system') {
+                    if (window.matchMedia) {
+                        if(window.matchMedia('(prefers-color-scheme: dark)').matches){
+                            $("body").attr("data-theme", "dark")
+                        } else {
+                            $("body").attr("data-theme", "light")
+                        }
+                    } else {
+                        $("body").attr("data-theme", "light")
+                    }
                 }
             },
             error: function(data) {
@@ -1202,3 +1333,17 @@ function createInstructingSessionsCal() {
 
     return calendar;
 }
+
+$(document).ready(function () {
+    if ($("body").data("theme") == "system") {
+        if (window.matchMedia) {
+            if(window.matchMedia('(prefers-color-scheme: dark)').matches){
+                $("body").attr("data-theme", "dark")
+            } else {
+                $("body").attr("data-theme", "light")
+            }
+        } else {
+            $("body").attr("data-theme", "light")
+        }
+    }
+})

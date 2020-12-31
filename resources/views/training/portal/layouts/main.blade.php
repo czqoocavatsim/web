@@ -1,4 +1,4 @@
-@extends('layouts.master', ['solidNavBar' => false])
+@extends('layouts.primary', ['solidNavBar' => false])
 
 @section('content')
 <div class="card card-image @yield('page-header-colour', 'blue') rounded-0" style="background-url:url(@yield('page-header-background')">
@@ -66,7 +66,7 @@
                     <li class="w-100">
                         <div class="d-flex h-100 flex-row justify-content-left align-items-center">
                             <i style="font-size: 1.6em; margin-right: 13px;" >👋</i>
-                            <span style="font-size: 1.1em;">Apply to Gander</span>
+                            <span style="font-size: 1.1em;">Apply for Gander</span>
                         </div>
                     </li>
                 </a>
@@ -79,12 +79,13 @@
                         </div>
                     </li>
                 </a>
-                @if(Auth::user()->studentProfile && $studentProfile = Auth::user()->studentProfile->current)
+                @if(Auth::user()->studentProfile)
                 <li class="w-100 my-3" style="border:none;">
                     <div class="d-flex h-100 flex-row justify-content-left align-items-center">
                         <span style="font-size: 1em;" class="text-muted">YOUR TRAINING</span>
                     </div>
                 </li>
+                @if(Auth::user()->studentProfile && Auth::user()->studentProfile->current)
                 <a class="myczqo-tab {{Request::is('training/portal/progress') ? 'active' : ''}} no-click" data-myczqo-tab="none" href="{{route('training.portal.progress')}}">
                     <li class="w-100">
                         <div class="d-flex h-100 flex-row justify-content-left align-items-center">
@@ -111,6 +112,15 @@
                     </li>
                 </a>
                 @endif
+                @endif
+                <a class="myczqo-tab {{request()->routeIs('training.portal.sessions*') ? 'active' : ''}} no-click" data-myczqo-tab="none" href="{{route('training.portal.sessions')}}">
+                    <li class="w-100">
+                        <div class="d-flex h-100 flex-row justify-content-left align-items-center">
+                            <i style="font-size: 1.6em; margin-right: 10px;" class="far fa-calendar-check fa-fw"></i>
+                            <span style="font-size: 1.1em;">Your training sessions</span>
+                        </div>
+                    </li>
+                </a>
                 <a class="myczqo-tab {{Request::is('training/portal/training-notes') ? 'active' : ''}} no-click" data-myczqo-tab="none" href="{{route('training.portal.training-notes')}}">
                     <li class="w-100">
                         <div class="d-flex h-100 flex-row justify-content-left align-items-center">
@@ -119,6 +129,7 @@
                         </div>
                     </li>
                 </a>
+                @if(Auth::user()->studentProfile && Auth::user()->studentProfile->current)
                 <a class="myczqo-tab {{Request::is('training/portal/actions') ? 'active' : ''}} no-click" data-myczqo-tab="none" href="{{route('training.portal.actions')}}">
                     <li class="w-100">
                         <div class="d-flex h-100 flex-row justify-content-left align-items-center">
@@ -127,6 +138,7 @@
                         </div>
                     </li>
                 </a>
+                @endif
                 @endif
             </ul>
         </div>

@@ -7,9 +7,12 @@ use App\Models\Training\Application;
 use App\Models\Training\Instructing\Links\InstructorStudentAssignment;
 use App\Models\Training\Instructing\Links\StudentStatusLabelLink;
 use App\Models\Training\Instructing\Records\InstuctorRecommendation;
+use App\Models\Training\Instructing\Records\OTSSession;
 use App\Models\Training\Instructing\Records\StudentNote;
+use App\Models\Training\Instructing\Records\TrainingSession;
 use App\Models\Users\User;
 use Carbon\Carbon;
+use Exception;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
@@ -81,7 +84,9 @@ class Student extends Model
     public function soloCertification()
     {
         //Find solo certification for student
-        return SoloCertification::where('roster_member_id', $this->user->rosterProfile->id)->where('expires', '>', Carbon::now())->first();
+        try {
+            return SoloCertification::where('roster_member_id', $this->user->rosterProfile->id)->where('expires', '>', Carbon::now())->first();
+        } catch(Exception $e) { return null; }
     }
 
     public function setAsReadyForAssessment()
@@ -105,5 +110,27 @@ class Student extends Model
             return true;
         }
         return false;
+    }
+
+    /**
+     * Return's the student's next scheduled training session if there is one.
+     *
+     * @return App\Models\Training\Instructing\Records\TrainingSession|null
+     */
+    public function upcomingTrainingSession()
+    {
+        if ($session = TrainingSession::where('student_id', $this->id)->where('scheduled_time', '>', Carbon::now())->first()) { return $session; }
+        return null;
+    }
+
+    /**
+     * Return's the student's next scheduled OTS session if there is one.
+     *
+     * @return App\Models\Training\Instructing\Records\OTSSession|null
+     */
+    public function upcomingOtsSession()
+    {
+        if ($session = OTSSession::where('student_id', $this->id)->where('scheduled_time', '>', Carbon::now())->first()) { return $session; }
+        return null;
     }
 }

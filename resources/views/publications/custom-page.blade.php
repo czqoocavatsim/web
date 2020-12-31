@@ -1,4 +1,4 @@
-@extends('layouts.master')
+@extends('layouts.primary')
 @section('title', $page->name . " - ")
 @section('description', $page->description)
 @section('image', $page->thumbnail)
