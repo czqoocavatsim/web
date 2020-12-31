@@ -268,6 +268,20 @@
                             <p class="mt-3 mb-0">{{ $cert->expires->diffInDays(Carbon\Carbon::now()) <= 2 ? 'Contact your instructor to request an extension or proceed to an OTS assessment.' : 'Your use of this solo certification is bound to our policies and VATSIM\'s GRP. Your instructor will give you more information.'}}</p>
                         </div>
                         @endif
+                        @if ($studentProfile = Auth::user()->studentProfile && $session = Auth::user()->studentProfile->upcomingTrainingSession())
+                        <div class="list-group-item rounded p-4 mb-3 z-depth-1 shadow-none">
+                            <h4 class="fw-600 blue-text">Your upcoming training session</h4>
+                            <h6 class="fw-500">Scheduled for {{$session->scheduled_time->toFormattedDateString()}} (in {{$session->scheduled_time->diffForHumans()}})</h6>
+                            <h6 class="fw-500 mb-0">With {{$session->instructor->user->fullName('FL')}}</h6>
+                        </div>
+                        @endif
+                        @if ($studentProfile = Auth::user()->studentProfile && $session = Auth::user()->studentProfile->upcomingOtsSession())
+                        <div class="list-group-item rounded p-4 mb-3 z-depth-1 shadow-none">
+                            <h4 class="fw-600 blue-text">Your upcoming OTS session</h4>
+                            <h6 class="fw-500">Scheduled for {{$session->scheduled_time->toFormattedDateString()}} (in {{$session->scheduled_time->diffForHumans()}})</h6>
+                            <h6 class="fw-500 mb-0">With {{$session->instructor->user->fullName('FL')}}</h6>
+                        </div>
+                        @endif
                     </div>
                 </div>
             </div>
@@ -281,7 +295,10 @@
                 <h3 class="mt-4 mb-3 fw-600" style="font-size: 1.3em;">Feedback</h3>
                 <p>We love feedback! Submit feedback on controllers or our operations here.</p>
                 <p style="font-size: 1em;" class="mt-2">
-                    <a class="font-weight-bold text-body" href="{{route('feedback.create')}}">Submit feedback &nbsp;&nbsp;<i class="fas fa-arrow-right blue-text"></i></a>
+                    <a class="font-weight-bold text-body" href="{{route('my.feedback.new')}}">Submit feedback &nbsp;&nbsp;<i class="fas fa-arrow-right blue-text"></i></a>
+                </p>
+                <p style="font-size: 1em;" class="mt-2">
+                    <a class="font-weight-bold text-body" href="{{route('my.feedback')}}">Your previous feedback &nbsp;&nbsp;<i class="fas fa-arrow-right blue-text"></i></a>
                 </p>
             </div>
             <div id="certificationTrainingTab" style="display:none">

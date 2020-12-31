@@ -9,6 +9,7 @@ use App\Models\Users\UserPrivacyPreferences;
 use App\Notifications\WelcomeNewUser;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
 use mofodojodino\ProfanityFilter\Check;
@@ -169,6 +170,9 @@ class MyCzqoController extends Controller
         //Change avatar mode and save
         $user->avatar_mode = 2;
         $user->save();
+
+        //Forget cache
+        Cache::forget('users.discorduserdata.'.$user->id.'.avatar');
 
         //Return
         return redirect()->route('my.index')->with('success', 'Avatar changed to your Discord avatar!');

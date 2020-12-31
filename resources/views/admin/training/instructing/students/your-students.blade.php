@@ -1,7 +1,7 @@
 @extends('admin.training.layouts.main')
 @section('title', 'Dashboard - Training - ')
 @section('training-content')
-<h1 class="blue-text mb-4">Your Students</h1>
+<h1 class="blue-text mb-4 font-weight-bold">Your Students</h1>
 <div class="list-group z-depth-1 rounded">
     @foreach($students as $student)
         <a href="{{route('training.admin.instructing.students.view', $student->user_id)}}" class="list-group-item list-group-item-action waves-effect">

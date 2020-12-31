@@ -62,10 +62,10 @@
         <script src="{{asset('js/masonry.pkgd.min.js')}}"></script>
         <!--Chart js-->
         <script src="https://cdn.jsdelivr.net/npm/chart.js@2.9.3/dist/Chart.min.js" integrity="sha256-R4pqcOYV8lt7snxMQO/HSbVCFRPMdrhAFMH+vr9giYI=" crossorigin="anonymous"></script>
+        @livewireStyles
     </head>
 
     <body class="d-flex flex-column min-vh-100" @if(Auth::check() && Auth::user()->preferences) @if(Auth::user()->preferences->accent_colour) data-accent="{{Auth::user()->preferences->accent_colour}}" @endif data-theme="{{Auth::user()->preferences->ui_mode}}" @else data-theme="light" @endif>
-
         <header>
             @if($adminNavBar)
                 <!--Admin nav bar-->
@@ -97,7 +97,7 @@
                 <div class="d-none d-md-block">
                     <p class="mb-3">Copyright (C) Gander Oceanic OCA {{App\Models\Settings\CoreSettings::where('id', 1)->firstOrFail()->copyright_year}}. All Rights Reserved.<br>Not to be used for real world navigation. Flight simulation only.</p>
                     <div class="flex-left my-4">
-                        <a href="{{route('feedback.create')}}" class="font-weight-bold black-text">Feedback</a>
+                        <a href="{{route('index')}}" class="font-weight-bold black-text">Feedback</a>
                         &nbsp;
                         •
                         &nbsp;
@@ -427,5 +427,5 @@
         })
     </script>
     <!-- End misc scripts -->
-
+    @livewireScripts
 </html>

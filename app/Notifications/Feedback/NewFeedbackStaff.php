@@ -7,7 +7,7 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
 
-class NewWebsiteFeedback extends Notification
+class NewFeedbackStaff extends Notification
 {
     use Queueable;
 
@@ -16,9 +16,9 @@ class NewWebsiteFeedback extends Notification
      *
      * @return void
      */
-    public function __construct($feedback)
+    public function __construct($submission)
     {
-        $this->feedback = $feedback;
+        $this->submission = $submission;
     }
 
     /**
@@ -41,12 +41,10 @@ class NewWebsiteFeedback extends Notification
     public function toMail($notifiable)
     {
         return (new MailMessage)
-                    ->greeting('Hello,')
-                    ->line('A user has submitted feedback on the website.')
-                    ->line('User: '.$this->feedback->user->fullName('FLC'))
-                    ->line('Email: '.$this->feedback->user->email)
-                    ->line('Subject: ' .$this->feedback->subject)
-                    ->line('Content: ' .$this->feedback->content);
+                    ->subject("New {$this->submission->type->name}")
+                    ->greeting('Hello!')
+                    ->line("{$this->submission->user->fullName('FLC')} has submitted {$this->submission->type->name}.")
+                    ->salutation("Gander Oceanic OCA");
     }
 
     /**

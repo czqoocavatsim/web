@@ -197,7 +197,7 @@
             <p style="font-size: 0.9em;">For Flight Simulation Use Only - Not To Be Used For Real World Navigation. Any and all proprietary content available on this website may not be shared, copied, reproduced or used in any way without providing credit to the Gander Oceanic OCA.</p>
             <p style="font-size: 0.9em;">Copyright © {{App\Models\Settings\CoreSettings::where('id', 1)->firstOrFail()->copyright_year}} Gander Oceanic OCA - All Rights Reserved.</p>
             <div class="flex-left mt-3">
-                <a href="{{route('feedback.create')}}" class="font-weight-bold black-text">Feedback</a>
+                <a href="{{route('index')}}" class="font-weight-bold black-text">Feedback</a>
                 &nbsp;
                 •
                 &nbsp;
@@ -447,7 +447,7 @@
                         </div>
                     </li>
                     <li class="nav-item  {{ Request::is('feedback') ? 'active' : '' }}">
-                        <a class="nav-link text-body" href="{{route('feedback.create')}}" aria-expanded="false">Feedback</a>
+                        <a class="nav-link text-body" href="{{route('index')}}" aria-expanded="false">Feedback</a>
                     </li>
                 </ul>
                 <hr>

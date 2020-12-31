@@ -145,6 +145,7 @@
                         </div>
                     </div>
                 @endforeach
+                @if (count($certifications) < 1) No data available. @endif
             </div>
             <div class="col-md-4 mb-4">
                 <h2 class="font-weight-bold blue-text mb-4">Top Controllers</h2>
@@ -177,6 +178,7 @@
                     </li>
                     @php $index++; @endphp
                     @endforeach
+                    @if (count($topControllers) < 1) No data available. @endif
                 </ul>
             </div>
         </div>
@@ -201,53 +203,43 @@
 
             <div class="col-lg-5 text-right">
                 <h2 class="font-weight-bold mb-3 blue-text">Quick Links</h2>
-                <div clss="list-group mt-4 z-depth-2" style="font-size: 1.3em;">
-                    <div class="list-group-item">
-                        <a data-toggle="modal" data-target="#discordTopModal" href="" style="text-decoration:none;">
-                            <span class="blue-text">
-                                <i class="fab fa-discord fa-2x" style="vertical-align:middle;"></i>
-                            </span>
-                            &nbsp;
-                            <span class="blue-text">Join Our Discord Community</span>
-                        </a>
-                    </div>
-                    <div class="list-group-item">
-                        <a href="https://twitter.com/ganderocavatsim" style="text-decoration:none;">
-                            <span class="blue-text">
-                                <i class="fab fa-twitter fa-2x" style="vertical-align:middle;"></i>
-                            </span>
-                            &nbsp;
-                            <span class="blue-text">Twitter</span>
-                        </a>
-                    </div>
-                    <div class="list-group-item">
-                        <a href="https://www.facebook.com/ganderocavatsim" style="text-decoration:none;">
-                            <span class="blue-text">
-                                <i class="fab fa-facebook fa-2x" style="vertical-align:middle;"></i>
-                            </span>
-                            &nbsp;
-                            <span class="blue-text">Facebook</span>
-                        </a>
-                    </div>
-                    <div class="list-group-item">
-                        <a href="https://www.youtube.com/channel/UC3norFpW3Cw4ryGR7ourjcA" style="text-decoration:none;">
-                            <span class="blue-text">
-                                <i class="fab fa-youtube fa-2x" style="vertical-align:middle;"></i>
-                            </span>
-                            &nbsp;
-                            <span class="blue-text">YouTube Channel</span>
-                        </a>
-                    </div>
-                    <div class="list-group-item">
-                        <a href="https://knowledgebase.ganderoceanic.com" style="text-decoration:none;">
-                            <span class="blue-text">
-                                <i class="fas fa-book fa-2x" style="vertical-align:middle;"></i>
-                            </span>
-                            &nbsp;
-                            <span class="blue-text">Knowledge Base</span>
-                        </a>
-                    </div>
-                </ul>
+                <div class="list-group mt-4 rounded list-group-flush" style="font-size: 1.3em;">
+                    <a class="border-0 list-group-item list-group-item-action waves-effect" data-toggle="modal" data-target="#discordTopModal" href="" style="text-decoration:none;">
+                        <span class="blue-text">Join Our Discord Community</span>
+                        &nbsp;
+                        <span class="blue-text">
+                            <i class="fab fa-discord fa-2x" style="vertical-align:middle;"></i>
+                        </span>
+                    </a>
+                    <a class="border-0 list-group-item list-group-item-action waves-effect" href="https://twitter.com/ganderocavatsim" style="text-decoration:none;">
+                        <span class="blue-text">Twitter</span>
+                        &nbsp;
+                        <span class="blue-text">
+                            <i class="fab fa-twitter fa-2x" style="vertical-align:middle;"></i>
+                        </span>
+                    </a>
+                    <a class="border-0 list-group-item list-group-item-action waves-effect" href="https://www.facebook.com/ganderocavatsim" style="text-decoration:none;">
+                        <span class="blue-text">Facebook</span>
+                        &nbsp;
+                        <span class="blue-text">
+                            <i class="fab fa-facebook fa-2x" style="vertical-align:middle;"></i>
+                        </span>
+                    </a>
+                    <a class="border-0 list-group-item list-group-item-action waves-effect" href="https://www.youtube.com/channel/UC3norFpW3Cw4ryGR7ourjcA" style="text-decoration:none;">
+                        <span class="blue-text">YouTube Channel</span>
+                        &nbsp;
+                        <span class="blue-text">
+                            <i class="fab fa-youtube fa-2x" style="vertical-align:middle;"></i>
+                        </span>
+                    </a>
+                    <a class="border-0 list-group-item list-group-item-action waves-effect" href="https://knowledgebase.ganderoceanic.com" style="text-decoration:none;">
+                        <span class="blue-text">Knowledge Base</span>
+                        &nbsp;
+                        <span class="blue-text">
+                            <i class="fas fa-book fa-2x" style="vertical-align:middle;"></i>
+                        </span>
+                    </a>
+                </div>
             </div>
         </div>
     </div>

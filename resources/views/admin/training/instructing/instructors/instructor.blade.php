@@ -17,15 +17,15 @@
                 <li>Discord: @if($instructor->user->hasDiscord()){{$instructor->user->getDiscordUser()->username}}<span style="color: #797979;">#{{$instructor->user->getDiscordUser()->discriminator}} @else N/A @endif</li>
                 <li>Instructor since: {{$instructor->created_at->toFormattedDateString()}}, {{$instructor->created_at->diffForHumans()}}</li>
             </ul>
-            <h5 class="blue-text">Records</h5>
+            {{-- <h5 class="blue-text">Records</h5>
             <ul class="list-unstyled mt-2 mb-3">
                 {{-- <li class="mb-2">
                     <a href="#" style="text-decoration:none;"><span class="blue-text"><i class="fas fa-chevron-right"></i></span> &nbsp; <span class="black-text">OTS sessions conducted</span></a>
                 </li>
                 <li class="mb-2">
                     <a href="#" style="text-decoration:none;"><span class="blue-text"><i class="fas fa-chevron-right"></i></span> &nbsp; <span class="black-text">Training sessions conducted</span></a>
-                </li> --}}
-            </ul>
+                </li>
+            </ul> --}}
             <h5 class="blue-text">Actions</h5>
             <ul class="list-unstyled mt-2 mb-0">
                 @can ('view users')

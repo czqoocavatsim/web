@@ -64,7 +64,7 @@
             </ul>
             <h5 class="blue-text">Records</h5>
             <ul class="list-unstyled mt-2">
-                {{-- <li class="mb-2">
+               {{--  <li class="mb-2">
                     <a href="#" style="text-decoration:none;"><span class="blue-text"><i class="fas fa-chevron-right"></i></span> &nbsp; <span class="black-text">Training/OTS Sessions</span></a>
                 </li> --}}
                 <li class="mb-2">

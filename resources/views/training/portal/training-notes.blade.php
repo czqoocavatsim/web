@@ -1,6 +1,7 @@
 @extends('training.portal.layouts.main')
 @section('page-header-title', 'Your training notes')
 @section('portal-content')
+@if (count($notes) == 0) None yet! @endif
 <div class="list-group list-group-flush z-depth-1 rounded mt-4">
     @foreach ($notes as $note)
     <div class="list-group-item">
@@ -24,6 +25,7 @@
 </div>
 
 <h4 class="blue-text mt-4">Instructor Recommendations</h4>
+@if (count($recommendations) == 0) None yet! @endif
 <div class="list-group list-group-flush z-depth-1 rounded mt-4">
     @foreach ($recommendations as $note)
     <div class="list-group-item">

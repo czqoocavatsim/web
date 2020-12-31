@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateSupportTicketMessagesTable extends Migration
+class CreateFeedbackSubmissionsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,25 +13,23 @@ class CreateSupportTicketMessagesTable extends Migration
      */
     public function up()
     {
-        Schema::create('support_ticket_messages', function (Blueprint $table) {
-            //ID
+        Schema::create('feedback_submissions', function (Blueprint $table) {
             $table->id();
+            $table->string('slug');
 
             //User assignment
             $table->unsignedInteger('user_id');
             $table->foreign('user_id')->references('id')->on('users');
 
-            //Ticket
-            $table->unsignedBigInteger('ticket_id');
-            $table->foreign('ticket_id')->references('id')->on('support_tickets');
+            //Feedback type
+            $table->foreignId('type_id')->constrained('feedback_types');
 
-            //Content
-            $table->longText('message');
-            $table->boolean('system_msg')->default(false);
+            //Feedback content
+            $table->text('submission_content');
+            $table->boolean('permission_to_publish')->default(false);
 
-            //Timestamps and soft deletes
-            $table->timestamps();
             $table->softDeletes();
+            $table->timestamps();
         });
     }
 
@@ -42,6 +40,6 @@ class CreateSupportTicketMessagesTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('support_ticket_messages');
+        Schema::dropIfExists('feedback_submissions');
     }
 }
