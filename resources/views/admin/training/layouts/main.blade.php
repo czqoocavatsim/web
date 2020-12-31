@@ -84,7 +84,7 @@
                         </div>
                     </li>
                 </a>
-                {{-- <a class="myczqo-tab {{Request::is('admin/training/instructing/training-sessions') || Request::is('admin/training/instructing/training-sessions/*') ? 'active' : ''}} no-click" data-myczqo-tab="none" href="{{route('training.admin.instructing.training-sessions')}}">
+                <a class="myczqo-tab {{Request::is('admin/training/instructing/training-sessions') || Request::is('admin/training/instructing/training-sessions/*') ? 'active' : ''}} no-click" data-myczqo-tab="none" href="{{route('training.admin.instructing.training-sessions')}}">
                     <li class="w-100">
                         <div class="d-flex h-100 flex-row justify-content-left align-items-center">
                             <i style="font-size: 1.6em; margin-right: 10px;" class="fas fa-user-friends fa-fw"></i>
