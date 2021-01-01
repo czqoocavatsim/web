@@ -110,12 +110,7 @@ class Kernel extends ConsoleKernel
                 foreach ($sessionLogs as $log) {
                     // Parse logon time lol
                     // Change this to the Y-m-d H:i:s format, as I changed the column type to 'dateTime'
-                    $ocLogon = substr($oc['time_logon'], 0, 4).'-'
-                        .substr($oc['time_logon'], 4, 2).'-'
-                        .substr($oc['time_logon'], 6, 2).' '
-                        .substr($oc['time_logon'], 8, 2).':'
-                        .substr($oc['time_logon'], 10, 2).':'
-                        .substr($oc['time_logon'], 12, 2);
+                    $ocLogon = Carbon::parse($log['time_logon']);
 
                     // If a match is found
                     if ($ocLogon == $log->session_start) {
@@ -160,12 +155,7 @@ class Kernel extends ConsoleKernel
 
                     // Parse logon time again lol
                     // Change this to the Y-m-d H:i:s format, as I changed the column type to 'dateTime'
-                    $ocLogon = substr($oc['time_logon'], 0, 4).'-'
-                        .substr($oc['time_logon'], 4, 2).'-'
-                        .substr($oc['time_logon'], 6, 2).' '
-                        .substr($oc['time_logon'], 8, 2).':'
-                        .substr($oc['time_logon'], 10, 2).':'
-                        .substr($oc['time_logon'], 12, 2);
+                    $ocLogon = Carbon::parse($log['time_logon']);
 
                     // Build new session log
                     $sessionLog = new SessionLog();
