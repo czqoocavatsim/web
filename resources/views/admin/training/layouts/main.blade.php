@@ -44,11 +44,11 @@
                         <span style="font-size: 1em;" class="text-muted">INSTRUCTING</span>
                     </div>
                 </li>
-                <a class="myczqo-tab no-click" data-myczqo-tab="none" href="" data-toggle="modal" data-target="#searchModal">
+                <a class="myczqo-tab {{Request::is('admin/training/instructing/board') ? 'active' : ''}} no-click" data-myczqo-tab="none" href="{{route('training.admin.instructing.board')}}">
                     <li class="w-100">
                         <div class="d-flex h-100 flex-row justify-content-left align-items-center">
-                            <i style="font-size: 1.6em; margin-right: 10px;" class="fas fa-search fa-fw"></i>
-                            <span style="font-size: 1.1em;">Search</span>
+                            <i style="font-size: 1.6em; margin-right: 10px;" class="fas fa-stream fa-fw"></i>
+                            <span style="font-size: 1.1em;">Overview</span>
                         </div>
                     </li>
                 </a>
@@ -57,14 +57,6 @@
                         <div class="d-flex h-100 flex-row justify-content-left align-items-center">
                             <i style="font-size: 1.6em; margin-right: 10px;" class="fas fa-clock fa-fw"></i>
                             <span style="font-size: 1.1em;">Calendar</span>
-                        </div>
-                    </li>
-                </a>
-                <a class="myczqo-tab {{Request::is('admin/training/instructing/board') ? 'active' : ''}} no-click" data-myczqo-tab="none" href="{{route('training.admin.instructing.board')}}">
-                    <li class="w-100">
-                        <div class="d-flex h-100 flex-row justify-content-left align-items-center">
-                            <i style="font-size: 1.6em; margin-right: 10px;" class="fas fa-stream fa-fw"></i>
-                            <span style="font-size: 1.1em;">Overview</span>
                         </div>
                     </li>
                 </a>
@@ -97,6 +89,14 @@
                         <div class="d-flex h-100 flex-row justify-content-left align-items-center">
                             <i style="font-size: 1.6em; margin-right: 10px;" class="fas fa-user-check fa-fw"></i>
                             <span style="font-size: 1.1em;">OTS Sessions</span>
+                        </div>
+                    </li>
+                </a>
+                <a class="myczqo-tab no-click" data-myczqo-tab="none" href="" data-toggle="modal" data-target="#searchModal">
+                    <li class="w-100">
+                        <div class="d-flex h-100 flex-row justify-content-left align-items-center">
+                            <i style="font-size: 1.6em; margin-right: 10px;" class="fas fa-search fa-fw"></i>
+                            <span style="font-size: 1.1em;">Search</span>
                         </div>
                     </li>
                 </a>
