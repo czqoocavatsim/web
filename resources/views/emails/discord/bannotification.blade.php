@@ -11,5 +11,5 @@
 @section('footer-to-line', $user->fullName('FLC').' ('.$user->email.')')
 
 @section('footer-reason-line')
-as your membership with Gander Oceanic has been affected
+your membership with Gander Oceanic has been affected.
 @endsection

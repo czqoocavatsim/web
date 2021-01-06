@@ -1,5 +1,5 @@
 @extends('layouts.email')
-@section('to-line', 'Hi'.$user->fullName('FL'))
+@section('to-line', 'Hi '.$user->fullName('FL'))
 @section('message-content')
 Listed below is the data that you requested from Gander Oceanic. If you have any questions, please reply to this email.
 <hr>
@@ -13,4 +13,4 @@ Kind regards,<br/>
 <b>Gander Oceanic OCA</b><br>
 @endsection
 @section('footer-to-line', $user->fullName('FLC').' ('.$user->email.')')
-@section('footer-reason-line', 'as they requested a data export')
+@section('footer-reason-line', 'you requested a data export.')

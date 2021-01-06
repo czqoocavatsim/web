@@ -19,10 +19,10 @@ Sent by the Gander Oceanic Staff Team
 
 @section('footer-reason-line')
 @if ($news->email_level == 1)
-as they are an oceanic controller on the CZQO controller roster
+you are an oceanic controller on the CZQO controller roster.
 @elseif ($news->email_level == 2)
-as they hold an account on the CZQO website and have subscribed to emails
+you hold an account on the CZQO website and have subscribed to emails.
 @elseif ($news->email_level == 3)
-as the hold an account on the CZQO website.
+you hold an account on the CZQO website.
 @endif
 @endsection

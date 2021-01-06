@@ -15,5 +15,5 @@ Sent by Gander Oceanic OCA
 @section('footer-to-line', $application->user->fullName('FLC').' ('.$application->user->email.')')
 
 @section('footer-reason-line')
-of the following reason: there is an update on your application to Gander Oceanic
+there is an update on your application to become a Gander Oceanic Controller.
 @endsection

@@ -50,7 +50,7 @@ class ApplicationsController extends Controller
     {
         if (!Auth::user()->can('start applications'))
         {
-            abort(403, 'You cannot apply for Gander Oceanic at this time. If this is a mistake, please contact staff.');
+            abort(403, 'You cannot apply for Gander Oceanic at this time. If this is a mistake, please contact the Deputy OCA Chief.');
         }
 
         if ($pendingApp = Application::where('user_id', Auth::id())->where('status', 0)->first())
@@ -146,7 +146,7 @@ class ApplicationsController extends Controller
         $processingUpdate = new ApplicationUpdate([
             'application_id' => $application->id,
             'update_title' => 'Sit tight! Your application is now pending',
-            'update_content' => 'If you do not see an update through email or Discord within 5 days, please contact the OCA Chief.',
+            'update_content' => 'If you do not see an update through email or Discord within 5 days, please contact the Deputy OCA Chief.',
             'update_type' => 'green'
         ]);
         $processingUpdate->save();
@@ -208,7 +208,7 @@ class ApplicationsController extends Controller
 
         //If bad, return response
         if ($validator->fails()) {
-            return redirect()->back()->with('error-modal', 'There was an error withdrawing your application. Please contact the Deputy OCA Chief.');
+            return redirect()->back()->with('error-modal', 'There was an error withdrawing your application. Please contact the IT Director.');
         }
 
         //Check if the application exists
@@ -217,7 +217,7 @@ class ApplicationsController extends Controller
         if(!$application) {
             //return error
             Log::error('Application withdraw fail (ref #'.$request->get('reference_id').')');
-            return redirect()->back()->with('error-modal', 'There was an error withdrawing your application. Please contact the Deputy OCA Chief.');
+            return redirect()->back()->with('error-modal', 'There was an error withdrawing your application. Please contact the IT Director.');
         }
 
         //Let's withdraw it then
@@ -260,7 +260,7 @@ class ApplicationsController extends Controller
         if(!$application) {
             //return error
             Log::error('Application comment fail (ref #'.$request->get('reference_id').')');
-            return redirect()->back()->with('error-modal', 'There was an error commenting. Please contact the Deputy OCA Chief.');
+            return redirect()->back()->with('error-modal', 'There was an error commenting. Please contact the IT Director.');
         }
 
         //How long ago was the last one?
