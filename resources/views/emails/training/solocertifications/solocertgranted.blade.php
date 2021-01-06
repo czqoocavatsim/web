@@ -22,5 +22,5 @@ Sent by Gander Oceanic OCA
 @section('footer-to-line', $cert->rosterMember->user->fullName('FLC').' ('.$cert->rosterMember->user->email.')')
 
 @section('footer-reason-line')
-of the following reason: your status with Gander Oceanic has changed
+your status with Gander Oceanic has changed.
 @endsection

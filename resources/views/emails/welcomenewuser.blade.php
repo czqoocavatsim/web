@@ -10,4 +10,4 @@ Cheers,<br/>
 <b>OCA Chief</b>
 @endsection
 @section('footer-to-line', $user->fullName('FLC').' ('.$user->email.')')
-@section('footer-reason-line', 'as they just logged into the CZQO website for the first time.')
+@section('footer-reason-line', 'you just logged into the CZQO website for the first time.')

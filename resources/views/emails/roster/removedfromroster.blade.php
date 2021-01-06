@@ -16,5 +16,5 @@ Sent by Gander Oceanic OCA
 @section('footer-to-line', $user->fullName('FLC').' ('.$user->email.')')
 
 @section('footer-reason-line')
-of the following reason: your status with Gander Oceanic has changed
+your status with Gander Oceanic has changed.
 @endsection

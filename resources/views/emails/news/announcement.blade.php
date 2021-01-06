@@ -14,5 +14,5 @@ Sent by <b>{{$announcement->user->fullName('FLC')}} ({{$announcement->user->staf
 @section('footer-to-line', $user->fullName('FLC').' ('.$user->email.')')
 
 @section('footer-reason-line')
-of the following reason: {{$announcement->reason_for_sending}}
+{{$announcement->reason_for_sending}}
 @endsection

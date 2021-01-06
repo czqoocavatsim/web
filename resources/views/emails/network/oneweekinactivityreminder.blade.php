@@ -20,5 +20,5 @@ Sent automatically by ActivityBot
 @section('footer-to-line', $rosterMember->user->fullName('FLC').' ('.$rosterMember->user->email.')')
 
 @section('footer-reason-line')
-as there is important information in regard to your status with Gander Oceanic
+there is important information in regard to your status with Gander Oceanic.
 @endsection
