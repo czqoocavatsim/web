@@ -24,12 +24,12 @@
     @if(!$student->current)
         <h5 class="blue-text mt-3">Records</h5>
         <ul class="list-unstyled mt-2">
-            <li class="mb-2">
+            {{-- <li class="mb-2">
                 <a href="#" style="text-decoration:none;"><span class="blue-text"><i class="fas fa-chevron-right"></i></span> &nbsp; <span class="black-text">Training/OTS Sessions</span></a>
             </li>
             <li class="mb-2">
                 <a href="#" style="text-decoration:none;"><span class="blue-text"><i class="fas fa-chevron-right"></i></span> &nbsp; <span class="black-text">Student History</span></a>
-            </li>
+            </li> --}}
             <li class="mb-2">
                 <a href="{{route('training.admin.instructing.students.records.training-notes', $student->user_id)}}" style="text-decoration:none;"><span class="blue-text"><i class="fas fa-chevron-right"></i></span> &nbsp; <span class="black-text">Training Notes</span></a>
             </li>
