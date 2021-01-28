@@ -13,7 +13,7 @@ class AddAvatarFields extends Migration
      */
     public function up()
     {
-        Schema::table('users', function(Blueprint $table) {
+        Schema::table('users', function (Blueprint $table) {
             $table->integer('avatar_mode')->default(0);
         });
     }
@@ -25,7 +25,7 @@ class AddAvatarFields extends Migration
      */
     public function down()
     {
-        Schema::table('users', function(Blueprint $table) {
+        Schema::table('users', function (Blueprint $table) {
             $table->dropColumn('avatar_mode');
         });
     }

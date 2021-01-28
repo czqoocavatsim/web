@@ -42,17 +42,17 @@ class PublicationsController extends Controller
     {
         //Define validator messages
         $messages = [
-            'title.required' => 'A title is required.',
-            'title.max' => 'A title may not be more than 100 characters long.',
+            'title.required'       => 'A title is required.',
+            'title.max'            => 'A title may not be more than 100 characters long.',
             'description.required' => 'A description is required.',
-            'url.required' => 'A PDF URL is required.',
+            'url.required'         => 'A PDF URL is required.',
         ];
 
         //Validate
         $validator = Validator::make($request->all(), [
-            'title' => 'required|max:100',
+            'title'       => 'required|max:100',
             'description' => 'required',
-            'url' => 'required',
+            'url'         => 'required',
         ], $messages);
 
         //Redirect if fails
@@ -62,10 +62,10 @@ class PublicationsController extends Controller
 
         //Create policy object
         $policy = new Policy([
-            'user_id' => Auth::id(),
-            'title' => $request->get('title'),
+            'user_id'     => Auth::id(),
+            'title'       => $request->get('title'),
             'description' => $request->get('description'),
-            'url' => $request->get('url')
+            'url'         => $request->get('url'),
         ]);
 
         //Save it
@@ -82,17 +82,17 @@ class PublicationsController extends Controller
 
         //Define validator messages
         $messages = [
-            'title.required' => 'A title is required.',
-            'title.max' => 'A title may not be more than 100 characters long.',
+            'title.required'       => 'A title is required.',
+            'title.max'            => 'A title may not be more than 100 characters long.',
             'description.required' => 'A description is required.',
-            'url.required' => 'A PDF URL is required.',
+            'url.required'         => 'A PDF URL is required.',
         ];
 
         //Validate
         $validator = Validator::make($request->all(), [
-            'title' => 'required|max:100',
+            'title'       => 'required|max:100',
             'description' => 'required',
-            'url' => 'required',
+            'url'         => 'required',
         ], $messages);
 
         //Redirect if fails
@@ -137,19 +137,19 @@ class PublicationsController extends Controller
     {
         //Define validator messages
         $messages = [
-            'title.required' => 'A title is required.',
-            'title.max' => 'A title may not be more than 100 characters long.',
+            'title.required'       => 'A title is required.',
+            'title.max'            => 'A title may not be more than 100 characters long.',
             'description.required' => 'A description is required.',
-            'visibility.required' => 'A visibility option is required.',
-            'url.required' => 'A PDF URL is required.',
+            'visibility.required'  => 'A visibility option is required.',
+            'url.required'         => 'A PDF URL is required.',
         ];
 
         //Validate
         $validator = Validator::make($request->all(), [
-            'title' => 'required|max:100',
+            'title'       => 'required|max:100',
             'description' => 'required',
-            'visibility' => 'required',
-            'url' => 'required',
+            'visibility'  => 'required',
+            'url'         => 'required',
         ], $messages);
 
         //Redirect if fails
@@ -159,11 +159,11 @@ class PublicationsController extends Controller
 
         //Create object
         $atcResource = new AtcResource([
-            'user_id' => Auth::id(),
-            'title' => $request->get('title'),
+            'user_id'     => Auth::id(),
+            'title'       => $request->get('title'),
             'description' => $request->get('description'),
-            'atc_only' => $request->get('visibility'),
-            'url' => $request->get('url')
+            'atc_only'    => $request->get('visibility'),
+            'url'         => $request->get('url'),
         ]);
 
         //Save it
@@ -180,21 +180,20 @@ class PublicationsController extends Controller
 
         //Define validator messages
         $messages = [
-            'title.required' => 'A title is required.',
-            'title.max' => 'A title may not be more than 100 characters long.',
+            'title.required'       => 'A title is required.',
+            'title.max'            => 'A title may not be more than 100 characters long.',
             'description.required' => 'A description is required.',
-            'visibility.required' => 'A visibility option is required.',
-            'url.required' => 'A PDF URL is required.',
+            'visibility.required'  => 'A visibility option is required.',
+            'url.required'         => 'A PDF URL is required.',
         ];
 
         //Validate
         $validator = Validator::make($request->all(), [
-            'title' => 'required|max:100',
+            'title'       => 'required|max:100',
             'description' => 'required',
-            'visibility' => 'required',
-            'url' => 'required',
+            'visibility'  => 'required',
+            'url'         => 'required',
         ], $messages);
-
 
         //Redirect if fails
         if ($validator->fails()) {

@@ -3,7 +3,6 @@
 namespace App\Models\Users;
 
 use Illuminate\Database\Eloquent\Model;
-use App\Models\Users\User;
 use Spatie\Activitylog\Traits\LogsActivity;
 
 class StaffMember extends Model
@@ -22,7 +21,10 @@ class StaffMember extends Model
 
     public function vacant()
     {
-        if ($this->user_id == 1) return true;
+        if ($this->user_id == 1) {
+            return true;
+        }
+
         return false;
     }
 }

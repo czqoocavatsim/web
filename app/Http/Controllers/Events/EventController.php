@@ -4,15 +4,14 @@ namespace App\Http\Controllers\Events;
 
 use App\Http\Controllers\Controller;
 use App\Models\Events\ControllerApplication;
-use App\Models\Users\User;
 use App\Models\Events\Event;
 use App\Models\Events\EventUpdate;
 use App\Models\Publications\UploadedImage;
-use App\Models\Settings\AuditLogEntry;
+use App\Models\Users\User;
 use App\Notifications\Events\NewControllerSignUp;
-use Illuminate\Http\Request;
 use Auth;
 use Carbon\Carbon;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Str;
@@ -41,11 +40,12 @@ class EventController extends Controller
     {
         $event = Event::where('slug', $slug)->firstOrFail();
         $updates = $event->updates;
-        if (Auth::check() && ControllerApplication::where('user_id', Auth::id())->where('event_id', $event->id))
-        {
+        if (Auth::check() && ControllerApplication::where('user_id', Auth::id())->where('event_id', $event->id)) {
             $app = ControllerApplication::where('user_id', Auth::id())->where('event_id', $event->id)->first();
+
             return view('events.view', compact('event', 'updates', 'app'));
         }
+
         return view('events.view', compact('event', 'updates'));
     }
 
@@ -53,22 +53,21 @@ class EventController extends Controller
     {
         $this->validate($request, [
             'availability_start' => 'required',
-            'availability_end' => 'required'
+            'availability_end'   => 'required',
         ]);
         $application = new ControllerApplication([
-            'user_id' => Auth::id(),
-            'event_id' => $request->get('event_id'),
+            'user_id'                      => Auth::id(),
+            'event_id'                     => $request->get('event_id'),
             'start_availability_timestamp' => $request->get('availability_start'),
-            'end_availability_timestamp' => $request->get('availability_end'),
-            'comments' => $request->get('comments'),
-            'submission_timestamp' => date('Y-m-d H:i:s'),
+            'end_availability_timestamp'   => $request->get('availability_end'),
+            'comments'                     => $request->get('comments'),
+            'submission_timestamp'         => date('Y-m-d H:i:s'),
         ]);
         $application->save();
 
         //Send email notification to Marketing Team
         $marketingTeam = Role::whereName('Marketing Team')->first();
-        if ($marketingTeam)
-        {
+        if ($marketingTeam) {
             foreach ($marketingTeam->users as $user) {
                 $user->notify(new NewControllerSignUp($application));
             }
@@ -80,26 +79,26 @@ class EventController extends Controller
         //Send notification to marketing
         $discord->channel->createMessage([
             'channel.id' => intval(config('services.discord.marketing')),
-            "content" => "A controller has signed up to control for " . $application->event->name,
-            'embed' => [
-                "title" => $application->user->fullName('FLC'),
-                "url" => route('events.admin.view', $application->event->slug),
-                "timestamp" => date('Y-m-d H:i:s'),
-                "color" => hexdec( "2196f3" ),
-                "fields" => [
+            'content'    => 'A controller has signed up to control for '.$application->event->name,
+            'embed'      => [
+                'title'     => $application->user->fullName('FLC'),
+                'url'       => route('events.admin.view', $application->event->slug),
+                'timestamp' => date('Y-m-d H:i:s'),
+                'color'     => hexdec('2196f3'),
+                'fields'    => [
                     [
-                        "name" => "Timing",
-                        "value" => "From " . $application->start_availability_timestamp . " to " . $application->end_availability_timestamp,
-                        "inline" => false
+                        'name'   => 'Timing',
+                        'value'  => 'From '.$application->start_availability_timestamp.' to '.$application->end_availability_timestamp,
+                        'inline' => false,
                     ],
                     [
-                        "name" => "Comments",
-                        "value" => $application->comments ? $application->comments : "No comments given",
-                        "inline" => true
+                        'name'   => 'Comments',
+                        'value'  => $application->comments ? $application->comments : 'No comments given',
+                        'inline' => true,
                     ],
-                ]
-            ]
-        ]); 
+                ],
+            ],
+        ]);
 
         return redirect()->back()->with('success', 'Submitted!');
     }
@@ -107,6 +106,7 @@ class EventController extends Controller
     public function adminIndex()
     {
         $events = Event::all()->sortByDesc('created_at');
+
         return view('admin.events.index', compact('events'));
     }
 
@@ -115,12 +115,14 @@ class EventController extends Controller
         $event = Event::where('slug', $slug)->firstOrFail();
         $applications = $event->controllerApplications;
         $updates = $event->updates;
-        return view('admin.events.view', compact('event','applications', 'updates'));
+
+        return view('admin.events.view', compact('event', 'applications', 'updates'));
     }
 
     public function adminCreateEvent()
     {
         $uploadedImgs = UploadedImage::all()->sortByDesc('id');
+
         return view('admin.events.create', compact('uploadedImgs'));
     }
 
@@ -128,19 +130,19 @@ class EventController extends Controller
     {
         //Define validator messages
         $messages = [
-            'name.required' => 'A name is required.',
-            'name.max' => 'A name may not be more than 100 characters long.',
-            'image.mimes' => 'An image file must be in the jpg png or gif formats.',
+            'name.required'        => 'A name is required.',
+            'name.max'             => 'A name may not be more than 100 characters long.',
+            'image.mimes'          => 'An image file must be in the jpg png or gif formats.',
             'description.required' => 'A description is required.',
         ];
 
         //Validate
         $validator = Validator::make($request->all(), [
-            'name' => 'required|max:100',
-            'image' => 'mimes:jpeg,jpg,png,gif',
+            'name'        => 'required|max:100',
+            'image'       => 'mimes:jpeg,jpg,png,gif',
             'description' => 'required',
-            'start' => 'required',
-            'end' => 'required'
+            'start'       => 'required',
+            'end'         => 'required',
         ], $messages);
 
         //Redirect if fails
@@ -166,7 +168,7 @@ class EventController extends Controller
 
         //Upload image if it exists
         if ($request->file('image')) {
-            $path = Storage::disk('digitalocean')->put('staff_uploads/events' . Carbon::now()->toDateString(), $request->file('image'), 'public');
+            $path = Storage::disk('digitalocean')->put('staff_uploads/events'.Carbon::now()->toDateString(), $request->file('image'), 'public');
             $event->image_url = Storage::url($path);
 
             //Add to uploaded images
@@ -206,16 +208,16 @@ class EventController extends Controller
             //Send notification to marketing
             $discord->channel->createMessage([
                 'channel.id' => config('app.env') == 'local' ? intval(config('services.discord.web_logs')) : intval(config('services.discord.announcements')),
-                'embed' => [
-                    'title' => "Upcoming event: {$event->name}",
+                'embed'      => [
+                    'title'       => "Upcoming event: {$event->name}",
                     'description' => "Starting {$event->start_timestamp_pretty()}",
-                    'color' => 0x80c9,
-                    "image" => [
-                        "url" => $event->image_url ? url('/').$event->image_url : null
+                    'color'       => 0x80c9,
+                    'image'       => [
+                        'url' => $event->image_url ? url('/').$event->image_url : null,
                     ],
-                    "url" => route('events.view', $event->slug),
-                    "timestamp" => date('Y-m-d H:i:s'),
-                ]
+                    'url'       => route('events.view', $event->slug),
+                    'timestamp' => date('Y-m-d H:i:s'),
+                ],
             ]);
         }
 
@@ -239,19 +241,19 @@ class EventController extends Controller
     {
         //Define validator messages
         $messages = [
-            'name.required' => 'A name is required.',
-            'name.max' => 'A name may not be more than 100 characters long.',
-            'image.mimes' => 'An image file must be in the jpg png or gif formats.',
+            'name.required'        => 'A name is required.',
+            'name.max'             => 'A name may not be more than 100 characters long.',
+            'image.mimes'          => 'An image file must be in the jpg png or gif formats.',
             'description.required' => 'A description is required.',
         ];
 
         //Validate
         $validator = Validator::make($request->all(), [
-            'name' => 'required|max:100',
-            'image' => 'mimes:jpeg,jpg,png,gif',
+            'name'        => 'required|max:100',
+            'image'       => 'mimes:jpeg,jpg,png,gif',
             'description' => 'required',
-            'start' => 'required',
-            'end' => 'required'
+            'start'       => 'required',
+            'end'         => 'required',
         ], $messages);
 
         //Redirect if fails
@@ -274,7 +276,7 @@ class EventController extends Controller
 
         //Upload image if it exists
         if ($request->file('image')) {
-            $path = Storage::disk('digitalocean')->put('staff_uploads/events' . Carbon::now()->toDateString(), $request->file('image'), 'public');
+            $path = Storage::disk('digitalocean')->put('staff_uploads/events'.Carbon::now()->toDateString(), $request->file('image'), 'public');
             $event->image_url = Storage::url($path);
 
             //Add to uploaded images
@@ -311,15 +313,15 @@ class EventController extends Controller
     {
         //Define validator messages
         $messages = [
-            'updateTitle.required' => 'A title is required.',
-            'updateTitle.max' => 'A title may not be more than 100 characters long.',
+            'updateTitle.required'   => 'A title is required.',
+            'updateTitle.max'        => 'A title may not be more than 100 characters long.',
             'updateContent.required' => 'Content is required.',
         ];
 
         //Validate
         $validator = Validator::make($request->all(), [
-            'updateTitle' => 'required|max:100',
-            'updateContent' => 'required'
+            'updateTitle'   => 'required|max:100',
+            'updateContent' => 'required',
         ], $messages);
 
         //Redirect if fails
@@ -329,12 +331,12 @@ class EventController extends Controller
 
         //Create update object
         $update = new EventUpdate([
-            'event_id' => Event::where('slug', $event_slug)->firstOrFail()->id,
-            'user_id' => Auth::id(),
-            'title' => $request->get('updateTitle'),
-            'content' => $request->get('updateContent'),
+            'event_id'          => Event::where('slug', $event_slug)->firstOrFail()->id,
+            'user_id'           => Auth::id(),
+            'title'             => $request->get('updateTitle'),
+            'content'           => $request->get('updateContent'),
             'created_timestamp' => Carbon::now(),
-            'slug' => Str::slug($request->get('updateTitle').'-'.Carbon::now()->toDateString()),
+            'slug'              => Str::slug($request->get('updateTitle').'-'.Carbon::now()->toDateString()),
         ]);
 
         //Save it
@@ -348,16 +350,16 @@ class EventController extends Controller
             //Send notification to marketing
             $discord->channel->createMessage([
                 'channel.id' => config('app.env') == 'local' ? intval(config('services.discord.web_logs')) : intval(config('services.discord.announcements')),
-                'embed' => [
-                    'title' => "Update for event {$update->event->name}",
+                'embed'      => [
+                    'title'       => "Update for event {$update->event->name}",
                     'description' => $update->content,
-                    'color' => 0x80c9,
-                    "url" => route('events.view', $update->event->slug),
-                    "timestamp" => date('Y-m-d H:i:s'),
-                    "author" => [
-                        "name" => $update->user->fullName('FLC'),
+                    'color'       => 0x80c9,
+                    'url'         => route('events.view', $update->event->slug),
+                    'timestamp'   => date('Y-m-d H:i:s'),
+                    'author'      => [
+                        'name' => $update->user->fullName('FLC'),
                     ],
-                ]
+                ],
             ]);
         }
 
@@ -374,7 +376,7 @@ class EventController extends Controller
         $app->delete();
 
         //Redirect
-        return redirect()->route('events.admin.view', $event_slug)->with('info', 'Controller application from '.$app->user_id. 'deleted.');
+        return redirect()->route('events.admin.view', $event_slug)->with('info', 'Controller application from '.$app->user_id.'deleted.');
     }
 
     public function adminDeleteUpdate($event_slug, $update_id)
@@ -386,6 +388,6 @@ class EventController extends Controller
         $update->delete();
 
         //Redirect
-        return redirect()->route('events.admin.view', $event_slug)->with('info', 'Update \''.$update->title. '\'deleted.');
+        return redirect()->route('events.admin.view', $event_slug)->with('info', 'Update \''.$update->title.'\'deleted.');
     }
 }

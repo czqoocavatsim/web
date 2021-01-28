@@ -2,9 +2,9 @@
 
 namespace App\Models\ControllerBookings;
 
-use Illuminate\Database\Eloquent\Model;
-use App\Models\Users\User;
 use App\Models\Network\VatsimPosition;
+use App\Models\Users\User;
+use Illuminate\Database\Eloquent\Model;
 
 class ReservedBookingSlot extends Model
 {

@@ -21,8 +21,7 @@ class TrainingPortalController extends Controller
     public function index()
     {
         //Is the user a student who needs to submit availability?
-        if (Auth::user()->studentProfile && Auth::user()->studentProfile->current && count(Auth::user()->studentProfile->availability) < 1)
-        {
+        if (Auth::user()->studentProfile && Auth::user()->studentProfile->current && count(Auth::user()->studentProfile->availability) < 1) {
             return view('training.portal.submit-availability');
         }
 
@@ -33,7 +32,7 @@ class TrainingPortalController extends Controller
     {
         //Define validator messages
         $messages = [
-            'submission.required' => 'Please enter your availability in the form.'
+            'submission.required' => 'Please enter your availability in the form.',
         ];
 
         //Validate
@@ -49,7 +48,7 @@ class TrainingPortalController extends Controller
         //Create submission obj
         $submission = new StudentAvailabilitySubmission([
             'student_id' => Auth::user()->studentProfile->id,
-            'submission' => $request->get('submission')
+            'submission' => $request->get('submission'),
         ]);
         $submission->save();
 
@@ -66,8 +65,8 @@ class TrainingPortalController extends Controller
 
                 //Assign it with link
                 $link = new StudentStatusLabelLink([
-                    'student_id' => $student->id,
-                    'student_status_label_id' => $readyForPickUp->id
+                    'student_id'              => $student->id,
+                    'student_status_label_id' => $readyForPickUp->id,
                 ]);
                 $link->save();
 
@@ -75,14 +74,14 @@ class TrainingPortalController extends Controller
                 $discord = new DiscordClient(['token' => config('services.discord.token')]);
                 $discord->channel->createMessage([
                     'channel.id' => intval(config('services.discord.instructors')),
-                    "content" => "",
-                    'embed' => [
-                        "title" => "A new student is available for pick-up by an Instructor",
-                        "url" => route('training.admin.instructing.students.view', $student->user_id),
-                        "timestamp" => Carbon::now(),
-                        "color" => hexdec( "2196f3" ),
-                        "description" => $student->user->fullName('FLC')
-                    ]
+                    'content'    => '',
+                    'embed'      => [
+                        'title'       => 'A new student is available for pick-up by an Instructor',
+                        'url'         => route('training.admin.instructing.students.view', $student->user_id),
+                        'timestamp'   => Carbon::now(),
+                        'color'       => hexdec('2196f3'),
+                        'description' => $student->user->fullName('FLC'),
+                    ],
                 ]);
 
                 //Break
@@ -91,14 +90,14 @@ class TrainingPortalController extends Controller
         }
 
         //Return
-        return redirect()->route('training.portal.index')->with('success', "Thank you for submitting your availability, " . Auth::user()->fullName("F") . '!');
+        return redirect()->route('training.portal.index')->with('success', 'Thank you for submitting your availability, '.Auth::user()->fullName('F').'!');
     }
 
     public function helpPolicies()
     {
         //Get all training policies
         $policies = Policy::cursor()->filter(function ($p) {
-            return (in_array($p->title, ['Training', 'Controller', 'Currency']));
+            return in_array($p->title, ['Training', 'Controller', 'Currency']);
         });
 
         //Return view

@@ -12,7 +12,10 @@ use Illuminate\Queue\SerializesModels;
 
 class ProcessInactivityEmail implements ShouldQueue
 {
-    use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
+    use Dispatchable;
+    use InteractsWithQueue;
+    use Queueable;
+    use SerializesModels;
 
     /**
      * Create a new job instance.
@@ -57,7 +60,7 @@ class ProcessInactivityEmail implements ShouldQueue
                             $hoursToCheck = 2;
                             break;
                         case 3: // 3 months
-                            $hoursToCheck = 3;;
+                            $hoursToCheck = 3;
                             break;
                         case 4: // 4 months
                             $hoursToCheck = 4;
@@ -66,7 +69,7 @@ class ProcessInactivityEmail implements ShouldQueue
                             $hoursToCheck = 5;
                             break;
                         default: // Default
-                            $hoursToCheck = null;;
+                            $hoursToCheck = null;
                             break;
                     }
                 } else {

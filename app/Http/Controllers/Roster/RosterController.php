@@ -12,11 +12,10 @@ use App\Notifications\Roster\RemovedFromRoster;
 use App\Notifications\Roster\RosterStatusChanged;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Notification;
 use Illuminate\Support\Facades\Response;
 use Illuminate\Support\Facades\Validator;
-use Spatie\Permission\Models\Role;
-use Illuminate\Support\Facades\Auth;
 
 class RosterController extends Controller
 {
@@ -42,24 +41,24 @@ class RosterController extends Controller
     {
         //Define validator messages
         $messages = [
-            'cid.required' => 'A controller CID is required.',
-            'cid.min' => 'CIDs are a minimum of 8 characters.',
-            'cid.integer' => 'CIDs must be an integer.',
-            'certification.required' => 'Certification required.',
-            'active.required' => 'Active required.',
-            'date_certified.required' => 'Certification date required.'
+            'cid.required'            => 'A controller CID is required.',
+            'cid.min'                 => 'CIDs are a minimum of 8 characters.',
+            'cid.integer'             => 'CIDs must be an integer.',
+            'certification.required'  => 'Certification required.',
+            'active.required'         => 'Active required.',
+            'date_certified.required' => 'Certification date required.',
         ];
 
         //Validate
         $validator = Validator::make($request->all(), [
-            'cid' => 'required|integer|min:8',
-            'certification' => 'required',
-            'active' => 'required',
-            'date_certified' => 'required'
+            'cid'            => 'required|integer|min:8',
+            'certification'  => 'required',
+            'active'         => 'required',
+            'date_certified' => 'required',
         ], $messages);
 
         //If there is already someone with this CID...
-        $validator->after(function ($validator) use($request) {
+        $validator->after(function ($validator) use ($request) {
             if (RosterMember::where('cid', $request->get('cid'))->first()) {
                 $validator->errors()->add('cid', 'CID already on roster');
             }
@@ -150,7 +149,6 @@ class RosterController extends Controller
         return redirect()->route('training.admin.roster')->with('info', 'Roster member removed');
     }
 
-
     public function editRosterMemberPost($cid, Request $request)
     {
         //Get roster member
@@ -158,16 +156,16 @@ class RosterController extends Controller
 
         //Define validator messages
         $messages = [
-            'certification.required' => 'Certification required.',
-            'active.required' => 'Active required.',
-            'date_certified.required' => 'Certification date required.'
+            'certification.required'  => 'Certification required.',
+            'active.required'         => 'Active required.',
+            'date_certified.required' => 'Certification date required.',
         ];
 
         //Validate
         $validator = Validator::make($request->all(), [
-            'certification' => 'required',
-            'active' => 'required',
-            'date_certified' => 'required'
+            'certification'  => 'required',
+            'active'         => 'required',
+            'date_certified' => 'required',
         ], $messages);
 
         //Redirect if it fails
@@ -214,32 +212,32 @@ class RosterController extends Controller
     public function exportRoster()
     {
         //Http headers
-        $headers = array(
-            "Content-type" => "text/csv",
-            "Content-Disposition" => "attachment; filename=roster-".Carbon::now()->toDateString().".csv",
-        );
+        $headers = [
+            'Content-type'        => 'text/csv',
+            'Content-Disposition' => 'attachment; filename=roster-'.Carbon::now()->toDateString().'.csv',
+        ];
 
         //Get the roster
         $roster = RosterMember::all();
 
         //Columns
-        $columns = array('cid','name','rating','division','certification','active','email');
+        $columns = ['cid', 'name', 'rating', 'division', 'certification', 'active', 'email'];
 
         //Create the CSV file
-        $callback = function() use ($roster, $columns) {
+        $callback = function () use ($roster, $columns) {
             $file = fopen('php://output', 'w');
             fputcsv($file, $columns);
 
             foreach ($roster as $r) {
-                fputcsv($file, array(
+                fputcsv($file, [
                     $r->cid,
                     $r->user->fullName('FL'),
                     $r->user->ratings_short,
                     $r->user->division_code,
                     $r->certification,
                     $r->active,
-                    Auth::user()->can('view user details') ? $r->email : 'REDACTED'
-                ));
+                    Auth::user()->can('view user details') ? $r->email : 'REDACTED',
+                ]);
 
                 fclose($file);
             }
@@ -262,7 +260,7 @@ class RosterController extends Controller
     {
         //Validate
         $validator = Validator::make($request->all(), [
-            'entry_id' => 'required'
+            'entry_id' => 'required',
         ]);
 
         if ($validator->fails()) {
@@ -280,7 +278,7 @@ class RosterController extends Controller
     {
         //Validate
         $validator = Validator::make($request->all(), [
-            'cid' => 'required'
+            'cid' => 'required',
         ]);
 
         if ($validator->fails()) {

@@ -1,6 +1,6 @@
 <?php
 
-return array(
+return [
 
     /*
     |--------------------------------------------------------------------------
@@ -12,10 +12,10 @@ return array(
     |
     */
     'show_warnings' => false,   // Throw an Exception on warnings from dompdf
-    'orientation' => 'portrait',
-    'defines' => array(
+    'orientation'   => 'portrait',
+    'defines'       => [
         /**
-         * The location of the DOMPDF font directory
+         * The location of the DOMPDF font directory.
          *
          * The location of the directory where DOMPDF will store fonts and font metrics
          * Note: This directory must exist and be writable by the webserver process.
@@ -38,17 +38,17 @@ return array(
          * Times-Roman, Times-Bold, Times-BoldItalic, Times-Italic,
          * Symbol, ZapfDingbats.
          */
-        "font_dir" => storage_path('fonts/'), // advised by dompdf (https://github.com/dompdf/dompdf/pull/782)
+        'font_dir' => storage_path('fonts/'), // advised by dompdf (https://github.com/dompdf/dompdf/pull/782)
 
         /**
-         * The location of the DOMPDF font cache directory
+         * The location of the DOMPDF font cache directory.
          *
          * This directory contains the cached font metrics for the fonts used by DOMPDF.
          * This directory can be the same as DOMPDF_FONT_DIR
          *
          * Note: This directory must exist and be writable by the webserver process.
          */
-        "font_cache" => storage_path('fonts/'),
+        'font_cache' => storage_path('fonts/'),
 
         /**
          * The location of a temporary directory.
@@ -57,10 +57,10 @@ return array(
          * The temporary directory is required to download remote images and when
          * using the PFDLib back end.
          */
-        "temp_dir" => sys_get_temp_dir(),
+        'temp_dir' => sys_get_temp_dir(),
 
         /**
-         * ==== IMPORTANT ====
+         * ==== IMPORTANT ====.
          *
          * dompdf's "chroot": Prevents dompdf from accessing system files or other
          * files on the webserver.  All local files opened by dompdf must be in a
@@ -71,20 +71,19 @@ return array(
          * direct class use like:
          * $dompdf = new DOMPDF();	$dompdf->load_html($htmldata); $dompdf->render(); $pdfdata = $dompdf->output();
          */
-        "chroot" => realpath(base_path()),
+        'chroot' => realpath(base_path()),
 
         /**
          * Whether to enable font subsetting or not.
          */
-        "enable_font_subsetting" => false,
+        'enable_font_subsetting' => false,
 
         /**
-         * The PDF rendering backend to use
+         * The PDF rendering backend to use.
          *
          * Valid settings are 'PDFLib', 'CPDF' (the bundled R&OS PDF class), 'GD' and
          * 'auto'. 'auto' will look for PDFLib and use it if found, or if not it will
-         * fall back on CPDF. 'GD' renders PDFs to graphic files. {@link
-         * Canvas_Factory} ultimately determines which rendering class to instantiate
+         * fall back on CPDF. 'GD' renders PDFs to graphic files. {@link * Canvas_Factory} ultimately determines which rendering class to instantiate
          * based on this setting.
          *
          * Both PDFLib & CPDF rendering backends provide sufficient rendering
@@ -106,10 +105,10 @@ return array(
          * @link http://www.ros.co.nz/pdf
          * @link http://www.php.net/image
          */
-        "pdf_backend" => "CPDF",
+        'pdf_backend' => 'CPDF',
 
         /**
-         * PDFlib license key
+         * PDFlib license key.
          *
          * If you are using a licensed, commercial version of PDFlib, specify
          * your license key here.  If you are using PDFlib-Lite or are evaluating
@@ -132,7 +131,7 @@ return array(
          * the desired content might be different (e.g. screen or projection view of html file).
          * Therefore allow specification of content here.
          */
-        "default_media_type" => "screen",
+        'default_media_type' => 'screen',
 
         /**
          * The default paper size.
@@ -141,18 +140,19 @@ return array(
          *
          * @see CPDF_Adapter::PAPER_SIZES for valid sizes ('letter', 'legal', 'A4', etc.)
          */
-        "default_paper_size" => "a4",
+        'default_paper_size' => 'a4',
 
         /**
-         * The default font family
+         * The default font family.
          *
          * Used if no suitable fonts can be found. This must exist in the font folder.
+         *
          * @var string
          */
-        "default_font" => "sans-serif",
+        'default_font' => 'sans-serif',
 
         /**
-         * Image DPI setting
+         * Image DPI setting.
          *
          * This setting determines the default DPI setting for images and fonts.  The
          * DPI may be overridden for inline images by explictly setting the
@@ -184,10 +184,10 @@ return array(
          *
          * @var int
          */
-        "dpi" => 96,
+        'dpi' => 96,
 
         /**
-         * Enable inline PHP
+         * Enable inline PHP.
          *
          * If this setting is set to true then DOMPDF will automatically evaluate
          * inline PHP contained within <script type="text/php"> ... </script> tags.
@@ -198,20 +198,20 @@ return array(
          *
          * @var bool
          */
-        "enable_php" => false,
+        'enable_php' => false,
 
         /**
-         * Enable inline Javascript
+         * Enable inline Javascript.
          *
          * If this setting is set to true then DOMPDF will automatically insert
          * JavaScript code contained within <script type="text/javascript"> ... </script> tags.
          *
          * @var bool
          */
-        "enable_javascript" => true,
+        'enable_javascript' => true,
 
         /**
-         * Enable remote file access
+         * Enable remote file access.
          *
          * If this setting is set to true, DOMPDF will access remote sites for
          * images and CSS files as required.
@@ -227,18 +227,17 @@ return array(
          *
          * @var bool
          */
-        "enable_remote" => true,
+        'enable_remote' => true,
 
         /**
-         * A ratio applied to the fonts height to be more like browsers' line height
+         * A ratio applied to the fonts height to be more like browsers' line height.
          */
-        "font_height_ratio" => 1.1,
+        'font_height_ratio' => 1.1,
 
         /**
-         * Use the more-than-experimental HTML5 Lib parser
+         * Use the more-than-experimental HTML5 Lib parser.
          */
-        "enable_html5_parser" => true,
-    ),
+        'enable_html5_parser' => true,
+    ],
 
-
-);
+];

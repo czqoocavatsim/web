@@ -5,13 +5,13 @@ namespace App\Models\Feedback;
 use Illuminate\Database\Eloquent\Model;
 
 /**
- * @var id Incremental ID of the feedback type field submission.
- * @var name Name of the feedback type field.
- * @var type_id ID of feedback type this field belongs to.
+ * @var id            Incremental ID of the feedback type field submission.
+ * @var name          Name of the feedback type field.
+ * @var type_id       ID of feedback type this field belongs to.
  * @var submission_id ID of feedback submission this belongs to.
- * @var content Content of submission for field.
- * @var created_at Time created at.
- * @var updated_at Time last updated at.
+ * @var content       Content of submission for field.
+ * @var created_at    Time created at.
+ * @var updated_at    Time last updated at.
  */
 class FeedbackTypeFieldSubmission extends Model
 {
@@ -21,7 +21,7 @@ class FeedbackTypeFieldSubmission extends Model
      * @var array
      */
     protected $fillable = [
-        'type_id', 'submission_id', 'name', 'content'
+        'type_id', 'submission_id', 'name', 'content',
     ];
 
     /**

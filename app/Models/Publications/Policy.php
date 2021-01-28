@@ -15,11 +15,11 @@ class Policy extends Model
     use SoftDeletes;
 
     protected $fillable = [
-        'user_id', 'title', 'description', 'url'
+        'user_id', 'title', 'description', 'url',
     ];
 
     protected $dates = [
-        'created_at', 'updated_at'
+        'created_at', 'updated_at',
     ];
 
     public function user()

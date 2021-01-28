@@ -12,7 +12,10 @@ use Illuminate\Queue\SerializesModels;
 
 class ProcessRosterInactivity implements ShouldQueue
 {
-    use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
+    use Dispatchable;
+    use InteractsWithQueue;
+    use Queueable;
+    use SerializesModels;
 
     /**
      * Create a new job instance.
@@ -45,14 +48,14 @@ class ProcessRosterInactivity implements ShouldQueue
                 $certifiedDate = null;
             }
 
-            if($rosterMember->active) {
+            if ($rosterMember->active) {
 
                 // Check if certified in last 6mo
                 $diff = $certifiedDate != null ? Carbon::now()->diffInMonths($certifiedDate) : null; // Get date diff
 
                 // If less than 6 months
                 if ($diff != null && $diff <= 6) {
-                    switch($diff) { // Switch the activity and check appropriate hours based on number
+                    switch ($diff) { // Switch the activity and check appropriate hours based on number
                         case 0:
                             break;
                         case 1: // 1 month
@@ -76,14 +79,12 @@ class ProcessRosterInactivity implements ShouldQueue
                     }
                     // Save record
                     $rosterMember->update();
-                }
-                else {
+                } else {
                     // Assign to false if less than 6
                     $rosterMember->active = $rosterMember->currency >= 6.0 ?: false;
                     $rosterMember->save();
                 }
-            }
-            else { // If inactive
+            } else { // If inactive
                 $rosterMember->delete(); // Bye bye
             }
         }

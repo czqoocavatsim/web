@@ -3,7 +3,6 @@
 namespace App\Notifications;
 
 use Illuminate\Bus\Queueable;
-use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
 use Illuminate\Support\HtmlString;
@@ -25,7 +24,8 @@ class WelcomeNewUser extends Notification
     /**
      * Get the notification's delivery channels.
      *
-     * @param  mixed  $notifiable
+     * @param mixed $notifiable
+     *
      * @return array
      */
     public function via($notifiable)
@@ -36,23 +36,25 @@ class WelcomeNewUser extends Notification
     /**
      * Get the mail representation of the notification.
      *
-     * @param  mixed  $notifiable
+     * @param mixed $notifiable
+     *
      * @return \Illuminate\Notifications\Messages\MailMessage
      */
     public function toMail($notifiable)
     {
-        return (new MailMessage)
+        return (new MailMessage())
                     ->subject("Welcome to CZQO, {$this->user->fullName('FLC')}!")
                     ->from('chief@ganderoceanic.com', 'Andrew Ogden')
                     ->line("Welcome to Gander Oceanic, we're very excited that you're here!")
                     ->line("On our site you can find various resources relating to Oceanic operations in the North Atlantic for both pilots and controllers. Please don't hesitate to contact me should you have any questions about us!")
-                    ->salutation(new HtmlString("Cheers,<br>Andrew Ogden<br>OCA Chief"));
+                    ->salutation(new HtmlString('Cheers,<br>Andrew Ogden<br>OCA Chief'));
     }
 
     /**
      * Get the array representation of the notification.
      *
-     * @param  mixed  $notifiable
+     * @param mixed $notifiable
+     *
      * @return array
      */
     public function toArray($notifiable)

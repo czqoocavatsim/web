@@ -5,8 +5,6 @@ namespace App\Models\Roster;
 use App\Models\Users\User;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\SoftDeletes;
-use Illuminate\Support\Facades\Log;
 use Illuminate\Support\HtmlString;
 use Spatie\Activitylog\Traits\LogsActivity;
 
@@ -15,7 +13,7 @@ class RosterMember extends Model
     use LogsActivity;
 
     protected $fillable = [
-        'cid', 'user_id', 'certification', 'date_certified', 'active', 'monthly_hours', 'remarks'
+        'cid', 'user_id', 'certification', 'date_certified', 'active', 'monthly_hours', 'remarks',
     ];
 
     protected $hidden = ['id', 'user_id', 'date_certified', 'monthly_hours', 'remarks', 'created_at', 'updated_at'];
@@ -25,41 +23,44 @@ class RosterMember extends Model
         return $this->belongsTo(User::class);
     }
 
-    public function getLeaderboardHours() { // Get hours from leaderboard
+    public function getLeaderboardHours()
+    { // Get hours from leaderboard
         return $this->monthly_hours;
     }
 
     public function activeSoloCertification()
     {
         $cert = SoloCertification::where('expires', '>', Carbon::now())->where('roster_member_id', $this->id)->first();
-        if ($cert) { return $cert; }
+        if ($cert) {
+            return $cert;
+        }
+
         return null;
     }
 
     public function certificationPretty()
     {
-        switch ($this->certification)
-        {
-            case "certified":
-                return "Certified";
+        switch ($this->certification) {
+            case 'certified':
+                return 'Certified';
             break;
-            case "not_certified":
-                return "Not Certified";
+            case 'not_certified':
+                return 'Not Certified';
             break;
-            case "training":
-                return "Student";
+            case 'training':
+                return 'Student';
             break;
             default:
-                "Unknown";
+                'Unknown';
         }
     }
 
     public function activePretty()
     {
         if ($this->active) {
-            return "Active";
+            return 'Active';
         } else {
-            return "Inactive";
+            return 'Inactive';
         }
     }
 
@@ -97,22 +98,21 @@ class RosterMember extends Model
         $html = "<span style='font-weight: 400' class='badge rounded p-2 shadow-none ";
 
         //Colour
-        switch ($this->certification)
-        {
-            case "certified":
+        switch ($this->certification) {
+            case 'certified':
                 $html .= "green text-white'><i class='fas fa-check-double mr-2'></i>";
             break;
-            case "not_certified":
+            case 'not_certified':
                 $html .= "red text-white'><i class='fas fa-times mr-2'></i>";
             break;
-            case "training":
+            case 'training':
                 $html .= "orange text-white'><i class='fas fa-graduation-cap mr-2'></i>";
             break;
             default:
                 $html .= "grey text-white'><i class='fas fa-question mr-2'></i>";
         }
 
-        $html .= $this->certificationPretty() . "</span>";
+        $html .= $this->certificationPretty().'</span>';
 
         return new HtmlString($html);
     }
@@ -122,16 +122,13 @@ class RosterMember extends Model
         $html = "<span style='font-weight: 400' class='badge rounded p-2 shadow-none ";
 
         //Colour
-        if ($this->active)
-        {
+        if ($this->active) {
             $html .= "green text-white'><i class='fas fa-check mr-2'></i>";
-        }
-        else
-        {
+        } else {
             $html .= "red text-white'><i class='fas fa-times mr-2'></i>";
         }
 
-        $html .= $this->activePretty() . "</span>";
+        $html .= $this->activePretty().'</span>';
 
         return new HtmlString($html);
     }

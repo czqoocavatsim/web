@@ -4,9 +4,9 @@ namespace App\Models\Training;
 
 use App\Models\Users\User;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\HtmlString;
 use Parsedown;
-use Illuminate\Database\Eloquent\SoftDeletes;
 
 class ApplicationComment extends Model
 {

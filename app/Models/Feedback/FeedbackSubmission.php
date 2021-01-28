@@ -10,14 +10,14 @@ use Parsedown;
 use Spatie\Activitylog\Traits\LogsActivity;
 
 /**
- * @var id Incremental ID of feedback.
- * @var user_id User foreign key for whoever submitted the feedback.
- * @var type_id Feedback type foreign key for the type of feedback it is.
- * @var submission_content Content of the submission in Markdown format.
+ * @var id                    Incremental ID of feedback.
+ * @var user_id               User foreign key for whoever submitted the feedback.
+ * @var type_id               Feedback type foreign key for the type of feedback it is.
+ * @var submission_content    Content of the submission in Markdown format.
  * @var permission_to_publish Has the user given permission for this feedback to be published?
- * @var slug URL slug of type.
- * @var created_at Time feedback submitted at.
- * @var updated_at Time feedback last updated at.
+ * @var slug                  URL slug of type.
+ * @var created_at            Time feedback submitted at.
+ * @var updated_at            Time feedback last updated at.
  */
 class FeedbackSubmission extends Model
 {
@@ -27,7 +27,7 @@ class FeedbackSubmission extends Model
      * @var array
      */
     protected $fillable = [
-        'user_id', 'type_id', 'submission_content', 'permission_to_publish', 'slug'
+        'user_id', 'type_id', 'submission_content', 'permission_to_publish', 'slug',
     ];
 
     /**

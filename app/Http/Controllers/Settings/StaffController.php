@@ -5,7 +5,6 @@ namespace App\Http\Controllers\Settings;
 use App\Http\Controllers\Controller;
 use App\Models\Users\StaffGroup;
 use App\Models\Users\StaffMember;
-use Illuminate\Http\Request;
 
 class StaffController extends Controller
 {

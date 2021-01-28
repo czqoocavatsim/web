@@ -20,8 +20,8 @@ class CreateFeedbackTypeFieldsTable extends Migration
             $table->foreignId('type_id')->constrained('feedback_types');
 
             //Info
-            $table->string("name");
-            $table->boolean("required");
+            $table->string('name');
+            $table->boolean('required');
 
             $table->timestamps();
         });

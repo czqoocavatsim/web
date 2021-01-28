@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 class StaffGroup extends Model
 {
     protected $fillable = [
-        'name', 'slug', 'description', 'can_receive_tickets'
+        'name', 'slug', 'description', 'can_receive_tickets',
     ];
 
     public function members()

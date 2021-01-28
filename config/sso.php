@@ -70,7 +70,7 @@ O0gQ0RDS3gD8C5XHvy5vryYjUOB10rUn9A2xLQw4sqKv2suHvIhc0Eit
 
     'additionalConfig' => [
         'allow_suspended' => false,
-        'allow_inactive' => false,
+        'allow_inactive'  => false,
     ],
 
 ];
