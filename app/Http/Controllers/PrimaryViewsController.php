@@ -21,15 +21,17 @@ class PrimaryViewsController extends Controller
     public function home(Request $request)
     {
         //VATSIM online controllers
-        $vatsim = new \Vatsimphp\VatsimData();
-        $vatsim->setConfig('cacheOnly', false);
+        $vatsimData = new VatsimData();
+
         $ganderControllers = [];
         $shanwickControllers = [];
         $controllers = [];
-        if ($vatsim->loadData()) {
-            $ganderControllers = $vatsim->searchCallsign('CZQX_');
-            $shanwickControllers = $vatsim->searchCallsign('EGGX_');
+        if ($vatsimData->loadData()) {
+            $ganderControllers = $vatsimData->searchCallsign('CZQX_');
+            $shanwickControllers = $vatsimData->searchCallsign('EGGX_');
             $controllers = array_merge($ganderControllers->toArray(), $shanwickControllers->toArray());
+        } else {
+            Log::error('PrimaryViewsController home: VATSIMPhp Could Not Load Data');
         }
 
         //News
