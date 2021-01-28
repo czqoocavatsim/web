@@ -60,7 +60,7 @@ class ProcessSessionLogging implements ShouldQueue
 
             //If there is an active session
             if ($activeSession = $position->activeSession()) {
-                if (!empty($vatsimSessionInstances)) { //If the session isn't detected online anymore
+                if (empty($vatsimSessionInstances)) { //If the session isn't detected online anymore
                     //Update and end session
                     $activeSession->session_end = Carbon::now();
                     $activeSession->duration = $activeSession->session_start->floatDiffInMinutes(Carbon::now()) / 60;
