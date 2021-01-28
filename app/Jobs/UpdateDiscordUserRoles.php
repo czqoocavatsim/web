@@ -13,7 +13,10 @@ use RestCord\DiscordClient;
 
 class UpdateDiscordUserRoles implements ShouldQueue
 {
-    use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
+    use Dispatchable;
+    use InteractsWithQueue;
+    use Queueable;
+    use SerializesModels;
 
     /**
      * Create a new job instance.
@@ -39,32 +42,29 @@ class UpdateDiscordUserRoles implements ShouldQueue
         $counter = 0;
 
         //Get all Discord linked users
-        foreach (User::where('discord_user_id', '!=', null)->cursor() as $user)
-        {
+        foreach (User::where('discord_user_id', '!=', null)->cursor() as $user) {
             //Test if they're on the server or a staff member
             if (!$user->memberOfCzqoGuild() || $user->staffProfile || $user->isBot()) {
                 //They're not.. continue on.
                 continue;
             }
 
-
-
             //Get their current user, so we can compare changes
             $guildMember = $discord->guild->getGuildMember([
                 'guild.id' => intval(config('services.discord.guild_id')),
-                'user.id' => $user->discord_user_id
+                'user.id'  => $user->discord_user_id,
             ]);
 
             //let's find all the roles they could possibly have...
-            $rolesToAdd = array();
+            $rolesToAdd = [];
 
             //Here are all the role ids
-            $discordRoleIds = array(
-                'guest' => 482835389640343562,
-                'training' => 482824058141016075,
-                'certified' => 482819739996127259,
-                'supervisor' => 720502070683369563
-            );
+            $discordRoleIds = [
+                'guest'      => 482835389640343562,
+                'training'   => 482824058141016075,
+                'certified'  => 482819739996127259,
+                'supervisor' => 720502070683369563,
+            ];
 
             //Roster?
             if (!$user->rosterProfile) {
@@ -92,12 +92,12 @@ class UpdateDiscordUserRoles implements ShouldQueue
             }
 
             //Create the full arguments
-            $arguments = array(
+            $arguments = [
                 'guild.id' => intval(config('services.discord.guild_id')),
-                'user.id' => $user->discord_user_id,
-                'nick' => $user->fullName('FLC'),
-                'roles' => $rolesToAdd
-            );
+                'user.id'  => $user->discord_user_id,
+                'nick'     => $user->fullName('FLC'),
+                'roles'    => $rolesToAdd,
+            ];
 
             //Modify
             $discord->guild->modifyGuildMember($arguments);
@@ -122,6 +122,6 @@ class UpdateDiscordUserRoles implements ShouldQueue
         }
 
         //Tell the log chat
-        $discord->channel->createMessage(['channel.id' => 482860026831175690, 'content' => $counter . ' users were updated automatically.']);
+        $discord->channel->createMessage(['channel.id' => 482860026831175690, 'content' => $counter.' users were updated automatically.']);
     }
 }

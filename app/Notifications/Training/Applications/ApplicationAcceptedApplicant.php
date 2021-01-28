@@ -4,10 +4,8 @@ namespace App\Notifications\Training\Applications;
 
 use App\Models\Training\Application;
 use Illuminate\Bus\Queueable;
-use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
-use NotificationChannels\Discord\Discord;
 use NotificationChannels\Discord\DiscordChannel;
 use NotificationChannels\Discord\DiscordMessage;
 
@@ -28,7 +26,8 @@ class ApplicationAcceptedApplicant extends Notification
     /**
      * Get the notification's delivery channels.
      *
-     * @param  mixed  $notifiable
+     * @param mixed $notifiable
+     *
      * @return array
      */
     public function via($notifiable)
@@ -39,24 +38,26 @@ class ApplicationAcceptedApplicant extends Notification
     /**
      * Get the mail representation of the notification.
      *
-     * @param  mixed  $notifiable
+     * @param mixed $notifiable
+     *
      * @return \Illuminate\Notifications\Messages\MailMessage
      */
     public function toMail($notifiable)
     {
-        return (new MailMessage)
+        return (new MailMessage())
         ->subject('Your Application Has Been Accepted!')
         ->greeting("Hello {$this->application->user->fullName('FLC')},")
-        ->line("Congratulations! Your application for Gander Oceanic has been accepted. You can now take the next steps to achieving your oceanic certification.")
-        ->line("**How to get started**")
-        ->line("To begin your training, head to the Training Portal in myCZQO and submit your availability for the next two weeks. This will allow us to assign you an Instructor who is best suited to your time zone.")
-        ->action("Submit Your Availability", route('training.portal.index'))
-        ->salutation("Kind regards, Gander Oceanic OCA")
-        ->line("You received this email as there is an important update to your status with Gander Oceanic.");
+        ->line('Congratulations! Your application for Gander Oceanic has been accepted. You can now take the next steps to achieving your oceanic certification.')
+        ->line('**How to get started**')
+        ->line('To begin your training, head to the Training Portal in myCZQO and submit your availability for the next two weeks. This will allow us to assign you an Instructor who is best suited to your time zone.')
+        ->action('Submit Your Availability', route('training.portal.index'))
+        ->salutation('Kind regards, Gander Oceanic OCA')
+        ->line('You received this email as there is an important update to your status with Gander Oceanic.');
     }
 
     /**
      * @param $notifiable
+     *
      * @return DiscordMessage
      */
     public function toDiscord($notifiable)
@@ -64,11 +65,11 @@ class ApplicationAcceptedApplicant extends Notification
         $message = new DiscordMessage();
 
         $message->embed([
-            'title' => 'Your application for Gander Oceanic has been accepted!',
-            'url' => route('training.applications.show', $this->application->reference_id),
-            'description' => "Congratulations! Please check your email inbox for further instructions.",
-            'color' => 0x80c9,
-            "timestamp" => date('Y-m-d H:i:s'),
+            'title'       => 'Your application for Gander Oceanic has been accepted!',
+            'url'         => route('training.applications.show', $this->application->reference_id),
+            'description' => 'Congratulations! Please check your email inbox for further instructions.',
+            'color'       => 0x80c9,
+            'timestamp'   => date('Y-m-d H:i:s'),
         ]);
 
         return $message;
@@ -77,7 +78,8 @@ class ApplicationAcceptedApplicant extends Notification
     /**
      * Get the array representation of the notification.
      *
-     * @param  mixed  $notifiable
+     * @param mixed $notifiable
+     *
      * @return array
      */
     public function toArray($notifiable)

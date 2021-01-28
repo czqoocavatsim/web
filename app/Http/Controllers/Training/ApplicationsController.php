@@ -2,8 +2,6 @@
 
 namespace App\Http\Controllers\Training;
 
-use App\Events\Training\ApplicationSubmitted;
-use App\Events\Training\ApplicationWithdrawn;
 use App\Http\Controllers\Controller;
 use App\Models\Roster\RosterMember;
 use App\Models\Settings\CoreSettings;
@@ -23,8 +21,6 @@ use App\Notifications\Training\Applications\NewCommentApplicant;
 use App\Notifications\Training\Applications\NewCommentStaff;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
-use Illuminate\Notifications\Notifiable;
-use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Gate;
@@ -34,7 +30,6 @@ use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Str;
 use mofodojodino\ProfanityFilter\Check;
-use NotificationChannels\Discord\DiscordMessage;
 use RestCord\DiscordClient;
 use Spatie\Permission\Models\Role;
 
@@ -43,33 +38,32 @@ class ApplicationsController extends Controller
     public function showAll()
     {
         $applications = Auth::user()->applications->sortByDesc('created_at');
+
         return view('training.applications.showall', compact('applications'));
     }
 
     public function apply(Request $request)
     {
-        if (!Auth::user()->can('start applications'))
-        {
+        if (!Auth::user()->can('start applications')) {
             abort(403, 'You cannot apply for Gander Oceanic at this time. If this is a mistake, please contact the Deputy OCA Chief.');
         }
 
-        if ($pendingApp = Application::where('user_id', Auth::id())->where('status', 0)->first())
-        {
+        if ($pendingApp = Application::where('user_id', Auth::id())->where('status', 0)->first()) {
             //redirect
             $request->session()->flash('alreadyApplied', 'You already have a pending application for Gander.');
+
             return redirect()->route('training.applications.show', $pendingApp->reference_id);
         }
 
         //Redirect of rating isnt C1
-        if (Auth::user()->rating_id < 5)
-        {
+        if (Auth::user()->rating_id < 5) {
             return view('training.applications.apply')->with('allowed', 'rating');
         }
 
         //Check hours of controller
 
         //Download via CURL
-        $url = 'https://api.vatsim.net/api/ratings/' . Auth::id() . '/rating_times/';
+        $url = 'https://api.vatsim.net/api/ratings/'.Auth::id().'/rating_times/';
         $ch = curl_init();
         curl_setopt($ch, CURLOPT_URL, $url);
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
@@ -81,8 +75,7 @@ class ApplicationsController extends Controller
         $hoursTotal = intval($hoursObj->c1) + intval($hoursObj->c2) + intval($hoursObj->c3) + intval($hoursObj->i1) + intval($hoursObj->i2) + intval($hoursObj->i3) + intval($hoursObj->sup) + intval($hoursObj->adm);
 
         //Redirect if hours aren't 80
-        if ($hoursTotal < 80)
-        {
+        if ($hoursTotal < 80) {
             return view('training.applications.apply', compact('hoursTotal'))->with('allowed', 'hours');
         }
 
@@ -93,6 +86,7 @@ class ApplicationsController extends Controller
             curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
             $output = curl_exec($ch);
             curl_close($ch);
+
             return $output;
         }));
 
@@ -109,17 +103,17 @@ class ApplicationsController extends Controller
     {
         $messages = [
             'applicant_statement.required' => 'You need to write why you wish to control at Gander.',
-            'refereeName.required' => 'Please provide a name for your referee.',
-            'refereeEmail.required' => 'Please provide an email for your referee.',
-            'refereePosition.required' => 'Please provide your referee\'s email.'
+            'refereeName.required'         => 'Please provide a name for your referee.',
+            'refereeEmail.required'        => 'Please provide an email for your referee.',
+            'refereePosition.required'     => 'Please provide your referee\'s email.',
         ];
 
         //Validate form
         $validator = Validator::make($request->all(), [
             'applicant_statement' => 'required',
-            'refereeName' => 'required',
-            'refereeEmail' => 'required|email',
-            'refereePosition' => 'required'
+            'refereeName'         => 'required',
+            'refereeEmail'        => 'required|email',
+            'refereePosition'     => 'required',
         ], $messages);
 
         if ($validator->fails()) {
@@ -128,26 +122,26 @@ class ApplicationsController extends Controller
 
         //Create application and save it
         $application = new Application();
-        $application->reference_id = Auth::user()->display_fname[0] . Auth::user()->lname[0] . Str::random(4);
+        $application->reference_id = Auth::user()->display_fname[0].Auth::user()->lname[0].Str::random(4);
         $application->user_id = Auth::id();
         $application->applicant_statement = $request->get('applicant_statement');
         $application->save();
 
         //Create referee object
         $referee = new ApplicationReferee([
-            'application_id' => $application->id,
-            'referee_full_name' => $request->get('refereeName'),
-            'referee_email' => $request->get('refereeEmail'),
-            'referee_staff_position' => $request->get('refereePosition')
+            'application_id'         => $application->id,
+            'referee_full_name'      => $request->get('refereeName'),
+            'referee_email'          => $request->get('refereeEmail'),
+            'referee_staff_position' => $request->get('refereePosition'),
         ]);
         $referee->save();
 
         //Create processing update
         $processingUpdate = new ApplicationUpdate([
             'application_id' => $application->id,
-            'update_title' => 'Sit tight! Your application is now pending',
+            'update_title'   => 'Sit tight! Your application is now pending',
             'update_content' => 'If you do not see an update through email or Discord within 5 days, please contact the Deputy OCA Chief.',
-            'update_type' => 'green'
+            'update_type'    => 'green',
         ]);
         $processingUpdate->save();
 
@@ -165,8 +159,7 @@ class ApplicationsController extends Controller
         $application = Application::where('reference_id', $reference_id)->firstOrFail();
 
         //Check if not allowed
-        if (Gate::denies('view-application', $application) || Auth::id() != $application->user_id)
-        {
+        if (Gate::denies('view-application', $application) || Auth::id() != $application->user_id) {
             //Show 404 to not show that the application does exist
             abort(404);
         }
@@ -186,8 +179,7 @@ class ApplicationsController extends Controller
         $application = Application::where('reference_id', $reference_id)->firstOrFail();
 
         //Check if not allowed
-        if (Gate::denies('view-application', $application))
-        {
+        if (Gate::denies('view-application', $application)) {
             //Show 404 to not show that the application does exist
             abort(404);
         }
@@ -203,7 +195,7 @@ class ApplicationsController extends Controller
     {
         //Validate form
         $validator = Validator::make($request->all(), [
-            'reference_id' => 'required'
+            'reference_id' => 'required',
         ]);
 
         //If bad, return response
@@ -214,9 +206,10 @@ class ApplicationsController extends Controller
         //Check if the application exists
         $application = Application::where('reference_id', $request->get('reference_id'))->firstOrFail();
 
-        if(!$application) {
+        if (!$application) {
             //return error
             Log::error('Application withdraw fail (ref #'.$request->get('reference_id').')');
+
             return redirect()->back()->with('error-modal', 'There was an error withdrawing your application. Please contact the IT Director.');
         }
 
@@ -227,9 +220,9 @@ class ApplicationsController extends Controller
         //Update
         $update = new ApplicationUpdate([
             'application_id' => $application->id,
-            'update_title' => 'Application withdrawn',
+            'update_title'   => 'Application withdrawn',
             'update_content' => 'You may apply for Gander Oceanic again when you are ready',
-            'update_type' => 'grey'
+            'update_type'    => 'grey',
         ]);
         $update->save();
 
@@ -239,6 +232,7 @@ class ApplicationsController extends Controller
 
         //Return
         $request->session()->flash('alreadyApplied', 'Application withdrawn.');
+
         return redirect()->route('training.applications.show', $application->reference_id);
     }
 
@@ -247,7 +241,7 @@ class ApplicationsController extends Controller
         //Validate form
         $validator = Validator::make($request->all(), [
             'reference_id' => 'required',
-            'comment' => 'required'
+            'comment'      => 'required',
         ]);
 
         //If bad, return response
@@ -257,9 +251,10 @@ class ApplicationsController extends Controller
 
         //Check if the application exists
         $application = Application::where('reference_id', $request->get('reference_id'))->firstOrFail();
-        if(!$application) {
+        if (!$application) {
             //return error
             Log::error('Application comment fail (ref #'.$request->get('reference_id').')');
+
             return redirect()->back()->with('error-modal', 'There was an error commenting. Please contact the IT Director.');
         }
 
@@ -285,6 +280,7 @@ class ApplicationsController extends Controller
 
         //Return
         $request->session()->flash('alreadyApplied', 'Comment added!');
+
         return redirect()->route('training.applications.show', $application->reference_id);
     }
 
@@ -331,13 +327,12 @@ class ApplicationsController extends Controller
         //Check hours of controller
 
         //Download via CURL
-        $url = 'https://api.vatsim.net/api/ratings/' . $application->user->id . '/rating_times/';
+        $url = 'https://api.vatsim.net/api/ratings/'.$application->user->id.'/rating_times/';
         $ch = curl_init();
         curl_setopt($ch, CURLOPT_URL, $url);
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
         $output = curl_exec($ch);
         curl_close($ch);
-
 
         //Create json and hours int
         $hoursObj = json_decode($output);
@@ -352,7 +347,7 @@ class ApplicationsController extends Controller
         //Validate form
         $validator = Validator::make($request->all(), [
             'reference_id' => 'required',
-            'comment' => 'required'
+            'comment'      => 'required',
         ]);
 
         //If bad, return response
@@ -362,9 +357,10 @@ class ApplicationsController extends Controller
 
         //Check if the application exists
         $application = Application::where('reference_id', $request->get('reference_id'))->firstOrFail();
-        if(!$application) {
+        if (!$application) {
             //return error
             Log::error('Application comment fail (ref #'.$request->get('reference_id').')');
+
             return redirect()->back()->with('error-modal', 'There was an error commenting.');
         }
 
@@ -384,6 +380,7 @@ class ApplicationsController extends Controller
 
         //Return
         $request->session()->flash('alreadyApplied', 'Comment added!');
+
         return redirect()->route('training.admin.applications.view', $application->reference_id);
     }
 
@@ -399,9 +396,9 @@ class ApplicationsController extends Controller
         //Create update
         $update = new ApplicationUpdate([
             'application_id' => $application->id,
-            'update_title' => 'Your application has been accepted!',
+            'update_title'   => 'Your application has been accepted!',
             'update_content' => 'Congratulations! Check out the myCZQO Training portal for more information on how to continue with getting your Gander Oceanic certification.',
-            'update_type' => 'green'
+            'update_type'    => 'green',
         ]);
         $update->save();
 
@@ -415,7 +412,7 @@ class ApplicationsController extends Controller
         //Setup roster member
         $rosterMember->cid = $application->user_id;
         $rosterMember->user_id = $application->user_id;
-        $rosterMember->certification = "training";
+        $rosterMember->certification = 'training';
         $rosterMember->active = 1;
         $rosterMember->save();
 
@@ -441,8 +438,8 @@ class ApplicationsController extends Controller
             //Remove student role
             $discord->guild->addGuildMemberRole([
                 'guild.id' => intval(config('services.discord.guild_id')),
-                'user.id' => $student->user->discord_user_id,
-                'role.id' => 482824058141016075
+                'user.id'  => $student->user->discord_user_id,
+                'role.id'  => 482824058141016075,
             ]);
         } else {
             Session::flash('info', 'Unable to add Discord permissions automatically.');
@@ -451,7 +448,7 @@ class ApplicationsController extends Controller
         //Status label
         $label = new StudentStatusLabelLink([
             'student_status_label_id' => StudentStatusLabel::whereName('Not Ready')->first()->id,
-            'student_id' => $student->id
+            'student_id'              => $student->id,
         ]);
         $label->save();
 
@@ -467,6 +464,7 @@ class ApplicationsController extends Controller
 
         //Return
         $request->session()->flash('alreadyApplied', 'Accepted!');
+
         return redirect()->route('training.admin.applications.view', $application->reference_id);
     }
 
@@ -482,9 +480,9 @@ class ApplicationsController extends Controller
         //Create update
         $update = new ApplicationUpdate([
             'application_id' => $application->id,
-            'update_title' => 'Your application has been rejected',
+            'update_title'   => 'Your application has been rejected',
             'update_content' => 'Your application for Gander Oceanic has been rejected. This may be because you do not meet the requirements as per our General Policy. You can view the exact reason for rejection by viewing the comments below.',
-            'update_type' => 'red'
+            'update_type'    => 'red',
         ]);
         $update->save();
 
@@ -493,6 +491,7 @@ class ApplicationsController extends Controller
 
         //Return
         $request->session()->flash('alreadyApplied', 'Rejected');
+
         return redirect()->route('training.admin.applications.view', $application->reference_id);
     }
 }

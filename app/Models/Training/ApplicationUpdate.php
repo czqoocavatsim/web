@@ -10,13 +10,12 @@ use Parsedown;
 
 class ApplicationUpdate extends Model
 {
-
     use SoftDeletes;
 
     protected $hidden = ['id'];
 
     protected $fillable = [
-        'application_id', 'update_title', 'update_content', 'update_type'
+        'application_id', 'update_title', 'update_content', 'update_type',
     ];
 
     public function user()

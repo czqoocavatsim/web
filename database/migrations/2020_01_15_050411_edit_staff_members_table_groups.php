@@ -13,9 +13,9 @@ class EditStaffMembersTableGroups extends Migration
      */
     public function up()
     {
-        Schema::table('staff_member', function(Blueprint $table) {
-             $table->unsignedInteger('group_id')->nullable();
-             $table->foreign('group_id')->references('id')->on('staff_groups');
+        Schema::table('staff_member', function (Blueprint $table) {
+            $table->unsignedInteger('group_id')->nullable();
+            $table->foreign('group_id')->references('id')->on('staff_groups');
         });
     }
 
@@ -26,7 +26,7 @@ class EditStaffMembersTableGroups extends Migration
      */
     public function down()
     {
-        Schema::table('staff_member', function(Blueprint $table) {
+        Schema::table('staff_member', function (Blueprint $table) {
             $table->dropColumn('group_id');
         });
     }

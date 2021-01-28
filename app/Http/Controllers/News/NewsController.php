@@ -6,18 +6,15 @@ use App\Http\Controllers\Controller;
 use App\Jobs\ProcessAnnouncement;
 use App\Jobs\ProcessArticlePublishing;
 use App\Models\News\Announcement;
-use App\Models\Settings\AuditLogEntry;
-use App\Models\News\CarouselItem;
-use App\Models\Settings\CoreSettings;
-use App\Models\Publications\MeetingMinutes;
 use App\Models\News\News;
+use App\Models\Publications\MeetingMinutes;
 use App\Models\Publications\UploadedImage;
+use App\Models\Settings\AuditLogEntry;
 use App\Models\Users\StaffMember;
 use App\Models\Users\User;
 use Auth;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Str;
@@ -28,6 +25,7 @@ class NewsController extends Controller
     {
         $articles = News::where('certification', false)->get()->sortByDesc('id');
         $announcements = Announcement::all()->sortByDesc('id');
+
         return view('admin.news.index', compact('articles', 'announcements'));
     }
 
@@ -35,6 +33,7 @@ class NewsController extends Controller
     {
         $uploadedImgs = UploadedImage::all()->sortByDesc('id');
         $staff = StaffMember::where('user_id', '!=', 1)->get();
+
         return view('admin.news.articles.create', compact('staff', 'uploadedImgs'));
     }
 
@@ -42,19 +41,19 @@ class NewsController extends Controller
     {
         //Define validator messages
         $messages = [
-            'title.required' => 'A title is required.',
-            'title.max' => 'A title may not be more than 100 characters long.',
-            'image.mimes' => 'We need an image file in the jpg png or gif formats.',
-            'content.required' => 'Content is required.',
+            'title.required'       => 'A title is required.',
+            'title.max'            => 'A title may not be more than 100 characters long.',
+            'image.mimes'          => 'We need an image file in the jpg png or gif formats.',
+            'content.required'     => 'Content is required.',
             'emailOption.required' => 'Please select an email option.',
         ];
 
         //Validate
         $validator = Validator::make($request->all(), [
-            'title' => 'required|max:100',
-            'image' => 'mimes:jpeg,jpg,png,gif',
-            'content' => 'required',
-            'emailOption' => 'required'
+            'title'       => 'required|max:100',
+            'image'       => 'mimes:jpeg,jpg,png,gif',
+            'content'     => 'required',
+            'emailOption' => 'required',
         ], $messages);
 
         //Redirect if fails
@@ -75,7 +74,7 @@ class NewsController extends Controller
 
         //Upload image if it exists
         if ($request->file('image')) {
-            $path = Storage::disk('digitalocean')->put('staff_uploads/news/' . Carbon::now()->toDateString(), $request->file('image'), 'public');
+            $path = Storage::disk('digitalocean')->put('staff_uploads/news/'.Carbon::now()->toDateString(), $request->file('image'), 'public');
             $article->image = Storage::url($path);
 
             //Add to uploaded images
@@ -139,6 +138,7 @@ class NewsController extends Controller
         } else {
             $request->session()->flash('artileCreated', 'Article created, but not yet published.');
         }
+
         return redirect()->route('news.articles.view', $article->slug);
     }
 
@@ -146,6 +146,7 @@ class NewsController extends Controller
     {
         $staff = StaffMember::where('user_id', '!=', 1)->get();
         $article = News::where('slug', $slug)->firstOrFail();
+
         return view('admin.news.articles.view', compact('article', 'staff'));
     }
 
@@ -157,12 +158,14 @@ class NewsController extends Controller
                 abort(403, 'This article is hidden.');
             }
         }
-    return view('news.article', compact('article'));
+
+        return view('news.article', compact('article'));
     }
 
     public function viewAllPublic()
     {
         $news = News::where('visible', true)->get()->sortByDesc('id');
+
         return view('news.index', compact('news'));
     }
 
@@ -186,7 +189,7 @@ class NewsController extends Controller
     {
         $this->validate($request, [
             'title' => 'required',
-            'file' => 'required',
+            'file'  => 'required',
         ]);
 
         $file = $request->file('file');
@@ -194,13 +197,15 @@ class NewsController extends Controller
         $fileName = $file->getClientOriginalName();
 
         Storage::disk('local')->putFileAs(
-            'public/files/minutes', $file, $fileName
+            'public/files/minutes',
+            $file,
+            $fileName
         );
 
         $minutes = new MeetingMinutes([
             'user_id' => Auth::id(),
-            'title' => $request->get('title'),
-            'link' => Storage::url('public/files/minutes/'.$fileName),
+            'title'   => $request->get('title'),
+            'link'    => Storage::url('public/files/minutes/'.$fileName),
         ]);
 
         $minutes->save();
@@ -219,19 +224,19 @@ class NewsController extends Controller
     {
         //Define validator messages
         $messages = [
-            'title.required' => 'A title is required.',
-            'title.max' => 'A title may not be more than 100 characters long.',
-            'target_group.required' => 'A target group is required.',
-            'content.required' => 'Content is required.',
+            'title.required'              => 'A title is required.',
+            'title.max'                   => 'A title may not be more than 100 characters long.',
+            'target_group.required'       => 'A target group is required.',
+            'content.required'            => 'Content is required.',
             'reason_for_sending.required' => 'Please select an email option.',
         ];
 
         //Validate
         $validator = Validator::make($request->all(), [
-            'title' => 'required|max:100',
-            'target_group' => 'required',
-            'content' => 'required',
-            'reason_for_sending' => 'required'
+            'title'              => 'required|max:100',
+            'target_group'       => 'required',
+            'content'            => 'required',
+            'reason_for_sending' => 'required',
         ], $messages);
 
         //Redirect if fails
@@ -241,13 +246,13 @@ class NewsController extends Controller
 
         //Create announcement
         $announcement = new Announcement([
-            'user_id' => Auth::id(),
-            'target_group' => $request->get('target_group'),
-            'title' => $request->get('title'),
-            'content' => $request->get('content'),
-            'slug' => Str::slug($request->get('title').'-'.Carbon::now()->toDateString()),
+            'user_id'            => Auth::id(),
+            'target_group'       => $request->get('target_group'),
+            'title'              => $request->get('title'),
+            'content'            => $request->get('content'),
+            'slug'               => Str::slug($request->get('title').'-'.Carbon::now()->toDateString()),
             'reason_for_sending' => $request->get('reason_for_sending'),
-            'notes' => $request->get('notes')
+            'notes'              => $request->get('notes'),
         ]);
 
         $announcement->save();

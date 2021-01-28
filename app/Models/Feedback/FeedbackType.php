@@ -6,13 +6,13 @@ use Illuminate\Database\Eloquent\Model;
 use Spatie\Permission\Models\Role;
 
 /**
- * @var id Incremental ID of the feedback type.
- * @var name Name of the feedback type.
- * @var description Description of the feedback type.
+ * @var id                 Incremental ID of the feedback type.
+ * @var name               Name of the feedback type.
+ * @var description        Description of the feedback type.
  * @var visible_to_role_id ID of role that can view submissions of this type.
- * @var slug URL slug of type.
- * @var created_at Time created at.
- * @var updated_at Time last updated at.
+ * @var slug               URL slug of type.
+ * @var created_at         Time created at.
+ * @var updated_at         Time last updated at.
  */
 class FeedbackType extends Model
 {
@@ -22,7 +22,7 @@ class FeedbackType extends Model
      * @var array
      */
     protected $fillable = [
-        'name', 'description', 'visible_to_role_id', 'slug'
+        'name', 'description', 'visible_to_role_id', 'slug',
     ];
 
     /**

@@ -48,15 +48,15 @@ class SessionsController extends Controller
     {
         //Define validator messages
         $messages = [
-            'student_id.required' => 'A student is required.',
-            'student_id.integer' => 'A student is required.',
-            'scheduled_time.required' => 'A scheduled time is required.'
+            'student_id.required'     => 'A student is required.',
+            'student_id.integer'      => 'A student is required.',
+            'scheduled_time.required' => 'A scheduled time is required.',
         ];
 
         //Validate
         $validator = Validator::make($request->all(), [
-            'student_id' => 'required|integer',
-            'scheduled_time' => 'required'
+            'student_id'     => 'required|integer',
+            'scheduled_time' => 'required',
         ], $messages);
 
         //Redirect if it fails
@@ -66,9 +66,9 @@ class SessionsController extends Controller
 
         //Create session
         $session = new TrainingSession([
-            'student_id' => $request->get('student_id'),
-            'instructor_id' => Auth::user()->instructorProfile->id,
-            'scheduled_time' => $request->get('scheduled_time')
+            'student_id'     => $request->get('student_id'),
+            'instructor_id'  => Auth::user()->instructorProfile->id,
+            'scheduled_time' => $request->get('scheduled_time'),
         ]);
         $session->save();
 
@@ -79,25 +79,25 @@ class SessionsController extends Controller
         $discord = new DiscordClient(['token' => config('services.discord.token')]);
         $discord->channel->createMessage([
             'channel.id' => config('app.env') == 'local' ? intval(config('services.discord.web_logs')) : intval(config('services.discord.instructors')),
-            "content" => "",
-            'embed' => [
-                "title" => "New training session scheduled",
-                "url" => route('training.admin.instructing.training-sessions.view', $session->id),
-                "timestamp" => Carbon::now(),
-                "color" => hexdec( "2196f3" ),
-                'fields' => array(
+            'content'    => '',
+            'embed'      => [
+                'title'     => 'New training session scheduled',
+                'url'       => route('training.admin.instructing.training-sessions.view', $session->id),
+                'timestamp' => Carbon::now(),
+                'color'     => hexdec('2196f3'),
+                'fields'    => [
                     [
-                        'name' => 'Student',
-                        'value' => $session->student->user->fullName('FLC'),
-                        'inline' => false
+                        'name'   => 'Student',
+                        'value'  => $session->student->user->fullName('FLC'),
+                        'inline' => false,
                     ],
                     [
-                        'name' => 'Instructor',
-                        'value' => $session->instructor->user->fullName('FLC'),
-                        'inline' => false
+                        'name'   => 'Instructor',
+                        'value'  => $session->instructor->user->fullName('FLC'),
+                        'inline' => false,
                     ],
-                )
-            ]
+                ],
+            ],
         ]);
 
         //Return
@@ -126,15 +126,15 @@ class SessionsController extends Controller
 
         //Define validator messages
         $messages = [
-            'new_time.required' => 'A new time is required.'
+            'new_time.required' => 'A new time is required.',
         ];
 
         //Validate
         $validator = Validator::make($request->all(), [
-            'new_time' => 'required'
+            'new_time' => 'required',
         ], $messages);
 
-           //Redirect if it fails
+        //Redirect if it fails
         if ($validator->fails()) {
             return redirect()->route('training.admin.instructing.training-sessions.view', ['id' => $session->id, 'editTimeModal' => 1])->withInput()->withErrors($validator, 'editTimeErrors');
         }
@@ -158,7 +158,7 @@ class SessionsController extends Controller
         //Define validator messages
         $messages = [
             'instructor_id.required' => 'Please select an instructor.',
-            'instructor_id.integer' => 'Please select an instructor.'
+            'instructor_id.integer'  => 'Please select an instructor.',
         ];
 
         //Validate
@@ -187,7 +187,8 @@ class SessionsController extends Controller
      * POST request to assign/reassign a position to a training session.
      *
      * @param Request $request
-     * @param integer $session_id
+     * @param int     $session_id
+     *
      * @return redirect
      */
     public function assignTrainingSessionPosition(Request $request, $session_id)
@@ -198,7 +199,7 @@ class SessionsController extends Controller
         //Define validator messages
         $messages = [
             'position_id.required' => 'Please select a position.',
-            'position_id.integer' => 'Please select a position.'
+            'position_id.integer'  => 'Please select a position.',
         ];
 
         //Validate
@@ -226,7 +227,8 @@ class SessionsController extends Controller
      * GET request to cancel a training session.
      *
      * @param Request $request
-     * @param integer $session_id
+     * @param int     $session_id
+     *
      * @return redirect
      */
     public function cancelTrainingSession(Request $request, $session_id)
@@ -248,6 +250,7 @@ class SessionsController extends Controller
      * AJAX POST request to save training session remarks field.
      *
      * @param Request $request
+     *
      * @return response
      */
     public function saveTrainingSessionRemarks(Request $request)
@@ -255,7 +258,7 @@ class SessionsController extends Controller
         //Validate
         $validator = Validator::make($request->all(), [
             'session_id' => 'required',
-            'remarks' => 'required',
+            'remarks'    => 'required',
         ]);
 
         if ($validator->fails()) {
@@ -271,20 +274,19 @@ class SessionsController extends Controller
         return response()->json(['message' => 'Saved'], 200);
     }
 
-
     public function createOtsSession(Request $request)
     {
         //Define validator messages
         $messages = [
-            'student_id.required' => 'A student is required.',
-            'student_id.integer' => 'A student is required.',
-            'scheduled_time.required' => 'A scheduled time is required.'
+            'student_id.required'     => 'A student is required.',
+            'student_id.integer'      => 'A student is required.',
+            'scheduled_time.required' => 'A scheduled time is required.',
         ];
 
         //Validate
         $validator = Validator::make($request->all(), [
-            'student_id' => 'required|integer',
-            'scheduled_time' => 'required'
+            'student_id'     => 'required|integer',
+            'scheduled_time' => 'required',
         ], $messages);
 
         //Redirect if it fails
@@ -294,9 +296,9 @@ class SessionsController extends Controller
 
         //Create session
         $session = new OtsSession([
-            'student_id' => $request->get('student_id'),
-            'assessor_id' => Auth::user()->instructorProfile->id,
-            'scheduled_time' => $request->get('scheduled_time')
+            'student_id'     => $request->get('student_id'),
+            'assessor_id'    => Auth::user()->instructorProfile->id,
+            'scheduled_time' => $request->get('scheduled_time'),
         ]);
         $session->save();
 
@@ -307,25 +309,25 @@ class SessionsController extends Controller
         $discord = new DiscordClient(['token' => config('services.discord.token')]);
         $discord->channel->createMessage([
             'channel.id' => config('app.env') == 'local' ? intval(config('services.discord.web_logs')) : intval(config('services.discord.instructors')),
-            "content" => "",
-            'embed' => [
-                "title" => "New training session scheduled",
-                "url" => route('training.admin.instructing.ots-sessions.view', $session->id),
-                "timestamp" => Carbon::now(),
-                "color" => hexdec( "2196f3" ),
-                'fields' => array(
+            'content'    => '',
+            'embed'      => [
+                'title'     => 'New training session scheduled',
+                'url'       => route('training.admin.instructing.ots-sessions.view', $session->id),
+                'timestamp' => Carbon::now(),
+                'color'     => hexdec('2196f3'),
+                'fields'    => [
                     [
-                        'name' => 'Student',
-                        'value' => $session->student->user->fullName('FLC'),
-                        'inline' => false
+                        'name'   => 'Student',
+                        'value'  => $session->student->user->fullName('FLC'),
+                        'inline' => false,
                     ],
                     [
-                        'name' => 'Instructor',
-                        'value' => $session->instructor->user->fullName('FLC'),
-                        'inline' => false
+                        'name'   => 'Instructor',
+                        'value'  => $session->instructor->user->fullName('FLC'),
+                        'inline' => false,
                     ],
-                )
-            ]
+                ],
+            ],
         ]);
 
         //Return
@@ -354,12 +356,12 @@ class SessionsController extends Controller
 
         //Define validator messages
         $messages = [
-            'new_time.required' => 'A new time is required.'
+            'new_time.required' => 'A new time is required.',
         ];
 
         //Validate
         $validator = Validator::make($request->all(), [
-            'new_time' => 'required'
+            'new_time' => 'required',
         ], $messages);
 
         //Redirect if it fails
@@ -386,7 +388,7 @@ class SessionsController extends Controller
         //Define validator messages
         $messages = [
             'instructor_id.required' => 'Please select an instructor.',
-            'instructor_id.integer' => 'Please select an instructor.'
+            'instructor_id.integer'  => 'Please select an instructor.',
         ];
 
         //Validate
@@ -415,7 +417,8 @@ class SessionsController extends Controller
      * POST request to assign/reassign a position to a training session.
      *
      * @param Request $request
-     * @param integer $session_id
+     * @param int     $session_id
+     *
      * @return redirect
      */
     public function assignOtsSessionPosition(Request $request, $session_id)
@@ -426,7 +429,7 @@ class SessionsController extends Controller
         //Define validator messages
         $messages = [
             'position_id.required' => 'Please select a position.',
-            'position_id.integer' => 'Please select a position.'
+            'position_id.integer'  => 'Please select a position.',
         ];
 
         //Validate
@@ -454,7 +457,8 @@ class SessionsController extends Controller
      * GET request to cancel a training session.
      *
      * @param Request $request
-     * @param integer $session_id
+     * @param int     $session_id
+     *
      * @return redirect
      */
     public function cancelOtsSession(Request $request, $session_id)
@@ -476,6 +480,7 @@ class SessionsController extends Controller
      * AJAX POST request to save training session remarks field.
      *
      * @param Request $request
+     *
      * @return response
      */
     public function saveOtsSessionRemarks(Request $request)
@@ -483,7 +488,7 @@ class SessionsController extends Controller
         //Validate
         $validator = Validator::make($request->all(), [
             'session_id' => 'required',
-            'remarks' => 'required',
+            'remarks'    => 'required',
         ]);
 
         if ($validator->fails()) {
@@ -503,7 +508,8 @@ class SessionsController extends Controller
      * POST request to mark an OTS session as passed.
      *
      * @param Request $request
-     * @param integer $session_id
+     * @param int     $session_id
+     *
      * @return void
      */
     public function markOtsSessionAsPassed(Request $request, $session_id)
@@ -530,16 +536,16 @@ class SessionsController extends Controller
         //Put the report onto disk
         $reportPath = null;
         if ($request->file('reportFile')) {
-            $reportPath = Storage::disk('digitalocean')->put('staff_uploads/training/otsreports/' . uniqid(), $request->file('reportFile'), 'public');
+            $reportPath = Storage::disk('digitalocean')->put('staff_uploads/training/otsreports/'.uniqid(), $request->file('reportFile'), 'public');
         }
 
         //Create record
         $record = new OTSSessionPassFailRecord([
             'ots_session_id' => $session->id,
-            'result' => 'passed',
-            'assessor_id' => Auth::user()->instructorProfile->id,
-            'report_url' => $reportPath ? Storage::url($reportPath) : null,
-            'remarks' => $request->get('remarks')
+            'result'         => 'passed',
+            'assessor_id'    => Auth::user()->instructorProfile->id,
+            'report_url'     => $reportPath ? Storage::url($reportPath) : null,
+            'remarks'        => $request->get('remarks'),
         ]);
         $record->save();
 
@@ -555,7 +561,8 @@ class SessionsController extends Controller
      * POST request to mark an OTS session as failed.
      *
      * @param Request $request
-     * @param integer $session_id
+     * @param int     $session_id
+     *
      * @return void
      */
     public function markOtsSessionAsFailed(Request $request, $session_id)
@@ -582,16 +589,16 @@ class SessionsController extends Controller
         //Put the report onto disk
         $reportPath = null;
         if ($request->file('reportFile')) {
-            $reportPath = Storage::disk('digitalocean')->put('staff_uploads/training/otsreports/' . uniqid(), $request->file('reportFile'), 'public');
+            $reportPath = Storage::disk('digitalocean')->put('staff_uploads/training/otsreports/'.uniqid(), $request->file('reportFile'), 'public');
         }
 
         //Create record
         $record = new OTSSessionPassFailRecord([
             'ots_session_id' => $session->id,
-            'result' => 'failed',
-            'assessor_id' => Auth::user()->instructorProfile->id,
-            'report_url' => $reportPath ? Storage::url($reportPath) : null,
-            'remarks' => $request->get('remarks')
+            'result'         => 'failed',
+            'assessor_id'    => Auth::user()->instructorProfile->id,
+            'report_url'     => $reportPath ? Storage::url($reportPath) : null,
+            'remarks'        => $request->get('remarks'),
         ]);
         $record->save();
 

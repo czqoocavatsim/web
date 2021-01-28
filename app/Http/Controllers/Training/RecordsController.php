@@ -6,8 +6,9 @@ use App\Http\Controllers\Controller;
 use App\Models\Training\Instructing\Records\StudentNote;
 use App\Models\Training\Instructing\Students\Student;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Validator;
+
 class RecordsController extends Controller
 {
     public function studentTrainingNotes($student_id)
@@ -41,15 +42,15 @@ class RecordsController extends Controller
 
         //Define validator messages
         $messages = [
-            'content.required' => 'Content is required',
+            'content.required'    => 'Content is required',
             'visibility.required' => 'A visibility setting is required',
-            'visibility.integer' => 'A visibilty setting is required'
+            'visibility.integer'  => 'A visibilty setting is required',
         ];
 
         //Validate
         $validator = Validator::make($request->all(), [
-            'content' => 'required',
-            'visibility' => 'required|integer'
+            'content'    => 'required',
+            'visibility' => 'required|integer',
         ], $messages);
 
         //Redirect if it fails
@@ -59,10 +60,10 @@ class RecordsController extends Controller
 
         //Create note
         $note = new StudentNote([
-            'student_id' => $student->id,
+            'student_id'    => $student->id,
             'instructor_id' => Auth::user()->instructorProfile->id,
-            'content' => $request->get('content'),
-            'staff_only' => $request->get('visibility')
+            'content'       => $request->get('content'),
+            'staff_only'    => $request->get('visibility'),
         ]);
         $note->save();
 

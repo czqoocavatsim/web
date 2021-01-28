@@ -19,9 +19,12 @@ class MyCzqoController extends Controller
     /*
     Privacy Policy/Account Init
     */
+
     /**
      * POST route for accepting the privacy policy.
-     * @param  Request $request
+     *
+     * @param Request $request
+     *
      * @return redirect to myczqo
      */
     public function acceptPrivacyPolicy(Request $request)
@@ -58,7 +61,8 @@ class MyCzqoController extends Controller
     }
 
     /**
-     * GET request for denying privacy policy
+     * GET request for denying privacy policy.
+     *
      * @return redirect Logout
      */
     public function denyPrivacyPolicy()
@@ -91,8 +95,10 @@ class MyCzqoController extends Controller
     }
 
     /**
-     * POST request for saving biography
-     * @param  Request $request
+     * POST request for saving biography.
+     *
+     * @param Request $request
+     *
      * @return redirect to myczqo
      */
     public function saveBiography(Request $request)
@@ -120,18 +126,20 @@ class MyCzqoController extends Controller
     */
 
     /**
-     * POST request for changing avatar to a custom image
-     * @param  Request $request
+     * POST request for changing avatar to a custom image.
+     *
+     * @param Request $request
+     *
      * @return redirect
      */
     public function changeAvatarCustomImage(Request $request)
     {
         //Validate
         $messages = [
-            'file.mimes' => 'The image must be either a JPEG, PNG, JPG, or GIF file.',
+            'file.mimes'    => 'The image must be either a JPEG, PNG, JPG, or GIF file.',
             'file.required' => 'Please select an image to upload.',
-            'file.max' => 'Images must be 2MB in size or below.',
-            'file.images' => 'The image must be either a JPEG, PNG, JPG, or GIF file.'
+            'file.max'      => 'Images must be 2MB in size or below.',
+            'file.images'   => 'The image must be either a JPEG, PNG, JPG, or GIF file.',
         ];
 
         $this->validate($request, [
@@ -154,7 +162,8 @@ class MyCzqoController extends Controller
     }
 
     /**
-     * GET request for changing avatar to Discord avatar
+     * GET request for changing avatar to Discord avatar.
+     *
      * @return redirect
      */
     public function changeAvatarDiscord()
@@ -179,7 +188,8 @@ class MyCzqoController extends Controller
     }
 
     /**
-     * GET request for changing avatar to initials
+     * GET request for changing avatar to initials.
+     *
      * @return redirect
      */
     public function changeAvatarInitials()
@@ -196,8 +206,10 @@ class MyCzqoController extends Controller
     }
 
     /**
-     * POST request for changing user display name
-     * @param  Request $request
+     * POST request for changing user display name.
+     *
+     * @param Request $request
+     *
      * @return redirect
      */
     public function changeDisplayName(Request $request)
@@ -205,7 +217,7 @@ class MyCzqoController extends Controller
         //Validate
         $this->validate($request, [
             'display_fname' => 'required',
-            'format' => 'required',
+            'format'        => 'required',
         ]);
 
         //Get user
@@ -236,7 +248,8 @@ class MyCzqoController extends Controller
     }
 
     /**
-     * GET request for accessing preferences
+     * GET request for accessing preferences.
+     *
      * @return view
      */
     public function preferences()
@@ -249,8 +262,10 @@ class MyCzqoController extends Controller
     }
 
     /**
-     * POST AJAX request for updating preferneces
-     * @param  Request $request
+     * POST AJAX request for updating preferneces.
+     *
+     * @param Request $request
+     *
      * @return response
      */
     public function preferencesPost(Request $request)
@@ -258,8 +273,8 @@ class MyCzqoController extends Controller
         //Validate
         $validator = Validator::make($request->all(), [
             'preference_name' => 'required',
-            'value' => 'required',
-            'table' => 'required'
+            'value'           => 'required',
+            'table'           => 'required',
         ]);
 
         if ($validator->fails()) {

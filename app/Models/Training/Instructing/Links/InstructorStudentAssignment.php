@@ -11,7 +11,7 @@ class InstructorStudentAssignment extends Model
     protected $hidden = ['id'];
 
     protected $fillable = [
-        'student_id', 'instructor_id'
+        'student_id', 'instructor_id',
     ];
 
     public function student()

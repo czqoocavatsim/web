@@ -2,9 +2,8 @@
 
 namespace App\Models\Network;
 
-use Carbon\CarbonInterval;
+use App\Models\Roster\RosterMember;
 use Illuminate\Database\Eloquent\Model;
-use Carbon\Carbon;
 use Spatie\Activitylog\Traits\LogsActivity;
 
 // Log of all sessions
@@ -14,10 +13,11 @@ class SessionLog extends Model
 
     // session_start and session_end are in format 'Y-m-d H:i:s'
     protected $fillable = [
-      'id', 'roster_member_id', 'cid', 'session_start', 'session_end', 'monitored_position_id', 'duration', 'emails_sent'
+        'id', 'roster_member_id', 'cid', 'session_start', 'session_end', 'monitored_position_id', 'duration', 'emails_sent',
     ];
 
-    public function user() {
+    public function user()
+    {
         $this->belongsTo(User::class);
     }
 
@@ -25,4 +25,13 @@ class SessionLog extends Model
     {
         return $this->hasOne(MonitoredPosition::class, 'monitored_position_id');
     }
+
+    public function rosterMember()
+    {
+        return $this->belongsTo(RosterMember::class);
+    }
+
+    protected $dates = [
+        'session_start', 'session_end',
+    ];
 }

@@ -14,14 +14,13 @@ use App\Models\Users\User;
 use Carbon\Carbon;
 use Exception;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Student extends Model
 {
     protected $hidden = ['id'];
 
     protected $fillable = [
-        'user_id', 'current'
+        'user_id', 'current',
     ];
 
     public function instructor()
@@ -75,8 +74,8 @@ class Student extends Model
     {
         //Create link
         $link = new StudentStatusLabelLink([
-            'student_id' => $this->id,
-            'student_status_label_id' => $label->id
+            'student_id'              => $this->id,
+            'student_status_label_id' => $label->id,
         ]);
         $link->save();
     }
@@ -86,12 +85,14 @@ class Student extends Model
         //Find solo certification for student
         try {
             return SoloCertification::where('roster_member_id', $this->user->rosterProfile->id)->where('expires', '>', Carbon::now())->first();
-        } catch(Exception $e) { return null; }
+        } catch (Exception $e) {
+            return null;
+        }
     }
 
     public function setAsReadyForAssessment()
     {
-        if ($this->hasLabel("Ready for Assessment")) {
+        if ($this->hasLabel('Ready for Assessment')) {
             return true;
         }
 
@@ -100,15 +101,19 @@ class Student extends Model
 
     public function hasLabel($label_text)
     {
-        if (!StudentStatusLabel::whereName($label_text)->first()) return false;
+        if (!StudentStatusLabel::whereName($label_text)->first()) {
+            return false;
+        }
         if ($label = StudentStatusLabelLink
             ::where('student_id', $this->id)
-            ->where('student_status_label_id',
+            ->where(
+                'student_status_label_id',
                 StudentStatusLabel::whereName($label_text)->first()->id
             )->first()
         ) {
             return true;
         }
+
         return false;
     }
 
@@ -119,7 +124,10 @@ class Student extends Model
      */
     public function upcomingTrainingSession()
     {
-        if ($session = TrainingSession::where('student_id', $this->id)->where('scheduled_time', '>', Carbon::now())->first()) { return $session; }
+        if ($session = TrainingSession::where('student_id', $this->id)->where('scheduled_time', '>', Carbon::now())->first()) {
+            return $session;
+        }
+
         return null;
     }
 
@@ -130,7 +138,10 @@ class Student extends Model
      */
     public function upcomingOtsSession()
     {
-        if ($session = OTSSession::where('student_id', $this->id)->where('scheduled_time', '>', Carbon::now())->first()) { return $session; }
+        if ($session = OTSSession::where('student_id', $this->id)->where('scheduled_time', '>', Carbon::now())->first()) {
+            return $session;
+        }
+
         return null;
     }
 }

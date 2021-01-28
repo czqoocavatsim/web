@@ -3,7 +3,6 @@
 namespace App\Notifications\Events;
 
 use Illuminate\Bus\Queueable;
-use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
 
@@ -24,7 +23,8 @@ class NewControllerSignUp extends Notification
     /**
      * Get the notification's delivery channels.
      *
-     * @param  mixed  $notifiable
+     * @param mixed $notifiable
+     *
      * @return array
      */
     public function via($notifiable)
@@ -35,12 +35,13 @@ class NewControllerSignUp extends Notification
     /**
      * Get the mail representation of the notification.
      *
-     * @param  mixed  $notifiable
+     * @param mixed $notifiable
+     *
      * @return \Illuminate\Notifications\Messages\MailMessage
-    */
+     */
     public function toMail($notifiable)
     {
-        return (new MailMessage)
+        return (new MailMessage())
                     ->subject("Sign Up For Event {$this->signUp->event->name}")
                     ->line("{$this->signUp->user->fullName('FLC')} has signed up for the event {$this->signUp->event->name}.")
                     ->line("Availability: {$this->signUp->start_availability_timestamp} to {$this->signUp->end_availability_timestamp}")
@@ -51,7 +52,8 @@ class NewControllerSignUp extends Notification
     /**
      * Get the array representation of the notification.
      *
-     * @param  mixed  $notifiable
+     * @param mixed $notifiable
+     *
      * @return array
      */
     public function toArray($notifiable)

@@ -9,10 +9,10 @@ use Parsedown;
 
 /**
  * @var ots_session_id The ID of the OTS Session this belongs to.
- * @var result Enum for the result of the session. (passed/failed/pending)
- * @var assessor_id The Id of the Assessor (Instructor) who wrote this record.
- * @var report_url URL to the report for this session.
- * @var remarks Remarks from assessor.
+ * @var result         Enum for the result of the session. (passed/failed/pending)
+ * @var assessor_id    The Id of the Assessor (Instructor) who wrote this record.
+ * @var report_url     URL to the report for this session.
+ * @var remarks        Remarks from assessor.
  */
 class OTSSessionPassFailRecord extends Model
 {
@@ -22,7 +22,7 @@ class OTSSessionPassFailRecord extends Model
      * @var array
      */
     protected $fillable = [
-        'ots_session_id', 'result', 'assessor_id', 'report_url', 'remarks'
+        'ots_session_id', 'result', 'assessor_id', 'report_url', 'remarks',
     ];
 
     /**

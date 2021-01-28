@@ -42,13 +42,13 @@ class SoloCertificationsController extends Controller
         //Define validator messages
         $messages = [
             'roster_member.required' => 'A roster member is required.',
-            'expires.required' => 'Expiry date required'
+            'expires.required'       => 'Expiry date required',
         ];
 
         //Validate
         $validator = Validator::make($request->all(), [
             'roster_member' => 'required',
-            'expires' => 'required'
+            'expires'       => 'required',
         ], $messages);
 
         //If they already have an active solo cert...
@@ -82,8 +82,8 @@ class SoloCertificationsController extends Controller
 
         //Are they a student? If so, add solo cert label
         if ($student = $cert->rosterMember->user->studentProfile) {
-            if (!$student->hasLabel("Solo Certification")) {
-                $student->assignStatusLabel(StudentStatusLabel::whereName("Solo Certification")->first());
+            if (!$student->hasLabel('Solo Certification')) {
+                $student->assignStatusLabel(StudentStatusLabel::whereName('Solo Certification')->first());
             }
         }
 

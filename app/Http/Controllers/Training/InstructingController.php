@@ -4,14 +4,13 @@ namespace App\Http\Controllers\Training;
 
 use App\Http\Controllers\Controller;
 use App\Models\Roster\RosterMember;
-use App\Models\Training\Instructing\Board\BoardList;
 use App\Models\Training\Instructing\Instructors\Instructor;
 use App\Models\Training\Instructing\Links\InstructorStudentAssignment;
 use App\Models\Training\Instructing\Links\StudentStatusLabelLink;
 use App\Models\Training\Instructing\Records\InstuctorRecommendation;
 use App\Models\Training\Instructing\Records\OTSSession;
-use App\Models\Training\Instructing\Students\Student;
 use App\Models\Training\Instructing\Records\TrainingSession;
+use App\Models\Training\Instructing\Students\Student;
 use App\Models\Training\Instructing\Students\StudentStatusLabel;
 use App\Models\Users\User;
 use App\Notifications\Training\Instructing\AddedAsInstructor;
@@ -23,10 +22,10 @@ use App\Notifications\Training\Instructing\StudentRecommendedForAssessment;
 use App\Notifications\Training\Instructing\StudentRecommendedForSoloCert;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Validator;
 use RestCord\DiscordClient;
-use Illuminate\Support\Facades\Auth;
 
 class InstructingController extends Controller
 {
@@ -74,7 +73,10 @@ class InstructingController extends Controller
     {
         //Get all students assigned to user
         $students = Student::whereCurrent(true)->cursor()->filter(function ($student) {
-            if ($student->instructor() && $student->instructor()->instructor == Auth::user()->instructorProfile) return true;
+            if ($student->instructor() && $student->instructor()->instructor == Auth::user()->instructorProfile) {
+                return true;
+            }
+
             return false;
         });
 
@@ -104,6 +106,7 @@ class InstructingController extends Controller
             if (StudentStatusLabelLink::where('student_id', $student->id)->where('student_status_label_id', $l->id)->first()) {
                 return false;
             }
+
             return true;
         });
 
@@ -115,26 +118,25 @@ class InstructingController extends Controller
     {
         //Define validator messages
         $messages = [
-            'cid.required' => 'A controller CID is required.',
-            'cid.min' => 'CIDs are a minimum of 8 characters.',
-            'cid.integer' => 'CIDs must be an integer.',
+            'cid.required'         => 'A controller CID is required.',
+            'cid.min'              => 'CIDs are a minimum of 8 characters.',
+            'cid.integer'          => 'CIDs must be an integer.',
             'staff_email.required' => 'Staff email required.',
-            'staff_email.email' => 'Staff email must be an email address.',
+            'staff_email.email'    => 'Staff email must be an email address.',
         ];
 
         //Validate
         $validator = Validator::make($request->all(), [
-            'cid' => 'required|integer|min:8',
+            'cid'         => 'required|integer|min:8',
             'staff_email' => 'required|email',
         ], $messages);
 
         //If there is no user with this CID....
-        $validator->after(function ($validator) use($request) {
+        $validator->after(function ($validator) use ($request) {
             if (!User::where('id', $request->get('cid'))->first()) {
                 $validator->errors()->add('cid', 'User with this CID not found.');
             }
         });
-
 
         //If they're already an instructor...
         if ($instructor = Instructor::where('user_id', $request->get('cid'))->first()) {
@@ -174,15 +176,15 @@ class InstructingController extends Controller
             //Add instructor role
             $discord->guild->addGuildMemberRole([
                 'guild.id' => intval(config('services.discord.guild_id')),
-                'user.id' => $instructor->user->discord_user_id,
-                'role.id' => 482816758185590787
+                'user.id'  => $instructor->user->discord_user_id,
+                'role.id'  => 482816758185590787,
             ]);
 
             //Add instructor role
             $discord->guild->addGuildMemberRole([
                 'guild.id' => intval(config('services.discord.guild_id')),
-                'user.id' => $instructor->user->discord_user_id,
-                'role.id' => 752767906768748586
+                'user.id'  => $instructor->user->discord_user_id,
+                'role.id'  => 752767906768748586,
             ]);
         } else {
             Session::flash('info', 'Unable to assign Discord permissions automatically.');
@@ -200,8 +202,8 @@ class InstructingController extends Controller
         //Define validator messages
         $messages = [
             'cid.required' => 'A controller CID is required.',
-            'cid.min' => 'CIDs are a minimum of 8 characters.',
-            'cid.integer' => 'CIDs must be an integer.',
+            'cid.min'      => 'CIDs are a minimum of 8 characters.',
+            'cid.integer'  => 'CIDs must be an integer.',
         ];
 
         //Validate
@@ -210,12 +212,11 @@ class InstructingController extends Controller
         ], $messages);
 
         //If there is no user with this CID....
-        $validator->after(function ($validator) use($request) {
+        $validator->after(function ($validator) use ($request) {
             if (!User::where('id', $request->get('cid'))->first()) {
                 $validator->errors()->add('cid', 'User with this CID not found.');
             }
         });
-
 
         //If they're already an instructor...
         if ($student = Student::where('user_id', $request->get('cid'))->first()) {
@@ -251,8 +252,8 @@ class InstructingController extends Controller
             //Remove student role
             $discord->guild->addGuildMemberRole([
                 'guild.id' => intval(config('services.discord.guild_id')),
-                'user.id' => $student->user->discord_user_id,
-                'role.id' => 482824058141016075
+                'user.id'  => $student->user->discord_user_id,
+                'role.id'  => 482824058141016075,
             ]);
         } else {
             Session::flash('info', 'Unable to add Discord permissions automatically.');
@@ -271,7 +272,7 @@ class InstructingController extends Controller
         //Setup roster member
         $rosterMember->cid = $student->user_id;
         $rosterMember->user_id = $student->user_id;
-        $rosterMember->certification = "training";
+        $rosterMember->certification = 'training';
         $rosterMember->active = 1;
         $rosterMember->save();
 
@@ -290,7 +291,7 @@ class InstructingController extends Controller
         //Define validator messages
         $messages = [
             'staff_email.required' => 'Staff email required.',
-            'staff_email.email' => 'Staff email must be an email address.',
+            'staff_email.email'    => 'Staff email must be an email address.',
         ];
 
         //Validate
@@ -337,23 +338,23 @@ class InstructingController extends Controller
         $instructor->user->removeRole('Instructor');
         $instructor->user->removeRole('Assessor');
 
-         //Remove role on Discord if able
-         if ($instructor->user->hasDiscord() && $instructor->user->memberOfCzqoGuild()) {
+        //Remove role on Discord if able
+        if ($instructor->user->hasDiscord() && $instructor->user->memberOfCzqoGuild()) {
             //Get Discord client
             $discord = new DiscordClient(['token' => config('services.discord.token')]);
 
             //Remove instructor role
             $discord->guild->removeGuildMemberRole([
                 'guild.id' => intval(config('services.discord.guild_id')),
-                'user.id' => $instructor->user->discord_user_id,
-                'role.id' => 482816758185590787
+                'user.id'  => $instructor->user->discord_user_id,
+                'role.id'  => 482816758185590787,
             ]);
 
             //Remove instructor role
             $discord->guild->removeGuildMemberRole([
                 'guild.id' => intval(config('services.discord.guild_id')),
-                'user.id' => $instructor->user->discord_user_id,
-                'role.id' => 752767906768748586
+                'user.id'  => $instructor->user->discord_user_id,
+                'role.id'  => 752767906768748586,
             ]);
         } else {
             Session::flash('info', 'Unable to remove Discord permissions automatically.');
@@ -388,8 +389,8 @@ class InstructingController extends Controller
             //Remove student role
             $discord->guild->removeGuildMemberRole([
                 'guild.id' => intval(config('services.discord.guild_id')),
-                'user.id' => $student->user->discord_user_id,
-                'role.id' => 482824058141016075
+                'user.id'  => $student->user->discord_user_id,
+                'role.id'  => 482824058141016075,
             ]);
         } else {
             Session::flash('info', 'Unable to remove Discord permissions automatically.');
@@ -401,8 +402,12 @@ class InstructingController extends Controller
                 $label->delete();
             }
         }
-        if ($student->instructor()) $student->instructor()->delete();
-        foreach ($student->availability as $a) $a->delete();
+        if ($student->instructor()) {
+            $student->instructor()->delete();
+        }
+        foreach ($student->availability as $a) {
+            $a->delete();
+        }
 
         //notify
         $student->user->notify(new RemovedAsStudent());
@@ -433,7 +438,7 @@ class InstructingController extends Controller
         //Define validator messages
         $messages = [
             'instructor_id.required' => 'Please select an instructor.',
-            'instructor_id.integer' => 'Please select an instructor.'
+            'instructor_id.integer'  => 'Please select an instructor.',
         ];
 
         //Validate
@@ -466,8 +471,8 @@ class InstructingController extends Controller
 
                 //Assign it with link
                 $link = new StudentStatusLabelLink([
-                    'student_id' => $student->id,
-                    'student_status_label_id' => StudentStatusLabel::whereName('In Progress')->first()->id
+                    'student_id'              => $student->id,
+                    'student_status_label_id' => StudentStatusLabel::whereName('In Progress')->first()->id,
                 ]);
                 $link->save();
             }
@@ -499,8 +504,8 @@ class InstructingController extends Controller
 
         //Assign it with link
         $link = new StudentStatusLabelLink([
-            'student_id' => $student->id,
-            'student_status_label_id' => StudentStatusLabel::whereName('Ready For Pick-Up')->first()->id
+            'student_id'              => $student->id,
+            'student_status_label_id' => StudentStatusLabel::whereName('Ready For Pick-Up')->first()->id,
         ]);
         $link->save();
 
@@ -508,14 +513,14 @@ class InstructingController extends Controller
         $discord = new DiscordClient(['token' => config('services.discord.token')]);
         $discord->channel->createMessage([
             'channel.id' => intval(config('services.discord.instructors')),
-            "content" => "",
-            'embed' => [
-                "title" => "A new student is available for pick-up by an Instructor",
-                "url" => route('training.admin.instructing.students.view', $student->user_id),
-                "timestamp" => Carbon::now(),
-                "color" => hexdec( "2196f3" ),
-                "description" => $student->user->fullName('FLC')
-            ]
+            'content'    => '',
+            'embed'      => [
+                'title'       => 'A new student is available for pick-up by an Instructor',
+                'url'         => route('training.admin.instructing.students.view', $student->user_id),
+                'timestamp'   => Carbon::now(),
+                'color'       => hexdec('2196f3'),
+                'description' => $student->user->fullName('FLC'),
+            ],
         ]);
 
         return redirect()->route('training.admin.instructing.students.view', $student->user_id)->with('info', 'Student dropped');
@@ -568,8 +573,8 @@ class InstructingController extends Controller
 
         //Create the link
         $link = new StudentStatusLabelLink([
-            'student_id' => $student->id,
-            'student_status_label_id' => $label->id
+            'student_id'              => $student->id,
+            'student_status_label_id' => $label->id,
         ]);
         $link->save();
 
@@ -594,9 +599,9 @@ class InstructingController extends Controller
 
         //Create object
         $recommendation = new InstuctorRecommendation([
-            'student_id' => $student->id,
+            'student_id'    => $student->id,
             'instructor_id' => Auth::user()->instructorProfile->id,
-            'type' => 'Solo Certification'
+            'type'          => 'Solo Certification',
         ]);
         $recommendation->save();
 
@@ -610,7 +615,7 @@ class InstructingController extends Controller
         $student = Student::whereCurrent(true)->where('user_id', $student_id)->firstOrFail();
 
         //Is student already ready for assessment?
-        if ($student->hasLabel("Ready for Assessment") || $student->hasLabel("Complete")) {
+        if ($student->hasLabel('Ready for Assessment') || $student->hasLabel('Complete')) {
             return redirect()->back()->with('error', 'Student is already set as ready for assessment. Check if their status labels are correctly setup.');
         }
 
@@ -621,9 +626,9 @@ class InstructingController extends Controller
 
         //Create object
         $recommendation = new InstuctorRecommendation([
-            'student_id' => $student->id,
+            'student_id'    => $student->id,
             'instructor_id' => Auth::user()->instructorProfile->id,
-            'type' => 'Ready For Assessment'
+            'type'          => 'Ready For Assessment',
         ]);
         $recommendation->save();
 

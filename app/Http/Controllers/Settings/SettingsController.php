@@ -3,13 +3,8 @@
 namespace App\Http\Controllers\Settings;
 
 use App\Http\Controllers\Controller;
-use App\Models\Settings\AuditLogEntry;
 use App\Models\Settings\CoreSettings;
-use App\Models\Settings\MaintenanceIPExemption;
 use App\Models\Settings\RotationImage;
-use App\Notifications\MaintenanceNotification;
-use App\Models\Users\User;
-use Artisan;
 use Auth;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
@@ -93,6 +88,7 @@ class SettingsController extends Controller
     public function activityLog()
     {
         $entries = Activity::all();
+
         return view('admin.settings.activitylog', compact('entries'));
     }
 
@@ -109,12 +105,12 @@ class SettingsController extends Controller
     public function uploadRotationImage(Request $request)
     {
         $this->validate($request, [
-            'file' => 'required|image|mimes:jpeg,png,jpg'
+            'file' => 'required|image|mimes:jpeg,png,jpg',
         ]);
 
         $image = new RotationImage();
 
-        $basePath = 'staff_uploads/rotation_images/'.Carbon::now()->toDateString().rand(1000,2000);
+        $basePath = 'staff_uploads/rotation_images/'.Carbon::now()->toDateString().rand(1000, 2000);
         $path = Storage::disk('digitalocean')->put($basePath, $request->file('file'), 'public');
         $image->path = Storage::url($path);
 
@@ -129,6 +125,7 @@ class SettingsController extends Controller
     {
         $image = RotationImage::whereId($image_id)->firstOrFail();
         $image->delete();
+
         return redirect()->back()->with('info', 'Image deleted.');
     }
 }

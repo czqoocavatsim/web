@@ -4,7 +4,6 @@ namespace App\Notifications\Training\SoloCertifications;
 
 use Carbon\Carbon;
 use Illuminate\Bus\Queueable;
-use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
 use NotificationChannels\Discord\DiscordChannel;
@@ -27,7 +26,8 @@ class SoloCertExpiringUser extends Notification
     /**
      * Get the notification's delivery channels.
      *
-     * @param  mixed  $notifiable
+     * @param mixed $notifiable
+     *
      * @return array
      */
     public function via($notifiable)
@@ -38,27 +38,29 @@ class SoloCertExpiringUser extends Notification
     /**
      * Get the mail representation of the notification.
      *
-     * @param  mixed  $notifiable
+     * @param mixed $notifiable
+     *
      * @return \Illuminate\Notifications\Messages\MailMessage
      */
     public function toMail($notifiable)
     {
-        return (new MailMessage)
-            ->subject("Solo Certification Expiring")
-            ->greeting("Hi there,")
-            ->line("Your solo certification is about to expire.")
+        return (new MailMessage())
+            ->subject('Solo Certification Expiring')
+            ->greeting('Hi there,')
+            ->line('Your solo certification is about to expire.')
             ->line("Expiry: {$this->cert->expires->toFormattedDateString()}")
             ->line("Granted by: {$this->cert->instructor->fullName('FLC')}")
-            ->line("Contact your instructor to request an extension or proceed to an OTS assessment.")
-            ->line("If you believe this is a mistake or have any questions, please email the Chief Instructor.")
-            ->line("*You were sent this email as your training status with Gander Oceanic is about to change.*")
-            ->salutation("Gander Oceanic OCA");
+            ->line('Contact your instructor to request an extension or proceed to an OTS assessment.')
+            ->line('If you believe this is a mistake or have any questions, please email the Chief Instructor.')
+            ->line('*You were sent this email as your training status with Gander Oceanic is about to change.*')
+            ->salutation('Gander Oceanic OCA');
     }
 
     /**
      * Get the Discord representation of the notification.
      *
-     * @param  mixed  $notifiable
+     * @param mixed $notifiable
+     *
      * @return NotificationChannels\Discord\DiscordMessage
      */
     public function toDiscord($notifiable)
@@ -66,25 +68,25 @@ class SoloCertExpiringUser extends Notification
         $message = new DiscordMessage();
 
         $message->embed([
-            'title' => 'Solo Certification Expiring',
-            'description' => "Your solo certification is about to expire. Contact your instructor to request an extension or proceed to an OTS assessment. If you believe this is a mistake or have any questions, please email the Chief Instructor.",
-            'color' => 0x80c9,
-            "timestamp" => Carbon::now(),
-            'footer' => array(
-                'text' => 'You can disable Discord notifications at any time in myCZQO'
-            ),
-            'fields' => array(
+            'title'       => 'Solo Certification Expiring',
+            'description' => 'Your solo certification is about to expire. Contact your instructor to request an extension or proceed to an OTS assessment. If you believe this is a mistake or have any questions, please email the Chief Instructor.',
+            'color'       => 0x80c9,
+            'timestamp'   => Carbon::now(),
+            'footer'      => [
+                'text' => 'You can disable Discord notifications at any time in myCZQO',
+            ],
+            'fields' => [
                 [
-                    'name' => 'Expiry',
-                    'value' => $this->cert->expires->toFormattedDateString(),
-                    'inline' => false
+                    'name'   => 'Expiry',
+                    'value'  => $this->cert->expires->toFormattedDateString(),
+                    'inline' => false,
                 ],
                 [
-                    'name' => 'Granted by',
-                    'value' => $this->cert->instructor->fullName('FLC'),
-                    'inline' => false
+                    'name'   => 'Granted by',
+                    'value'  => $this->cert->instructor->fullName('FLC'),
+                    'inline' => false,
                 ],
-            )
+            ],
         ]);
 
         return $message;
@@ -93,7 +95,8 @@ class SoloCertExpiringUser extends Notification
     /**
      * Get the array representation of the notification.
      *
-     * @param  mixed  $notifiable
+     * @param mixed $notifiable
+     *
      * @return array
      */
     public function toArray($notifiable)

@@ -43,6 +43,7 @@
                             </a>
                         @endforeach
                     </div> --}}
+                    @if ($news)
                     <div class="view" style="height: 330px !important; @if($news->image) background-image:url({{$news->image}}); background-size: cover; background-position-x: center; @else background: var(--czqo-blue); @endif">
                         <div class="mask rgba-stylish-light flex-left p-4 justify-content-end d-flex flex-column h-100">
                             <div class="container">
@@ -58,6 +59,7 @@
                             </div>
                         </div>
                     </div>
+                    @endif
                 </div>
                 <div class="col-md-6 mb-4">
                     <div class="d-flex flex-row-justify-content-between align-items-center">

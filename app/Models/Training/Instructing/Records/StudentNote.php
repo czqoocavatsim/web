@@ -16,7 +16,7 @@ class StudentNote extends Model
     protected $hidden = ['id'];
 
     protected $fillable = [
-        'student_id', 'instructor_id', 'content', 'staff_only'
+        'student_id', 'instructor_id', 'content', 'staff_only',
     ];
 
     public function student()

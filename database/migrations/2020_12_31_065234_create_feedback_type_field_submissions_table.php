@@ -17,7 +17,7 @@ class CreateFeedbackTypeFieldSubmissionsTable extends Migration
             $table->id();
             $table->foreignId('type_id')->constrained('feedback_types');
             $table->foreignId('submission_id')->constrained('feedback_submissions');
-            $table->string("name");
+            $table->string('name');
             $table->text('content');
             $table->softDeletes();
             $table->timestamps();

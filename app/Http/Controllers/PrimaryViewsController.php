@@ -8,7 +8,6 @@ use App\Models\News\News;
 use App\Models\Publications\AtcResource;
 use App\Models\Roster\RosterMember;
 use App\Models\Settings\RotationImage;
-use App\Models\Tickets\Ticket;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -77,7 +76,9 @@ class PrimaryViewsController extends Controller
             $ganderControllers = $vatsim->searchCallsign('CZQX_');
             $shanwickControllers = $vatsim->searchCallsign('EGGX_');
             $controllers = array_merge($ganderControllers->toArray(), $shanwickControllers->toArray());
-            if (count($controllers) > 1) { $controllerOnline = true; }
+            if (count($controllers) > 1) {
+                $controllerOnline = true;
+            }
             $planes = $vatsim->getPilots()->toArray();
         }
 
@@ -104,10 +105,10 @@ class PrimaryViewsController extends Controller
             curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
             $output = curl_exec($ch);
             curl_close($ch);
+
             return json_decode($output);
         });
 
         return view('my.index', compact('atcResources', 'bannerImg', 'quote'));
-
     }
 }

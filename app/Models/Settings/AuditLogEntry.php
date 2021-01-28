@@ -2,8 +2,8 @@
 
 namespace App\Models\Settings;
 
-use Illuminate\Database\Eloquent\Model;
 use App\Models\Users\User;
+use Illuminate\Database\Eloquent\Model;
 
 class AuditLogEntry extends Model
 {
@@ -13,7 +13,7 @@ class AuditLogEntry extends Model
 
     public static function insert(User $user, $message, User $affected_user, $private)
     {
-        $log = new self;
+        $log = new self();
         $log->action = $message;
         $log->user_id = $user->id;
         $log->affected_id = $affected_user->id;
