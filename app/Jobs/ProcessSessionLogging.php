@@ -77,9 +77,11 @@ class ProcessSessionLogging implements ShouldQueue
                     }
                 }
             } else { //Looking for a new session
-                if (!$vatsimSessionInstances[0]) { //If there ISN'T a session (there is only one allowed at a time I hope)
+                if(empty($vatsimSessionInstances)){ // Should be empty if there's no sessions found, not with an index of 0
                     Log::info('No sessions found for '.$position->identifier);
+                    continue;
                 }
+                // Should only be executing if there's a session in progress
                 $instance = $vatsimSessionInstances[0];
 
                 //Create a new session
@@ -99,6 +101,7 @@ class ProcessSessionLogging implements ShouldQueue
                                     $session->save();
                                 }
                  */
+                $session->save();
             }
         }
     }
