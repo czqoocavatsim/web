@@ -12,8 +12,10 @@ use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\Log;
 use Throwable;
 use Thujohn\Twitter\Facades\Twitter;
+use Vatsimphp\VatsimData;
 
 class PrimaryViewsController extends Controller
 {
