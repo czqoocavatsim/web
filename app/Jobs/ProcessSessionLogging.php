@@ -46,8 +46,7 @@ class ProcessSessionLogging implements ShouldQueue
 
         //If no data...
         if (!$dataLoaded) {
-            Log::error('ProcessSessionLogs job: VATSIMPhp Could Not Load Data');
-
+            Log::error('ProcessSessionLogs job: VATSIMPhp failed to load data');
             return;
         }
 
