@@ -2,6 +2,7 @@
 
 namespace App\Models\Network;
 
+use App\Models\Roster\RosterMember;
 use Carbon\CarbonInterval;
 use Illuminate\Database\Eloquent\Model;
 use Carbon\Carbon;
@@ -25,4 +26,13 @@ class SessionLog extends Model
     {
         return $this->hasOne(MonitoredPosition::class, 'monitored_position_id');
     }
+
+    public function rosterMember()
+    {
+        return $this->belongsTo(RosterMember::class);
+    }
+
+    protected $dates = [
+        'session_start', 'session_end'
+    ];
 }

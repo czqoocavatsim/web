@@ -27,4 +27,13 @@ class MonitoredPosition extends Model
         if (!$session) return null;
         return Carbon::create($session->session_end);
     }
+
+    public function activeSession()
+    {
+        if ($session = $this->sessions->where('session_end', null)->first()) {
+            return $session;
+        } else {
+            return null;
+        }
+    }
 }
