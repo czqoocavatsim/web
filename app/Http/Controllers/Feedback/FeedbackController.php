@@ -12,7 +12,6 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Str;
-use LasseRafn\Initials\Initials;
 
 class FeedbackController extends Controller
 {
@@ -34,6 +33,7 @@ class FeedbackController extends Controller
      * GET request for starting a new feedback submission of a specific type.
      *
      * @param string $type_slug Slug for the type of feedback.
+     *
      * @return \Illuminate\View\View
      */
     public function newFeedbackWrite($type_slug)
@@ -49,7 +49,8 @@ class FeedbackController extends Controller
      * POST request for submitting new feedback of a speific type.
      *
      * @param Request $request
-     * @param string $type_slug
+     * @param string  $type_slug
+     *
      * @return redirect
      */
     public function newFeedbackWritePost(Request $request, $type_slug)
@@ -59,12 +60,12 @@ class FeedbackController extends Controller
 
         //Define validator messages
         $messages = [
-            'submission_content.required' => 'Please write your feedback.'
+            'submission_content.required' => 'Please write your feedback.',
         ];
 
         //Validate
         $validator = Validator::make($request->all(), [
-            'submission_content' => 'required'
+            'submission_content' => 'required',
         ], $messages);
 
         //Redirect if it fails
@@ -74,21 +75,21 @@ class FeedbackController extends Controller
 
         //Create feedback
         $feedback = new FeedbackSubmission([
-            'user_id' => Auth::id(),
-            'type_id' => $type->id,
-            'submission_content' => $request->get('submission_content'),
+            'user_id'               => Auth::id(),
+            'type_id'               => $type->id,
+            'submission_content'    => $request->get('submission_content'),
             'permission_to_publish' => $request->get('publishPermission') == 'on' ? true : false,
-            'slug' => Str::slug(Auth::user()->display_fname[0] . Auth::user()->lname[0] . '-' . Carbon::now()->toDayDateTimeString()),
+            'slug'                  => Str::slug(Auth::user()->display_fname[0].Auth::user()->lname[0].'-'.Carbon::now()->toDayDateTimeString()),
         ]);
         $feedback->save();
 
         //Deal with fields
         foreach ($type->fields as $field) {
             $fieldSubmission = new FeedbackTypeFieldSubmission([
-                'type_id' => $type->id,
+                'type_id'       => $type->id,
                 'submission_id' => $feedback->id,
-                'name' => $field->name,
-                'content' => $request->get($field->id)
+                'name'          => $field->name,
+                'content'       => $request->get($field->id),
             ]);
             $fieldSubmission->save();
         }
@@ -109,6 +110,7 @@ class FeedbackController extends Controller
      * GET request to view a feedback submission.
      *
      * @param string $slug
+     *
      * @return view
      */
     public function viewSubmission($slug)

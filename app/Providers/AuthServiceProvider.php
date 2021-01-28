@@ -14,7 +14,7 @@ class AuthServiceProvider extends ServiceProvider
      * @var array
      */
     protected $policies = [
-        'App\Model' => 'App\Policies\ModelPolicy',
+        //'App\Model' => 'App\Policies\ModelPolicy',
     ];
 
     /**
@@ -31,10 +31,10 @@ class AuthServiceProvider extends ServiceProvider
         });
 
         Gate::define('start-application', function ($user) {
-            if (!$user->can('start applications') || Application::where('user_id', $user->id)->where('status', 0)->first())
-            {
+            if (!$user->can('start applications') || Application::where('user_id', $user->id)->where('status', 0)->first()) {
                 return false;
             }
+
             return true;
         });
 

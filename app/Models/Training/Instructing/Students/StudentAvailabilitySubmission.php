@@ -11,7 +11,7 @@ class StudentAvailabilitySubmission extends Model
     protected $hidden = ['id'];
 
     protected $fillable = [
-        'student_id', 'submission', 'extra_comments'
+        'student_id', 'submission', 'extra_comments',
     ];
 
     public function student()

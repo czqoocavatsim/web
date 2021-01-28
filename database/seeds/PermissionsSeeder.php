@@ -2,8 +2,8 @@
 
 use App\Models\Users\User;
 use Illuminate\Database\Seeder;
-use Spatie\Permission\Models\Role;
 use Spatie\Permission\Models\Permission;
+use Spatie\Permission\Models\Role;
 
 class PermissionsSeeder extends Seeder
 {
@@ -92,7 +92,7 @@ class PermissionsSeeder extends Seeder
                 'create event',
                 'edit event',
                 'delete event',
-                'view activity data'
+                'view activity data',
             ]
         );
 
@@ -106,7 +106,7 @@ class PermissionsSeeder extends Seeder
                 'edit settings',
                 'view tickets',
                 'reply to tickets',
-                'close tickets'
+                'close tickets',
             ]
         );
 
@@ -115,21 +115,19 @@ class PermissionsSeeder extends Seeder
                 'view events',
                 'create event',
                 'edit event',
-                'delete event'
+                'delete event',
             ]
         );
 
         $certifiedController->syncPermissions(
             [
                 'submit event controller application',
-                'view certified only atc resource'
+                'view certified only atc resource',
             ]
         );
-
 
         //Give the bot users the roles they deserve!
         User::find(1)->assignRole('Administrator');
         User::find(2)->assignRole('Administrator');
-
     }
 }

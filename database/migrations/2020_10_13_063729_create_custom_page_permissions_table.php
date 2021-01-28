@@ -25,7 +25,6 @@ class CreateCustomPagePermissionsTable extends Migration
             $table->unsignedBigInteger('page_id');
             $table->foreign('page_id')->references('id')->on('custom_pages');
 
-
             //Timestamp
             $table->timestamps();
         });

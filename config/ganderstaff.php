@@ -12,38 +12,38 @@ return [
     */
 
     'ZQO1' => [
-        'position' => 'Operations Director',
-        'type' => 'Director',
+        'position'    => 'Operations Director',
+        'type'        => 'Director',
         'accessLevel' => 'full',
     ],
 
     'ZQO2' => [
-        'position' => 'Deputy Operations Director',
-        'type' => 'Director',
+        'position'    => 'Deputy Operations Director',
+        'type'        => 'Director',
         'accessLevel' => 'full',
     ],
 
     'ZQO3' => [
-        'position' => 'Lead Instructor',
-        'type' => 'Director',
+        'position'    => 'Lead Instructor',
+        'type'        => 'Director',
         'accessLevel' => 'training',
     ],
 
     'ZQO4' => [
-        'position' => 'Webmaster',
-        'type' => 'Director',
+        'position'    => 'Webmaster',
+        'type'        => 'Director',
         'accessLevel' => 'full',
     ],
 
     'Instructor' => [
-        'position' => 'Instructor',
-        'type' => 'AtcTraining',
+        'position'    => 'Instructor',
+        'type'        => 'AtcTraining',
         'accessLevel' => 'training',
     ],
 
     'Developer' => [
-        'position' => 'Web Developer',
-        'type' => 'Maintainer',
+        'position'    => 'Web Developer',
+        'type'        => 'Maintainer',
         'accessLevel' => 'standard',
     ],
 ];

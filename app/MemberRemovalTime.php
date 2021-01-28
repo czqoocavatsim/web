@@ -8,6 +8,6 @@ use Illuminate\Database\Eloquent\Model;
 class MemberRemovalTime extends Model
 {
     protected $fillable = [
-        'id', 'day', 'month'
-      ];
+        'id', 'day', 'month',
+    ];
 }

@@ -3,12 +3,9 @@
 namespace App\Notifications\Discord;
 
 use Illuminate\Bus\Queueable;
-use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
-use NotificationChannels\Discord\DiscordChannel;
 use NotificationChannels\Discord\DiscordMessage;
-use Auth;
 
 class BanNotification extends Notification
 {
@@ -28,7 +25,8 @@ class BanNotification extends Notification
     /**
      * Get the notification's delivery channels.
      *
-     * @param  mixed  $notifiable
+     * @param mixed $notifiable
+     *
      * @return array
      */
     public function via($notifiable)
@@ -38,6 +36,7 @@ class BanNotification extends Notification
 
     /**
      * @param $notifiable
+     *
      * @return DiscordMessage
      */
     public function toDiscord($notifiable)
@@ -52,20 +51,23 @@ class BanNotification extends Notification
     /**
      * Get the mail representation of the notification.
      *
-     * @param  mixed  $notifiable
+     * @param mixed $notifiable
+     *
      * @return \Illuminate\Notifications\Messages\MailMessage
      */
     public function toMail($notifiable)
     {
-        return (new MailMessage)->view(
-            'emails.discord.bannotification', ['user' => $this->user, 'ban' => $this->ban]
+        return (new MailMessage())->view(
+            'emails.discord.bannotification',
+            ['user' => $this->user, 'ban' => $this->ban]
         )->subject('Ban from Gander Oceanic Discord server');
     }
 
     /**
      * Get the array representation of the notification.
      *
-     * @param  mixed  $notifiable
+     * @param mixed $notifiable
+     *
      * @return array
      */
     public function toArray($notifiable)

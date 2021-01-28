@@ -31,20 +31,21 @@ class DiscordController extends Controller
     {
         //Define validator messages
         $messages = [
-            'reason.required' => 'Please provide a ban reason.',
+            'reason.required'     => 'Please provide a ban reason.',
             'start_time.required' => 'Please provide a ban start time',
         ];
 
         //Validate
         $validator = Validator::make($request->all(), [
-            'reason' => 'required',
+            'reason'     => 'required',
             'start_time' => 'required',
-            'user_id' => 'required'
+            'user_id'    => 'required',
         ], $messages);
 
         //Redirect if fails
         if ($validator->fails()) {
             dd($validator->errors());
+
             return redirect()->back()->withInput()->withErrors($validator, 'createDiscordBanErrors');
         }
 
@@ -56,12 +57,12 @@ class DiscordController extends Controller
 
         //Create the ban
         $ban = new DiscordBan([
-            'user_id' => $user->id,
+            'user_id'      => $user->id,
             'moderator_id' => Auth::id(),
-            'reason' => $request->get('reason'),
-            'start_time' => $request->get('start_time'),
-            'end_time' => $request->get('end_time'),
-            'discord_id' => $user->discord_user_id
+            'reason'       => $request->get('reason'),
+            'start_time'   => $request->get('start_time'),
+            'end_time'     => $request->get('end_time'),
+            'discord_id'   => $user->discord_user_id,
         ]);
 
         $ban->save();
@@ -120,7 +121,7 @@ class DiscordController extends Controller
         if ($param == 'server_join_process') {
             return redirect()->route('me.discord.join');
         } else {
-            return redirect()->route('my.index')->with('success', 'Linked with account '.$discordAccount->nickname. '!');
+            return redirect()->route('my.index')->with('success', 'Linked with account '.$discordAccount->nickname.'!');
         }
     }
 
@@ -141,7 +142,7 @@ class DiscordController extends Controller
                 //Log
                 $discord->channel->createMessage([
                     'channel.id' => 482860026831175690,
-                    'content' => '['. Carbon::now()->toDateTimeString() . '] <@'.$user->discord_user_id.'> ('.Auth::id().') unlinked account, removed from guild'
+                    'content'    => '['.Carbon::now()->toDateTimeString().'] <@'.$user->discord_user_id.'> ('.Auth::id().') unlinked account, removed from guild',
                 ]);
             } catch (Throwable $ex) {
                 Log::error($ex);
@@ -167,6 +168,7 @@ class DiscordController extends Controller
     public function joinRedirectDiscord()
     {
         $config = new Config(config('services.discord.client_id'), config('services.discord.client_secret'), config('services.discord.redirect_join'));
+
         return Socialite::with('discord')->setConfig($config)->setScopes(['identify', 'guilds.join'])->redirect();
     }
 
@@ -183,15 +185,15 @@ class DiscordController extends Controller
         $user = Auth::user();
 
         //let's find all the roles they could possibly have...
-        $rolesToAdd = array();
+        $rolesToAdd = [];
 
         //Here are all the role ids
-        $discordRoleIds = array(
-            'guest' => 482835389640343562,
-            'training' => 482824058141016075,
-            'certified' => 482819739996127259,
-            'supervisor' => 720502070683369563
-        );
+        $discordRoleIds = [
+            'guest'      => 482835389640343562,
+            'training'   => 482824058141016075,
+            'certified'  => 482819739996127259,
+            'supervisor' => 720502070683369563,
+        ];
 
         //Add the Member role
         array_push($rolesToAdd, $discordRoleIds['guest']);
@@ -216,13 +218,13 @@ class DiscordController extends Controller
         }
 
         //Create the full arguments
-        $arguments = array(
-            'guild.id' => intval(config('services.discord.guild_id')),
-            'user.id' => $user->discord_user_id,
+        $arguments = [
+            'guild.id'     => intval(config('services.discord.guild_id')),
+            'user.id'      => $user->discord_user_id,
             'access_token' => $discordAccount->token,
-            'nick' => $user->fullName('FLC'),
-            'roles' => $rolesToAdd
-        );
+            'nick'         => $user->fullName('FLC'),
+            'roles'        => $rolesToAdd,
+        ];
 
         //Add them to guild
         try {
@@ -237,7 +239,7 @@ class DiscordController extends Controller
         //Log it
         $discord->channel->createMessage([
             'channel.id' => 482860026831175690,
-            'content' => '['. Carbon::now()->toDateTimeString() . '] <@'.$user->discord_user_id.'> ('.Auth::id().') has joined the guild'
+            'content'    => '['.Carbon::now()->toDateTimeString().'] <@'.$user->discord_user_id.'> ('.Auth::id().') has joined the guild',
         ]);
 
         //And back to the dashboard

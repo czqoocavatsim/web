@@ -15,7 +15,7 @@ class MeetingMinutes extends Model
     use SoftDeletes;
 
     protected $fillable = [
-        'user_id', 'title', 'description', 'url'
+        'user_id', 'title', 'description', 'url',
     ];
 
     public function user()

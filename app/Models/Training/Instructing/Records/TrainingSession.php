@@ -17,11 +17,11 @@ class TrainingSession extends Model
     protected $hidden = ['id'];
 
     protected $fillable = [
-        'student_id', 'instructor_id', 'scheduled_time', 'remarks', 'position_id', 'reminder_sent'
+        'student_id', 'instructor_id', 'scheduled_time', 'remarks', 'position_id', 'reminder_sent',
     ];
 
     protected $dates = [
-        'scheduled_time'
+        'scheduled_time',
     ];
 
     public function student()
@@ -38,7 +38,6 @@ class TrainingSession extends Model
     {
         return $this->belongsTo(MonitoredPosition::class, 'position_id');
     }
-
 
     public function remarksHtml()
     {

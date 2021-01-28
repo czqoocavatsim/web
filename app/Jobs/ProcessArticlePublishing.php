@@ -3,23 +3,24 @@
 namespace App\Jobs;
 
 use App\Models\Roster\RosterMember as RosterMember;
+use App\Models\Users\User;
+use App\Notifications\News as NewsNotification;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
-use App\Models\Users\User;
-use App\Notifications\News as NewsNotification;
-use Illuminate\Support\Facades\App;
-use Illuminate\Support\Facades\Log;
-use NotificationChannels\Discord\DiscordMessage;
 use RestCord\DiscordClient;
 use Throwable;
 
 class ProcessArticlePublishing implements ShouldQueue
 {
-    use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
+    use Dispatchable;
+    use InteractsWithQueue;
+    use Queueable;
+    use SerializesModels;
     protected $article;
+
     /**
      * Create a new job instance.
      *
@@ -41,28 +42,25 @@ class ProcessArticlePublishing implements ShouldQueue
         $discord = new DiscordClient(['token' => config('services.discord.token')]);
 
         //Send announcement
-        try
-        {
+        try {
             $discord->channel->createMessage([
                 'channel.id' => config('app.env') == 'local' ? intval(config('services.discord.web_logs')) : intval(config('services.discord.announcements')),
-                'embed' => [
-                    'title' => $this->article->title,
+                'embed'      => [
+                    'title'          => $this->article->title,
                     'description'    => $this->article->summary,
-                    'color' => 0x80c9,
-                    "image" => [
-                        "url" => $this->article->image ? url('/').$this->article->image : null
+                    'color'          => 0x80c9,
+                    'image'          => [
+                        'url' => $this->article->image ? url('/').$this->article->image : null,
                     ],
-                    "url" => route('news.articlepublic', $this->article->slug),
-                    "author" => [
-                        "name" => $this->article->author_pretty(),
+                    'url'    => route('news.articlepublic', $this->article->slug),
+                    'author' => [
+                        'name' => $this->article->author_pretty(),
                     ],
-                    "timestamp" => date('Y-m-d H:i:s'),
-                ]
+                    'timestamp' => date('Y-m-d H:i:s'),
+                ],
             ]);
-        }
-        catch (Throwable $ex)
-        {
-            error_log("Webhook failed");
+        } catch (Throwable $ex) {
+            error_log('Webhook failed');
         }
 
         //Send emails as appropirate
@@ -70,7 +68,7 @@ class ProcessArticlePublishing implements ShouldQueue
             case 0:
                 $discord->channel->createMessage([
                     'channel.id' => intval(config('services.discord.web_logs')),
-                    'content' => 'Sent no emails for article '.$this->article->title
+                    'content'    => 'Sent no emails for article '.$this->article->title,
                 ]);
             break;
             case 1:
@@ -81,7 +79,7 @@ class ProcessArticlePublishing implements ShouldQueue
                 }
                 $discord->channel->createMessage([
                     'channel.id' => intval(config('services.discord.web_logs')),
-                    'content' => 'Sent '.count($roster). ' emails to controllers for article '.$this->article->title
+                    'content'    => 'Sent '.count($roster).' emails to controllers for article '.$this->article->title,
                 ]);
             break;
             case 2:
@@ -90,6 +88,7 @@ class ProcessArticlePublishing implements ShouldQueue
                     if ($prefs = $user->notificationPreferences) {
                         return $prefs->news_notifications == 'email';
                     }
+
                     return false;
                 });
                 foreach ($users as $user) {
@@ -97,7 +96,7 @@ class ProcessArticlePublishing implements ShouldQueue
                 }
                 $discord->channel->createMessage([
                     'channel.id' => intval(config('services.discord.web_logs')),
-                    'content' => 'Sent '.count($users). ' emails to subscribed users for article '.$this->article->title
+                    'content'    => 'Sent '.count($users).' emails to subscribed users for article '.$this->article->title,
                 ]);
             break;
             case 3:
@@ -108,7 +107,7 @@ class ProcessArticlePublishing implements ShouldQueue
                 }
                 $discord->channel->createMessage([
                     'channel.id' => intval(config('services.discord.web_logs')),
-                    'content' => 'Sent '.count($users). ' emails to all users for article '.$this->article->title
+                    'content'    => 'Sent '.count($users).' emails to all users for article '.$this->article->title,
                 ]);
         }
     }

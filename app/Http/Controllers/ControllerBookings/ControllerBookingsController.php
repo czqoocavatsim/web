@@ -5,7 +5,6 @@ namespace App\Http\Controllers\ControllerBookings;
 use App\Http\Controllers\Controller;
 use App\Models\ControllerBookings\ControllerBooking;
 use Carbon\Carbon;
-use Illuminate\Http\Request;
 
 class ControllerBookingsController extends Controller
 {
@@ -28,4 +27,3 @@ class ControllerBookingsController extends Controller
         return view('controllerbookings', compact('bookings', 'upcomingBookings'));
     }
 }
-

@@ -17,11 +17,11 @@ class OTSSession extends Model
     protected $hidden = ['id'];
 
     protected $fillable = [
-        'student_id', 'assessor_id', 'scheduled_time', 'remarks', 'result', 'position_id'
+        'student_id', 'assessor_id', 'scheduled_time', 'remarks', 'result', 'position_id',
     ];
 
     protected $dates = [
-        'scheduled_time'
+        'scheduled_time',
     ];
 
     public function student()

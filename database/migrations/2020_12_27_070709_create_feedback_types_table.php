@@ -17,8 +17,8 @@ class CreateFeedbackTypesTable extends Migration
             $table->id();
 
             //Info
-            $table->string("name");
-            $table->text("description");
+            $table->string('name');
+            $table->text('description');
             $table->string('slug');
 
             //Staff visbility

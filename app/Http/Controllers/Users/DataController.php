@@ -14,6 +14,7 @@ class DataController extends Controller
     {
         return view('my.preferences');
     }
+
     public function subscribeEmails()
     {
         $user = Auth::user();
@@ -22,8 +23,10 @@ class DataController extends Controller
         }
         $user->gdpr_subscribed_emails = 1;
         $user->save();
+
         return redirect()->route('my.preferences')->with('success', 'You are subscribed!');
     }
+
     public function unsubscribeEmails()
     {
         $user = Auth::user();
@@ -32,6 +35,7 @@ class DataController extends Controller
         }
         $user->gdpr_subscribed_emails = 0;
         $user->save();
+
         return redirect()->route('my.preferences')->with('success', 'You are unsubscribed!');
     }
 
@@ -47,9 +51,8 @@ class DataController extends Controller
         ];
 
         $validator = Validator::make($request->all(), [
-            'email' => 'required|email'
+            'email' => 'required|email',
         ], $messages);
-
 
         if (Auth::user()->email != $request->get('email')) {
             $validator->after(function ($validator) {
@@ -65,6 +68,7 @@ class DataController extends Controller
         ProcessDataExport::dispatch($user);
 
         $request->session()->flash('exportAll', 'We will email you with your data soon!');
+
         return redirect()->back();
     }
 }

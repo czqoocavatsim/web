@@ -13,7 +13,7 @@ class UploadedImage extends Model
     use LogsActivity;
 
     protected $fillable = [
-        'user_id', 'path'
+        'user_id', 'path',
     ];
 
     public function user()
