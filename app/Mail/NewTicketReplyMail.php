@@ -6,13 +6,13 @@ use App\Models\Tickets\Ticket;
 use App\Models\Tickets\TicketReply;
 use App\Models\Users\User;
 use Illuminate\Bus\Queueable;
-use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Mail\Mailable;
 use Illuminate\Queue\SerializesModels;
 
 class NewTicketReplyMail extends Mailable
 {
-    use Queueable, SerializesModels;
+    use Queueable;
+    use SerializesModels;
     public $ticketReply;
     public $ticket;
 

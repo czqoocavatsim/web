@@ -8,9 +8,9 @@ use App\Models\Publications\CustomPageResponse;
 use App\Notifications\CustomPages\ResponseCopy;
 use App\Notifications\CustomPages\ResponseReceived;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Notification;
+use Illuminate\Support\Facades\Validator;
 
 class CustomPagesController extends Controller
 {
@@ -23,16 +23,14 @@ class CustomPagesController extends Controller
         $page = CustomPage::where('slug', $page_slug)->firstOrFail();
 
         //Permissions
-        if (count($page->permissions) > 0)
-        {
+        if (count($page->permissions) > 0) {
             if (!Auth::check()) {
                 return redirect()->route('auth.connect.login');
             }
 
             $hasPermission = false;
 
-            foreach ($page->permissions as $perm)
-            {
+            foreach ($page->permissions as $perm) {
                 $role = $perm->role;
                 if (Auth::user()->hasRole($role) || Auth::user()->hasAnyRole('Senior Staff|Administrator')) {
                     $hasPermission = true;

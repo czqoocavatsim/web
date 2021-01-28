@@ -18,7 +18,10 @@ use RestCord\DiscordClient;
 
 class ProcessSoloCertExpiryWarnings implements ShouldQueue
 {
-    use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
+    use Dispatchable;
+    use InteractsWithQueue;
+    use Queueable;
+    use SerializesModels;
 
     /**
      * Create a new job instance.
@@ -48,14 +51,14 @@ class ProcessSoloCertExpiryWarnings implements ShouldQueue
                 $discord = new DiscordClient(['token' => config('services.discord.token')]);
                 $discord->channel->createMessage([
                     'channel.id' => intval(config('services.discord.instructors')),
-                    "content" => "",
-                    'embed' => [
-                        "title" => "Solo certification for " . $cert->rosterMember->user->fullName('FLC') . " is about to expire.",
-                        "url" => route('training.admin.solocertifications'),
-                        "timestamp" => Carbon::now(),
-                        "color" => hexdec( "2196f3" ),
-                        "description" => "Expires on " . $cert->expires->toDayDateTimeString() . "."
-                    ]
+                    'content'    => '',
+                    'embed'      => [
+                        'title'       => 'Solo certification for '.$cert->rosterMember->user->fullName('FLC').' is about to expire.',
+                        'url'         => route('training.admin.solocertifications'),
+                        'timestamp'   => Carbon::now(),
+                        'color'       => hexdec('2196f3'),
+                        'description' => 'Expires on '.$cert->expires->toDayDateTimeString().'.',
+                    ],
                 ]);
 
                 //Notify their instructor

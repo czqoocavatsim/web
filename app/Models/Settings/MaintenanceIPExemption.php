@@ -7,6 +7,6 @@ use Illuminate\Database\Eloquent\Model;
 class MaintenanceIPExemption extends Model
 {
     protected $fillable = [
-        'id', 'label', 'ipv4'
+        'id', 'label', 'ipv4',
     ];
 }

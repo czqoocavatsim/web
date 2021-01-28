@@ -18,6 +18,6 @@ class SoloCertification extends Model
     }
 
     protected $dates = [
-        'expires', 'expiry_notification_time'
+        'expires', 'expiry_notification_time',
     ];
 }

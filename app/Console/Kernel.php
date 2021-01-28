@@ -2,28 +2,15 @@
 
 namespace App\Console;
 
-use App\AuditLogEntry;
 use App\Jobs\ProcessSessionLogging;
 use App\Jobs\ProcessSessionReminders;
 use App\Jobs\ProcessSoloCertExpiryWarnings;
 use App\Jobs\UpdateDiscordUserRoles;
 use App\Models\Roster\RosterMember;
-use App\Models\Network\MonitoredPosition;
-use App\Models\Network\SessionLog;
-use App\User;
-use Carbon\Carbon;
-use Illuminate\Console\Scheduling\Schedule;
-use Illuminate\Foundation\Console\Kernel as ConsoleKernel;
-use Illuminate\Support\Facades\Log;
-use App\Mail\ActivityBot\UnauthorisedConnection;
-use App\Models\Settings\CoreSettings;
-use App\Notifications\Network\ControllerInactive;
-use App\Notifications\Network\ControllerIsStudent;
-use App\Notifications\Network\ControllerNotCertified;
-use App\Notifications\Network\ControllerNotStaff;
 use App\Notifications\Network\OneWeekInactivityReminder;
 use App\Notifications\Network\TwoWeekInactivityReminder;
-use Illuminate\Support\Facades\DB;
+use Illuminate\Console\Scheduling\Schedule;
+use Illuminate\Foundation\Console\Kernel as ConsoleKernel;
 use Illuminate\Support\Facades\Notification;
 use RestCord\DiscordClient;
 
@@ -41,13 +28,14 @@ class Kernel extends ConsoleKernel
     /**
      * Define the application's command schedule.
      *
-     * @param  \Illuminate\Console\Scheduling\Schedule  $schedule
+     * @param \Illuminate\Console\Scheduling\Schedule $schedule
+     *
      * @return void
      */
-    protected function schedule (Schedule $schedule)
+    protected function schedule(Schedule $schedule)
     {
         // Activitybot session logging
-        $schedule->job(new ProcessSessionLogging)->everyMinute();
+        $schedule->job(new ProcessSessionLogging())->everyMinute();
 
         // Quarterly currency wipe
         $schedule->call(function () {
@@ -57,7 +45,7 @@ class Kernel extends ConsoleKernel
                 $rosterMember->currency = 0.0;
                 $rosterMember->save();
             }
-        })->cron("00 00 01 APR,JUL,OCT,JAN *");
+        })->cron('00 00 01 APR,JUL,OCT,JAN *');
 
         //// CRONS FOR INACTIVITY EMAILS
         /// 2 weeks
@@ -76,8 +64,8 @@ class Kernel extends ConsoleKernel
             }
             //Tell Discord all about it
             $discord = new DiscordClient(['token' => config('services.discord.token')]);
-            $discord->channel->createMessage(['channel.id' => 482817715489341441, 'content' => 'Sent '. $count . ' two-week warning inactivity emails']);
-        })->cron("00 00 16 MAR,JUN,SEP,DEC *"); // 2 weeks before end of quarter
+            $discord->channel->createMessage(['channel.id' => 482817715489341441, 'content' => 'Sent '.$count.' two-week warning inactivity emails']);
+        })->cron('00 00 16 MAR,JUN,SEP,DEC *'); // 2 weeks before end of quarter
 
         /// 1 week
         $schedule->call(function () {
@@ -95,8 +83,8 @@ class Kernel extends ConsoleKernel
             }
             //Tell Discord all about it
             $discord = new DiscordClient(['token' => config('services.discord.token')]);
-            $discord->channel->createMessage(['channel.id' => 482817715489341441, 'content' => 'Sent '. $count . ' one-week warning inactivity emails']);
-        })->cron("00 00 23 MAR,JUN,SEP,DEC *"); // 1 week before end of quarter
+            $discord->channel->createMessage(['channel.id' => 482817715489341441, 'content' => 'Sent '.$count.' one-week warning inactivity emails']);
+        })->cron('00 00 23 MAR,JUN,SEP,DEC *'); // 1 week before end of quarter
 
         /// Monthly leaderboard wipe
         $schedule->call(function () {
@@ -109,10 +97,10 @@ class Kernel extends ConsoleKernel
         })->monthlyOn(1, '00:00');
 
         //Solo cert expiry warning
-        $schedule->job(new ProcessSoloCertExpiryWarnings)->daily();
+        $schedule->job(new ProcessSoloCertExpiryWarnings())->daily();
 
         //Training/OTS session reminders
-        $schedule->job(new ProcessSessionReminders)->daily();
+        $schedule->job(new ProcessSessionReminders())->daily();
 
         // Discord role updating
         //$schedule->job(new UpdateDiscordUserRoles)->twiceDaily(6, 18);

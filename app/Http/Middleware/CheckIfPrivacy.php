@@ -2,18 +2,18 @@
 
 namespace App\Http\Middleware;
 
-use Closure;
 use Auth;
+use Closure;
 use Illuminate\Support\Facades\Request;
-use Illuminate\Support\Facades\Route;
 
 class CheckIfPrivacy
 {
     /**
      * Handle an incoming request.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \Closure  $next
+     * @param \Illuminate\Http\Request $request
+     * @param \Closure                 $next
+     *
      * @return mixed
      */
     public function handle($request, Closure $next)
@@ -28,7 +28,7 @@ class CheckIfPrivacy
             } else {
                 return $next($request);
             }
-        //otherwise
+            //otherwise
         } else {
             return $next($request);
         }

@@ -21,10 +21,10 @@ class CustomPage extends Model
 
     public function userHasResponded()
     {
-        if (CustomPageResponse::where('page_id', $this->id)->where('user_id', Auth::id())->first())
-        {
+        if (CustomPageResponse::where('page_id', $this->id)->where('user_id', Auth::id())->first()) {
             return false;
         }
+
         return false;
     }
 }

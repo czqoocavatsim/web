@@ -11,13 +11,14 @@ class DiscordBan extends Model
 {
     protected $hidden = ['id'];
     protected $dateFormat = 'Y-m-d H:i';
+
     public function getDateFormat()
     {
         return 'Y-m-d H:i';
     }
 
     protected $fillable = [
-        'user_id', 'moderator_id', 'reason', 'start_time', 'end_time', 'discord_id'
+        'user_id', 'moderator_id', 'reason', 'start_time', 'end_time', 'discord_id',
     ];
 
     public function user()
@@ -36,7 +37,6 @@ class DiscordBan extends Model
     }
 
     protected $dates = [
-        'start_time', 'end_time'
+        'start_time', 'end_time',
     ];
-
 }

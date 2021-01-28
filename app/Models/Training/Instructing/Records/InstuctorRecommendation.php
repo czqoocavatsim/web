@@ -9,7 +9,7 @@ use Illuminate\Database\Eloquent\Model;
 class InstuctorRecommendation extends Model
 {
     protected $fillable = [
-        'student_id', 'instructor_id', 'type'
+        'student_id', 'instructor_id', 'type',
     ];
 
     public function student()

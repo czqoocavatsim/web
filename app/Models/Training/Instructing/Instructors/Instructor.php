@@ -8,7 +8,6 @@ use App\Models\Training\Instructing\Records\TrainingSession;
 use App\Models\Users\User;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Notifications\Notifiable;
 
 class Instructor extends Model
@@ -18,7 +17,7 @@ class Instructor extends Model
     use Notifiable;
 
     protected $fillable = [
-        'user_id', 'current', 'assessor', 'staff_email', 'staff_page_tagline'
+        'user_id', 'current', 'assessor', 'staff_email', 'staff_page_tagline',
     ];
 
     public function user()
@@ -28,35 +27,25 @@ class Instructor extends Model
 
     public function email()
     {
-        if ($this->staff_email)
-        {
+        if ($this->staff_email) {
             return $this->staff_email;
-        }
-        else
-        {
+        } else {
             return $this->user->email;
         }
     }
 
     public function staffPageTagline()
     {
-        if ($this->staff_page_tagline)
-        {
+        if ($this->staff_page_tagline) {
             return $this->staff_page_tagline;
-        }
-        else
-        {
-            if ($this->assessor)
-            {
-                return "Assessor";
-            }
-            else
-            {
-                return "Instructor";
+        } else {
+            if ($this->assessor) {
+                return 'Assessor';
+            } else {
+                return 'Instructor';
             }
         }
     }
-
 
     public function trainingSessions()
     {

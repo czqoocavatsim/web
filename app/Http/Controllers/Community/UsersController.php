@@ -7,7 +7,6 @@ use App\Models\Users\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
-use mofodojodino\ProfanityFilter\Check;
 use Spatie\Activitylog\Models\Activity;
 use Spatie\Permission\Models\Permission;
 use Spatie\Permission\Models\Role;
@@ -45,7 +44,7 @@ class UsersController extends Controller
     {
         //Validate it
         $validator = Validator::make($request->all(), [
-            'role_id' => 'required|int'
+            'role_id' => 'required|int',
         ]);
 
         //No validate? Bad.
@@ -68,7 +67,7 @@ class UsersController extends Controller
         }
 
         //Is the role the "restricted" one and is this a staff member assigning it to themselves? -_-
-        if ($role->name == "Restricted" && $user->id == Auth::id()) {
+        if ($role->name == 'Restricted' && $user->id == Auth::id()) {
             return back()->with('error', 'You cannot restrict yourself.');
         }
 
@@ -76,17 +75,17 @@ class UsersController extends Controller
         $user->assignRole($role);
 
         //Log it.
-        activity()->causedBy(Auth::user())->performedOn($user)->log('Role \''. $role->name .'\' assigned');
+        activity()->causedBy(Auth::user())->performedOn($user)->log('Role \''.$role->name.'\' assigned');
 
         //Send good response back :)
-        return back()->with('success', 'Role \''. $role->name .'\' assigned!');
+        return back()->with('success', 'Role \''.$role->name.'\' assigned!');
     }
 
     public function removeUserRole(Request $request, $user_id)
     {
         //Validate it
         $validator = Validator::make($request->all(), [
-            'role_id' => 'required|int'
+            'role_id' => 'required|int',
         ]);
 
         //No validate? Bad.
@@ -112,17 +111,17 @@ class UsersController extends Controller
         $user->removeRole($role);
 
         //Log it.
-        activity()->causedBy(Auth::user())->performedOn($user)->log('Role \''. $role->name .'\' removed');
+        activity()->causedBy(Auth::user())->performedOn($user)->log('Role \''.$role->name.'\' removed');
 
         //Send good response back :)
-        return back()->with('info', 'Role \''. $role->name .'\' removed.');
+        return back()->with('info', 'Role \''.$role->name.'\' removed.');
     }
 
     public function assignUserPermission(Request $request, $user_id)
     {
         //Validate it
         $validator = Validator::make($request->all(), [
-            'permission_id' => 'required|int'
+            'permission_id' => 'required|int',
         ]);
 
         //No validate? Bad.
@@ -148,17 +147,17 @@ class UsersController extends Controller
         $user->givePermissionTo($permission);
 
         //Log it.
-        activity()->causedBy(Auth::user())->performedOn($user)->log('Permission to \''. $permission->name .'\' given');
+        activity()->causedBy(Auth::user())->performedOn($user)->log('Permission to \''.$permission->name.'\' given');
 
         //Send good response back :)
-        return back()->with('success', 'Permission to \''. $permission->name .'\' given!');
+        return back()->with('success', 'Permission to \''.$permission->name.'\' given!');
     }
 
     public function removeUserPermission(Request $request, $user_id)
     {
         //Validate it
         $validator = Validator::make($request->all(), [
-            'permission_id' => 'required|int'
+            'permission_id' => 'required|int',
         ]);
 
         //No validate? Bad.
@@ -184,10 +183,10 @@ class UsersController extends Controller
         $user->revokePermissionTo($permission);
 
         //Log it.
-        activity()->causedBy(Auth::user())->performedOn($user)->log('Permission to \''. $permission->name .'\' revoked');
+        activity()->causedBy(Auth::user())->performedOn($user)->log('Permission to \''.$permission->name.'\' revoked');
 
         //Send good response back :)
-        return back()->with('info', 'Permission to \''. $permission->name .'\' revoked.');
+        return back()->with('info', 'Permission to \''.$permission->name.'\' revoked.');
     }
 
     public function resetUserBiography($user_id)

@@ -4,7 +4,6 @@ namespace App\Notifications\Network;
 
 use App\Models\Network\MonitoredPosition;
 use Illuminate\Bus\Queueable;
-use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
 
@@ -25,7 +24,8 @@ class ControllerInactive extends Notification
     /**
      * Get the notification's delivery channels.
      *
-     * @param  mixed  $notifiable
+     * @param mixed $notifiable
+     *
      * @return array
      */
     public function via($notifiable)
@@ -36,18 +36,19 @@ class ControllerInactive extends Notification
     /**
      * Get the mail representation of the notification.
      *
-     * @param  mixed  $notifiable
+     * @param mixed $notifiable
+     *
      * @return \Illuminate\Notifications\Messages\MailMessage
      */
     public function toMail($notifiable)
     {
-        return (new MailMessage)
+        return (new MailMessage())
                     ->subject('[ACTIVITYBOT] Inactive Controller Sign On ('.$this->log->cid.', '.MonitoredPosition::find($this->log->monitored_position_id)->identifier.')')
                     ->line('An inactive controller has signed onto a position.')
                     ->line('CID: '.$this->log->cid)
                     ->line('Session start: '.$this->log->session_start)
                     ->line('Session end: '.$this->log->session_end)
-                    ->line('Position: '. MonitoredPosition::find($this->log->monitored_position_id)->identifier)
+                    ->line('Position: '.MonitoredPosition::find($this->log->monitored_position_id)->identifier)
                     ->line('Duration: '.$this->log->duration)
                     ->action('View Session (this is broken atm)', route('network.index'));
     }
@@ -55,7 +56,8 @@ class ControllerInactive extends Notification
     /**
      * Get the array representation of the notification.
      *
-     * @param  mixed  $notifiable
+     * @param mixed $notifiable
+     *
      * @return array
      */
     public function toArray($notifiable)

@@ -15,7 +15,7 @@ class Announcement extends Model
     protected $hidden = ['id'];
 
     protected $fillable = [
-        'user_id', 'target_group', 'title', 'content', 'slug', 'reason_for_sending', 'notes'
+        'user_id', 'target_group', 'title', 'content', 'slug', 'reason_for_sending', 'notes',
     ];
 
     public function user()

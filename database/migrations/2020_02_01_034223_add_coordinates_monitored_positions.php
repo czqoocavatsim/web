@@ -13,7 +13,7 @@ class AddCoordinatesMonitoredPositions extends Migration
      */
     public function up()
     {
-        Schema::table('monitored_positions', function(Blueprint $table) {
+        Schema::table('monitored_positions', function (Blueprint $table) {
             $table->polygon('polygon_coordinates')->nullable();
         });
     }
@@ -25,7 +25,7 @@ class AddCoordinatesMonitoredPositions extends Migration
      */
     public function down()
     {
-        Schema::table('monitored_positions', function(Blueprint $table) {
+        Schema::table('monitored_positions', function (Blueprint $table) {
             $table->dropColumn('polygon_coordinates');
         });
     }

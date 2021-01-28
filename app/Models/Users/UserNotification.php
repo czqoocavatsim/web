@@ -18,7 +18,7 @@ class UserNotification extends Model
 
     public static function send(User $user, $content, $link)
     {
-        $notification = new self;
+        $notification = new self();
         $notification->content = $content;
         $notification->user_id = $user->id;
         $notification->link = $link;

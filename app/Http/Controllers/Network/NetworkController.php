@@ -15,7 +15,7 @@ class NetworkController extends Controller
     public function index()
     {
         //Create hours per day array
-        $hoursPerDay = array();
+        $hoursPerDay = [];
 
         //Create carbon period
         $timePeriod = CarbonPeriod::create(Carbon::now()->subDays(30), Carbon::now());
@@ -42,23 +42,25 @@ class NetworkController extends Controller
     public function monitoredPositionsIndex()
     {
         $positions = MonitoredPosition::all()->sortByDesc('identifier');
+
         return view('admin.network.monitoredpositions.index', compact('positions'));
     }
 
     public function viewMonitoredPosition($position)
     {
         $position = MonitoredPosition::where(strtolower('identifier'), strtolower($position))->firstOrFail();
+
         return view('admin.network.monitoredpositions.view', compact('position'));
     }
 
     public function createMonitoredPosition(Request $request)
     {
         $messages = [
-            'identifier.required' => 'Please type an identifier prefix/callsign.'
+            'identifier.required' => 'Please type an identifier prefix/callsign.',
         ];
 
         $validator = Validator::make($request->all(), [
-            'identifier' => 'required'
+            'identifier' => 'required',
         ], $messages);
 
         if ($validator->fails()) {

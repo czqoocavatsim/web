@@ -24,37 +24,37 @@ return [
     ],
 
     'ses' => [
-        'key' => env('AWS_ACCESS_KEY_ID'),
+        'key'    => env('AWS_ACCESS_KEY_ID'),
         'secret' => env('AWS_SECRET_ACCESS_KEY'),
         'region' => env('AWS_DEFAULT_REGION', 'us-east-1'),
     ],
     'sparkpost' => [
         'secret' => env('SPARKPOST_SECRET'),
         'guzzle' => [
-            'verify' => true,
+            'verify'         => true,
             'decode_content' => true,
         ],
         'options' => [
-            'open_tracking' => false,
+            'open_tracking'  => false,
             'click_tracking' => false,
-            'transactional' => true,
+            'transactional'  => true,
         ],
     ],
     'discord' => [
-        'token' => env('DISCORD_BOT_TOKEN'),
-        'client_id' => env('DISCORD_KEY'),
-        'client_secret' => env('DISCORD_SECRET'),
-        'redirect' => env('DISCORD_REDIRECT_URI'),
+        'token'                        => env('DISCORD_BOT_TOKEN'),
+        'client_id'                    => env('DISCORD_KEY'),
+        'client_secret'                => env('DISCORD_SECRET'),
+        'redirect'                     => env('DISCORD_REDIRECT_URI'),
         'redirect_server_join_process' => env('DISCORD_REDIRECT_URI').'/server_join_process',
-        'redirect_join' => env('DISCORD_REDIRECT_URI_JOIN'),
-        'guild_id' => env('DISCORD_GUILD_ID'),
+        'redirect_join'                => env('DISCORD_REDIRECT_URI_JOIN'),
+        'guild_id'                     => env('DISCORD_GUILD_ID'),
         //Guild IDs
-        'web_logs' => env('DISCORD_WEB_LOGS'),
-        'guild_logs' => env('DISCORD_GUILD_LOGS'),
+        'web_logs'      => env('DISCORD_WEB_LOGS'),
+        'guild_logs'    => env('DISCORD_GUILD_LOGS'),
         'announcements' => env('DISCORD_ANNOUNCEMENTS'),
-        'endorsements' => env('DISCORD_ENDORSEMENTS'),
-        'marketing' => env('DISCORD_MARKETING'),
-        'staff' => env('DISCORD_STAFF'),
-        'instructors' => env('DISCORD_INSTRUCTORS')
+        'endorsements'  => env('DISCORD_ENDORSEMENTS'),
+        'marketing'     => env('DISCORD_MARKETING'),
+        'staff'         => env('DISCORD_STAFF'),
+        'instructors'   => env('DISCORD_INSTRUCTORS'),
     ],
 ];

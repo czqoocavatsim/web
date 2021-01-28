@@ -13,7 +13,7 @@ class AtcResource extends Model
     use LogsActivity;
 
     protected $fillable = [
-        'user_id', 'title', 'description', 'url', 'atc_only'
+        'user_id', 'title', 'description', 'url', 'atc_only',
     ];
 
     protected $hidden = ['id'];

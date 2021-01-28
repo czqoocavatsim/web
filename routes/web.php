@@ -15,13 +15,12 @@
 
 use App\Models\Users\User;
 use Illuminate\Support\Facades\Route;
-use Thujohn\Twitter\Facades\Twitter;
 
 Route::get('/', 'PrimaryViewsController@home')->name('index');
 Route::get('/map', 'PrimaryViewsController@map')->name('map');
 Route::get('/roster', 'Roster\RosterController@publicRoster')->name('roster.public');
 Route::get('/roster/solo-certs', 'Training\SoloCertificationsController@public')->name('solocertifications.public');
-Route::get('/staff', function() { return redirect(route('staff'), 301); });
+Route::get('/staff', function () { return redirect(route('staff'), 301); });
 Route::get('/atc/resources', 'Publications\PublicationsController@atcResources')->name('atcresources.index');
 Route::view('/pilots', 'pilots.index');
 Route::view('/pilots/oceanic-clearance', 'pilots.oceanic-clearance')->name('pilots.oceanic-clearance');
@@ -30,7 +29,7 @@ Route::view('/pilots/tracks', 'pilots.tracks')->name('pilots.tracks');
 Route::view('/pilots/tracks/event', 'pilots.event-tracks')->name('pilots.event-tracks');
 Route::view('/pilots/tracks/concorde', 'pilots.concorde-tracks')->name('pilots.concorde-tracks');
 Route::get('/policies', 'Publications\PublicationsController@policies')->name('policies');
-Route::get('/privacy', function() { return redirect(route('policies'), 301); })->name('privacy');
+Route::get('/privacy', function () { return redirect(route('policies'), 301); })->name('privacy');
 Route::get('/events', 'Events\EventController@index')->name('events.index');
 Route::get('/events/{slug}', 'Events\EventController@viewEvent')->name('events.view');
 
@@ -41,7 +40,7 @@ Route::get('/test', function () {
 
 //About
 Route::prefix('about')->group(function () {
-    Route::get('/', function() { return redirect(route('about.who-we-are'), 301); })->name('about.index');
+    Route::get('/', function () { return redirect(route('about.who-we-are'), 301); })->name('about.index');
     Route::view('/who-we-are', 'about.who-we-are')->name('about.who-we-are');
     Route::view('/core', 'about.about-core')->name('about.core');
     Route::get('/staff', 'Users\StaffListController@index')->name('staff');
@@ -72,7 +71,7 @@ Route::group(['middleware' => 'auth'], function () {
     Route::view('/my/accept-privacy-policy', 'my.accept-privacy-policy')->name('accept-privacy-policy');
 
     //Dashboard/MyCZQO
-    Route::get('/dashboard', function() { return redirect(route('my.index'), 301); });
+    Route::get('/dashboard', function () { return redirect(route('my.index'), 301); });
     Route::get('/my', 'PrimaryViewsController@dashboard')->name('my.index');
 
     //GDPR
@@ -97,7 +96,6 @@ Route::group(['middleware' => 'auth'], function () {
         //Notification
         Route::get('/notification/{id}', 'Users\NotificationRedirectController@notificationRedirect')->name('notification.redirect');
         Route::get('/notificationclear', 'Users\NotificationRedirectController@clearAll');
-
 
         //Support
         Route::prefix('support')->group(function () {
@@ -178,7 +176,6 @@ Route::group(['middleware' => 'auth'], function () {
 
         //Admin
         Route::prefix('admin')->group(function () {
-
             Route::view('/', 'admin.index')->name('admin.index');
 
             //Settings
@@ -204,15 +201,14 @@ Route::group(['middleware' => 'auth'], function () {
 
                     //Roster
                     Route::get('/roster', 'Roster\RosterController@admin')->name('roster')->middleware('can:view roster admin');
-                    Route::post('/roster/add', 'Roster\RosterController@addRosterMemberPost')->name('roster.add')->middleware('can:edit roster');;
+                    Route::post('/roster/add', 'Roster\RosterController@addRosterMemberPost')->name('roster.add')->middleware('can:edit roster');
                     Route::get('/roster/export', 'Roster\RosterController@exportRoster')->name('roster.export')->middleware('can:view roster admin');
                     Route::get('/roster/home-page-new-controllers', 'Roster\RosterController@homePageNewControllers')->name('roster.home-page-new-controllers')->middleware('can:edit roster');
                     Route::post('/roster/home-page-new-controllers/remove', 'Roster\RosterController@homePageNewControllersRemoveEntry')->name('roster.home-page-new-controllers.remove')->middleware('can:edit roster');
                     Route::post('/roster/home-page-new-controllers/add', 'Roster\RosterController@homePageNewControllersAddEntry')->name('roster.home-page-new-controllers.add')->middleware('can:edit roster');
-                    Route::get('/roster/{cid}', 'Roster\RosterController@viewRosterMember')->name('roster.viewcontroller')->middleware('can:view roster admin');;
-                    Route::get('/roster/{cid}/delete', 'Roster\RosterController@removeRosterMember')->name('roster.removecontroller')->middleware('can:edit roster');;
+                    Route::get('/roster/{cid}', 'Roster\RosterController@viewRosterMember')->name('roster.viewcontroller')->middleware('can:view roster admin');
+                    Route::get('/roster/{cid}/delete', 'Roster\RosterController@removeRosterMember')->name('roster.removecontroller')->middleware('can:edit roster');
                     Route::post('/roster/{cid}/edit', 'Roster\RosterController@editRosterMemberPost')->name('roster.editcontroller')->middleware('can:edit roster');
-
 
                     //Solo certifications
                     Route::get('/solocertifications', 'Training\SoloCertificationsController@admin')->name('solocertifications')->middleware('can:view roster admin');
@@ -356,11 +352,8 @@ Route::group(['middleware' => 'auth'], function () {
                     Route::delete('/users/{id}/remove/permission', 'Community\UsersController@removeUserPermission')->name('community.users.remove.permission')->middleware('can:edit user data');
                 });
             });
-
         });
-
     });
-
 });
 
 //Custom pages

@@ -2,7 +2,6 @@
 
 namespace App\Models\Users;
 
-
 use Illuminate\Database\Eloquent\Model;
 
 class UserNote extends Model

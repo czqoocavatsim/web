@@ -11,7 +11,7 @@ class StudentStatusLabel extends Model
     protected $hidden = ['id'];
 
     protected $fillable = [
-        'name', 'fa_icon', 'colour', 'description', 'restricted'
+        'name', 'fa_icon', 'colour', 'description', 'restricted',
     ];
 
     public function students()
@@ -25,17 +25,17 @@ class StudentStatusLabel extends Model
 
         //Colour
         if ($this->colour) {
-            $html .= $this->colour . " text-white'>";
+            $html .= $this->colour." text-white'>";
         } else {
             $html .= "grey lighten-3 text-black'>";
         }
 
         //Icon
         if ($this->fa_icon) {
-            $html .= "<i class='" . $this->fa_icon . " fa-fw'></i>&nbsp;";
+            $html .= "<i class='".$this->fa_icon." fa-fw'></i>&nbsp;";
         }
 
-        $html .= $this->name . "</span>";
+        $html .= $this->name.'</span>';
 
         return new HtmlString($html);
     }

@@ -2,25 +2,14 @@
 
 namespace App\Models\Users;
 
-use Illuminate\Contracts\Auth\MustVerifyEmail;
+use App\Models\News\News;
+use App\Models\Roster\RosterMember;
+use App\Models\Training\Application;
+use App\Models\Training\Instructing\Instructors\Instructor;
+use App\Models\Training\Instructing\Students\Student;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Carbon;
-use App\Models\Training;
-use App\Models\Community\Discord\DiscordBan;
-use App\Models\ControllerBookings;
-use App\Models\Events;
-use App\Models\Network;
-use App\Models\News\News;
-use App\Models\Publications;
-use App\Models\Roster\RosterMember;
-use App\Models\Settings;
-use App\Models\Tickets;
-use App\Models\Training\Application;
-use App\Models\Training\Instructing\Instructors\Instructor;
-use App\Models\Training\Instructing\Records\TrainingSession;
-use App\Models\Training\Instructing\Students\Student;
-use Exception;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
@@ -49,7 +38,7 @@ class User extends Authenticatable
         'id', 'fname', 'lname', 'email', 'rating_id', 'rating_short', 'rating_long', 'rating_GRP',
         'reg_date', 'region_code', 'region_name', 'division_code', 'division_name',
         'subdivision_code', 'subdivision_name', 'permissions', 'init', 'gdpr_subscribed_emails', 'avatar', 'bio', 'display_cid_only', 'display_fname', 'display_last_name',
-        'discord_user_id', 'discord_dm_channel_id', 'avatar_mode', 'used_connect'
+        'discord_user_id', 'discord_dm_channel_id', 'avatar_mode', 'used_connect',
     ];
 
     /**
@@ -64,7 +53,7 @@ class User extends Authenticatable
     /**
      * Is the user a bot?
      *
-     * @return boolean
+     * @return bool
      */
     public function isBot()
     {
@@ -138,7 +127,7 @@ class User extends Authenticatable
     /**
      * Days user has existed.
      *
-     * @return integer
+     * @return int
      */
     public function userSinceInDays()
     {
@@ -172,9 +161,10 @@ class User extends Authenticatable
      * Get the user's name in requested format.
      * FLC - First, Last, CID
      * FL - First, Last
-     * F - First
+     * F - First.
      *
      * @param string $format
+     *
      * @return string|null
      */
     public function fullName($format)
@@ -206,7 +196,7 @@ class User extends Authenticatable
     /**
      * Is the user's avatar the default (initials) avatar?
      *
-     * @return boolean
+     * @return bool
      */
     public function isAvatarDefault()
     {
@@ -220,7 +210,7 @@ class User extends Authenticatable
     /**
      * Returns their Discord DM channel snowflake ID for notifications.
      *
-     * @return integer|null
+     * @return int|null
      */
     public function routeNotificationForDiscord()
     {
@@ -230,11 +220,14 @@ class User extends Authenticatable
     /**
      * Does the user have a linked Discord account?
      *
-     * @return boolean
+     * @return bool
      */
     public function hasDiscord()
     {
-        if (!$this->discord_user_id) { return false; }
+        if (!$this->discord_user_id) {
+            return false;
+        }
+
         return true;
     }
 
@@ -248,6 +241,7 @@ class User extends Authenticatable
         return Cache::remember('users.discorduserdata.'.$this->id, 84600, function () {
             $discord = new DiscordClient(['token' => config('services.discord.token')]);
             $user = $discord->user->getUser(['user.id' => $this->discord_user_id]);
+
             return $user;
         });
     }
@@ -263,6 +257,7 @@ class User extends Authenticatable
             $discord = new DiscordClient(['token' => config('services.discord.token')]);
             $user = $discord->user->getUser(['user.id' => $this->discord_user_id]);
             $url = 'https://cdn.discordapp.com/avatars/'.$user->id.'/'.$user->avatar.'.png';
+
             return $url;
         });
     }
@@ -270,26 +265,28 @@ class User extends Authenticatable
     /**
      * Returns a true/false of whether the user is a member of the Discord guild.
      *
-     * @return boolean
+     * @return bool
      */
     public function memberOfCzqoGuild()
     {
         $discord = new DiscordClient(['token' => config('services.discord.token')]);
+
         try {
             if ($discord->guild->getGuildMember(['guild.id' => 479250337048297483, 'user.id' => $this->discord_user_id])) {
                 return true;
             }
-        }
-        catch (Throwable $ex) {
+        } catch (Throwable $ex) {
             return false;
         }
+
         return false;
     }
 
     /**
      * Returns the user's avatar.
      *
-     * @param boolean $external If URL should be an external URL.
+     * @param bool $external If URL should be an external URL.
+     *
      * @return string URL to avatar image.
      */
     public function avatar($external = false)
@@ -304,6 +301,7 @@ class User extends Authenticatable
                     ->color('#2196f3')
                     ->generate();
                 Storage::put('public/files/avatars/'.$this->id.'/initials.png', (string) $image->encode('png'));
+
                 return Storage::url('public/files/avatars/'.$this->id.'/initials.png');
                 imagedestroy($image);
             });
@@ -360,7 +358,10 @@ class User extends Authenticatable
      */
     public function pendingApplication()
     {
-        if ($pendingApp = Application::where('user_id', $this->id)->where('status', 0)->first()) { return $pendingApp; }
+        if ($pendingApp = Application::where('user_id', $this->id)->where('status', 0)->first()) {
+            return $pendingApp;
+        }
+
         return null;
     }
 }
