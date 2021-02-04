@@ -20,6 +20,95 @@ use Spatie\Activitylog\Traits\LogsActivity;
 use Spatie\Permission\Traits\HasRoles;
 use Throwable;
 
+/**
+ * App\Models\Users\User
+ *
+ * @property int $id
+ * @property string $fname
+ * @property string $lname
+ * @property string $email
+ * @property int|null $rating_id
+ * @property string|null $rating_short
+ * @property string|null $rating_long
+ * @property string|null $rating_GRP
+ * @property string|null $reg_date
+ * @property string|null $region_code
+ * @property string|null $region_name
+ * @property string|null $division_code
+ * @property string|null $division_name
+ * @property string|null $subdivision_code
+ * @property string|null $subdivision_name
+ * @property int $gdpr_subscribed_emails
+ * @property int $deleted
+ * @property int $init
+ * @property string $avatar
+ * @property string|null $bio
+ * @property string|null $remember_token
+ * @property Carbon|null $created_at
+ * @property Carbon|null $updated_at
+ * @property int $display_cid_only
+ * @property string|null $display_fname
+ * @property int $display_last_name
+ * @property int|null $discord_user_id
+ * @property int|null $discord_dm_channel_id
+ * @property int $avatar_mode
+ * @property int $used_connect
+ * @property-read \Illuminate\Database\Eloquent\Collection|\Spatie\Activitylog\Models\Activity[] $activities
+ * @property-read int|null $activities_count
+ * @property-read \Illuminate\Database\Eloquent\Collection|Application[] $applications
+ * @property-read int|null $applications_count
+ * @property-read Instructor|null $instructorProfile
+ * @property-read \Illuminate\Database\Eloquent\Collection|News[] $news
+ * @property-read int|null $news_count
+ * @property-read \App\Models\Users\UserNotificationPreferences|null $notificationPreferences
+ * @property-read \Illuminate\Notifications\DatabaseNotificationCollection|\Illuminate\Notifications\DatabaseNotification[] $notifications
+ * @property-read int|null $notifications_count
+ * @property-read \Illuminate\Database\Eloquent\Collection|\Spatie\Permission\Models\Permission[] $permissions
+ * @property-read int|null $permissions_count
+ * @property-read \App\Models\Users\UserPreferences|null $preferences
+ * @property-read \App\Models\Users\UserPrivacyPreferences|null $privacyPreferences
+ * @property-read \Illuminate\Database\Eloquent\Collection|\Spatie\Permission\Models\Role[] $roles
+ * @property-read int|null $roles_count
+ * @property-read RosterMember|null $rosterProfile
+ * @property-read \App\Models\Users\StaffMember|null $staffProfile
+ * @property-read Student|null $studentProfile
+ * @method static \Illuminate\Database\Eloquent\Builder|User newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|User newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|User permission($permissions)
+ * @method static \Illuminate\Database\Eloquent\Builder|User query()
+ * @method static \Illuminate\Database\Eloquent\Builder|User role($roles, $guard = null)
+ * @method static \Illuminate\Database\Eloquent\Builder|User whereAvatar($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|User whereAvatarMode($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|User whereBio($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|User whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|User whereDeleted($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|User whereDiscordDmChannelId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|User whereDiscordUserId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|User whereDisplayCidOnly($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|User whereDisplayFname($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|User whereDisplayLastName($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|User whereDivisionCode($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|User whereDivisionName($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|User whereEmail($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|User whereFname($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|User whereGdprSubscribedEmails($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|User whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|User whereInit($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|User whereLname($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|User whereRatingGRP($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|User whereRatingId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|User whereRatingLong($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|User whereRatingShort($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|User whereRegDate($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|User whereRegionCode($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|User whereRegionName($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|User whereRememberToken($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|User whereSubdivisionCode($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|User whereSubdivisionName($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|User whereUpdatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|User whereUsedConnect($value)
+ * @mixin \Eloquent
+ */
 class User extends Authenticatable
 {
     use Notifiable;

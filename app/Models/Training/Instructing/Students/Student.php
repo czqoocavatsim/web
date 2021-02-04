@@ -15,6 +15,37 @@ use Carbon\Carbon;
 use Exception;
 use Illuminate\Database\Eloquent\Model;
 
+/**
+ * App\Models\Training\Instructing\Students\Student
+ *
+ * @property int $id
+ * @property int $user_id
+ * @property int $current
+ * @property \Illuminate\Support\Carbon|null $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Training\Instructing\Students\StudentAvailabilitySubmission[] $availability
+ * @property-read int|null $availability_count
+ * @property-read \Illuminate\Database\Eloquent\Collection|StudentStatusLabelLink[] $labels
+ * @property-read int|null $labels_count
+ * @property-read \Illuminate\Database\Eloquent\Collection|StudentNote[] $notes
+ * @property-read int|null $notes_count
+ * @property-read \Illuminate\Database\Eloquent\Collection|OTSSession[] $otsSessions
+ * @property-read int|null $ots_sessions_count
+ * @property-read \Illuminate\Database\Eloquent\Collection|InstuctorRecommendation[] $recommendations
+ * @property-read int|null $recommendations_count
+ * @property-read \Illuminate\Database\Eloquent\Collection|TrainingSession[] $trainingSessions
+ * @property-read int|null $training_sessions_count
+ * @property-read User $user
+ * @method static \Illuminate\Database\Eloquent\Builder|Student newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|Student newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|Student query()
+ * @method static \Illuminate\Database\Eloquent\Builder|Student whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Student whereCurrent($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Student whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Student whereUpdatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Student whereUserId($value)
+ * @mixin \Eloquent
+ */
 class Student extends Model
 {
     protected $hidden = ['id'];
