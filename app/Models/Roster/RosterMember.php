@@ -8,6 +8,39 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\HtmlString;
 use Spatie\Activitylog\Traits\LogsActivity;
 
+/**
+ * App\Models\Roster\RosterMember
+ *
+ * @property int $id
+ * @property int $cid
+ * @property int $user_id
+ * @property string $certification
+ * @property string|null $date_certified
+ * @property int $active
+ * @property float|null $monthly_hours
+ * @property string|null $remarks
+ * @property \Illuminate\Support\Carbon|null $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property float|null $currency
+ * @property-read \Illuminate\Database\Eloquent\Collection|\Spatie\Activitylog\Models\Activity[] $activities
+ * @property-read int|null $activities_count
+ * @property-read User $user
+ * @method static \Illuminate\Database\Eloquent\Builder|RosterMember newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|RosterMember newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|RosterMember query()
+ * @method static \Illuminate\Database\Eloquent\Builder|RosterMember whereActive($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|RosterMember whereCertification($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|RosterMember whereCid($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|RosterMember whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|RosterMember whereCurrency($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|RosterMember whereDateCertified($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|RosterMember whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|RosterMember whereMonthlyHours($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|RosterMember whereRemarks($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|RosterMember whereUpdatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|RosterMember whereUserId($value)
+ * @mixin \Eloquent
+ */
 class RosterMember extends Model
 {
     use LogsActivity;

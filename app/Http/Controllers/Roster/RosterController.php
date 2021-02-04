@@ -15,7 +15,9 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Notification;
 use Illuminate\Support\Facades\Response;
+use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Validator;
+use RestCord\DiscordClient;
 
 class RosterController extends Controller
 {
@@ -100,6 +102,46 @@ class RosterController extends Controller
             break;
         }
 
+        //Give Discord role
+        if ($rosterMember->user->hasDiscord() && $rosterMember->user->memberOfCzqoGuild()) {
+            //Get Discord client
+            $discord = new DiscordClient(['token' => config('services.discord.token')]);
+
+            //Get role ID based off status
+            $roles = [
+                'certified' => 482819739996127259,
+                'student' => 482824058141016075,
+            ];
+
+            //Add role and remove role
+            if ($rosterMember->certification == 'certified') {
+                $discord->guild->addGuildMemberRole([
+                    'guild.id' => intval(config('services.discord.guild_id')),
+                    'user.id'  => $rosterMember->user->discord_user_id,
+                    'role.id'  => $roles['certified'],
+                ]);
+                $discord->guild->removeGuildMemberRole([
+                    'guild.id' => intval(config('services.discord.guild_id')),
+                    'user.id'  => $rosterMember->user->discord_user_id,
+                    'role.id'  => $roles['student'],
+                ]);
+            }
+            elseif ($rosterMember->certification == 'training') {
+                $discord->guild->addGuildMemberRole([
+                    'guild.id' => intval(config('services.discord.guild_id')),
+                    'user.id'  => $rosterMember->user->discord_user_id,
+                    'role.id'  => $roles['student'],
+                ]);
+                $discord->guild->removeGuildMemberRole([
+                    'guild.id' => intval(config('services.discord.guild_id')),
+                    'user.id'  => $rosterMember->user->discord_user_id,
+                    'role.id'  => $roles['certified'],
+                ]);
+            }
+        } else {
+            Session::flash('info', 'Unable to add Discord permissions automatically.');
+        }
+
         //Save
         $rosterMember->save();
 
@@ -141,6 +183,32 @@ class RosterController extends Controller
         $user->removeRole('Certified Controller');
         $user->assignRole('Guest');
         $user->removeRole('Student');
+
+        //Give Discord role
+        if ($rosterMember->user->hasDiscord() && $rosterMember->user->memberOfCzqoGuild()) {
+            //Get Discord client
+            $discord = new DiscordClient(['token' => config('services.discord.token')]);
+
+            //Get role ID based off status
+            $roles = [
+                'certified' => 482819739996127259,
+                'student' => 482824058141016075,
+            ];
+
+            $discord->guild->removeGuildMemberRole([
+                'guild.id' => intval(config('services.discord.guild_id')),
+                'user.id'  => $rosterMember->user->discord_user_id,
+                'role.id'  => $roles['student'],
+            ]);
+
+            $discord->guild->removeGuildMemberRole([
+                'guild.id' => intval(config('services.discord.guild_id')),
+                'user.id'  => $rosterMember->user->discord_user_id,
+                'role.id'  => $roles['certified'],
+            ]);
+        } else {
+            Session::flash('info', 'Unable to add Discord permissions automatically.');
+        }
 
         //Notify user
         Notification::send($user, new RemovedFromRoster($user));
@@ -193,6 +261,46 @@ class RosterController extends Controller
                 $user->removeRole('Guest');
                 $user->assignRole('Student');
             break;
+        }
+
+        //Give Discord role
+        if ($rosterMember->user->hasDiscord() && $rosterMember->user->memberOfCzqoGuild()) {
+            //Get Discord client
+            $discord = new DiscordClient(['token' => config('services.discord.token')]);
+
+            //Get role ID based off status
+            $roles = [
+                'certified' => 482819739996127259,
+                'student' => 482824058141016075,
+            ];
+
+            //Add role and remove role
+            if ($rosterMember->certification == 'certified') {
+                $discord->guild->addGuildMemberRole([
+                    'guild.id' => intval(config('services.discord.guild_id')),
+                    'user.id'  => $rosterMember->user->discord_user_id,
+                    'role.id'  => $roles['certified'],
+                ]);
+                $discord->guild->removeGuildMemberRole([
+                    'guild.id' => intval(config('services.discord.guild_id')),
+                    'user.id'  => $rosterMember->user->discord_user_id,
+                    'role.id'  => $roles['student'],
+                ]);
+            }
+            elseif ($rosterMember->certification == 'training') {
+                $discord->guild->addGuildMemberRole([
+                    'guild.id' => intval(config('services.discord.guild_id')),
+                    'user.id'  => $rosterMember->user->discord_user_id,
+                    'role.id'  => $roles['student'],
+                ]);
+                $discord->guild->removeGuildMemberRole([
+                    'guild.id' => intval(config('services.discord.guild_id')),
+                    'user.id'  => $rosterMember->user->discord_user_id,
+                    'role.id'  => $roles['certified'],
+                ]);
+            }
+        } else {
+            Session::flash('info', 'Unable to add Discord permissions automatically.');
         }
 
         //Notify

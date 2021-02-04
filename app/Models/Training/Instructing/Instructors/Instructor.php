@@ -10,6 +10,39 @@ use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Notifications\Notifiable;
 
+/**
+ * App\Models\Training\Instructing\Instructors\Instructor
+ *
+ * @property int $id
+ * @property int $user_id
+ * @property int $current
+ * @property int $assessor
+ * @property string|null $staff_email
+ * @property string|null $staff_page_tagline
+ * @property \Illuminate\Support\Carbon|null $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property-read \Illuminate\Notifications\DatabaseNotificationCollection|\Illuminate\Notifications\DatabaseNotification[] $notifications
+ * @property-read int|null $notifications_count
+ * @property-read \Illuminate\Database\Eloquent\Collection|OTSSession[] $otsSessions
+ * @property-read int|null $ots_sessions_count
+ * @property-read \Illuminate\Database\Eloquent\Collection|InstructorStudentAssignment[] $studentsAssigned
+ * @property-read int|null $students_assigned_count
+ * @property-read \Illuminate\Database\Eloquent\Collection|TrainingSession[] $trainingSessions
+ * @property-read int|null $training_sessions_count
+ * @property-read User $user
+ * @method static \Illuminate\Database\Eloquent\Builder|Instructor newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|Instructor newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|Instructor query()
+ * @method static \Illuminate\Database\Eloquent\Builder|Instructor whereAssessor($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Instructor whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Instructor whereCurrent($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Instructor whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Instructor whereStaffEmail($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Instructor whereStaffPageTagline($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Instructor whereUpdatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Instructor whereUserId($value)
+ * @mixin \Eloquent
+ */
 class Instructor extends Model
 {
     protected $hidden = ['id'];

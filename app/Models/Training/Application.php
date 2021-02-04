@@ -8,6 +8,40 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\HtmlString;
 use Parsedown;
 
+/**
+ * App\Models\Training\Application
+ *
+ * @property int $id
+ * @property string|null $reference_id
+ * @property int $user_id
+ * @property int $status
+ * @property \Illuminate\Support\Carbon|null $deleted_at
+ * @property string|null $applicant_statement
+ * @property \Illuminate\Support\Carbon|null $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Training\ApplicationComment[] $comments
+ * @property-read int|null $comments_count
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Training\ApplicationReferee[] $referees
+ * @property-read int|null $referees_count
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Training\ApplicationUpdate[] $updates
+ * @property-read int|null $updates_count
+ * @property-read User $user
+ * @method static \Illuminate\Database\Eloquent\Builder|Application newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|Application newQuery()
+ * @method static \Illuminate\Database\Query\Builder|Application onlyTrashed()
+ * @method static \Illuminate\Database\Eloquent\Builder|Application query()
+ * @method static \Illuminate\Database\Eloquent\Builder|Application whereApplicantStatement($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Application whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Application whereDeletedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Application whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Application whereReferenceId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Application whereStatus($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Application whereUpdatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Application whereUserId($value)
+ * @method static \Illuminate\Database\Query\Builder|Application withTrashed()
+ * @method static \Illuminate\Database\Query\Builder|Application withoutTrashed()
+ * @mixin \Eloquent
+ */
 class Application extends Model
 {
     use SoftDeletes;

@@ -36,6 +36,7 @@
         "wohali/oauth2-discord-new": "^1.0"
     },
     "require-dev": {
+        "barryvdh/laravel-ide-helper": "2.8.2",
         "facade/ignition": "^2.0",
         "fzaninotto/faker": "^1.4",
         "laravel-shift/blueprint": "^1.6",
