@@ -10,6 +10,8 @@ use Parsedown;
 use Spatie\Activitylog\Traits\LogsActivity;
 
 /**
+ * App\Models\Feedback\FeedbackSubmission
+ *
  * @var id                    Incremental ID of feedback.
  * @var user_id               User foreign key for whoever submitted the feedback.
  * @var type_id               Feedback type foreign key for the type of feedback it is.
@@ -18,6 +20,37 @@ use Spatie\Activitylog\Traits\LogsActivity;
  * @var slug                  URL slug of type.
  * @var created_at            Time feedback submitted at.
  * @var updated_at            Time feedback last updated at.
+ * @property int $id
+ * @property string $slug
+ * @property int $user_id
+ * @property int $type_id
+ * @property string $submission_content
+ * @property int $permission_to_publish
+ * @property \Illuminate\Support\Carbon|null $deleted_at
+ * @property \Illuminate\Support\Carbon|null $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property-read \Illuminate\Database\Eloquent\Collection|\Spatie\Activitylog\Models\Activity[] $activities
+ * @property-read int|null $activities_count
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Feedback\FeedbackTypeFieldSubmission[] $fields
+ * @property-read int|null $fields_count
+ * @property-read \App\Models\Feedback\FeedbackType $type
+ * @property-read User $user
+ * @method static \Illuminate\Database\Eloquent\Builder|FeedbackSubmission newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|FeedbackSubmission newQuery()
+ * @method static \Illuminate\Database\Query\Builder|FeedbackSubmission onlyTrashed()
+ * @method static \Illuminate\Database\Eloquent\Builder|FeedbackSubmission query()
+ * @method static \Illuminate\Database\Eloquent\Builder|FeedbackSubmission whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|FeedbackSubmission whereDeletedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|FeedbackSubmission whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|FeedbackSubmission wherePermissionToPublish($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|FeedbackSubmission whereSlug($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|FeedbackSubmission whereSubmissionContent($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|FeedbackSubmission whereTypeId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|FeedbackSubmission whereUpdatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|FeedbackSubmission whereUserId($value)
+ * @method static \Illuminate\Database\Query\Builder|FeedbackSubmission withTrashed()
+ * @method static \Illuminate\Database\Query\Builder|FeedbackSubmission withoutTrashed()
+ * @mixin \Eloquent
  */
 class FeedbackSubmission extends Model
 {

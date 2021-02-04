@@ -13,6 +13,7 @@ use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
 use mofodojodino\ProfanityFilter\Check;
+use RestCord\DiscordClient;
 
 class MyCzqoController extends Controller
 {
@@ -242,6 +243,23 @@ class MyCzqoController extends Controller
             $user->display_cid_only = true;
         }
         $user->save();
+
+        //Member of guild?
+        if ($user->memberOfCzqoGuild())
+        {
+            //Get Discord client
+            $discord = new DiscordClient(['token' => config('services.discord.token')]);
+
+            //Create the full arguments
+            $arguments = [
+                'guild.id' => intval(config('services.discord.guild_id')),
+                'user.id'  => $user->discord_user_id,
+                'nick'     => $user->fullName('FLC'),
+            ];
+
+            //Modify
+            $discord->guild->modifyGuildMember($arguments);
+        }
 
         //Redirect
         return redirect()->back()->with('success', 'Display name saved! If your avatar is set to default, it may take a while for the initials to update.');

@@ -12,8 +12,10 @@ use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\Log;
 use Throwable;
 use Thujohn\Twitter\Facades\Twitter;
+use Vatsimphp\VatsimData;
 
 class PrimaryViewsController extends Controller
 {
@@ -21,15 +23,18 @@ class PrimaryViewsController extends Controller
     public function home(Request $request)
     {
         //VATSIM online controllers
-        $vatsim = new \Vatsimphp\VatsimData();
-        $vatsim->setConfig('cacheOnly', false);
+        $vatsimData = new VatsimData();
+        $dataLoaded = $vatsimData->loadData();
+
         $ganderControllers = [];
         $shanwickControllers = [];
         $controllers = [];
-        if ($vatsim->loadData()) {
-            $ganderControllers = $vatsim->searchCallsign('CZQX_');
-            $shanwickControllers = $vatsim->searchCallsign('EGGX_');
+        if ($dataLoaded) {
+            $ganderControllers = $vatsimData->searchCallsign('CZQX_');
+            $shanwickControllers = $vatsimData->searchCallsign('EGGX_');
             $controllers = array_merge($ganderControllers->toArray(), $shanwickControllers->toArray());
+        } else {
+            Log::error('PrimaryViewsController home: VATSIMPhp failed to load data');
         }
 
         //News

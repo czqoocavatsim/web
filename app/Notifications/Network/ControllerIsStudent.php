@@ -47,7 +47,7 @@ class ControllerIsStudent extends Notification
                     ->line('A student controller has signed onto a position.')
                     ->line('CID: '.$this->log->cid)
                     ->line('Session start: '.$this->log->session_start)
-                    ->line('Position: '. MonitoredPosition::find($this->log->monitored_position_id)->identifier)
+                    ->line('Position: '. MonitoredPosition::find($this->log->monitored_position_id)->identifier);
     }
 
     /**

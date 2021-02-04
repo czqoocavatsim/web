@@ -6,6 +6,15 @@ use App\Models\Network\VatsimPosition;
 use App\Models\Users\User;
 use Illuminate\Database\Eloquent\Model;
 
+/**
+ * App\Models\ControllerBookings\ReservedBookingSlot
+ *
+ * @property-read User $user
+ * @method static \Illuminate\Database\Eloquent\Builder|ReservedBookingSlot newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|ReservedBookingSlot newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|ReservedBookingSlot query()
+ * @mixin \Eloquent
+ */
 class ReservedBookingSlot extends Model
 {
     protected $fillable = [
