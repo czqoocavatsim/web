@@ -224,12 +224,6 @@ class MyCzqoController extends Controller
         //Get user
         $user = Auth::user();
 
-        //Run through profanity filter
-        $check = new Check();
-        if ($check->hasProfanity($request->get('display_fname'))) {
-            return redirect()->back()->withInput()->with('error', 'Profanity was detected in your display name. Please remove it');
-        }
-
         //No swear words... give them the new name!
         $user->display_fname = $request->get('display_fname');
         if ($request->get('format') == 'showall') {
