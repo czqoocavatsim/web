@@ -41,21 +41,58 @@ class StaffMember extends Model
     protected $table = 'staff_member';
     use LogsActivity;
 
+    /**
+     * The attributes mass assignable.
+     *
+     * @var array
+     */
     protected $fillable = [
         'user_id', 'position', 'group', 'description', 'email',
     ];
 
+    /**
+     * Returns the user associated with the staff member.
+     *
+     * @return User
+     */
     public function user()
     {
         return $this->belongsTo(User::class);
     }
 
+    /**
+     * Returns whether the position is vacant.
+     *
+     * @return void
+     */
     public function vacant()
     {
-        if ($this->user_id == 1) {
-            return true;
-        }
+        return $this->user_id === 1;
+    }
 
-        return false;
+    /**
+     * Assign a user (person) to the position.
+     *
+     * @param User $user
+     * @return void
+     */
+    public function assignUser(User $assignedUser)
+    {
+        //Assign
+        $this->user = $assignedUser;
+        $this->save();
+
+        //Log
+        activity()->causedBy(auth()->user())->performedOn($this)->log('Changed position holder to '.$assignedUser->id);
+    }
+
+    /**
+     * Vacate the role.
+     *
+     * @return void
+     */
+    public function vacate()
+    {
+
     }
 }

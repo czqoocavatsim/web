@@ -1,4 +1,4 @@
-
+@extends('layouts.primary')
 @section('title', 'Error 500 - ')
 
 @section('content')
