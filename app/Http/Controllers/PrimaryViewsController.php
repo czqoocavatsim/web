@@ -99,7 +99,12 @@ class PrimaryViewsController extends Controller
 
         $atcResources = AtcResource::all()->sortBy('title');
 
-        $bannerImg = RotationImage::all()->random();
+        $bannerCollection = RotationImage::all();
+        if (!$bannerCollection->isEmpty()) {
+            $bannerImg = $bannerCollection->random();
+        } else {
+            $bannerImg = null;
+        }
 
         //Quote of the day
         $quote = Cache::remember('quoteoftheday', 86400, function () {
