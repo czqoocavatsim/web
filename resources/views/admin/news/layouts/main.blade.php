@@ -20,11 +20,11 @@
                 </a>
                 @endcan
                 @can('send announcements')
-                <a class="myczqo-tab {{Request::is('admin/publications/atc-resources') || Request::is('admin/publications/atc-resources/*') ? 'active' : ''}} no-click" data-myczqo-tab="none" href="{{route('publications.atc-resources')}}">
+                <a class="myczqo-tab {{ request()->routeIs('news.announcements*') 'active' : ''}} no-click" data-myczqo-tab="none" href="{{route('news.announcements.create')}}">
                     <li class="w-100">
                         <div class="d-flex h-100 flex-row justify-content-left align-items-center">
                             <i style="font-size: 1.6em; margin-right: 10px;" class="fas fa-file-alt fa-fw"></i>
-                            <span style="font-size: 1.1em;">Announcements</span>
+                            <span style="font-size: 1.1em;">Send Announcement</span>
                         </div>
                     </li>
                 </a>
