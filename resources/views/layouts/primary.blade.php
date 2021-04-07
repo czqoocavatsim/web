@@ -335,7 +335,6 @@
         </div>
     </div>
     <!-- End about modal -->
-
     <!-- Error modal -->
     <div class="modal fade" id="errorModal" tabindex="-1" role="dialog" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered" role="document">
@@ -352,7 +351,13 @@
             </div>
         </div>
     </div>
+    @if (session()->has('error-modal'))
+        <script>
+            $("#errorModal").modal('show');
+        </script>
+    @endif
     <!-- End error modal-->
+
 
     <!-- Discord (top nav) modal -->
     <div class="modal fade" id="discordTopModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">

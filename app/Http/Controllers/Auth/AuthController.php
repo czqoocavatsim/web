@@ -51,7 +51,7 @@ class AuthController extends Controller
             'state'           => $state,
         ]);
 
-        return redirect('https://auth.vatsim.net/oauth/authorize?'.$query);
+        return redirect(config('connect.endpoint').'/oauth/authorize?'.$query);
     }
 
     public function validateConnectLogin(Request $request)
@@ -60,7 +60,7 @@ class AuthController extends Controller
         $http = new Client();
 
         try {
-            $response = $http->post('https://auth.vatsim.net/oauth/token', [
+            $response = $http->post(config('connect.endpoint').'/oauth/token', [
                 'form_params' => [
                     'grant_type'    => 'authorization_code',
                     'client_id'     => config('connect.client_id'),
@@ -70,19 +70,20 @@ class AuthController extends Controller
                 ],
             ]);
         } catch (ClientException $e) {
-            return redirect()->route('index')->with('error-modal', $e->getResponse()->getBody());
+            return redirect()->route('index')->with('error-modal', $e->getMessage());
         }
         session()->put('token', json_decode((string) $response->getBody(), true));
 
         try {
-            $response = (new \GuzzleHttp\Client())->get('https://auth.vatsim.net/api/user', [
+            $response = (new \GuzzleHttp\Client())->get(config('connect.endpoint').'/api/user', [
                 'headers' => [
                     'Accept'        => 'application/json',
                     'Authorization' => 'Bearer '.session()->get('token.access_token'),
                 ],
             ]);
         } catch (ClientException $e) {
-            return redirect()->back()->with('error-modal', $e->getResponse()->getBody());
+            dd($e);
+            return redirect()->route('index')->with('error-modal', $e->getMessage());
         }
         $response = json_decode($response->getBody());
         if (!isset($response->data->cid)) {
