@@ -9,7 +9,7 @@
                 <h1 class="h1 font-weight-bold blue-text" style="font-size: 3em; color: #fff;">We provide oceanic control services over the skies of the North Atlantic on VATSIM.
                 </h1>
                 <p style="font-size: 1.4em;" class="mt-3">
-                    As a member of the VATCAN (Canada) Division on VATSiM, Gander Oceanic is dedicated to providing control services, training, and resources for flying and controlling in the Gander and Shanwick OCAs.
+                    As a member of the VATCAN (Canada) Division on VATSIM, Gander Oceanic is dedicated to providing air traffic control services, training, and resources for flying and controlling in the Gander and Shanwick OCAs.
                 </p>
             </div>
         </div>
@@ -29,12 +29,12 @@
     <div class="row">
         <div class="col-md">
             <p>
-                The Gander Oceanic OCA has been committed to providing the best oceanic control available on the VATSIM network for many years. Supported by VATCAN and the Americas region, our team of is dedicated to the task of providing quality training of non-radar surveillance procedures and phraseology over Gander and Shanwick, supporting our incredible community of talented controllers and providing resources for pilots so that everybody can experience the best that oceanic flight has to offer.
+                The Gander Oceanic OCA has been committed to providing the best oceanic control available on the VATSIM network for years. Supported by VATCAN and the Americas region, our team is dedicated to providing quality instruction of non-radar surveillance procedures and phraseology, supporting our incredible community of talented controllers and providing resources for pilots so that everybody can experience the best that the world of oceanic flight has to offer. We are proud to operate a full ADS-B simulation, supported by our Oceanic EuroScope plugin, the Virtual North Atlantic Airspace Situation Tracker (vNAAATS).
             </p>
         </div>
         <div class="col-md">
             <p>
-                Since 2017, the Gander Oceanic OCA has undergone a major revitalisation, with the installment of a fresh staff team, development of a brand new website and a more concentrated focus on the quality of our training program and available resources. New procedures are constantly being reviewed and our tools are regularly updated based on the amazing feedback from our community. We aim to provide the coolest, calmest and most collected service to pilots flying over the North Atlantic, and we're glad that you're interested in how it all works!
+                Since 2017, the Gander Oceanic OCA has undergone a major revitalisation, with the development of a brand new website, a new controller package and plugin and an increased focus on the quality of our training program and associated resources. Our procedures are constantly being reviewed and our tools are regularly updated based on the amazing feedback from our community. We aim to provide the coolest, calmest and most collected service to pilots flying over the North Atlantic, and we're glad that you're interested in how it all works!
             </p>
         </div>
     </div>
@@ -76,7 +76,7 @@
         <div class="col-md-5">
             <h3 class="font-weight-bold blue-text">The Gander and Shanwick OCAs</h3>
             <p>The Gander OCA spans a massive 905 nautical miles, bordering Shanwick at 30 degrees west, Santa Maria at 45 degrees north (between 30 and 40 degrees west) and New York Oceanic at 45 degrees north (between 40 and 51 degrees west). The OCA also borders several domestic flight information regions (FIRs), including Gander Domestic, Montreal, Sondrestrom and Edmonton. Airspace within the Gander OCA is Class A above 5,500 ft and Class G below.</p>
-            <p>The Shanwick OCA stretches another enormous 545 nautical miles, bordering Gander at 30 degrees west, Santa Maria at 45 degrees north and Reykjavik at 61 degrees north. Like Gander, Shanwick also borders several domestic FIRs: Scottish, Shannon, London, Brest and Madrid. Airspace is Class A above 5,500 ft and below, Class G.</p>
+            <p>The Shanwick OCA stretches another enormous 545 nautical miles, bordering Gander at 30 degrees west, Santa Maria at 45 degrees north and Reykjavik at 61 degrees north. Like Gander, Shanwick also borders several domestic FIRs: Scottish, Shannon, London, Brest and Madrid. Airspace is Class A above 5,500 ft and Class G below.</p>
             <p style="font-size: 1.2em;" class="mt-3">
                 <a class="font-weight-bold text-body" href="https://knowledgebase.ganderoceanic.com/en/basics/airspace">Read more about it &nbsp;&nbsp;<i class="fas fa-arrow-right blue-text"></i></a>
             </p>
