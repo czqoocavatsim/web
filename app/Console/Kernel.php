@@ -37,16 +37,6 @@ class Kernel extends ConsoleKernel
         // Activitybot session logging
         $schedule->job(new ProcessSessionLogging())->everyMinute();
 
-        // Quarterly currency wipe
-        $schedule->call(function () {
-            // Loop through all roster members
-            foreach (RosterMember::all() as $rosterMember) {
-                // Reset the hours for every member
-                $rosterMember->currency = 0.0;
-                $rosterMember->save();
-            }
-        })->cron('00 00 01 APR,JUL,OCT,JAN *');
-
         //// CRONS FOR INACTIVITY EMAILS
         /// 2 weeks
         $schedule->call(function () {
