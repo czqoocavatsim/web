@@ -36,7 +36,7 @@
             <tr>
                 <td>{{$s->student->user->fullName('FLC')}}</td>
                 <td>{{$s->instructor->user->fullName('FLC')}}</td>
-                <td>{{$s->scheduled_time->toDayDateTimeString()}} UTC</td>
+                <td data-sort="{{ $s->scheduled_time }}">{{$s->scheduled_time->toDayDateTimeString()}} UTC</td>
                 <td>
                     <a class="blue-text" href="{{route('training.admin.instructing.ots-sessions.view', $s->id)}}">
                         <i class="fas fa-eye"></i>&nbsp;View
