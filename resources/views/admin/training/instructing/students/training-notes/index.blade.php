@@ -9,6 +9,12 @@
         </div>
     </div>
 
+    @if (count($notes) == 0)
+        <div class="mt-4">
+        No notes found.
+        </div>
+    @endif
+
     <div class="list-group list-group-flush z-depth-1 rounded mt-4">
         @foreach ($notes as $note)
         <div class="list-group-item">
@@ -38,13 +44,10 @@
     <ul class="list-unstyled mt-4">
         <li class="mb-2">
             <a href="{{route('training.admin.instructing.students.records.training-notes.create', $student->user_id)}}" class="blue-text" style="font-size: 1.1em;"><i class="fas fa-plus"></i>&nbsp;&nbsp;Add a note</a>
-        </li>{{--
-        <li class="mb-2">
-            <a href="#" data-toggle="modal" data-target="#addStudentModal" class="blue-text" style="font-size: 1.1em;"><i class="fas fa-cloud-download-alt"></i>&nbsp;&nbsp;Export notes</a>
-        </li> --}}
+        </li>
     </ul>
 
-    <h4 class="blue-text mt-5">Instructor Recommendations</h4>
+    <h4 class="blue-text mt-5" id="instructorRecommendations">Instructor Recommendations</h4>
     <div class="list-group list-group-flush z-depth-1 rounded mt-4">
         @foreach ($recommendations as $note)
         <div class="list-group-item">
@@ -65,6 +68,17 @@
             </div>
         </div>
         @endforeach
+    </div>
+
+    @if (count($recommendations) == 0)
+        <div class="mt-4">
+        No recommendations found. Issue a recommendation on the student profile page.
+        </div>
+    @endif
+
+    <h4 class="blue-text mt-5" id="history">History</h4>
+    <div class="list-group list-group-flush z-depth-1 rounded mt-4">
+        TBA
     </div>
 
     <!--Delete modal-->
