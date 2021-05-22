@@ -276,7 +276,7 @@ Route::group(['middleware' => 'auth'], function () {
                             Route::post('/training-sessions/{id}/edit/time', 'Training\SessionsController@editTrainingSessionTime')->name('instructing.training-sessions.edit.time')->middleware('can:edit training sessions');
                             Route::post('/training-sessions/{id}/edit/instructor', 'Training\SessionsController@reassignTrainingSessionInstructor')->name('instructing.training-sessions.edit.instructor')->middleware('can:edit training sessions');
                             Route::get('/training-sessions/{id}/cancel', 'Training\SessionsController@cancelTrainingSession')->name('instructing.training-sessions.cancel')->middleware('can:edit training sessions');
-                            Route::post('/training-sessions/{id}/edit/position', 'Training\SessionsController@assignTrainingSessionPosition')->name('instructing.training-sessions.edit.position')->middleware('can:edit training session');
+                            Route::post('/training-sessions/{id}/edit/position', 'Training\SessionsController@assignTrainingSessionPosition')->name('instructing.training-sessions.edit.position')->middleware('can:edit training sessions');
 
                             //OTS sessions
                             Route::get('/ots-sessions', 'Training\SessionsController@otsSessionsIndex')->name('instructing.ots-sessions');
