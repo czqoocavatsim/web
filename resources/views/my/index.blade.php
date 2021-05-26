@@ -332,7 +332,7 @@
                             </span>
                         </h3>
                     @endif
-                    <p class="mt-4">You require 3 hours of activity every 6 months, unless you were certified within the current activity cycle.</p>
+                    <p class="mt-4">You require 3 hours of activity every quarter, unless you were certified within the current activity cycle.</p>
                 @else
                     <h3>
                         <span style='font-weight: 400' class='badge rounded p-2 red text-white shadow-none'>
