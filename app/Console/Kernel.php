@@ -37,7 +37,7 @@ class Kernel extends ConsoleKernel
         // Activitybot session logging
         $schedule->job(new ProcessSessionLogging())->everyMinute();
 
-        //// CRONS FOR INACTIVITY EMAILS
+        /*//// CRONS FOR INACTIVITY EMAILS
         /// 2 weeks
         $schedule->call(function () {
             //Loop through controllers
@@ -74,7 +74,7 @@ class Kernel extends ConsoleKernel
             //Tell Discord all about it
             $discord = new DiscordClient(['token' => config('services.discord.token')]);
             $discord->channel->createMessage(['channel.id' => 482817715489341441, 'content' => 'Sent '.$count.' one-week warning inactivity emails']);
-        })->cron('00 00 23 MAR,JUN,SEP,DEC *'); // 1 week before end of quarter
+        })->cron('00 00 23 MAR,JUN,SEP,DEC *'); // 1 week before end of quarter*/
 
         /// Monthly leaderboard wipe
         $schedule->call(function () {
