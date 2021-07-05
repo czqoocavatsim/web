@@ -56,7 +56,7 @@
         @can('edit training sessions')
             <h5 class="mt-4 blue-text fw-500">Actions</h5>
             <ul class="list-unstyled mt-2">
-                @if ($session->scheduled_time > Carbon\Carbon::now())
+                @if ($session->scheduled_time > now()->subHours(24))
                 <li class="mb-2">
                     <a data-target="#cancelSessionModal" data-toggle="modal" style="text-decoration:none;"><span class="red-text"><i class="fas fa-chevron-right"></i></span> &nbsp; <span class="black-text">Cancel session</span></a>
                 </li>
