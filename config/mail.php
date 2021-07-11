@@ -56,7 +56,7 @@ return [
     */
 
     'from' => [
-        'address' => env('MAIL_FROM_ADDRESS', 'no-reply@ganderoceanic.com'),
+        'address' => env('MAIL_FROM_ADDRESS', 'no-reply@ganderoceanic.ca'),
         'name'    => env('MAIL_FROM_NAME', 'Gander Oceanic VATSIM'),
     ],
 

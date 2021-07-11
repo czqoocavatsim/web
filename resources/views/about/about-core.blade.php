@@ -3,7 +3,7 @@
 @section('content')
 <div class="container py-5">
     <div class="d-flex flex-row justify-content-center">
-        <img src="https://cdn.ganderoceanic.com/resources/media/img/brand/sqr/ZQO_SQ_TSPBLUE.png" class="mr-3" style="width: 125px; height: 125px;" alt="">
+        <img src="https://cdn.ganderoceanic.ca/resources/media/img/brand/sqr/ZQO_SQ_TSPBLUE.png" class="mr-3" style="width: 125px; height: 125px;" alt="">
         <div class="d-flex flex-column">
             <h1 class="heading blue-text font-weight-bold display-5">Gander Oceanic Core</h1>
             <p style="font-size: 1.4em;" class="mb-1">The website for VATSIM's<br>Gander Oceanic OCA</p>
@@ -17,7 +17,7 @@
                 <a href="https://github.com/czqoocavatsim/czqo-core/releases" class="text-body d-flex flex-row align-items-center">
                     <i class="fas fa-history fa-2x mr-2"></i> Change Log
                 </a>
-                <a href="https://dev.ganderoceanic.com" class="text-body d-flex flex-row align-items-center">
+                <a href="https://dev.ganderoceanic.ca" class="text-body d-flex flex-row align-items-center">
                     <i class="fas fa-2x mr-2 fa-feather-alt"></i> Beta
                 </a>
             </div>

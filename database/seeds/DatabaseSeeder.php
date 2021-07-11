@@ -20,19 +20,19 @@ class DatabaseSeeder extends Seeder
             'banner'           => '',
             'bannerLink'       => '',
             'bannerMode'       => '',
-            'emailfirchief'    => 'webmaster@ganderoceanic.com',
-            'emaildepfirchief' => 'webmaster@ganderoceanic.com',
-            'emailcinstructor' => 'webmaster@ganderoceanic.com',
-            'emaileventc'      => 'webmaster@ganderoceanic.com',
-            'emailfacilitye'   => 'webmaster@ganderoceanic.com',
-            'emailwebmaster'   => 'webmaster@ganderoceanic.com',
+            'emailfirchief'    => 'webmaster@ganderoceanic.ca',
+            'emaildepfirchief' => 'webmaster@ganderoceanic.ca',
+            'emailcinstructor' => 'webmaster@ganderoceanic.ca',
+            'emaileventc'      => 'webmaster@ganderoceanic.ca',
+            'emailfacilitye'   => 'webmaster@ganderoceanic.ca',
+            'emailwebmaster'   => 'webmaster@ganderoceanic.ca',
         ]);
 
         DB::table('users')->insert([
             'id'            => 1,
             'fname'         => 'System',
             'lname'         => 'User',
-            'email'         => 'no-reply@ganderoceanic.com',
+            'email'         => 'no-reply@ganderoceanic.ca',
             'display_fname' => 'System',
         ]);
 
@@ -40,7 +40,7 @@ class DatabaseSeeder extends Seeder
             'id'            => 2,
             'fname'         => 'Roster',
             'lname'         => 'Placeholder',
-            'email'         => 'no-reply@ganderoceanic.com',
+            'email'         => 'no-reply@ganderoceanic.ca',
             'display_fname' => 'Roster',
         ]);
 
@@ -73,7 +73,7 @@ class DatabaseSeeder extends Seeder
             'position'    => 'FIR Chief',
             'group_id'    => 1,
             'description' => 'Ensures that CZQO is running optimally. In charge of day to day operations',
-            'email'       => 'chief@ganderoceanic.com',
+            'email'       => 'chief@ganderoceanic.ca',
             'shortform'   => 'firchief',
         ]);
 
@@ -83,7 +83,7 @@ class DatabaseSeeder extends Seeder
             'position'    => 'Deputy FIR Chief',
             'group_id'    => 1,
             'description' => 'Assistant to the FIR Chief.',
-            'email'       => 'deputy@ganderoceanic.com',
+            'email'       => 'deputy@ganderoceanic.ca',
             'shortform'   => 'dfirchief',
         ]);
 
@@ -93,7 +93,7 @@ class DatabaseSeeder extends Seeder
             'position'    => 'Chief Instructor',
             'group_id'    => 1,
             'description' => 'Manages the CZQO training program, including the talented team of Gander instructors.',
-            'email'       => 'training@ganderoceanic.com',
+            'email'       => 'training@ganderoceanic.ca',
             'shortform'   => 'cinstructor',
         ]);
 
@@ -103,7 +103,7 @@ class DatabaseSeeder extends Seeder
             'position'    => 'Events and Marketing Director',
             'group_id'    => 1,
             'description' => 'Devises awesome events for the Gander Oceanic FIR',
-            'email'       => 'events@ganderoceanic.com',
+            'email'       => 'events@ganderoceanic.ca',
             'shortform'   => 'eventsmarketing',
         ]);
 
@@ -113,7 +113,7 @@ class DatabaseSeeder extends Seeder
             'position'    => 'Facility Engineer',
             'group_id'    => 1,
             'description' => 'Manages and develops sector files and the Euroscope package for Gander Oceanic.',
-            'email'       => 'engineer@ganderoceanic.com',
+            'email'       => 'engineer@ganderoceanic.ca',
             'shortform'   => 'fengineer',
 
         ]);

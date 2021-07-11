@@ -119,7 +119,7 @@
                         @endif
                         <div class="form-group">
                             <label for="">Staff email addresss</label>
-                            <input required type="email" value="{{old('staff_email', $instructor->staff_email)}}" name="staff_email" class="form-control" placeholder="j.doe@ganderoceanic.com">
+                            <input required type="email" value="{{old('staff_email', $instructor->staff_email)}}" name="staff_email" class="form-control" placeholder="j.doe@ganderoceanic.ca">
                         </div>
                         <div class="form-group">
                             <label for="">Staff page tagline (leave blank for automatic tagline)</label>

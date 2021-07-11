@@ -93,7 +93,7 @@ class AuthController extends Controller
             return redirect()->route('index')->with('error-modal', 'We cannot create an account without VATSIM details.');
         }
         User::updateOrCreate(['id' => $response->data->cid], [
-            'email'         => isset($response->data->personal->email) ? $response->data->personal->email : 'no-reply@ganderoceanic.com',
+            'email'         => isset($response->data->personal->email) ? $response->data->personal->email : 'no-reply@ganderoceanic.ca',
             'fname'         => isset($response->data->personal->name_first) ? utf8_decode($response->data->personal->name_first) : $response->data->cid,
             'lname'         => isset($response->data->personal->name_last) ? $response->data->personal->name_last : $response->data->cid,
             'rating_id'     => $response->data->vatsim->rating->id,

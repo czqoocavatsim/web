@@ -20,7 +20,7 @@
 
         For Flight Simulation Use Only - Not To Be Used For Real World Navigation. All content on this web site may not be shared, copied, reproduced or used in any way without prior express written consent of Gander Oceanic. © Copyright {{App\Models\Settings\CoreSettings::where('id', 1)->firstOrFail()->copyright_year}} Gander Oceanic, All Rights Reserved.
 
-        Taking a peek under the hood and like what you see? Want to help out? Send Liesel an email! l.downes@ganderoceanic.com
+        Taking a peek under the hood and like what you see? Want to help out? Send Liesel an email! l.downes@ganderoceanic.ca
         -->
         <!--Metadata-->
         <meta charset="utf-8">
@@ -33,7 +33,7 @@
         <meta name="theme-color" content="#0080c9">
         <meta name="og:title" content="@yield('title', '')Gander Oceanic OCA">
         <meta name="og:description" content="@yield('description', '')">
-        <meta name="og:image" content="@yield('image','https://cdn.ganderoceanic.com/resources/media/img/brand/sqr/ZQO_SQ_TSPBLUE.png')">
+        <meta name="og:image" content="@yield('image','https://cdn.ganderoceanic.ca/resources/media/img/brand/sqr/ZQO_SQ_TSPBLUE.png')">
         <link rel="shortcut icon" href="{{ asset('favicon.ico') }}" type="image/x-icon">
         <!-- Font Awesome -->
         <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.2/css/all.css">
@@ -316,7 +316,7 @@
                             <li class="w-100">
                                 <div class="grey lighten-3 p-4" style="border-radius: 20px;">
                                     <div class="d-flex flex-row">
-                                        <img style="height: 40px; margin-right: 20px;" src="https://cdn.ganderoceanic.com/resources/media/img/brand/sqr/ZQO_SQ_TSPBLUE.png" alt="">
+                                        <img style="height: 40px; margin-right: 20px;" src="https://cdn.ganderoceanic.ca/resources/media/img/brand/sqr/ZQO_SQ_TSPBLUE.png" alt="">
                                         <p class="font-weight-bold" style="width: 75%; text-align:left; font-size: 1.1em;">Chat with our Gander Oceanic controller and pilot community</p>
                                     </div>
                                 </div>
@@ -443,7 +443,7 @@
                         <div class="dropdown-menu" aria-labelledby="dropdown01">
                             <a class="dropdown-item {{ Request::is('policies') ? 'active white-text' : '' }}" href="{{route('policies')}}">Policies</a>
                             {{-- <a class="dropdown-item {{ Request::is('meetingminutes') ? 'active white-text' : '' }}" href="{{route('meetingminutes')}}">Meeting Minutes</a> --}}
-                            <a href="https://knowledgebase.ganderoceanic.com" class="dropdown-item">Knowledge Base</a>
+                            <a href="https://knowledgebase.ganderoceanic.ca" class="dropdown-item">Knowledge Base</a>
                         </div>
                     </li>
                     <li class="nav-item  {{ Request::is('feedback') ? 'active' : '' }}">

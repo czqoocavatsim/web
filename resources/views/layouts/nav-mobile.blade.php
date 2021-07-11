@@ -61,7 +61,7 @@ aria-hidden="true">
                   <div class="dropdown-menu" aria-labelledby="dropdown01">
                       <a class="dropdown-item {{ Request::is('policies') ? 'active white-text' : '' }}" href="{{route('policies')}}">Policies</a>
                       {{-- <a class="dropdown-item {{ Request::is('meetingminutes') ? 'active white-text' : '' }}" href="{{route('meetingminutes')}}">Meeting Minutes</a> --}}
-                      <a href="https://knowledgebase.ganderoceanic.com" class="dropdown-item">Knowledge Base</a>
+                      <a href="https://knowledgebase.ganderoceanic.ca" class="dropdown-item">Knowledge Base</a>
                   </div>
               </li>
               <li class="nav-item  {{ Request::is('feedback') ? 'active' : '' }}">

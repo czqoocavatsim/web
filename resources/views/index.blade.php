@@ -234,7 +234,7 @@
                             <i class="fab fa-youtube fa-2x" style="vertical-align:middle;"></i>
                         </span>
                     </a>
-                    <a class="border-0 list-group-item list-group-item-action waves-effect" href="https://knowledgebase.ganderoceanic.com" style="text-decoration:none;">
+                    <a class="border-0 list-group-item list-group-item-action waves-effect" href="https://knowledgebase.ganderoceanic.ca" style="text-decoration:none;">
                         <span class="blue-text">Knowledge Base</span>
                         &nbsp;
                         <span class="blue-text">
@@ -248,7 +248,7 @@
     <script> /*
         jarallax(document.querySelectorAll('.jarallax'), {
             speed: 0.5,
-            videoSrc: 'mp4:https://cdn.ganderoceanic.com/resources/media/video/ZQO_SITE_TIMELAPSE.mp4',
+            videoSrc: 'mp4:https://cdn.ganderoceanic.ca/resources/media/video/ZQO_SITE_TIMELAPSE.mp4',
             videoLoop: true,
             zIndex: 5
         }); */

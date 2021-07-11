@@ -15,7 +15,7 @@
         <meta name="theme-color" content="#0080c9">
         <meta name="og:title" content="@yield('title', '')Gander Oceanic OCA">
         <meta name="og:description" content="@yield('description', '')">
-        <meta name="og:image" content="@yield('image','https://cdn.ganderoceanic.com/resources/media/img/brand/sqr/ZQO_SQ_TSPBLUE.png')">
+        <meta name="og:image" content="@yield('image','https://cdn.ganderoceanic.ca/resources/media/img/brand/sqr/ZQO_SQ_TSPBLUE.png')">
         <link rel="shortcut icon" href="{{ asset('favicon.ico') }}" type="image/x-icon">
         <!-- Font Awesome -->
         <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.2/css/all.css">
@@ -310,7 +310,7 @@
                 </div>
                 <div class="modal-body fw-500 p-5">
                     <div class="d-flex flex-row justify-content-center">
-                        <img src="https://cdn.ganderoceanic.com/resources/media/img/brand/sqr/ZQO_SQ_TSPBLUE.png" class="mr-3" style="width: 125px; height: 125px;" alt="">
+                        <img src="https://cdn.ganderoceanic.ca/resources/media/img/brand/sqr/ZQO_SQ_TSPBLUE.png" class="mr-3" style="width: 125px; height: 125px;" alt="">
                         <div class="d-flex flex-column">
                             <h1 class="heading blue-text font-weight-bold display-5">Gander Oceanic Core</h1>
                             <p style="font-size: 1.4em;" class="mb-1">The website for VATSIM's<br>Gander Oceanic OCA</p>
@@ -324,7 +324,7 @@
                                 <a href="https://github.com/czqoocavatsim/czqo-core/releases" class="text-body d-flex flex-row align-items-center mb-3">
                                     <i class="fas fa-history fa-2x mr-2"></i> Change Log
                                 </a>
-                                <a href="https://dev.ganderoceanic.com" class="text-body d-flex flex-row align-items-center">
+                                <a href="https://dev.ganderoceanic.ca" class="text-body d-flex flex-row align-items-center">
                                     <i class="fas fa-2x mr-2 fa-feather-alt"></i> Beta
                                 </a>
                             </div>
@@ -375,7 +375,7 @@
                             <li class="w-100">
                                 <div class="grey lighten-3 p-4" style="border-radius: 20px;">
                                     <div class="d-flex flex-row">
-                                        <img style="height: 40px; margin-right: 20px;" src="https://cdn.ganderoceanic.com/resources/media/img/brand/sqr/ZQO_SQ_TSPBLUE.png" alt="">
+                                        <img style="height: 40px; margin-right: 20px;" src="https://cdn.ganderoceanic.ca/resources/media/img/brand/sqr/ZQO_SQ_TSPBLUE.png" alt="">
                                         <p class="font-weight-bold" style="width: 75%; text-align:left; font-size: 1.1em;">Chat with our Gander Oceanic controller and pilot community</p>
                                     </div>
                                 </div>

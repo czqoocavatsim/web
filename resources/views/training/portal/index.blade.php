@@ -102,7 +102,7 @@
         <h4 class="blue-text fw-600"><i class="fas fa-paper-plane mr-2"></i>Check out our resources on oceanic flight</h4>
         <p style="font-size: 1.1em;">We've created a large range of tutorials and resources on what it takes to fly and control over the North Atlanic Ocean. Check it for yourself!</p>
         <p style="font-size: 1.2em;" class="mt-3 mb-0">
-            <a class="fw-500 text-body" href="https://knowledgebase.ganderoceanic.com">CZQO Knowledge Base &nbsp;&nbsp;<i class="fas fa-arrow-right blue-text"></i></a>
+            <a class="fw-500 text-body" href="https://knowledgebase.ganderoceanic.ca">CZQO Knowledge Base &nbsp;&nbsp;<i class="fas fa-arrow-right blue-text"></i></a>
         </p>
     </div>
 </div>

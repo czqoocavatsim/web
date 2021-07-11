@@ -59,7 +59,7 @@
                     </div>
                     <div class="form-group">
                         <label for="">Their staff email addresss</label>
-                        <input required type="email" value="{{old('staff_email')}}" name="staff_email" class="form-control" placeholder="j.doe@ganderoceanic.com">
+                        <input required type="email" value="{{old('staff_email')}}" name="staff_email" class="form-control" placeholder="j.doe@ganderoceanic.ca">
                     </div>
                     <p>Adding this person as an instructor will give them automatic access to Discord channels, resources and administrative tools. Are you sure the information entered is correct?</p>
                     <div class="custom-control custom-checkbox">

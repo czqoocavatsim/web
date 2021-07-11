@@ -38,7 +38,7 @@
                         </div>
                     </li>
                 </a>
-                <a class="myczqo-tab no-click" data-myczqo-tab="none" href="https://knowledgebase.ganderoceanic.com">
+                <a class="myczqo-tab no-click" data-myczqo-tab="none" href="https://knowledgebase.ganderoceanic.ca">
                     <li class="w-100">
                         <div class="d-flex h-100 flex-row justify-content-left align-items-center">
                             <i style="font-size: 1.6em; margin-right: 10px;" class="fas fa-book fa-fw"></i>

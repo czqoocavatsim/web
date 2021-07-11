@@ -44,7 +44,7 @@
         @if(Auth::user()->created_at->diffInDays(Carbon\Carbon::now()) < 14) <!--14 days since user signed up-->
         <div class="container white-text">
             <p style="font-size: 1.4em;" class="font-weight-bold">
-                <a href="https://knowledgebase.ganderoceanic.com/en/website/myczqo" class="white-text">
+                <a href="https://knowledgebase.ganderoceanic.ca/en/website/myczqo" class="white-text">
                     <i class="fas fa-question"></i>&nbsp;&nbsp;Need help with myCZQO?
                 </a>
             </p>
@@ -97,7 +97,7 @@
                         </div>
                     </li>
                 </a>
-                <a class="myczqo-tab no-click" data-myczqo-tab="none" href="https://knowledgebase.ganderoceanic.com">
+                <a class="myczqo-tab no-click" data-myczqo-tab="none" href="https://knowledgebase.ganderoceanic.ca">
                     <li class="w-100">
                         <div class="d-flex h-100 flex-row justify-content-left align-items-center">
                             <i style="font-size: 1.6em; margin-right: 10px;" class="fas fa-book fa-fw"></i>
@@ -567,7 +567,7 @@
                     var simplemde = new EasyMDE({ autofocus: true, autoRefresh: true, element: document.getElementById("contentMD"), toolbar: false, initialValue: '{{Auth::user()->bio}}' });
                     simplemde.value('{{Auth::user()->bio}}')
                 </script>
-                <p>Wonder what the purpose of a biography is? <a href="https://knowledgebase.ganderoceanic.com/en/website/myczqo" target="_blank">Find out here.</a></p>
+                <p>Wonder what the purpose of a biography is? <a href="https://knowledgebase.ganderoceanic.ca/en/website/myczqo" target="_blank">Find out here.</a></p>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-light" data-dismiss="modal">Dismiss</button>
@@ -641,7 +641,7 @@
                         <li class="w-100">
                             <div class="grey lighten-3 p-4" style="border-radius: 20px;">
                                 <div class="d-flex flex-row">
-                                    <img style="height: 40px; margin-right: 20px;" src="https://cdn.ganderoceanic.com/resources/media/img/brand/sqr/ZQO_SQ_TSPBLUE.png" alt="">
+                                    <img style="height: 40px; margin-right: 20px;" src="https://cdn.ganderoceanic.ca/resources/media/img/brand/sqr/ZQO_SQ_TSPBLUE.png" alt="">
                                     <p class="font-weight-bold" style="width: 75%; text-align:left; font-size: 1.1em;">Join the Gander Oceanic Discord community</p>
                                 </div>
                             </div>

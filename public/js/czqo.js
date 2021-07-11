@@ -686,7 +686,7 @@ async function createNatTrackMap()
     }
 
     //Get tracks
-    let endpoint = "https://tracks.ganderoceanic.com/data"
+    let endpoint = "https://tracks.ganderoceanic.ca/data"
     const response = await fetch(endpoint)
 
     //Create data object
@@ -788,7 +788,7 @@ async function createEventTrackMap()
     }
 
     //Get tracks
-    let endpoint = "https://tracks.ganderoceanic.com/event"
+    let endpoint = "https://tracks.ganderoceanic.ca/event"
     const response = await fetch(endpoint)
 
     //Create data object
@@ -890,7 +890,7 @@ async function createConcordeTrackMap()
     }
 
     //Get tracks
-    let endpoint = "https://tracks.ganderoceanic.com/concorde"
+    let endpoint = "https://tracks.ganderoceanic.ca/concorde"
     const response = await fetch(endpoint)
 
     //Create data object
@@ -994,7 +994,7 @@ async function createMap(planes, controllerOnline) {
 
     //Add tracks
     //Get tracks
-    let endpoint = "https://tracks.ganderoceanic.com/data"
+    let endpoint = "https://tracks.ganderoceanic.ca/data"
     const response = await fetch(endpoint)
 
     //Create data object
