@@ -125,6 +125,10 @@
                         &nbsp;
                         •
                         &nbsp;
+                        <a href="https://vatsim.uk" class="font-weight-bold black-text">VATSIM UK</a>
+                        &nbsp;
+                        •
+                        &nbsp;
                         <a href="https://vatcan.ca" class="font-weight-bold black-text">VATCAN</a>
                     </div>
                     <div class="d-flex flex-row justify-content-between align-items-end">

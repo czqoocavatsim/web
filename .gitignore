@@ -11,6 +11,7 @@ app/storage/
 public/storage
 public/hot
 storage/*.key
+storage/debugbar
 .env
 Homestead.yaml
 Homestead.json
