@@ -23,19 +23,19 @@ Route::get('news', function (Request $request) {
     $array = \App\Models\News\News::where('certification', false)->where('visible', true)->get()->sortByDesc('published');
     $array->makeHidden(['created_at', 'updated_at', 'email_level', 'certification', 'user_id', 'show_author', 'visible', 'id']);
 
-    return $array->toJson(JSON_PRETTY_PRINT);
+    return response()->json($array);
 });
 
 Route::get('roster', function (Request $request) {
     $array = \App\Models\Roster\RosterMember::all();
     $array->makeHidden(['id', 'user_id', 'created_at', 'updated_at', 'remarks', 'date_certified']);
 
-    return $array->toJson(JSON_PRETTY_PRINT);
+    return response()->json($array);
 });
 
 Route::get('roster/solocertifications', function (Request $request) {
     $array = SoloCertification::where('expires', '>', Carbon::now())->with(['rosterMember'])->get();
     $array->makeHidden(['id', 'roster_member_id', 'created_at', 'updated_at', 'remarks', 'instructor_id']);
 
-    return $array->toJson(JSON_PRETTY_PRINT);
+    return response()->json($array);
 });
