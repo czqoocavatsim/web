@@ -21,7 +21,7 @@
                     <i class="fas fa-2x mr-2 fa-feather-alt"></i> Beta
                 </a>
             </div>
-            <img src="https://images.typeform.com/images/QKuaAssrFCq7/image/default" class="mt-3" style="height: 50px;">
+            <img src="https://images.typeform.com/images/QKuaAssrFCq7/image/default" class="mt-3" style="height: 50px; object-fit: contain;">
             <p>We use bugsnag.com</p>
         </div>
     </div>
