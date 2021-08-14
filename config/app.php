@@ -165,6 +165,8 @@ return [
         MisterPhilip\MaintenanceMode\MaintenanceCommandServiceProvider::class,
         NotificationChannels\Discord\DiscordServiceProvider::class,
         SocialiteProviders\Manager\ServiceProvider::class,
+        Bugsnag\BugsnagLaravel\BugsnagServiceProvider::class,
+
         /*
          * Application Service Providers...
          */

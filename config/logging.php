@@ -37,7 +37,7 @@ return [
     'channels' => [
         'stack' => [
             'driver'            => 'stack',
-            'channels'          => ['daily', 'sentry'],
+            'channels'          => ['daily', 'bugsnag'],
             'ignore_exceptions' => false,
         ],
 
@@ -96,8 +96,8 @@ return [
             'handler' => NullHandler::class,
         ],
 
-        'sentry' => [
-            'driver' => 'sentry',
+        'bugsnag' => [
+            'driver' => 'bugsnag',
         ],
     ],
 
