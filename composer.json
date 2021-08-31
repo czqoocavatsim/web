@@ -34,7 +34,8 @@
         "spatie/laravel-activitylog": "^3.14",
         "spatie/laravel-permission": "^3.13",
         "thujohn/twitter": "^2.3",
-        "wohali/oauth2-discord-new": "^1.0"
+        "wohali/oauth2-discord-new": "^1.0",
+        "spatie/laravel-cookie-consent": "2.12.13"
     },
     "require-dev": {
         "barryvdh/laravel-ide-helper": "2.8.2",
