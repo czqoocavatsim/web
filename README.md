@@ -13,7 +13,7 @@ czqo-core is licensed under the **MIT License**. You are free to use code from t
 
 However, if you wish to use czqo-core as a basis for your own VATSIM related website (e.g. an FIR), we humbly ask the following:
 
-* You **provide credit for major portions of this repository used** to Gander Ocenaic OCA with a link to this repository.
+* You **provide credit for major portions of this repository used** to Gander Oceanic OCA with a link to this repository.
 * You **do not** use the same public facing user interface or branding as the Gander Oceanic OCA website. This is important in ensuring that we maintain our brand identity. It is fine to keep admin-only user interfaces (e.g. the create news article form).
 
 If you require assistance with some aspect of czqo-core, feel free to DM one of us on Discord or send an email. We cannot guarantee support.
