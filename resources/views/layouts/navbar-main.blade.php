@@ -41,6 +41,8 @@
                     <a class="dropdown-item {{ Request::is('atcresources') ? 'active white-text' : '' }}" href="{{route('atcresources.index')}}">ATC Resources</a>
                     <a href="{{URL('/eurosounds')}}" class="dropdown-item {{ Request::is('eurosounds') ? 'active white-text' : '' }}">EuroSounds</a>
                     <a href="https://knowledgebase.ganderoceanic.ca" class="dropdown-item">Knowledge Base</a>
+                    <a href="https://vnaaats.net" class="dropdown-item">vNAAATS</a>
+                    <a href="https://vnaaats.net/fdd" class="dropdown-item">Flight Data Display</a>
                 </div>
             </li>
             <li class="nav-item dropdown {{ Request::is('pilots/oceanic-clearance') || Request::is('pilots/position-report') || Request::is('pilots/vatsim-resources') || Request::is('pilots/tutorial') || Request::is('pilots/tracks') ? 'active' : '' }}">
