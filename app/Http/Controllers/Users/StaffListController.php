@@ -19,9 +19,20 @@ class StaffListController extends Controller
         $instructors_temp = Instructor::where('current', true)->get(); // Temp
         $instructors = []; // Actual
 
+        // Helper array
+        $putUpTop = ['Chief Instructor', 'Assistant Chief Instructor'];
+
+        foreach ($putUpTop as $tagline) {
+            foreach ($instructors_temp as $inst) {
+                if ($inst->staffPageTagline() == $tagline) {
+                    array_push($instructors, $inst);
+                }
+            }
+        }
+
         // Sort assessors to top of array
         foreach ($instructors_temp as $instructor) {
-            if ($instructor->assessor) {
+            if ($instructor->assessor && in_array($instructor->staffPageTagline(), $putUpTop)) {
                 array_push($instructors, $instructor);
             }
         }
