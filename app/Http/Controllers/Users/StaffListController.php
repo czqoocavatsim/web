@@ -32,7 +32,7 @@ class StaffListController extends Controller
 
         // Sort assessors to top of array
         foreach ($instructors_temp as $instructor) {
-            if ($instructor->assessor && in_array($instructor->staffPageTagline(), $putUpTop)) {
+            if ($instructor->assessor && !in_array($instructor->staffPageTagline(), $putUpTop)) {
                 array_push($instructors, $instructor);
             }
         }
