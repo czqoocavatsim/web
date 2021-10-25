@@ -72,7 +72,7 @@ class ApplicationsController extends Controller
 
         //Create json and hours int
         $hoursObj = json_decode($output);
-        $hoursTotal = intval($hoursObj->c1) + intval($hoursObj->c2) + intval($hoursObj->c3) + intval($hoursObj->i1) + intval($hoursObj->i2) + intval($hoursObj->i3) + intval($hoursObj->sup) + intval($hoursObj->adm);
+        $hoursTotal = (int)$hoursObj->c1 + (int)$hoursObj->c3 + (int)$hoursObj->i1 + (int)$hoursObj->i3;
 
         //Redirect if hours aren't 80
         if ($hoursTotal < 80) {
