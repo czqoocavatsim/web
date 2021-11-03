@@ -156,7 +156,7 @@
             </div>
             <div class="col-md-4 mb-4">
                 <h2 class="font-weight-bold blue-text mb-4">Top Controllers</h2>
-                @auth
+                @if (auth()->check())
                     <ul class="list-unstyled">
                         @php $index = 1; @endphp
                         @foreach($topControllers as $c)
