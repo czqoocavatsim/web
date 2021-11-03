@@ -23,7 +23,7 @@
     <div class="container">
         <h4 class="blue-text font-weight-bold">{{$article->summary}}</h4>
         <div class="d-flex flex-row align-items-center mt-3">
-            @if($article->show_author)
+            @if(auth()->check() && $article->show_author)
             <span class="mr-2">
                     <img src="{{$article->user->avatar()}}" style="height: 35px; !important; width: 35px !important; margin-right: 5px; border-radius: 50%;">
                     Authored by {{$article->user->fullName('FL')}}

@@ -18,8 +18,8 @@ use Illuminate\Support\Facades\Route;
 
 Route::get('/', 'PrimaryViewsController@home')->name('index');
 Route::get('/map', 'PrimaryViewsController@map')->name('map');
-Route::get('/roster', 'Roster\RosterController@publicRoster')->name('roster.public');
-Route::get('/roster/solo-certs', 'Training\SoloCertificationsController@public')->name('solocertifications.public');
+Route::get('/roster', 'Roster\RosterController@publicRoster')->middleware('auth')->name('roster.public');
+Route::get('/roster/solo-certs', 'Training\SoloCertificationsController@public')->middleware('auth')->name('solocertifications.public');
 Route::get('/staff', function () { return redirect(route('staff'), 301); });
 Route::get('/atc/resources', 'Publications\PublicationsController@atcResources')->name('atcresources.index');
 Route::view('/pilots', 'pilots.index');
@@ -43,7 +43,7 @@ Route::prefix('about')->group(function () {
     Route::get('/', function () { return redirect(route('about.who-we-are'), 301); })->name('about.index');
     Route::view('/who-we-are', 'about.who-we-are')->name('about.who-we-are');
     Route::view('/core', 'about.about-core')->name('about.core');
-    Route::get('/staff', 'Users\StaffListController@index')->name('staff');
+    Route::get('/staff', 'Users\StaffListController@index')->name('staff')->middleware('auth');
 });
 
 //Authentication
