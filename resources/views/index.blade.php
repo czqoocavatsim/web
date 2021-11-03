@@ -79,12 +79,12 @@
                             <div class="white-text d-flex flex-row justify-content-between align-items-center">
                                 <h4 class="font-weight-bold m-0">{{$controller['callsign']}}</h4>
                                 <div style="font-size: 1.1em;">
-                                    @if ($rosterMember = App\Models\Roster\RosterMember::where('cid', $controller['cid'])->first())
+                                    @if (auth()->check() && $rosterMember = App\Models\Roster\RosterMember::where('cid', $controller['cid'])->first())
                                         <img src="{{$rosterMember->user->avatar()}}" style="height: 35px; !important; width: 35px !important; margin-left: 10px; margin-right: 5px; margin-bottom: 3px; border-radius: 50%;">
                                         {{$rosterMember->user->fullName('FLC')}}
                                     @else
                                         <div class="my-1">
-                                            {{$controller['realname']}} {{$controller['cid']}}
+                                            @if (auth()->check()){{$controller['realname']}}@endif {{$controller['cid']}}
                                         </div>
                                     @endif
                                 </div>
@@ -138,50 +138,59 @@
             </div>
             <div class="col-md-4 mb-4">
                 <h2 class="font-weight-bold blue-text mb-4">Our Newest Controllers</h2>
-                @foreach ($certifications as $cert)
-                    <div class="d-flex flex-row mb-2">
-                        <img src="{{$cert->controller->avatar()}}" style="height: 55px !important; width: 55px !important; margin-right: 10px; margin-bottom: 3px; border-radius: 50%;">
-                        <div class="d-flex flex-column">
-                            <h4 class="fw-400">{{$cert->controller->fullName('FL')}}</h4>
-                            <p title="{{$cert->timestamp->toDayDateTimeString()}}">{{$cert->timestamp->diffForHumans()}}</p>
+                @if (count($certifications) > 0)
+                    @foreach ($certifications as $cert)
+                        <div class="d-flex flex-row mb-2">
+                            <img src="{{$cert->controller->avatar()}}" style="height: 55px !important; width: 55px !important; margin-right: 10px; margin-bottom: 3px; border-radius: 50%;">
+                            <div class="d-flex flex-column">
+                                <h4 class="fw-400">{{$cert->controller->fullName('FL')}}</h4>
+                                <p title="{{$cert->timestamp->toDayDateTimeString()}}">{{$cert->timestamp->diffForHumans()}}</p>
+                            </div>
                         </div>
-                    </div>
-                @endforeach
-                @if (count($certifications) < 1) No data available. @endif
+                    @endforeach
+                @elseif (! auth()->check())
+                    Login with VATSIM to view our newest controllers!
+                @else
+                    No data available.
+                @endif
             </div>
             <div class="col-md-4 mb-4">
                 <h2 class="font-weight-bold blue-text mb-4">Top Controllers</h2>
-                <ul class="list-unstyled">
-                    @php $index = 1; @endphp
-                    @foreach($topControllers as $c)
-                    <li class="mb-1">
-                        <div class="d-flex flex-row">
-                            <span class="font-weight-bold blue-text" style="font-size: 1.9em;">
-                                @if($index == 1)
-                                <i class="fas fa-trophy amber-text fa-fw"></i>
-                                @elseif ($index == 2)
-                                <i class="fas fa-trophy blue-grey-text fa-fw"></i>
-                                @elseif ($index == 3)
-                                <i class="fas fa-trophy brown-text fa-fw"></i>
-                                @else
-                                {{$index}}.
-                                @endif
-                            </span>
-                            <p class="mb-0 ml-1">
-                                <span style="font-size: 1.4em;">
-                                    <img src="{{$c->user->avatar()}}" style="height: 35px; !important; width: 35px !important; margin-left: 10px; margin-right: 5px; margin-bottom: 3px; border-radius: 50%;">
-                                    <div class="d-flex flex-column ml-2">
-                                        <h4 class="fw-400">{{$c->user->fullName('FL')}}</h4>
-                                        <p>{{$c->monthly_hours}} hours this month</p>
-                                    </div>
+                @auth
+                    <ul class="list-unstyled">
+                        @php $index = 1; @endphp
+                        @foreach($topControllers as $c)
+                        <li class="mb-1">
+                            <div class="d-flex flex-row">
+                                <span class="font-weight-bold blue-text" style="font-size: 1.9em;">
+                                    @if($index == 1)
+                                    <i class="fas fa-trophy amber-text fa-fw"></i>
+                                    @elseif ($index == 2)
+                                    <i class="fas fa-trophy blue-grey-text fa-fw"></i>
+                                    @elseif ($index == 3)
+                                    <i class="fas fa-trophy brown-text fa-fw"></i>
+                                    @else
+                                    {{$index}}.
+                                    @endif
                                 </span>
-                            </p>
-                        </div>
-                    </li>
-                    @php $index++; @endphp
-                    @endforeach
-                    @if (count($topControllers) < 1) No data available. @endif
-                </ul>
+                                <p class="mb-0 ml-1">
+                                    <span style="font-size: 1.4em;">
+                                        <img src="{{$c->user->avatar()}}" style="height: 35px; !important; width: 35px !important; margin-left: 10px; margin-right: 5px; margin-bottom: 3px; border-radius: 50%;">
+                                        <div class="d-flex flex-column ml-2">
+                                            <h4 class="fw-400">{{$c->user->fullName('FL')}}</h4>
+                                            <p>{{$c->monthly_hours}} hours this month</p>
+                                        </div>
+                                    </span>
+                                </p>
+                            </div>
+                        </li>
+                        @php $index++; @endphp
+                        @endforeach
+                        @if (count($topControllers) < 1) No data available. @endif
+                    </ul>
+                @else
+                    Login with VATSIM to check our top controllers!
+                @endif
             </div>
         </div>
     </div>
