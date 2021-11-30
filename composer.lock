@@ -4,8 +4,70 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "dfa98c3a751c4270c14080d743a689a6",
+    "content-hash": "ef6876e9cca5d597abb686ca85e59a1b",
     "packages": [
+        {
+            "name": "asantibanez/livewire-calendar",
+            "version": "2.1.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/asantibanez/livewire-calendar.git",
+                "reference": "21992f9eacd73dc603b5d9a7b0f7a194437a19bc"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/asantibanez/livewire-calendar/zipball/21992f9eacd73dc603b5d9a7b0f7a194437a19bc",
+                "reference": "21992f9eacd73dc603b5d9a7b0f7a194437a19bc",
+                "shasum": ""
+            },
+            "require": {
+                "illuminate/support": "^6.0|^7.0|^8.0",
+                "livewire/livewire": "^2.0",
+                "php": "^7.2|^8.0"
+            },
+            "require-dev": {
+                "orchestra/testbench": "^5.0|^6.0",
+                "phpunit/phpunit": "^8.0|^9.0"
+            },
+            "type": "library",
+            "extra": {
+                "laravel": {
+                    "providers": [
+                        "Asantibanez\\LivewireCalendar\\LivewireCalendarServiceProvider"
+                    ],
+                    "aliases": {
+                        "LivewireCalendar": "Asantibanez\\LivewireCalendar\\LivewireCalendarFacade"
+                    }
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Asantibanez\\LivewireCalendar\\": "src"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Andrés Santibáñez",
+                    "email": "santibanez.andres@gmail.com",
+                    "role": "Developer"
+                }
+            ],
+            "description": "Laravel Livewire calendar component",
+            "homepage": "https://github.com/asantibanez/livewire-calendar",
+            "keywords": [
+                "asantibanez",
+                "livewire-calendar"
+            ],
+            "support": {
+                "issues": "https://github.com/asantibanez/livewire-calendar/issues",
+                "source": "https://github.com/asantibanez/livewire-calendar/tree/2.1.0"
+            },
+            "time": "2021-01-25T21:12:52+00:00"
+        },
         {
             "name": "atymic/tmhoauth",
             "version": "0.8.6",

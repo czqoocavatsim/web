@@ -439,4 +439,5 @@
     </script>
     <!-- End misc scripts -->
     @livewireScripts
+    @livewireCalendarScripts
 </html>

@@ -9,6 +9,7 @@
     "type": "project",
     "require": {
         "php": "^7.2",
+        "asantibanez/livewire-calendar": "^2.1",
         "barryvdh/laravel-dompdf": "^0.8.5",
         "bugsnag/bugsnag-laravel": "^2.0",
         "erusev/parsedown": "^1.7",
@@ -32,10 +33,10 @@
         "skymeyer/vatsimphp": "^2.0",
         "socialiteproviders/discord": "^2.0",
         "spatie/laravel-activitylog": "^3.14",
+        "spatie/laravel-cookie-consent": "2.12.13",
         "spatie/laravel-permission": "^3.13",
         "thujohn/twitter": "^2.3",
-        "wohali/oauth2-discord-new": "^1.0",
-        "spatie/laravel-cookie-consent": "2.12.13"
+        "wohali/oauth2-discord-new": "^1.0"
     },
     "require-dev": {
         "barryvdh/laravel-ide-helper": "2.8.2",
