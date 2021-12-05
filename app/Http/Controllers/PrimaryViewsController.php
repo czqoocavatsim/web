@@ -30,7 +30,7 @@ class PrimaryViewsController extends Controller
         $shanwickControllers = [];
         $controllers = [];
         if ($dataLoaded) {
-            $ganderControllers = $vatsimData->searchCallsign('EGCC_');
+            $ganderControllers = $vatsimData->searchCallsign('CZQO_');
             $shanwickControllers = $vatsimData->searchCallsign('EGGX_');
             $natControllers = $vatsimData->searchCallsign('NAT_');
             $controllers = array_merge($ganderControllers->toArray(), $shanwickControllers->toArray(), $natControllers->toArray());
