@@ -33,11 +33,6 @@ Route::get('/privacy', function () { return redirect(route('policies'), 301); })
 Route::get('/events', 'Events\EventController@index')->name('events.index');
 Route::get('/events/{slug}', 'Events\EventController@viewEvent')->name('events.view');
 
-Route::get('/test', function () {
-    $user = User::find(1300012);
-    Auth::login($user);
-});
-
 //About
 Route::prefix('about')->group(function () {
     Route::get('/', function () { return redirect(route('about.who-we-are'), 301); })->name('about.index');
