@@ -169,25 +169,30 @@ class InstructingController extends Controller
         $instructor->user->assignRole('Instructor');
 
         //Give them role on Discord if able
-        if ($instructor->user->hasDiscord() && $instructor->user->memberOfCzqoGuild()) {
-            //Get Discord client
-            $discord = new DiscordClient(['token' => config('services.discord.token')]);
+        try {
+            if ($instructor->user->hasDiscord() && $instructor->user->memberOfCzqoGuild()) {
+                //Get Discord client
+                $discord = new DiscordClient(['token' => config('services.discord.token')]);
 
-            //Add instructor role
-            $discord->guild->addGuildMemberRole([
-                'guild.id' => intval(config('services.discord.guild_id')),
-                'user.id'  => $instructor->user->discord_user_id,
-                'role.id'  => 482816758185590787,
-            ]);
+                //Add instructor role
+                $discord->guild->addGuildMemberRole([
+                    'guild.id' => intval(config('services.discord.guild_id')),
+                    'user.id' => $instructor->user->discord_user_id,
+                    'role.id' => 482816758185590787,
+                ]);
 
-            //Add instructor role
-            $discord->guild->addGuildMemberRole([
-                'guild.id' => intval(config('services.discord.guild_id')),
-                'user.id'  => $instructor->user->discord_user_id,
-                'role.id'  => 752767906768748586,
-            ]);
-        } else {
-            Session::flash('info', 'Unable to assign Discord permissions automatically.');
+                //Add instructor role
+                $discord->guild->addGuildMemberRole([
+                    'guild.id' => intval(config('services.discord.guild_id')),
+                    'user.id' => $instructor->user->discord_user_id,
+                    'role.id' => 752767906768748586,
+                ]);
+            } else {
+                Session::flash('info', 'Unable to assign Discord permissions automatically.');
+            }
+        }
+        catch (\Exception $e) {
+            Session::flash('info', 'Unable to remove Discord permissions automatically.');
         }
 
         //Tell them
@@ -245,18 +250,22 @@ class InstructingController extends Controller
         $student->user->assignRole('Student');
 
         //Give Discord role
-        if ($student->user->hasDiscord() && $student->user->memberOfCzqoGuild()) {
-            //Get Discord client
-            $discord = new DiscordClient(['token' => config('services.discord.token')]);
+        try {
+            if ($student->user->hasDiscord() && $student->user->memberOfCzqoGuild()) {
+                //Get Discord client
+                $discord = new DiscordClient(['token' => config('services.discord.token')]);
 
-            //Remove student role
-            $discord->guild->addGuildMemberRole([
-                'guild.id' => intval(config('services.discord.guild_id')),
-                'user.id'  => $student->user->discord_user_id,
-                'role.id'  => 482824058141016075,
-            ]);
-        } else {
-            Session::flash('info', 'Unable to add Discord permissions automatically.');
+                //Remove student role
+                $discord->guild->addGuildMemberRole([
+                    'guild.id' => intval(config('services.discord.guild_id')),
+                    'user.id' => $student->user->discord_user_id,
+                    'role.id' => 482824058141016075,
+                ]);
+            } else {
+                Session::flash('info', 'Unable to add Discord permissions automatically.');
+            }
+        } catch (\Exception $e) {
+            Session::flash('info', 'Unable to remove Discord permissions automatically.');
         }
 
         //Give not ready status label
@@ -339,24 +348,29 @@ class InstructingController extends Controller
         $instructor->user->removeRole('Assessor');
 
         //Remove role on Discord if able
-        if ($instructor->user->hasDiscord() && $instructor->user->memberOfCzqoGuild()) {
-            //Get Discord client
-            $discord = new DiscordClient(['token' => config('services.discord.token')]);
+        try {
+            if ($instructor->user->hasDiscord() && $instructor->user->memberOfCzqoGuild()) {
+                //Get Discord client
+                $discord = new DiscordClient(['token' => config('services.discord.token')]);
 
-            //Remove instructor role
-            $discord->guild->removeGuildMemberRole([
-                'guild.id' => intval(config('services.discord.guild_id')),
-                'user.id'  => $instructor->user->discord_user_id,
-                'role.id'  => 482816758185590787,
-            ]);
+                //Remove instructor role
+                $discord->guild->removeGuildMemberRole([
+                    'guild.id' => intval(config('services.discord.guild_id')),
+                    'user.id' => $instructor->user->discord_user_id,
+                    'role.id' => 482816758185590787,
+                ]);
 
-            //Remove instructor role
-            $discord->guild->removeGuildMemberRole([
-                'guild.id' => intval(config('services.discord.guild_id')),
-                'user.id'  => $instructor->user->discord_user_id,
-                'role.id'  => 752767906768748586,
-            ]);
-        } else {
+                //Remove instructor role
+                $discord->guild->removeGuildMemberRole([
+                    'guild.id' => intval(config('services.discord.guild_id')),
+                    'user.id' => $instructor->user->discord_user_id,
+                    'role.id' => 752767906768748586,
+                ]);
+            } else {
+                Session::flash('info', 'Unable to remove Discord permissions automatically.');
+            }
+        }
+        catch (\Exception $e) {
             Session::flash('info', 'Unable to remove Discord permissions automatically.');
         }
 
@@ -382,17 +396,21 @@ class InstructingController extends Controller
         $student->user->removeRole('Student');
 
         //Remove role on Discord if able
-        if ($student->user->hasDiscord() && $student->user->memberOfCzqoGuild()) {
-            //Get Discord client
-            $discord = new DiscordClient(['token' => config('services.discord.token')]);
+        try {
+            if ($student->user->hasDiscord() && $student->user->memberOfCzqoGuild()) {
+                //Get Discord client
+                $discord = new DiscordClient(['token' => config('services.discord.token')]);
 
-            //Remove student role
-            $discord->guild->removeGuildMemberRole([
-                'guild.id' => intval(config('services.discord.guild_id')),
-                'user.id'  => $student->user->discord_user_id,
-                'role.id'  => 482824058141016075,
-            ]);
-        } else {
+                //Remove student role
+                $discord->guild->removeGuildMemberRole([
+                    'guild.id' => intval(config('services.discord.guild_id')),
+                    'user.id' => $student->user->discord_user_id,
+                    'role.id' => 482824058141016075,
+                ]);
+            } else {
+                Session::flash('info', 'Unable to remove Discord permissions automatically.');
+            }
+        } catch (\Exception $e) {
             Session::flash('info', 'Unable to remove Discord permissions automatically.');
         }
 
