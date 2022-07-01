@@ -41,14 +41,70 @@
 @endforeach
 <ul class="list-unstyled mt-3">
     <li class="mb-2">
-        <a href="#" class="blue-text" style="font-size: 1.1em;"><i class="fas fa-plus"></i>&nbsp;&nbsp;New staff member</a>
+        <a data-target="#addStaffMemberModal" data-toggle="modal" class="blue-text" style="font-size: 1.1em;"><i class="fas fa-plus"></i>&nbsp;&nbsp;New staff member</a>
     </li>
     <li class="mb-2">
         <a href="#" class="blue-text" style="font-size: 1.1em;"><i class="fas fa-plus"></i>&nbsp;&nbsp;New group</a>
     </li>
 </ul>
 
-
+<!--Start new staff member modal-->
+<div class="modal fade" id="addStaffMemberModal" tabindex="-1" role="dialog">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Add staff member</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <form action="{{ route('settings.staff.store') }}" method="POST">
+                @csrf
+                <div class="modal-body">
+                    @if($errors->addStaffMemberErrors->any())
+                        <div class="alert alert-danger">
+                            <h4>There were errors</h4>
+                            <ul class="pl-0 ml-0 list-unstyled">
+                                @foreach ($errors->addStaffMemberErrors->all() as $error)
+                                    <li>{{ $error }}</li>
+                                @endforeach
+                            </ul>
+                        </div>
+                    @endif
+                    <div class="form-group">
+                        <label for="">Position Name<sup class="red-text">*</sup></label>
+                        <input type="text"  name="position" class="form-control">
+                    </div>
+                    <div class="form-group">
+                        <label for="">CID <sup class="red-text">*</sup></label>
+                        <input type="text" name="cid" class="form-control">
+                    </div>
+                    <div class="form-group">
+                        <label for="">Description</label>
+                        <input type="text" name="description" class="form-control">
+                    </div>
+                    <div class="form-group">
+                        <label for="">Email Address<sup class="red-text">*</sup></label>
+                        <input type="email" name="email" class="form-control">
+                    </div>
+                    <div class="form-group">
+                        <label for="">Group <sup class="red-text">*</sup></label>
+                        <select name="group_id" class="form-control">
+                            @foreach ($groups as $group)
+                                <option value="{{ $group->id }}">{{ $group->name }}</option>
+                            @endforeach
+                        </select>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-light" data-dismiss="modal">Close</button>
+                    <input type="submit" class="btn btn-primary" value="Add">
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+<!--End new staff member modal-->
 
 <!--Start edit staff member modal-->
 @foreach($staff as $s)
@@ -61,10 +117,10 @@
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
-            <form action="" method="POST">
+            <form action="{{ route('settings.staff.update', $s) }}" method="POST">
                 @csrf
                 <div class="modal-body">
-                    @if($errors->editRosterMemberErrors->any())
+                    @if($errors->editStaffMemberErrors->any())
                     <div class="alert alert-danger">
                         <h4>There were errors</h4>
                         <ul class="pl-0 ml-0 list-unstyled">
@@ -77,6 +133,10 @@
                     <div class="form-group">
                         <label for="">Position Name<sup class="red-text">*</sup></label>
                         <input type="text" value="{{old('position', $s->position)}}" name="position" class="form-control">
+                    </div>
+                    <div class="form-group">
+                        <label for="">CID <sup class="red-text">*</sup></label>
+                        <input type="text" name="cid" value="{{ old('cid', $s->user_id) }}" class="form-control">
                     </div>
                     <div class="form-group">
                         <label for="">Description</label>
@@ -103,23 +163,26 @@
 <div class="modal fade" id="deleteStaffMember{{$s->shortform}}Modal" tabindex="-1" role="dialog">
     <div class="modal-dialog modal-dialog-centered" role="document">
         <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLongTitle">Are you sure?</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            <div class="modal-body">
-                <p>This will delete the '{{$member->position}}' staff member profile.<br>If this profile is in the Senior Staff grouping, please set it to Vacant rather than delete it, unless the position is being abolished.</p>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-light" data-dismiss="modal">Dismiss</button>
-                <a href="#" role="button" class="btn btn-danger">Delete</a>
-            </div>
+            <form action="{{ route('settings.staff.delete', $s) }}" method="POST">
+                @csrf
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLongTitle">Are you sure?</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <p>This will delete the '{{$member->position}}' staff member profile.<br>If this profile is in the Senior Staff grouping, please set it to Vacant rather than delete it, unless the position is being abolished.</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-light" data-dismiss="modal">Dismiss</button>
+                    <button type="submit" role="button" class="btn btn-danger">Delete</button>
+                </div>
             </form>
         </div>
     </div>
 </div>
 @endforeach
 <!--End delete staff member modal-->
+
 @endsection

@@ -47,7 +47,7 @@ class StaffMember extends Model
      * @var array
      */
     protected $fillable = [
-        'user_id', 'position', 'group', 'description', 'email',
+        'user_id', 'position', 'group', 'description', 'email', 'shortform', 'group_id'
     ];
 
     /**

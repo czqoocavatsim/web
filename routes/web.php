@@ -185,7 +185,11 @@ Route::group(['middleware' => 'auth'], function () {
                     Route::get('/rotation-images', 'Settings\SettingsController@rotationImages')->name('settings.rotationimages');
                     Route::get('/rotation-images/delete/{image_id}', 'Settings\SettingsController@deleteRotationImage')->name('settings.rotationimages.deleteimg');
                     Route::post('/rotation-images/uploadimg', 'Settings\SettingsController@uploadRotationImage')->name('settings.rotationimages.uploadimg');
-                    Route::get('/staff', 'Settings\StaffController@editStaff')->name('settings.staff');
+
+                    Route::get('/staff', 'Settings\StaffController@index')->name('settings.staff');
+                    Route::post('/staff/store', 'Settings\StaffController@store')->name('settings.staff.store');
+                    Route::post('/staff/{staffMember:id}/update', 'Settings\StaffController@update')->name('settings.staff.update');
+                    Route::post('/staff/{staffMember:id}/delete', 'Settings\StaffController@delete')->name('settings.staff.delete');
                 });
             });
 
