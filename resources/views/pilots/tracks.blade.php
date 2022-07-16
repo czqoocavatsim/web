@@ -6,7 +6,7 @@
     <script src="{{asset('js/leaflet.latlng.js')}}"></script>
             <h1 class="font-weight-bold blue-text mb-3">Current NAT Tracks</h1>
             <div style="height: 400px;" id="map"></div>
-            <p>Red = Westbound, Blue = Eastbound</p>
+            <p>Blue = Westbound, Red = Eastbound</p>
             <table id="natTrackTable" class="table table-responsive table-striped">
                 <thead>
                 <tr>
