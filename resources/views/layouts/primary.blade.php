@@ -99,7 +99,7 @@
                 <div class="d-none d-md-block">
                     <p class="mb-3">Copyright (C) Gander Oceanic OCA {{App\Models\Settings\CoreSettings::where('id', 1)->firstOrFail()->copyright_year}}. All Rights Reserved.<br>Not to be used for real world navigation. Flight simulation only.</p>
                     <div class="flex-left my-4">
-                        <a href="{{route('index')}}" class="font-weight-bold black-text">Feedback</a>
+                        <a href="{{route('my.feedback.new')}}" class="font-weight-bold black-text">Feedback</a>
                         &nbsp;
                         •
                         &nbsp;
@@ -111,7 +111,7 @@
                         &nbsp;
                         •
                         &nbsp;
-                        <a href="https://github.com/gander-oceanic-fir-vatsim/czqo-core" class="font-weight-bold black-text">GitHub</a>
+                        <a href="https://github.com/czqoocavatsim/web" class="font-weight-bold black-text">GitHub</a>
                         &nbsp;
                         •
                         &nbsp;
@@ -119,7 +119,7 @@
                         &nbsp;
                         •
                         &nbsp;
-                        <a href="#" data-toggle="modal" data-target="#contactUsModal" class="font-weight-bold black-text">Contact Us</a>
+                        <a href="{{route('staff')}}" class="font-weight-bold black-text">Contact Us</a>
                         &nbsp;
                         •
                         &nbsp;
