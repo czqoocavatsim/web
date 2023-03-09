@@ -10,6 +10,7 @@
             @if (count($list->students) > 0)
                 <div class="list-group mt-3">
                     @foreach($list->students as $student)
+                    @if ($student->student->current == True)
                         <a href="{{route('training.admin.instructing.students.view', $student->student->user->id)}}" class="list-group-item rounded list-group-item-action waves-effect">
                             <div class="d-flex flex-column">
                                 <p class="mb-1">{{$student->student->created_at->format('d M')}} - {{$student->student->user->fullName('FL')}}</p>
@@ -22,6 +23,7 @@
                                 </div>
                             </div>
                         </a>
+                    @endif
                     @endforeach
                 </div>
             @else
@@ -42,6 +44,7 @@
             @if (count($list->studentsAssigned) > 0)
                 <div class="list-group mt-3">
                     @foreach($list->studentsAssigned as $student)
+                    @if ($student->student->current == True)
                         <a href="{{route('training.admin.instructing.students.view', $student->student->user->id)}}" class="list-group-item rounded list-group-item-action waves-effect">
                             <div class="d-flex flex-column">
                                 <p class="mb-0">{{$student->student->created_at->format('d M')}} - {{$student->student->user->fullName('FL')}}</p>
@@ -54,6 +57,7 @@
                                 </div>
                             </div>
                         </a>
+                    @endif
                     @endforeach
                 </div>
             @else
