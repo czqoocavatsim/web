@@ -63,7 +63,7 @@ class ApplicationsController extends Controller
         //Check hours of controller
 
         //Download via CURL
-        $url = 'https://api.vatsim.net/api/ratings/'.Auth::id().'/rating_times/';
+        $url = 'https://api.vatsim.net/v2/members/'.Auth::id().'/stats';
         $ch = curl_init();
         curl_setopt($ch, CURLOPT_URL, $url);
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
@@ -148,6 +148,7 @@ class ApplicationsController extends Controller
         //Dispatch event
         Notification::route('mail', CoreSettings::find(1)->emailfirchief)->notify(new NewApplicationStaff($application));
         Notification::route('mail', CoreSettings::find(1)->emaildepfirchief)->notify(new NewApplicationStaff($application));
+        Notification::route('mail', CoreSettings::find(1)->emailcinstructor)->notify(new NewApplicationStaff($application));
 
         //Redirect to application page
         return redirect()->route('training.applications.show', $application->reference_id);
@@ -327,7 +328,7 @@ class ApplicationsController extends Controller
         //Check hours of controller
 
         //Download via CURL
-        $url = 'https://api.vatsim.net/api/ratings/'.$application->user->id.'/rating_times/';
+        $url = 'https://api.vatsim.net/v2/members/'.Auth::id().'/stats';
         $ch = curl_init();
         curl_setopt($ch, CURLOPT_URL, $url);
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);

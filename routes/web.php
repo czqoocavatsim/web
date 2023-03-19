@@ -299,6 +299,7 @@ Route::group(['middleware' => 'auth'], function () {
                     Route::get('/', 'News\NewsController@index')->name('news.index');
                     Route::get('/article/create', 'News\NewsController@createArticle')->name('news.articles.create')->middleware('can:create articles');
                     Route::post('/article/create', 'News\NewsController@postArticle')->name('news.articles.create.post')->middleware('can:create articles');
+                    Route::post('/article/{slug}/update/create', 'News\NewsController@adminEditNewsArticle')->name('news.article.update.post')->middleware('can:edit articles');
                     Route::get('/article/{slug}', 'News\NewsController@viewArticle')->name('news.articles.view');
                     Route::get('/announcement/create', 'News\NewsController@createAnnouncement')->name('news.announcements.create')->middleware('can:send announcements');
                     Route::post('/announcement/create', 'News\NewsController@createAnnouncementPost')->name('news.announcements.create.post')->middleware('can:send announcements');

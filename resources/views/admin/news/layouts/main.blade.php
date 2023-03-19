@@ -30,6 +30,16 @@
                 </a>
                 @endcan
             </ul>
+            @if ($actions == true)
+            <h4 class="font-weight-bold blue-text">Actions</h4>
+            <ul class="list-unstyled mt-3 mb-0" style="font-size: 1.05em;">
+                @can('edit event')
+                <li class="mb-2">
+                    <a href="" data-toggle="modal" data-target="#editarticle" style="text-decoration:none;"><span class="blue-text"><i class="fas fa-chevron-right"></i></span> &nbsp; <span class="text-body">Edit article</span></a>
+                </li>
+                @endcan
+            </ul>
+            @endif
         </div>
         <div class="col-md-9">
             @yield('news-content')
