@@ -172,7 +172,7 @@
                     </button>
                 </div>
                 <div class="modal-body">
-                    <p>This will delete the '{{$member->position}}' staff member profile.<br>If this profile is in the Senior Staff grouping, please set it to Vacant rather than delete it, unless the position is being abolished.</p>
+                    <p>This will delete the '{{$s->position}}' staff member profile.<br>If this profile is in the Senior Staff grouping, please set it to Vacant rather than delete it, unless the position is being abolished.</p>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-light" data-dismiss="modal">Dismiss</button>
