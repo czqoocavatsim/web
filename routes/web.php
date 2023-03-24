@@ -327,7 +327,11 @@ Route::group(['middleware' => 'auth'], function () {
 
                 Route::group(['middleware' => ['permission:edit atc resources']], function () {
                     Route::get('/custom-pages', 'Publications\CustomPagesController@admin')->name('publications.custom-pages');
-                    Route::get('/custom-pages/{slug}', 'Publications\CustomPagesController@adminViewPage')->name('publications.custom-pages.view');
+                    Route::get('/custom-pages/create', 'Publications\CustomPagesController@adminCreatePage')->name('publications.custom-pages.create');
+                    Route::post('/custom-pages/create', 'Publications\CustomPagesController@adminPostCreatePage')->name('publications.custom-pages.post.create');
+                    Route::get('/custom-pages/{id}/edit', 'Publications\CustomPagesController@adminEditPage')->name('publications.custom-pages.edit');
+                    Route::post('/custom-pages/{id}/edit/post', 'Publications\CustomPagesController@adminEditPagePost')->name('publications.custom-pages.post.edit');
+                    Route::get('/custom-pages/{id}/delete', 'Publications\CustomPagesController@deleteCustomPage')->name('publications.custom-pages.delete');
                 });
             });
 

@@ -172,17 +172,10 @@ body[data-theme="dark"] .modal-content {
     background:  rgb(59, 61, 68) !important;
 }
 
-<<<<<<< Updated upstream
-=======
-body[data-theme="dark"] #discordTopModal .modal-content div {
+body[data-theme="dark"] #discordTopModal .modal-body p {
     color: black;
 }
 
-<<<<<<< Updated upstream
-
-=======
->>>>>>> Stashed changes
->>>>>>> Stashed changes
 body[data-theme="dark"] .modal-content .close {
     color: #eee !important;
 }

@@ -11,6 +11,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Notification;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Str;
 
 class CustomPagesController extends Controller
 {
@@ -45,7 +46,7 @@ class CustomPagesController extends Controller
         //Return the view
         return view('publications/custom-page', compact('page'));
     }
-
+    
     //Repsonse submission
     public function submitResponse($page_slug, Request $request)
     {
@@ -88,12 +89,88 @@ class CustomPagesController extends Controller
         return view('admin.publications.custom-pages.index', compact('pages'));
     }
 
-    public function adminViewPage($page_slug)
+    public function adminCreatePage()
+    {
+        //Return view
+        return view('admin.publications.custom-pages.create');
+    }
+
+    public function adminPostCreatePage(Request $request)
+    {
+        //Define validator messages
+        $messages = [
+            'title.required'       => 'A title is required.',
+            'title.max'            => 'A title may not be more than 50 characters long.',
+            'content.required'     => 'Content is required.',
+        ];
+
+        //Validate
+        $validator = Validator::make($request->all(), [
+            'title'       => 'required|max:50',
+            'content'     => 'required',
+        ], $messages);
+
+        //Redirect if fails
+        if ($validator->fails()) {
+            return redirect()->back()->withInput()->withErrors($validator, 'createCustomPageError');
+        }
+
+        $custom_page = new CustomPage();
+        $custom_page->name = $request->get('title');
+        $custom_page->slug = Str::slug($request->get('title'));
+        $custom_page->content = $request->get('content');
+        $custom_page->response_form_enabled = $request->get('responses');
+        $custom_page->save();
+
+        return redirect()->route('publications.custom-pages')->with('success', $custom_page->name.' was created!');
+
+    }
+
+    public function adminEditPage($page_id)
     {
         //Find page
-        $page = CustomPage::where('slug', $page_slug)->firstOrFail();
+        $page = CustomPage::where('id', $page_id)->firstOrFail();
 
         //Return view
-        return view('admin.publications.custom-pages.view', compact('page'));
+        return view('admin.publications.custom-pages.edit', compact('page'));
+
+    }
+
+    public function adminEditPagePost(Request $request, $page_id)
+    {
+        //Define validator messages
+        $messages = [
+            'title.required'       => 'A title is required.',
+            'title.max'            => 'A title may not be more than 50 characters long.',
+            'content.required'     => 'Content is required.',
+        ];
+
+        //Validate
+        $validator = Validator::make($request->all(), [
+            'title'       => 'required|max:50',
+            'content'     => 'required',
+        ], $messages);
+
+        //Redirect if fails
+        if ($validator->fails()) {
+            return redirect()->back()->withInput()->withErrors($validator, 'editCustomPageError');
+        }
+
+        $custom_page = CustomPage::whereId($page_id)->firstOrFail();
+        $custom_page->name = $request->get('title');
+        $custom_page->slug = Str::slug($request->get('title'));
+        $custom_page->content = $request->get('content');
+        $custom_page->response_form_enabled = $request->get('responses');
+        $custom_page->save();
+
+        $request->session()->flash('custompageedited', 'Custom Page Edited!');
+
+        return redirect()->route('publications.custom-pages')->with('success', $custom_page->name.' was edited!');
+    }
+    public function deleteCustomPage($page_id){
+        $custom_page = CustomPage::whereId($page_id)->firstOrFail();
+        $custom_page->delete();
+
+        return redirect()->route('publications.custom-pages');
     }
 }

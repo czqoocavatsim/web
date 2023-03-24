@@ -43,7 +43,7 @@ use Illuminate\Support\Facades\Auth;
  */
 class CustomPage extends Model
 {
-    //
+    protected $fillable = ['slug'];
 
     public function permissions()
     {
