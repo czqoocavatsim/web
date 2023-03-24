@@ -254,6 +254,8 @@ Route::group(['middleware' => 'auth'], function () {
                             Route::get('/students/{cid}/records/training-notes/create', 'Training\RecordsController@createStudentTrainingNote')->name('instructing.students.records.training-notes.create')->middleware('can:edit training records');
                             Route::post('/students/{cid}/records/training-notes/create', 'Training\RecordsController@createStudentTrainingNotePost')->name('instructing.students.records.training-notes.create.post')->middleware('can:edit training records');
                             Route::get('/students/{cid}/records/training-notes/{training_note_id}/delete', 'Training\RecordsController@deleteStudentTrainingNote')->name('instructing.students.records.training-notes.delete')->middleware('can:edit training records');
+                            Route::get('/students/{cid}/records/training-notes/{training_note_id}/edit', 'Training\RecordsController@editStudentTrainingNote')->name('instructing.students.records.training-notes.edit')->middleware('can:edit training records');
+                            Route::post('/students/{cid}/records/training-notes/{training_note_id}/edit', 'Training\RecordsController@editpostStudentTrainingNote')->name('instructing.students.records.training-notes.post.edit')->middleware('can:edit training records');
 
                             //Assign student to instructor
                             Route::post('/students/{cid}/assign/instructor', 'Training\InstructingController@assignStudentToInstructor')->name('instructing.students.assign.instructor')->middleware('can:assign instructor to student');
