@@ -10,7 +10,7 @@
             <ul class="list-unstyled mt-3 mb-0" style="font-size: 1.05em;">
                 @can('edit monitored positions')
                 <li class="mb-2">
-                    <a href="#" style="text-decoration:none;"><span class="blue-text"><i class="fas fa-chevron-right"></i></span> &nbsp; <span class="text-body">Create monitored positions</span></a>
+                    <a href="#" data-toggle="modal" data-target="#createPositionModal" style="text-decoration:none;"><span class="blue-text"><i class="fas fa-chevron-right"></i></span> &nbsp; <span class="text-body">Create monitored positions</span></a>
                 </li>
                 @endcan
             </ul>
@@ -26,7 +26,7 @@
                     @foreach ($positions as $p)
                         <tr>
                             <td>{{$p->identifier}}</td>
-                            <td title="{{$p->lastOnline()}}">{{$p->lastOnline()->diffForHumans()}}</td>
+                            <td title="{{$p->lastOnline()}}">{{$p->lastOnline() ? $p->lastOnline()->diffForHumans() : 'Never'}}</td>
                             <td><a class="blue-text" href="{{route('network.monitoredpositions.view', strtolower($p->identifier))}}"><i class="fa fa-eye"></i> View Position</a></td>
                         </tr>
                     @endforeach
