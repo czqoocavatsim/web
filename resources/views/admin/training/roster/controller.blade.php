@@ -83,16 +83,31 @@
                     <div class="form-group">
                         <label for="">Certification</label>
                         <select class="custom-select" aria-valuemax="{{$rosterMember->certification}}" name="certification">
+                            @if ($rosterMember->certification == 'certified')
+                            <option value="not_certified">Not Certified</option>
+                            <option value="certified" selected>Certified</option>
+                            <option value="training">Training</option>
+                            @elseif ($rosterMember->certification == 'not_certified')
                             <option value="not_certified" selected>Not Certified</option>
                             <option value="certified">Certified</option>
                             <option value="training">Training</option>
+                            @elseif ($rosterMember->certification == 'training')
+                            <option value="not_certified">Not Certified</option>
+                            <option value="certified">Certified</option>
+                            <option value="training" selected>Training</option>
+                            @endif
                         </select>
                     </div>
                     <div class="form-group">
                         <label for="">Active</label>
                         <select value="{{$rosterMember->active}}" class="custom-select" name="active">
+                            @if ($rosterMember->active == true)
                             <option value="true" selected>Active</option>
                             <option value="false">Inactive</option>
+                            @else
+                            <option value="true">Active</option>
+                            <option value="false" selected>Inactive</option>
+                            @endif
                         </select>
                     </div>
                     <div class="form-group">
@@ -103,7 +118,7 @@
                                 enableTime: false,
                                 noCalendar: false,
                                 dateFormat: "Y-m-d",
-                                defaultDate: "{{Carbon\Carbon::now()}}"
+                                defaultDate: "{{Carbon\Carbon::createFromFormat('Y-m-d H:i:s', $rosterMember->date_certified)}}"
                             });
                         </script>
                     </div>
