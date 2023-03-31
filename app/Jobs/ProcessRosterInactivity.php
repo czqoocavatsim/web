@@ -53,8 +53,8 @@ class ProcessRosterInactivity implements ShouldQueue
             if ($rosterMember->active && $certifiedDate != null && !($certifiedDate > Carbon::now()->startOfQuarter() && $certifiedDate < Carbon::now()->endOfQuarter())) {
                 
 
-                $rosterMember->active = $rosterMember->currency >= 6.0 ?: false;
-                if ($rosterMember->currency < 6.0) {
+                $rosterMember->active = $rosterMember->currency >= 3.0 ?: false;
+                if ($rosterMember->currency < 3.0) {
                     $rosterMember->active = false;
                     $rosterMember->save();
                     Notification::send($rosterMember->user, new RosterStatusChanged($rosterMember));

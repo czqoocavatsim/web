@@ -45,7 +45,7 @@ class OneWeekInactivityReminder extends Notification
         return (new MailMessage())
             ->greeting("Hi {$this->rosterMember->user->fullName('FLC')}")
             ->line('**One Week Left - Activity Reminder**')
-            ->line('According to our records, you have not yet fulfilled our currency requirement. You require **6 hours** online controlling on Gander or Shanwick or Bandbox by the end of the quarter, otherwise you will be marked inactive.')
+            ->line('According to our records, you have not yet fulfilled our currency requirement. You require **3 hours** online controlling on Gander or Shanwick or Bandbox by the end of the quarter, otherwise you will be marked inactive.')
             ->line('There is one week remaining in the current quarter, so this email serves only as a reminder in case you may have forgotten.')
             ->line("Please don’t hesitate to contact us should you have any concerns, or if you need us to make an accommodation. We're here to help!")
             ->line('*You received this email as there is important information in regard to your status with Gander Oceanic.*')
