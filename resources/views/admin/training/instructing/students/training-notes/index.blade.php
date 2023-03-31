@@ -28,7 +28,7 @@
                 <div class="d-flex flex-row justify-content-between">
                     <p class="text-muted mt-3">Added by {{$note->instructor->user->fullName('FLC')}}, last edited <span style="text-decoration: underline; text-decoration-style:dotted; cursor: help;" title="{{$note->updated_at ?? ''}}">{{$note->updated_at ? $note->updated_at->diffForHumans() : 'never'}}</span>, {{$note->staff_only ? 'staff only' : 'visible to student'}}</p>
                     <p class="mt-3">
-                        <a class="text-muted" style="cursor:not-allowed"><i class="fa fa-edit"></i>&nbsp;Edit</a>
+                        <a class="text-muted" href="{{route('training.admin.instructing.students.records.training-notes.edit', [$student->user_id, $note->id])}}"><i class="fa fa-edit"></i>&nbsp;Edit</a>
                         <a data-toggle="modal" data-target="#deleteNote{{$note->id}}Modal" class="red-text ml-2"><i class="fa fa-trash-alt"></i>&nbsp;Delete</a>
                     </p>
                 </div>
@@ -99,7 +99,6 @@
                     <button type="button" class="btn btn-light" data-dismiss="modal">Dismiss</button>
                     <a href="{{route('training.admin.instructing.students.records.training-notes.delete', [$student->user_id, $n->id])}}" role="button" class="btn btn-danger"><i class="fa fa-trash-alt mr-2"></i>Delete</a>
                 </div>
-                </form>
             </div>
         </div>
     </div>

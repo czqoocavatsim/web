@@ -1,4 +1,5 @@
 @extends('admin.publications.layouts.main')
+@section('title', "View ATC Resources -  ")
 @section('publications-content')
     <h1 class="font-weight-bold blue-text pb-2">ATC Resources</h1>
     <div class="row">

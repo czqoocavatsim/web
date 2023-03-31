@@ -55,7 +55,7 @@
                 </div>
                 <div class="form-group">
                     <p>Alternatively, pick an already uploaded image.</p>
-                    <button class="btn" type="button" data-toggle="collapse" data-target="#collapseExample">
+                    <button class="btn btn-primary mt-4" type="button" data-toggle="collapse" data-target="#collapseExample">
                         Pick uploaded image
                     </button>
                     <div class="collapse" id="collapseExample">

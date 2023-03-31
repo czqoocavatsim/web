@@ -416,7 +416,7 @@ class InstructingController extends Controller
 
         //Remove labels and instructor links and availability
         foreach ($student->labels as $label) {
-            if (!in_array($label->label()->name, ['Completed', 'Inactive'])) {
+            if (!in_array($label->label()->name, ['Completed'])) {
                 $label->delete();
             }
         }

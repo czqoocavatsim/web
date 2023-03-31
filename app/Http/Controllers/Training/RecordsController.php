@@ -71,6 +71,55 @@ class RecordsController extends Controller
         return redirect()->route('training.admin.instructing.students.records.training-notes', $student->user_id)->with('success', 'Note added!');
     }
 
+    public function editStudentTrainingNote($student_id, $training_note_id)
+    {
+        //Get Student
+        $student = Student::where('user_id', $student_id)->firstOrFail();
+
+        //Get note
+        $note = StudentNote::whereId($training_note_id)->where('student_id', $student->id)->firstOrFail();
+
+        //Return view
+        return view('admin.training.instructing.students.training-notes.edit', compact('note', 'student'));
+
+    }
+
+    public function editpostStudentTrainingNote(Request $request, $student_id, $training_note_id)
+    {
+        //Get student
+        $student = Student::where('user_id', $student_id)->firstOrFail();
+
+        //Get note
+        $note = StudentNote::whereId($training_note_id)->where('student_id', $student->id)->firstOrFail();
+
+        //Define validator messages
+        $messages = [
+            'content.required'    => 'Content is required',
+            'visibility.required' => 'A visibility setting is required',
+            'visibility.integer'  => 'A visibilty setting is required',
+        ];
+
+        //Validate
+        $validator = Validator::make($request->all(), [
+            'content'    => 'required',
+            'visibility' => 'required|integer',
+        ], $messages);
+
+        //Redirect if it fails
+        if ($validator->fails()) {
+            return redirect()->route('training.admin.instructing.students.records.training-notes.edit', [$student->user_id, $note->id])->withInput()->withErrors($validator, 'editTrainingNoteErrors');
+        }
+        
+        $note->content = $request->get('content');
+        $note->staff_only = $request->get('visibility');
+        $note->save();
+
+
+        //Return to notes
+        return redirect()->route('training.admin.instructing.students.records.training-notes', $student->user_id)->with('success', 'Note added!');
+
+    }
+
     public function deleteStudentTrainingNote($student_id, $training_note_id)
     {
         //Get student

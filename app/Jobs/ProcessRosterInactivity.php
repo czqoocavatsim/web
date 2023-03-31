@@ -2,13 +2,17 @@
 
 namespace App\Jobs;
 
-use App\Models\AtcTraining\RosterMember;
+use App\Models\Roster\RosterMember;
 use Carbon\Carbon;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
+use Illuminate\Support\Facades\Notification;
+use App\Notifications\Roster\RosterStatusChanged;
+use App\Notifications\Roster\RemovedFromRoster;
+use Illuminate\Support\Facades\Log;
 
 class ProcessRosterInactivity implements ShouldQueue
 {
@@ -34,58 +38,30 @@ class ProcessRosterInactivity implements ShouldQueue
      */
     public function handle()
     {
-        // Get all roster members that are certified
-        $rosterMembers = RosterMember::all()->whereNotIn('status', ['not_certified', 'training']);
+        $rosterMembers = RosterMember::all()->whereNotIn('certification', ['not_certified', 'training']);
 
-        // Loop through all roster members
         foreach ($rosterMembers as $rosterMember) {
 
             // Get date certified
             try {
                 $certifiedDate = Carbon::createFromFormat('Y-m-d H:i:s', $rosterMember->date_certified);
-                error_log($certifiedDate);
             } catch (\InvalidArgumentException $e) { // Catch exception if date is null
                 $certifiedDate = null;
+                Log::error('Certified Date Error '.$certifiedDate);
             }
 
-            if ($rosterMember->active) {
+            if ($rosterMember->active && $certifiedDate != null && !($certifiedDate > Carbon::now()->startOfQuarter() && $certifiedDate < Carbon::now()->endOfQuarter())) {
+                
 
-                // Check if certified in last 6mo
-                $diff = $certifiedDate != null ? Carbon::now()->diffInMonths($certifiedDate) : null; // Get date diff
-
-                // If less than 6 months
-                if ($diff != null && $diff <= 6) {
-                    switch ($diff) { // Switch the activity and check appropriate hours based on number
-                        case 0:
-                            break;
-                        case 1: // 1 month
-                            $rosterMember->active = $rosterMember->currency >= 1.0 ?: false;
-                            break;
-                        case 2: // 2 months
-                            $rosterMember->active = $rosterMember->currency >= 2.0 ?: false;
-                            break;
-                        case 3: // 3 months
-                            $rosterMember->active = $rosterMember->currency >= 3.0 ?: false;
-                            break;
-                        case 4: // 4 months
-                            $rosterMember->active = $rosterMember->currency >= 4.0 ?: false;
-                            break;
-                        case 5: // 5 months
-                            $rosterMember->active = $rosterMember->currency >= 5.0 ?: false;
-                            break;
-                        default: // Default
-                            $isActive = true;
-                            break;
-                    }
-                    // Save record
-                    $rosterMember->update();
-                } else {
-                    // Assign to false if less than 6
-                    $rosterMember->active = $rosterMember->currency >= 6.0 ?: false;
+                $rosterMember->active = $rosterMember->currency >= 3.0 ?: false;
+                if ($rosterMember->currency < 3.0) {
+                    $rosterMember->active = false;
                     $rosterMember->save();
-                }
-            } else { // If inactive
-                $rosterMember->delete(); // Bye bye
+                    Notification::send($rosterMember->user, new RosterStatusChanged($rosterMember));
+                }    
+            }elseif (!$rosterMember->active) {
+                $rosterMember->delete();
+                Notification::send($rosterMember->user, new RemovedFromRoster($rosterMember));
             }
         }
     }

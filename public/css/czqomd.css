@@ -172,6 +172,10 @@ body[data-theme="dark"] .modal-content {
     background:  rgb(59, 61, 68) !important;
 }
 
+body[data-theme="dark"] #discordTopModal .modal-body p {
+    color: black;
+}
+
 body[data-theme="dark"] .modal-content .close {
     color: #eee !important;
 }

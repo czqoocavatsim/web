@@ -7,6 +7,7 @@ use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\HtmlString;
 use Spatie\Activitylog\Traits\LogsActivity;
+use Illuminate\Support\Facades\Log;
 
 /**
  * App\Models\Roster\RosterMember
@@ -99,30 +100,42 @@ class RosterMember extends Model
 
     public function meetsActivityRequirement()
     {
-        //If not active
-        if (!$this->active) {
-            return false;
+        //Returns false only if we want them to get an inactivity email 
+
+        // Get date certified
+        try {
+            $certifiedDate = Carbon::createFromFormat('Y-m-d H:i:s', $this->date_certified);
+        } catch (\InvalidArgumentException $e) { // Catch exception if date is null
+            $certifiedDate = null;
         }
 
-        //If meets requirement outright
-        if ($this->currency >= 3.0) {
+        //If they are already inactive they can't control to meet activity in first place.
+        if (!$this->active){
             return true;
         }
 
-        //Check if its due to certified date
-        if ($this->date_certified) {
-            $certifiedDate = Carbon::create($this->date_certified);
-
-            //Get difference
-            $diff = Carbon::now()->diffInMonths($certifiedDate);
-
-            //If difference is equal to or less than 3 months
-            if ($diff <= 3) {
-                return true; //Exempt as per policy
-            }
+        //Can't do checks if certification date is bad
+        if ($certifiedDate === null) {
+            Log::error($this->cid.' was skipped from sending an inactivity email because of bad certification date.');
+            return true;
         }
 
-        //No
+        //Don't wanna send an inactivity email to someone who isn't certified
+        if ($this->certification != 'certified'){
+            return true;
+        }
+
+        //If within quarter nah skip since policy.
+        if ($certifiedDate > Carbon::now()->startOfQuarter() && $certifiedDate < Carbon::now()->endOfQuarter()){
+            return true;
+        }
+        
+        //If they are meet activity requirements why send em an email?
+        if ($this->currency >= 3.0) {
+            return true;
+        }
+        
+        //Finally send em an email!
         return false;
     }
 

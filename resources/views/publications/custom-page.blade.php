@@ -4,7 +4,11 @@
 @section('image', $page->thumbnail)
 @section('content')
 
+<div class="container py-4">
+<h1 class="font-weight-bold blue-text">{{ $page->name }}</h1>
+<hr>
 {!! $page->content !!}
+</div>
 
 @if ($page->response_form_enabled)
 <div class="container py-4">

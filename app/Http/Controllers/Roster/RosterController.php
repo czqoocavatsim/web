@@ -151,7 +151,7 @@ class RosterController extends Controller
         }
 
         //Redirect
-        return view('admin.training.roster.controller', compact('rosterMember'));
+        return redirect()->route('training.admin.roster.viewcontroller', $rosterMember->cid)->with('success', 'Roster Member Added');
     }
 
     public function viewRosterMember($cid)
@@ -314,7 +314,7 @@ class RosterController extends Controller
         $rosterMember->save();
 
         //Redirect
-        return view('admin.training.roster.controller', compact('rosterMember'))->with('success', 'Edited!');
+        return redirect()->route('training.admin.roster.viewcontroller', $cid)->with('success', 'Edited!');
     }
 
     public function exportRoster()

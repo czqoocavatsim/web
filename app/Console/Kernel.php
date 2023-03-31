@@ -2,17 +2,17 @@
 
 namespace App\Console;
 
+use App\Jobs\ProcessRosterInactivity;
 use App\Jobs\ProcessSessionLogging;
 use App\Jobs\ProcessSessionReminders;
 use App\Jobs\ProcessSoloCertExpiryWarnings;
-use App\Jobs\UpdateDiscordUserRoles;
 use App\Models\Roster\RosterMember;
 use App\Notifications\Network\OneWeekInactivityReminder;
 use App\Notifications\Network\TwoWeekInactivityReminder;
 use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Foundation\Console\Kernel as ConsoleKernel;
-use Illuminate\Support\Facades\Notification;
 use RestCord\DiscordClient;
+
 
 class Kernel extends ConsoleKernel
 {
@@ -37,40 +37,38 @@ class Kernel extends ConsoleKernel
         // Activitybot session logging
         $schedule->job(new ProcessSessionLogging())->everyMinute();
 
-        /*//// CRONS FOR INACTIVITY EMAILS
-        /// 2 weeks
+        //Inactivity checks
+        $schedule->job(new ProcessRosterInactivity())->cron('00 00 01 JAN,APR,JUL,OCT *');
+
+        //CRONS FOR INACTIVITY EMAILS 2 weeks
         $schedule->call(function () {
             //Loop through controllers
             $count = 0;
             foreach (RosterMember::all() as $rosterMember) {
                 //Do they meet the requirements?
-                if ($rosterMember->meetsActivityRequirement()) {
-                    //Yes... skip them
-                    continue;
+                if (!$rosterMember->meetsActivityRequirement()) {
+                    $count++;
+                    $rosterMember->user->notify(new TwoWeekInactivityReminder($rosterMember, 'n/a'));
                 }
-                //Let's send them a notification
-                $count++;
-                $rosterMember->user->notify(new TwoWeekInactivityReminder($rosterMember, 'n/a'));
             }
+
             //Tell Discord all about it
             $discord = new DiscordClient(['token' => config('services.discord.token')]);
             $discord->channel->createMessage(['channel.id' => 482817715489341441, 'content' => 'Sent '.$count.' two-week warning inactivity emails']);
         })->cron('00 00 16 MAR,JUN,SEP,DEC *'); // 2 weeks before end of quarter
 
-        /// 1 week
+        // 1 week
         $schedule->call(function () {
             //Loop through controllers
             $count = 0;
             foreach (RosterMember::all() as $rosterMember) {
                 //Do they meet the requirements?
-                if ($rosterMember->meetsActivityRequirement()) {
-                    //Yes... skip them
-                    continue;
+                if (!$rosterMember->meetsActivityRequirement()) {
+                    $count++;
+                    $rosterMember->user->notify(new OneWeekInactivityReminder($rosterMember, 'n/a'));
                 }
-                //Let's send them a notification
-                $count++;
-                $rosterMember->user->notify(new OneWeekInactivityReminder($rosterMember, 'n/a'));
             }
+            
             //Tell Discord all about it
             $discord = new DiscordClient(['token' => config('services.discord.token')]);
             $discord->channel->createMessage(['channel.id' => 482817715489341441, 'content' => 'Sent '.$count.' one-week warning inactivity emails']);
@@ -85,6 +83,16 @@ class Kernel extends ConsoleKernel
                 $rosterMember->save();
             }
         })->monthlyOn(1, '00:00');
+
+        // Quarterly Currency Wipe
+        $schedule->call(function () {
+            // Loop through all roster members
+            foreach (RosterMember::all() as $rosterMember) {
+                // Reset the hours for every member
+                $rosterMember->currency = 0.0;
+                $rosterMember->save();
+            }
+        })->cron('15 00 01 JAN,APR,JUL,OCT *');
 
         //Solo cert expiry warning
         $schedule->job(new ProcessSoloCertExpiryWarnings())->daily();

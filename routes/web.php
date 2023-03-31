@@ -254,6 +254,8 @@ Route::group(['middleware' => 'auth'], function () {
                             Route::get('/students/{cid}/records/training-notes/create', 'Training\RecordsController@createStudentTrainingNote')->name('instructing.students.records.training-notes.create')->middleware('can:edit training records');
                             Route::post('/students/{cid}/records/training-notes/create', 'Training\RecordsController@createStudentTrainingNotePost')->name('instructing.students.records.training-notes.create.post')->middleware('can:edit training records');
                             Route::get('/students/{cid}/records/training-notes/{training_note_id}/delete', 'Training\RecordsController@deleteStudentTrainingNote')->name('instructing.students.records.training-notes.delete')->middleware('can:edit training records');
+                            Route::get('/students/{cid}/records/training-notes/{training_note_id}/edit', 'Training\RecordsController@editStudentTrainingNote')->name('instructing.students.records.training-notes.edit')->middleware('can:edit training records');
+                            Route::post('/students/{cid}/records/training-notes/{training_note_id}/edit', 'Training\RecordsController@editpostStudentTrainingNote')->name('instructing.students.records.training-notes.post.edit')->middleware('can:edit training records');
 
                             //Assign student to instructor
                             Route::post('/students/{cid}/assign/instructor', 'Training\InstructingController@assignStudentToInstructor')->name('instructing.students.assign.instructor')->middleware('can:assign instructor to student');
@@ -299,6 +301,7 @@ Route::group(['middleware' => 'auth'], function () {
                     Route::get('/', 'News\NewsController@index')->name('news.index');
                     Route::get('/article/create', 'News\NewsController@createArticle')->name('news.articles.create')->middleware('can:create articles');
                     Route::post('/article/create', 'News\NewsController@postArticle')->name('news.articles.create.post')->middleware('can:create articles');
+                    Route::post('/article/{slug}/update/create', 'News\NewsController@adminEditNewsArticle')->name('news.article.update.post')->middleware('can:edit articles');
                     Route::get('/article/{slug}', 'News\NewsController@viewArticle')->name('news.articles.view');
                     Route::get('/announcement/create', 'News\NewsController@createAnnouncement')->name('news.announcements.create')->middleware('can:send announcements');
                     Route::post('/announcement/create', 'News\NewsController@createAnnouncementPost')->name('news.announcements.create.post')->middleware('can:send announcements');
@@ -324,7 +327,11 @@ Route::group(['middleware' => 'auth'], function () {
 
                 Route::group(['middleware' => ['permission:edit atc resources']], function () {
                     Route::get('/custom-pages', 'Publications\CustomPagesController@admin')->name('publications.custom-pages');
-                    Route::get('/custom-pages/{slug}', 'Publications\CustomPagesController@adminViewPage')->name('publications.custom-pages.view');
+                    Route::get('/custom-pages/create', 'Publications\CustomPagesController@adminCreatePage')->name('publications.custom-pages.create');
+                    Route::post('/custom-pages/create', 'Publications\CustomPagesController@adminPostCreatePage')->name('publications.custom-pages.post.create');
+                    Route::get('/custom-pages/{id}/edit', 'Publications\CustomPagesController@adminEditPage')->name('publications.custom-pages.edit');
+                    Route::post('/custom-pages/{id}/edit/post', 'Publications\CustomPagesController@adminEditPagePost')->name('publications.custom-pages.post.edit');
+                    Route::get('/custom-pages/{id}/delete', 'Publications\CustomPagesController@deleteCustomPage')->name('publications.custom-pages.delete');
                 });
             });
 
@@ -334,7 +341,7 @@ Route::group(['middleware' => 'auth'], function () {
                     Route::get('/', 'Network\NetworkController@index')->name('network.index');
                     Route::get('/monitored-positions', 'Network\NetworkController@monitoredPositionsIndex')->name('network.monitoredpositions.index');
                     Route::get('/monitored-positions/{position}', 'Network\NetworkController@viewMonitoredPosition')->name('network.monitoredpositions.view');
-                    Route::post('/monitored-positions/create', 'Network\NetworkController@createMonitoredPosition')->name('network.monitoredpositions.create')->middleware('edit monitored positions');
+                    Route::post('/monitored-positions/create', 'Network\NetworkController@createMonitoredPosition')->name('network.monitoredpositions.create')->middleware('can:edit monitored positions');
                 });
             });
 

@@ -8,6 +8,7 @@ use App\Models\Events\Event;
 use App\Models\Events\EventUpdate;
 use App\Models\Publications\UploadedImage;
 use App\Models\Users\User;
+use App\Models\Users\StaffMember;
 use App\Notifications\Events\NewControllerSignUp;
 use Auth;
 use Carbon\Carbon;
@@ -15,6 +16,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Str;
+use Illuminate\Support\Facades\Notification;
 use RestCord\DiscordClient;
 use Spatie\Permission\Models\Role;
 
@@ -69,7 +71,12 @@ class EventController extends Controller
         $marketingTeam = Role::whereName('Marketing Team')->first();
         if ($marketingTeam) {
             foreach ($marketingTeam->users as $user) {
-                $user->notify(new NewControllerSignUp($application));
+                $staff = StaffMember::whereUserId($user->id)->first();
+                if ($staff) {
+                    Notification::route('mail', $staff->email)->notify(new NewControllerSignUp($application));
+                } else {
+                    $user->notify(new NewControllerSignUp($application));
+                }
             }
         }
 

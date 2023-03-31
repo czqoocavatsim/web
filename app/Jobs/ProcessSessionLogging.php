@@ -5,8 +5,6 @@ namespace App\Jobs;
 use App\Models\Network\MonitoredPosition;
 use App\Models\Network\SessionLog;
 use App\Models\Roster\RosterMember;
-use App\Models\Settings\CoreSettings;
-use App\Notifications\Network\ControllerNotCertified;
 use Carbon\Carbon;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
@@ -14,7 +12,6 @@ use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Support\Facades\Log;
-use Illuminate\Support\Facades\Notification;
 use Vatsimphp\VatsimData;
 
 class ProcessSessionLogging implements ShouldQueue
