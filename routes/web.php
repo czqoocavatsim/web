@@ -122,6 +122,11 @@ Route::group(['middleware' => 'auth'], function () {
             Route::get('/{slug}', 'Feedback\FeedbackController@viewSubmission')->name('my.feedback.submission');
         });
 
+        //Bookings Calendar
+        Route::get('/atc/training-calendar', 'TrainingCalendar\TrainingController@index')->name('trainingcalendar.index');
+        Route::get('/atc/training-calendar/training-sessions', 'TrainingCalendar\TrainingController@getTrainingSessions')->name('trainingcalendar.trainingsessions');
+        Route::get('/atc/training-calendar/ots-sessions', 'TrainingCalendar\TrainingController@getOtsSessions')->name('trainingcalendar.otssessions');
+
         //Training
         Route::prefix('training')->group(function () {
 
