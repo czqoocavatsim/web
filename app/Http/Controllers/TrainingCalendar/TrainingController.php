@@ -17,6 +17,7 @@ class TrainingController extends Controller
 
     public function getTrainingSessions(Request $request) {
         $trainingsessions = TrainingSession::whereDate('scheduled_time', '>=', Carbon::createFromFormat('Y-m-d', explode('T',$request->start)[0]))   
+                ->whereDate('scheduled_time', '<=', Carbon::createFromFormat('Y-m-d', explode('T',$request->end)[0]))
                 ->whereNotNull('position_id')
                 ->get(['scheduled_time AS start', 'position_id']);
         
@@ -29,6 +30,7 @@ class TrainingController extends Controller
 
     public function getOtsSessions(Request $request) {
         $otssessions = OTSSession::whereDate('scheduled_time', '>=', Carbon::createFromFormat('Y-m-d', explode('T',$request->start)[0]))   
+                ->whereDate('scheduled_time', '<=', Carbon::createFromFormat('Y-m-d', explode('T',$request->end)[0]))
                 ->whereNotNull('position_id')
                 ->get(['scheduled_time AS start', 'position_id']);
         
