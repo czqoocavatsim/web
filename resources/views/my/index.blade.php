@@ -7,38 +7,9 @@
         <div class="container">
             <div class="py-5">
                 <h1 class="h1 my-4 py-2 font-weight-bold" style="font-size: 3em;">
-                    <?php
-                    function randomArrayVar($array)
-                    {
-                        if (!is_array($array)){
-                            return $array;
-                        }
-                        return $array[array_rand($array)];
-                    }
-
-                    //list of grettings as arary
-
-                    $greeting= array(
-                        "aloha"=>"Aloha",
-                        "ahoy"=>"Ahoy",
-                        "bonjour"=>"Bonjour",
-                        "gday"=>"G'day",
-                        "hello"=>"Hello",
-                        "hey"=>"Hey",
-                        "hi"=>"Hi",
-                        "hola"=>"Hola",
-                        "howdy"=>"Howdy",
-                        "guten_tag"=>"Guten Tag",
-                        "grüß_dich"=>"Grüß Dich");
-
-                    //echo greeting
-                    echo (randomArrayVar($greeting));
-                    ?>
+                    Hi,
                     {{Auth::user()->fullName('F')}}!
                 </h1>
-                @if(isset($quote))
-                <p style="font-size: 1.2em;">{{$quote->contents->quotes[0]->quote}} ~ {{$quote->contents->quotes[0]->author}}</p>
-                @endif
             </div>
         </div>
         @if(Auth::user()->created_at->diffInDays(Carbon\Carbon::now()) < 14) <!--14 days since user signed up-->
