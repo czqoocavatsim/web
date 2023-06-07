@@ -67,7 +67,7 @@
     </div>
     <h4 class="blue-text mt-4 mb-3">Finish your application</h4>
     <div class="list-group-item p-4 z-depth-1">
-        <p>By applying to Gander Oceanic you acknowledge the activity requirements for after you receive your endorsement. You will be required to control 3 hours each quarter. Failure to meet the requirement without justification may lead to the revokation of your endorsement.</p>
+        <p>By applying to Gander Oceanic you acknowledge the activity requirements for after you receive your endorsement. You will be required to control 6 hours each quarter. Failure to meet the requirement without justification may lead to the revokation of your endorsement.</p>
         <p>You also agree to comply with our General and Training policies.</p>
         <div class="custom-control custom-checkbox">
             <input type="checkbox" class="custom-control-input" required name="agreeActivity" id="agreeActivity">

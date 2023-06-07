@@ -73,10 +73,10 @@ class ProcessSessionLogging implements ShouldQueue
                     }
                 }
             } else { //Looking for a new session
-                if(empty($vatsimSessionInstances)){ // Should be empty if there's no sessions found, not with an index of 0
-                    Log::info('No sessions found for '.$position->identifier);
-                    continue;
-                }
+                // if(empty($vatsimSessionInstances)){ // Should be empty if there's no sessions found, not with an index of 0
+                //     Log::info('No sessions found for '.$position->identifier);
+                //     continue;
+                // }
                 // Should only be executing if there's a session in progress
                 $instance = $vatsimSessionInstances[0];
 

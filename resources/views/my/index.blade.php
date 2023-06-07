@@ -319,20 +319,20 @@
                             No hours recorded
                             </span>
                         </h3>
-                    @elseif (Auth::user()->rosterProfile->currency < 3.0)
+                    @elseif (Auth::user()->rosterProfile->currency < 6.0)
                         <h3>
                             <span style='font-weight: 400' class='badge rounded blue text-white p-2 shadow-none'>
                                 {{Auth::user()->rosterProfile->currency}} hours recorded
                             </span>
                         </h3>
-                    @elseif (Auth::user()->rosterProfile->currency >= 3.0)
+                    @elseif (Auth::user()->rosterProfile->currency >= 6.0)
                         <h3>
                             <span style='font-weight: 400' class='badge rounded green text-white p-2 shadow-none'>
                                 {{Auth::user()->rosterProfile->currency}} hours recorded
                             </span>
                         </h3>
                     @endif
-                    <p class="mt-4">You require 3 hours of activity every quarter, unless you were certified within the current activity cycle.</p>
+                    <p class="mt-4">You require 6 hours of activity every quarter, unless you were certified within the current activity cycle.</p>
                 @else
                     <h3>
                         <span style='font-weight: 400' class='badge rounded p-2 red text-white shadow-none'>
