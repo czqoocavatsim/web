@@ -1,0 +1,21 @@
+name: Deploy
+
+on:
+  [push, pull_request]:
+    branches: [ main ]
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v2
+
+    - name: Copy repository contents via scp
+      uses: appleboy/scp-action@master
+      with:
+        HOST: ${{ secrets.HOST }}
+        USERNAME: ${{ secrets.USER }}
+        KEY: ${{ secrets.KEY }}
+        PORT: 22
+        source: ./
+        target: /var/www/czqo-web-prod/

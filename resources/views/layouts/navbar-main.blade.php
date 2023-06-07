@@ -39,6 +39,7 @@
                 <a class="nav-link dropdown-toggle" style="cursor:pointer" id="dropdown01" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">ATC</a>
                 <div class="dropdown-menu" aria-labelledby="dropdown01">
                     <a class="dropdown-item {{ Request::is('atcresources') ? 'active white-text' : '' }}" href="{{route('atcresources.index')}}">ATC Resources</a>
+                    <a class="dropdown-item {{ Request::is('atc/training-calendar') ? 'active white-text' : '' }}" href="{{ route('trainingcalendar.index')}}"> Training Calendar</a> 
                     <a href="{{URL('/eurosounds')}}" class="dropdown-item {{ Request::is('eurosounds') ? 'active white-text' : '' }}">EuroSounds</a>
                     <a href="https://knowledgebase.ganderoceanic.ca" class="dropdown-item">Knowledge Base</a>
                     <a href="https://vnaaats.net" class="dropdown-item">vNAAATS</a>

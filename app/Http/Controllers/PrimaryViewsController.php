@@ -2,20 +2,21 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Events\Event;
-use App\Models\News\HomeNewControllerCert;
-use App\Models\News\News;
-use App\Models\Publications\AtcResource;
-use App\Models\Roster\RosterMember;
-use App\Models\Settings\RotationImage;
-use Carbon\Carbon;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Cache;
-use Illuminate\Support\Facades\Log;
 use Throwable;
-use Thujohn\Twitter\Facades\Twitter;
+use Carbon\Carbon;
+use GuzzleHttp\Client;
+use App\Models\News\News;
 use Vatsimphp\VatsimData;
+use App\Models\Events\Event;
+use Illuminate\Http\Request;
+use App\Models\Roster\RosterMember;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Auth;
+use Thujohn\Twitter\Facades\Twitter;
+use Illuminate\Support\Facades\Cache;
+use App\Models\Settings\RotationImage;
+use App\Models\Publications\AtcResource;
+use App\Models\News\HomeNewControllerCert;
 
 class PrimaryViewsController extends Controller
 {
@@ -109,15 +110,15 @@ class PrimaryViewsController extends Controller
 
         //Quote of the day
         $quote = Cache::remember('quoteoftheday', 86400, function () {
-            //Download via CURL
-            $url = 'https://quotes.rest/qod';
-            $ch = curl_init();
-            curl_setopt($ch, CURLOPT_URL, $url);
-            curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
-            $output = curl_exec($ch);
-            curl_close($ch);
+            $client = new Client();
+            $headers = [
+                'Authorization' => 'Bearer '.env('QUOTES_API_TOKEN')
+            ];
+            $output = $client->get('https://quotes.rest/qod',[
+                'headers' => $headers
+            ]);
 
-            return json_decode($output);
+            return json_decode($output->getBody());
         });
 
         return view('my.index', compact('atcResources', 'bannerImg', 'quote'));
