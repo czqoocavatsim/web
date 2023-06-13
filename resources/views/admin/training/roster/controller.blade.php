@@ -118,7 +118,7 @@
                                 enableTime: false,
                                 noCalendar: false,
                                 dateFormat: "Y-m-d",
-                                defaultDate: "{{Carbon\Carbon::createFromFormat('Y-m-d H:i:s', $rosterMember->date_certified ?? '1990-01-01 00:00:00')}}"
+                                defaultDate: "{{Carbon\Carbon::createFromFormat('Y-m-d H:i:s', $rosterMember->date_certified ?? Carbon\Carbon::now())}}"
                             });
                         </script>
                     </div>
