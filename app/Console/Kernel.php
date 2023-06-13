@@ -54,7 +54,7 @@ class Kernel extends ConsoleKernel
 
             //Tell Discord all about it
             $discord = new DiscordClient(['token' => config('services.discord.token')]);
-            $discord->channel->createMessage(['channel.id' => 482817715489341441, 'content' => 'Sent '.$count.' two-week warning inactivity emails']);
+            $discord->channel->createMessage(['channel.id' => 753086414811562014, 'content' => 'Sent '.$count.' two-week warning inactivity emails']);
         })->cron('00 00 16 MAR,JUN,SEP,DEC *'); // 2 weeks before end of quarter
 
         // 1 week
@@ -71,7 +71,7 @@ class Kernel extends ConsoleKernel
             
             //Tell Discord all about it
             $discord = new DiscordClient(['token' => config('services.discord.token')]);
-            $discord->channel->createMessage(['channel.id' => 482817715489341441, 'content' => 'Sent '.$count.' one-week warning inactivity emails']);
+            $discord->channel->createMessage(['channel.id' => 753086414811562014, 'content' => 'Sent '.$count.' one-week warning inactivity emails']);
         })->cron('00 00 23 MAR,JUN,SEP,DEC *'); // 1 week before end of quarter*/
 
         /// Monthly leaderboard wipe
