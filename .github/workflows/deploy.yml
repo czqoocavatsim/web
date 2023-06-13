@@ -1,7 +1,7 @@
 name: Deploy
-#
+
 on:
-  push:
+  [push, pull_request]:
     branches: [ main ]
 jobs:
   deploy:
@@ -15,7 +15,7 @@ jobs:
       with:
         HOST: ${{ secrets.HOST }}
         USERNAME: ${{ secrets.USER }}
-        KEY: ${{ secrets.KEY }}
+        PASSWORD: ${{ secrets.PASS }}
         PORT: 22
         source: ./
         target: /var/www/czqo-web-prod/
