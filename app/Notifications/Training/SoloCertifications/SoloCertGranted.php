@@ -4,12 +4,13 @@ namespace App\Notifications\Training\SoloCertifications;
 
 use Carbon\Carbon;
 use Illuminate\Bus\Queueable;
-use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
+use Illuminate\Contracts\Queue\ShouldQueue;
 use NotificationChannels\Discord\DiscordChannel;
 use NotificationChannels\Discord\DiscordMessage;
+use Illuminate\Notifications\Messages\MailMessage;
 
-class SoloCertGranted extends Notification
+class SoloCertGranted extends Notification implements ShouldQueue
 {
     use Queueable;
 

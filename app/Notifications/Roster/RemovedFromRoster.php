@@ -3,10 +3,11 @@
 namespace App\Notifications\Roster;
 
 use Illuminate\Bus\Queueable;
-use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
+use Illuminate\Contracts\Queue\ShouldQueue;
+use Illuminate\Notifications\Messages\MailMessage;
 
-class RemovedFromRoster extends Notification
+class RemovedFromRoster extends Notification implements ShouldQueue
 {
     use Queueable;
 

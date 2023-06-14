@@ -4,13 +4,13 @@ namespace App\Notifications\Training\Instructing;
 
 use Carbon\Carbon;
 use Illuminate\Bus\Queueable;
-use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
-use NotificationChannels\Discord\Discord;
+use Illuminate\Contracts\Queue\ShouldQueue;
 use NotificationChannels\Discord\DiscordChannel;
 use NotificationChannels\Discord\DiscordMessage;
+use Illuminate\Notifications\Messages\MailMessage;
 
-class NewSessionScheduledStudent extends Notification
+class NewSessionScheduledStudent extends Notification implements ShouldQueue
 {
     use Queueable;
 

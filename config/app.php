@@ -164,8 +164,8 @@ return [
         MisterPhilip\MaintenanceMode\MaintenanceModeServiceProvider::class,
         MisterPhilip\MaintenanceMode\MaintenanceCommandServiceProvider::class,
         NotificationChannels\Discord\DiscordServiceProvider::class,
-        SocialiteProviders\Manager\ServiceProvider::class,
         Bugsnag\BugsnagLaravel\BugsnagServiceProvider::class,
+        Collective\Html\HtmlServiceProvider::class,
 
         /*
          * Application Service Providers...
@@ -229,6 +229,8 @@ return [
         'GoogleCalendar' => Spatie\GoogleCalendar\GoogleCalendarFacade::class,
         'PDF'            => Barryvdh\DomPDF\Facade::class,
         'Calendar'       => \MaddHatter\LaravelFullcalendar\Facades\Calendar::class,
+        'Html' => Collective\Html\HtmlFacade::class,
+
     ],
 
 ];

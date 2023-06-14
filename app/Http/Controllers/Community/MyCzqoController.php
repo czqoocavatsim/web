@@ -2,18 +2,17 @@
 
 namespace App\Http\Controllers\Community;
 
-use App\Http\Controllers\Controller;
-use App\Models\Users\UserNotificationPreferences;
-use App\Models\Users\UserPreferences;
-use App\Models\Users\UserPrivacyPreferences;
-use App\Notifications\WelcomeNewUser;
 use Illuminate\Http\Request;
+use App\Services\DiscordClient;
+use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
+use App\Models\Users\UserPreferences;
+use App\Notifications\WelcomeNewUser;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
-use mofodojodino\ProfanityFilter\Check;
-use RestCord\DiscordClient;
+use App\Models\Users\UserPrivacyPreferences;
+use App\Models\Users\UserNotificationPreferences;
 
 class MyCzqoController extends Controller
 {
@@ -239,20 +238,11 @@ class MyCzqoController extends Controller
         $user->save();
 
         //Member of guild?
-        if ($user->memberOfCzqoGuild())
+        if ($user->member_of_czqo)
         {
             //Get Discord client
-            $discord = new DiscordClient(['token' => config('services.discord.token')]);
-
-            //Create the full arguments
-            $arguments = [
-                'guild.id' => intval(config('services.discord.guild_id')),
-                'user.id'  => $user->discord_user_id,
-                'nick'     => $user->fullName('FLC'),
-            ];
-
-            //Modify
-            $discord->guild->modifyGuildMember($arguments);
+            $discord = new DiscordClient();
+            $discord->changeName($user->discord_user_id, $user->fullName('FLC'));
         }
 
         //Redirect

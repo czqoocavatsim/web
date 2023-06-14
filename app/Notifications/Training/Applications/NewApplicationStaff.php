@@ -2,12 +2,13 @@
 
 namespace App\Notifications\Training\Applications;
 
-use App\Models\Training\Application;
 use Illuminate\Bus\Queueable;
-use Illuminate\Notifications\Messages\MailMessage;
+use App\Models\Training\Application;
 use Illuminate\Notifications\Notification;
+use Illuminate\Contracts\Queue\ShouldQueue;
+use Illuminate\Notifications\Messages\MailMessage;
 
-class NewApplicationStaff extends Notification
+class NewApplicationStaff extends Notification implements ShouldQueue
 {
     use Queueable;
 

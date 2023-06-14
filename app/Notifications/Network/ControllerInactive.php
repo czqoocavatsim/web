@@ -2,12 +2,13 @@
 
 namespace App\Notifications\Network;
 
-use App\Models\Network\MonitoredPosition;
 use Illuminate\Bus\Queueable;
-use Illuminate\Notifications\Messages\MailMessage;
+use App\Models\Network\MonitoredPosition;
 use Illuminate\Notifications\Notification;
+use Illuminate\Contracts\Queue\ShouldQueue;
+use Illuminate\Notifications\Messages\MailMessage;
 
-class ControllerInactive extends Notification
+class ControllerInactive extends Notification implements ShouldQueue
 {
     use Queueable;
 

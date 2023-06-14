@@ -3,10 +3,11 @@
 namespace App\Notifications\Training\Instructing;
 
 use Illuminate\Bus\Queueable;
-use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
+use Illuminate\Contracts\Queue\ShouldQueue;
+use Illuminate\Notifications\Messages\MailMessage;
 
-class RemovedAsInstructor extends Notification
+class RemovedAsInstructor extends Notification implements ShouldQueue
 {
     use Queueable;
 

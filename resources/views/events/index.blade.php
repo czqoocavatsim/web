@@ -28,7 +28,7 @@
                         </a>
                     </h2>
                     @if ($event->departure_icao && $event->arrival_icao)
-                    <h4 class="white-text">{{$event->departure_icao_data()->name}} ({{$event->departure_icao_data()->ICAO}})&nbsp;&nbsp;<i class="fas fa-plane"></i>&nbsp;&nbsp;{{$event->arrival_icao_data()->name}} ({{$event->arrival_icao_data()->ICAO}})</h4>
+                    <h4 class="white-text">{{$event->departure_icao_data()}} ({{$event->departure_icao}})&nbsp;&nbsp;<i class="fas fa-plane"></i>&nbsp;&nbsp;{{$event->arrival_icao_data()}} ({{$event->arrival_icao}})</h4>
                     @endif
                     <h5 class="white-text">{{$event->start_timestamp_pretty()}} to {{$event->end_timestamp_pretty()}}</h5>
                 </div>
@@ -57,7 +57,7 @@
                             </a>
                         </h2>
                         @if ($event->departure_icao && $event->arrival_icao)
-                        <h4 class="white-text">{{$event->departure_icao_data()->name}} ({{$event->departure_icao_data()->ICAO}})&nbsp;&nbsp;<i class="fas fa-plane"></i>&nbsp;&nbsp;{{$event->arrival_icao_data()->name}} ({{$event->arrival_icao_data()->ICAO}})</h4>
+                        <h4 class="white-text">{{$event->departure_icao_data()}} ({{$event->departure_icao}})&nbsp;&nbsp;<i class="fas fa-plane"></i>&nbsp;&nbsp;{{$event->arrival_icao_data()}} ({{$event->arrival_icao}})</h4>
                         @endif
                         <h5 class="white-text">{{$event->start_timestamp_pretty()}} to {{$event->end_timestamp_pretty()}}</h5>
                     </div>

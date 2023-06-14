@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use Throwable;
 use Carbon\Carbon;
 use GuzzleHttp\Client;
 use App\Models\News\News;
@@ -12,11 +11,11 @@ use Illuminate\Http\Request;
 use App\Models\Roster\RosterMember;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Auth;
-use Thujohn\Twitter\Facades\Twitter;
 use Illuminate\Support\Facades\Cache;
 use App\Models\Settings\RotationImage;
 use App\Models\Publications\AtcResource;
 use App\Models\News\HomeNewControllerCert;
+use Atymic\Twitter\Facade\Twitter;
 
 class PrimaryViewsController extends Controller
 {
@@ -52,11 +51,13 @@ class PrimaryViewsController extends Controller
         //Twitter
         $tweets = Cache::remember('twitter.timeline', 86400, function () {
             try {
-                return Twitter::getUserTimeline(['screen_name' => 'ganderocavatsim', 'count' => 2, 'format' => 'array']);
-            } catch (Throwable $ex) {
+                return Twitter::getUserTimeline(['screen_name' => 'ganderocavatsim', 'count' => 3, 'response_format' => 'json']);
+            } catch (\Exception $ex) {
                 return null;
             }
         });
+
+        $tweets = json_decode($tweets);
 
         //CTP Mode?
         $ctpMode = false;

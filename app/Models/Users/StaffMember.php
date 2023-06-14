@@ -4,6 +4,7 @@ namespace App\Models\Users;
 
 use Illuminate\Database\Eloquent\Model;
 use Spatie\Activitylog\Traits\LogsActivity;
+use Spatie\Activitylog\LogOptions;
 
 /**
  * App\Models\Users\StaffMember
@@ -86,13 +87,9 @@ class StaffMember extends Model
         activity()->causedBy(auth()->user())->performedOn($this)->log('Changed position holder to '.$assignedUser->id);
     }
 
-    /**
-     * Vacate the role.
-     *
-     * @return void
-     */
-    public function vacate()
+    public function getActivitylogOptions(): LogOptions
     {
-
+        return LogOptions::defaults()
+        ->logOnly(['name', 'text']);
     }
 }

@@ -2,6 +2,7 @@
 
 namespace App\Models\Network;
 
+use Spatie\Activitylog\LogOptions;
 use App\Models\Roster\RosterMember;
 use Illuminate\Database\Eloquent\Model;
 use Spatie\Activitylog\Traits\LogsActivity;
@@ -66,4 +67,10 @@ class SessionLog extends Model
     protected $dates = [
         'session_start', 'session_end',
     ];
+
+    public function getActivitylogOptions(): LogOptions
+    {
+        return LogOptions::defaults()
+        ->logOnly(['name', 'text']);
+    }
 }

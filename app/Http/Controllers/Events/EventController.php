@@ -2,23 +2,21 @@
 
 namespace App\Http\Controllers\Events;
 
-use App\Http\Controllers\Controller;
-use App\Models\Events\ControllerApplication;
-use App\Models\Events\Event;
-use App\Models\Events\EventUpdate;
-use App\Models\Publications\UploadedImage;
-use App\Models\Users\User;
-use App\Models\Users\StaffMember;
-use App\Notifications\Events\NewControllerSignUp;
-use Auth;
 use Carbon\Carbon;
+use Illuminate\Support\Str;
+use App\Models\Events\Event;
 use Illuminate\Http\Request;
+use App\Services\DiscordClient;
+use App\Models\Users\StaffMember;
+use App\Models\Events\EventUpdate;
+use Spatie\Permission\Models\Role;
+use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
-use Illuminate\Support\Str;
+use App\Models\Publications\UploadedImage;
+use App\Models\Events\ControllerApplication;
 use Illuminate\Support\Facades\Notification;
-use RestCord\DiscordClient;
-use Spatie\Permission\Models\Role;
+use App\Notifications\Events\NewControllerSignUp;
 
 class EventController extends Controller
 {
@@ -42,8 +40,8 @@ class EventController extends Controller
     {
         $event = Event::where('slug', $slug)->firstOrFail();
         $updates = $event->updates;
-        if (Auth::check() && ControllerApplication::where('user_id', Auth::id())->where('event_id', $event->id)) {
-            $app = ControllerApplication::where('user_id', Auth::id())->where('event_id', $event->id)->first();
+        if (auth()->check() && ControllerApplication::where('user_id', auth()->id())->where('event_id', $event->id)) {
+            $app = ControllerApplication::where('user_id', auth()->id())->where('event_id', $event->id)->first();
 
             return view('events.view', compact('event', 'updates', 'app'));
         }
@@ -58,7 +56,7 @@ class EventController extends Controller
             'availability_end'   => 'required',
         ]);
         $application = new ControllerApplication([
-            'user_id'                      => Auth::id(),
+            'user_id'                      => auth()->id(),
             'event_id'                     => $request->get('event_id'),
             'start_availability_timestamp' => $request->get('availability_start'),
             'end_availability_timestamp'   => $request->get('availability_end'),
@@ -81,31 +79,10 @@ class EventController extends Controller
         }
 
         //Discord client
-        $discord = new DiscordClient(['token' => config('services.discord.token')]);
+        $discord = new DiscordClient();
 
         //Send notification to marketing
-        $discord->channel->createMessage([
-            'channel.id' => intval(config('services.discord.marketing')),
-            'content'    => 'A controller has signed up to control for '.$application->event->name,
-            'embed'      => [
-                'title'     => $application->user->fullName('FLC'),
-                'url'       => route('events.admin.view', $application->event->slug),
-                'timestamp' => date('Y-m-d H:i:s'),
-                'color'     => hexdec('2196f3'),
-                'fields'    => [
-                    [
-                        'name'   => 'Timing',
-                        'value'  => 'From '.$application->start_availability_timestamp.' to '.$application->end_availability_timestamp,
-                        'inline' => false,
-                    ],
-                    [
-                        'name'   => 'Comments',
-                        'value'  => $application->comments ? $application->comments : 'No comments given',
-                        'inline' => true,
-                    ],
-                ],
-            ],
-        ]);
+        $discord->sendMessageWithEmbed(intval(config('services.discord.marketing')),'A controller has signed up to control for '.$application->event->name, 'Timing: From '.$application->start_availability_timestamp.' to '.$application->end_availability_timestamp.' Comments: '.$application->comments ? $application->comments : 'No comments given');
 
         return redirect()->back()->with('success', 'Submitted!');
     }
@@ -171,7 +148,7 @@ class EventController extends Controller
         $event->description = $request->get('description');
 
         //Assign user
-        $event->user_id = Auth::id();
+        $event->user_id = auth()->id();
 
         //Upload image if it exists
         if ($request->file('image')) {
@@ -181,7 +158,7 @@ class EventController extends Controller
             //Add to uploaded images
             $uploadedImg = new UploadedImage();
             $uploadedImg->path = Storage::url($path);
-            $uploadedImg->user_id = Auth::id();
+            $uploadedImg->user_id = auth()->id();
             $uploadedImg->save();
         }
 
@@ -210,22 +187,10 @@ class EventController extends Controller
         //Announce it on Discord?
         if ($request->get('announceDiscord') == 'on') {
             //Discord client
-            $discord = new DiscordClient(['token' => config('services.discord.token')]);
+            $discord = new DiscordClient();
 
             //Send notification to marketing
-            $discord->channel->createMessage([
-                'channel.id' => config('app.env') == 'local' ? intval(config('services.discord.web_logs')) : intval(config('services.discord.announcements')),
-                'embed'      => [
-                    'title'       => "Upcoming event: {$event->name}",
-                    'description' => "Starting {$event->start_timestamp_pretty()}",
-                    'color'       => 0x80c9,
-                    'image'       => [
-                        'url' => $event->image_url ? url('/').$event->image_url : null,
-                    ],
-                    'url'       => route('events.view', $event->slug),
-                    'timestamp' => date('Y-m-d H:i:s'),
-                ],
-            ]);
+            $discord->sendMessageWithEmbed(config('app.env') == 'local' ? intval(config('services.discord.web_logs')) : intval(config('services.discord.announcements')),"Upcoming event: {$event->name}","Starting {$event->start_timestamp_pretty()}");
         }
 
         //Redirect
@@ -289,7 +254,7 @@ class EventController extends Controller
             //Add to uploaded images
             $uploadedImg = new UploadedImage();
             $uploadedImg->path = Storage::url($path);
-            $uploadedImg->user_id = Auth::id();
+            $uploadedImg->user_id = auth()->id();
             $uploadedImg->save();
         }
 
@@ -339,7 +304,7 @@ class EventController extends Controller
         //Create update object
         $update = new EventUpdate([
             'event_id'          => Event::where('slug', $event_slug)->firstOrFail()->id,
-            'user_id'           => Auth::id(),
+            'user_id'           => auth()->id(),
             'title'             => $request->get('updateTitle'),
             'content'           => $request->get('updateContent'),
             'created_timestamp' => Carbon::now(),
@@ -348,27 +313,6 @@ class EventController extends Controller
 
         //Save it
         $update->save();
-
-        //Announce it on Discord?
-        if ($request->get('announceDiscord') == 'on') {
-            //Discord client
-            $discord = new DiscordClient(['token' => config('services.discord.token')]);
-
-            //Send notification to marketing
-            $discord->channel->createMessage([
-                'channel.id' => config('app.env') == 'local' ? intval(config('services.discord.web_logs')) : intval(config('services.discord.announcements')),
-                'embed'      => [
-                    'title'       => "Update for event {$update->event->name}",
-                    'description' => $update->content,
-                    'color'       => 0x80c9,
-                    'url'         => route('events.view', $update->event->slug),
-                    'timestamp'   => date('Y-m-d H:i:s'),
-                    'author'      => [
-                        'name' => $update->user->fullName('FLC'),
-                    ],
-                ],
-            ]);
-        }
 
         //Redirect
         return redirect()->route('events.admin.view', $event_slug)->with('success', 'Update created!');

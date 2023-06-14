@@ -14,7 +14,7 @@
             <h5 class="blue-text">Information</h5>
             <ul class="list-unstyled">
                 <li>Email: <a href="mailto:{{$instructor->email()}}">{{$instructor->email()}}</a></li>
-                <li>Discord: @if($instructor->user->hasDiscord()){{$instructor->user->getDiscordUser()->username}}<span style="color: #797979;">#{{$instructor->user->getDiscordUser()->discriminator}} @else N/A @endif</li>
+                <li>Discord: @if($instructor->user->hasDiscord()){{$instructor->user->discord_username}} @else N/A @endif</li>
                 <li>Instructor since: {{$instructor->created_at->toFormattedDateString()}}, {{$instructor->created_at->diffForHumans()}}</li>
             </ul>
             {{-- <h5 class="blue-text">Records</h5>

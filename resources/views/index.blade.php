@@ -32,17 +32,6 @@
         <div class="container blue z-depth-2 px-5 pt-5 pb-3 mb-5">
             <div class="row">
                 <div class="col-md-6 mb-4">
-                    {{-- <h2 class="font-weight-bold white-text mb-4">Latest News</h2>
-                    <div class="list-group list-group-flush z-depth-1">
-                        @foreach($news as $n)
-                            <a href="" target="_blank" class="list-group-item list-group-item-action waves-effect blue">
-                                <h4 class="fw-600 white-text">{{$n->title}}</h4>
-                                <p class="white-text mb-0">
-                                    {{$n->summary}}&nbsp;&nbsp;•&nbsp;&nbsp;{{$n->published->diffForHumans()}}
-                                </p>
-                            </a>
-                        @endforeach
-                    </div> --}}
                     @if ($news)
                     <div class="view" style="height: 330px !important; @if($news->image) background-image:url({{$news->image}}); background-size: cover; background-position-x: center; @else background: var(--czqo-blue); @endif">
                         <div class="mask rgba-stylish-light flex-left p-4 justify-content-end d-flex flex-column h-100">
@@ -112,21 +101,21 @@
                 <div class="list-group z-depth-1">
                     @if($tweets)
                     @foreach($tweets as $t)
-                        <a href="https://twitter.com/ganderocavatsim/status/{{$t['id']}}" target="_blank" class="list-group-item list-group-item-action waves-effect">
+                        <a href="https://twitter.com/ganderocavatsim/status/{{$t->id}}" target="_blank" class="list-group-item list-group-item-action waves-effect">
                             <p>
-                                {{$t['text']}}
+                                {{$t->text}}
                             </p>
                             <p class="text-muted mb-0">
-                                {{Carbon\Carbon::create($t['created_at'])->diffForHumans()}}
-                                @if($t['retweeted'])
+                                {{Carbon\Carbon::create($t->created_at)->diffForHumans()}}
+                                @if($t->retweeted)
                                 &nbsp;&nbsp;•&nbsp;&nbsp;
                                 <i class="fas fa-retweet"></i>
-                                Retweet of {{$t['retweeted_status']['user']['name']}}
+                                Retweet of {{$t->retweeted_status->user->name}}
                                 @endif
-                                @if($t['in_reply_to_user_id'])
+                                @if($t->in_reply_to_user_id)
                                 &nbsp;&nbsp;•&nbsp;&nbsp;
                                 <i class="fas fa-reply"></i>
-                                In Reply To {{$t['in_reply_to_screen_name']}}
+                                In Reply To {{$t->in_reply_to_screen_name}}
                                 @endif
                             </p>
                         </a>

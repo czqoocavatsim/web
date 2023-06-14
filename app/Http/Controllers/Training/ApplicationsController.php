@@ -13,7 +13,6 @@ use App\Models\Training\Instructing\Links\StudentStatusLabelLink;
 use App\Models\Training\Instructing\Students\Student;
 use App\Models\Training\Instructing\Students\StudentStatusLabel;
 use App\Notifications\Training\Applications\ApplicationAcceptedApplicant;
-use App\Notifications\Training\Applications\ApplicationAcceptedStaff;
 use App\Notifications\Training\Applications\ApplicationRejectedApplicant;
 use App\Notifications\Training\Applications\ApplicationWithdrawnStaff;
 use App\Notifications\Training\Applications\NewApplicationStaff;
@@ -21,7 +20,6 @@ use App\Notifications\Training\Applications\NewCommentApplicant;
 use App\Notifications\Training\Applications\NewCommentStaff;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Log;
@@ -29,26 +27,24 @@ use Illuminate\Support\Facades\Notification;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Str;
-use mofodojodino\ProfanityFilter\Check;
-use RestCord\DiscordClient;
-use Spatie\Permission\Models\Role;
+use App\Services\DiscordClient;
 
 class ApplicationsController extends Controller
 {
     public function showAll()
     {
-        $applications = Auth::user()->applications->sortByDesc('created_at');
+        $applications = auth()->user()->applications->sortByDesc('created_at');
 
         return view('training.applications.showall', compact('applications'));
     }
 
     public function apply(Request $request)
     {
-        if (!Auth::user()->can('start applications')) {
+        if (!auth()->user()->can('start applications')) {
             abort(403, 'You cannot apply for Gander Oceanic at this time. If this is a mistake, please contact the Deputy OCA Chief.');
         }
 
-        if ($pendingApp = Application::where('user_id', Auth::id())->where('status', 0)->first()) {
+        if ($pendingApp = Application::where('user_id', auth()->id())->where('status', 0)->first()) {
             //redirect
             $request->session()->flash('alreadyApplied', 'You already have a pending application for Gander.');
 
@@ -56,14 +52,14 @@ class ApplicationsController extends Controller
         }
 
         //Redirect of rating isnt C1
-        if (Auth::user()->rating_id < 5) {
+        if (auth()->user()->rating_id < 5) {
             return view('training.applications.apply')->with('allowed', 'rating');
         }
 
         //Check hours of controller
 
         //Download via CURL
-        $url = 'https://api.vatsim.net/v2/members/'.Auth::id().'/stats';
+        $url = 'https://api.vatsim.net/v2/members/'.auth()->id().'/stats';
         $ch = curl_init();
         curl_setopt($ch, CURLOPT_URL, $url);
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
@@ -91,7 +87,7 @@ class ApplicationsController extends Controller
         }));
 
         foreach ($shanwickRoster->validated_members as $member) {
-            if ($member->id == Auth::id()) {
+            if ($member->id == auth()->id()) {
                 return view('training.applications.apply')->with('allowed', 'shanwick');
             }
         }
@@ -122,8 +118,8 @@ class ApplicationsController extends Controller
 
         //Create application and save it
         $application = new Application();
-        $application->reference_id = Auth::user()->display_fname[0].Auth::user()->lname[0].Str::random(4);
-        $application->user_id = Auth::id();
+        $application->reference_id = auth()->user()->display_fname[0].auth()->user()->lname[0].Str::random(4);
+        $application->user_id = auth()->id();
         $application->applicant_statement = $request->get('applicant_statement');
         $application->save();
 
@@ -160,7 +156,7 @@ class ApplicationsController extends Controller
         $application = Application::where('reference_id', $reference_id)->firstOrFail();
 
         //Check if not allowed
-        if (Gate::denies('view-application', $application) || Auth::id() != $application->user_id) {
+        if (Gate::denies('view-application', $application) || auth()->id() != $application->user_id) {
             //Show 404 to not show that the application does exist
             abort(404);
         }
@@ -260,7 +256,7 @@ class ApplicationsController extends Controller
         }
 
         //How long ago was the last one?
-        if ($application->comments->where('user_id', Auth::id())->sortByDesc('created_at')->first() && $application->comments->where('user_id', Auth::id())->sortByDesc('created_at')->first()->created_at->diffInMinutes(Carbon::now()) < 10) {
+        if ($application->comments->where('user_id', auth()->id())->sortByDesc('created_at')->first() && $application->comments->where('user_id', auth()->id())->sortByDesc('created_at')->first()->created_at->diffInMinutes(Carbon::now()) < 10) {
             return redirect()->back()->withInput()->with('error-modal', 'You can only submit a comment every 10 minutes to prevent spam.');
         }
 
@@ -268,7 +264,7 @@ class ApplicationsController extends Controller
         $comment = new ApplicationComment();
 
         //Assign values
-        $comment->user_id = Auth::id();
+        $comment->user_id = auth()->id();
         $comment->content = $request->get('comment');
         $comment->application_id = $application->id;
 
@@ -328,7 +324,7 @@ class ApplicationsController extends Controller
         //Check hours of controller
 
         //Download via CURL
-        $url = 'https://api.vatsim.net/v2/members/'.Auth::id().'/stats';
+        $url = 'https://api.vatsim.net/v2/members/'.$application->user_id.'/stats';
         $ch = curl_init();
         curl_setopt($ch, CURLOPT_URL, $url);
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
@@ -369,7 +365,7 @@ class ApplicationsController extends Controller
         $comment = new ApplicationComment();
 
         //Assign values
-        $comment->user_id = Auth::id();
+        $comment->user_id = auth()->id();
         $comment->content = $request->get('comment');
         $comment->application_id = $application->id;
 
@@ -432,16 +428,12 @@ class ApplicationsController extends Controller
         $student->user->assignRole('Student');
 
         //Give Discord role
-        if ($student->user->hasDiscord() && $student->user->memberOfCzqoGuild()) {
+        if ($student->user->hasDiscord() && $student->user->member_of_czqo) {
             //Get Discord client
-            $discord = new DiscordClient(['token' => config('services.discord.token')]);
+            $discord = new DiscordClient();
 
-            //Remove student role
-            $discord->guild->addGuildMemberRole([
-                'guild.id' => intval(config('services.discord.guild_id')),
-                'user.id'  => $student->user->discord_user_id,
-                'role.id'  => 482824058141016075,
-            ]);
+            //Add student role
+            $discord->assignRole($student->user->discord_user_id, 482824058141016075);
         } else {
             Session::flash('info', 'Unable to add Discord permissions automatically.');
         }

@@ -5,6 +5,7 @@ namespace App\Models\Events;
 use App\Models\Users\User;
 use Illuminate\Database\Eloquent\Model;
 use Spatie\Activitylog\Traits\LogsActivity;
+use Spatie\Activitylog\LogOptions;
 
 /**
  * App\Models\Events\ControllerApplication
@@ -54,5 +55,11 @@ class ControllerApplication extends Model
     public function event()
     {
         return $this->belongsTo(Event::class);
+    }
+
+    public function getActivitylogOptions(): LogOptions
+    {
+        return LogOptions::defaults()
+        ->logOnly(['name', 'text']);
     }
 }

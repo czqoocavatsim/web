@@ -2,23 +2,26 @@
 
 namespace App\Models\Users;
 
+use Throwable;
 use App\Models\News\News;
+use Illuminate\Support\Carbon;
+use App\Models\Users\StaffMember;
+use Spatie\Activitylog\LogOptions;
 use App\Models\Roster\RosterMember;
+use Illuminate\Support\Facades\Log;
 use App\Models\Training\Application;
-use App\Models\Training\Instructing\Instructors\Instructor;
+use App\Models\Users\UserPreferences;
+use Illuminate\Support\Facades\Cache;
+use Spatie\Permission\Traits\HasRoles;
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Notifications\Notifiable;
+use Spatie\Activitylog\Traits\LogsActivity;
+use App\Models\Users\UserPrivacyPreferences;
+use App\Models\Users\UserNotificationPreferences;
+use LasseRafn\InitialAvatarGenerator\InitialAvatar;
 use App\Models\Training\Instructing\Students\Student;
 use Illuminate\Foundation\Auth\User as Authenticatable;
-use Illuminate\Notifications\Notifiable;
-use Illuminate\Support\Carbon;
-use Illuminate\Support\Facades\Cache;
-use Illuminate\Support\Facades\Log;
-use Illuminate\Support\Facades\Storage;
-use Illuminate\Support\Facades\URL;
-use LasseRafn\InitialAvatarGenerator\InitialAvatar;
-use RestCord\DiscordClient;
-use Spatie\Activitylog\Traits\LogsActivity;
-use Spatie\Permission\Traits\HasRoles;
-use Throwable;
+use App\Models\Training\Instructing\Instructors\Instructor;
 
 /**
  * App\Models\Users\User
@@ -321,54 +324,13 @@ class User extends Authenticatable
     }
 
     /**
-     * Returns the user's Discord account data.
-     *
-     * @return \RestCord\Model\User\User|null
-     */
-    public function getDiscordUser()
-    {
-        return Cache::remember('users.discorduserdata.'.$this->id, 84600, function () {
-            $discord = new DiscordClient(['token' => config('services.discord.token')]);
-            $user = $discord->user->getUser(['user.id' => $this->discord_user_id]);
-
-            return $user;
-        });
-    }
-
-    /**
      * Returns the user's Discord avatar URL.
      *
      * @return string|null
      */
     public function getDiscordAvatar()
     {
-        return Cache::remember('users.discorduserdata.'.$this->id.'.avatar', 21600, function () {
-            $discord = new DiscordClient(['token' => config('services.discord.token')]);
-            $user = $discord->user->getUser(['user.id' => $this->discord_user_id]);
-            $url = 'https://cdn.discordapp.com/avatars/'.$user->id.'/'.$user->avatar.'.png';
-
-            return $url;
-        });
-    }
-
-    /**
-     * Returns a true/false of whether the user is a member of the Discord guild.
-     *
-     * @return bool
-     */
-    public function memberOfCzqoGuild()
-    {
-        $discord = new DiscordClient(['token' => config('services.discord.token')]);
-
-        try {
-            if ($discord->guild->getGuildMember(['guild.id' => 479250337048297483, 'user.id' => $this->discord_user_id])) {
-                return true;
-            }
-        } catch (Throwable $ex) {
-            return false;
-        }
-
-        return false;
+        return $this->discord_avatar;
     }
 
     /**
@@ -452,5 +414,11 @@ class User extends Authenticatable
         }
 
         return null;
+    }
+
+    public function getActivitylogOptions(): LogOptions
+    {
+        return LogOptions::defaults()
+        ->logOnly(['name', 'text']);
     }
 }

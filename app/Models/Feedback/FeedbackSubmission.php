@@ -2,12 +2,15 @@
 
 namespace App\Models\Feedback;
 
-use App\Models\Users\User;
-use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\SoftDeletes;
-use Illuminate\Support\HtmlString;
 use Parsedown;
+use App\Models\Users\User;
+use Illuminate\Support\HtmlString;
+use Spatie\Activitylog\LogOptions;
+use App\Models\Feedback\FeedbackType;
+use Illuminate\Database\Eloquent\Model;
 use Spatie\Activitylog\Traits\LogsActivity;
+use Illuminate\Database\Eloquent\SoftDeletes;
+use App\Models\Feedback\FeedbackTypeFieldSubmission;
 
 /**
  * App\Models\Feedback\FeedbackSubmission
@@ -112,5 +115,11 @@ class FeedbackSubmission extends Model
     public function fields()
     {
         return $this->hasMany(FeedbackTypeFieldSubmission::class, 'submission_id');
+    }
+
+    public function getActivitylogOptions(): LogOptions
+    {
+        return LogOptions::defaults()
+        ->logOnly(['name', 'text']);
     }
 }

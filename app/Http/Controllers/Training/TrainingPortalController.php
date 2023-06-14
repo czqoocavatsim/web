@@ -10,11 +10,10 @@ use App\Models\Training\Instructing\Records\StudentNote;
 use App\Models\Training\Instructing\Records\TrainingSession;
 use App\Models\Training\Instructing\Students\StudentAvailabilitySubmission;
 use App\Models\Training\Instructing\Students\StudentStatusLabel;
-use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
-use RestCord\DiscordClient;
+use App\Services\DiscordClient;
 
 class TrainingPortalController extends Controller
 {
@@ -65,24 +64,14 @@ class TrainingPortalController extends Controller
 
                 //Assign it with link
                 $link = new StudentStatusLabelLink([
-                    'student_id'              => $student->id,
+                    'student_id' => $student->id,
                     'student_status_label_id' => $readyForPickUp->id,
                 ]);
                 $link->save();
 
                 //Discord notification in instructors channel
-                $discord = new DiscordClient(['token' => config('services.discord.token')]);
-                $discord->channel->createMessage([
-                    'channel.id' => intval(config('services.discord.instructors')),
-                    'content'    => '',
-                    'embed'      => [
-                        'title'       => 'A new student is available for pick-up by an Instructor',
-                        'url'         => route('training.admin.instructing.students.view', $student->user_id),
-                        'timestamp'   => Carbon::now(),
-                        'color'       => hexdec('2196f3'),
-                        'description' => $student->user->fullName('FLC'),
-                    ],
-                ]);
+                $discord = new DiscordClient();
+                $discord->sendMessageWithEmbed(intval(config('services.discord.instructors')), 'A new student is available for pick-up by an Instructor', $student->user->fullName('FLC') . ' is available to be picked up by an instructor!');
 
                 //Break
                 break;
@@ -90,7 +79,7 @@ class TrainingPortalController extends Controller
         }
 
         //Return
-        return redirect()->route('training.portal.index')->with('success', 'Thank you for submitting your availability, '.Auth::user()->fullName('F').'!');
+        return redirect()->route('training.portal.index')->with('success', 'Thank you for submitting your availability, ' . Auth::user()->fullName('F') . '!');
     }
 
     public function helpPolicies()

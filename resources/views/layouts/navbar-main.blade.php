@@ -42,8 +42,6 @@
                     <a class="dropdown-item {{ Request::is('atc/training-calendar') ? 'active white-text' : '' }}" href="{{ route('trainingcalendar.index')}}"> Training Calendar</a> 
                     <a href="{{URL('/eurosounds')}}" class="dropdown-item {{ Request::is('eurosounds') ? 'active white-text' : '' }}">EuroSounds</a>
                     <a href="https://knowledgebase.ganderoceanic.ca" class="dropdown-item">Knowledge Base</a>
-                    <a href="https://vnaaats.net" class="dropdown-item">vNAAATS</a>
-                    <a href="https://vnaaats.net/fdd" class="dropdown-item">Flight Data Display</a>
                 </div>
             </li>
             <li class="nav-item dropdown {{ Request::is('pilots/oceanic-clearance') || Request::is('pilots/position-report') || Request::is('pilots/vatsim-resources') || Request::is('pilots/tutorial') || Request::is('pilots/tracks') ? 'active' : '' }}">
@@ -53,7 +51,6 @@
                     <a class="dropdown-item {{ Request::is('pilots/position-report') ? 'active white-text' : '' }}" href="{{url('/pilots/position-report')}}">Position Report Generator</a>
                     <a class="dropdown-item {{ Request::is('pilots/tracks') ? 'active white-text' : ''}}" href="{{url('/pilots/tracks')}}">Current NAT Tracks</a>
                     <a class="dropdown-item {{ Request::is('pilots/tracks/event') ? 'active white-text' : ''}}" href="{{url('/pilots/tracks/event')}}">Event NAT Tracks</a>
-                    <a class="dropdown-item" href="https://www.vatsim.net/pilots/resources" target="_blank">VATSIM Resources</a>
                     <a class="dropdown-item" href="https://nattrak.vatsim.net" target="_blank">natTRAK</a>
                     <a class="dropdown-item" href="{{url('/map')}}">Map</a>
                 </div>

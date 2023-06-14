@@ -40,4 +40,28 @@ class TrainingController extends Controller
         
         return response()->json($otssessions);
     }
+
+    public function getTrainingSessionsAdmin(Request $request) {
+        $trainingsessions = TrainingSession::whereDate('scheduled_time', '>=', Carbon::createFromFormat('Y-m-d', explode('T',$request->start)[0]))   
+                ->whereDate('scheduled_time', '<=', Carbon::createFromFormat('Y-m-d', explode('T',$request->end)[0]))
+                ->get(['scheduled_time AS start', 'position_id']);
+        
+        foreach($trainingsessions->all() as $ts){
+            $ts->title = 'Training Session';
+        }
+        
+        return response()->json($trainingsessions);
+    }
+
+    public function getOtsSessionsAdmin(Request $request) {
+        $otssessions = OTSSession::whereDate('scheduled_time', '>=', Carbon::createFromFormat('Y-m-d', explode('T',$request->start)[0]))   
+                ->whereDate('scheduled_time', '<=', Carbon::createFromFormat('Y-m-d', explode('T',$request->end)[0]))
+                ->get(['scheduled_time AS start', 'position_id']);
+        
+        foreach($otssessions->all() as $os){
+            $os->title = 'OTS Session';
+        }
+        
+        return response()->json($otssessions);
+    }
 }

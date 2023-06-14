@@ -3,6 +3,8 @@
 namespace App\Models\Network;
 
 use Carbon\Carbon;
+use App\Models\Network\SessionLog;
+use Spatie\Activitylog\LogOptions;
 use Illuminate\Database\Eloquent\Model;
 use Spatie\Activitylog\Traits\LogsActivity;
 
@@ -37,5 +39,11 @@ class MonitoredPosition extends Model
         } else {
             return null;
         }
+    }
+
+    public function getActivitylogOptions(): LogOptions
+    {
+        return LogOptions::defaults()
+        ->logOnly(['name', 'text']);
     }
 }

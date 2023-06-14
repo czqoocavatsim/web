@@ -3,10 +3,11 @@
 namespace App\Notifications\Feedback;
 
 use Illuminate\Bus\Queueable;
-use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
+use Illuminate\Contracts\Queue\ShouldQueue;
+use Illuminate\Notifications\Messages\MailMessage;
 
-class NewFeedbackStaff extends Notification
+class NewFeedbackStaff extends Notification implements ShouldQueue
 {
     use Queueable;
 

@@ -2,6 +2,8 @@
 
 namespace App\Models\Network;
 
+use App\Models\Network\SessionLog;
+use Spatie\Activitylog\LogOptions;
 use Illuminate\Database\Eloquent\Model;
 use Spatie\Activitylog\Traits\LogsActivity;
 
@@ -32,5 +34,11 @@ class MonthlyHours extends Model
         }
 
         return $session;
+    }
+
+    public function getActivitylogOptions(): LogOptions
+    {
+        return LogOptions::defaults()
+        ->logOnly(['name', 'text']);
     }
 }

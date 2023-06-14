@@ -44,7 +44,7 @@
                 <li>Discord:
                     @if($student->user->hasDiscord())
                         @if(Auth::user()->hasAnyRole('Senior Staff|Administrator') || ($student->instructor() && $student->instructor()->instructor == Auth::user()->instructorProfile))
-                            {{$student->user->getDiscordUser()->username}}<span style="color: #797979;">#{{$student->user->getDiscordUser()->discriminator}}
+                            {{$student->user->discord_username}}
                         @else
                             Private
                         @endif

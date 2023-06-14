@@ -2,6 +2,7 @@
 
 namespace App\Models\Settings;
 
+use Spatie\Activitylog\LogOptions;
 use Illuminate\Database\Eloquent\Model;
 use Spatie\Activitylog\Traits\LogsActivity;
 
@@ -58,4 +59,10 @@ class CoreSettings extends Model
         'emailfirchief', 'emaildepfirchief', 'emailcinstructor',
         'emaileventc', 'emailfacilitye', 'emailwebmaster',
     ];
+
+    public function getActivitylogOptions(): LogOptions
+    {
+        return LogOptions::defaults()
+        ->logOnly(['name', 'text']);
+    }
 }
