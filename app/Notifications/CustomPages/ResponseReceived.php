@@ -3,10 +3,11 @@
 namespace App\Notifications\CustomPages;
 
 use Illuminate\Bus\Queueable;
-use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
+use Illuminate\Contracts\Queue\ShouldQueue;
+use Illuminate\Notifications\Messages\MailMessage;
 
-class ResponseReceived extends Notification
+class ResponseReceived extends Notification implements ShouldQueue
 {
     use Queueable;
 

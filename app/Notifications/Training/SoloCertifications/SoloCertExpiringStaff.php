@@ -3,10 +3,11 @@
 namespace App\Notifications\Training\SoloCertifications;
 
 use Illuminate\Bus\Queueable;
-use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
+use Illuminate\Contracts\Queue\ShouldQueue;
+use Illuminate\Notifications\Messages\MailMessage;
 
-class SoloCertExpiringStaff extends Notification
+class SoloCertExpiringStaff extends Notification implements ShouldQueue
 {
     use Queueable;
 

@@ -3,11 +3,12 @@
 namespace App\Notifications;
 
 use Illuminate\Bus\Queueable;
-use Illuminate\Notifications\Messages\MailMessage;
-use Illuminate\Notifications\Notification;
 use Illuminate\Support\HtmlString;
+use Illuminate\Notifications\Notification;
+use Illuminate\Contracts\Queue\ShouldQueue;
+use Illuminate\Notifications\Messages\MailMessage;
 
-class WelcomeNewUser extends Notification
+class WelcomeNewUser extends Notification implements ShouldQueue
 {
     use Queueable;
 
@@ -44,10 +45,10 @@ class WelcomeNewUser extends Notification
     {
         return (new MailMessage())
                     ->subject("Welcome to Gander Oceanic, {$this->user->fullName('FL')}!")
-                    ->from('chief@ganderoceanic.ca', 'David Solesvik')
+                    ->from('chief@ganderoceanic.ca', 'Dieter Windels')
                     ->line("Welcome to Gander Oceanic, we're very excited that you're here!")
                     ->line("On our site you can find various resources relating to Oceanic operations in the North Atlantic for both pilots and controllers. Please don't hesitate to contact me should you have any questions about us!")
-                    ->salutation(new HtmlString('Kind regards,<br>David Solesvik<br>OCA Chief'));
+                    ->salutation(new HtmlString('Kind regards,<br>Dieter Windels<br>OCA Chief'));
     }
 
     /**

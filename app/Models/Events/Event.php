@@ -2,14 +2,18 @@
 
 namespace App\Models\Events;
 
-use App\Models\Users\User;
 use Auth;
-use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\SoftDeletes;
-use Illuminate\Support\Facades\Cache;
-use Illuminate\Support\HtmlString;
+use Exception;
 use Parsedown;
+use App\Models\Users\User;
+use App\Models\Events\EventUpdate;
+use Illuminate\Support\HtmlString;
+use Spatie\Activitylog\LogOptions;
+use Illuminate\Support\Facades\Cache;
+use Illuminate\Database\Eloquent\Model;
 use Spatie\Activitylog\Traits\LogsActivity;
+use App\Models\Events\ControllerApplication;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 /**
  * App\Models\Events\Event
@@ -140,7 +144,13 @@ class Event extends Model
             return json_decode($json);
         });
 
-        return $output;
+        try {
+            if (!$output->message){
+                return $output->name;
+            }
+        } catch (Exception $e) {
+            return $output->name;
+        }
     }
 
     public function arrival_icao_data()
@@ -162,7 +172,13 @@ class Event extends Model
             return json_decode($json);
         });
 
-        return $output;
+        try {
+            if (!$output->message){
+                return $output->name;
+            }
+        } catch (Exception $e) {
+            return $output->name;
+        }
     }
 
     public function event_in_past()
@@ -198,5 +214,11 @@ class Event extends Model
         }
 
         return false;
+    }
+
+    public function getActivitylogOptions(): LogOptions
+    {
+        return LogOptions::defaults()
+        ->logOnly(['name', 'text']);
     }
 }

@@ -17,7 +17,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
-use RestCord\DiscordClient;
+use App\Services\DiscordClient;
 
 class SessionsController extends Controller
 {
@@ -76,29 +76,8 @@ class SessionsController extends Controller
         $session->student->user->notify(new NewSessionScheduledStudent($session, 'training'));
 
         //Discord notification in instructors channel
-        $discord = new DiscordClient(['token' => config('services.discord.token')]);
-        $discord->channel->createMessage([
-            'channel.id' => config('app.env') == 'local' ? intval(config('services.discord.web_logs')) : intval(config('services.discord.instructors')),
-            'content'    => '',
-            'embed'      => [
-                'title'     => 'New training session scheduled',
-                'url'       => route('training.admin.instructing.training-sessions.view', $session->id),
-                'timestamp' => Carbon::now(),
-                'color'     => hexdec('2196f3'),
-                'fields'    => [
-                    [
-                        'name'   => 'Student',
-                        'value'  => $session->student->user->fullName('FLC'),
-                        'inline' => false,
-                    ],
-                    [
-                        'name'   => 'Instructor',
-                        'value'  => $session->instructor->user->fullName('FLC'),
-                        'inline' => false,
-                    ],
-                ],
-            ],
-        ]);
+        $discord = new DiscordClient();
+        $discord->sendMessageWithEmbed(config('app.env') == 'local' ? intval(config('services.discord.web_logs')) : intval(config('services.discord.instructors')), 'New training session scheduled #'.$session->id, $session->instructor->user->fullName('FLC').' has scheduled a new training session with '.$session->student->user->fullName('FLC').' on '.$request->get('scheduled_time'));
 
         //Return
         return redirect()->route('training.admin.instructing.training-sessions.view', $session->id)->with('success', 'Session created!');
@@ -306,29 +285,8 @@ class SessionsController extends Controller
         $session->student->user->notify(new NewSessionScheduledStudent($session, 'ots'));
 
         //Discord notification in instructors channel
-        $discord = new DiscordClient(['token' => config('services.discord.token')]);
-        $discord->channel->createMessage([
-            'channel.id' => config('app.env') == 'local' ? intval(config('services.discord.web_logs')) : intval(config('services.discord.instructors')),
-            'content'    => '',
-            'embed'      => [
-                'title'     => 'New training session scheduled',
-                'url'       => route('training.admin.instructing.ots-sessions.view', $session->id),
-                'timestamp' => Carbon::now(),
-                'color'     => hexdec('2196f3'),
-                'fields'    => [
-                    [
-                        'name'   => 'Student',
-                        'value'  => $session->student->user->fullName('FLC'),
-                        'inline' => false,
-                    ],
-                    [
-                        'name'   => 'Instructor',
-                        'value'  => $session->instructor->user->fullName('FLC'),
-                        'inline' => false,
-                    ],
-                ],
-            ],
-        ]);
+        $discord = new DiscordClient();
+        $discord->sendMessageWithEmbed(config('app.env') == 'local' ? intval(config('services.discord.web_logs')) : intval(config('services.discord.instructors')), 'New training session scheduled #'.$session->id, $session->instructor->user->fullName('FLC').' has scheduled a new OTS session with '.$session->student->user->fullName('FLC').' on '.$request->get('scheduled_time'));
 
         //Return
         return redirect()->route('training.admin.instructing.ots-sessions.view', $session->id)->with('success', 'Session created!');

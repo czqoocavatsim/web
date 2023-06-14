@@ -3,10 +3,11 @@
 namespace App\Notifications\Network;
 
 use Illuminate\Bus\Queueable;
-use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
+use Illuminate\Contracts\Queue\ShouldQueue;
+use Illuminate\Notifications\Messages\MailMessage;
 
-class TwoWeekInactivityReminder extends Notification
+class TwoWeekInactivityReminder extends Notification implements ShouldQueue
 {
     use Queueable;
 

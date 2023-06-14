@@ -6,7 +6,7 @@
 @endsection
 @section('from-line')
 Cheers,<br/>
-<b>Andrew Ogden</b><br>
+<b>Dieter Windels</b><br>
 <b>OCA Chief</b>
 @endsection
 @section('footer-to-line', $user->fullName('FLC').' ('.$user->email.')')

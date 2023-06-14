@@ -2,13 +2,14 @@
 
 namespace App\Notifications\Training\Applications;
 
-use App\Models\Training\Application;
-use App\Models\Training\ApplicationComment;
 use Illuminate\Bus\Queueable;
-use Illuminate\Notifications\Messages\MailMessage;
+use App\Models\Training\Application;
 use Illuminate\Notifications\Notification;
+use App\Models\Training\ApplicationComment;
+use Illuminate\Contracts\Queue\ShouldQueue;
+use Illuminate\Notifications\Messages\MailMessage;
 
-class NewCommentStaff extends Notification
+class NewCommentStaff extends Notification implements ShouldQueue
 {
     use Queueable;
 

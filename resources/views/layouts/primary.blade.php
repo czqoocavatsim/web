@@ -68,8 +68,7 @@
     </head>
 
     <body class="d-flex flex-column min-vh-100" @if(Auth::check() && Auth::user()->preferences) @if(Auth::user()->preferences->accent_colour) data-accent="{{Auth::user()->preferences->accent_colour}}" @endif data-theme="{{Auth::user()->preferences->ui_mode}}" @else data-theme="light" @endif>
-        @include('cookieConsent::index')
-
+        @include('cookie-consent::index')
         <header>
             @if($adminNavBar)
                 <!--Admin nav bar-->
@@ -101,7 +100,7 @@
                 <div class="d-none d-md-block">
                     <p class="mb-3">Copyright (C) Gander Oceanic OCA {{App\Models\Settings\CoreSettings::where('id', 1)->firstOrFail()->copyright_year}}. All Rights Reserved.<br>Not to be used for real world navigation. Flight simulation only.</p>
                     <div class="flex-left my-4">
-                        <a href="{{route('index')}}" class="font-weight-bold black-text">Feedback</a>
+                        <a href="{{route('my.feedback.new')}}" class="font-weight-bold black-text">Feedback</a>
                         &nbsp;
                         •
                         &nbsp;
@@ -113,7 +112,7 @@
                         &nbsp;
                         •
                         &nbsp;
-                        <a href="https://github.com/gander-oceanic-fir-vatsim/czqo-core" class="font-weight-bold black-text">GitHub</a>
+                        <a href="https://github.com/czqoocavatsim/web" class="font-weight-bold black-text">GitHub</a>
                         &nbsp;
                         •
                         &nbsp;
@@ -121,7 +120,7 @@
                         &nbsp;
                         •
                         &nbsp;
-                        <a href="#" data-toggle="modal" data-target="#contactUsModal" class="font-weight-bold black-text">Contact Us</a>
+                        <a href="{{route('staff')}}" class="font-weight-bold black-text">Contact Us</a>
                         &nbsp;
                         •
                         &nbsp;
@@ -159,7 +158,7 @@
                             <a class="text-body fw-600" href="https://vatsim.net">VATSIM</a>
                         </li>
                         <li class="mt-3">
-                            <a class="text-body fw-600" href="" data-target="#aboutCoreModal" data-toggle="modal">About CZQO Core</a>
+                            <a href="{{route('about.core')}}" class="text-body fw-600">About</a>
                         </li>
                         <li>
                             <a class="text-body fw-600" href="{{route('policies')}}#policyEmbed3">Privacy Policy</a>
@@ -306,43 +305,6 @@
         </div>
     </div>
     <!-- End report an issue modal-->
-
-    <!-- About modal-->
-    <div class="modal fade" id="aboutCoreModal" tabindex="-1" role="dialog" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span data-toggle="tooltip" title="Close dialog" aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-                <div class="modal-body fw-500 p-5">
-                    <div class="d-flex flex-row justify-content-center">
-                        <img src="https://cdn.ganderoceanic.ca/resources/media/img/brand/sqr/ZQO_SQ_TSPBLUE.png" class="mr-3" style="width: 125px; height: 125px;" alt="">
-                        <div class="d-flex flex-column">
-                            <h1 class="heading blue-text font-weight-bold display-5">Gander Oceanic Core</h1>
-                            <p style="font-size: 1.4em;" class="mb-1">The website for VATSIM's<br>Gander Oceanic OCA</p>
-                            <p class="text-muted" style="font-size: 0.9em;">
-                                Version {{App\Models\Settings\CoreSettings::where('id', 1)->firstOrFail()->release}} ({{App\Models\Settings\CoreSettings::where('id', 1)->firstOrFail()->sys_build}})
-                            </p>
-                            <div class="d-flex flex-column mt-3">
-                                <a href="https://github.com/czqoocavatsim" class="text-body d-flex flex-row align-items-center mb-3">
-                                    <i class="fab fa-2x fa-github mr-2"></i> GitHub
-                                </a>
-                                <a href="https://github.com/czqoocavatsim/czqo-core/releases" class="text-body d-flex flex-row align-items-center mb-3">
-                                    <i class="fas fa-history fa-2x mr-2"></i> Change Log
-                                </a>
-                                <a href="https://dev.ganderoceanic.ca" class="text-body d-flex flex-row align-items-center">
-                                    <i class="fas fa-2x mr-2 fa-feather-alt"></i> Beta
-                                </a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-    <!-- End about modal -->
     <!-- Error modal -->
     <div class="modal fade" id="errorModal" tabindex="-1" role="dialog" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered" role="document">
@@ -406,15 +368,9 @@
                             </li>
                         </ul>
                         @auth
-                            @if(Auth::user()->hasDiscord() && !Auth::user()->memberOfCzqoGuild())
-                            <a href="{{route('me.discord.join')}}" class="class btn btn-primary mt-3">Join The Community</a>
+                            @if(!auth()->user()->member_of_czqo)
+                            <a href="{{route('me.discord.link')}}" class="class btn btn-primary mt-3">Join The Community</a>
                             <p class="text-muted text-center mt-2">You will be redirected to Discord to allow us to add you to our server. Information collected is shown on the Discord authorisation screen. Read our privacy policy for details.</p>
-                            @elseif (Auth::user()->hasDiscord() && Auth::user()->memberOfCzqoGuild())
-                            <p class="mt-1"><img style="border-radius:50%; height: 30px;" class="img-fluid" src="{{Auth::user()->getDiscordAvatar()}}" alt="">&nbsp;&nbsp;{{Auth::user()->getDiscordUser()->username}}<span style="color: #d1d1d1;">#{{Auth::user()->getDiscordUser()->discriminator}}</span></p>
-                            <p class="text-muted text-center mt-2">You are already a member of the Gander Oceanic Discord. To unlink your account and leave the server, go to myCZQO.</p>
-                            @else
-                                <a href="{{route('me.discord.link', ['param' => 'server_join_process'])}}" class="class btn btn-primary mt-3">Link Your Discord To Join</a>
-                                <p class="text-muted text-center mt-2">You will be redirected to Discord to connect your account, and then prompted to allow us to add you to our server. Information collected is shown on the Discord authorisation screen. Read our privacy policy for details.</p>
                             @endif
                         @else
                         <a href="{{route('auth.connect.login')}}" class="class btn btn-primary mt-3">Login With VATSIM To Join</a>
@@ -440,6 +396,4 @@
         })
     </script>
     <!-- End misc scripts -->
-    @livewireScripts
-    @livewireCalendarScripts
 </html>

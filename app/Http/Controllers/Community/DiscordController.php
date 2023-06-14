@@ -2,23 +2,18 @@
 
 namespace App\Http\Controllers\Community;
 
-use App\Http\Controllers\Controller;
-use App\Models\Community\Discord\DiscordBan;
-use App\Models\Users\User;
-use App\Notifications\Discord\BanNotification;
-use App\Notifications\Discord\DiscordWelcome;
 use Carbon\Carbon;
-use GuzzleHttp\Command\Exception\CommandClientException;
+use GuzzleHttp\Client;
+use App\Models\Users\User;
 use Illuminate\Http\Request;
+use App\Services\DiscordClient;
+use App\Models\Roster\RosterMember;
+use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Log;
+use GuzzleHttp\Exception\ClientException;
 use Illuminate\Support\Facades\Validator;
-use Laravel\Socialite\Facades\Socialite;
-use NotificationChannels\Discord\Discord;
-use NotificationChannels\Discord\DiscordChannel;
-use RestCord\DiscordClient;
-use SocialiteProviders\Manager\Config;
-use Throwable;
+use App\Models\Community\Discord\DiscordBan;
+use App\Notifications\Discord\DiscordWelcome;
 
 class DiscordController extends Controller
 {
@@ -50,7 +45,7 @@ class DiscordController extends Controller
         }
 
         //Create discord client
-        $discord = new DiscordClient(['token' => config('services.discord.token')]);
+        // $discord = new DiscordClient(['token' => config('services.discord.token')]);
 
         //Get the user object
         $user = User::whereId($request->get('user_id'))->first();
@@ -68,121 +63,93 @@ class DiscordController extends Controller
         $ban->save();
 
         //Notify user via bot and email
-        $user->notify(new BanNotification($user, $ban), [DiscordChannel::class, 'mail']);
-
-        dd($ban);
+        // $user->notify(new BanNotification($user, $ban), [DiscordChannel::class, 'mail']);
     }
 
     /*
     Discord connection/server join
     */
-    public function linkRedirectDiscord($param = null)
+    public function linkRedirectDiscord()
     {
-        //Create the config
-        if ($param == 'server_join_process') {
-            $config = new Config(config('services.discord.client_id'), config('services.discord.client_secret'), config('services.discord.redirect_server_join_process'));
-        } else {
-            $config = new Config(config('services.discord.client_id'), config('services.discord.client_secret'), config('services.discord.redirect'));
-        }
+        $query = http_build_query([
+            'client_id' => env('DISCORD_CLIENT_ID'),
+            'redirect_uri' => env('APP_URL') . '/my/discord/link/callback',
+            'response_type' => 'code',
+            'scope' => 'identify',
+        ]);
 
-        //Redirect to Discord OAuth
-        return Socialite::with('discord')->setConfig($config)->setScopes(['identify'])->redirect();
+        return redirect('https://discord.com/oauth2/authorize?' . $query);
     }
 
-    public function linkCallbackDiscord($param = null)
+    public function linkCallbackDiscord(Request $request)
     {
-        //Get Discord account
-        if ($param == 'server_join_process') {
-            $config = new Config(config('services.discord.client_id'), config('services.discord.client_secret'), config('services.discord.redirect_server_join_process'));
-        } else {
-            $config = new Config(config('services.discord.client_id'), config('services.discord.client_secret'), config('services.discord.redirect'));
-        }
-        $discordAccount = Socialite::driver('discord')->setConfig($config)->user();
+        //Get access token using returned code
+        $http = new Client();
 
-        //If it doesn't exist...
-        if (!$discordAccount) {
-            return redirect()->route('my.index')->with('error-modal', 'There was an error linking your account. Contact the Web Team for assistance.');
+        try {
+            $response = $http->post('https://discord.com/api/v10/oauth2/token', [
+                'form_params' => [
+                    'client_id' => env('DISCORD_CLIENT_ID'),
+                    'client_secret' => env('DISCORD_CLIENT_SECRET'),
+                    'grant_type' => 'authorization_code',
+                    'code' => $request->code,
+                    'redirect_uri' => env('APP_URL') . '/my/discord/link/callback',
+                    'scope' => 'identify'
+                ],
+                'headers' => ['Content-Type' => 'application/x-www-form-urlencoded']
+            ]);
+        } catch (ClientException $e) {
+            return redirect()->route('my.index')->with('error-modal', $e->getMessage());
         }
 
-        //Get current user
-        $user = Auth::user();
+        $access_token = json_decode($response->getBody(), true)['access_token'];
+
+        //Get User Details from access token
+        try {
+            $response = (new Client())->get('https://discord.com/api/v10/users/@me', [
+                'headers' => [
+                    'Accept' => 'application/json',
+                    'Authorization' => "Bearer {$access_token}"
+                ],
+            ]);
+        } catch (ClientException $e) {
+            return redirect()->route('my.index')->with('error-modal', $e->getMessage());
+        }
+
+        $discord_user = json_decode($response->getBody(), true);
 
         //Duplicate?
-        if (User::where('discord_user_id', $discordAccount->id)->first()) {
+        if (User::where('discord_user_id', $discord_user['id'])->exists()) {
             return redirect()->route('my.index')->with('error-modal', 'This Discord account has already been linked by another user.');
         }
 
+        $user = auth()->user();
+
         //Edit user
-        $user->discord_user_id = $discordAccount->id;
-        $user->discord_dm_channel_id = app(Discord::class)->getPrivateChannel($discordAccount->id);
+        $user->discord_user_id = $discord_user['id'];
+        $user->discord_username = $discord_user['username'];
+        $user->discord_avatar = $discord_user['avatar'] ? 'https://cdn.discordapp.com/avatars/'.$discord_user['id'].'/'.$discord_user['avatar'].'.png' : null;
         $user->save();
 
-        //Redirect to dashboard or server join
-        if ($param == 'server_join_process') {
-            return redirect()->route('me.discord.join');
-        } else {
-            return redirect()->route('my.index')->with('success', 'Linked with account '.$discordAccount->nickname.'!');
-        }
-    }
-
-    public function unlinkDiscord()
-    {
-        //Create discord client
-        $discord = new DiscordClient(['token' => config('services.discord.token')]);
-
-        //Get user
-        $user = Auth::user();
-
-        //If they're a member of the Discord, and not a staff member
-        if ($user->memberOfCzqoGuild() && !$user->staffProfile) {
-            //In case of an unauthorised response
-            try {
-                //Remove member
-                $discord->guild->removeGuildMember(['guild.id' => 479250337048297483, 'user.id' => $user->discord_user_id]);
-                //Log
-                $discord->channel->createMessage([
-                    'channel.id' => 482860026831175690,
-                    'content'    => '['.Carbon::now()->toDateTimeString().'] <@'.$user->discord_user_id.'> ('.Auth::id().') unlinked account, removed from guild',
-                ]);
-            } catch (Throwable $ex) {
-                Log::error($ex);
-            }
-        }
-
-        //Remove details from DB
-        $user->discord_user_id = null;
-        $user->discord_dm_channel_id = null;
-
-        //If they have a Discord avatar, remove it
-        if ($user->avatar_mode == 2) {
-            $user->avatar_mode = 0;
-        }
-
-        //Save
-        $user->save();
-
-        //Redirect
-        return redirect()->route('my.index')->with('info', 'Discord account unlinked.');
+        return redirect()->route('my.index')->with('success', 'Linked with account '.$discord_user['username'].'!');
     }
 
     public function joinRedirectDiscord()
     {
-        $config = new Config(config('services.discord.client_id'), config('services.discord.client_secret'), config('services.discord.redirect_join'));
+        $query = http_build_query([
+            'client_id' => env('DISCORD_CLIENT_ID'),
+            'redirect_uri' => env('APP_URL') . '/my/discord/server/join/callback',
+            'response_type' => 'code',
+            'scope' => 'identify guilds.join',
+        ]);
 
-        return Socialite::with('discord')->setConfig($config)->setScopes(['identify', 'guilds.join'])->redirect();
+        return redirect('https://discord.com/oauth2/authorize?' . $query);
     }
 
-    public function joinCallbackDiscord()
+    public function joinCallbackDiscord(Request $request)
     {
-        //Create Discord client
-        $discord = new DiscordClient(['token' => config('services.discord.token')]);
-
-        //Get Discord account data
-        $config = new Config(config('services.discord.client_id'), config('services.discord.client_secret'), config('services.discord.redirect_join'));
-        $discordAccount = Socialite::driver('discord')->setConfig($config)->user();
-
         //Get the current user
-        $user = Auth::user();
+        $user = auth()->user();
 
         //let's find all the roles they could possibly have...
         $rolesToAdd = [];
@@ -198,11 +165,11 @@ class DiscordController extends Controller
         //Add the Member role
         array_push($rolesToAdd, $discordRoleIds['guest']);
 
-        /* //Roster?
-        if ($user->rosterProfile) {
+        //Roster?
+        if (RosterMember::where('user_id', $user->id)->exists()) {
             //What status do they have?
-            $rosterProfile = $user->rosterProfile;
-            switch ($rosterProfile->status) {
+            $rosterProfile = RosterMember::where('user_id', $user->id)->first();
+            switch ($rosterProfile->certification) {
                 case 'certified':
                     array_push($rolesToAdd, $discordRoleIds['certified']);
                     break;
@@ -210,39 +177,102 @@ class DiscordController extends Controller
                     array_push($rolesToAdd, $discordRoleIds['training']);
                     break;
             }
-        } */
+        }
 
         //Supervisor?
         if ($user->rating_short == 'SUP') {
             array_push($rolesToAdd, $discordRoleIds['supervisor']);
         }
 
-        //Create the full arguments
-        $arguments = [
-            'guild.id'     => intval(config('services.discord.guild_id')),
-            'user.id'      => $user->discord_user_id,
-            'access_token' => $discordAccount->token,
-            'nick'         => $user->fullName('FLC'),
-            'roles'        => $rolesToAdd,
-        ];
+        //Get access token using returned code
+        $http = new Client();
 
-        //Add them to guild
         try {
-            $discord->guild->addGuildMember($arguments);
-        } catch (CommandClientException $ex) {
-            return redirect()->route('my.index')->with('error-modal', 'There was an error adding you to the server. Please try again later. If it still doesn\'t work, report it to the Web Team via the Feedback page. (CommandClientException)');
+            $response = $http->post('https://discord.com/api/v10/oauth2/token', [
+                'form_params' => [
+                    'client_id' => env('DISCORD_CLIENT_ID'),
+                    'client_secret' => env('DISCORD_CLIENT_SECRET'),
+                    'grant_type' => 'authorization_code',
+                    'code' => $request->code,
+                    'redirect_uri' => env('APP_URL') . '/my/discord/server/join/callback',
+                    'scope' => 'identify guilds.join'
+                ],
+                'headers' => ['Content-Type' => 'application/x-www-form-urlencoded']
+            ]);
+        } catch (ClientException $e) {
+            return redirect()->route('my.index')->with('error-modal', $e->getMessage());
         }
 
+        $access_token = json_decode($response->getBody(), true)['access_token'];
+
+        //Make em join Discord 
+        try {
+            $response = (new Client())
+                ->put(
+                    'https://discord.com/api/v10/guilds/'.env('DISCORD_GUILD_ID').'/members/'.$user->discord_user_id,
+                    [
+                        'headers' => [
+                            'Authorization' => 'Bot ' . env('DISCORD_BOT_TOKEN')
+                        ],
+                        'json' => [
+                            'access_token' => $access_token,
+                            'nick' => auth()->user()->fullName('FLC'),
+                            'roles' => $rolesToAdd
+                        ]
+                    ]
+                );
+        } catch (ClientException $e) {
+            return redirect()->route('my.index')->with('error-modal', $e->getMessage());
+        }
+
+
         //DM them
-        Auth::user()->notify(new DiscordWelcome());
+        $user->notify(new DiscordWelcome());
+
+        $user->member_of_czqo = true;
+        $user->save();
 
         //Log it
-        $discord->channel->createMessage([
-            'channel.id' => 482860026831175690,
-            'content'    => '['.Carbon::now()->toDateTimeString().'] <@'.$user->discord_user_id.'> ('.Auth::id().') has joined the guild',
-        ]);
+        $discord = new DiscordClient();
+        $discord->sendMessage(482860026831175690, '['.Carbon::now()->toDateTimeString().'] <@'.$user->discord_user_id.'> ('.auth()->id().') has joined the guild');
 
         //And back to the dashboard
         return redirect()->route('my.index')->with('success', 'You have joined the CZQO Discord server!');
+    }
+
+    public function unlinkDiscord()
+    {
+        //Get user
+        $user = auth()->user();
+
+        //If they're a member of the Discord
+        if ($user->member_of_czqo) {
+            $http = new Client();
+
+            try {
+                $http->delete('https://discord.com/api/v10/guilds/'.env('DISCORD_GUILD_ID').'/members/'.$user->discord_user_id, 
+                    [
+                        'headers' => ['Authorization' => 'Bot '.env('DISCORD_BOT_TOKEN')]
+                    ]);
+            } catch (ClientException $e) {
+                return redirect()->route('my.index')->with('error-modal', $e->getMessage());
+            }
+        }
+
+        //Remove details from DB
+        $user->discord_user_id = null;
+        $user->member_of_czqo = false;
+        $user->discord_avatar = null;
+
+        //If they have a Discord avatar, remove it
+        if ($user->avatar_mode == 2) {
+            $user->avatar_mode = 0;
+        }
+
+        //Save
+        $user->save();
+
+        //Redirect
+        return redirect()->route('my.index')->with('info', 'Discord account unlinked.');
     }
 }

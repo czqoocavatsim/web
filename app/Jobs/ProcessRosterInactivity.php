@@ -46,14 +46,12 @@ class ProcessRosterInactivity implements ShouldQueue
             try {
                 $certifiedDate = Carbon::createFromFormat('Y-m-d H:i:s', $rosterMember->date_certified);
             } catch (\InvalidArgumentException $e) { // Catch exception if date is null
-                $certifiedDate = null;
-                Log::error('Certified Date Error '.$certifiedDate);
+                Log::error('Certified Date Error '.$rosterMember->user_id);
+                continue;
             }
 
-            if ($rosterMember->active && $certifiedDate != null && !($certifiedDate > Carbon::now()->startOfQuarter() && $certifiedDate < Carbon::now()->endOfQuarter())) {
+            if ($rosterMember->active && !($certifiedDate > Carbon::now()->startOfQuarter() && $certifiedDate < Carbon::now()->endOfQuarter())) {
                 
-
-                $rosterMember->active = $rosterMember->currency >= 6.0 ?: false;
                 if ($rosterMember->currency < 6.0) {
                     $rosterMember->active = false;
                     $rosterMember->save();

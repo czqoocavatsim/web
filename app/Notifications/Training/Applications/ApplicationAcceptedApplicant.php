@@ -2,14 +2,15 @@
 
 namespace App\Notifications\Training\Applications;
 
-use App\Models\Training\Application;
 use Illuminate\Bus\Queueable;
-use Illuminate\Notifications\Messages\MailMessage;
+use App\Models\Training\Application;
 use Illuminate\Notifications\Notification;
+use Illuminate\Contracts\Queue\ShouldQueue;
 use NotificationChannels\Discord\DiscordChannel;
 use NotificationChannels\Discord\DiscordMessage;
+use Illuminate\Notifications\Messages\MailMessage;
 
-class ApplicationAcceptedApplicant extends Notification
+class ApplicationAcceptedApplicant extends Notification implements ShouldQueue
 {
     use Queueable;
 

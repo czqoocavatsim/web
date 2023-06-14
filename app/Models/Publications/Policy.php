@@ -2,12 +2,13 @@
 
 namespace App\Models\Publications;
 
-use App\Models\Users\User;
-use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\SoftDeletes;
-use Illuminate\Support\HtmlString;
 use Parsedown;
+use App\Models\Users\User;
+use Illuminate\Support\HtmlString;
+use Spatie\Activitylog\LogOptions;
+use Illuminate\Database\Eloquent\Model;
 use Spatie\Activitylog\Traits\LogsActivity;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 /**
  * App\Models\Publications\Policy
@@ -60,5 +61,11 @@ class Policy extends Model
     public function descriptionHtml()
     {
         return new HtmlString(app(Parsedown::class)->text($this->description));
+    }
+
+    public function getActivitylogOptions(): LogOptions
+    {
+        return LogOptions::defaults()
+        ->logOnly(['name', 'text']);
     }
 }

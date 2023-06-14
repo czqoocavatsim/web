@@ -3,10 +3,11 @@
 namespace App\Notifications\Events;
 
 use Illuminate\Bus\Queueable;
-use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
+use Illuminate\Contracts\Queue\ShouldQueue;
+use Illuminate\Notifications\Messages\MailMessage;
 
-class NewControllerSignUp extends Notification
+class NewControllerSignUp extends Notification implements ShouldQueue
 {
     use Queueable;
 

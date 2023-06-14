@@ -2,12 +2,14 @@
 
 namespace App\Models\Roster;
 
-use App\Models\Users\User;
 use Carbon\Carbon;
-use Illuminate\Database\Eloquent\Model;
+use App\Models\Users\User;
 use Illuminate\Support\HtmlString;
-use Spatie\Activitylog\Traits\LogsActivity;
+use Spatie\Activitylog\LogOptions;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Database\Eloquent\Model;
+use App\Models\Roster\SoloCertification;
+use Spatie\Activitylog\Traits\LogsActivity;
 
 /**
  * App\Models\Roster\RosterMember
@@ -177,5 +179,11 @@ class RosterMember extends Model
         $html .= $this->activePretty().'</span>';
 
         return new HtmlString($html);
+    }
+
+    public function getActivitylogOptions(): LogOptions
+    {
+        return LogOptions::defaults()
+        ->logOnly(['name', 'text']);
     }
 }

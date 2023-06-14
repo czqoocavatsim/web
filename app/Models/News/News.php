@@ -2,10 +2,11 @@
 
 namespace App\Models\News;
 
-use App\Models\Users\User;
-use Illuminate\Database\Eloquent\Model;
-use Illuminate\Support\HtmlString;
 use Parsedown;
+use App\Models\Users\User;
+use Illuminate\Support\HtmlString;
+use Spatie\Activitylog\LogOptions;
+use Illuminate\Database\Eloquent\Model;
 use Spatie\Activitylog\Traits\LogsActivity;
 
 /**
@@ -95,6 +96,12 @@ class News extends Model
     public function html()
     {
         return new HtmlString(app(Parsedown::class)->text($this->content));
+    }
+
+    public function getActivitylogOptions(): LogOptions
+    {
+        return LogOptions::defaults()
+        ->logOnly(['name', 'text']);
     }
 
     protected $dates = [
