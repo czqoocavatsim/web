@@ -75,8 +75,8 @@ Route::prefix('auth')->group(function () {
 Route::get('/discord', [DiscordController::class, 'joinShortcut']);
 
 // Public news articles
-Route::get('/news/{id}', [NewsController::class, 'viewArticlePublic'])->name('news.articlepublic.id')->where('id', '[0-9]+');
-Route::get('/news/{slug}', [NewsController::class, 'viewArticlePublic'])->name('news.articlepublic.slug');
+Route::get('/news/{id}', [NewsController::class, 'viewArticlePublic'])->name('news.articlepublic')->where('id', '[0-9]+');
+Route::get('/news/{slug}', [NewsController::class, 'viewArticlePublic'])->name('news.articlepublic');
 Route::get('/news', [NewsController::class, 'viewAllPublic'])->name('news');
 
 
