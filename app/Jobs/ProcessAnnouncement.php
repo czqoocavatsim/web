@@ -13,7 +13,7 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
-use RestCord\DiscordClient;
+use App\Services\DiscordClient;
 
 class ProcessAnnouncement implements ShouldQueue
 {
@@ -42,7 +42,7 @@ class ProcessAnnouncement implements ShouldQueue
     public function handle()
     {
         //Discord
-        $discord = new DiscordClient(['token' => config('services.discord.token')]);
+        $discord = new DiscordClient();
 
         //Who is it directed to
         switch ($this->announcement->target_group) {
@@ -52,7 +52,7 @@ class ProcessAnnouncement implements ShouldQueue
                 foreach ($users as $user) {
                     $user->notify(new AnnouncementNotification($user, $this->announcement));
                 }
-                $discord->channel->createMessage(['channel.id' => intval(config('services.discord.web_logs')), 'content' => 'Sent '.count($users).' emails for announcement '.$this->announcement->title]);
+                $discord->sendMessage(intval(config('services.discord.web_logs')), 'Sent '.count($users).' emails for announcement '.$this->announcement->title);
                 break;
             case 'roster':
                 // All active roster members
@@ -60,7 +60,7 @@ class ProcessAnnouncement implements ShouldQueue
                 foreach ($rosterMembers as $member) {
                     $member->user->notify(new AnnouncementNotification($member->user, $this->announcement));
                 }
-                $discord->channel->createMessage(['channel.id' => intval(config('services.discord.web_logs')), 'content' => 'Sent '.count($rosterMembers).' emails to roster members for announcement '.$this->announcement->title]);
+                $discord->sendMessage(intval(config('services.discord.web_logs')),'Sent '.count($rosterMembers).' emails to roster members for announcement '.$this->announcement->title);
                 break;
             case 'staff':
                 // All active staff members
@@ -68,7 +68,7 @@ class ProcessAnnouncement implements ShouldQueue
                 foreach ($staffMembers as $member) {
                     $member->user->notify(new AnnouncementNotification($member->user, $this->announcement));
                 }
-                $discord->channel->createMessage(['channel.id' => intval(config('services.discord.web_logs')), 'content' => 'Sent '.count($staffMembers).' emails to staff members for announcement '.$this->announcement->title]);
+                $discord->sendMessage(intval(config('services.discord.web_logs')), 'Sent '.count($staffMembers).' emails to staff members for announcement '.$this->announcement->title);
                 break;
             case 'students':
                 // All active students
@@ -76,7 +76,7 @@ class ProcessAnnouncement implements ShouldQueue
                 foreach ($students as $member) {
                     $member->user->notify(new AnnouncementNotification($member->user, $this->announcement));
                 }
-                $discord->channel->createMessage(['channel.id' => intval(config('services.discord.web_logs')), 'content' => 'Sent '.count($students).' emails to current students for announcement '.$this->announcement->title]);
+                $discord->sendMessage(intval(config('services.discord.web_logs')), 'Sent '.count($students).' emails to current students for announcement '.$this->announcement->title);
             break;
             case 'students':
                 // All active students
@@ -84,7 +84,7 @@ class ProcessAnnouncement implements ShouldQueue
                 foreach ($students as $member) {
                     $member->user->notify(new AnnouncementNotification($member->user, $this->announcement));
                 }
-                $discord->channel->createMessage(['channel.id' => intval(config('services.discord.web_logs')), 'content' => 'Sent '.count($students).' emails to current instructors for announcement '.$this->announcement->title]);
+                $discord->sendMessage(intval(config('services.discord.web_logs')), 'Sent '.count($students).' emails to current instructors for announcement '.$this->announcement->title);
                 break;
         }
     }

@@ -14,7 +14,7 @@ use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Support\Facades\Notification;
-use RestCord\DiscordClient;
+use App\Services\DiscordClient;
 
 class ProcessSoloCertExpiryWarnings implements ShouldQueue
 {
@@ -48,18 +48,8 @@ class ProcessSoloCertExpiryWarnings implements ShouldQueue
             //If cert is about to expire
             if (Carbon::now()->diffInDays($cert->expires) <= 2) {
                 //Discord notification in instructors channel
-                $discord = new DiscordClient(['token' => config('services.discord.token')]);
-                $discord->channel->createMessage([
-                    'channel.id' => intval(config('services.discord.instructors')),
-                    'content'    => '',
-                    'embed'      => [
-                        'title'       => 'Solo certification for '.$cert->rosterMember->user->fullName('FLC').' is about to expire.',
-                        'url'         => route('training.admin.solocertifications'),
-                        'timestamp'   => Carbon::now(),
-                        'color'       => hexdec('2196f3'),
-                        'description' => 'Expires on '.$cert->expires->toDayDateTimeString().'.',
-                    ],
-                ]);
+                $discord = new DiscordClient();
+                $discord->sendMessageWithEmbed(intval(config('services.discord.instructors')), 'Solo certification for '.$cert->rosterMember->user->fullName('FLC').' is about to expire.','Expires on '.$cert->expires->toDayDateTimeString().'.');
 
                 //Notify their instructor
                 if ($cert->rosterMember->user->studentProfile && $cert->rosterMember->user->studentProfile->instructor()) {
