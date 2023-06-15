@@ -10,7 +10,7 @@ use Illuminate\Notifications\Messages\MailMessage;
 class RosterStatusChanged extends Notification implements ShouldQueue
 {
     use Queueable;
-
+    protected $rosterMember;
     /**
      * Create a new notification instance.
      *

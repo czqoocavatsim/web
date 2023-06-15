@@ -12,7 +12,6 @@ use NotificationChannels\Discord\DiscordMessage;
 class DiscordWelcome extends Notification
 {
     use Queueable;
-
     /**
      * Create a new notification instance.
      *

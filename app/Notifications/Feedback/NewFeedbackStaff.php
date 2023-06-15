@@ -10,7 +10,7 @@ use Illuminate\Notifications\Messages\MailMessage;
 class NewFeedbackStaff extends Notification implements ShouldQueue
 {
     use Queueable;
-
+    protected $submission;
     /**
      * Create a new notification instance.
      *

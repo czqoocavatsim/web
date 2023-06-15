@@ -12,7 +12,7 @@ use Illuminate\Notifications\Messages\MailMessage;
 class NewCommentStaff extends Notification implements ShouldQueue
 {
     use Queueable;
-
+    protected $application, $comment;
     /**
      * Create a new notification instance.
      *

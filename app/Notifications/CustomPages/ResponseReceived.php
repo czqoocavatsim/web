@@ -10,7 +10,7 @@ use Illuminate\Notifications\Messages\MailMessage;
 class ResponseReceived extends Notification implements ShouldQueue
 {
     use Queueable;
-
+    protected $response;
     /**
      * Create a new notification instance.
      *

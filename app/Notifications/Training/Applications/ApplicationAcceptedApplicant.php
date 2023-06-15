@@ -13,7 +13,7 @@ use Illuminate\Notifications\Messages\MailMessage;
 class ApplicationAcceptedApplicant extends Notification implements ShouldQueue
 {
     use Queueable;
-
+    protected $application;
     /**
      * Create a new notification instance.
      *

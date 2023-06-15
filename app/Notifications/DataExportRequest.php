@@ -10,7 +10,8 @@ use Illuminate\Notifications\Messages\MailMessage;
 class DataExportRequest extends Notification implements ShouldQueue
 {
     use Queueable;
-
+    
+    protected $user, $json;
     /**
      * Create a new notification instance.
      *

@@ -13,7 +13,7 @@ use Illuminate\Notifications\Messages\MailMessage;
 class SoloCertExpiringUser extends Notification implements ShouldQueue
 {
     use Queueable;
-
+    protected $cert;
     /**
      * Create a new notification instance.
      *

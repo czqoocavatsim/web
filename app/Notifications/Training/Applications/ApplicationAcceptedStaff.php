@@ -11,7 +11,7 @@ use Illuminate\Notifications\Messages\MailMessage;
 class ApplicationAcceptedStaff extends Notification implements ShouldQueue
 {
     use Queueable;
-
+    protected $application;
     /**
      * Create a new notification instance.
      *

@@ -10,7 +10,7 @@ use Illuminate\Notifications\Messages\MailMessage;
 class RemovedFromRoster extends Notification implements ShouldQueue
 {
     use Queueable;
-
+    protected $user;
     /**
      * Create a new notification instance.
      *

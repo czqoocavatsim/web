@@ -10,7 +10,7 @@ use NotificationChannels\Discord\DiscordMessage;
 class BanNotification extends Notification
 {
     use Queueable;
-
+    protected $user, $ban;
     /**
      * Create a new notification instance.
      *

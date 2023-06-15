@@ -10,7 +10,7 @@ use Illuminate\Notifications\Messages\MailMessage;
 class SessionAssignedToYou extends Notification implements ShouldQueue
 {
     use Queueable;
-
+    protected $session, $type;
     /**
      * Create a new notification instance.
      *

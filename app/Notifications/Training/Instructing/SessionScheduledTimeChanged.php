@@ -10,7 +10,7 @@ use Illuminate\Notifications\Messages\MailMessage;
 class SessionScheduledTimeChanged extends Notification implements ShouldQueue
 {
     use Queueable;
-
+    protected $session, $type;
     /**
      * Create a new notification instance.
      *

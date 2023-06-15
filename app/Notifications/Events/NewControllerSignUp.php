@@ -10,7 +10,7 @@ use Illuminate\Notifications\Messages\MailMessage;
 class NewControllerSignUp extends Notification implements ShouldQueue
 {
     use Queueable;
-
+    protected $signUp;
     /**
      * Create a new notification instance.
      *
