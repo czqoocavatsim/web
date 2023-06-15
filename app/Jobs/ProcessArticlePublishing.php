@@ -10,7 +10,7 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
-use RestCord\DiscordClient;
+use App\Services\DiscordClient;
 use Throwable;
 
 class ProcessArticlePublishing implements ShouldQueue
@@ -39,26 +39,11 @@ class ProcessArticlePublishing implements ShouldQueue
     public function handle()
     {
         //Discord client
-        $discord = new DiscordClient(['token' => config('services.discord.token')]);
+        $discord = new DiscordClient();
 
         //Send announcement
         try {
-            $discord->channel->createMessage([
-                'channel.id' => config('app.env') == 'local' ? intval(config('services.discord.web_logs')) : intval(config('services.discord.announcements')),
-                'embed'      => [
-                    'title'          => $this->article->title,
-                    'description'    => $this->article->summary,
-                    'color'          => 0x80c9,
-                    'image'          => [
-                        'url' => $this->article->image ? url('/').$this->article->image : null,
-                    ],
-                    'url'    => route('news.articlepublic', $this->article->slug),
-                    'author' => [
-                        'name' => $this->article->author_pretty(),
-                    ],
-                    'timestamp' => date('Y-m-d H:i:s'),
-                ],
-            ]);
+            $discord->sendMessageWithEmbed(config('app.env') == 'local' ? intval(config('services.discord.web_logs')) : intval(config('services.discord.announcements')),$this->article->title,$this->article->summary);
         } catch (Throwable $ex) {
             error_log('Webhook failed');
         }
@@ -66,10 +51,7 @@ class ProcessArticlePublishing implements ShouldQueue
         //Send emails as appropirate
         switch ($this->article->email_level) {
             case 0:
-                $discord->channel->createMessage([
-                    'channel.id' => intval(config('services.discord.web_logs')),
-                    'content'    => 'Sent no emails for article '.$this->article->title,
-                ]);
+                $discord->sendMessage(intval(config('services.discord.web_logs')),'Sent no emails for article '.$this->article->title);
             break;
             case 1:
                 //Send to controllers
@@ -77,10 +59,7 @@ class ProcessArticlePublishing implements ShouldQueue
                 foreach ($roster as $member) {
                     $member->user->notify(new NewsNotification($member->user, $this->article));
                 }
-                $discord->channel->createMessage([
-                    'channel.id' => intval(config('services.discord.web_logs')),
-                    'content'    => 'Sent '.count($roster).' emails to controllers for article '.$this->article->title,
-                ]);
+                $discord->sendMessage(intval(config('services.discord.web_logs')), 'Sent '.count($roster).' emails to controllers for article '.$this->article->title);
             break;
             case 2:
                 //Send to subscribed users
@@ -94,10 +73,7 @@ class ProcessArticlePublishing implements ShouldQueue
                 foreach ($users as $user) {
                     $user->notify(new NewsNotification($user, $this->article));
                 }
-                $discord->channel->createMessage([
-                    'channel.id' => intval(config('services.discord.web_logs')),
-                    'content'    => 'Sent '.count($users).' emails to subscribed users for article '.$this->article->title,
-                ]);
+                $discord->sendMessage(intval(config('services.discord.web_logs')), 'Sent '.count($users).' emails to subscribed users for article '.$this->article->title);
             break;
             case 3:
                 //Send to all
@@ -105,10 +81,7 @@ class ProcessArticlePublishing implements ShouldQueue
                 foreach ($users as $user) {
                     $user->notify(new NewsNotification($user, $this->article));
                 }
-                $discord->channel->createMessage([
-                    'channel.id' => intval(config('services.discord.web_logs')),
-                    'content'    => 'Sent '.count($users).' emails to all users for article '.$this->article->title,
-                ]);
+                $discord->sendMessage(intval(config('services.discord.web_logs')), 'Sent '.count($users).' emails to all users for article '.$this->article->title);
         }
     }
 }

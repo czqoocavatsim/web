@@ -40,7 +40,7 @@ class ProcessDataExport implements ShouldQueue
         $userArray = $user->toArray();
         $discord = null;
         if ($user->hasDiscord()) {
-            $discord = $user->getDiscordUser();
+            $discord = $user->discord_user_id;
         }
         array_push($userArray, $discord);
         $json = json_encode($userArray, JSON_PRETTY_PRINT);
