@@ -11,7 +11,7 @@ use Illuminate\Notifications\Notification;
 class ControllerNotStaff extends Notification implements ShouldQueue
 {
     use Queueable;
-
+    protected $log;
     /**
      * Create a new notification instance.
      *

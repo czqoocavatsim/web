@@ -10,7 +10,7 @@ use Illuminate\Notifications\Messages\MailMessage;
 class StudentRecommendedForAssessment extends Notification implements ShouldQueue
 {
     use Queueable;
-
+    protected $student, $instructor;
     /**
      * Create a new notification instance.
      *

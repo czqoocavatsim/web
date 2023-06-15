@@ -13,7 +13,7 @@ use Illuminate\Notifications\Messages\MailMessage;
 class Session24HrReminder extends Notification implements ShouldQueue
 {
     use Queueable;
-
+    protected $session, $type;
     /**
      * Create a new notification instance.
      *

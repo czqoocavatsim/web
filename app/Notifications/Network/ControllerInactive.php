@@ -11,7 +11,7 @@ use Illuminate\Notifications\Messages\MailMessage;
 class ControllerInactive extends Notification implements ShouldQueue
 {
     use Queueable;
-
+    protected $log;
     /**
      * Create a new notification instance.
      *

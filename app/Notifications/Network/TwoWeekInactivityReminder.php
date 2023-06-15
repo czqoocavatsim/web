@@ -10,7 +10,7 @@ use Illuminate\Notifications\Messages\MailMessage;
 class TwoWeekInactivityReminder extends Notification implements ShouldQueue
 {
     use Queueable;
-
+    protected $rosterMember, $cycle;
     /**
      * Create a new notification instance.
      *

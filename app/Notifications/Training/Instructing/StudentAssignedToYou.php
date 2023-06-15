@@ -10,7 +10,7 @@ use Illuminate\Notifications\Messages\MailMessage;
 class StudentAssignedToYou extends Notification implements ShouldQueue
 {
     use Queueable;
-
+    protected $student;
     /**
      * Create a new notification instance.
      *

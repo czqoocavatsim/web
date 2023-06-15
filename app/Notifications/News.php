@@ -11,7 +11,7 @@ use Illuminate\Notifications\Messages\MailMessage;
 class News extends Notification implements ShouldQueue
 {
     use Queueable;
-
+    protected $user, $news;
     /**
      * Create a new notification instance.
      *

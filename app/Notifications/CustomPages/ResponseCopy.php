@@ -10,7 +10,7 @@ use Illuminate\Notifications\Notification;
 class ResponseCopy extends Notification implements ShouldQueue
 {
     use Queueable;
-
+    protected $response;
     /**
      * Create a new notification instance.
      *

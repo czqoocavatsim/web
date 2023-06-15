@@ -13,7 +13,7 @@ use Illuminate\Notifications\Messages\MailMessage;
 class SessionCancelled extends Notification implements ShouldQueue
 {
     use Queueable;
-
+    protected $session, $type;
     /**
      * Create a new notification instance.
      *
