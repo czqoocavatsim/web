@@ -181,7 +181,7 @@ Route::group(['middleware' => 'auth'], function () {
         });
 
         //Admin
-        Route::group(['middleware' => 'can:view events', 'prefix' => 'admin'], function () {
+        Route::group(['prefix' => 'admin'], function () {
 
             Route::view('/', 'admin.index')->name('admin.index');
 

@@ -22,7 +22,6 @@ use App\Notifications\Training\Instructing\StudentRecommendedForAssessment;
 use App\Notifications\Training\Instructing\StudentRecommendedForSoloCert;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Validator;
 use App\Services\DiscordClient;
@@ -73,7 +72,7 @@ class InstructingController extends Controller
     {
         //Get all students assigned to user
         $students = Student::whereCurrent(true)->cursor()->filter(function ($student) {
-            if ($student->instructor() && $student->instructor()->instructor == Auth::user()->instructorProfile) {
+            if ($student->instructor() && $student->instructor()->instructor == auth()->user()->instructorProfile) {
                 return true;
             }
 
@@ -170,7 +169,7 @@ class InstructingController extends Controller
 
         //Give them role on Discord if able
         try {
-            if ($instructor->user->hasDiscord() && $instructor->user->memberOfCzqoGuild()) {
+            if ($instructor->user->hasDiscord() && $instructor->user->member_of_czqo) {
                 //Get Discord client
                 $discord = new DiscordClient();
 
@@ -241,7 +240,7 @@ class InstructingController extends Controller
 
         //Give Discord role
         try {
-            if ($student->user->hasDiscord() && $student->user->memberOfCzqoGuild()) {
+            if ($student->user->hasDiscord() && $student->user->member_of_czqo) {
                 //Get Discord client
                 $discord = new DiscordClient();
 
@@ -335,7 +334,7 @@ class InstructingController extends Controller
 
         //Remove role on Discord if able
         try {
-            if ($instructor->user->hasDiscord() && $instructor->user->memberOfCzqoGuild()) {
+            if ($instructor->user->hasDiscord() && $instructor->user->member_of_czqo) {
                 //Get Discord client
                 $discord = new DiscordClient();
 
@@ -373,7 +372,7 @@ class InstructingController extends Controller
 
         //Remove role on Discord if able
         try {
-            if ($student->user->hasDiscord() && $student->user->memberOfCzqoGuild()) {
+            if ($student->user->hasDiscord() && $student->user->member_of_czqo) {
                 //Get Discord client
                 $discord = new DiscordClient();
 
@@ -482,7 +481,7 @@ class InstructingController extends Controller
         $student = Student::whereCurrent(true)->where('user_id', $student_id)->firstOrFail();
 
         //Find the link
-        $link = InstructorStudentAssignment::where('student_id', $student->id)->where('instructor_id', Auth::user()->instructorProfile->id)->firstOrFail();
+        $link = InstructorStudentAssignment::where('student_id', $student->id)->where('instructor_id', auth()->user()->instructorProfile->id)->firstOrFail();
 
         //Remove
         $link->delete();
@@ -574,13 +573,13 @@ class InstructingController extends Controller
 
         //Notify via email
         foreach (Instructor::whereAssessor(true)->whereCurrent(true)->get() as $instructor) {
-            $instructor->notify(new StudentRecommendedForSoloCert($student, Auth::user()->instructorProfile));
+            $instructor->notify(new StudentRecommendedForSoloCert($student, auth()->user()->instructorProfile));
         }
 
         //Create object
         $recommendation = new InstuctorRecommendation([
             'student_id'    => $student->id,
-            'instructor_id' => Auth::user()->instructorProfile->id,
+            'instructor_id' => auth()->user()->instructorProfile->id,
             'type'          => 'Solo Certification',
         ]);
         $recommendation->save();
@@ -601,13 +600,13 @@ class InstructingController extends Controller
 
         //Notify via email
         foreach (Instructor::whereAssessor(true)->whereCurrent(true)->get() as $instructor) {
-            $instructor->notify(new StudentRecommendedForAssessment($student, Auth::user()->instructorProfile));
+            $instructor->notify(new StudentRecommendedForAssessment($student, auth()->user()->instructorProfile));
         }
 
         //Create object
         $recommendation = new InstuctorRecommendation([
             'student_id'    => $student->id,
-            'instructor_id' => Auth::user()->instructorProfile->id,
+            'instructor_id' => auth()->user()->instructorProfile->id,
             'type'          => 'Ready For Assessment',
         ]);
         $recommendation->save();
