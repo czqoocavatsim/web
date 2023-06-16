@@ -8,19 +8,11 @@ use App\Models\Settings\AuditLogEntry;
 use App\Models\Users\User;
 use App\Models\Users\UserNote;
 use App\Models\Users\UserNotification;
-use App\Notifications\Discord\DiscordWelcome;
 use App\Notifications\WelcomeNewUser;
-use Auth;
-use Exception;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
-use Laravel\Socialite\Facades\Socialite;
 use mofodojodino\ProfanityFilter\Check;
-use NotificationChannels\Discord\Discord;
-use RestCord\DiscordClient;
-use SocialiteProviders\Manager\Config;
 use Spatie\Permission\Models\Permission;
 use Spatie\Permission\Models\Role;
 
@@ -28,7 +20,7 @@ class UserController extends Controller
 {
     public function privacyAccept(Request $request)
     {
-        $user = Auth::user();
+        $user = auth()->user();
         if ($user->init == 1) {
             return redirect()->route('my.index')->with('error', 'You have already accepted our privacy policy.');
         }
@@ -44,11 +36,11 @@ class UserController extends Controller
 
     public function privacyDeny()
     {
-        $user = Auth::user();
+        $user = auth()->user();
         if ($user->init == 1) {
             return redirect()->route('index');
         }
-        Auth::logout($user);
+        auth()->logout($user);
         AuditLogEntry::insert(User::find(1), 'User '.$user->fullName('FLC').' denied privacy policy - account deleted', User::find(1), 0);
         $user->delete();
 
@@ -74,12 +66,12 @@ class UserController extends Controller
     public function deleteUser($id)
     {
         $user = User::where('id', $id)->firstOrFail();
-        if ($user->id == Auth::user()->id) {
+        if ($user->id == auth()->user()->id) {
             abort(403, 'You cannot delete yourself you fucking idiot.');
         }
 
         $entry = new AuditLogEntry([
-            'user_id'     => Auth::user()->id,
+            'user_id'     => auth()->user()->id,
             'affected_id' => $user->id,
             'action'      => 'DELETE USER',
             'time'        => date('Y-m-d H:i:s'),
@@ -112,7 +104,7 @@ class UserController extends Controller
             'file'    => 'required',
             'user_id' => 'required',
         ]);
-        $editUser = Auth::user();
+        $editUser = auth()->user();
         $user = User::whereId($request->get('user_id'))->firstOrFail();
         $uploadedFile = $request->file('file');
         $filename = $uploadedFile->getClientOriginalName();
@@ -134,7 +126,7 @@ class UserController extends Controller
         $this->validate($request, [
             'user_id' => 'required',
         ]);
-        $editUser = Auth::user();
+        $editUser = auth()->user();
         $user = User::whereId($request->get('user_id'))->firstOrFail();
         if ($user->isAvatarDefault()) {
             abort(403, 'The avatar is already the default avatar.');
@@ -154,7 +146,7 @@ class UserController extends Controller
             'user_id' => 'required',
         ]);
 
-        $editUser = Auth::user();
+        $editUser = auth()->user();
         $user = User::whereId($request->get('user_id'))->firstOrFail();
 
         $user->bio = null;
@@ -173,7 +165,7 @@ class UserController extends Controller
         $user->permissions = $request->get('permissions');
         $user->save();
         $entry = new AuditLogEntry([
-            'user_id'     => Auth::user()->id,
+            'user_id'     => auth()->user()->id,
             'action'      => 'EDIT USER',
             'affected_id' => $user->id,
             'time'        => date('Y-m-d H:i:s'),
@@ -215,7 +207,7 @@ class UserController extends Controller
         $user = User::where('id', $id)->firstOrFail();
         $note = new UserNote([
             'user_id'   => $user->id,
-            'author'    => Auth::user()->id,
+            'author'    => auth()->user()->id,
             'content'   => $request->get('content'),
             'timestamp' => date('Y-m-d H:i:s'),
         ]);
@@ -236,7 +228,7 @@ class UserController extends Controller
         $note = UserNote::where('id', $note_id)->where('user_id', $user->id)->firstOrFail();
 
         $entry = new AuditLogEntry([
-            'user_id'     => Auth::user()->id,
+            'user_id'     => auth()->user()->id,
             'action'      => 'DELETE USER NOTE '.$note->id,
             'affected_id' => $user->id,
             'time'        => date('Y-m-d H:i:s'),
@@ -265,7 +257,7 @@ class UserController extends Controller
         ], $messages);
 
         //Get user
-        $user = Auth::user();
+        $user = auth()->user();
 
         //Put it onto disk
         $path = Storage::disk('digitalocean')->put('user_uploads/'.$user->id.'/avatars', $request->file('file'), 'public');
@@ -282,7 +274,7 @@ class UserController extends Controller
     public function changeAvatarDiscord()
     {
         //Get user
-        $user = Auth::user();
+        $user = auth()->user();
 
         //They need Discord don't they
         if (!$user->hasDiscord()) {
@@ -300,7 +292,7 @@ class UserController extends Controller
     public function resetAvatar()
     {
         //Get user
-        $user = Auth::user();
+        $user = auth()->user();
 
         //Change mode and save
         $user->avatar_mode = 0;
@@ -344,7 +336,7 @@ class UserController extends Controller
         ]);
 
         //Get user
-        $user = Auth::user();
+        $user = auth()->user();
 
         //Run through profanity filter
         $check = new Check();
@@ -392,7 +384,7 @@ class UserController extends Controller
 
         //No... let's create a ban
         $ban = new ControllerBookingsBan();
-        $ban->reason = $request->get(Auth::user()->fullName('FLC').' at '.date('Y-m-d H:i:s').' '.$request->get('reason'));
+        $ban->reason = $request->get(auth()->user()->fullName('FLC').' at '.date('Y-m-d H:i:s').' '.$request->get('reason'));
         $ban->user_id = $user->id;
         $ban->timestamp = date('Y-m-d H:i:s');
         $ban->save();
@@ -402,7 +394,7 @@ class UserController extends Controller
 
     public function preferences()
     {
-        $preferences = Auth::user()->preferences;
+        $preferences = auth()->user()->preferences;
 
         return view('dashboard.me.preferences', compact('preferences'));
     }
@@ -427,7 +419,7 @@ class UserController extends Controller
         }
 
         //Save preferences
-        $preferences = Auth::user()->preferences;
+        $preferences = auth()->user()->preferences;
 
         //UI mode
         $preferences->ui_mode = $request->get('ui_mode');

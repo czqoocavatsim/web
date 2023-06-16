@@ -11,7 +11,7 @@ use App\Notifications\Network\OneWeekInactivityReminder;
 use App\Notifications\Network\TwoWeekInactivityReminder;
 use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Foundation\Console\Kernel as ConsoleKernel;
-use RestCord\DiscordClient;
+use App\Services\DiscordClient;
 
 
 class Kernel extends ConsoleKernel
@@ -53,9 +53,9 @@ class Kernel extends ConsoleKernel
             }
 
             //Tell Discord all about it
-            $discord = new DiscordClient(['token' => config('services.discord.token')]);
-            $discord->channel->createMessage(['channel.id' => 753086414811562014, 'content' => 'Sent '.$count.' two-week warning inactivity emails']);
-        })->cron('00 00 16 MAR,JUN,SEP,DEC *'); // 2 weeks before end of quarter
+            $discord = new DiscordClient();
+            $discord->sendMessage(753086414811562014, 'Sent '.$count.' two-week warning inactivity emails');
+        })->cron('00 16 16 MAR,JUN,SEP,DEC *'); // 2 weeks before end of quarter
 
         // 1 week
         $schedule->call(function () {
@@ -70,8 +70,8 @@ class Kernel extends ConsoleKernel
             }
             
             //Tell Discord all about it
-            $discord = new DiscordClient(['token' => config('services.discord.token')]);
-            $discord->channel->createMessage(['channel.id' => 753086414811562014, 'content' => 'Sent '.$count.' one-week warning inactivity emails']);
+            $discord = new DiscordClient();
+            $discord->sendMessage(753086414811562014, 'Sent '.$count.' one-week warning inactivity emails');
         })->cron('00 00 23 MAR,JUN,SEP,DEC *'); // 1 week before end of quarter*/
 
         /// Monthly leaderboard wipe
