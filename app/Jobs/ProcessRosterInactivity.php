@@ -42,16 +42,21 @@ class ProcessRosterInactivity implements ShouldQueue
 
         foreach ($rosterMembers as $rosterMember) {
 
+            $date = false;
             // Get date certified
             try {
                 $certifiedDate = Carbon::createFromFormat('Y-m-d H:i:s', $rosterMember->date_certified);
             } catch (\InvalidArgumentException $e) { // Catch exception if date is null
-                Log::error('Certified Date Error '.$rosterMember->user_id);
-                continue;
+                $date = true;
             }
 
-            if ($rosterMember->active && !($certifiedDate > Carbon::now()->startOfQuarter() && $certifiedDate < Carbon::now()->endOfQuarter())) {
-                
+            if ($date === false){
+                if ($certifiedDate > Carbon::now()->startOfQuarter() && $certifiedDate < Carbon::now()->endOfQuarter()){
+                    continue;
+                }
+            }
+
+            if ($rosterMember->active) {
                 if ($rosterMember->currency < 6.0) {
                     $rosterMember->active = false;
                     $rosterMember->save();

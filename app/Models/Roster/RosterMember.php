@@ -103,22 +103,16 @@ class RosterMember extends Model
     public function meetsActivityRequirement()
     {
         //Returns false only if we want them to get an inactivity email 
-
+        $date = false;
         // Get date certified
         try {
             $certifiedDate = Carbon::createFromFormat('Y-m-d H:i:s', $this->date_certified);
         } catch (\InvalidArgumentException $e) { // Catch exception if date is null
-            $certifiedDate = null;
+            $date = true;
         }
 
         //If they are already inactive they can't control to meet activity in first place.
         if (!$this->active){
-            return true;
-        }
-
-        //Can't do checks if certification date is bad
-        if ($certifiedDate === null) {
-            Log::error($this->cid.' was skipped from sending an inactivity email because of bad certification date.');
             return true;
         }
 
@@ -128,7 +122,7 @@ class RosterMember extends Model
         }
 
         //If within quarter nah skip since policy.
-        if ($certifiedDate > Carbon::now()->startOfQuarter() && $certifiedDate < Carbon::now()->endOfQuarter()){
+        if ($date === false && ($certifiedDate > Carbon::now()->startOfQuarter() && $certifiedDate < Carbon::now()->endOfQuarter())){
             return true;
         }
         
