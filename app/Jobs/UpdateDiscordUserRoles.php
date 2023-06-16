@@ -43,7 +43,7 @@ class UpdateDiscordUserRoles implements ShouldQueue
         //Get all Discord linked users
         foreach (User::where('discord_user_id', '!=', null)->cursor() as $user) {
             //Test if they're on the server or a staff member
-            if (!$user->memberOfCzqoGuild() || $user->staffProfile || $user->isBot()) {
+            if (!$user->member_of_czqo || $user->staffProfile || $user->isBot()) {
                 //They're not.. continue on.
                 continue;
             }

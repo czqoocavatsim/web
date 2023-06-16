@@ -32,7 +32,8 @@
         "spatie/laravel-activitylog": "^4.7",
         "spatie/laravel-cookie-consent": "^3.2",
         "spatie/laravel-html": "^3.2",
-        "spatie/laravel-permission": "^5.10"
+        "spatie/laravel-permission": "^5.10",
+        "laravelcollective/html": "^6.4"
     },
     "require-dev": {
         "barryvdh/laravel-debugbar": "^3.8",

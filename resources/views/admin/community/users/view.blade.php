@@ -146,7 +146,7 @@
                 <h5 class="mt-3 blue-text">Discord Link</h5>
                 <div class="list-group-item z-depth-1 rounded p-3">
                     @if($user->hasDiscord())
-                    <h5><img style="border-radius:50%; height: 30px;" class="img-fluid" src="{{$user->getDiscordAvatar()}}" alt="">&nbsp;&nbsp;{{$user->getDiscordUser()->username}}#{{$user->getDiscordUser()->discriminator}}</h5>
+                    <h5><img style="border-radius:50%; height: 30px;" class="img-fluid" src="{{$user->getDiscordAvatar()}}" alt="">&nbsp;&nbsp;{{$user->discord_username}}</h5>
                     <ul class="list-unstyled">
                         <li class="d-flex align-items-center">Member of the CZQO Discord: <i style="margin-left: 5px;font-size: 20px;" class="{{$user->memberOfCzqoGuild() ? 'fas fa-check-circle green-text' : 'fas fa-times-circle red-text'}}"></i></li>
                     </ul>

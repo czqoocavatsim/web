@@ -32,7 +32,7 @@
         <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mdbootstrap/4.8.11/js/mdb.min.js"></script>
         <!--CZQO specific CSS and JS-->
         @if (Auth::check())
-        @switch (Auth::user()->preferences)
+        @switch (auth()->user()->preferences)
             @case("default")
             <link href="{{ asset('css/czqomd.css') }}" rel="stylesheet">
             @break
@@ -72,7 +72,7 @@
         <!--Chart js-->
         <script src="https://cdn.jsdelivr.net/npm/chart.js@2.9.3/dist/Chart.min.js" integrity="sha256-R4pqcOYV8lt7snxMQO/HSbVCFRPMdrhAFMH+vr9giYI=" crossorigin="anonymous"></script>
     </head>
-    <body class="d-flex flex-column min-vh-100" @if(Auth::check() && Auth::user()->preferences) @if(Auth::user()->preferences->accent_colour) data-accent="{{Auth::user()->preferences->accent_colour}}" @endif data-theme="{{Auth::user()->preferences->ui_mode}}" @else data-theme="light" @endif>
+    <body class="d-flex flex-column min-vh-100" @if(Auth::check() && auth()->user()->preferences) @if(auth()->user()->preferences->accent_colour) data-accent="{{auth()->user()->preferences->accent_colour}}" @endif data-theme="{{auth()->user()->preferences->ui_mode}}" @else data-theme="light" @endif>
     <!--Header-->
     @include('maintenancemode::notification')
     @if (\App\Models\Settings\CoreSettings::where('id', 1)->firstOrFail()->banner)
@@ -320,11 +320,11 @@
                             </li>
                         </ul>
                         @auth
-                            @if(Auth::user()->hasDiscord() && !Auth::user()->memberOfCzqoGuild())
+                            @if(auth()->user()->hasDiscord() && !auth()->user()->member_of_czqo)
                             <a href="{{route('me.discord.join')}}" class="class btn btn-primary mt-3">Join The Community</a>
                             <p class="text-muted text-center mt-2">You will be redirected to Discord to allow us to add you to our server. Information collected is shown on the Discord authorisation screen. Read our privacy policy for details.</p>
-                            @elseif (Auth::user()->hasDiscord() && Auth::user()->memberOfCzqoGuild())
-                            <p class="mt-1"><img style="border-radius:50%; height: 30px;" class="img-fluid" src="{{Auth::user()->getDiscordAvatar()}}" alt="">&nbsp;&nbsp;{{Auth::user()->getDiscordUser()->username}}<span style="color: #d1d1d1;">#{{Auth::user()->getDiscordUser()->discriminator}}</span></p>
+                            @elseif (auth()->user()->hasDiscord() && auth()->user()->member_of_czqo)
+                            <p class="mt-1"><img style="border-radius:50%; height: 30px;" class="img-fluid" src="{{auth()->user()->getDiscordAvatar()}}" alt="">&nbsp;&nbsp;{{auth()->user()->discord_username}}</p>
                             <p class="text-muted text-center mt-2">You are already a member of the Gander Oceanic Discord. To unlink your account and leave the server, go to myCZQO.</p>
                             @else
                                 <a href="{{route('me.discord.link', ['param' => 'server_join_process'])}}" class="class btn btn-primary mt-3">Link Your Discord To Join</a>
@@ -370,7 +370,7 @@
       <div class="modal-dialog modal-frame modal-top" role="document">
         <div class="modal-content">
             <div class="modal-body px-5 py-4">
-                <h4 class="blue-text">Hello{{ Auth::check() ? ', ' . Auth::user()->fullName('F') . '!' : '!' }}</h4>
+                <h4 class="blue-text">Hello{{ Auth::check() ? ', ' . auth()->user()->fullName('F') . '!' : '!' }}</h4>
                 <hr>
                 <ul class="list-unstyled">
                     <li class="nav-item">
@@ -435,7 +435,7 @@
                 <div class="d-flex flex-row justify-content-between">
                     @auth
                         <div>
-                            <img src="{{Auth::user()->avatar()}}" style="height: 27px; width: 27px; margin-right: 7px; margin-bottom: 3px; border-radius: 50%;">&nbsp;<span>{{Auth::user()->fullName("FL")}}</span>
+                            <img src="{{auth()->user()->avatar()}}" style="height: 27px; width: 27px; margin-right: 7px; margin-bottom: 3px; border-radius: 50%;">&nbsp;<span>{{auth()->user()->fullName("FL")}}</span>
                         </div>
                         <div>
                             <a href="{{ route('auth.logout') }}" class="red-text"><i class="fas fa-sign-out-alt mr-2"></i>Log Out</a>

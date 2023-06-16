@@ -230,8 +230,6 @@ return [
         'Calendar'       => \MaddHatter\LaravelFullcalendar\Facades\Calendar::class,
         'Form'           => Spatie\Html\Facades\Form::class,
         'Html'           => Spatie\Html\Facades\Html::class,
-
-
     ],
 
 ];
