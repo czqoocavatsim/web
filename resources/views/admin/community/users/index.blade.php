@@ -2,7 +2,7 @@
 @section('community-content')
     <div class="container py-4">
         <h1 class="blue-text font-weight-bold mt-2">Users</h1>
-        <h4 class="mb-3">There are <span class="font-weight-bold blue-text">{{$userCount}}</span> users</h4>
+        <h4 class="mb-3">There are <span class="font-weight-bold blue-text">{{count($users) - 2}}</span> users</h4>
         @if (empty($users))
             <div class="alert alert-danger">No users found</div>
         @else

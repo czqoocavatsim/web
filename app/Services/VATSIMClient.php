@@ -22,7 +22,7 @@ class VATSIMClient
 
     public function searchCallsign($callsign, $precise)
     {
-        $data = Cache::remember('vatsimdata', 55, function () {
+        $data = Cache::remember('vatsimdata', 59, function () {
             return $this->getVATSIMData();
         });
 

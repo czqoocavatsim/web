@@ -19,12 +19,9 @@ class UsersController extends Controller
     public function index()
     {
         //Get all users
-        $users = User::all();
+        $users = User::select(['id', 'fname', 'lname', 'rating_short', 'display_fname', 'display_cid_only', 'display_last_name'])->get();
 
-        //Get cool stats for the page
-        $userCount = count($users) - 2;
-
-        return view('admin.community.users.index', compact('users', 'userCount'));
+        return view('admin.community.users.index', compact('users'));
     }
 
     public function viewUser($id)

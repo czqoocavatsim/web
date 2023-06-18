@@ -23,7 +23,10 @@ class RosterController extends Controller
     public function publicRoster()
     {
         //Get roster
-        $roster = RosterMember::where('certification', '!=', 'not_certified')->get();
+        $roster = RosterMember::where('certification', '!=', 'not_certified')
+            ->select(['id', 'certification', 'active', 'user_id'])
+            ->with('user:id,fname,lname,rating_short,display_fname,display_cid_only,display_last_name,division_name,division_code')
+            ->get();
 
         //Return view
         return view('roster.index', compact('roster'));
