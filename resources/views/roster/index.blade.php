@@ -31,7 +31,7 @@
             <tbody>
             @foreach ($roster as $controller)
                 <tr>
-                    <th scope="row"><b>{{$controller->cid}}</b></th>
+                    <th scope="row"><b>{{$controller->user_id}}</b></th>
                     <td>
                         {{$controller->user->fullName('FL')}}
                         @if ($controller->activeSoloCertification())

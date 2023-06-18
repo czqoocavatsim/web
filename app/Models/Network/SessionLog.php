@@ -5,6 +5,7 @@ namespace App\Models\Network;
 use Spatie\Activitylog\LogOptions;
 use App\Models\Roster\RosterMember;
 use Illuminate\Database\Eloquent\Model;
+use App\Services\VATSIMClient;
 use Spatie\Activitylog\Traits\LogsActivity;
 
 // Log of all sessions
@@ -13,6 +14,7 @@ use Spatie\Activitylog\Traits\LogsActivity;
  *
  * @property int $id
  * @property int $cid
+ * @property string $callsign
  * @property \Illuminate\Support\Carbon $session_start
  * @property \Illuminate\Support\Carbon|null $session_end
  * @property float|null $duration
@@ -61,6 +63,12 @@ class SessionLog extends Model
     public function rosterMember()
     {
         return $this->belongsTo(RosterMember::class);
+    }
+
+    public function searchCallsign()
+    {
+        $vatsimData = new VATSIMClient();
+        return $vatsimData->searchCallsign($this->callsign, true);
     }
 
     protected $dates = [

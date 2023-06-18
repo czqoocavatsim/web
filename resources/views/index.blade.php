@@ -66,14 +66,14 @@
                         @foreach($controllers as $controller)
                         <li>
                             <div class="white-text d-flex flex-row justify-content-between align-items-center">
-                                <h4 class="font-weight-bold m-0">{{$controller['callsign']}}</h4>
+                                <h4 class="font-weight-bold m-0">{{$controller->callsign}}</h4>
                                 <div style="font-size: 1.1em;">
-                                    @if (auth()->check() && $rosterMember = App\Models\Roster\RosterMember::where('cid', $controller['cid'])->first())
+                                    @if (auth()->check() && $rosterMember = $controller->rosterMember)
                                         <img src="{{$rosterMember->user->avatar()}}" style="height: 35px; !important; width: 35px !important; margin-left: 10px; margin-right: 5px; margin-bottom: 3px; border-radius: 50%;">
                                         {{$rosterMember->user->fullName('FLC')}}
                                     @else
                                         <div class="my-1">
-                                            @if (auth()->check()){{$controller['realname']}}@endif {{$controller['cid']}}
+                                            @if (auth()->check()){{$controller->searchCallsign()->name ?? ''}}@endif {{$controller['cid']}}
                                         </div>
                                     @endif
                                 </div>

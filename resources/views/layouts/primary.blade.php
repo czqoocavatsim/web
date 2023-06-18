@@ -98,7 +98,7 @@
         <footer class="page-footer text-dark font-small" style="bottom:0; background: rgb(239, 239, 239)">
             <div class="container py-5">
                 <div class="d-none d-md-block">
-                    <p class="mb-3">Copyright (C) Gander Oceanic OCA {{App\Models\Settings\CoreSettings::where('id', 1)->firstOrFail()->copyright_year}}. All Rights Reserved.<br>Not to be used for real world navigation. Flight simulation only.</p>
+                    <p class="mb-3">Copyright (C) Gander Oceanic OCA {{App\Models\Settings\CoreSettings::where('id', 1)->value('copyright_year')}}. All Rights Reserved.<br>Not to be used for real world navigation. Flight simulation only.</p>
                     <div class="flex-left my-4">
                         <a href="{{route('my.feedback.new')}}" class="font-weight-bold black-text">Feedback</a>
                         &nbsp;
@@ -149,7 +149,7 @@
                     </div>
                 </div>
                 <div class="d-md-none text-center">
-                    <p class="mb-3">Copyright (C) Gander Oceanic OCA {{App\Models\Settings\CoreSettings::where('id', 1)->firstOrFail()->copyright_year}}. All Rights Reserved.<br>Not to be used for real world navigation. Flight simulation only.</p>
+                    <p class="mb-3">Copyright (C) Gander Oceanic OCA {{App\Models\Settings\CoreSettings::where('id', 1)->value('copyright_year')}}. All Rights Reserved.<br>Not to be used for real world navigation. Flight simulation only.</p>
                     <ul class="list-unstyled">
                         <li>
                             <a class="text-body fw-600" href="https://vatcan.ca">VATCAN</a>

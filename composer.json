@@ -84,6 +84,5 @@
         }
     },
     "minimum-stability": "dev",
-    "prefer-stable": true,
-    "repositories": [{ "type": "package", "canonical": false, "package": { "version": "master", "name": "asantibanez/livewire-calendar", "source": { "url": "https://github.com/Butochnikov/livewire-calendar.git", "type": "git", "reference": "master" } } }]
+    "prefer-stable": true
 }

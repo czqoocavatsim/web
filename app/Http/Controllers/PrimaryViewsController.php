@@ -5,17 +5,16 @@ namespace App\Http\Controllers;
 use Carbon\Carbon;
 use GuzzleHttp\Client;
 use App\Models\News\News;
-use Vatsimphp\VatsimData;
 use App\Models\Events\Event;
 use Illuminate\Http\Request;
+use App\Models\Network\SessionLog;
+use Atymic\Twitter\Facade\Twitter;
 use App\Models\Roster\RosterMember;
-use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Cache;
 use App\Models\Settings\RotationImage;
 use App\Models\Publications\AtcResource;
 use App\Models\News\HomeNewControllerCert;
-use Atymic\Twitter\Facade\Twitter;
 
 class PrimaryViewsController extends Controller
 {
@@ -23,20 +22,7 @@ class PrimaryViewsController extends Controller
     public function home(Request $request)
     {
         //VATSIM online controllers
-        $vatsimData = new VatsimData();
-        $dataLoaded = $vatsimData->loadData();
-
-        $ganderControllers = [];
-        $shanwickControllers = [];
-        $controllers = [];
-        if ($dataLoaded) {
-            $ganderControllers = $vatsimData->searchCallsign('CZQO_');
-            $shanwickControllers = $vatsimData->searchCallsign('EGGX_');
-            $natControllers = $vatsimData->searchCallsign('NAT_');
-            $controllers = array_merge($ganderControllers->toArray(), $shanwickControllers->toArray(), $natControllers->toArray());
-        } else {
-            Log::error('PrimaryViewsController home: VATSIMPhp failed to load data');
-        }
+        $controllers = SessionLog::whereNull('session_end')->get();
 
         //News
         $news = News::where('visible', true)->get()->sortByDesc('published')->first();
