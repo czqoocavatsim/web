@@ -9,6 +9,7 @@
     "type": "project",
     "require": {
         "php": "^8.0",
+        "asantibanez/livewire-calendar": "dev-master",
         "atymic/twitter": "^3.2",
         "barryvdh/laravel-dompdf": "^2.0",
         "bugsnag/bugsnag-laravel": "^2.0",
@@ -20,6 +21,7 @@
         "laravel/framework": "^9.0",
         "laravel/tinker": "^2.0",
         "laravel/ui": "^4.0",
+        "laravelcollective/html": "^6.4",
         "lasserafn/php-initial-avatar-generator": "^4.0",
         "lasserafn/php-initials": "^3.1",
         "league/flysystem-aws-s3-v3": "^3.1",
@@ -32,8 +34,7 @@
         "spatie/laravel-activitylog": "^4.7",
         "spatie/laravel-cookie-consent": "^3.2",
         "spatie/laravel-html": "^3.2",
-        "spatie/laravel-permission": "^5.10",
-        "laravelcollective/html": "^6.4"
+        "spatie/laravel-permission": "^5.10"
     },
     "require-dev": {
         "barryvdh/laravel-debugbar": "^3.8",
@@ -83,5 +84,6 @@
         }
     },
     "minimum-stability": "dev",
-    "prefer-stable": true
+    "prefer-stable": true,
+    "repositories": [{ "type": "package", "canonical": false, "package": { "version": "master", "name": "asantibanez/livewire-calendar", "source": { "url": "https://github.com/Butochnikov/livewire-calendar.git", "type": "git", "reference": "master" } } }]
 }

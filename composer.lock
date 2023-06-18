@@ -4,8 +4,18 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "46c830a657bc0da56f4b73e17bcff089",
+    "content-hash": "c639797c9503d95eae660ceb8fd17607",
     "packages": [
+        {
+            "name": "asantibanez/livewire-calendar",
+            "version": "master",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/Butochnikov/livewire-calendar.git",
+                "reference": "master"
+            },
+            "type": "library"
+        },
         {
             "name": "atymic/twitter",
             "version": "3.2.0",
@@ -13222,7 +13232,9 @@
     ],
     "aliases": [],
     "minimum-stability": "dev",
-    "stability-flags": [],
+    "stability-flags": {
+        "asantibanez/livewire-calendar": 20
+    },
     "prefer-stable": true,
     "prefer-lowest": false,
     "platform": {

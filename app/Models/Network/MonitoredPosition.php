@@ -32,12 +32,12 @@ class MonitoredPosition extends Model
         return Carbon::create($session->session_end);
     }
 
-    public function activeSession()
+    public function activeSession($callsign)
     {
-        if ($session = $this->sessions->where('session_end', null)->first()) {
+        if ($session = SessionLog::where('callsign', $callsign)->whereNull('session_end')->first()) {
             return $session;
         } else {
-            return null;
+            return false;
         }
     }
 
