@@ -11,8 +11,7 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
-use Illuminate\Support\Facades\Log;
-use Vatsimphp\VatsimData;
+use App\Services\VATSIMClient;
 
 class ProcessSessionLogging implements ShouldQueue
 {
@@ -37,67 +36,52 @@ class ProcessSessionLogging implements ShouldQueue
      */
     public function handle()
     {
-        //Get VATSIMData instance
-        $vatsimData = new VatsimData();
-        $dataLoaded = $vatsimData->loadData();
-
-        //If no data...
-        if (!$dataLoaded) {
-            Log::error('ProcessSessionLogs job: VATSIMPhp failed to load data');
-            return;
-        }
+        //BEGIN CONTROLLER SESSION CHECK
 
         //Get monitored positions
-        $monitoredPositions = MonitoredPosition::all()->sortBy('staff_only');
+        $monitoredPositions = MonitoredPosition::all();
+
+        $vatsimData = new VATSIMClient();
+
+        $positionsFound = [];
 
         //Go through each position and process sessions for each of them
         foreach ($monitoredPositions as $position) {
-            //Get sessions with the positions callsign
-            $vatsimSessionInstances = $vatsimData->searchCallsign($position->identifier)->toArray();
+            $controllers = $vatsimData->searchCallsign($position->identifier, false);
 
-            //If there is an active session
-            if ($activeSession = $position->activeSession()) {
-                if (empty($vatsimSessionInstances)) { //If the session isn't detected online anymore
-                    //Update and end session
-                    $activeSession->session_end = Carbon::now();
-                    $activeSession->duration = $activeSession->session_start->floatDiffInMinutes(Carbon::now()) / 60;
-                    $activeSession->save();
+            foreach ($controllers as $controller) {
 
-                    //If there is an associated roster member, give them the hours
-                    if ($rosterMember = $activeSession->rosterMember) {
-                        if ($rosterMember->certification == 'certified' && $rosterMember->active) {
-                            $rosterMember->currency += $activeSession->session_start->floatDiffInMinutes(Carbon::now()) / 60;
-                            $rosterMember->monthly_hours += $activeSession->session_start->floatDiffInMinutes(Carbon::now()) / 60;
-                            $rosterMember->save();
-                        }
+                SessionLog::firstOrCreate([
+                    'cid' => $controller->cid,
+                    'callsign' => $controller->callsign,
+                    'session_end' => null,
+                ], [
+                        'session_start' => Carbon::now(),
+                        'emails_sent' => 0,
+                        'monitored_position_id' => $position->id,
+                        'roster_member_id' => RosterMember::where('cid', $controller->cid)->value('id') ?? null,
+                    ]);
+
+                array_push($positionsFound, $controller->callsign);
+            }
+        }
+
+        //Check existing sessions in db
+        $sessionLogs = SessionLog::whereNull('session_end')->get();
+        foreach ($sessionLogs as $log) {
+            if ((!in_array($log->callsign, $positionsFound)) || $vatsimData->searchCallsign($log->callsign, true)->cid != $log->cid) {
+                $log->session_end = Carbon::now();
+                $log->duration = $log->session_start->floatDiffInMinutes(Carbon::now()) / 60;
+                $log->save();
+
+                //If there is an associated roster member, give them the hours
+                if ($rosterMember = $log->rosterMember) {
+                    if (($rosterMember->certification == 'certified' || $rosterMember->certification == 'training') && $rosterMember->active) {
+                        $rosterMember->currency += $log->session_start->floatDiffInMinutes(Carbon::now()) / 60;
+                        $rosterMember->monthly_hours += $log->session_start->floatDiffInMinutes(Carbon::now()) / 60;
+                        $rosterMember->save();
                     }
                 }
-            } else { //Looking for a new session
-                // if(empty($vatsimSessionInstances)){ // Should be empty if there's no sessions found, not with an index of 0
-                //     Log::info('No sessions found for '.$position->identifier);
-                //     continue;
-                // }
-                // Should only be executing if there's a session in progress
-                $instance = $vatsimSessionInstances[0];
-
-                //Create a new session
-                $session = SessionLog::create([
-                    'roster_member_id'      => RosterMember::whereCid($instance['cid'])->first()->id ?? null,
-                    'cid'                   => $instance['cid'],
-                    'session_start'         => Carbon::parse($instance['time_logon']),
-                    'monitored_position_id' => $position->id,
-                    'emails_sent'           => 0,
-                ]);
-                /*
-                                //Send notifications if staff only, not certified, etc
-                                if ($position->staff_only && ($session->rosterMember == null || $session->rosterMember->certification == 'not_certified'))
-                                {
-                                    Notification::route('mail', CoreSettings::find(1)->emailfirchief)->notify(new ControllerNotCertified($session));
-                                    $session->emails_sent++;
-                                    $session->save();
-                                }
-                 */
-                $session->save();
             }
         }
     }

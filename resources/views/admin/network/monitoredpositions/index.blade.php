@@ -47,19 +47,19 @@
             </div>
             {!! Form::open(['route' => 'network.monitoredpositions.create']) !!}
             <div class="modal-body">
-                <p>ActivityBot will monitor positions for activity and will record sessions. You can specify a prefix or complete callsign.</p>
+                <p>ActivityBot will monitor positions for activity and will record sessions. Please DO NOT specify a prefix, the system will check all possible combinations.</p>
                 <div class="form-group">
                     <label for="recipient-name" class="col-form-label">Identifier</label>
-                    {!! Form::text('identifier', null, ['class' => 'form-control', 'placeholder' => 'CZQX_']) !!}
+                    {!! Form::text('identifier', null, ['class' => 'form-control', 'placeholder' => 'NAT_FSS']) !!}
                 </div>
-                <div class="form-group">
+                {{-- <div class="form-group">
                     <label for="recipient-name" class="col-form-label">Staff Only</label>
                     {{ Form::checkbox('staffOnly', 'no', false) }}
-                </div>
+                </div> --}}
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-light" data-dismiss="modal">Close</button>
-                {!! Form::submit('Submit', ['class' => 'btn btn-primary']) !!}
+                {!! Form::submit('Create', ['class' => 'btn btn-primary']) !!}
             </div>
             {!! Form::close() !!}
         </div>
