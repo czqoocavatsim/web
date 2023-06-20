@@ -8,13 +8,13 @@ use App\Models\News\News;
 use App\Models\Events\Event;
 use Illuminate\Http\Request;
 use App\Models\Network\SessionLog;
-use Atymic\Twitter\Facade\Twitter;
 use App\Models\Roster\RosterMember;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Cache;
 use App\Models\Settings\RotationImage;
 use App\Models\Publications\AtcResource;
 use App\Models\News\HomeNewControllerCert;
+use App\Services\VATSIMClient;
 
 class PrimaryViewsController extends Controller
 {
@@ -34,24 +34,13 @@ class PrimaryViewsController extends Controller
         //Top controllers
         $topControllers = RosterMember::where('monthly_hours', '>', 0)->get()->sortByDesc('monthly_hours')->take(3);
 
-        //Twitter
-        $tweets = Cache::remember('twitter.timeline', 86400, function () {
-            try {
-                return Twitter::getUserTimeline(['screen_name' => 'ganderocavatsim', 'count' => 3, 'response_format' => 'json']);
-            } catch (\Exception $ex) {
-                return null;
-            }
-        });
-
-        $tweets = json_decode($tweets);
-
         //CTP Mode?
         $ctpMode = false;
         if (config('app.ctp_home_page')) {
             $ctpMode = true;
         }
 
-        return view('index', compact('controllers', 'news', 'certifications', 'nextEvent', 'topControllers', 'tweets', 'ctpMode'));
+        return view('index', compact('controllers', 'news', 'certifications', 'nextEvent', 'topControllers', 'ctpMode'));
     }
 
     /*
@@ -60,21 +49,10 @@ class PrimaryViewsController extends Controller
     public function map()
     {
         //VATSIM online controllers
-        $vatsim = new \Vatsimphp\VatsimData();
-        $vatsim->setConfig('cacheOnly', false);
-        $ganderControllers = [];
-        $shanwickControllers = [];
-        $controllerOnline = false;
-        $planes = null;
-        if ($vatsim->loadData()) {
-            $ganderControllers = $vatsim->searchCallsign('CZQX_');
-            $shanwickControllers = $vatsim->searchCallsign('EGGX_');
-            $controllers = array_merge($ganderControllers->toArray(), $shanwickControllers->toArray());
-            if (count($controllers) > 1) {
-                $controllerOnline = true;
-            }
-            $planes = $vatsim->getPilots()->toArray();
-        }
+        $controllerOnline = SessionLog::whereNull('session_end')->exists();
+
+        $vatsim = new VATSIMClient();
+        $planes = $vatsim->getPilots();
 
         return view('pilots.map', compact('planes', 'controllerOnline'));
     }

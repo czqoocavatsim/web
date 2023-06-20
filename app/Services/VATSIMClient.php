@@ -48,4 +48,13 @@ class VATSIMClient
 
         return $controllers;
     }
+
+    public function getPilots()
+    {
+        $data = Cache::remember('vatsimdatapilots', 60*60*1, function () {
+            return $this->getVATSIMData();
+        });
+
+        return $data->pilots;
+    }
 }

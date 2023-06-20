@@ -983,13 +983,14 @@ async function createMap(planes, controllerOnline) {
 
     //Create plane markers and controllers
     planes.forEach(function (plane) {
+
         let markerIcon = L.icon({
             iconUrl: '/img/planes/base.png',
             iconSize: [30, 30],
             iconAnchor: [2,4]
         });
        var marker = L.marker([plane.latitude, plane.longitude], {rotationAngle: plane.heading, icon:markerIcon}).addTo(map);
-       marker.bindPopup(`<h4>${plane.callsign}</h4><br>${plane.realname} ${plane.cid}<br>${plane.planned_depairport} to ${plane.planned_destairport}<br>${plane.planned_aircraft}`)
+       marker.bindPopup(`<h4>${plane['callsign']}</h4><br>${plane['name']} ${plane['cid']}<br>${plane['flight_plan'] ? plane['flight_plan']['departure'] : ''} to ${plane['flight_plan'] ? plane['flight_plan']['arrival'] : ''}<br>${plane['flight_plan'] ? plane['flight_plan']['aircraft'] : ''}`);
     });
 
     //Add tracks

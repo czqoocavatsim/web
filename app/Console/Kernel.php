@@ -55,7 +55,7 @@ class Kernel extends ConsoleKernel
             //Tell Discord all about it
             $discord = new DiscordClient();
             $discord->sendMessage(753086414811562014, 'Sent '.$count.' two-week warning inactivity emails');
-        })->cron('00 19 16 MAR,JUN,SEP,DEC *'); // 2 weeks before end of quarter
+        })->cron('00 00 16 MAR,JUN,SEP,DEC *'); // 2 weeks before end of quarter
 
         // 1 week
         $schedule->call(function () {
