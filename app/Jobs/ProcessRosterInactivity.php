@@ -12,7 +12,7 @@ use Illuminate\Queue\SerializesModels;
 use Illuminate\Support\Facades\Notification;
 use App\Notifications\Roster\RosterStatusChanged;
 use App\Notifications\Roster\RemovedFromRoster;
-use Illuminate\Support\Facades\Log;
+use App\Services\DiscordClient;
 
 class ProcessRosterInactivity implements ShouldQueue
 {
@@ -60,6 +60,15 @@ class ProcessRosterInactivity implements ShouldQueue
                 if ($rosterMember->currency < 6.0) {
                     $rosterMember->active = false;
                     $rosterMember->save();
+
+                    $discord = new DiscordClient();
+                    $discord_user_id = $rosterMember->user->discord_user_id;
+                    if ($discord_user_id && $rosterMember->user->member_of_czqo){
+                        $discord->removeRole($discord_user_id, 482819739996127259);
+                        $discord->assignRole($discord_user_id, 482835389640343562);
+                    }
+                    $rosterMember->user->removeRole('Certified Controller');
+                    $rosterMember->user->assignRole('Guest');
                     Notification::send($rosterMember->user, new RosterStatusChanged($rosterMember));
                 }    
             }elseif (!$rosterMember->active) {

@@ -99,7 +99,7 @@
                     </div>
                 </div>
                 <div class="list-group z-depth-1">
-                    @if($tweets)
+                    {{-- @if($tweets)
                     @foreach($tweets as $t)
                         <a href="https://twitter.com/ganderocavatsim/status/{{$t->id}}" target="_blank" class="list-group-item list-group-item-action waves-effect">
                             <p>
@@ -120,9 +120,9 @@
                             </p>
                         </a>
                     @endforeach
-                    @else
-                    No tweets found
-                    @endif
+                    @else --}}
+                    No recent tweets
+                    {{-- @endif --}}
                 </div>
             </div>
             <div class="col-md-4 mb-4">
