@@ -7,7 +7,7 @@ use Illuminate\Notifications\Notification;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
 
-class RemovedFromRoster extends Notification implements ShouldQueue
+class RemovedFromRoster extends Notification
 {
     use Queueable;
     protected $user;

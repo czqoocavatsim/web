@@ -51,16 +51,13 @@ class ProcessRosterInactivity implements ShouldQueue
             }
 
             if ($date === false){
-                if ($certifiedDate > Carbon::now()->startOfQuarter() && $certifiedDate < Carbon::now()->endOfQuarter()){
+                if ($certifiedDate > Carbon::now()->subDays(2)->startOfQuarter() && $certifiedDate < Carbon::now()->subDays(2)->endOfQuarter()){
                     continue;
                 }
             }
 
             if ($rosterMember->active) {
                 if ($rosterMember->currency < 6.0) {
-                    $rosterMember->active = false;
-                    $rosterMember->save();
-
                     $discord = new DiscordClient();
                     $discord_user_id = $rosterMember->user->discord_user_id;
                     if ($discord_user_id && $rosterMember->user->member_of_czqo){
@@ -69,7 +66,8 @@ class ProcessRosterInactivity implements ShouldQueue
                     }
                     $rosterMember->user->removeRole('Certified Controller');
                     $rosterMember->user->assignRole('Guest');
-                    Notification::send($rosterMember->user, new RosterStatusChanged($rosterMember));
+                    Notification::send($rosterMember->user, new RemovedFromRoster($rosterMember));
+                    $rosterMember->delete();
                 }    
             }elseif (!$rosterMember->active) {
                 $rosterMember->delete();

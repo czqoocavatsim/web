@@ -2,17 +2,18 @@
 
 namespace App\Http\Controllers\Auth;
 
-use App\Http\Controllers\Controller;
-use App\Models\Users\User;
-use App\Models\Users\UserNotificationPreferences;
-use App\Models\Users\UserPreferences;
-use App\Models\Users\UserPrivacyPreferences;
 use GuzzleHttp\Client;
-use GuzzleHttp\Exception\ClientException;
-use Illuminate\Foundation\Auth\AuthenticatesUsers;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
+use App\Models\Users\User;
 use Illuminate\Support\Str;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
+use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Auth;
+use App\Models\Users\UserPreferences;
+use GuzzleHttp\Exception\ClientException;
+use App\Models\Users\UserPrivacyPreferences;
+use App\Models\Users\UserNotificationPreferences;
+use Illuminate\Foundation\Auth\AuthenticatesUsers;
 
 /**
  * Class AuthController.
@@ -131,6 +132,7 @@ class AuthController extends Controller
             $notif->save();
         }
 
+        Log::info($user->id.' logged in');
         return redirect()->route('my.index')->with('success', "Welcome back, {$user->fullName('F')}!");
     }
 }

@@ -241,9 +241,6 @@ class User extends Authenticatable
         if (count($this->roles) == 0) {
             //Assign them guest
             $this->assignRole('Guest');
-
-            //Should probably inform
-            Log::alert('User '.$this->id.' did not have any role assigned. Guest role assigned.');
         }
 
         return $this->roles[0];
