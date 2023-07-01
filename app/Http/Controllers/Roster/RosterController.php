@@ -154,14 +154,6 @@ class RosterController extends Controller
         $rosterMember = RosterMember::where('cid', $cid)->firstOrFail();
         $user = $rosterMember->user;
 
-        //Delete and its dependencies
-        foreach (SoloCertification::where('roster_member_id', $rosterMember->id)->get() as $cert) {
-            $cert->delete();
-        }
-        foreach (SessionLog::where('roster_member_id', $rosterMember->id)->get() as $session) {
-            $session->roster_member_id = 1;
-            $session->save();
-        }
         $rosterMember->delete();
 
         //Roles

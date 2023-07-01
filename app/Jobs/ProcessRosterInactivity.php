@@ -61,17 +61,15 @@ class ProcessRosterInactivity implements ShouldQueue
                     $discord = new DiscordClient();
                     $discord_user_id = $rosterMember->user->discord_user_id;
                     if ($discord_user_id && $rosterMember->user->member_of_czqo){
+                        sleep(2); //TODO: CREATE A JOB TO HANDLE THIS RATHER SLEEP
                         $discord->removeRole($discord_user_id, 482819739996127259);
                         $discord->assignRole($discord_user_id, 482835389640343562);
                     }
                     $rosterMember->user->removeRole('Certified Controller');
                     $rosterMember->user->assignRole('Guest');
-                    Notification::send($rosterMember->user, new RemovedFromRoster($rosterMember));
+                    Notification::send($rosterMember->user, new RemovedFromRoster($rosterMember->user));
                     $rosterMember->delete();
                 }    
-            }elseif (!$rosterMember->active) {
-                $rosterMember->delete();
-                Notification::send($rosterMember->user, new RemovedFromRoster($rosterMember));
             }
         }
     }
