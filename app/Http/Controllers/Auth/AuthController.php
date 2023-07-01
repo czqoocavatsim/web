@@ -132,7 +132,6 @@ class AuthController extends Controller
             $notif->save();
         }
 
-        Log::info($user->id.' logged in');
         return redirect()->route('my.index')->with('success', "Welcome back, {$user->fullName('F')}!");
     }
 }
