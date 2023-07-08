@@ -77,9 +77,9 @@ class PrimaryViewsController extends Controller
         $quote = Cache::remember('quoteoftheday', 86400, function () {
             $client = new Client();
             $headers = [
-                'Authorization' => 'Bearer '.env('QUOTES_API_TOKEN')
+                'X-Api-Key' => env('QUOTES_API_TOKEN')
             ];
-            $output = $client->get('https://quotes.rest/qod',[
+            $output = $client->get('https://api.api-ninjas.com/v1/quotes',[
                 'headers' => $headers
             ]);
 
