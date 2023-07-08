@@ -37,7 +37,7 @@
                     {{auth()->user()->fullName('F')}}!
                 </h1>
                 @if(isset($quote))
-                <p style="font-size: 1.2em;">{{$quote->contents->quotes[0]->quote}} ~ {{$quote->contents->quotes[0]->author}}</p>
+                <p style="font-size: 1.2em;">{{$quote[0]->quote}} ~ {{$quote[0]->author}}</p>
                 @endif
             </div>
         </div>
