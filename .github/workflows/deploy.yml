@@ -19,7 +19,7 @@ jobs:
         KEY: ${{ secrets.PASS }}
         PORT: 22
         source: ./
-        target: /var/www/czqoprod/
+        target: /var/www/czqo-web-prod/
 
     - name: Set permissions
       uses: appleboy/ssh-action@master
@@ -29,7 +29,7 @@ jobs:
         KEY: ${{ secrets.PASS }}
         PORT: 22
         script: |
-          cd /var/www/czqoprod/
+          cd /var/www/czqo-web-prod/
           chown -R mufassil:www-data .
           find . -type f -exec chmod 664 {} \;
           find . -type d -exec chmod 775 {} \;

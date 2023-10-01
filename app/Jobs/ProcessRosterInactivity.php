@@ -57,7 +57,7 @@ class ProcessRosterInactivity implements ShouldQueue
             }
 
             if ($rosterMember->active) {
-                if ($rosterMember->currency < 6.0) {
+                if ($rosterMember->currency < 3.0) {
                     $discord = new DiscordClient();
                     $discord_user_id = $rosterMember->user->discord_user_id;
                     if ($discord_user_id && $rosterMember->user->member_of_czqo){
