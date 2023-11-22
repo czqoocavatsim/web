@@ -16,20 +16,20 @@ jobs:
       with:
         HOST: ${{ secrets.HOST }}
         USERNAME: ${{ secrets.USER }}
-        KEY: ${{ secrets.PASS }}
+        PASSWORD: ${{ secrets.PASS }}
         PORT: 22
         source: ./
-        target: /var/www/czqo-web-prod/
+        target: /var/www/czqoprod/
 
     - name: Set permissions
       uses: appleboy/ssh-action@master
       with:
         HOST: ${{ secrets.HOST }}
         USERNAME: ${{ secrets.USER }}
-        KEY: ${{ secrets.PASS }}
+        PASSWORD: ${{ secrets.PASS }}
         PORT: 22
         script: |
-          cd /var/www/czqo-web-prod/
+          cd /var/www/czqoprod/
           chown -R mufassil:www-data .
           find . -type f -exec chmod 664 {} \;
           find . -type d -exec chmod 775 {} \;
