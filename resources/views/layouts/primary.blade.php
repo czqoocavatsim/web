@@ -15,7 +15,7 @@
         <meta name="theme-color" content="#0080c9">
         <meta name="og:title" content="@yield('title', '')Gander Oceanic OCA">
         <meta name="og:description" content="@yield('description', '')">
-        <meta name="og:image" content="@yield('image','{{asset('assets/resources/media/img/brand/sqr/ZQO_SQ_TSPBLUE.png')}}">
+        <meta name="og:image" content="@yield('image', asset('assets/resources/media/img/brand/sqr/ZQO_SQ_TSPBLUE.png'))">
         <link rel="shortcut icon" href="{{ asset('favicon.ico') }}" type="image/x-icon">
         
         <!-- Font Awesome -->
