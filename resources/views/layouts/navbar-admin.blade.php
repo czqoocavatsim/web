@@ -5,7 +5,7 @@
 } */
 </style>
 <div class="container pt-3 pb-1">
-    <a class="navbar-brand" href="{{route('index')}}"><img style="height: 50px; width:auto;" id="czqoHeaderImg" src="{{asset('assets/resources/media/img/brand/sqr/ZQO_BNR_TSPBLUE.png')}}" alt=""></a>
+    <a class="navbar-brand" href="{{route('index')}}"><img style="height: 50px; width:auto;" id="czqoHeaderImg" src="{{asset('assets/resources/media/img/brand/bnr/ZQO_BNR_TSPBLUE.png')}}" alt=""></a>
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
             aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>

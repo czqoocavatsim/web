@@ -1,9 +1,9 @@
 @php if (!isset($logo)) $logo = 'white' @endphp
 <div class="container py-2">
     @if ($logo == 'white')
-    <a class="navbar-brand" href="{{route('index')}}"><img style="height: 45px; width:auto;" id="czqoHeaderImg" src="{{asset('assets/resources/media/img/brand/sqr/ZQO_BNR_TSPWHITE.png')}}" alt=""></a>
+    <a class="navbar-brand" href="{{route('index')}}"><img style="height: 45px; width:auto;" id="czqoHeaderImg" src="{{asset('assets/resources/media/img/brand/bnr/ZQO_BNR_TSPWHITE.png')}}" alt=""></a>
     @else
-    <a class="navbar-brand" href="{{route('index')}}"><img style="height: 45px; width:auto;" id="czqoHeaderImg" src="{{asset('assets/resources/media/img/brand/sqr/ZQO_BNR_TSPBLUE.png')}}" alt=""></a>
+    <a class="navbar-brand" href="{{route('index')}}"><img style="height: 45px; width:auto;" id="czqoHeaderImg" src="{{asset('assets/resources/media/img/brand/bnr/ZQO_BNR_TSPBLUE.png')}}" alt=""></a>
     @endif
     <button class="navbar-toggler" type="button" data-toggle="modal" data-target="#mobileNavBarModal">
         <span class="navbar-toggler-icon"></span>
