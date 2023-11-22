@@ -29,7 +29,7 @@
                                     @if(!$member->vacant())
                                     <img src="{{$member->user->avatar()}}" style="height: 80px; width:80px;margin-right: 15px; border-radius: 50%;">
                                     @else
-                                    <img src="https://cdn.ganderoceanic.ca/resources/user.png" style="height: 80px; width:80px;margin-right: 15px; border-radius: 50%;">
+                                    <img src="{{asset('assets/resources/user.png')}}" style="height: 80px; width:80px;margin-right: 15px; border-radius: 50%;">
                                     @endif
                                     <div class="d-flex flex-column">
                                         <h4 class="font-weight-bold">
@@ -59,7 +59,7 @@
                                 @if(!$member->vacant())
                                 <img src="{{$member->user->avatar()}}" style="height: 80px; width:80px;margin-right: 15px; border-radius: 50%;">
                                 @else
-                                <img src="https://cdn.ganderoceanic.ca/resources/user.png" style="height: 80px; width:80px;margin-right: 15px; border-radius: 50%;">
+                                <img src="{{asset('assets/resources/user.png')}}" style="height: 80px; width:80px;margin-right: 15px; border-radius: 50%;">
                                 @endif
                                 <div class="d-flex flex-column">
                                     <h4 class="font-weight-bold">

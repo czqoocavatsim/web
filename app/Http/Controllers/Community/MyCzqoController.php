@@ -150,10 +150,10 @@ class MyCzqoController extends Controller
         $user = Auth::user();
 
         //Put it onto disk
-        $path = Storage::disk('digitalocean')->put('user_uploads/'.$user->id.'/avatars', $request->file('file'), 'public');
+        $path = Storage::put('user_uploads/'.$user->id.'/avatars', $request->file('file'));
 
         //Change the avatar url and mode
-        $user->avatar = Storage::url($path);
+        $user->avatar = '/assets/'.$path;
         $user->avatar_mode = 1;
         $user->save();
 
