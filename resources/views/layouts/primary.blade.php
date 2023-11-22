@@ -15,7 +15,7 @@
         <meta name="theme-color" content="#0080c9">
         <meta name="og:title" content="@yield('title', '')Gander Oceanic OCA">
         <meta name="og:description" content="@yield('description', '')">
-        <meta name="og:image" content="@yield('image','https://cdn.ganderoceanic.ca/resources/media/img/brand/sqr/ZQO_SQ_TSPBLUE.png')">
+        <meta name="og:image" content="@yield('image','{{asset('assets/resources/media/img/brand/sqr/ZQO_SQ_TSPBLUE.png')}}">
         <link rel="shortcut icon" href="{{ asset('favicon.ico') }}" type="image/x-icon">
         
         <!-- Font Awesome -->
@@ -345,7 +345,7 @@
                             <li class="w-100">
                                 <div class="grey lighten-3 p-4" style="border-radius: 20px;">
                                     <div class="d-flex flex-row">
-                                        <img style="height: 40px; margin-right: 20px;" src="https://cdn.ganderoceanic.ca/resources/media/img/brand/sqr/ZQO_SQ_TSPBLUE.png" alt="">
+                                        <img style="height: 40px; margin-right: 20px;" src="{{asset('assets/resources/media/img/brand/sqr/ZQO_SQ_TSPBLUE.png')}}" alt="">
                                         <p class="font-weight-bold" style="width: 75%; text-align:left; font-size: 1.1em;">Chat with our Gander Oceanic controller and pilot community</p>
                                     </div>
                                 </div>
