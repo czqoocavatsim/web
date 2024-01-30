@@ -29,9 +29,10 @@ jobs:
         PASSWORD: ${{ secrets.PASS }}
         PORT: 22
         script: |
+          sudo su root
           cd /var/www/czqoprod/
-          sudo chown -R gander:www-data .
-          sudo find . -type f -exec chmod 664 {} \;
-          sudo find . -type d -exec chmod 775 {} \;
-          sudo chgrp -R www-data storage bootstrap/cache
-          sudo chmod -R ug+rwx storage bootstrap/cache
+          chown -R gander:www-data .
+          find . -type f -exec chmod 664 {} \;
+          find . -type d -exec chmod 775 {} \;
+          chgrp -R www-data storage bootstrap/cache
+          chmod -R ug+rwx storage bootstrap/cache
