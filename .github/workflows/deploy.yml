@@ -3,7 +3,7 @@ name: Deploy
 on:
   push:
     branches: [ main ]
-    
+
 jobs:
   deploy:
     runs-on: ubuntu-latest
@@ -30,8 +30,8 @@ jobs:
         PORT: 22
         script: |
           cd /var/www/czqoprod/
-          chown -R mufassil:www-data .
-          find . -type f -exec chmod 664 {} \;
-          find . -type d -exec chmod 775 {} \;
-          chgrp -R www-data storage bootstrap/cache
-          chmod -R ug+rwx storage bootstrap/cache
+          sudo chown -R gander:www-data .
+          sudo find . -type f -exec chmod 664 {} \;
+          sudo find . -type d -exec chmod 775 {} \;
+          sudo chgrp -R www-data storage bootstrap/cache
+          sudo chmod -R ug+rwx storage bootstrap/cache
