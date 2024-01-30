@@ -16,7 +16,7 @@ jobs:
       with:
         HOST: ${{ secrets.HOST }}
         USERNAME: ${{ secrets.USER }}
-        PASSWORD: ${{ secrets.PASS }}
+        KEY: ${{ secrets.PASS }}
         PORT: 22
         source: ./
         target: /var/www/czqoprod/
@@ -26,7 +26,7 @@ jobs:
       with:
         HOST: ${{ secrets.HOST }}
         USERNAME: ${{ secrets.USER }}
-        PASSWORD: ${{ secrets.PASS }}
+        KEY: ${{ secrets.PASS }}
         PORT: 22
         script: |
           sudo su root
