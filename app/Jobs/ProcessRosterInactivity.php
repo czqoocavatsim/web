@@ -38,7 +38,7 @@ class ProcessRosterInactivity implements ShouldQueue
      */
     public function handle()
     {
-        $rosterMembers = RosterMember::all()->whereNotIn('certification', ['not_certified', 'training']);
+        $rosterMembers = RosterMember::whereNotIn('certification', ['not_certified', 'training'])->get();
 
         foreach ($rosterMembers as $rosterMember) {
 
@@ -56,20 +56,9 @@ class ProcessRosterInactivity implements ShouldQueue
                 }
             }
 
-            if ($rosterMember->active) {
-                if ($rosterMember->currency < 3.0) {
-                    $discord = new DiscordClient();
-                    $discord_user_id = $rosterMember->user->discord_user_id;
-                    if ($discord_user_id && $rosterMember->user->member_of_czqo){
-                        sleep(2); //TODO: CREATE A JOB TO HANDLE THIS RATHER SLEEP
-                        $discord->removeRole($discord_user_id, 482819739996127259);
-                        $discord->assignRole($discord_user_id, 482835389640343562);
-                    }
-                    $rosterMember->user->removeRole('Certified Controller');
-                    $rosterMember->user->assignRole('Guest');
-                    Notification::send($rosterMember->user, new RemovedFromRoster($rosterMember->user));
-                    $rosterMember->delete();
-                }    
+            if ($rosterMember->active && $rosterMember->currency < 0.25) {
+                $rosterMember->active = false;
+                $rosterMember->save();
             }
         }
     }

@@ -41,38 +41,38 @@ class Kernel extends ConsoleKernel
         $schedule->job(new ProcessRosterInactivity())->cron('00 00 01 JAN,APR,JUL,OCT *');
 
         //CRONS FOR INACTIVITY EMAILS 2 weeks
-        $schedule->call(function () {
-            //Loop through controllers
-            $count = 0;
-            foreach (RosterMember::all() as $rosterMember) {
-                //Do they meet the requirements?
-                if (!$rosterMember->meetsActivityRequirement()) {
-                    $count++;
-                    $rosterMember->user->notify(new TwoWeekInactivityReminder($rosterMember, 'n/a'));
-                }
-            }
+        // $schedule->call(function () {
+        //     //Loop through controllers
+        //     $count = 0;
+        //     foreach (RosterMember::all() as $rosterMember) {
+        //         //Do they meet the requirements?
+        //         if (!$rosterMember->meetsActivityRequirement()) {
+        //             $count++;
+        //             $rosterMember->user->notify(new TwoWeekInactivityReminder($rosterMember, 'n/a'));
+        //         }
+        //     }
 
-            //Tell Discord all about it
-            $discord = new DiscordClient();
-            $discord->sendMessage(753086414811562014, 'Sent '.$count.' two-week warning inactivity emails');
-        })->cron('00 00 16 MAR,JUN,SEP,DEC *'); // 2 weeks before end of quarter
+        //     //Tell Discord all about it
+        //     $discord = new DiscordClient();
+        //     $discord->sendMessage(753086414811562014, 'Sent '.$count.' two-week warning inactivity emails');
+        // })->cron('00 00 16 MAR,JUN,SEP,DEC *'); // 2 weeks before end of quarter
 
         // 1 week
-        $schedule->call(function () {
-            //Loop through controllers
-            $count = 0;
-            foreach (RosterMember::all() as $rosterMember) {
-                //Do they meet the requirements?
-                if (!$rosterMember->meetsActivityRequirement()) {
-                    $count++;
-                    $rosterMember->user->notify(new OneWeekInactivityReminder($rosterMember, 'n/a'));
-                }
-            }
-            
-            //Tell Discord all about it
-            $discord = new DiscordClient();
-            $discord->sendMessage(753086414811562014, 'Sent '.$count.' one-week warning inactivity emails');
-        })->cron('00 00 23 MAR,JUN,SEP,DEC *'); // 1 week before end of quarter*/
+        // $schedule->call(function () {
+        //     //Loop through controllers
+        //     $count = 0;
+        //     foreach (RosterMember::all() as $rosterMember) {
+        //         //Do they meet the requirements?
+        //         if (!$rosterMember->meetsActivityRequirement()) {
+        //             $count++;
+        //             $rosterMember->user->notify(new OneWeekInactivityReminder($rosterMember, 'n/a'));
+        //         }
+        //     }
+
+        //     //Tell Discord all about it
+        //     $discord = new DiscordClient();
+        //     $discord->sendMessage(753086414811562014, 'Sent '.$count.' one-week warning inactivity emails');
+        // })->cron('00 00 23 MAR,JUN,SEP,DEC *'); // 1 week before end of quarter*/
 
         /// Monthly leaderboard wipe
         $schedule->call(function () {
