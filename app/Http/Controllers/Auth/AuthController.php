@@ -121,11 +121,13 @@ class AuthController extends Controller
             ]);
         }
 
+        $user->genInitialAvatar();
+
         if (!isset($response->data->personal->name_first)) {
             $user->display_cid_only = true;
         }
-        $user->save();
 
+        $user->save();
         Auth::login($user, true);
 
         return redirect()->route('my.index')->with('success', "Welcome back, {$user->fullName('F')}!");

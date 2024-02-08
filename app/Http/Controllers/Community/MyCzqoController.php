@@ -288,10 +288,10 @@ class MyCzqoController extends Controller
                 $preferences = auth()->user()->preferences;
             break;
             case 'notifications':
-                $preferences = UserNotificationPreferences::where('user_id', Auth::id())->first();
+                $preferences = UserNotificationPreferences::where('user_id', auth()->id())->first();
                 break;
             case 'privacy':
-                $preferences = UserPrivacyPreferences::where('user_id', Auth::id())->first();
+                $preferences = UserPrivacyPreferences::where('user_id', auth()->id())->first();
         }
 
         //Change variable

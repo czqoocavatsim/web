@@ -330,6 +330,19 @@ class User extends Authenticatable
         return $this->discord_avatar;
     }
 
+    public function genInitialAvatar()
+    {
+        $avatar = new InitialAvatar();
+        $image = $avatar->name($this->fullName('FL'))
+            ->size(125)
+            ->background('#cfeaff')
+            ->color('#2196f3')
+            ->generate();
+
+        Storage::put('files/avatars/'.$this->id.'/initials.png', (string) $image->encode('png'));
+        return;
+    }
+
     /**
      * Returns the user's avatar.
      *
@@ -340,24 +353,7 @@ class User extends Authenticatable
     public function avatar($external = false)
     {
         if ($this->avatar_mode == 0) {
-            $avatar = Cache::remember('users.'.$this->id.'.initialsavatar', 172800, function () {
-                $avatar = new InitialAvatar();
-                $image = $avatar
-                    ->name($this->fullName('FL'))
-                    ->size(125)
-                    ->background('#cfeaff')
-                    ->color('#2196f3')
-                    ->generate();
-                Storage::put('public/files/avatars/'.$this->id.'/initials.png', (string) $image->encode('png'));
-
-                return Storage::url('public/files/avatars/'.$this->id.'/initials.png');
-                imagedestroy($image);
-            });
-            if ($external) {
-                return URL('/').$avatar;
-            } else {
-                return $avatar;
-            }
+            return '/assets/files/avatars/'.$this->id.'/initials.png';
         } elseif ($this->avatar_mode == 1) {
             if ($external) {
                 return URL('/').$this->avatar;

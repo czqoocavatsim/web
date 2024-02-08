@@ -9,6 +9,8 @@ app/storage/
 
 # Laravel 5 & Lumen specific
 public/storage
+public/assets/files/avatars
+public/assets/user_uploads
 public/hot
 storage/*.key
 storage/debugbar
@@ -22,12 +24,7 @@ Homestead.json
 app/Http/Controllers/vendor/skymeyer/vatsimphp/app/logs/pilots.log
 
 *.zip
-
-
 .vscode/
-
 .idea/
-
 .DS_Store
-
 training.yaml
