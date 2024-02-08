@@ -5,7 +5,6 @@ namespace App\Http\Controllers\Community;
 use Illuminate\Http\Request;
 use App\Services\DiscordClient;
 use App\Http\Controllers\Controller;
-use Illuminate\Support\Facades\Auth;
 use App\Models\Users\UserPreferences;
 use App\Notifications\WelcomeNewUser;
 use Illuminate\Support\Facades\Cache;
@@ -30,7 +29,7 @@ class MyCzqoController extends Controller
     public function acceptPrivacyPolicy(Request $request)
     {
         //Get the user
-        $user = Auth::user();
+        $user = auth()->user();
 
         //If they're already initiated...
         if ($user->init) {
@@ -68,7 +67,7 @@ class MyCzqoController extends Controller
     public function denyPrivacyPolicy()
     {
         //Get the user
-        $user = Auth::user();
+        $user = auth()->user();
 
         //If they're already initiated...
         if ($user->init) {
@@ -77,7 +76,7 @@ class MyCzqoController extends Controller
         }
 
         //Well lets log them out
-        Auth::logout($user);
+        auth()->logout($user);
 
         //Delete their privacy, notifs, prefs
         $notifPrefs = UserNotificationPreferences::where('user_id', $user->id)->first();
@@ -108,7 +107,7 @@ class MyCzqoController extends Controller
         ]);
 
         //Get user
-        $user = Auth::user();
+        $user = auth()->user();
 
         //Get input
         $input = $request->get('bio');
@@ -147,7 +146,7 @@ class MyCzqoController extends Controller
         ], $messages);
 
         //Get user
-        $user = Auth::user();
+        $user = auth()->user();
 
         //Put it onto disk
         $path = Storage::put('user_uploads/'.$user->id.'/avatars', $request->file('file'));
@@ -169,7 +168,7 @@ class MyCzqoController extends Controller
     public function changeAvatarDiscord()
     {
         //Get user
-        $user = Auth::user();
+        $user = auth()->user();
 
         //They need Discord don't they
         if (!$user->hasDiscord()) {
@@ -195,7 +194,7 @@ class MyCzqoController extends Controller
     public function changeAvatarInitials()
     {
         //Get user
-        $user = Auth::user();
+        $user = auth()->user();
 
         //Change mode and save
         $user->avatar_mode = 0;
@@ -221,7 +220,7 @@ class MyCzqoController extends Controller
         ]);
 
         //Get user
-        $user = Auth::user();
+        $user = auth()->user();
 
         //No swear words... give them the new name!
         $user->display_fname = $request->get('display_fname');
@@ -246,7 +245,7 @@ class MyCzqoController extends Controller
         }
 
         //Redirect
-        return redirect()->back()->with('success', 'Display name saved! If your avatar is set to default, it may take a while for the initials to update.');
+        return back()->with('success', 'Display name saved! If your avatar is set to default, it may take a while for the initials to update.');
     }
 
     /**
@@ -257,7 +256,7 @@ class MyCzqoController extends Controller
     public function preferences()
     {
         //Get preferences
-        $preferences = Auth::user()->preferences;
+        $preferences = auth()->user()->preferences;
 
         //return
         return view('my.preferences', compact('preferences'));
@@ -286,7 +285,7 @@ class MyCzqoController extends Controller
         //Get user's preferences object
         switch ($request->get('table')) {
             case 'main':
-                $preferences = Auth::user()->preferences;
+                $preferences = auth()->user()->preferences;
             break;
             case 'notifications':
                 $preferences = UserNotificationPreferences::where('user_id', Auth::id())->first();
