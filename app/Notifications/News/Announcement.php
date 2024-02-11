@@ -49,7 +49,7 @@ class Announcement extends Notification implements ShouldQueue
             ->line(new Htmlstring($this->announcement->html()))
             ->line("This announcement was sent to you for the following reason: {$this->announcement->reason_for_sending}")
             ->subject($this->announcement->title)
-            ->salutation(new HtmlString("Sent by <b>{$this->announcement->user->fullName('FLC')} (".$this->announcement->user->staffProfile->position.')</b>' ?? 'No staff position found'.')</b>'));
+            ->salutation(new HtmlString("Sent by <b>{$this->announcement->user->fullName('FLC')} (".$this->announcement->user->staffProfile?->position.')</b>'));
     }
 
     /**

@@ -2,16 +2,15 @@
 
 namespace App\Models\Users;
 
-use Throwable;
+use App\Models\News\Announcement;
+use App\Models\Training\ControllerAcknowledgement;
 use App\Models\News\News;
 use Illuminate\Support\Carbon;
 use App\Models\Users\StaffMember;
 use Spatie\Activitylog\LogOptions;
 use App\Models\Roster\RosterMember;
-use Illuminate\Support\Facades\Log;
 use App\Models\Training\Application;
 use App\Models\Users\UserPreferences;
-use Illuminate\Support\Facades\Cache;
 use Spatie\Permission\Traits\HasRoles;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Notifications\Notifiable;
@@ -413,5 +412,13 @@ class User extends Authenticatable
     {
         return LogOptions::defaults()
         ->logOnly(['name', 'text']);
+    }
+
+    public function getUnreadAcknowledgements()
+    {
+        $controllerAcknowledgements = Announcement::where('controller_acknowledgement', true)->get();
+        return $controllerAcknowledgements->filter(function ($acknowledgement) {
+            return !ControllerAcknowledgement::where('user_id', $this->id)->where('announcement_id', $acknowledgement->id)->exists();
+        });
     }
 }

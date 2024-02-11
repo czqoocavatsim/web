@@ -6,17 +6,17 @@ use Carbon\Carbon;
 use App\Models\Users\User;
 use Illuminate\Http\Request;
 use App\Services\DiscordClient;
-use App\Models\Network\SessionLog;
+use App\Models\News\Announcement;
 use App\Models\Roster\RosterMember;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Session;
-use App\Models\Roster\SoloCertification;
 use Illuminate\Support\Facades\Validator;
 use App\Models\News\HomeNewControllerCert;
 use Illuminate\Support\Facades\Notification;
 use App\Notifications\Roster\RemovedFromRoster;
 use App\Notifications\Roster\RosterStatusChanged;
+use App\Models\Training\ControllerAcknowledgement;
 
 class RosterController extends Controller
 {
@@ -357,5 +357,11 @@ class RosterController extends Controller
 
         //Return
         return response()->json(['message' => 'Saved'], 200);
+    }
+
+    //Controller Acknowledgement
+    public function getAcknowledgement(Announcement $announcement)
+    {
+        return view('admin.training.acknowledgements.acknowledgement', compact('announcement'));
     }
 }
