@@ -16,7 +16,6 @@ use App\Models\News\HomeNewControllerCert;
 use Illuminate\Support\Facades\Notification;
 use App\Notifications\Roster\RemovedFromRoster;
 use App\Notifications\Roster\RosterStatusChanged;
-use App\Models\Training\ControllerAcknowledgement;
 
 class RosterController extends Controller
 {
