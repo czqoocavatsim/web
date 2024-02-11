@@ -713,7 +713,7 @@
                                     <div class="grey lighten-3 p-4" style="border-radius: 20px;">
                                         <div class="d-flex flex-row">
                                             <img style="height: 40px; margin-right: 20px;"
-                                                src="https://cdn.ganderoceanic.ca/resources/media/img/brand/sqr/ZQO_SQ_TSPBLUE.png"
+                                                src="{{asset('assets/resources/media/img/brand/sqr/ZQO_SQ_TSPBLUE.png')}}"
                                                 alt="">
                                             <p class="font-weight-bold"
                                                 style="width: 75%; text-align:left; font-size: 1.1em;">Join the Gander
