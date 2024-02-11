@@ -59,7 +59,7 @@ class DiscordClient
 
     public function removeRole($discordId, $roleId)
     {
-        ProcessDiscordRoles::dispatch(true, $discordId, $roleId);
+        ProcessDiscordRoles::dispatch(false, $discordId, $roleId);
 
         return;
     }
