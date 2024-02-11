@@ -6,7 +6,6 @@ use GuzzleHttp\Client;
 use App\Models\Users\User;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Log;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 use App\Models\Users\UserPreferences;
@@ -76,14 +75,13 @@ class AuthController extends Controller
         session()->put('token', json_decode((string) $response->getBody(), true));
 
         try {
-            $response = (new \GuzzleHttp\Client())->get(config('connect.endpoint').'/api/user', [
+            $response = (new Client())->get(config('connect.endpoint').'/api/user', [
                 'headers' => [
                     'Accept'        => 'application/json',
                     'Authorization' => 'Bearer '.session()->get('token.access_token'),
                 ],
             ]);
         } catch (ClientException $e) {
-            dd($e);
             return redirect()->route('index')->with('error-modal', $e->getMessage());
         }
         $response = json_decode($response->getBody());
@@ -93,7 +91,7 @@ class AuthController extends Controller
         if (!isset($response->data->vatsim->rating)) {
             return redirect()->route('index')->with('error-modal', 'We cannot create an account without VATSIM details.');
         }
-        User::updateOrCreate(['id' => $response->data->cid], [
+        $user = User::updateOrCreate(['id' => $response->data->cid], [
             'email'         => isset($response->data->personal->email) ? $response->data->personal->email : 'no-reply@ganderoceanic.ca',
             'fname'         => isset($response->data->personal->name_first) ? utf8_decode($response->data->personal->name_first) : $response->data->cid,
             'lname'         => isset($response->data->personal->name_last) ? $response->data->personal->name_last : $response->data->cid,
@@ -109,28 +107,28 @@ class AuthController extends Controller
             'display_fname' => isset($response->data->personal->name_first) ? utf8_decode($response->data->personal->name_first) : $response->data->cid,
             'used_connect'  => true,
         ]);
-        $user = User::find($response->data->cid);
+
+        if ($user->wasRecentlyCreated) {
+            UserPreferences::create([
+                'user_id' => $response->data->cid,
+                'ui_mode' => 'light'
+            ]);
+            UserNotificationPreferences::create([
+                'user_id' => $response->data->cid,
+            ]);
+            UserPrivacyPreferences::create([
+                'user_id' => $response->data->cid
+            ]);
+        }
+
+        $user->genInitialAvatar();
+
         if (!isset($response->data->personal->name_first)) {
             $user->display_cid_only = true;
         }
+
         $user->save();
         Auth::login($user, true);
-        if (!UserPreferences::where('user_id', $user->id)->first()) {
-            $prefs = new UserPreferences();
-            $prefs->user_id = $user->id;
-            $prefs->ui_mode = 'light';
-            $prefs->save();
-        }
-        if (!UserPrivacyPreferences::where('user_id', $user->id)->first()) {
-            $priv = new UserPrivacyPreferences();
-            $priv->user_id = $user->id;
-            $priv->save();
-        }
-        if (!UserNotificationPreferences::where('user_id', $user->id)->first()) {
-            $notif = new UserNotificationPreferences();
-            $notif->user_id = $user->id;
-            $notif->save();
-        }
 
         return redirect()->route('my.index')->with('success', "Welcome back, {$user->fullName('F')}!");
     }

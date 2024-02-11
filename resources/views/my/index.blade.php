@@ -1,6 +1,10 @@
 @extends('layouts.primary', ['solidNavBar' => false])
 @section('title', 'myCZQO - ')
 @section('content')
+    @php
+        $user = auth()->user();
+    @endphp
+
     <div class="jarallax card card-image rounded-0 blue" data-jarallax data-speed="0.2">
         <img class="jarallax-img" src="{{ $bannerImg->path ?? '' }}" alt="">
         <div class="text-white text-left rgba-stylish-strong py-3 pt-5 px-4">
@@ -15,9 +19,9 @@
                             }
                             return $array[array_rand($array)];
                         }
-                        
+
                         //list of grettings as arary
-                        
+
                         $greeting = [
                             'aloha' => 'Aloha',
                             'ahoy' => 'Ahoy',
@@ -31,18 +35,18 @@
                             'guten_tag' => 'Guten Tag',
                             'grüß_dich' => 'Grüß Dich',
                         ];
-                        
+
                         //echo greeting
                         echo randomArrayVar($greeting);
                         ?>
-                        {{ auth()->user()->fullName('F') }}!
+                        {{ $user->fullName('F') }}!
                     </h1>
                     @if (isset($quote))
                         <p style="font-size: 1.2em;">{{ $quote[0]->quote }} ~ {{ $quote[0]->author }}</p>
                     @endif
                 </div>
             </div>
-            @if (auth()->user()->created_at->diffInDays(Carbon\Carbon::now()) < 14)
+            @if ($user->created_at->diffInDays(Carbon\Carbon::now()) < 14)
                 <!--14 days since user signed up-->
                 <div class="container white-text">
                     <p style="font-size: 1.4em;" class="font-weight-bold">
@@ -56,7 +60,7 @@
     </div>
     <div class="container py-4">
         <h1 data-step="1" data-intro="" class="blue-text fw-800">myCZQO</h1>
-        @if (auth()->user()->rating_id >= 5)
+        @if ($user->rating_id >= 5)
         @endif
         <br class="my-2">
         @role('Restricted')
@@ -72,7 +76,7 @@
                         <li class="w-100">
                             <div class="d-flex h-100 flex-row justify-content-left align-items-center">
                                 <i style="font-size: 1.6em; margin-right: 10px;" class="fas fa-user-circle fa-fw"></i>
-                                <span style="font-size: 1.1em;">{{ auth()->user()->fullName('F') }}</span>
+                                <span style="font-size: 1.1em;">{{ $user->fullName('F') }}</span>
                             </div>
                         </li>
                     </a>
@@ -176,7 +180,7 @@
                                 <div class="myczqo_avatar_container" style=" margin-bottom: 10px; margin-right: 20px;">
                                     <a href="#" data-toggle="modal" data-target="#changeAvatar">
                                         <div class="myczqo_avatar_object">
-                                            <img src="{{ auth()->user()->avatar() }}"
+                                            <img src="{{ $user->avatar() }}"
                                                 style="width: 125px; height: 125px; border-radius: 50%;">
                                             <div class="img_overlay"></div>
                                         </div>
@@ -186,21 +190,21 @@
                                     <h5 class="card-title">
                                         <a href="" data-toggle="modal" data-target="#changeDisplayNameModal"
                                             class="text-dark text-decoration-underline fw-500">
-                                            {{ auth()->user()->fullName('FLC') }} <i style="font-size: 0.8em;"
+                                            {{ $user->fullName('FLC') }} <i style="font-size: 0.8em;"
                                                 class="ml-1 far fa-edit text-muted"></i>
                                         </a>
                                     </h5>
                                     <h6 class="card-subtitle mb-2 text-muted fw-500">
-                                        {{ auth()->user()->rating_GRP }} ({{ auth()->user()->rating_short }})
+                                        {{ $user->rating_GRP }} ({{ $user->rating_short }})
                                     </h6>
-                                    Region: {{ auth()->user()->region_name }}<br />
-                                    Division: {{ auth()->user()->division_name }}<br />
-                                    @if (auth()->user()->subdivision_name)
-                                        vACC/ARTCC: {{ auth()->user()->subdivision_name }}<br />
+                                    Region: {{ $user->region_name }}<br />
+                                    Division: {{ $user->division_name }}<br />
+                                    @if ($user->subdivision_name)
+                                        vACC/ARTCC: {{ $user->subdivision_name }}<br />
                                     @endif
-                                    Role: {{ auth()->user()->highestRole()->name }}<br />
-                                    @if (auth()->user()->staffProfile)
-                                        Staff Role: {{ auth()->user()->staffProfile->position }}
+                                    Role: {{ $user->highestRole()->name }}<br />
+                                    @if ($user->staffProfile)
+                                        Staff Role: {{ $user->staffProfile->position }}
                                     @endif
                                 </div>
                             </div>
@@ -208,7 +212,7 @@
                             <div data-step="4"
                                 data-intro="Here you can link your Discord account to receive training session reminders and to gain access to the CZQO Discord.">
                                 <h3 class="mt-2 fw-600" style="font-size: 1.3em;">Discord</h3>
-                                @if (!auth()->user()->hasDiscord())
+                                @if (!$user->hasDiscord())
                                     <p class="mt-1">You have not linked your Discord account.</p>
                                     <a href="#" data-toggle="modal" data-target="#discordTopModal"
                                         style="text-decoration:none;">
@@ -223,9 +227,9 @@
                                 @else
                                     <p class="mt-1" style="font-size: 1.1em;"><img
                                             style="border-radius:50%; height: 30px;" class="img-fluid"
-                                            src="{{ auth()->user()->getDiscordAvatar() }}"
-                                            alt="">&nbsp;&nbsp;{{ auth()->user()->discord_username }}</p>
-                                    @if (!auth()->user()->member_of_czqo)
+                                            src="{{ $user->getDiscordAvatar() }}"
+                                            alt="">&nbsp;&nbsp;{{ $user->discord_username }}</p>
+                                    @if (!$user->member_of_czqo)
                                         <a href="#" data-toggle="modal" data-target="#joinDiscordServerModal"
                                             style="text-decoration:none;">
                                             <span class="blue-text">
@@ -250,8 +254,8 @@
                                 @endif
                                 <h3 class="mt-4 fw-600" style="font-size: 1.3em;">Biography</h3>
                                 <p>
-                                    @if (auth()->user()->bio)
-                                        {{ auth()->user()->bio }}
+                                    @if ($user->bio)
+                                        {{ $user->bio }}
                                     @else
                                         You have no biography.
                                     @endif
@@ -269,19 +273,19 @@
                             </div>
                         </div>
                         <div class="col-md">
-                            @if (auth()->user()->pendingApplication())
-                                <a href="{{ route('training.applications.show',auth()->user()->pendingApplication()->reference_id) }}"
+                            @if ($user->pendingApplication())
+                                <a href="{{ route('training.applications.show',$user->pendingApplication()->reference_id) }}"
                                     class="list-group-item list-group-item-action p-4 z-depth-1 shadow-none mb-3">
                                     <h4 class="blue-text fw-600">You have a pending application for Gander Oceanic</h4>
                                     <p style="font-size:1.1em;" class="m-0">
-                                        #{{ auth()->user()->pendingApplication()->reference_id }} - submitted
-                                        {{ auth()->user()->pendingApplication()->created_at->diffForHumans() }}</p>
+                                        #{{ $user->pendingApplication()->reference_id }} - submitted
+                                        {{ $user->pendingApplication()->created_at->diffForHumans() }}</p>
                                 </a>
                             @endif
                             @if (
                                 $studentProfile =
-                                    auth()->user()->studentProfile &&
-                                    ($cert = auth()->user()->studentProfile->soloCertification()))
+                                    $user->studentProfile &&
+                                    ($cert = $user->studentProfile->soloCertification()))
                                 <div class="list-group-item rounded p-4 mb-3 z-depth-1 shadow-none">
                                     <h4 class="fw-600 blue-text">
                                         {{ $cert->expires->diffInDays(Carbon\Carbon::now()) <= 2 ? 'Your solo certification is about to expire' : 'Your active solo certification' }}
@@ -296,8 +300,8 @@
                             @endif
                             @if (
                                 $studentProfile =
-                                    auth()->user()->studentProfile &&
-                                    ($session = auth()->user()->studentProfile->upcomingTrainingSession()))
+                                    $user->studentProfile &&
+                                    ($session = $user->studentProfile->upcomingTrainingSession()))
                                 <div class="list-group-item rounded p-4 mb-3 z-depth-1 shadow-none">
                                     <h4 class="fw-600 blue-text">Your upcoming training session</h4>
                                     <h6 class="fw-500">Scheduled for
@@ -308,8 +312,8 @@
                             @endif
                             @if (
                                 $studentProfile =
-                                    auth()->user()->studentProfile &&
-                                    ($session = auth()->user()->studentProfile->upcomingOtsSession()))
+                                    $user->studentProfile &&
+                                    ($session = $user->studentProfile->upcomingOtsSession()))
                                 <div class="list-group-item rounded p-4 mb-3 z-depth-1 shadow-none">
                                     <h4 class="fw-600 blue-text">Your upcoming OTS session</h4>
                                     <h6 class="fw-500">Scheduled for
@@ -343,10 +347,10 @@
                 </div>
                 <div id="certificationTrainingTab" style="display:none">
                     <h3 class="font-weight-bold blue-text pb-2">Certification</h3>
-                    @if ($rosterProfile = auth()->user()->rosterProfile)
+                    @if ($rosterProfile = $user->rosterProfile)
                         <div class="d-flex flex-row justify-content-left">
                             <h3 class="mr-3">
-                                {{ auth()->user()->rosterProfile->certificationLabelHtml() }}
+                                {{ $user->rosterProfile->certificationLabelHtml() }}
                             </h3>
                             <h3>
                                 {{ $rosterProfile->activeLabelHtml() }}
@@ -354,8 +358,8 @@
                         </div>
                         <h3 class="font-weight-bold blue-text mt-3 pb-2">Activity</h3>
                         @php
-                            $currency = auth()->user()->rosterProfile->currency;
-                            $class = $currency < 0.1 ? 'red' : ($currency < 3.0 ? 'blue' : 'green');
+                            $currency = $user->rosterProfile->currency;
+                            $class = $currency < 0.1 ? 'red' : 'green';
                         @endphp
 
                         <h3>
@@ -364,17 +368,14 @@
                                 {{ $currency }} hours recorded
                             </span>
                         </h3>
-
-                        <p class="mt-4">You require 3 hours of activity every quarter, unless you were certified within
-                            the current activity cycle.</p>
                     @else
                         <h3>
                             <span style='font-weight: 400' class='badge rounded p-2 red text-white shadow-none'>
                                 <i class="fas fa-times mr-2"></i>&nbsp;Not Gander Certified
                             </span>
                         </h3>
-                        @if (auth()->user()->rating_id >= 5 &&
-                                auth()->user()->can('start applications'))
+                        @if ($user->rating_id >= 5 &&
+                                $user->can('start applications'))
                             <div class="list-group-item rounded p-4 my-3 z-depth-1 shadow-none w-50 mt-4">
                                 <h4 class="blue-text"><i style="margin-right: 10px;">👋</i>Apply for Gander Oceanic
                                     Certification</h4>
@@ -530,7 +531,7 @@
             var intro = introJs();
             intro.setOptions({
                 steps: [{
-                        intro: "Hi {{ auth()->user()->fullName('F') }}! Welcome to the tutorial for the Gander Oceanic website. We're excited to have you join us. On the dashboard, you can get a glance at your status within our OCA and access various functions. To begin, click the 'Next' button below."
+                        intro: "Hi {{ $user->fullName('F') }}! Welcome to the tutorial for the Gander Oceanic website. We're excited to have you join us. On the dashboard, you can get a glance at your status within our OCA and access various functions. To begin, click the 'Next' button below."
                     },
                     {
                         element: "#atcResources",
@@ -538,7 +539,7 @@
                     },
                     {
                         element: '#yourData',
-                        intro: "Here you can get an overview of your Gander Oceanic profile. Change your display name by clicking '{{ auth()->user()->fullName('FLC') }}l and following the prompts. You can link your Discord account here and access to our Discord community, and you can even set an avatar for yourself. The buttons below allow you to change settings such as your biography, preferences, and manage your data.",
+                        intro: "Here you can get an overview of your Gander Oceanic profile. Change your display name by clicking '{{ $user->fullName('FLC') }}l and following the prompts. You can link your Discord account here and access to our Discord community, and you can even set an avatar for yourself. The buttons below allow you to change settings such as your biography, preferences, and manage your data.",
                         position: 'right'
                     },
                     {
@@ -584,7 +585,7 @@
                                 <label class="custom-file-label">Choose image file</label>
                             </div>
                         </div>
-                        @if (auth()->user()->hasDiscord())
+                        @if ($user->hasDiscord())
                             or use your Discord avatar (refreshes every 6 hours)<br />
                             <a href="{{ route('users.changeavatar.discord') }}" class="btn bg-czqo-blue-light mt-3">Use
                                 Discord Avatar</a>
@@ -622,9 +623,9 @@
                                 autoRefresh: true,
                                 element: document.getElementById("contentMD"),
                                 toolbar: false,
-                                initialValue: '{{ auth()->user()->bio }}'
+                                initialValue: '{{ $user->bio }}'
                             });
-                            simplemde.value('{{ auth()->user()->bio }}')
+                            simplemde.value('{{ $user->bio }}')
                         </script>
                         <p>Wonder what the purpose of a biography is? <a
                                 href="https://knowledgebase.ganderoceanic.ca/en/website/myczqo" target="_blank">Find out
@@ -659,7 +660,7 @@
                             names must comply with section A4 of the VATSIM Code of Conduct.</p>
                         <div class="form-group">
                             <div class="md-form">
-                                <input type="text" class="form-control" value="{{ auth()->user()->display_fname }}"
+                                <input type="text" class="form-control" value="{{ $user->display_fname }}"
                                     name="display_fname" id="input_display_fname">
                                 <label for="input_display_fname" class="active">Display first name</label>
                             </div>
@@ -667,7 +668,7 @@
                                     style="color: #000">Reset to your CERT first name</span></a>
                             <script>
                                 function resetToCertFirstName() {
-                                    $("#input_display_fname").val("{{ auth()->user()->fname }}")
+                                    $("#input_display_fname").val("{{ $user->fname }}")
                                 }
                             </script>
                         </div>
@@ -675,9 +676,9 @@
                             <label class="text-muted">Format</label>
                             <select name="format" class="custom-select">
                                 <option value="showall">First name, last name, and CID
-                                    ({{ auth()->user()->display_fname }} {{ auth()->user()->lname }} {{ Auth::id() }})
+                                    ({{ $user->display_fname }} {{ $user->lname }} {{ Auth::id() }})
                                 </option>
-                                <option value="showfirstcid">First name and CID ({{ auth()->user()->display_fname }}
+                                <option value="showfirstcid">First name and CID ({{ $user->display_fname }}
                                     {{ Auth::id() }})</option>
                                 <option value="showcid">CID only ({{ Auth::id() }})</option>
                             </select>
@@ -697,7 +698,7 @@
     <div class="modal fade" id="discordTopModal" tabindex="-1" role="dialog"
         aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered" role="document">
-            @if (!auth()->user()->hasDiscord())
+            @if (!$user->hasDiscord())
                 <div class="modal-content">
                     <div class="modal-header pb-2" style="border:none; text-align:center;">
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
@@ -712,7 +713,7 @@
                                     <div class="grey lighten-3 p-4" style="border-radius: 20px;">
                                         <div class="d-flex flex-row">
                                             <img style="height: 40px; margin-right: 20px;"
-                                                src="https://cdn.ganderoceanic.ca/resources/media/img/brand/sqr/ZQO_SQ_TSPBLUE.png"
+                                                src="{{asset('assets/resources/media/img/brand/sqr/ZQO_SQ_TSPBLUE.png')}}"
                                                 alt="">
                                             <p class="font-weight-bold"
                                                 style="width: 75%; text-align:left; font-size: 1.1em;">Join the Gander
@@ -764,7 +765,7 @@
     </div>
     <!--End Discord modal-->
 
-    @if (!auth()->user()->member_of_czqo)
+    @if (!$user->member_of_czqo)
         <!--Join guild modal-->
         <div class="modal fade" id="joinDiscordServerModal" tabindex="-1" role="dialog"
             aria-labelledby="exampleModalCenterTitle" aria-hidden="true">

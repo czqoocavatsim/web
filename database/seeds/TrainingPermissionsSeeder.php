@@ -59,6 +59,8 @@ class TrainingPermissionsSeeder extends Seeder
         $instructor->givePermissionTo('edit training records');
         $instructor->givePermissionTo('assign instructor to student');
         $instructor->givePermissionTo('edit training sessions');
+        $instructor->givePermissionTo('view roster admin');
+        $instructor->givePermissionTo('edit roster');
 
         $guest = Role::where('name', 'Guest')->first();
         $guest->givePermissionTo('start applications');

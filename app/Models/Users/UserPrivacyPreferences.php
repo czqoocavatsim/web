@@ -30,5 +30,5 @@ use Illuminate\Database\Eloquent\Model;
  */
 class UserPrivacyPreferences extends Model
 {
-    //
+    protected $guarded = [];
 }

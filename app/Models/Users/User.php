@@ -2,16 +2,15 @@
 
 namespace App\Models\Users;
 
-use Throwable;
+use App\Models\News\Announcement;
+use App\Models\Training\ControllerAcknowledgement;
 use App\Models\News\News;
 use Illuminate\Support\Carbon;
 use App\Models\Users\StaffMember;
 use Spatie\Activitylog\LogOptions;
 use App\Models\Roster\RosterMember;
-use Illuminate\Support\Facades\Log;
 use App\Models\Training\Application;
 use App\Models\Users\UserPreferences;
-use Illuminate\Support\Facades\Cache;
 use Spatie\Permission\Traits\HasRoles;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Notifications\Notifiable;
@@ -330,6 +329,19 @@ class User extends Authenticatable
         return $this->discord_avatar;
     }
 
+    public function genInitialAvatar()
+    {
+        $avatar = new InitialAvatar();
+        $image = $avatar->name($this->fullName('FL'))
+            ->size(125)
+            ->background('#cfeaff')
+            ->color('#2196f3')
+            ->generate();
+
+        Storage::put('files/avatars/'.$this->id.'/initials.png', (string) $image->encode('png'));
+        return;
+    }
+
     /**
      * Returns the user's avatar.
      *
@@ -340,24 +352,7 @@ class User extends Authenticatable
     public function avatar($external = false)
     {
         if ($this->avatar_mode == 0) {
-            $avatar = Cache::remember('users.'.$this->id.'.initialsavatar', 172800, function () {
-                $avatar = new InitialAvatar();
-                $image = $avatar
-                    ->name($this->fullName('FL'))
-                    ->size(125)
-                    ->background('#cfeaff')
-                    ->color('#2196f3')
-                    ->generate();
-                Storage::put('public/files/avatars/'.$this->id.'/initials.png', (string) $image->encode('png'));
-
-                return Storage::url('public/files/avatars/'.$this->id.'/initials.png');
-                imagedestroy($image);
-            });
-            if ($external) {
-                return URL('/').$avatar;
-            } else {
-                return $avatar;
-            }
+            return '/assets/files/avatars/'.$this->id.'/initials.png';
         } elseif ($this->avatar_mode == 1) {
             if ($external) {
                 return URL('/').$this->avatar;
@@ -417,5 +412,13 @@ class User extends Authenticatable
     {
         return LogOptions::defaults()
         ->logOnly(['name', 'text']);
+    }
+
+    public function getUnreadAcknowledgements()
+    {
+        $controllerAcknowledgements = Announcement::where('controller_acknowledgement', true)->get();
+        return $controllerAcknowledgements->filter(function ($acknowledgement) {
+            return !ControllerAcknowledgement::where('user_id', $this->id)->where('announcement_id', $acknowledgement->id)->exists();
+        });
     }
 }

@@ -70,8 +70,8 @@ class ApplicationsController extends Controller
         $hoursObj = json_decode($output);
         $hoursTotal = (int)$hoursObj->c1 + (int)$hoursObj->c3 + (int)$hoursObj->i1 + (int)$hoursObj->i3;
 
-        //Redirect if hours aren't 80
-        if ($hoursTotal < 80) {
+        //Redirect if hours aren't 50
+        if ($hoursTotal < 50) {
             return view('training.applications.apply', compact('hoursTotal'))->with('allowed', 'hours');
         }
 

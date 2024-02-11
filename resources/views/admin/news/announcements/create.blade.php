@@ -34,15 +34,25 @@
                         </div>
                         <div class="form-group">
                             <label for="">Target group</label>
-                            <select name="target_group" id="" class="form-control" required>
+                            <select name="target_group" id="targetGroup" class="form-control" required onchange="showRosterCheckbox()">
                                 <option hidden>Select one</option>
                                 <option value="everyone">Every user</option>
                                 <option disabled value="subscribed">Users subscribed to news notifications</option>
-                                <option value="roster">Controller roster</option>
+                                <option value="roster">Controller roster - active</option>
                                 <option value="staff">Staff members</option>
                                 <option value="students">Current students</option>
                                 <option value="instructors">Instructors</option>
                             </select>
+                        </div>
+                        <div id="rosterCheckboxContainer" style="display: none;">
+                            <div class="form-group">
+                                <div class="form-group">
+                                    <div class="mr-2">
+                                        <input type="checkbox" class="" name="acknowledgement" id="rosterCheckbox">
+                                        <label class="" for="rosterCheckbox">Is this a controller acknowledgement?</label>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </li>
@@ -81,4 +91,16 @@
         </div>
     </div>
 </div>
+<script>
+    function showRosterCheckbox() {
+        var targetGroupSelect = document.getElementById("targetGroup");
+        var rosterCheckboxContainer = document.getElementById("rosterCheckboxContainer");
+
+        if (targetGroupSelect.value === "roster") {
+            rosterCheckboxContainer.style.display = "block";
+        } else {
+            rosterCheckboxContainer.style.display = "none";
+        }
+    }
+</script>
 @endsection

@@ -5,7 +5,6 @@ namespace App\Http\Controllers\Training;
 use App\Http\Controllers\Controller;
 use App\Models\Roster\RosterMember;
 use App\Models\Roster\SoloCertification;
-use App\Models\Training\Instructing\Students\Student;
 use App\Models\Training\Instructing\Students\StudentStatusLabel;
 use App\Notifications\Training\SoloCertifications\SoloCertGranted;
 use Carbon\Carbon;
