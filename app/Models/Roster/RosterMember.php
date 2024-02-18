@@ -102,7 +102,7 @@ class RosterMember extends Model
 
     public function meetsActivityRequirement()
     {
-        //Returns false only if we want them to get an inactivity email 
+        //Returns false only if we want them to get an inactivity email
         $date = false;
         // Get date certified
         try {
@@ -125,12 +125,12 @@ class RosterMember extends Model
         if ($date === false && ($certifiedDate > Carbon::now()->startOfQuarter() && $certifiedDate < Carbon::now()->endOfQuarter())){
             return true;
         }
-        
+
         //If they are meeting activity requirements why send em an email?
-        if ($this->currency >= 3.0) {
+        if ($this->currency >= 0.1) {
             return true;
         }
-        
+
         //Finally send em an email!
         return false;
     }
