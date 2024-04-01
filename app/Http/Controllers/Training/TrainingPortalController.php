@@ -53,33 +53,6 @@ class TrainingPortalController extends Controller
         ]);
         $submission->save();
 
-        //If they have the "Not Ready" label, process them as new student submitting availability
-        $student = auth()->user()->studentProfile;
-        foreach ($student->labels as $label) {
-            //Find Not Ready label
-            if (strtolower($label->label()->name) == 'not ready') {
-                //Remove label
-                $label->delete();
-
-                //Find Ready For Pick-Up label
-                $readyForPickUp = StudentStatusLabel::whereName('Ready For Pick-Up')->first();
-
-                //Assign it with link
-                $link = new StudentStatusLabelLink([
-                    'student_id' => $student->id,
-                    'student_status_label_id' => $readyForPickUp->id,
-                ]);
-                $link->save();
-
-                //Discord notification in instructors channel
-                $discord = new DiscordClient();
-                $discord->sendMessageWithEmbed(intval(config('services.discord.instructors')), 'A new student is available for pick-up by an Instructor', $student->user->fullName('FLC') . ' is available to be picked up by an instructor!');
-
-                //Break
-                break;
-            }
-        }
-
         //Return
         return redirect()->route('training.portal.index')->with('success', 'Thank you for submitting your availability, ' . auth()->user()->fullName('F') . '!');
     }

@@ -43,7 +43,7 @@ class InstructingController extends Controller
         $instructors = Instructor::whereCurrent(true)->get();
 
         //Get all lists
-        $lists = StudentStatusLabel::whereName('Ready For Pick-up')->orWhere('name', 'Not Ready')->orWhere('name', 'Solo Certification')->orWhere('name', 'Ready for Assessment')->orWhere('name', 'Inactive')->get();
+        $lists = StudentStatusLabel::whereName('Ready For Pick-up')->orWhere('name', 'Awaiting Exam')->orWhere('name', 'Solo Certification')->orWhere('name', 'Ready for Assessment')->orWhere('name', 'Inactive')->get();
 
         //Return view
         return view('admin.training.instructing.board', compact('instructors', 'lists'));
@@ -545,10 +545,18 @@ class InstructingController extends Controller
         $label = StudentStatusLabel::whereId($request->get('label_id'))->firstOrFail();
 
         //Does user already have this label?
-        if ($l = StudentStatusLabelLink::where('student_id', $student->id)->where('student_status_label_id', $label->id)->first()) {
+        if (StudentStatusLabelLink::where('student_id', $student->id)->where('student_status_label_id', $label->id)->exists()) {
             //Return error
-            return redirect()->back()->with('error', "Label {$label->name} already assigned.");
+            return back()->with('error', "Label {$label->name} already assigned.");
         }
+
+        if ($label->name == 'Ready For Pick-Up'){
+            //Discord notification in instructors channel
+            $discord = new DiscordClient();
+            $discord->sendMessageWithEmbed(intval(config('services.discord.instructors')), 'A new student is available for pick-up by an Instructor', $student->user->fullName('FLC') . ' is available to be picked up by an instructor!');
+        }
+
+
 
         //Create the link
         $link = new StudentStatusLabelLink([
