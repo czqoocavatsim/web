@@ -359,7 +359,7 @@
                         <h3 class="font-weight-bold blue-text mt-3 pb-2">Activity</h3>
                         @php
                             $currency = $user->rosterProfile->currency;
-                            $class = $currency < 0.1 ? 'red' : 'green';
+                            $class = $currency < 3 ? 'red' : 'green';
                         @endphp
 
                         <h3>
@@ -368,6 +368,8 @@
                                 {{ $currency }} hours recorded
                             </span>
                         </h3>
+
+                        <p class="mt-4">You require 3 hours of activity every quarter, unless you were certified within the current activity cycle.</p>
                     @else
                         <h3>
                             <span style='font-weight: 400' class='badge rounded p-2 red text-white shadow-none'>
