@@ -56,7 +56,7 @@ class ProcessRosterInactivity implements ShouldQueue
                 }
             }
 
-            if ($rosterMember->active && $rosterMember->currency < 0.25) {
+            if ($rosterMember->active && $rosterMember->currency < 3) {
                 $rosterMember->active = false;
                 $rosterMember->save();
             }

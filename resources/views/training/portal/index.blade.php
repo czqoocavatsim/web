@@ -66,7 +66,7 @@
                 Completed!
             </div>
         </div>
-        @if ($studentProfile->hasLabel("Not Ready"))
+        @if ($studentProfile->hasLabel("Awaiting Exam"))
             <script>
                 $('#studentProgressBar').css('width', '0%')
             </script>
