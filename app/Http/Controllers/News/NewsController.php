@@ -12,7 +12,6 @@ use App\Models\Publications\UploadedImage;
 use App\Models\Settings\AuditLogEntry;
 use App\Models\Users\StaffMember;
 use App\Models\Users\User;
-use Auth;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
@@ -82,7 +81,7 @@ class NewsController extends Controller
             //Add to uploaded images
             $uploadedImg = new UploadedImage();
             $uploadedImg->path = Storage::url($path);
-            $uploadedImg->user_id = Auth::id();
+            $uploadedImg->user_id = auth()->id();
             $uploadedImg->save();
         }
 
@@ -164,7 +163,7 @@ class NewsController extends Controller
         if ($validator->fails()) {
             return redirect()->back()->withInput()->withErrors($validator, 'editArticleErrors');
         }
-        
+
         //Get article object
         $article = News::where('slug', $article_slug)->firstOrFail();
 
@@ -182,7 +181,7 @@ class NewsController extends Controller
             //Add to uploaded images
             $uploadedImg = new UploadedImage();
             $uploadedImg->path = Storage::url($path);
-            $uploadedImg->user_id = Auth::id();
+            $uploadedImg->user_id = auth()->id();
             $uploadedImg->save();
         }
 
@@ -253,7 +252,7 @@ class NewsController extends Controller
     {
         $article = News::where('slug', $slug)->firstOrFail();
         if (!$article->visible) {
-            if (Auth::check() && !Auth::user()->permissions > 3) {
+            if (auth()->check() && !auth()->user()->permissions > 3) {
                 abort(403, 'This article is hidden.');
             }
         }
@@ -278,7 +277,7 @@ class NewsController extends Controller
     public function minutesDelete($id)
     {
         $minutes = MeetingMinutes::whereId($id)->firstOrFail();
-        AuditLogEntry::insert(Auth::user(), 'Deleted meeting minutes '.$minutes->title, User::find(1), 0);
+        AuditLogEntry::insert(auth()->user(), 'Deleted meeting minutes '.$minutes->title, User::find(1), 0);
         $minutes->delete();
 
         return redirect()->back()->with('info', 'Deleted item');
@@ -302,14 +301,14 @@ class NewsController extends Controller
         );
 
         $minutes = new MeetingMinutes([
-            'user_id' => Auth::id(),
+            'user_id' => auth()->id(),
             'title'   => $request->get('title'),
             'link'    => Storage::url('public/files/minutes/'.$fileName),
         ]);
 
         $minutes->save();
 
-        AuditLogEntry::insert(Auth::user(), 'Uploaded meeting minutes '.$minutes->title, User::find(1), 0);
+        AuditLogEntry::insert(auth()->user(), 'Uploaded meeting minutes '.$minutes->title, User::find(1), 0);
 
         return redirect()->back()->with('success', 'Minutes uploaded!');
     }
@@ -340,18 +339,19 @@ class NewsController extends Controller
 
         //Redirect if fails
         if ($validator->fails()) {
-            return redirect()->back()->withInput()->withErrors($validator, 'createAnnouncementErrors');
+            return back()->withInput()->withErrors($validator, 'createAnnouncementErrors');
         }
 
         //Create announcement
         $announcement = new Announcement([
-            'user_id'            => Auth::id(),
+            'user_id'            => auth()->id(),
             'target_group'       => $request->get('target_group'),
             'title'              => $request->get('title'),
             'content'            => $request->get('content'),
             'slug'               => Str::slug($request->get('title').'-'.Carbon::now()->toDateString()),
             'reason_for_sending' => $request->get('reason_for_sending'),
             'notes'              => $request->get('notes'),
+            'controller_acknowledgement' => is_null($request->get('acknowledgement')) ? false : true
         ]);
 
         $announcement->save();

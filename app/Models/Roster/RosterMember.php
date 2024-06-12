@@ -6,7 +6,6 @@ use Carbon\Carbon;
 use App\Models\Users\User;
 use Illuminate\Support\HtmlString;
 use Spatie\Activitylog\LogOptions;
-use Illuminate\Support\Facades\Log;
 use Illuminate\Database\Eloquent\Model;
 use App\Models\Roster\SoloCertification;
 use Spatie\Activitylog\Traits\LogsActivity;
@@ -102,7 +101,7 @@ class RosterMember extends Model
 
     public function meetsActivityRequirement()
     {
-        //Returns false only if we want them to get an inactivity email 
+        //Returns false only if we want them to get an inactivity email
         $date = false;
         // Get date certified
         try {
@@ -125,12 +124,12 @@ class RosterMember extends Model
         if ($date === false && ($certifiedDate > Carbon::now()->startOfQuarter() && $certifiedDate < Carbon::now()->endOfQuarter())){
             return true;
         }
-        
+
         //If they are meeting activity requirements why send em an email?
         if ($this->currency >= 1.0) {
             return true;
         }
-        
+
         //Finally send em an email!
         return false;
     }

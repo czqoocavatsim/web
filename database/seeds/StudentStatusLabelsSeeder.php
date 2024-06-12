@@ -13,10 +13,10 @@ class StudentStatusLabelsSeeder extends Seeder
     public function run()
     {
         $notReady = new StudentStatusLabel([
-            'name'        => 'Not Ready',
+            'name'        => 'Awaiting Exam',
             'colour'      => 'grey',
             'fa_icon'     => 'far fa-pause-circle',
-            'description' => 'Student yet to submit timings for sessions.',
+            'description' => 'Student yet to complete entry exam.',
             'restricted'  => false,
         ]);
         $notReady->save();

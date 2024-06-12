@@ -33,9 +33,7 @@ class UserPreferences extends Model
 {
     protected $hidden = ['id'];
 
-    protected $fillable = [
-        'enable_beta_components', 'ui_mode', 'enable_discord_notifications', 'accent_colour',
-    ];
+    protected $guarded = [];
 
     public function user()
     {

@@ -3,6 +3,7 @@
 namespace App\Services;
 
 use GuzzleHttp\Client;
+use App\Jobs\ProcessDiscordRoles;
 use GuzzleHttp\Exception\ClientException;
 
 class DiscordClient
@@ -49,24 +50,16 @@ class DiscordClient
         return $response->getStatusCode() == 200;
     }
 
-    public function assignRole($userId, $roleId)
+    public function assignRole($discordId, $roleId)
     {
-        if ($userId) {
-            $response = $this->client->put('guilds/' . env('DISCORD_GUILD_ID') . "/members/{$userId}/roles/{$roleId}");
-
-            return $response->getStatusCode() == 204;
-        }
+        ProcessDiscordRoles::dispatch(true, $discordId, $roleId);
 
         return;
     }
 
-    public function removeRole($userId, $roleId)
+    public function removeRole($discordId, $roleId)
     {
-        if ($userId) {
-            $response = $this->client->delete('guilds/' . env('DISCORD_GUILD_ID') . "/members/{$userId}/roles/{$roleId}");
-
-            return $response->getStatusCode() == 204;
-        }
+        ProcessDiscordRoles::dispatch(false, $discordId, $roleId);
 
         return;
     }
@@ -90,3 +83,4 @@ class DiscordClient
 
     }
 }
+

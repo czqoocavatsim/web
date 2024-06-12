@@ -70,8 +70,8 @@ class ApplicationsController extends Controller
         $hoursObj = json_decode($output);
         $hoursTotal = (int)$hoursObj->c1 + (int)$hoursObj->c3 + (int)$hoursObj->i1 + (int)$hoursObj->i3;
 
-        //Redirect if hours aren't 80
-        if ($hoursTotal < 80) {
+        //Redirect if hours aren't 50
+        if ($hoursTotal < 50) {
             return view('training.applications.apply', compact('hoursTotal'))->with('allowed', 'hours');
         }
 
@@ -142,8 +142,8 @@ class ApplicationsController extends Controller
         $processingUpdate->save();
 
         //Dispatch event
-        Notification::route('mail', CoreSettings::find(1)->emailfirchief)->notify(new NewApplicationStaff($application));
-        Notification::route('mail', CoreSettings::find(1)->emaildepfirchief)->notify(new NewApplicationStaff($application));
+        // Notification::route('mail', CoreSettings::find(1)->emailfirchief)->notify(new NewApplicationStaff($application));
+        // Notification::route('mail', CoreSettings::find(1)->emaildepfirchief)->notify(new NewApplicationStaff($application));
         Notification::route('mail', CoreSettings::find(1)->emailcinstructor)->notify(new NewApplicationStaff($application));
 
         //Redirect to application page
@@ -440,7 +440,7 @@ class ApplicationsController extends Controller
 
         //Status label
         $label = new StudentStatusLabelLink([
-            'student_status_label_id' => StudentStatusLabel::whereName('Not Ready')->first()->id,
+            'student_status_label_id' => StudentStatusLabel::whereName('Awaiting Exam')->first()->id,
             'student_id'              => $student->id,
         ]);
         $label->save();

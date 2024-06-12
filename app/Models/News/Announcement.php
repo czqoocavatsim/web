@@ -6,8 +6,10 @@ use Parsedown;
 use App\Models\Users\User;
 use Illuminate\Support\HtmlString;
 use Spatie\Activitylog\LogOptions;
+use App\Models\Roster\RosterMember;
 use Illuminate\Database\Eloquent\Model;
 use Spatie\Activitylog\Traits\LogsActivity;
+use App\Models\Training\ControllerAcknowledgement;
 
 /**
  * App\Models\News\Announcement
@@ -46,9 +48,7 @@ class Announcement extends Model
 
     protected $hidden = ['id'];
 
-    protected $fillable = [
-        'user_id', 'target_group', 'title', 'content', 'slug', 'reason_for_sending', 'notes',
-    ];
+    protected $guarded = [];
 
     public function user()
     {
@@ -64,5 +64,13 @@ class Announcement extends Model
     {
         return LogOptions::defaults()
         ->logOnly(['name', 'text']);
+    }
+
+    public function getReadMembers()
+    {
+        $rosterMembers = RosterMember::all();
+        return $rosterMembers->filter(function ($rosterMember) {
+            return !ControllerAcknowledgement::where('user_id', $rosterMember->user_id)->where('announcement_id', $this->id)->exists();
+        });
     }
 }

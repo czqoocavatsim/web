@@ -4,7 +4,7 @@
 
 @section('content')
     <div style="height: calc(100vh - 74px); z-index: -1" class="z-depth-0 jarallax">
-        <img src="https://media.discordapp.net/attachments/498332235154456579/695982036346994708/unknown.png" alt=""
+        <img src="{{asset('assets/resources/media/img/website/home_banner.png')}}" alt=""
             class="jarallax-img">
         <div class="flex-center mask rgba-black-light flex-column">
             <div class="container d-none d-sm-block">

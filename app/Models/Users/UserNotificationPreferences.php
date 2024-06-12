@@ -28,5 +28,5 @@ use Illuminate\Database\Eloquent\Model;
  */
 class UserNotificationPreferences extends Model
 {
-    //
+    protected $guarded = [];
 }

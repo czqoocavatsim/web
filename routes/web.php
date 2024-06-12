@@ -54,6 +54,7 @@ Route::get('/policies', [PublicationsController::class, 'policies'])->name('poli
 Route::get('/privacy', fn() => redirect(route('policies'), 301))->name('privacy');
 Route::get('/events', [EventController::class, 'index'])->name('events.index');
 Route::get('/events/{slug}', [EventController::class, 'viewEvent'])->name('events.view');
+Route::view('/branding', 'about.branding')->name('branding');
 
 // About
 Route::prefix('about')->group(function () {
@@ -110,8 +111,8 @@ Route::group(['middleware' => 'auth'], function () {
         Route::post('/users/changedisplayname', [MyCzqoController::class, 'changeDisplayName'])->name('users.changedisplayname');
 
         // Notification
-        Route::get('/notification/{id}', [NotificationRedirectController::class, 'notificationRedirect'])->name('notification.redirect');
-        Route::get('/notificationclear', [NotificationRedirectController::class, 'clearAll']);
+        // Route::get('/notification/{id}', [NotificationRedirectController::class, 'notificationRedirect'])->name('notification.redirect');
+        // Route::get('/notificationclear', [NotificationRedirectController::class, 'clearAll']);
 
         // Email prefs
         Route::get('/dashboard/emailpref', [DataController::class, 'emailPref'])->name('dashboard.emailpref');
@@ -161,6 +162,9 @@ Route::group(['middleware' => 'auth'], function () {
             Route::name('training.portal.')->group(function () {
                 Route::get('portal', [TrainingPortalController::class, 'index'])->name('index');
                 Route::get('portal/help-policies', [TrainingPortalController::class, 'helpPolicies'])->name('help-policies');
+                //Acknowledgements
+                Route::view('portal/acknowledgements', 'training.portal.acknowledgements')->name('controller-acknowledgements');
+                Route::post('portal/acknowledgements/read/{announcement}', [TrainingPortalController::class, 'readAcknowledgement'])->name('controller-acknowledgements.read');
                 // Training availability
                 Route::get('portal/availability', [TrainingPortalController::class, 'viewAvailability'])->name('availability');
                 Route::post('portal/availability', [TrainingPortalController::class, 'submitAvailabilityPost'])->name('availability.submit.post');
@@ -237,6 +241,10 @@ Route::group(['middleware' => 'auth'], function () {
                     Route::get('/solocertifications', [SoloCertificationsController::class, 'admin'])->name('solocertifications')->middleware('can:view roster admin');
                     Route::post('/solocertifications/add', [SoloCertificationsController::class, 'addSoloCertificationPost'])->name('solocertifications.add')->middleware('can:edit roster');
                     Route::get('/solocertifications/{cert_id}/revoke', [SoloCertificationsController::class, 'revokeSoloCert'])->name('solocertifications.revoke')->middleware('can:edit roster');
+
+                    //Controller Acknowledgements
+                    Route::view('/acknowledgements', 'admin.training.acknowledgements.index')->name('acknowledgements');
+                    Route::get('/acknowledgement/{announcement}', [RosterController::class, 'getAcknowledgement'])->name('acknowledgement.find');
 
                     //Applications
                     Route::get('/applications', [ApplicationsController::class, 'admin'])->name('applications')->middleware('can:view applications');
