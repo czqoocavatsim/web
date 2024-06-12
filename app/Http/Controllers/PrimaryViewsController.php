@@ -73,19 +73,6 @@ class PrimaryViewsController extends Controller
             $bannerImg = null;
         }
 
-        //Quote of the day
-        $quote = Cache::remember('quoteoftheday', 86400, function () {
-            $client = new Client();
-            $headers = [
-                'X-Api-Key' => env('QUOTES_API_TOKEN')
-            ];
-            $output = $client->get('https://api.api-ninjas.com/v1/quotes',[
-                'headers' => $headers
-            ]);
-
-            return json_decode($output->getBody());
-        });
-
-        return view('my.index', compact('atcResources', 'bannerImg', 'quote'));
+        return view('my.index', compact('atcResources', 'bannerImg'));
     }
 }

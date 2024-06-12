@@ -37,9 +37,6 @@
                         ?>
                         {{ auth()->user()->fullName('F') }}!
                     </h1>
-                    @if (isset($quote))
-                        <p style="font-size: 1.2em;">{{ $quote[0]->quote }} ~ {{ $quote[0]->author }}</p>
-                    @endif
                 </div>
             </div>
             @if (auth()->user()->created_at->diffInDays(Carbon\Carbon::now()) < 14)
@@ -355,7 +352,7 @@
                         <h3 class="font-weight-bold blue-text mt-3 pb-2">Activity</h3>
                         @php
                             $currency = auth()->user()->rosterProfile->currency;
-                            $class = $currency < 0.1 ? 'red' : ($currency < 3.0 ? 'blue' : 'green');
+                            $class = $currency < 0.1 ? 'red' : ($currency < 1.0 ? 'blue' : 'green');
                         @endphp
 
                         <h3>
@@ -365,8 +362,7 @@
                             </span>
                         </h3>
 
-                        <p class="mt-4">You require 3 hours of activity every quarter, unless you were certified within
-                            the current activity cycle.</p>
+                        <p class="mt-4">You require 1 hour of activity within the last 12 months.</p>
                     @else
                         <h3>
                             <span style='font-weight: 400' class='badge rounded p-2 red text-white shadow-none'>

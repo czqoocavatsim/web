@@ -127,7 +127,7 @@ class RosterMember extends Model
         }
         
         //If they are meeting activity requirements why send em an email?
-        if ($this->currency >= 3.0) {
+        if ($this->currency >= 1.0) {
             return true;
         }
         
