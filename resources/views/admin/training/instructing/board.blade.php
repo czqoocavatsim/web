@@ -2,6 +2,7 @@
 @section('title', 'Board - Instructing - ')
 @section('training-content')
 <h1 class="blue-text mb-4">Board</h1>
+<h3 class="blue-text mb-4">Student Status</h3>
 <div class="row">
     @foreach($lists as $list)
     <div class="col-lg-4">
@@ -30,8 +31,12 @@
         </div>
     </div>
     @endforeach
-    <div class="col-lg-4">
+</div>
+
+<div class="row">
+    <h3 class="blue-text mb-4">Student Status</h3>
     @foreach($instructors as $list)
+    <div class="col-lg-4">
         <div class="card p-4 z-depth-1 shadow-none mb-3" style="min-height: 160px;">
             <div class="d-flex flex-row align-items-center">
                 <a title="View Instructor Profile" href="{{route('training.admin.instructing.instructors.view', $list->user_id)}}"><img src="{{$list->user->avatar()}}" style="height: 30px; width:30px;margin-right: 10px; border-radius: 50%;"></a>
@@ -63,6 +68,6 @@
             @endif
         </div>
     </div>
+    </div>
     @endforeach
-</div>
 @endsection
