@@ -146,6 +146,11 @@ class ApplicationsController extends Controller
         // Notification::route('mail', CoreSettings::find(1)->emaildepfirchief)->notify(new NewApplicationStaff($application));
         Notification::route('mail', CoreSettings::find(1)->emailcinstructor)->notify(new NewApplicationStaff($application));
 
+
+        //New Applicant in Instructor Channel
+        $discord = new DiscordClient();
+        $discord->sendMessageWithEmbed(config('app.env') == 'local' ? intval(config('services.discord.web_logs')) : intval(config('services.discord.instructors')), 'New training session scheduled #'.$session->id, $session->instructor->user->fullName('FLC').' has scheduled a new training session with '.$session->student->user->fullName('FLC').' on '.$request->get('scheduled_time'));
+
         //Redirect to application page
         return redirect()->route('training.applications.show', $application->reference_id);
     }
