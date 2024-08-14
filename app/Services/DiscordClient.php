@@ -82,5 +82,38 @@ class DiscordClient
         }
 
     }
+
+    // Function to create a user training thread
+    public function createTrainingThread($channelId, $name, $user)
+{
+    try {
+        $response = $this->client->post("channels/{$channelId}/threads", [
+            'json' => [
+                'name' => $name,
+                'message' => [
+                    'content' => $user.', your application has now been approved. Welcome to Gander Oceanic! 
+
+Please review <#1214345937871179777> in order to get yourself up to speed with our training process. It is pretty easy, but there are a few steps you *must* do in order to begin your training.
+
+Once you have done so, and you are ready to attempt the exam, please ping `@exam-request` to have the Oceanic Exam assigned. You will only have 48 Hours to complete this exam, so please make sure you are ready.
+
+After you pass the exam, please provide 7-days of availability for our Instructors.
+
+Good luck with your study!',
+                ],
+            ],
+
+        ]);
+        
+    
+        $responseData = json_decode($response->getBody(), true);
+        // Process $responseData as needed
+    } catch (\Exception $e) {
+        // Handle exception
+        echo 'Error: ' . $e->getMessage();
+    }
+     
+}
+
 }
 
