@@ -149,7 +149,9 @@ class ApplicationsController extends Controller
 
         //New Applicant in Instructor Channel
         $discord = new DiscordClient();
-        $discord->sendMessageWithEmbed(config('app.env') == 'local' ? intval(config('services.discord.web_logs')) : intval(config('services.discord.instructors')), 'New training session scheduled #'.$session->id, $session->instructor->user->fullName('FLC').' has scheduled a new training session with '.$session->student->user->fullName('FLC').' on '.$request->get('scheduled_time'));
+        $discord->sendMessageWithEmbed(config('app.env') == 'local' ? intval(config('services.discord.web_logs')) : intval(config('services.discord.applications')), 'New Training Applicant!', $application->user->fullName('FLC').' has just applied to control at Gander Oceanic!
+        
+        [View their application now](https://ganderoceanic.ca/admin/training/applications/'.$application->reference_id.')');
 
         //Redirect to application page
         return redirect()->route('training.applications.show', $application->reference_id);
