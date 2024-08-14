@@ -55,8 +55,8 @@ return [
         'endorsements'  => env('DISCORD_ENDORSEMENTS'),
         'marketing'     => env('DISCORD_MARKETING'),
         'staff'         => env('DISCORD_STAFF'),
-        'instructors'   => env('DISCORD_INSTRUCTORS'),
-        'applications'  => env('DISCORD_APPLICATIONS'),
-        'training_forum' => env('DISCORD_TRAINING_FORUM'),
+        'instructors'   => '782927909974442015',
+        'applications'  => '1273228164255977492',
+        'training_forum' => '1226234767138226338',
     ],
 ];
