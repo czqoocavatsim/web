@@ -13,4 +13,12 @@ class DiscordTestController extends Controller
         $discord = new DiscordClient();
         $discord->createTrainingThread('1273181022699130902', 'Joshua Micallef 1342084', '<@200426385863344129>');
     }
+
+    public function EditTagTest()
+    {
+        $discord = new DiscordClient();
+        $results = $discord->AddThreadTag('Test', 'Roster Placeholder 2');
+
+        return $results;
+    }
 }

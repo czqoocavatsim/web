@@ -443,7 +443,11 @@ class ApplicationsController extends Controller
             $discord->assignRole($student->user->discord_user_id, 482824058141016075);
 
             //Create Instructor Thread
-            $discord->createTrainingThread('1273181022699130902', $student->user->fullName('FLC'), '<@'.$student->user->discord_user_id.'>');
+            $discord->createTrainingThread(intval(config('services.discord.training_forum')), $student->user->fullName('FLC'), '<@'.$student->user->discord_user_id.'>');
+
+            // Notify Senior Team that the application was accepted.
+            $discord->sendMessageWithEmbed(config('app.env') == 'local' ? intval(config('services.discord.web_logs')) : intval(config('services.discord.applications')), 'Accepted Applicant', $student->user->fullName('FLC').' has just been accepted.', 'error');
+        
         } else {
             Session::flash('info', 'Unable to add Discord permissions automatically, as the member is not in the Discord.');
 
@@ -494,6 +498,9 @@ class ApplicationsController extends Controller
             'update_type'    => 'red',
         ]);
         $update->save();
+
+        // Notify Senior Team that new Applicant has been rejected.
+        $discord->sendMessageWithEmbed(config('app.env') == 'local' ? intval(config('services.discord.web_logs')) : intval(config('services.discord.applications')), 'Application Denied', $student->user->fullName('FLC')."'s application has been denied.", 'error');
 
         //Notify user
         $application->user->notify(new ApplicationRejectedApplicant($application));

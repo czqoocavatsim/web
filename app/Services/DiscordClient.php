@@ -116,5 +116,39 @@ Good luck with your study!',
      
 }
 
+public function EditThreadTag($lable, $name)
+{
+    // Get Training Tags and Threads from Discord
+    $tag_responses = $this->client->get('channels/'.intval(config('services.discord.training_forum')));
+    $active_threads = $this->client->get('guilds/'.env('DISCORD_GUILD_ID').'/threads/active');
+
+    // Decode Data in JSON
+    $tag_data = json_decode($tag_responses->getBody(), true);
+    $threads_data = json_decode($active_threads->getBody(), true);
+
+    // Filter Tag/Thread data into easier format
+    $tag_details = [];
+    $tags = $tag_data['available_tags'];
+
+    $thread_details = [];
+    $threads = $threads_data['threads'];
+
+    // Loop through each Thread, and then through each tag to see if a match is found.
+    foreach($threads as $thread){
+        foreach($tags as $tag){
+            if($tag['name'] == $lable && $thread['name'] == $name){
+                // Update Tag with new details
+                $data = $this->client->patch('channels/'.$thread['id'], [
+                    'json' => [
+                        'applied_tags' => [$tag['id']],
+                    ]
+                ]);
+
+                break;
+            }
+        }
+    }
+}
+
 }
 
