@@ -558,7 +558,7 @@ class InstructingController extends Controller
 
         // 
         $discord = new DiscordClient();
-        $discord->EditThreadTag($lable->name, $student->user->fullName('FLC'));
+        $discord->EditThreadTag($label->name, $student->user->fullName('FLC'));
 
         //Create the link
         $link = new StudentStatusLabelLink([
