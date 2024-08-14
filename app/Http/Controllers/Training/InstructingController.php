@@ -556,7 +556,9 @@ class InstructingController extends Controller
             $discord->sendMessageWithEmbed(intval(config('services.discord.instructors')), 'A new student is available for pick-up by an Instructor', $student->user->fullName('FLC') . ' is available to be picked up by an instructor!');
         }
 
-
+        // 
+        $discord = new DiscordClient();
+        $discord->EditThreadTag($lable->name, $student->user->fullName('FLC'));
 
         //Create the link
         $link = new StudentStatusLabelLink([
