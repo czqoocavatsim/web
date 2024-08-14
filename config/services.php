@@ -56,5 +56,7 @@ return [
         'marketing'     => env('DISCORD_MARKETING'),
         'staff'         => env('DISCORD_STAFF'),
         'instructors'   => env('DISCORD_INSTRUCTORS'),
+        'applications'  => env('DISCORD_APPLICATIONS'),
+        'training_forum' => env('DISCORD_TRAINING_FORUM'),
     ],
 ];
