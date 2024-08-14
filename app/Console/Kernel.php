@@ -6,6 +6,7 @@ use App\Jobs\ProcessRosterInactivity;
 use App\Jobs\ProcessSessionLogging;
 use App\Jobs\ProcessSessionReminders;
 use App\Jobs\ProcessSoloCertExpiryWarnings;
+use App\Job\ProcessShanwickController;
 use App\Models\Roster\RosterMember;
 use App\Notifications\Network\OneWeekInactivityReminder;
 use App\Notifications\Network\TwoWeekInactivityReminder;
@@ -96,6 +97,9 @@ class Kernel extends ConsoleKernel
 
         //Solo cert expiry warning
         $schedule->job(new ProcessSoloCertExpiryWarnings())->daily();
+
+        // Shanwick Controller Roster Update
+        $schedule->job(new ProcessShanwickController())->daily();
 
         //Training/OTS session reminders
         $schedule->job(new ProcessSessionReminders())->daily();

@@ -7,6 +7,7 @@ use App\Models\Users\User;
 use Illuminate\Http\Request;
 use App\Services\DiscordClient;
 use App\Models\News\Announcement;
+use App\Models\Network\ShanwickController;
 use App\Models\Roster\RosterMember;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
@@ -21,12 +22,25 @@ class RosterController extends Controller
 {
     public function publicRoster()
     {
-        //Get roster
-        $roster = RosterMember::where('certification', '!=', 'not_certified')
+        // Get CZQO Roster
+        $czqo_roster = RosterMember::where('certification', '!=', 'not_certified')
             ->select(['id', 'certification', 'active', 'user_id'])
             ->with('user:id,fname,lname,rating_short,display_fname,display_cid_only,display_last_name,division_name,division_code')
             ->get();
 
+        // Get EGGX Roster
+        $shanwick_controllers = ShanwickController::all();
+
+        // Transform EGGX data to Eloquent-like objects
+        $eggx_roster = $shanwick_controllers->map(function($controller) {
+            return $this->transformShanwickControllerToRoster($controller);
+        });
+
+        // Combine Data
+        $roster = $czqo_roster->concat($eggx_roster);   
+
+        // return $roster;
+        
         //Return view
         return view('roster.index', compact('roster'));
     }
@@ -362,5 +376,27 @@ class RosterController extends Controller
     public function getAcknowledgement(Announcement $announcement)
     {
         return view('admin.training.acknowledgements.acknowledgement', compact('announcement'));
+    }
+
+    public function transformShanwickControllerToRoster($shanwickController) {
+        $rosterMember = new RosterMember();
+        $rosterMember->certification = 'certified';
+        $rosterMember->active = 1;
+        $rosterMember->eggx = true;
+        $rosterMember->user_id = $shanwickController->controller_cid;
+        
+        // Create a pseudo-user object
+        $rosterMember->user = new User();
+        $rosterMember->user->id = $shanwickController->controller_cid;
+        $rosterMember->user->fname = null;
+        $rosterMember->user->lname = null;
+        $rosterMember->user->rating_short = $shanwickController->rating;
+        $rosterMember->user->display_fname = null;
+        $rosterMember->user->display_cid_only = 1;
+        $rosterMember->user->display_last_name = 0;
+        $rosterMember->user->division_name = null;
+        $rosterMember->user->division_code = $shanwickController->division;
+
+        return $rosterMember;
     }
 }
