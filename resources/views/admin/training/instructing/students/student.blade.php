@@ -61,6 +61,11 @@
                     <a data-target="#deleteStudentModal" data-toggle="modal" style="text-decoration:none;"><span class="red-text"><i class="fas fa-chevron-right"></i></span> &nbsp; <span class="black-text">Remove as student</span></a>
                 </li>
                 @endcan
+                @if($student->user->rosterProfile->certification == "training")
+                <li class="mb-2">
+                    <a data-target="#certifyStudentModal" data-toggle="modal" style="text-decoration:none;"><span class="green-text"><i class="fas fa-chevron-right"></i></span> &nbsp; <span class="black-text">Certify Controller</span></a>
+                </li>
+                @endif
             </ul>
             <h5 class="blue-text">Records</h5>
             <ul class="list-unstyled mt-2">
@@ -178,6 +183,30 @@
         </div>
     </div>
     <!--End delete modal-->
+
+    <!--certify modal-->
+    <div class="modal fade" id="certifyStudentModal" tabindex="-1" role="dialog">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLongTitle">Certify Controller: {{$student->user->FullName('FLC')}}</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <p>This will mark the students training as 'completed', close out all of their training, and add them to the controller roster.</p>
+                    <p>Please do not do this unless the student is actually completed. This is REALLY REALLY painful to reverse</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-light" data-dismiss="modal">Dismiss</button>
+                    <a href="{{route('training.admin.instructing.students.certify', $student->user->id)}}" role="button" class="btn btn-success">Certify Controller</a>
+                </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    <!--End certify modal-->
 
     <!--Drop modal-->
     <div class="modal fade" id="dropStudentModal" tabindex="-1" role="dialog">
