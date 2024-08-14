@@ -2,7 +2,7 @@
 @section('title', 'Board - Instructing - ')
 @section('training-content')
 <h1 class="blue-text mb-4">Board</h1>
-<h3 class="blue-text mb-4">Student Status</h3>
+<h4 class="blue-text mb-4">Student Status</h4>
 <div class="row">
     @foreach($lists as $list)
     <div class="col-lg-4">
@@ -34,7 +34,7 @@
 </div>
 
 <div class="row">
-    <h3 class="blue-text mb-4">Student Status</h3>
+    <h4 class="blue-text mb-4">Instructor View</h4>
     @foreach($instructors as $list)
     <div class="col-lg-4">
         <div class="card p-4 z-depth-1 shadow-none mb-3" style="min-height: 160px;">

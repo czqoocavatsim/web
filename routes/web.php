@@ -37,6 +37,7 @@ use App\Http\Controllers\Publications\CustomPagesController;
 use App\Http\Controllers\Publications\PublicationsController;
 use App\Http\Controllers\TrainingCalendar\TrainingController;
 use App\Http\Controllers\Training\SoloCertificationsController;
+use App\Http\Controllers\DiscordTestController;
 
 Route::get('/', [PrimaryViewsController::class, 'home'])->name('index');
 Route::get('/map', [PrimaryViewsController::class, 'map'])->name('map');
@@ -74,6 +75,7 @@ Route::prefix('auth')->group(function () {
 
 // Discord shortcut
 Route::get('/discord', [DiscordController::class, 'joinShortcut']);
+Route::get('/discord/function-test', [DiscordTestController::class, 'ThreadTest']);
 
 // Public news articles
 Route::get('/news/{id}', [NewsController::class, 'viewArticlePublic'])->name('news.articlepublic')->where('id', '[0-9]+');

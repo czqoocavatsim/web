@@ -146,6 +146,13 @@ class ApplicationsController extends Controller
         // Notification::route('mail', CoreSettings::find(1)->emaildepfirchief)->notify(new NewApplicationStaff($application));
         Notification::route('mail', CoreSettings::find(1)->emailcinstructor)->notify(new NewApplicationStaff($application));
 
+
+        //New Applicant in Instructor Channel
+        $discord = new DiscordClient();
+        $discord->sendMessageWithEmbed(config('app.env') == 'local' ? intval(config('services.discord.web_logs')) : intval(config('services.discord.applications')), 'New Training Applicant!', $application->user->fullName('FLC').' has just applied to control at Gander Oceanic!
+        
+        [View their application now](https://ganderoceanic.ca/admin/training/applications/'.$application->reference_id.')');
+
         //Redirect to application page
         return redirect()->route('training.applications.show', $application->reference_id);
     }
@@ -390,7 +397,7 @@ class ApplicationsController extends Controller
         $application->status = 1;
         $application->save();
 
-        //Create update
+        // Create update
         $update = new ApplicationUpdate([
             'application_id' => $application->id,
             'update_title'   => 'Your application has been accepted!',
@@ -427,15 +434,24 @@ class ApplicationsController extends Controller
         //Give role
         $student->user->assignRole('Student');
 
-        //Give Discord role
+        //Discord Updates
         if ($student->user->hasDiscord() && $student->user->member_of_czqo) {
             //Get Discord client
             $discord = new DiscordClient();
 
-            //Add student role
+            //Add student discord role
             $discord->assignRole($student->user->discord_user_id, 482824058141016075);
+
+            //Create Instructor Thread
+            $discord->createTrainingThread('1273181022699130902', $student->user->fullName('FLC'), '<@'.$student->user->discord_user_id.'>');
         } else {
-            Session::flash('info', 'Unable to add Discord permissions automatically.');
+            Session::flash('info', 'Unable to add Discord permissions automatically, as the member is not in the Discord.');
+
+            //Get Discord client
+            $discord = new DiscordClient();
+            
+            // Notify Senior Team that new Applicant is not a member of the Discord Server
+            $discord->sendMessageWithEmbed(config('app.env') == 'local' ? intval(config('services.discord.web_logs')) : intval(config('services.discord.applications')), 'Accepted applicant not in the discord', $student->user->fullName('FLC').' is not a member of Gander Oceanic. They will need to be contacted via email.', 'error');
         }
 
         //Status label
