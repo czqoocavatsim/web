@@ -200,7 +200,7 @@
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-light" data-dismiss="modal">Dismiss</button>
-                    <a href="{{route('training.admin.instructing.students.certify', $student->user->id)}}" role="button" class="btn btn-success">Certify Controller</a>
+                    <a disabled href="{{route('training.admin.instructing.students.certify', $student->user->id)}}" role="button" class="btn btn-success">Certify Controller</a>
                 </div>
                 </form>
             </div>
