@@ -79,6 +79,15 @@ class SessionsController extends Controller
         $discord = new DiscordClient();
         $discord->sendMessageWithEmbed(config('app.env') == 'local' ? intval(config('services.discord.web_logs')) : intval(config('services.discord.instructors')), 'New training session scheduled #'.$session->id, $session->instructor->user->fullName('FLC').' has scheduled a new training session with '.$session->student->user->fullName('FLC').' on '.$request->get('scheduled_time'));
 
+        //Discord Notification in Training Thread
+        $discord = new DiscordClient();
+        $discord->sendEmbedInTrainingThread($session->student->user->fullName('FLC'), 'Training Session Booked', 
+'Hello, '. $session->student->user->fullName('F').'!
+
+A training session has been created for you at '.Carbon::parse($request->get('scheduled_time'))->format('l, jS F H:i\z').'.
+
+Please reach out to your instructor in this training thread if you have any questions.');
+        
         //Return
         return redirect()->route('training.admin.instructing.training-sessions.view', $session->id)->with('success', 'Session created!');
     }
@@ -124,6 +133,15 @@ class SessionsController extends Controller
 
         //Notify
         $session->student->user->notify(new SessionScheduledTimeChanged($session, 'training'));
+
+         //Discord Notification in Training Thread
+         $discord = new DiscordClient();
+         $discord->sendEmbedInTrainingThread($session->student->user->fullName('FLC'), 'Training Session Time Changed', 
+ 'Hello, '. $session->student->user->fullName('F').'!
+ 
+ A training session time has been updated. The new time is now '.Carbon::parse($request->get('new_time'))->format('l, jS F H:i\z').'.
+ 
+ Please reach out to your instructor in this training thread if you have any questions.');
 
         //Return
         return redirect()->route('training.admin.instructing.training-sessions.view', $session)->with('success', 'Scheduled time changed!');
@@ -217,6 +235,15 @@ class SessionsController extends Controller
 
         //Notify student
         $session->student->user->notify(new SessionCancelled($session, 'training'));
+
+        //Discord Notification in Training Thread
+        $discord = new DiscordClient();
+        $discord->sendEmbedInTrainingThread($session->student->user->fullName('FLC'), 'Training Session Cancelled', 
+'Hello, '. $session->student->user->fullName('F').'!
+
+A training session which was planned has been cancelled.
+
+Please contact your instructor if you believe this was a mistake.');
 
         //Soft delete session
         $session->delete();

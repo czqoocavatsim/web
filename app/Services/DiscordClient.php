@@ -133,12 +133,14 @@ Good luck with your study!',
                     ]
                 ]);
 
-                $this->sendMessageWithEmbed($thread['id'], 'Training Completed!',
-'Congratulations, you have now been certified on Gander Oceanic! 
+                $this->sendMessageWithEmbed($thread['id'], 'Oceanic Training Completed!',
+'Congratulations, you have now been certified on Gander & Shanwick Oceanic!
                 
-This thread is now being closed due to the completion of your training. 
-                
-Enjoy controlling Gander & Shanwick!');
+This training thread will now be closed due to the completion of your training.
+
+If you have any questions, please reach out to your Instructor, or ask your question in <#836707337829089322>.
+
+Enjoy controlling Gander & Shanwick OCA!');
             }
         }
 
@@ -179,6 +181,24 @@ Enjoy controlling Gander & Shanwick!');
 
                     break;
                 }
+            }
+        }
+    }
+
+    // Send Embed Message in Training Thread
+    public function sendEmbedInTrainingThread($name, $title, $message)
+    {
+        // Get active Discord Threads
+        $active_threads = $this->client->get('guilds/'.env('DISCORD_GUILD_ID').'/threads/active');
+
+        // Decode Data
+        $threads_data = json_decode($active_threads->getBody(), true);
+
+        // Loop through all threads to find students training record
+        foreach ($threads_data['threads'] as $thread) {
+            if ($thread['name'] == $name) {
+                // Send Embed Message
+                $this->sendMessageWithEmbed($thread['id'], $title, $message);
             }
         }
     }
