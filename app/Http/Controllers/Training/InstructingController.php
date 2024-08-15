@@ -457,6 +457,10 @@ class InstructingController extends Controller
     {
         $student = Student::where('user_id', $cid)->firstOrFail();
 
+        //Make as not current
+        $student->current = false;
+        $student->save();
+
         // Remove Student Status & Set Controller as Active
         $student->user->removeRole('Student');
         $student->user->assignRole('Certified Controller');
@@ -472,13 +476,17 @@ class InstructingController extends Controller
         ]);
         $link->save();
 
+        // Unassign Instructor from Student
+        $instructor_id = InstructorStudentAssignment::where('student_id', $student->id)->firstOrFail();
+        $instructor_id->delete();
+
         // Update Thread Tag to match site
         $discord = new DiscordClient();
         $discord->EditThreadTag('Completed', $student->user->fullName('FLC'));
 
         // Close Training Thread Out & Send Completion Message
         $discord = new DiscordClient();
-        $discord->closeTrainingThread($student->user->fullName('FLC'), 'certfied');
+        $discord->closeTrainingThread($student->user->fullName('FLC'), 'certify');
 
         // Update Roster with Certification Status
         $rosterMember = RosterMember::where('cid', $cid)->firstOrFail();
@@ -486,7 +494,7 @@ class InstructingController extends Controller
         //Assign values
         $rosterMember->certification = 'Certified';
         $rosterMember->active = 1;
-        $rosterMember->remarks = 'Certified on NAT_FSS (Automatic Message)';
+        $rosterMember->remarks = 'Certified on NAT_FSS (Web Message)';
         $rosterMember->date_certified = Carbon::now();
 
         //User
@@ -512,6 +520,8 @@ class InstructingController extends Controller
                 $discord->assignRole($rosterMember->user->discord_user_id, $roles['student']);
                 $discord->removeRole($rosterMember->user->discord_user_id, $roles['certified']);
             }
+
+
         } else {
             Session::flash('info', 'Unable to add Discord permissions automatically.');
         }
