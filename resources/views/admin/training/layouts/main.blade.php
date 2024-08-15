@@ -106,14 +106,14 @@
                         </div>
                     </li>
                 </a>
-                <a class="myczqo-tab {{Request::is('admin/training/solocertifications') || Request::is('admin/training/solocertifications/*') ? 'active' : ''}} no-click" data-myczqo-tab="none" href="{{route('training.admin.solocertifications')}}">
+                {{-- <a class="myczqo-tab {{Request::is('admin/training/solocertifications') || Request::is('admin/training/solocertifications/*') ? 'active' : ''}} no-click" data-myczqo-tab="none" href="{{route('training.admin.solocertifications')}}">
                     <li class="w-100">
                         <div class="d-flex h-100 flex-row justify-content-left align-items-center">
                             <i style="font-size: 1.6em; margin-right: 10px;" class="fas fa-certificate fa-fw"></i>
                             <span style="font-size: 1.1em;">Solo Certifications</span>
                         </div>
                     </li>
-                </a>
+                </a> --}}
                 <a class="myczqo-tab {{Request::is('admin/training/acknowledgement*') ? 'active' : ''}} no-click" data-myczqo-tab="none" href="{{route('training.admin.acknowledgements')}}">
                     <li class="w-100">
                         <div class="d-flex h-100 flex-row justify-content-left align-items-center">

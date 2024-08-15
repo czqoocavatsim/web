@@ -1,13 +1,13 @@
 @extends('admin.training.layouts.main')
 @section('title', 'Board - Instructing - ')
 @section('training-content')
-<h1 class="blue-text mb-4">Board</h1>
-<h4 class="blue-text mb-4">Student Status</h4>
+<h1 class="blue-text">Instructing Overview - Board</h1>
+<h4 class="blue-text mb-4">All Student's Status</h4>
 <div class="row">
     @foreach($lists as $list)
     <div class="col-lg-4">
         <div class="card p-3 z-depth-1 shadow-none mb-3" style="min-height: 160px;">
-            <h5><i class="fa fa-circle fa-fw {{$list->colour}}-text"></i>&nbsp;{{$list->name}}</h5>
+            <h5><i class="fa fa-circle fa-fw {{$list->colour}}-text"></i>&nbsp;{{$list->name}} ({{count($list->students)}})</h5>
             @if (count($list->students) > 0)
                 <div class="list-group mt-3">
                     @foreach($list->students as $student)
@@ -33,15 +33,15 @@
     @endforeach
 </div>
 
+<h4 class="blue-text mt-4">View By Instructor</h4>
 <div class="row">
-    <h4 class="blue-text mb-4">Instructor View</h4>
     @foreach($instructors as $list)
     <div class="col-lg-4">
         <div class="card p-4 z-depth-1 shadow-none mb-3" style="min-height: 160px;">
             <div class="d-flex flex-row align-items-center">
                 <a title="View Instructor Profile" href="{{route('training.admin.instructing.instructors.view', $list->user_id)}}"><img src="{{$list->user->avatar()}}" style="height: 30px; width:30px;margin-right: 10px; border-radius: 50%;"></a>
                 <div class="d-flex flex-column align-items-center h-100">
-                    <h5 class="mb-0">{{$list->user->fullName('F')}}'s Students</h5>
+                    <h5 class="mb-0">{{$list->user->fullName('F')}}'s Students ({{count($list->studentsAssigned)}})</h5>
                 </div>
             </div>
             @if (count($list->studentsAssigned) > 0)
@@ -68,6 +68,6 @@
             @endif
         </div>
     </div>
-    </div>
     @endforeach
+</div>
 @endsection
