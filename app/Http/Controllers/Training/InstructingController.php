@@ -459,7 +459,7 @@ class InstructingController extends Controller
 
         // Remove Student Status & Set Controller as Active
         $student->user->removeRole('Student');
-        $student->user->addRole('Certified Controller');
+        $student->user->assignRole('Certified Controller');
         $student->user->removeRole('Guest');
 
         // Update Traing Lable

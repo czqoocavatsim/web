@@ -57,15 +57,15 @@
             <h5 class="blue-text">Actions</h5>
             <ul class="list-unstyled mt-2">
                 @can('edit students')
-                <li class="mb-2">
-                    <a data-target="#deleteStudentModal" data-toggle="modal" style="text-decoration:none;"><span class="red-text"><i class="fas fa-chevron-right"></i></span> &nbsp; <span class="black-text">Remove as student</span></a>
-                </li>
+                    <div class="list-group z-depth-1">
+                        <a data-target="#deleteStudentModal" data-toggle="modal" class="list-group-item list-group-item-action red-text"><i class="fas fa-dumpster-fire mr-3"></i>Remove User as Student</a>
+                    </div>
                 @endcan
-                {{-- @if($student->user->rosterProfile->certification == "training")
-                <li class="mb-2">
-                    <a data-target="#certifyStudentModal" data-toggle="modal" style="text-decoration:none;"><span class="green-text"><i class="fas fa-chevron-right"></i></span> &nbsp; <span class="black-text">Certify Controller</span></a>
-                </li>
-                @endif --}}
+                @if($student->user->rosterProfile->certification == "training")
+                    <div class="list-group z-depth-1">
+                        <a data-target="#certifyStudentModal" data-toggle="modal" class="list-group-item list-group-item-action green-text"><i class="fas fa-check mr-3"></i>Certify Controller</a>
+                    </div>
+                @endif
             </ul>
             <h5 class="blue-text">Records</h5>
             <ul class="list-unstyled mt-2">
