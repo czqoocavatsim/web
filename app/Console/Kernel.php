@@ -6,7 +6,7 @@ use App\Jobs\ProcessRosterInactivity;
 use App\Jobs\ProcessSessionLogging;
 use App\Jobs\ProcessSessionReminders;
 use App\Jobs\ProcessSoloCertExpiryWarnings;
-use App\Job\ProcessShanwickController;
+use App\Jobs\ProcessShanwickController;
 use App\Models\Roster\RosterMember;
 use App\Notifications\Network\OneWeekInactivityReminder;
 use App\Notifications\Network\TwoWeekInactivityReminder;

@@ -23,21 +23,21 @@ class RosterController extends Controller
     public function publicRoster()
     {
         // Get CZQO Roster
-        $roster = RosterMember::where('certification', '!=', 'not_certified')
+        $czqo_roster = RosterMember::where('certification', '!=', 'not_certified')
             ->select(['id', 'certification', 'active', 'user_id'])
             ->with('user:id,fname,lname,rating_short,display_fname,display_cid_only,display_last_name,division_name,division_code')
             ->get();
 
         // Get EGGX Roster
-        // $shanwick_controllers = ShanwickController::all();
+        $shanwick_controllers = ShanwickController::all();
 
-        // // Transform EGGX data to Eloquent-like objects
-        // $eggx_roster = $shanwick_controllers->map(function($controller) {
-        //     return $this->transformShanwickControllerToRoster($controller);
-        // });
+        // Transform EGGX data into Eloquent Model (For Full Name etc)
+        $eggx_roster = $shanwick_controllers->map(function($controller) {
+            return $this->transformShanwickControllerToRoster($controller);
+        });
 
-        // // Combine Data
-        // $roster = $czqo_roster->concat($eggx_roster);   
+        // Combine Data
+        $roster = $czqo_roster->concat($eggx_roster);   
 
         // return $roster;
         
