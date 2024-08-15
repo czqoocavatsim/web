@@ -85,7 +85,6 @@ Route::get('/news', [NewsController::class, 'viewAllPublic'])->name('news');
 
 //Base level authentication
 Route::group(['middleware' => 'auth'], function () {
-
     // Privacy accept
     Route::post('/privacyaccept', [MyCzqoController::class, 'acceptPrivacyPolicy'])->name('privacyaccept');
     Route::get('/privacydeny', [MyCzqoController::class, 'denyPrivacyPolicy']);
