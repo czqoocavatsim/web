@@ -155,6 +155,18 @@ class User extends Authenticatable
         return false;
     }
 
+    // // Assign role to user Model
+    // public function assignRole($role)
+    // {
+    //     return $role;
+    // }
+
+    // // Remove role from user Model
+    // public function removeRole($role)
+    // {
+
+    // }
+
     /**
      * Return articles that the user has written.
      *
@@ -244,6 +256,8 @@ class User extends Authenticatable
 
         return $this->roles[0];
     }
+
+
 
     /**
      * Get the user's name in requested format.
