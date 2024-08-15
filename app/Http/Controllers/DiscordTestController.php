@@ -36,4 +36,14 @@ class DiscordTestController extends Controller
             'data' => $result,
         ]);
     }
+
+    public function SendEmbed()
+    {
+     //New Applicant in Instructor Channel
+     $discord = new DiscordClient();
+     $discord->sendMessageWithEmbed('482817676067209217', 'Oceanic Training Cancelled!',
+'Your training request with Gander Oceanic has been terminated.
+
+If you would like to begin training again, please re-apply via the Gander Website.');   
+    }
 }
