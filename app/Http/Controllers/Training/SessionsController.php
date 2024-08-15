@@ -84,7 +84,7 @@ class SessionsController extends Controller
         $discord->sendEmbedInTrainingThread($session->student->user->fullName('FLC'), 'Training Session Booked', 
 'Hello, '. $session->student->user->fullName('F').'!
 
-A training session has been created for you at '.Carbon::parse($request->get('scheduled_time'))->format('l, jS F H:i\z').'.
+A training session has been created for you on <t:'.Carbon::parse($request->get('scheduled_time'))->timestamp.':F>.
 
 Please reach out to your instructor in this training thread if you have any questions.');
         
@@ -139,7 +139,7 @@ Please reach out to your instructor in this training thread if you have any ques
          $discord->sendEmbedInTrainingThread($session->student->user->fullName('FLC'), 'Training Session Time Changed', 
  'Hello, '. $session->student->user->fullName('F').'!
  
- A training session time has been updated. The new time is now '.Carbon::parse($request->get('new_time'))->format('l, jS F H:i\z').'.
+ A training session time has been updated. The new time is now <t:'.Carbon::parse($request->get('new_time'))->timestamp.':F>
  
  Please reach out to your instructor in this training thread if you have any questions.');
 
