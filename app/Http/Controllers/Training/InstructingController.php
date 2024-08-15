@@ -252,7 +252,7 @@ class InstructingController extends Controller
                 Session::flash('info', 'Unable to add Discord permissions automatically.');
             }
         } catch (\Exception $e) {
-            Session::flash('info', 'Unable to remove Discord permissions automatically.');
+
         }
 
         //Give Awaiting Exam status label
@@ -401,7 +401,7 @@ class InstructingController extends Controller
         $student->user->removeRole('Student');
 
         //Discord Updates
-        if (!$student->user->hasDiscord()) {
+        if ($student->user->hasDiscord() && $student->user->member_of_czqo) {
             //Get Discord client
             $discord = new DiscordClient();
 

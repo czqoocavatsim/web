@@ -56,11 +56,11 @@
             </ul>
             <h5 class="blue-text">Actions</h5>
             <ul class="list-unstyled mt-2">
-                @if(Auth::user()->id == "1342084" || Auth::user()->hasRole('Instructor'))
+                @can('edit students')
                     <div class="list-group z-depth-1">
                         <a data-target="#deleteStudentModal" data-toggle="modal" class="list-group-item list-group-item-action red-text"><i class="fas fa-dumpster-fire mr-3"></i>Remove User as Student</a>
                     </div>
-                @endif
+                @endcan
                 @if($student->user->rosterProfile->certification == "training")
                     <div class="list-group z-depth-1">
                         <a data-target="#certifyStudentModal" data-toggle="modal" class="list-group-item list-group-item-action green-text"><i class="fas fa-check mr-3"></i>Certify Controller</a>

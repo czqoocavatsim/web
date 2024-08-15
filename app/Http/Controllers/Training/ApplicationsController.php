@@ -79,7 +79,7 @@ class ApplicationsController extends Controller
         //Check Shanwick roster
         $shanwickRoster = json_decode(Cache::remember('shanwickroster', 86400, function () {
             $ch = curl_init();
-            curl_setopt($ch, CURLOPT_URL, 'https://www.vatsim.uk/api/validations?position=EGGX');
+            curl_setopt($ch, CURLOPT_URL, 'https://www.vatsim.uk/api/validations?position=EGGX_FSS');
             curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
             $output = curl_exec($ch);
             curl_close($ch);
