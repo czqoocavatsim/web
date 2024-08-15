@@ -75,7 +75,7 @@ Route::prefix('auth')->group(function () {
 
 // Discord shortcut
 Route::get('/discord', [DiscordController::class, 'joinShortcut']);
-Route::get('/discord/function-test', [DiscordTestController::class, 'EditTagTest']);
+// Route::get('/discord/function-test', [DiscordTestController::class, 'Shanwick']);
 
 // Public news articles
 Route::get('/news/{id}', [NewsController::class, 'viewArticlePublic'])->name('news.articlepublic')->where('id', '[0-9]+');
@@ -280,6 +280,7 @@ Route::group(['middleware' => 'auth'], function () {
                         Route::get('/students/{cid}', [InstructingController::class, 'viewStudent'])->name('instructing.students.view');
                         Route::get('/students/{cid}/records/training-notes', [RecordsController::class, 'studentTrainingNotes'])->name('instructing.students.records.training-notes');
                         Route::get('/students/{cid}/remove', [InstructingController::class, 'removeStudent'])->name('instructing.students.remove')->middleware('can:edit students');
+                        Route::get('/students/{cid}/certify', [InstructingController::class, 'certifyStudent'])->name('instructing.students.certify');
                         //Training notes
                         Route::get('/students/{cid}/records/training-notes/create', [RecordsController::class, 'createStudentTrainingNote'])->name('instructing.students.records.training-notes.create')->middleware('can:edit training records');
                         Route::post('/students/{cid}/records/training-notes/create', [RecordsController::class, 'createStudentTrainingNotePost'])->name('instructing.students.records.training-notes.create.post')->middleware('can:edit training records');

@@ -20,6 +20,8 @@ use App\Notifications\Training\Instructing\RemovedAsStudent;
 use App\Notifications\Training\Instructing\StudentAssignedToYou;
 use App\Notifications\Training\Instructing\StudentRecommendedForAssessment;
 use App\Notifications\Training\Instructing\StudentRecommendedForSoloCert;
+use App\Notifications\Roster\RosterStatusChanged;
+use Illuminate\Support\Facades\Notification;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Session;
@@ -414,6 +416,82 @@ class InstructingController extends Controller
         return redirect()->route('training.admin.instructing.students')->with('info', 'Student removed.');
     }
 
+    public function certifyStudent($cid)
+    {
+        $student = Student::where('user_id', $cid)->firstOrFail();
+
+        // Remove Student Status & Set Controller as Active
+        // $student->user->removeRole('Student');
+        // $student->user->addRole('Certified Controller');
+        $student->user->removeRole('Guest');
+
+        // Update Traing Lable
+        $link_old = StudentStatusLabelLink::where('student_id', $student->id);
+        $link_old->delete();
+
+        $link = new StudentStatusLabelLink([
+            'student_id'              => $student->id,
+            'student_status_label_id' => StudentStatusLabel::whereName('Completed')->first()->id,
+        ]);
+        $link->save();
+
+        // Update Thread Tag to match site
+        $discord = new DiscordClient();
+        $discord->EditThreadTag('Completed', $student->user->fullName('FLC'));
+
+        // Close Training Thread Out & Send Completion Message
+        $discord = new DiscordClient();
+        $discord->closeTrainingThread($student->user->fullName('FLC'));
+
+        // Update Roster with Certification Status
+        $rosterMember = RosterMember::where('cid', $cid)->firstOrFail();
+
+        //Assign values
+        $rosterMember->certification = 'Certified';
+        $rosterMember->active = 1;
+        $rosterMember->remarks = 'Certified on NAT_FSS (Automatic Message)';
+        $rosterMember->date_certified = Carbon::now();
+
+        //User
+        $user = User::whereId($rosterMember->user->id)->first();
+        
+
+        //Give Discord role
+        if ($rosterMember->user->hasDiscord() && $rosterMember->user->member_of_czqo) {
+            //Get Discord client
+            $discord = new DiscordClient();
+
+            //Get role ID based off status
+            $roles = [
+                'certified' => 482819739996127259,
+                'student' => 482824058141016075,
+            ];
+
+            //Add role and remove role
+            if ($rosterMember->certification == 'certified') {
+                $discord->assignRole($rosterMember->user->discord_user_id, $roles['certified']);
+                $discord->removeRole($rosterMember->user->discord_user_id, $roles['student']);
+            } elseif ($rosterMember->certification == 'training') {
+                $discord->assignRole($rosterMember->user->discord_user_id, $roles['student']);
+                $discord->removeRole($rosterMember->user->discord_user_id, $roles['certified']);
+            }
+        } else {
+            Session::flash('info', 'Unable to add Discord permissions automatically.');
+        }
+
+        //Notify
+        if ($rosterMember->isDirty('certification') || $rosterMember->isDirty('active')) {
+            if ($user) {
+                Notification::send($user, new RosterStatusChanged($rosterMember));
+            }
+        }
+
+        //Save
+        $rosterMember->save();
+
+        return back()->with('info', $student->user->FullName('FLC').' has been Certified as a Controller!');
+    }
+
     public function assignStudentToInstructor(Request $request, $student_id)
     {
         //Get the instructor
@@ -556,7 +634,7 @@ class InstructingController extends Controller
             $discord->sendMessageWithEmbed(intval(config('services.discord.instructors')), 'A new student is available for pick-up by an Instructor', $student->user->fullName('FLC') . ' is available to be picked up by an instructor!');
         }
 
-        // 
+        // Update Thread Tag to match site
         $discord = new DiscordClient();
         $discord->EditThreadTag($label->name, $student->user->fullName('FLC'));
 
