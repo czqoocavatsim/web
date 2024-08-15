@@ -12,7 +12,7 @@ class DiscordTestController extends Controller
     {
         //New Applicant in Instructor Channel
         $discord = new DiscordClient();
-        $discord->createTrainingThread('1273181022699130902', 'Joshua Micallef 1342084', '<@200426385863344129>');
+        $discord->createTrainingThread('1273228164255977492', 'Joshua Micallef 1342084', '<@200426385863344129>');
     }
 
     public function EditTagTest()
