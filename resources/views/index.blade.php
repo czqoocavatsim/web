@@ -72,6 +72,7 @@
                             <li>
                                 <div class="white-text d-flex flex-row justify-content-between align-items-center">
                                     <h4 class="font-weight-bold m-0">{{ $controller->callsign }}</h4>
+                                    <div class="my-1">{{$controller->session_start->diff(\Carbon\Carbon::now())->format('%h:%I')}} Online</div>
                                     <div style="font-size: 1.1em;">
                                         @if (auth()->check() && ($rosterMember = $controller->rosterMember))
                                             <img src="{{ $rosterMember->user->avatar() }}"
