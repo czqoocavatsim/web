@@ -401,12 +401,14 @@ class InstructingController extends Controller
         $student->user->removeRole('Student');
 
         //Discord Updates
-        if ($student->user->hasDiscord() && $student->user->member_of_czqo) {
+        if (!$student->user->hasDiscord()) {
             //Get Discord client
             $discord = new DiscordClient();
 
             //remove student discord role
             $discord->removeRole($student->user->discord_user_id, 482824058141016075);
+
+            $discord->EditThreadTag('Inactive', $student->user->fullName('FLC'));
 
             //close Instructor Thread
             $discord->closeTrainingThread($student->user->fullName('FLC'), 'cancel');

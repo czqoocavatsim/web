@@ -127,6 +127,14 @@ Good luck with your study!',
         foreach ($threads_data['threads'] as $thread) {
             if ($thread['name'] == $name) {
 
+                // Lock and Archive the Thread
+                $data = $this->client->patch('channels/'.$thread['id'], [
+                    'json' => [
+                        'locked' => true,
+                        'archived' => true,
+                    ]
+                ]);
+
                 if($status == "certify"){
                     $this->sendMessageWithEmbed($thread['id'], 'Oceanic Training Completed!',
 'Congratulations, you have now been certified on Gander & Shanwick Oceanic!
@@ -137,19 +145,11 @@ If you have any questions, please reach out to your Instructor, or ask your ques
 
 Enjoy controlling Gander & Shanwick OCA!');
                 } elseif($status == "cancel") {
-                    $this->sendMessageWithEmbed($thread['id'], 'Oceanic Training Cancelled!',
+                    $this->sendMessageWithEmbed($thread['id'], 'Oceanic Training Cancelled',
 'Your training request with Gander Oceanic has been terminated.
 
 If you would like to begin training again, please re-apply via the Gander Website.');
                 }
-
-                // Lock and Archive the Thread
-                $data = $this->client->patch('channels/'.$thread['id'], [
-                    'json' => [
-                        'locked' => true,
-                        'archived' => true,
-                    ]
-                ]);
             }
         }
 
