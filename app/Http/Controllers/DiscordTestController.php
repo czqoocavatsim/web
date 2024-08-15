@@ -41,7 +41,7 @@ class DiscordTestController extends Controller
     {
      //New Applicant in Instructor Channel
      $discord = new DiscordClient();
-     $discord->sendMessageWithEmbed('772787726009237524', 'Oceanic Training Cancelled!',
+     $discord->sendMessageWithEmbed('1273228164255977492', 'Oceanic Training Cancelled!',
 'Your training request with Gander Oceanic has been terminated.
 
 If you would like to begin training again, please re-apply via the Gander Website.');   
