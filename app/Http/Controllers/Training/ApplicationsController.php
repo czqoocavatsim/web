@@ -60,8 +60,8 @@ class ApplicationsController extends Controller
         //Check hours of controller
 
         //Download via CURL
-        // $url = 'https://api.vatsim.net/v2/members/'.auth()->id().'/stats';
-        $url = 'https://api.vatsim.net/v2/members/1342084/stats';
+        $url = 'https://api.vatsim.net/v2/members/'.auth()->id().'/stats';
+        // $url = 'https://api.vatsim.net/v2/members/1342084/stats';
         $ch = curl_init();
         curl_setopt($ch, CURLOPT_URL, $url);
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
