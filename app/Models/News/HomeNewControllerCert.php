@@ -28,6 +28,10 @@ use Illuminate\Database\Eloquent\Model;
  */
 class HomeNewControllerCert extends Model
 {
+    protected $fillable = [
+        'controller_id', 'user_id', 'timestamp',
+    ];
+
     public function controller()
     {
         return $this->belongsTo(User::class, 'controller_id');

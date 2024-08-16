@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Training;
 
 use App\Http\Controllers\Controller;
 use App\Models\Roster\RosterMember;
+use App\Models\News\HomeNewControllerCert;
 use App\Models\Training\Instructing\Instructors\Instructor;
 use App\Models\Training\Instructing\Links\InstructorStudentAssignment;
 use App\Models\Training\Instructing\Links\StudentStatusLabelLink;
@@ -479,8 +480,16 @@ class InstructingController extends Controller
         $link->save();
 
         // Unassign Instructor from Student
-        $instructor_id = InstructorStudentAssignment::where('student_id', $student->id)->firstOrFail();
-        $instructor_id->delete();
+        $instructor_link = InstructorStudentAssignment::where('student_id', $cid);
+        $instructor_link->delete();
+
+        // Create new certification (for home page)
+        $controller_cert = new HomeNewControllerCert([
+            'controller_id' => $cid,
+            'user_id' => $cid,
+            'timestamp' => Carbon::now(),
+        ]);
+        $controller_cert->save();
 
         // Update Thread Tag to match site
         $discord = new DiscordClient();
