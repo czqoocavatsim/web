@@ -75,7 +75,7 @@ Route::prefix('auth')->group(function () {
 
 // Discord shortcut
 Route::get('/discord', [DiscordController::class, 'joinShortcut']);
-// Route::get('/discord/function-test', [DiscordTestController::class, 'Shanwick']);
+Route::get('/discord/function-test', [DiscordTestController::class, 'ThreadTest']);
 
 // Public news articles
 Route::get('/news/{id}', [NewsController::class, 'viewArticlePublic'])->name('news.articlepublic')->where('id', '[0-9]+');
@@ -85,7 +85,6 @@ Route::get('/news', [NewsController::class, 'viewAllPublic'])->name('news');
 
 //Base level authentication
 Route::group(['middleware' => 'auth'], function () {
-
     // Privacy accept
     Route::post('/privacyaccept', [MyCzqoController::class, 'acceptPrivacyPolicy'])->name('privacyaccept');
     Route::get('/privacydeny', [MyCzqoController::class, 'denyPrivacyPolicy']);

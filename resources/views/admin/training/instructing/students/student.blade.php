@@ -57,14 +57,14 @@
             <h5 class="blue-text">Actions</h5>
             <ul class="list-unstyled mt-2">
                 @can('edit students')
-                <li class="mb-2">
-                    <a data-target="#deleteStudentModal" data-toggle="modal" style="text-decoration:none;"><span class="red-text"><i class="fas fa-chevron-right"></i></span> &nbsp; <span class="black-text">Remove as student</span></a>
-                </li>
+                    <div class="list-group z-depth-1">
+                        <a data-target="#deleteStudentModal" data-toggle="modal" class="list-group-item list-group-item-action red-text"><i class="fas fa-dumpster-fire mr-3"></i>Remove User as Student</a>
+                    </div>
                 @endcan
                 @if($student->user->rosterProfile->certification == "training")
-                <li class="mb-2">
-                    <a data-target="#certifyStudentModal" data-toggle="modal" style="text-decoration:none;"><span class="green-text"><i class="fas fa-chevron-right"></i></span> &nbsp; <span class="black-text">Certify Controller</span></a>
-                </li>
+                    <div class="list-group z-depth-1">
+                        <a data-target="#certifyStudentModal" data-toggle="modal" class="list-group-item list-group-item-action green-text"><i class="fas fa-check mr-3"></i>Certify Controller</a>
+                    </div>
                 @endif
             </ul>
             <h5 class="blue-text">Records</h5>
@@ -147,7 +147,7 @@
                 Expires on {{$student->soloCertification()->expires->toFormattedDateString()}}
             </div>
             @endif
-            @if(Auth::user()->hasAnyRole('Senior Staff|Administrator') || ($student->instructor() && $student->instructor()->instructor == Auth::user()->instructorProfile))
+            {{-- @if(Auth::user()->hasAnyRole('Senior Staff|Administrator') || ($student->instructor() && $student->instructor()->instructor == Auth::user()->instructorProfile))
             <h5 class="mt-4 blue-text">Requests</h5>
                 <div class="list-group z-depth-1">
                     @if(!$student->soloCertification() && !$student->setAsReadyForAssessment())
@@ -156,7 +156,7 @@
                         <div class="list-group-item text-muted"><i>Already recommended for solo certification/solo certification in progress</i></div>
                     @endif
                 </div>
-            @endif
+            @endif --}}
         </div>
     </div>
 
@@ -200,7 +200,7 @@
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-light" data-dismiss="modal">Dismiss</button>
-                    <a href="{{route('training.admin.instructing.students.certify', $student->user->id)}}" role="button" class="btn btn-success">Certify Controller</a>
+                    <a disabled href="{{route('training.admin.instructing.students.certify', $student->user->id)}}" role="button" class="btn btn-success">Certify Controller</a>
                 </div>
                 </form>
             </div>

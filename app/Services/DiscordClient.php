@@ -5,6 +5,7 @@ namespace App\Services;
 use GuzzleHttp\Client;
 use App\Jobs\ProcessDiscordRoles;
 use GuzzleHttp\Exception\ClientException;
+use Carbon\Carbon;
 
 class DiscordClient
 {
@@ -84,10 +85,10 @@ class DiscordClient
     }
 
     // Function to create a user training thread
-    public function createTrainingThread($channelId, $name, $user)
+    public function createTrainingThread($name, $user)
 {
     try {
-        $response = $this->client->post("channels/{$channelId}/threads", [
+        $response = $this->client->post("channels/".env('DISCORD_TRAINING_FORUM')."/threads", [
             'json' => [
                 'name' => $name,
                 'applied_tags' => [1271845980865695774], //Tag ID for 'New Request'
@@ -116,7 +117,7 @@ Good luck with your study!',
      
 }
 
-    public function closeTrainingThread($name)
+    public function closeTrainingThread($name, $status)
     {
         // Get active Discord Threads
         $active_threads = $this->client->get('guilds/'.env('DISCORD_GUILD_ID').'/threads/active');
@@ -126,19 +127,30 @@ Good luck with your study!',
 
         foreach ($threads_data['threads'] as $thread) {
             if ($thread['name'] == $name) {
+
+                if($status == "certify"){
+                    $this->sendMessageWithEmbed($thread['id'], 'Oceanic Training Completed!',
+'Congratulations, you have now been certified on Gander & Shanwick Oceanic!
+                
+This training thread will now be closed due to the completion of your training.
+
+If you have any questions, please reach out to your Instructor, or ask your question in <#836707337829089322>.
+
+Enjoy controlling Gander & Shanwick OCA!');
+                } elseif($status == "cancel") {
+                    $this->sendMessageWithEmbed($thread['id'], 'Oceanic Training Cancelled',
+'Your training request with Gander Oceanic has been terminated on <t:'.Carbon::now()->timestamp.':F>
+
+If you would like to begin training again, please re-apply via the Gander Website.');
+                }
+
+                // Lock and Archive the Thread
                 $data = $this->client->patch('channels/'.$thread['id'], [
                     'json' => [
                         'locked' => true,
                         'archived' => true,
                     ]
                 ]);
-
-                $this->sendMessageWithEmbed($thread['id'], 'Training Completed!',
-'Congratulations, you have now been certified on Gander Oceanic! 
-                
-This thread is now being closed due to the completion of your training. 
-                
-Enjoy controlling Gander & Shanwick!');
             }
         }
 
@@ -179,6 +191,24 @@ Enjoy controlling Gander & Shanwick!');
 
                     break;
                 }
+            }
+        }
+    }
+
+    // Send Embed Message in Training Thread
+    public function sendEmbedInTrainingThread($name, $title, $message)
+    {
+        // Get active Discord Threads
+        $active_threads = $this->client->get('guilds/'.env('DISCORD_GUILD_ID').'/threads/active');
+
+        // Decode Data
+        $threads_data = json_decode($active_threads->getBody(), true);
+
+        // Loop through all threads to find students training record
+        foreach ($threads_data['threads'] as $thread) {
+            if ($thread['name'] == $name) {
+                // Send Embed Message
+                $this->sendMessageWithEmbed($thread['id'], $title, $message);
             }
         }
     }

@@ -18,6 +18,7 @@ use App\Notifications\Training\Applications\ApplicationWithdrawnStaff;
 use App\Notifications\Training\Applications\NewApplicationStaff;
 use App\Notifications\Training\Applications\NewCommentApplicant;
 use App\Notifications\Training\Applications\NewCommentStaff;
+use App\Models\Network\ShanwickController;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cache;
@@ -60,6 +61,7 @@ class ApplicationsController extends Controller
 
         //Download via CURL
         $url = 'https://api.vatsim.net/v2/members/'.auth()->id().'/stats';
+        // $url = 'https://api.vatsim.net/v2/members/1342084/stats';
         $ch = curl_init();
         curl_setopt($ch, CURLOPT_URL, $url);
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
@@ -75,19 +77,11 @@ class ApplicationsController extends Controller
             return view('training.applications.apply', compact('hoursTotal'))->with('allowed', 'hours');
         }
 
-        //Check Shanwick roster
-        $shanwickRoster = json_decode(Cache::remember('shanwickroster', 86400, function () {
-            $ch = curl_init();
-            curl_setopt($ch, CURLOPT_URL, 'https://www.vatsim.uk/api/validations?position=EGGX');
-            curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
-            $output = curl_exec($ch);
-            curl_close($ch);
+        // Check Shanwick Roster (DB)
+        $shanwickRoster = ShanwickController::all()->pluck('controller_cid');
 
-            return $output;
-        }));
-
-        foreach ($shanwickRoster->validated_members as $member) {
-            if ($member->id == auth()->id()) {
+        foreach ($shanwickRoster as $member) {
+            if ($member == auth()->id()) {
                 return view('training.applications.apply')->with('allowed', 'shanwick');
             }
         }
@@ -332,6 +326,7 @@ class ApplicationsController extends Controller
 
         //Download via CURL
         $url = 'https://api.vatsim.net/v2/members/'.$application->user_id.'/stats';
+        // $url = 'https://api.vatsim.net/v2/members/1342084/stats';
         $ch = curl_init();
         curl_setopt($ch, CURLOPT_URL, $url);
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
@@ -443,7 +438,7 @@ class ApplicationsController extends Controller
             $discord->assignRole($student->user->discord_user_id, 482824058141016075);
 
             //Create Instructor Thread
-            $discord->createTrainingThread(intval(config('services.discord.training_forum')), $student->user->fullName('FLC'), '<@'.$student->user->discord_user_id.'>');
+            $discord->createTrainingThread($student->user->fullName('FLC'), '<@'.$student->user->discord_user_id.'>');
 
             // Notify Senior Team that the application was accepted.
             $discord->sendMessageWithEmbed(config('app.env') == 'local' ? intval(config('services.discord.web_logs')) : intval(config('services.discord.applications')), 'Accepted Applicant', $student->user->fullName('FLC').' has just been accepted.', 'error');

@@ -176,6 +176,7 @@
             <form action="{{route('training.admin.instructing.training-sessions.edit.time', $session->id)}}" method="POST">
                 @csrf
                 <div class="modal-body">
+                    <p>This will notify the Student in their Discord Thread</p>
                     @if($errors->editTimeErrors->any())
                         <div class="alert alert-danger">
                             <h4>There were errors</h4>
@@ -303,7 +304,7 @@
                 </button>
             </div>
             <div class="modal-body">
-                <p>The student will be notified by email. Please ensure proper communication with the student.</p>
+                <p>The student will be notified by email and discord. Please ensure proper communication with the student if you have not already explained the reason.</p>
                 <p>The session will also no longer be available to view.</p>
             </div>
             <div class="modal-footer">

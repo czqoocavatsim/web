@@ -12,7 +12,7 @@ class DiscordTestController extends Controller
     {
         //New Applicant in Instructor Channel
         $discord = new DiscordClient();
-        $discord->createTrainingThread('1273181022699130902', 'Joshua Micallef 1342084', '<@200426385863344129>');
+        $discord->createTrainingThread('1273228164255977492', 'Joshua Micallef 1342084', '<@200426385863344129>');
     }
 
     public function EditTagTest()
@@ -41,7 +41,9 @@ class DiscordTestController extends Controller
     {
      //New Applicant in Instructor Channel
      $discord = new DiscordClient();
-     $discord->sendMessageWithEmbed('482817676067209217', 'Oceanic Training Cancelled!',
+
+     $discord->sendMessageWithEmbed('1273228164255977492', 'Oceanic Training Cancelled!',
+                                    
 'Your training request with Gander Oceanic has been terminated.
 
 If you would like to begin training again, please re-apply via the Gander Website.');   

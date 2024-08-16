@@ -252,11 +252,15 @@ class InstructingController extends Controller
                 Session::flash('info', 'Unable to add Discord permissions automatically.');
             }
         } catch (\Exception $e) {
-            Session::flash('info', 'Unable to remove Discord permissions automatically.');
+
         }
 
-        //Give not ready status label
-        $student->assignStatusLabel(StudentStatusLabel::whereName('Not Ready')->first());
+        //Give Awaiting Exam status label
+        $label = new StudentStatusLabelLink([
+            'student_status_label_id' => StudentStatusLabel::whereName('Awaiting Exam')->first()->id,
+            'student_id'              => $student->id,
+        ]);
+        $label->save();
 
         //Create roster object
         if (!RosterMember::where('cid', $student->user_id)->first()) {
@@ -271,6 +275,30 @@ class InstructingController extends Controller
         $rosterMember->certification = 'training';
         $rosterMember->active = 1;
         $rosterMember->save();
+
+        //Discord Updates
+        if ($student->user->hasDiscord() && $student->user->member_of_czqo) {
+            //Get Discord client
+            $discord = new DiscordClient();
+
+            //Add student discord role
+            $discord->assignRole($student->user->discord_user_id, 482824058141016075);
+
+            //Create Instructor Thread
+            $discord->createTrainingThread($student->user->fullName('FLC'), '<@'.$student->user->discord_user_id.'>');
+
+            // Notify Senior Team that the application was accepted.
+            $discord->sendMessageWithEmbed(config('app.env') == 'local' ? intval(config('services.discord.web_logs')) : intval(config('services.discord.applications')), 'Manually Added Student', $student->user->fullName('FLC').' has just been added as a manual student. Their training record has been created automatically.', 'error');
+        
+        } else {
+            Session::flash('info', 'Unable to add Discord permissions automatically, as the member is not in the Discord.');
+
+            //Get Discord client
+            $discord = new DiscordClient();
+            
+            // Notify Senior Team that new Applicant is not a member of the Discord Server
+            $discord->sendMessageWithEmbed(config('app.env') == 'local' ? intval(config('services.discord.web_logs')) : intval(config('services.discord.applications')), 'Manually Added Student not in Discord', $student->user->fullName('FLC').' is not a member of Gander Oceanic. They will need to be contacted via email.', 'error');
+        }
 
         //Notify
         $student->user->notify(new AddedAsStudent());
@@ -372,19 +400,30 @@ class InstructingController extends Controller
         //Remove role
         $student->user->removeRole('Student');
 
-        //Remove role on Discord if able
-        try {
-            if ($student->user->hasDiscord() && $student->user->member_of_czqo) {
-                //Get Discord client
-                $discord = new DiscordClient();
+        //Discord Updates
+        if ($student->user->hasDiscord() && $student->user->member_of_czqo) {
+            //Get Discord client
+            $discord = new DiscordClient();
 
-                //Remove student role
-                $discord->removeRole($student->user->discord_user_id, 482824058141016075);
-            } else {
-                Session::flash('info', 'Unable to remove Discord permissions automatically.');
-            }
-        } catch (\Exception $e) {
-            Session::flash('info', 'Unable to remove Discord permissions automatically.');
+            //remove student discord role
+            $discord->removeRole($student->user->discord_user_id, 482824058141016075);
+
+            $discord->EditThreadTag('Inactive', $student->user->fullName('FLC'));
+
+            //close Instructor Thread
+            $discord->closeTrainingThread($student->user->fullName('FLC'), 'cancel');
+
+            // Notify Senior Team that new training has been terminated.
+            $discord->sendMessageWithEmbed(config('app.env') == 'local' ? intval(config('services.discord.web_logs')) : intval(config('services.discord.instructors')), 'Training Terminated', $student->user->fullName('FLC').' has had their training terminated.', 'error');
+        
+        } else {
+            Session::flash('info', 'Unable to add Discord permissions automatically, as the member is not in the Discord.');
+
+            //Get Discord client
+            $discord = new DiscordClient();
+            
+            // Notify Senior Team that training has been terminated
+            $discord->sendMessageWithEmbed(config('app.env') == 'local' ? intval(config('services.discord.web_logs')) : intval(config('services.discord.instructors')), 'Training Terminated', $student->user->fullName('FLC').' has had their training terminated.', 'error');
         }
 
         //Remove labels and instructor links and availability
@@ -420,9 +459,13 @@ class InstructingController extends Controller
     {
         $student = Student::where('user_id', $cid)->firstOrFail();
 
+        //Make as not current
+        $student->current = false;
+        $student->save();
+
         // Remove Student Status & Set Controller as Active
-        // $student->user->removeRole('Student');
-        // $student->user->addRole('Certified Controller');
+        $student->user->removeRole('Student');
+        $student->user->assignRole('Certified Controller');
         $student->user->removeRole('Guest');
 
         // Update Traing Lable
@@ -435,13 +478,17 @@ class InstructingController extends Controller
         ]);
         $link->save();
 
+        // Unassign Instructor from Student
+        $instructor_id = InstructorStudentAssignment::where('student_id', $student->id)->firstOrFail();
+        $instructor_id->delete();
+
         // Update Thread Tag to match site
         $discord = new DiscordClient();
         $discord->EditThreadTag('Completed', $student->user->fullName('FLC'));
 
         // Close Training Thread Out & Send Completion Message
         $discord = new DiscordClient();
-        $discord->closeTrainingThread($student->user->fullName('FLC'));
+        $discord->closeTrainingThread($student->user->fullName('FLC'), 'certify');
 
         // Update Roster with Certification Status
         $rosterMember = RosterMember::where('cid', $cid)->firstOrFail();
@@ -449,7 +496,7 @@ class InstructingController extends Controller
         //Assign values
         $rosterMember->certification = 'Certified';
         $rosterMember->active = 1;
-        $rosterMember->remarks = 'Certified on NAT_FSS (Automatic Message)';
+        $rosterMember->remarks = 'Certified on NAT_FSS (Web Message)';
         $rosterMember->date_certified = Carbon::now();
 
         //User
@@ -475,6 +522,8 @@ class InstructingController extends Controller
                 $discord->assignRole($rosterMember->user->discord_user_id, $roles['student']);
                 $discord->removeRole($rosterMember->user->discord_user_id, $roles['certified']);
             }
+
+
         } else {
             Session::flash('info', 'Unable to add Discord permissions automatically.');
         }
