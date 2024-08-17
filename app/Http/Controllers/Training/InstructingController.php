@@ -493,11 +493,10 @@ class InstructingController extends Controller
 
         // Update Thread Tag to match site
         $discord = new DiscordClient();
-        $discord->EditThreadTag('Endorsed', $student->user->fullName('FLC'));
+        $discord->EditThreadTag('Completed', $student->user->fullName('FLC'));
 
         // Close Training Thread Out & Send Completion Message
-        $discord = new DiscordClient();
-        $discord->closeTrainingThread($student->user->fullName('FLC'), 'certify');
+        $discord = new DiscordClient(); $discord->closeTrainingThread($student->user->fullName('FLC'), 'certify');
 
         // Update Roster with Certification Status
         $rosterMember = RosterMember::where('cid', $cid)->firstOrFail();
