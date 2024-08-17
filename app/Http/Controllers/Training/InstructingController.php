@@ -493,7 +493,7 @@ class InstructingController extends Controller
 
         // Update Thread Tag to match site
         $discord = new DiscordClient();
-        $discord->EditThreadTag('Completed', $student->user->fullName('FLC'));
+        $discord->EditThreadTag('Endorsed', $student->user->fullName('FLC'));
 
         // Close Training Thread Out & Send Completion Message
         $discord = new DiscordClient();
