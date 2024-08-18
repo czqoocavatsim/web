@@ -64,7 +64,7 @@ class InstructingController extends Controller
     public function students()
     {
         //Get all students
-        $students = Student::whereCurrent(true)->orderBy('created_at', 'desc')->get();
+        $students = Student::whereCurrent(true)->orderBy('created_at', 'asc')->get();
         $pastStudents = Student::whereCurrent(false)->orderBy('updated_at', 'desc')->get();
 
         //Return view
@@ -600,19 +600,22 @@ class InstructingController extends Controller
         $link->student_id = $student->id;
         $link->save();
 
-        //If student has ready for pick up, remove and add In Progress
+        //Relabelling process
         foreach ($student->labels as $label) {
-            //Find label
-            if (strtolower($label->label()->name) == 'ready for pick-up') {
-                $label->delete();
+            $label->delete();
+        }
+        
+        //Assign it with link
+        $link = new StudentStatusLabelLink([
+            'student_id'              => $student->id,
+            'student_status_label_id' => StudentStatusLabel::whereName('In Progress')->first()->id,
+        ]);
+        $link->save();
 
-                //Assign it with link
-                $link = new StudentStatusLabelLink([
-                    'student_id'              => $student->id,
-                    'student_status_label_id' => StudentStatusLabel::whereName('In Progress')->first()->id,
-                ]);
-                $link->save();
-            }
+        // Update Thread Tag
+        if ($student->user->hasDiscord() && $student->user->member_of_czqo) {
+            $discord = new DiscordClient();
+            $discord->EditThreadTag('In Progress', $student->user->id);
         }
 
         //Notify instructor
@@ -645,6 +648,12 @@ class InstructingController extends Controller
             'student_status_label_id' => StudentStatusLabel::whereName('Ready For Pick-Up')->first()->id,
         ]);
         $link->save();
+
+        // Update Thread Tag
+        if ($student->user->hasDiscord() && $student->user->member_of_czqo) {
+            $discord = new DiscordClient();
+            $discord->EditThreadTag('Ready For Pick-Up', $student->user->id);
+        }
 
         //Discord notification in instructors channel
         $discord = new DiscordClient();

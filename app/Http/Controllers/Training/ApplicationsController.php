@@ -144,7 +144,7 @@ class ApplicationsController extends Controller
         $discord = new DiscordClient();
         $discord->sendMessageWithEmbed(config('app.env') == 'local' ? intval(config('services.discord.web_logs')) : intval(config('services.discord.applications')), 'New Training Applicant!', $application->user->fullName('FLC').' has just applied to control at Gander Oceanic!
         
-        [View their application now](https://ganderoceanic.ca/admin/training/applications/'.$application->reference_id.')');
+[View their application now](https://ganderoceanic.ca/admin/training/applications/'.$application->reference_id.')');
 
         //Redirect to application page
         return redirect()->route('training.applications.show', $application->reference_id);

@@ -22,6 +22,11 @@ class DiscordClient
         ]);
     }
 
+    // Get Discord Client (For external use outside of this php file)
+    public function getClient() {
+        return $this->client;
+    }
+
     public function sendMessage($channelId, $message)
     {
         $response = $this->client->post("channels/{$channelId}/messages", [
@@ -91,6 +96,7 @@ class DiscordClient
         $response = $this->client->post("channels/".env('DISCORD_TRAINING_FORUM')."/threads", [
             'json' => [
                 'name' => $name,
+                'auto_archive_duration' => 20160,
                 'applied_tags' => [1271845980865695774], //Tag ID for 'New Request'
                 'message' => [
                     'content' => $user.', your application has now been approved. Welcome to Gander Oceanic! 
@@ -132,16 +138,34 @@ Good luck with your study!',
                     $this->sendMessageWithEmbed($thread['id'], 'Oceanic Training Completed!',
 'Congratulations <@'.$discord_id.'>, you have now been certified on Gander & Shanwick Oceanic!
                 
-This training thread will now be closed due to the completion of your training. Your discord roles will automatically be updated within the next 24 Hours.
+This training thread will now be closed due to the completion of your training. Your discord roles will automatically be updated within the next 24
 
 If you have any questions, please reach out to your Instructor, or ask your question in <#836707337829089322>.
 
-Enjoy controlling Gander & Shanwick OCA!');
+Enjoy controlling Gander & Shanwick OCA!
+
+**Kind Regards,
+Gander Oceanic Training Team**');
+
                 } elseif($status == "cancel") {
                     $this->sendMessageWithEmbed($thread['id'], 'Oceanic Training Cancelled',
-'<@'.$discord_id.'>, Your training request with Gander Oceanic has been terminated on <t:'.Carbon::now()->timestamp.':F>
+'<@'.$discord_id.'>, Your training request with Gander Oceanic has been terminated at <t:'.Carbon::now()->timestamp.':F>
 
-If you would like to begin training again, please re-apply via the Gander Website.');
+If you would like to begin training again, please re-apply via the Gander Website.
+
+**Kind Regards,
+Gander Oceanic Training Team**');
+
+                } elseif($status == "terminate"){
+                    $this->sendMessageWithEmbed($thread['id'], 'Oceanic Training Terminated',
+'<@'.$discord_id.'>, Your training request with Gander Oceanic has been terminated at <t:'.Carbon::now()->timestamp.':F>. 
+                    
+This is due to not completing the Exam within 60 Days of your application being accepted.
+                    
+If you would like to begin training again, please re-apply via the Gander Website.
+
+**Kind Regards,
+Gander Oceanic Training Team**');
                 }
 
                 // Lock and Archive the Thread
