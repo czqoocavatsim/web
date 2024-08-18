@@ -58,7 +58,7 @@
             <ul class="list-unstyled mt-2">
                 @can('edit students')
                     <div class="list-group z-depth-1">
-                        <a data-target="#deleteStudentModal" data-toggle="modal" class="list-group-item list-group-item-action red-text"><i class="fas fa-dumpster-fire mr-3"></i>Remove User as Student</a>
+                        <a data-target="#deleteStudentModal" data-toggle="modal" class="list-group-item list-group-item-action red-text"><i class="fas fa-dumpster-fire mr-3"></i>Terminate User as Student</a>
                     </div>
                 @endcan
                 @if($student->user->rosterProfile->certification == "training")

@@ -411,11 +411,11 @@
                                                     class="waves-effect list-group-item list-group-item-action">
                                                     <i style="margin-right: 10px;" class="fas fa-users fa-fw"></i>Roster
                                                 </a>
-                                                <a href="{{ route('training.admin.solocertifications') }}"
+                                                {{-- <a href="{{ route('training.admin.solocertifications') }}"
                                                     class="waves-effect list-group-item list-group-item-action">
                                                     <i style="margin-right: 10px;" class="fas fa-certificate fa-fw"></i>Solo
                                                     Certifications
-                                                </a>
+                                                </a> --}}
                                             @endcan
                                             @can('view applications')
                                                 <a href="{{ route('training.admin.applications') }}"
