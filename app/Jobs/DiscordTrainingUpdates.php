@@ -17,7 +17,7 @@ use App\Models\Training\Instructing\Students\StudentStatusLabel;
 use App\Models\Training\Instructing\Links\StudentStatusLabelLink;
 use Carbon\Carbon;
 
-class DiscordWeeklyTrainingUpdates implements ShouldQueue
+class DiscordTrainingUpdates implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
@@ -130,11 +130,11 @@ class DiscordWeeklyTrainingUpdates implements ShouldQueue
     //                         // SendEmbed to ask student to send availability
                             $discord->sendEmbedInTrainingThread($cid, "Please Provide Availability", 'Hello,
     
-Please provide your availability for the next 7-14 days. Please ensure to tag the `@Instructor` role with all times you are available. Please provide these times in Zulu Format.
+As we head into the Weekend, we ask you please provide your availability for next week. Please ensure to tag the `@Instructor` role with all times you are available. Please provide these times in Zulu Format.
     
-One of our team will make contact with you to organise a session if they have availability matching yours.
+One of our team will make contact with you to organise a session for next if they have availability matching yours.
     
-*If you have done this in the past few days, please disregard this message.*');
+*If you have done this in the past few days, or are unable to provide any times for next week, please disregard this message.*');
 
                         // $discord->sendMessageWithEmbed(env('DISCORD_WEB_LOGS'), 'Thread Sent: '.$thread['name'], 'Availability Message Sent');
                     }
