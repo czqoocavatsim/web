@@ -128,15 +128,15 @@ class DiscordWeeklyTrainingUpdates implements ShouldQueue
                             $avail_message++;
     
     //                         // SendEmbed to ask student to send availability
-    //                         $discord->sendEmbedInTrainingThread($cid, "Your Availability", 'Hello, <@'.$student->user->discord_user_id.'>
+                            $discord->sendEmbedInTrainingThread($cid, "Please Provide Availability", 'Hello,
     
-    // Please provide your availability for the next 7-14 days. Please ensure to tag the `@Instructor` role with all times you are available. Please provide these times in Zulu Format.
+Please provide your availability for the next 7-14 days. Please ensure to tag the `@Instructor` role with all times you are available. Please provide these times in Zulu Format.
     
-    // One of our team will make contact with you to organise a session if they have availability matching yours.
+One of our team will make contact with you to organise a session if they have availability matching yours.
     
-    // *If you have done this in the past few days, please disregard this message.*');
+*If you have done this in the past few days, please disregard this message.*');
 
-                        $discord->sendMessageWithEmbed(env('DISCORD_WEB_LOGS'), 'Found Thread to Use: '.$thread['name'], $thread['name']);
+                        // $discord->sendMessageWithEmbed(env('DISCORD_WEB_LOGS'), 'Thread Sent: '.$thread['name'], 'Availability Message Sent');
                     }
                   }
                 }
