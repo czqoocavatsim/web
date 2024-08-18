@@ -34,7 +34,7 @@ class DiscordTrainingUpdates implements ShouldQueue
             $discord = new DiscordClient();
 
             // Number of Messages Sent
-            $counter = 0;
+            $to_activate = 0;
 
             // Get Active Threads
             $response = $discord->getClient()->get('channels/'.env('DISCORD_TRAINING_FORUM').'/threads/archived/public');
@@ -58,11 +58,11 @@ class DiscordTrainingUpdates implements ShouldQueue
                     }
 
                     // See if CID is still a student
-                    $student = Student::where('user_id', $cid)->where('current', true)->first();
+                    $student = Student::where('current', 1)->where('user_id', $cid)->firstOrFail();
 
                     if($student !== null){
 
-                        $counter++;
+                        $to_activate++;
 
                         // Thread should be active, so lets activate it.
                         $discord = new DiscordClient();
@@ -76,7 +76,7 @@ class DiscordTrainingUpdates implements ShouldQueue
                 }
             }
 
-            $discord->sendMessageWithEmbed(env('DISCORD_WEB_LOGS'), 'AUTO: Training Thread Opened',$counter. ' Threads were automatically reopended as they had expired (more than 1 week since last activity)');
+            $discord->sendMessageWithEmbed(env('DISCORD_WEB_LOGS'), 'AUTO: Training Thread Opened',$to_activate. ' Threads were automatically reopended as they had expired (more than 1 week since last activity)');
         }
 
         // Function for Training Thread Availability Updates
@@ -85,15 +85,13 @@ class DiscordTrainingUpdates implements ShouldQueue
             $discord = new DiscordClient();
 
             // Number of Messages Sent
-            $counter = 0;
+            $avail_message = 0;
 
             // Get Active Threads
             $response = $discord->getClient()->get('guilds/'.env('DISCORD_GUILD_ID').'/threads/active');
-            $results = json_decode($response->getBody(), true);
+            $results2 = json_decode($response->getBody(), true);
 
-            dd($results);
-
-            foreach ($results['threads'] as $thread) {
+            foreach ($results2['threads'] as $thread) {
 
                 // Get the ID of the Active Training Thread
                 if (preg_match('/\d+$/', $thread['name'], $matches)) {
@@ -103,32 +101,34 @@ class DiscordTrainingUpdates implements ShouldQueue
                 }
 
                 // See if user is still a student
-                $student = Student::where('user_id', $cid)->where('current', true)->first();
-
-                // Check Lable is 'In Progress' or 'Ready For Pick-Up'
-                if($student->hasLabel('In Progress') || $student->hasLabel('Ready For Pick-Up')){
-
-                    // Check Sessions Upcoming
-                    $upcoming_sessions = TrainingSession::where('student_id', $student->id)->whereBetween('scheduled_time', [Carbon::now(), Carbon::now()->addDays(7)])->first();
-
-                    if($upcoming_sessions == null){
-                        // There is no sessions within the next week
-                        $counter++; //Add 1 to the $counter variable
-
-                        // SendEmbed to ask student to send availability
-                        $discord->sendEmbedInTrainingThread($cid, "Your Availability", 'Hello, <@'.$student->user->discord_user_id.'>
-
-Please provide your availability for the next 7-14 days. Please ensure to tag the `@Instructor` role with all times you are available. Please provide these times in Zulu Format.
-
-One of our team will make contact with you to organise a session if they have availability matching yours.
-
-*If you have done this in the past few days, please disregard this message.*');
+                if($cid !== null){
+                    $student = Student::where('current', 1)->where('user_id', $cid)->firstOrFail();
+    
+                    // Check Lable is 'In Progress' or 'Ready For Pick-Up'
+                    if($student->hasLabel('In Progress') || $student->hasLabel('Ready For Pick-Up')){
+    
+                        // Check Sessions Upcoming
+                        $upcoming_sessions = TrainingSession::where('student_id', $student->id)->whereBetween('scheduled_time', [Carbon::now(), Carbon::now()->addDays(7)])->first();
+    
+                        if($upcoming_sessions == null){
+                            // There is no sessions within the next week
+                            $avail_message++;
+    
+                            // SendEmbed to ask student to send availability
+                            $discord->sendEmbedInTrainingThread($cid, "Your Availability", 'Hello, <@'.$student->user->discord_user_id.'>
+    
+    Please provide your availability for the next 7-14 days. Please ensure to tag the `@Instructor` role with all times you are available. Please provide these times in Zulu Format.
+    
+    One of our team will make contact with you to organise a session if they have availability matching yours.
+    
+    *If you have done this in the past few days, please disregard this message.*');
+                    }
+                  }
                 }
-            }
             }
 
             // Tell the log chat
-            $discord->sendMessageWithEmbed(env('DISCORD_WEB_LOGS'), 'AUTO: Training Thread Availability Requests', $counter.' Training Threads have been messaged asking for their weekly availability. This is only completed if a student has no scheduled session within the next 7 days.');
+            $discord->sendMessageWithEmbed(env('DISCORD_WEB_LOGS'), 'AUTO: Training Thread Availability Requests', $avail_message.' Training Threads have been messaged asking for their weekly availability. This is only completed if a student has no scheduled session within the next 7 days.');
         }
 
         // Check 'Awaiting Exam' label students between 31-37 Days after Application

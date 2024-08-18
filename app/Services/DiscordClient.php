@@ -96,7 +96,6 @@ class DiscordClient
         $response = $this->client->post("channels/".env('DISCORD_TRAINING_FORUM')."/threads", [
             'json' => [
                 'name' => $name,
-                'auto_archive_duration' => 20160,
                 'applied_tags' => [1271845980865695774], //Tag ID for 'New Request'
                 'message' => [
                     'content' => $user.', your application has now been approved. Welcome to Gander Oceanic! 
