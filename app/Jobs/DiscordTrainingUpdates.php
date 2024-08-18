@@ -58,8 +58,11 @@ class DiscordTrainingUpdates implements ShouldQueue
                     }
 
                     // See if CID is still a student
-                    $student = Student::where('user_id', $cid)->first();
+                    $student = Student::where('user_id', $cid)->where('current', true)->first();
+
                     if($student !== null){
+
+                        $counter++;
 
                         // Thread should be active, so lets activate it.
                         $discord = new DiscordClient();
@@ -88,6 +91,8 @@ class DiscordTrainingUpdates implements ShouldQueue
             $response = $discord->getClient()->get('guilds/'.env('DISCORD_GUILD_ID').'/threads/active');
             $results = json_decode($response->getBody(), true);
 
+            dd($results);
+
             foreach ($results['threads'] as $thread) {
 
                 // Get the ID of the Active Training Thread
@@ -97,7 +102,8 @@ class DiscordTrainingUpdates implements ShouldQueue
                     $cid = null;
                 }
 
-                $student = Student::where('user_id', $cid)->first();
+                // See if user is still a student
+                $student = Student::where('user_id', $cid)->where('current', true)->first();
 
                 // Check Lable is 'In Progress' or 'Ready For Pick-Up'
                 if($student->hasLabel('In Progress') || $student->hasLabel('Ready For Pick-Up')){
