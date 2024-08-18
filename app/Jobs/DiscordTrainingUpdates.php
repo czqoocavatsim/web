@@ -97,18 +97,20 @@ class DiscordTrainingUpdates implements ShouldQueue
                     $cid = null;
                 }
 
-                // Check Lable is 'In Progress' or 'Ready For Pick-Up'
-
-                // Check Sessions Upcoming
                 $student = Student::where('user_id', $cid)->first();
-                $upcoming_sessions = TrainingSession::where('student_id', $student->id)->whereBetween('scheduled_time', [Carbon::now(), Carbon::now()->addDays(7)])->first();
-                
-                if($upcoming_sessions == null){
-                    // There is no sessions within the next week
-                    $counter++; //Add 1 to the $counter variable
 
-                    // SendEmbed to ask student to send availability
-                    $discord->sendEmbedInTrainingThread($cid, "Your Availability", 'Hello, <@'.$student->user->discord_user_id.'>
+                // Check Lable is 'In Progress' or 'Ready For Pick-Up'
+                if($student->hasLabel('In Progress') || $student->hasLabel('Ready For Pick-Up')){
+
+                    // Check Sessions Upcoming
+                    $upcoming_sessions = TrainingSession::where('student_id', $student->id)->whereBetween('scheduled_time', [Carbon::now(), Carbon::now()->addDays(7)])->first();
+
+                    if($upcoming_sessions == null){
+                        // There is no sessions within the next week
+                        $counter++; //Add 1 to the $counter variable
+
+                        // SendEmbed to ask student to send availability
+                        $discord->sendEmbedInTrainingThread($cid, "Your Availability", 'Hello, <@'.$student->user->discord_user_id.'>
 
 Please provide your availability for the next 7-14 days. Please ensure to tag the `@Instructor` role with all times you are available. Please provide these times in Zulu Format.
 
@@ -116,6 +118,7 @@ One of our team will make contact with you to organise a session if they have av
 
 *If you have done this in the past few days, please disregard this message.*');
                 }
+            }
             }
 
             // Tell the log chat
