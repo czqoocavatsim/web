@@ -117,7 +117,7 @@ Good luck with your study!',
      
 }
 
-    public function closeTrainingThread($name, $status)
+    public function closeTrainingThread($cid, $discord_id, $status)
     {
         // Get active Discord Threads
         $active_threads = $this->client->get('guilds/'.env('DISCORD_GUILD_ID').'/threads/active');
@@ -126,20 +126,20 @@ Good luck with your study!',
         $threads_data = json_decode($active_threads->getBody(), true);
 
         foreach ($threads_data['threads'] as $thread) {
-            if ($thread['name'] == $name) {
+            if (strpos($thread['name'], $cid) !== false) {
 
                 if($status == "certify"){
                     $this->sendMessageWithEmbed($thread['id'], 'Oceanic Training Completed!',
-'Congratulations, you have now been certified on Gander & Shanwick Oceanic!
+'Congratulations <@'.$discord_id.'>, you have now been certified on Gander & Shanwick Oceanic!
                 
-This training thread will now be closed due to the completion of your training.
+This training thread will now be closed due to the completion of your training. Your discord roles will automatically be updated within the next 24 Hours.
 
 If you have any questions, please reach out to your Instructor, or ask your question in <#836707337829089322>.
 
 Enjoy controlling Gander & Shanwick OCA!');
                 } elseif($status == "cancel") {
                     $this->sendMessageWithEmbed($thread['id'], 'Oceanic Training Cancelled',
-'Your training request with Gander Oceanic has been terminated on <t:'.Carbon::now()->timestamp.':F>
+'<@'.$discord_id.'>, Your training request with Gander Oceanic has been terminated on <t:'.Carbon::now()->timestamp.':F>
 
 If you would like to begin training again, please re-apply via the Gander Website.');
                 }
@@ -161,7 +161,7 @@ If you would like to begin training again, please re-apply via the Gander Websit
         // }
     }
 
-    public function EditThreadTag($lable, $name)
+    public function EditThreadTag($lable, $cid)
     {
         // Get Training Tags and Threads from Discord
         $tag_responses = $this->client->get('channels/'.intval(config('services.discord.training_forum')));
@@ -181,7 +181,7 @@ If you would like to begin training again, please re-apply via the Gander Websit
         // Loop through each Thread, and then through each tag to see if a match is found.
         foreach($threads as $thread){
             foreach($tags as $tag){
-                if($tag['name'] == $lable && $thread['name'] == $name){
+                if (strpos($thread['name'], $cid) !== false && $tag['name'] == $lable) {
                     // Update Tag with new details
                     $data = $this->client->patch('channels/'.$thread['id'], [
                         'json' => [
@@ -196,7 +196,7 @@ If you would like to begin training again, please re-apply via the Gander Websit
     }
 
     // Send Embed Message in Training Thread
-    public function sendEmbedInTrainingThread($name, $title, $message)
+    public function sendEmbedInTrainingThread($cid, $title, $message)
     {
         // Get active Discord Threads
         $active_threads = $this->client->get('guilds/'.env('DISCORD_GUILD_ID').'/threads/active');
@@ -206,7 +206,7 @@ If you would like to begin training again, please re-apply via the Gander Websit
 
         // Loop through all threads to find students training record
         foreach ($threads_data['threads'] as $thread) {
-            if ($thread['name'] == $name) {
+            if (strpos($thread['name'], $cid) !== false) {
                 // Send Embed Message
                 $this->sendMessageWithEmbed($thread['id'], $title, $message);
             }

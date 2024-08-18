@@ -64,8 +64,8 @@ class InstructingController extends Controller
     public function students()
     {
         //Get all students
-        $students = Student::whereCurrent(true)->get();
-        $pastStudents = Student::whereCurrent(false)->get();
+        $students = Student::whereCurrent(true)->orderBy('created_at', 'desc')->get();
+        $pastStudents = Student::whereCurrent(false)->orderBy('updated_at', 'desc')->get();
 
         //Return view
         return view('admin.training.instructing.students.index', compact('students', 'pastStudents'));
@@ -409,10 +409,10 @@ class InstructingController extends Controller
             //remove student discord role
             $discord->removeRole($student->user->discord_user_id, 482824058141016075);
 
-            $discord->EditThreadTag('Inactive', $student->user->fullName('FLC'));
+            $discord->EditThreadTag('Inactive', $student->user->id);
 
             //close Instructor Thread
-            $discord->closeTrainingThread($student->user->fullName('FLC'), 'cancel');
+            $discord->closeTrainingThread($student->user->id, $student->user->discord_user_id, 'cancel');
 
             // Notify Senior Team that new training has been terminated.
             $discord->sendMessageWithEmbed(config('app.env') == 'local' ? intval(config('services.discord.web_logs')) : intval(config('services.discord.instructors')), 'Training Terminated', $student->user->fullName('FLC').' has had their training terminated.', 'error');
@@ -433,6 +433,7 @@ class InstructingController extends Controller
                 $label->delete();
             }
         }
+
         if ($student->instructor()) {
             $student->instructor()->delete();
         }
@@ -446,7 +447,7 @@ class InstructingController extends Controller
         //Save
         $student->save();
 
-        //Remove assignments
+        //Remove Instructor from Student
         $links = InstructorStudentAssignment::where('student_id', $student->id);
         foreach ($links as $l) {
             $l->delete();
@@ -479,6 +480,13 @@ class InstructingController extends Controller
         ]);
         $link->save();
 
+        //Remove labels and instructor links and availability
+        foreach ($student->labels as $label) {
+            if (!in_array($label->label()->name, ['Completed'])) {
+                $label->delete();
+            }
+        }
+
         // Unassign Instructor from Student
         $instructor_link = InstructorStudentAssignment::where('student_id', $cid);
         $instructor_link->delete();
@@ -491,13 +499,17 @@ class InstructingController extends Controller
         ]);
         $controller_cert->save();
 
-        // Update Thread Tag to match site
-        $discord = new DiscordClient();
-        $discord->EditThreadTag('Completed', $student->user->fullName('FLC'));
+        if ($student->user->hasDiscord() && $student->user->member_of_czqo) {
+            // Update Thread Tag to match site
+            $discord = new DiscordClient();
+            $discord->EditThreadTag('Completed', $student->user->id);
 
-        // Close Training Thread Out & Send Completion Message
-        $discord = new DiscordClient();
-        $discord->closeTrainingThread($student->user->fullName('FLC'), 'certify');
+            // Close Training Thread Out & Send Completion Message
+            $discord = new DiscordClient();
+            $discord->closeTrainingThread($student->user->fullName('FLC'), $student->user->discord_user_id, 'certify');
+        } else {
+
+        }
 
         // Update Roster with Certification Status
         $rosterMember = RosterMember::where('cid', $cid)->firstOrFail();
@@ -694,7 +706,7 @@ class InstructingController extends Controller
 
         // Update Thread Tag to match site
         $discord = new DiscordClient();
-        $discord->EditThreadTag($label->name, $student->user->fullName('FLC'));
+        $discord->EditThreadTag($label->name, $student->user->id);
 
         //Create the link
         $link = new StudentStatusLabelLink([

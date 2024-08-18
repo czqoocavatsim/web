@@ -13,6 +13,7 @@ use App\Models\Roster\RosterMember;
 use App\Models\Users\User;
 use Illuminate\Http\Request;
 use GuzzleHttp\Client;
+use Carbon\Carbon;
 
 class ProcessShanwickController implements ShouldQueue
 {
@@ -39,6 +40,157 @@ class ProcessShanwickController implements ShouldQueue
     {
             // Data to Start Off With
             ini_set('max_execution_time', 300);
+
+            // VATSIM Region List
+            $vatsim_regions = [
+                    [
+                    "id" => "AMAS",
+                    "name" => "Americas",
+                    "director" => "1013441"
+                    ],
+                    [
+                    "id" => "APAC",
+                    "name" => "Asia Pacific",
+                    "director" => "901134"
+                    ],
+                    [
+                    "id" => "EMEA",
+                    "name" => "Europe, Middle East and Africa",
+                    "director" => "858680"
+                    ],
+                ];
+
+                // VATSIM Division List
+            $vatsim_divisions = [
+                [
+                "id" => "BRZ",
+                "name" => "Brazil (VATBRZ)",
+                "parentregion" => "AMAS",
+                "subdivisionallowed" => 0
+                ],
+                [
+                "id" => "CAM",
+                "name" => "Central America",
+                "parentregion" => "AMAS",
+                "subdivisionallowed" => 0
+                ],
+                [
+                "id" => "CAN",
+                "name" => "Canada",
+                "parentregion" => "AMAS",
+                "subdivisionallowed" => 1
+                ],
+                [
+                "id" => "CAR",
+                "name" => "Caribbean",
+                "parentregion" => "AMAS",
+                "subdivisionallowed" => 1
+                ],
+                [
+                "id" => "EUD",
+                "name" => "Europe (except UK)",
+                "parentregion" => "EMEA",
+                "subdivisionallowed" => 1
+                ],
+                [
+                "id" => "GBR",
+                "name" => "United Kingdom",
+                "parentregion" => "EMEA",
+                "subdivisionallowed" => 0
+                ],
+                [
+                "id" => "IL",
+                "name" => "Israel (VATIL)",
+                "parentregion" => "EMEA",
+                "subdivisionallowed" => 0
+                ],
+                [
+                "id" => "JPN",
+                "name" => "Japan",
+                "parentregion" => "APAC",
+                "subdivisionallowed" => 0
+                ],
+                [
+                "id" => "KOR",
+                "name" => "Korea",
+                "parentregion" => "APAC",
+                "subdivisionallowed" => 0
+                ],
+                [
+                "id" => "MCO",
+                "name" => "Mexico",
+                "parentregion" => "AMAS",
+                "subdivisionallowed" => 0
+                ],
+                [
+                "id" => "MENA",
+                "name" => "Middle East and North Africa",
+                "parentregion" => "EMEA",
+                "subdivisionallowed" => 1
+                ],
+                [
+                "id" => "NZ",
+                "name" => "New Zealand (VATNZ)",
+                "parentregion" => "APAC",
+                "subdivisionallowed" => 0
+                ],
+                [
+                "id" => "PAC",
+                "name" => "Australia (VATPAC)",
+                "parentregion" => "APAC",
+                "subdivisionallowed" => 0
+                ],
+                [
+                "id" => "PRC",
+                "name" => "People's Republic of China",
+                "parentregion" => "APAC",
+                "subdivisionallowed" => 0
+                ],
+                [
+                "id" => "ROC",
+                "name" => "Republic of China (Taiwan)",
+                "parentregion" => "APAC",
+                "subdivisionallowed" => 0
+                ],
+                [
+                "id" => "RUS",
+                "name" => "Russia",
+                "parentregion" => "EMEA",
+                "subdivisionallowed" => 0
+                ],
+                [
+                "id" => "SAM",
+                "name" => "South America",
+                "parentregion" => "AMAS",
+                "subdivisionallowed" => 1
+                ],
+                [
+                "id" => "SEA",
+                "name" => "Southeast Asia (VATSEA)",
+                "parentregion" => "APAC",
+                "subdivisionallowed" => 1
+                ],
+                [
+                "id" => "SSA",
+                "name" => "Sub-Sahara Africa",
+                "parentregion" => "EMEA",
+                "subdivisionallowed" => 1
+                ],
+                [
+                "id" => "USA",
+                "name" => "United States",
+                "parentregion" => "AMAS",
+                "subdivisionallowed" => 0
+                ],
+                [
+                "id" => "WA",
+                "name" => "West Asia",
+                "parentregion" => "APAC",
+                "subdivisionallowed" => 1
+                ]
+            ];
+
+            // VATSIM Ratings
             $vatsim_ratings = [
                 [
                     "id" => -1,
@@ -113,13 +265,13 @@ class ProcessShanwickController implements ShouldQueue
             ];
 
             // Create a Request for the Shanwick Controllers
-            $client = new Client(['timeout' => 250]);
+            $client = new Client(['timeout' => 1000]);
             $response = $client->request('GET', 'https://www.vatsim.uk/api/validations?position=EGGX_FSS');
             $data = json_decode($response->getBody(), true);
             $data_json = $data['validated_members'];
             
 
-            // Figure out which ones are already on the roster
+            // Figure out which ones are already on the roster, and ignore them.
             $non_czqo = [];
             $czqo = RosterMember::all()->pluck('user_id');
             $czqo = $czqo->toArray();
@@ -131,26 +283,50 @@ class ProcessShanwickController implements ShouldQueue
                 }
             }
 
-            // Delete all Roster Controllers before the update
-            $shanwick_table = ShanwickController::all();
-            foreach($shanwick_table as $st){
-                $st->delete();
+            // Loop through all Non-CZQO Roster Members, and gather DB info from CZQO for those who have it.
+            $get_vatsim_data = [];
+            $use_gander_data = [];
+            foreach($non_czqo as $eggx_controller){
+                $controller = User::find($eggx_controller);
+
+                if($controller !== null){
+                    // Controller ID is Gander DB
+                    $use_gander_data[] = $eggx_controller;
+                } else {
+                    // Controller has never logged into Gander
+                    $get_vatsim_data[] = $eggx_controller;
+                }
             }
 
-            $controller = [];
-            foreach($non_czqo as $eggx){
+            // Get Current Shanwick Details
+            $shanwick_data = ShanwickController::all()->pluck('controller_cid');
+            $shanwick_data = $shanwick_data->toArray();
+            $delete_from_eggx_controllers = array_diff($shanwick_data, $non_czqo);
 
-                $czqo_user = [];
-                $czqo_user = User::find($eggx);
+            // Update or Create Gander Shanwick Roster
+            // Update from CZQO DB
+            foreach($use_gander_data as $data1){
+                $gander_controller = RosterMember::where('user_id', $data1)->first();
 
-                if($czqo_user !== null){
+                // dd($gander_controller);
 
-                    // to add additional details for members apart of CZQO. TBC
+                ShanwickController::UpdateorCreate([
+                    'controller_cid' => $data1,
+                    'name' => $gander_controller->user->fullName('FLC'),
+                    'rating' => $gander_controller->user->rating_short,
+                    'division' => $gander_controller->user->division_code,
+                    'division_name' => $gander_controller->user->division_name,
+                    'region_code' => $gander_controller->user->region_code,
+                    'region_name' => $gander_controller->user->region_name,
+                ]);
+            }
 
-                } else {
+            // Update from VATSIM API
+            if (Carbon::now()->isMonday()) {
+                foreach($get_vatsim_data as $data2){
                     // User not in CZQO DB. Get Data from VATSIM.
-                    $client2 = new Client();
-                    $response2 = $client2->request('GET', 'https://api.vatsim.net/v2/members/'.$eggx);
+                    $client2 = new Client(['timeout' => 1000]);
+                    $response2 = $client2->request('GET', 'https://api.vatsim.net/v2/members/'.$data2);
                     $data_controller = json_decode($response2->getBody(), true);
                     
                     foreach($vatsim_ratings as $rating){
@@ -159,17 +335,46 @@ class ProcessShanwickController implements ShouldQueue
                         }
                     }
 
-                    ShanwickController::create([
-                        'controller_cid' => $eggx,
-                        'name' => $eggx,
+                    foreach($vatsim_divisions as $division){
+                        if($division['id']= $data_controller['division_id']){
+                            $division_code = $division['id'];
+                            $division_name = $division['name'];
+                        }
+                    }
+
+                    foreach($vatsim_regions as $region){
+                        if($region['id']= $data_controller['region_id']){
+                            $region_code = $region['id'];
+                            $region_name = $region['name'];
+                        }
+                    }
+
+                    ShanwickController::UpdateorCreate([
+                        'controller_cid' => $data2,
+                        'name' => $data2,
                         'rating' => $rating_id,
-                        'division' => $data_controller['division_id'],
+                        'division' => $division_code,
+                        'division_name' => null,
+                        'region_code' => $region_code,
+                        'region_name' => null,
                     ]);
                 }
-
-                
             }
 
-            dd($controller);
+            // Delete following CIDs from DB
+            $shanwick_table = ShanwickController::all();
+            $shanwick_table = $shanwick_table->toArray();
+            
+            foreach($delete_from_eggx_controllers as $data3){
+                foreach($shanwick_table as $st){
+                    if($st['controller_cid'] == $data3){
+                        $shanwick_data = ShanwickController::where('controller_cid', $data3)->get();
+
+                        foreach ($shanwick_data as $data) {
+                            $data->delete(); // Delete each person not supposed to be on the roster
+                        }
+                    }
+                }
+            }
     }
 }

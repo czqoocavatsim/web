@@ -9,6 +9,6 @@ class ShanwickController extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['id', 'controller_cid', 'name', 'rating', 'division'];
+    protected $fillable = ['id', 'controller_cid', 'name', 'rating', 'division', 'division_name', 'region_code', 'region_name'];
         
 }
