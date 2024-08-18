@@ -17,7 +17,7 @@ use App\Models\Training\Instructing\Students\StudentStatusLabel;
 use App\Models\Training\Instructing\Links\StudentStatusLabelLink;
 use Carbon\Carbon;
 
-class DiscordTrainingUpdates implements ShouldQueue
+class DiscordWeeklyTrainingUpdates implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
