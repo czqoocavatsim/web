@@ -64,8 +64,8 @@ class InstructingController extends Controller
     public function students()
     {
         //Get all students
-        $students = Student::whereCurrent(true)->get();
-        $pastStudents = Student::whereCurrent(false)->get();
+        $students = Student::whereCurrent(true)->orderBy('created_at', 'desc')->get();
+        $pastStudents = Student::whereCurrent(false)->orderBy('updated_at', 'desc')->get();
 
         //Return view
         return view('admin.training.instructing.students.index', compact('students', 'pastStudents'));
@@ -433,6 +433,7 @@ class InstructingController extends Controller
                 $label->delete();
             }
         }
+
         if ($student->instructor()) {
             $student->instructor()->delete();
         }
@@ -446,7 +447,7 @@ class InstructingController extends Controller
         //Save
         $student->save();
 
-        //Remove assignments
+        //Remove Instructor from Student
         $links = InstructorStudentAssignment::where('student_id', $student->id);
         foreach ($links as $l) {
             $l->delete();
@@ -478,6 +479,13 @@ class InstructingController extends Controller
             'student_status_label_id' => StudentStatusLabel::whereName('Completed')->first()->id,
         ]);
         $link->save();
+
+        //Remove labels and instructor links and availability
+        foreach ($student->labels as $label) {
+            if (!in_array($label->label()->name, ['Completed'])) {
+                $label->delete();
+            }
+        }
 
         // Unassign Instructor from Student
         $instructor_link = InstructorStudentAssignment::where('student_id', $cid);
