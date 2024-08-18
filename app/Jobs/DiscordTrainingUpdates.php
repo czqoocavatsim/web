@@ -28,6 +28,54 @@ class DiscordTrainingUpdates implements ShouldQueue
      */
     public function handle()
     {
+        // Check all Training Threads are open and dont expire for one week
+        {
+            // Initialize the DiscordClient inside the handle method
+            $discord = new DiscordClient();
+
+            // Number of Messages Sent
+            $counter = 0;
+
+            // Get Active Threads
+            $response = $discord->getClient()->get('channels/'.env('DISCORD_TRAINING_FORUM').'/threads/archived/public');
+            $results = json_decode($response->getBody(), true);
+
+            // dd($results);
+
+            foreach($results['threads'] as $thread){
+                $archiveTimestamp = Carbon::parse($thread['thread_metadata']['archive_timestamp']);
+                
+                // Thread was closed within the last 10 days
+                if ($archiveTimestamp >= Carbon::now()->subDays(10) && $archiveTimestamp <= Carbon::now()) {
+                    // Your code to handle the condition
+                    // dd($archiveTimestamp);
+
+                    // Get the ID of the Training Thread Recently Closed
+                    if (preg_match('/\d+$/', $thread['name'], $matches)) {
+                        $cid = $matches[0];
+                    } else {
+                        $cid = null;
+                    }
+
+                    // See if CID is still a student
+                    $student = Student::where('user_id', $cid)->first();
+                    if($student !== null){
+
+                        // Thread should be active, so lets activate it.
+                        $discord = new DiscordClient();
+                        $data = $discord->getClient()->patch('channels/'.$thread['id'], [
+                            'json' => [
+                                'locked' => false,
+                                'archived' => false,
+                            ]
+                        ]);
+                    }
+                }
+            }
+
+            $discord->sendMessageWithEmbed(env('DISCORD_WEB_LOGS'), 'AUTO: Training Thread Opened',$counter. ' Threads were automatically reopended as they had expired (more than 1 week since last activity)');
+        }
+
         // Function for Training Thread Availability Updates
         {
             // Initialize the DiscordClient inside the handle method
