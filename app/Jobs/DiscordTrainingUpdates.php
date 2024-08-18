@@ -113,11 +113,12 @@ class DiscordTrainingUpdates implements ShouldQueue
                     }
                     
                     //Is the Applied Tag = "In Progress" or "Ready For Pick-Up"?
-                    $tag_completed = in_array("1271846477966086265", $thread['applied_tags']);
-                    $tag_inProgress = in_array("1271847420631978107", $thread['applied_tags']);
-                    $tag_PickUp = in_array("1271846369510035627", $thread['applied_tags']);
+                    $tag_completed = (bool) in_array("1271846477966086265", $thread['applied_tags']);
+                    $tag_inProgress = (bool) in_array("1271847420631978107", $thread['applied_tags']);
+                    $tag_PickUp = (bool) in_array("1271846369510035627", $thread['applied_tags']);
 
-                    if (!$tag_completed && $tag_inProgress || $tag_PickUp) {
+                    // Thread isnt completed, but is In progress or ready for pick up
+                    if (!$tag_completed && ($tag_inProgress || $tag_PickUp)) {
 
                         // Check Sessions Upcoming
                         $upcoming_sessions = TrainingSession::where('student_id', $student->id)->whereBetween('scheduled_time', [Carbon::now(), Carbon::now()->addDays(7)])->first();
@@ -126,18 +127,18 @@ class DiscordTrainingUpdates implements ShouldQueue
                             // There is no sessions within the next week
                             $avail_message++;
     
-                            // SendEmbed to ask student to send availability
-                            $discord->sendEmbedInTrainingThread($cid, "Your Availability", 'Hello, <@'.$student->user->discord_user_id.'>
+    //                         // SendEmbed to ask student to send availability
+    //                         $discord->sendEmbedInTrainingThread($cid, "Your Availability", 'Hello, <@'.$student->user->discord_user_id.'>
     
-    Please provide your availability for the next 7-14 days. Please ensure to tag the `@Instructor` role with all times you are available. Please provide these times in Zulu Format.
+    // Please provide your availability for the next 7-14 days. Please ensure to tag the `@Instructor` role with all times you are available. Please provide these times in Zulu Format.
     
-    One of our team will make contact with you to organise a session if they have availability matching yours.
+    // One of our team will make contact with you to organise a session if they have availability matching yours.
     
-    *If you have done this in the past few days, please disregard this message.*');
+    // *If you have done this in the past few days, please disregard this message.*');
+
+                        $discord->sendMessageWithEmbed(env('DISCORD_WEB_LOGS'), 'Found Thread to Use: '.$thread['name'], $thread['name']);
                     }
                   }
-
-                    $discord->sendMessageWithEmbed(env('DISCORD_WEB_LOGS'), 'TEST: '.$thread['name'], $thread['name']);
                 }
             }
 
