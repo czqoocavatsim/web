@@ -106,7 +106,7 @@ class Kernel extends ConsoleKernel
         $schedule->job(new ProcessSessionReminders())->daily();
 
         // Check Training Threads Status (Once per week)
-        $schedule->job(new DiscordTrainingUpdates())->weeklyOn(7, '20:08');
+        $schedule->job(new DiscordTrainingUpdates())->weeklyOn(7, '20:50');
 
         // Discord role updating
         //$schedule->job(new UpdateDiscordUserRoles)->twiceDaily(6, 18);
