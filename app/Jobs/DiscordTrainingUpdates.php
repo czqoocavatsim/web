@@ -91,6 +91,8 @@ class DiscordTrainingUpdates implements ShouldQueue
             $response = $discord->getClient()->get('guilds/'.env('DISCORD_GUILD_ID').'/threads/active');
             $results2 = json_decode($response->getBody(), true);
 
+            // dd($results2);
+
             foreach ($results2['threads'] as $thread) {
 
                 // Get the ID of the Active Training Thread
@@ -102,10 +104,10 @@ class DiscordTrainingUpdates implements ShouldQueue
 
                 // See if user is still a student
                 if($cid !== null){
-                    $student = Student::whereCurrent(true)->where('user_id', $cid)->firstOrFail();
+                    $student = Student::whereCurrent(true)->where('user_id', $cid)->first();
 
-                    //Is student already ready for assessment?
-                    if ($student && ($student->hasLabel('In Progress') !== false || $student->hasLabel('Ready For Pick-Up') !== false)) {
+                    //Is the Applied Tag = "In Progress" or "Ready For Pick-Up"?
+                    if ($student && ($thread['applied_tags'] == "1271846369510035627" || $thread['applied_tags'] == "1271847420631978107")) {
                         
                         // Check Sessions Upcoming
                         $upcoming_sessions = TrainingSession::where('student_id', $student->id)->whereBetween('scheduled_time', [Carbon::now(), Carbon::now()->addDays(7)])->first();
