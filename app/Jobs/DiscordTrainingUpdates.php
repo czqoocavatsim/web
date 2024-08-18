@@ -122,7 +122,7 @@ One of our team will make contact with you to organise a session if they have av
             }
 
             // Tell the log chat
-            $discord->sendMessageWithEmbed(env('DISCORD_WEB_LOGS'), 'AUTO: Training Thread Availability Requests',$counter. ' Training Threads have been messaged asking for their weekly availability. This is only completed if a student has no scheduled session within the next 7 days.');
+            $discord->sendMessageWithEmbed(env('DISCORD_WEB_LOGS'), 'AUTO: Training Thread Availability Requests', $counter.' Training Threads have been messaged asking for their weekly availability. This is only completed if a student has no scheduled session within the next 7 days.');
         }
 
         // Check 'Awaiting Exam' label students between 31-37 Days after Application
