@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Services\DiscordClient;
-use App\Jobs\DiscordTrainingUpdates;
+use App\Jobs\ProcessSessionLogging;
 
 class DiscordTestController extends Controller
 {
@@ -23,10 +23,10 @@ class DiscordTestController extends Controller
         return $results;
     }
 
-    public function Shanwick()
+    public function Job()
     {
         // Dispatch the job
-        $job = DiscordTrainingUpdates::dispatch();
+        $job = ProcessSessionLogging::dispatch();
 
         // Call the handle method directly to get the result synchronously
         $result = $job->handle();

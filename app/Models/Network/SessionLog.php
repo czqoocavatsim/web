@@ -6,6 +6,7 @@ use Spatie\Activitylog\LogOptions;
 use App\Models\Roster\RosterMember;
 use Illuminate\Database\Eloquent\Model;
 use App\Services\VATSIMClient;
+use App\Models\Users\User;
 use Spatie\Activitylog\Traits\LogsActivity;
 
 // Log of all sessions
@@ -52,7 +53,7 @@ class SessionLog extends Model
 
     public function user()
     {
-        $this->belongsTo(User::class);
+        return $this->belongsTo(User::class);
     }
 
     public function position()
