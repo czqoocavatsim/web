@@ -70,11 +70,16 @@ class ProcessSessionLogging implements ShouldQueue
                     }        
 
                 if($session->discord_id == null){
-                    $discord = new DiscordClient();
-                    $discord_id = $discord->ControllerConnection($controller->callsign, $name);
-
-                    $session->discord_id = $discord_id;
-                    $session->save();
+                    try{
+                        $discord = new DiscordClient();
+                        $discord_id = $discord->ControllerConnection($controller->callsign, $name);
+    
+                        $session->discord_id = $discord_id;
+                        $session->save();
+                    } catch (\Exception $e) {
+                        $discord = new DiscordClient();
+                        $discord->sendMessageWithEmbed(env('DISCORD_WEB_LOGS'), 'Discord Controller Connect Error', $e->getMessage());
+                    }
                 }
 
                 array_push($positionsFound, $controller->callsign);
@@ -98,12 +103,17 @@ class ProcessSessionLogging implements ShouldQueue
                 }        
 
                 if($log->discord_id !== null){
-                    $discord = new DiscordClient();
-                    $data = $discord->ControllerDisconnect($log->discord_id, $log->callsign, $name, $log->session_start, $log->duration);
-
-                    $log->discord_id = null;
-                    $log->save;
+                    try{
+                        $discord = new DiscordClient();
+                        $data = $discord->ControllerDisconnect($log->discord_id, $log->callsign, $name, $log->session_start, $log->duration);
+                    } catch (\Exception $e) {
+                        $discord = new DiscordClient();
+                        $discord->sendMessageWithEmbed(env('DISCORD_WEB_LOGS'), 'Discord Controller Disconnect Error', $e->getMessage());
+                    }
                 }
+
+                $log->discord_id = null;
+                $log->save;
 
                 //If there is an associated roster member, give them the hours
                 if ($rosterMember = $log->rosterMember) {
