@@ -72,10 +72,10 @@ class ProcessSessionLogging implements ShouldQueue
                 if($session->discord_id == null){
                     $discord = new DiscordClient();
                     $discord_id = $discord->ControllerConnection($controller->callsign, $name);
-                }
 
-                $session->discord_id = $discord_id;
-                $session->save();
+                    $session->discord_id = $discord_id;
+                    $session->save();
+                }
 
                 array_push($positionsFound, $controller->callsign);
             }

@@ -53,7 +53,7 @@ class SessionLog extends Model
 
     public function user()
     {
-        return $this->belongsTo(User::class);
+        return $this->belongsTo(User::class, 'cid', 'id');
     }
 
     public function position()

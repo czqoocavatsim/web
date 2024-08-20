@@ -63,11 +63,11 @@ class DiscordClient
                 "tts" => false,
                 "embeds" => [
                     [
-                        'title' => $callsign.' Just Connected!',
-                        'description' => 'A new controller has just connected to the network!
+                        'title' => $callsign.' is currently online!',
+                        'description' => 'There is currently ATC being provided over the Ocean!
 
-Controller Name: '.$name.'
-Online from: <t:'.Carbon::now()->timestamp.':t>',
+**Controller:** '.$name.'
+**Online from:** <t:'.Carbon::now()->timestamp.':t>',
                         'color' => hexdec('6EC40C'),
                     ]
                 ]
