@@ -56,6 +56,53 @@ class DiscordClient
         return $response->getStatusCode() == 200;
     }
 
+    public function ControllerConnection($callsign, $name)
+    {
+        $response = $this->client->post("channels/1275443682992197692/messages", [
+            'json' => [
+                "tts" => false,
+                "embeds" => [
+                    [
+                        'title' => $callsign.' Just Connected!',
+                        'description' => 'A new controller has just connected to the network!
+
+Controller Name: '.$name.'
+Online from: <t:'.Carbon::now()->timestamp.':t>',
+                        'color' => hexdec('6EC40C'),
+                    ]
+                ]
+            ]
+        ]);
+
+        $responseData = json_decode($response->getBody(), true);
+
+        return $responseData['id'];
+    }
+
+    public function ControllerDisconnect($id, $callsign, $name, $connect_time, $total_time)
+    {
+        $response = $this->client->patch("channels/1275443682992197692/messages/{$id}", [
+            'json' => [
+                "tts" => false,
+                "embeds" => [
+                    [
+                        'title' => $callsign.' is Offline',
+                        'description' => $name.' was connected to '.$callsign.'.
+                        
+Online from <t:'.Carbon::parse($connect_time)->timestamp.':t> to <t:'.Carbon::now()->timestamp.':t>.
+Time: '.sprintf('%d hours %d minutes', intdiv($total_time, 1), ($total_time - intdiv($total_time, 1)) * 60),
+
+                        'color' => hexdec('990000'),
+                    ]
+                ]
+            ]
+        ]);
+
+        $responseData = json_decode($response->getBody(), true);
+
+        return $responseData;
+    }
+
     public function assignRole($discordId, $roleId)
     {
         ProcessDiscordRoles::dispatch(true, $discordId, $roleId);

@@ -12,6 +12,7 @@ use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
 use App\Services\VATSIMClient;
+use App\Services\DiscordClient;
 
 class ProcessSessionLogging implements ShouldQueue
 {
@@ -51,7 +52,7 @@ class ProcessSessionLogging implements ShouldQueue
 
             foreach ($controllers as $controller) {
 
-                SessionLog::firstOrCreate([
+                $session = SessionLog::firstOrCreate([
                     'cid' => $controller->cid,
                     'callsign' => $controller->callsign,
                     'session_end' => null,
@@ -61,6 +62,20 @@ class ProcessSessionLogging implements ShouldQueue
                         'monitored_position_id' => $position->id,
                         'roster_member_id' => RosterMember::where('cid', $controller->cid)->value('id') ?? null,
                     ]);
+
+                    if($session->user){
+                        $name = $session->user->fullName('FL');
+                    } else {
+                        $name = $controller->cid;
+                    }        
+
+                if($session->discord_id == null){
+                    $discord = new DiscordClient();
+                    $discord_id = $discord->ControllerConnection($controller->callsign, $name);
+                }
+
+                $session->discord_id = $discord_id;
+                $session->save();
 
                 array_push($positionsFound, $controller->callsign);
             }
@@ -73,6 +88,22 @@ class ProcessSessionLogging implements ShouldQueue
                 $log->session_end = Carbon::now();
                 $log->duration = $log->session_start->floatDiffInMinutes(Carbon::now()) / 60;
                 $log->save();
+
+                // dd($log);
+
+                if($log->user){
+                    $name = $log->user->fullName('FLC');
+                } else {
+                    $name = $log->cid;
+                }        
+
+                if($log->discord_id !== null){
+                    $discord = new DiscordClient();
+                    $data = $discord->ControllerDisconnect($log->discord_id, $log->callsign, $name, $log->session_start, $log->duration);
+
+                    $log->discord_id = null;
+                    $log->save;
+                }
 
                 //If there is an associated roster member, give them the hours
                 if ($rosterMember = $log->rosterMember) {
