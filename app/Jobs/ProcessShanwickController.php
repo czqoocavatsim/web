@@ -283,20 +283,25 @@ class ProcessShanwickController implements ShouldQueue
                 }
             }
 
+            // dd($non_czqo);
+
             // Loop through all Non-CZQO Roster Members, and gather DB info from CZQO for those who have it.
             $get_vatsim_data = [];
             $use_gander_data = [];
             foreach($non_czqo as $eggx_controller){
-                $controller = User::find($eggx_controller);
-
+                $controller = User::where('id', $eggx_controller)->first();
+            
                 if($controller !== null){
-                    // Controller ID is Gander DB
+                    // Controller ID is in Gander DB
                     $use_gander_data[] = $eggx_controller;
+                    // dd($controller); // Output the controller for debugging
                 } else {
                     // Controller has never logged into Gander
                     $get_vatsim_data[] = $eggx_controller;
                 }
             }
+
+            // dd($use_gander_data);
 
             // Get Current Shanwick Details
             $shanwick_data = ShanwickController::all()->pluck('controller_cid');
@@ -306,19 +311,19 @@ class ProcessShanwickController implements ShouldQueue
             // Update or Create Gander Shanwick Roster
             // Update from CZQO DB
             foreach($use_gander_data as $data1){
-                $gander_controller = RosterMember::where('user_id', $data1)->first();
+                $gander_controller = User::where('id', $data1)->first();
 
-                // dd($gander_controller);
-
-                ShanwickController::UpdateorCreate([
-                    'controller_cid' => $data1,
-                    'name' => $gander_controller->user->fullName('FLC'),
-                    'rating' => $gander_controller->user->rating_short,
-                    'division' => $gander_controller->user->division_code,
-                    'division_name' => $gander_controller->user->division_name,
-                    'region_code' => $gander_controller->user->region_code,
-                    'region_name' => $gander_controller->user->region_name,
-                ]);
+                if($gander_controller !== null){
+                    ShanwickController::UpdateorCreate([
+                        'controller_cid' => $data1,
+                        'name' => $gander_controller->fullName('FLC'),
+                        'rating' => $gander_controller->rating_short,
+                        'division' => $gander_controller->division_code,
+                        'division_name' => $gander_controller->division_name,
+                        'region_code' => $gander_controller->region_code,
+                        'region_name' => $gander_controller->region_name,
+                    ]);
+                }
             }
 
             // Update from VATSIM API
