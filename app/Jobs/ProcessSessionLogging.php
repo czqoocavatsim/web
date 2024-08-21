@@ -4,6 +4,7 @@ namespace App\Jobs;
 
 use App\Models\Network\MonitoredPosition;
 use App\Models\Network\SessionLog;
+use App\Models\Network\ShanwickController;
 use App\Models\Roster\RosterMember;
 use Carbon\Carbon;
 use Illuminate\Bus\Queueable;
@@ -44,6 +45,10 @@ class ProcessSessionLogging implements ShouldQueue
 
         $vatsimData = new VATSIMClient();
 
+        $czqoRoster = RosterMember::all()->pluck('user_id')->toArray();
+        $eggxRoster = ShanwickController::all()->pluck('controller_cid')->toArray();
+        $allRoster = array_unique(array_merge($czqoRoster, $eggxRoster));
+
         $positionsFound = [];
 
         //Go through each position and process sessions for each of them
@@ -64,23 +69,45 @@ class ProcessSessionLogging implements ShouldQueue
                     ]);
 
                     if($session->user){
-                        $name = $session->user->fullName('FL');
+                        $name = $session->user->fullName('FLC');
                     } else {
                         $name = $controller->cid;
                     }        
 
-                if($session->discord_id == null){
-                    try{
-                        $discord = new DiscordClient();
-                        $discord_id = $discord->ControllerConnection($controller->callsign, $name);
+                    // Check if Controller is Authorised to open a position (training/certified)
+                    if (in_array($session->cid, $allRoster)) {
+                        // Controller is authorised, send message if discord_id is not set
+                        if($session->discord_id == null){
+                            try{
+                                $discord = new DiscordClient();
+                                $discord_id = $discord->ControllerConnection($controller->callsign, $name);
     
-                        $session->discord_id = $discord_id;
-                        $session->save();
-                    } catch (\Exception $e) {
-                        $discord = new DiscordClient();
-                        $discord->sendMessageWithEmbed(env('DISCORD_WEB_LOGS'), 'Discord Controller Connect Error', $e->getMessage());
+                                $session->discord_id = $discord_id;
+                                $session->save();
+                            } catch (\Exception $e) {
+                                $discord = new DiscordClient();
+                                $discord->sendMessageWithEmbed(env('DISCORD_WEB_LOGS'), 'Discord Controller Connect Error', $e->getMessage());
+                            }
+                        }
+                    } else {
+                        // Controller is not authorised. Let Senior Team know.
+                        if($session->discord_id == null){
+                            try{
+                                // Send Discord Message
+                                $discord = new DiscordClient();
+                                $discord_id = $discord->sendMessageWithEmbed('482817715489341441', 'Controller Unauthorised to Control', '<@&482816721280040964>, '.$session->cid.' has just connected onto VATSIM as '.$session->callsign.' on <t:'.Carbon::now()->timestamp.':F>. 
+                                
+**They are not authorised to open this position.**');
+
+                                // Save ID so it doesnt keep spamming
+                                $session->discord_id = $discord_id;
+                                $session->save();
+                            } catch (\Exception $e) {
+                                $discord = new DiscordClient();
+                                $discord->sendMessageWithEmbed(env('DISCORD_WEB_LOGS'), 'Unauthorised Controller Notification Error', $e->getMessage());
+                            }
+                        }
                     }
-                }
 
                 array_push($positionsFound, $controller->callsign);
             }

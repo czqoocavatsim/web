@@ -100,7 +100,7 @@ class Kernel extends ConsoleKernel
         $schedule->job(new ProcessSoloCertExpiryWarnings())->daily();
 
         // Shanwick Controller Roster Update
-        $schedule->job(new ProcessShanwickController())->daily();
+        $schedule->job(new ProcessShanwickController())->dailyAt('07:05');
 
         //Training/OTS session reminders
         $schedule->job(new ProcessSessionReminders())->daily();
