@@ -57,6 +57,11 @@ class ApplicationsController extends Controller
             return view('training.applications.apply')->with('allowed', 'rating');
         }
 
+        if(auth()->user()->member_of_czqo == 0){
+
+            return view('training.applications.apply')->with('allowed', 'discord');
+        }
+
         //Check hours of controller
         //Download via CURL
         $url = 'https://api.vatsim.net/v2/members/'.auth()->id().'/stats';

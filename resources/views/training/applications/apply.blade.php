@@ -135,6 +135,23 @@
     </div>
 @break
 
+@case('discord')
+
+<div class="container py-4">
+    <h1 class="font-weight-bold red-text">You are not a member of discord</h1>
+    <p style="font-size: 1.2em;" class="mt-3">
+        You must be a member of the Gander Oceanic Discord to begin your training. Once you do so, you will be able to apply.
+    </p>
+    <p style="font-size: 1.2em;" class="mt-3">
+        <a href="{{route('my.index')}}">Join Discord via myCZQO.</a>
+    </p>
+    <p style="font-size: 1.2em;" class="mt-3">
+        If you beleive this is a mistake, please make contact with the Senior Leadership Team.
+    </p>
+</div>
+
+@break
+
 @endswitch
 
 @endsection
