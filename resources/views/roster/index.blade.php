@@ -17,8 +17,8 @@
 </div>
 <div class="container py-4">
         <p class="text-muted">Please note that the 'full name' field on this roster is dependent on the controller's name settings on the CZQO Core system.<br></p>
-        <p class="text-muted">This Roster shows the combined endorsements of Shanwick and Gander controllers.<br><i class="fas fa-certificate"></i> = Certified frm Shanwick FIR</p>
-        <p class="text-muted">Controllers with active status are endorsed to open & control: CZQX_CTR, EGGX_CTR and/or NAT_FSS<br></p>
+        <p class="text-muted">This Roster shows the combined endorsements of Shanwick and Gander controllers.<br><i class="fas fa-certificate"></i> = Certified by VATSIM UK</p>
+        <p class="text-muted">Controllers with active status are endorsed to open & control either CZQO, EGGX and/or NAT_FSS positions.<br></p>
         <table id="rosterTable" class="table table-hover">
             <thead>
                 <tr>

@@ -105,16 +105,42 @@ Time: '.sprintf('%d hours %d minutes', intdiv($total_time, 1), ($total_time - in
 
     public function assignRole($discordId, $roleId)
     {
-        ProcessDiscordRoles::dispatch(true, $discordId, $roleId);
+        sleep(1);
 
-        return;
+        try {
+            $client = new Client();
+            $client->request('PUT', "https://discord.com/api/v10/guilds/".env('DISCORD_GUILD_ID')."/members/" . $discordId . "/roles/" . $roleId, [
+                'headers' => [
+                    'Authorization' => 'Bot ' . env('DISCORD_BOT_TOKEN'),
+                    'Content-Type' => 'application/json'
+                ],
+            ]);
+        } catch (\Exception $e) {
+            if ($e->getCode() !== 404) {
+                throw $e;
+            }
+            return;
+        }
     }
 
     public function removeRole($discordId, $roleId)
     {
-        ProcessDiscordRoles::dispatch(false, $discordId, $roleId);
-
-        return;
+        sleep(2);
+        
+        try {
+            $client = new Client();
+            $client->request('DELETE', "https://discord.com/api/v10/guilds/".env('DISCORD_GUILD_ID')."/members/" . $discordId . "/roles/" . $roleId, [
+                'headers' => [
+                    'Authorization' => 'Bot ' . env('DISCORD_BOT_TOKEN'),
+                    'Content-Type' => 'application/json'
+                ],
+            ]);
+        } catch (\Exception $e) {
+            if ($e->getCode() !== 404) {
+                throw $e;
+            }
+            return;
+        }
     }
 
     public function changeName($userId, $name)

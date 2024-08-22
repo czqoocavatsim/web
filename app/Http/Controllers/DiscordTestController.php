@@ -48,4 +48,19 @@ class DiscordTestController extends Controller
 
 If you would like to begin training again, please re-apply via the Gander Website.');   
     }
+
+    public function DiscordRoles()
+    {
+            $discord = new DiscordClient();
+
+            //Get role ID based off status
+            $roles = [
+                'certified' => 482819739996127259,
+                'student' => 482824058141016075,
+            ];
+
+            $discord->removeRole(200426385863344129, $roles['student']);
+
+            dd($discord);
+    }
 }

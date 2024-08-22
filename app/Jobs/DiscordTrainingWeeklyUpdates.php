@@ -128,7 +128,7 @@ class DiscordTrainingWeeklyUpdates implements ShouldQueue
                             $avail_message++;
     
     //                         // SendEmbed to ask student to send availability
-                            $discord->sendEmbedInTrainingThread($cid, "Please Provide Availability", 'Hello,
+                            $discord->sendEmbedInTrainingThread($cid, "Please Provide Availability", 'Hello, <@'.$student->discord_id.'>
     
 As we head into the Weekend, we ask you please provide your availability for next week. Please ensure to tag the `@Instructor` role with all times you are available. Please provide these times in Zulu Format.
     
