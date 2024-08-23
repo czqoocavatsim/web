@@ -8,6 +8,7 @@ use App\Jobs\ProcessSessionReminders;
 use App\Jobs\ProcessSoloCertExpiryWarnings;
 use App\Jobs\ProcessShanwickController;
 use App\Jobs\DiscordTrainingWeeklyUpdates;
+use App\Jobs\UpdateDiscordUserRoles;
 use App\Models\Roster\RosterMember;
 use App\Notifications\Network\OneWeekInactivityReminder;
 use App\Notifications\Network\TwoWeekInactivityReminder;
