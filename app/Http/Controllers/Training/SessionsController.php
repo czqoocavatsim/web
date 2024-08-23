@@ -81,7 +81,7 @@ class SessionsController extends Controller
 
         //Discord Notification in Training Thread
         $discord = new DiscordClient();
-        $discord->sendEmbedInTrainingThread($session->student->user->fullName('FLC'), 'Training Session Booked', 
+        $discord->sendEmbedInTrainingThread($session->student->user->id, 'Training Session Booked', 
 'Hello, '. $session->student->user->fullName('F').'!
 
 A training session has been created for you on <t:'.Carbon::parse($request->get('scheduled_time'))->timestamp.':F>.
@@ -136,7 +136,7 @@ Please reach out to your instructor in this training thread if you have any ques
 
          //Discord Notification in Training Thread
          $discord = new DiscordClient();
-         $discord->sendEmbedInTrainingThread($session->student->user->fullName('FLC'), 'Training Session Time Changed', 
+         $discord->sendEmbedInTrainingThread($session->student->user->id, 'Training Session Time Changed', 
  'Hello, '. $session->student->user->fullName('F').'!
  
  A training session time has been updated. The new time is now <t:'.Carbon::parse($request->get('new_time'))->timestamp.':F>
@@ -238,7 +238,7 @@ Please reach out to your instructor in this training thread if you have any ques
 
         //Discord Notification in Training Thread
         $discord = new DiscordClient();
-        $discord->sendEmbedInTrainingThread($session->student->user->fullName('FLC'), 'Training Session Cancelled', 
+        $discord->sendEmbedInTrainingThread($session->student->user->id, 'Training Session Cancelled', 
 'Hello, '. $session->student->user->fullName('F').'!
 
 A training session which was planned has been cancelled.

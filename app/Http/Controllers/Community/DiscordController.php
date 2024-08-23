@@ -128,6 +128,7 @@ class DiscordController extends Controller
         //Edit user
         $user->discord_user_id = $discord_user['id'];
         $user->discord_username = $discord_user['username'];
+        $user->member_of_czqo = true;
         $user->discord_avatar = $discord_user['avatar'] ? 'https://cdn.discordapp.com/avatars/'.$discord_user['id'].'/'.$discord_user['avatar'].'.png' : null;
         $user->save();
 
