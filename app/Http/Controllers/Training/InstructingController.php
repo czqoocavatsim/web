@@ -488,7 +488,7 @@ class InstructingController extends Controller
         }
 
         // Unassign Instructor from Student
-        $instructor_link = InstructorStudentAssignment::where('student_id', $cid);
+        $instructor_link = InstructorStudentAssignment::where('student_id', $student->id);
         $instructor_link->delete();
 
         // Create new certification (for home page)
@@ -613,7 +613,7 @@ class InstructingController extends Controller
         $link->save();
 
         // Update Thread Tag
-        if ($student->user->hasDiscord() && $student->user->member_of_czqo) {
+        if ($student->user->member_of_czqo) {
             $discord = new DiscordClient();
             $discord->EditThreadTag('In Progress', $student->user->id);
         }
@@ -640,6 +640,12 @@ class InstructingController extends Controller
         //Relabelling process
         foreach ($student->labels as $label) {
             $label->delete();
+        }
+
+        // Update Thread Tag
+        if ($student->user->member_of_czqo) {
+            $discord = new DiscordClient();
+            $discord->EditThreadTag('Ready For Pick-Up', $student->user->id);
         }
 
         //Assign it with link
