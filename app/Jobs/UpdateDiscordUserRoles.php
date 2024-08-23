@@ -101,7 +101,7 @@ class UpdateDiscordUserRoles implements ShouldQueue
             //Modify
             $discord->guild->modifyGuildMember($arguments);
 
-            /* //Notify them if roles/nickname were change
+            //Notify them if roles/nickname were change
             if ($user->fullName('FLC') != $guildMember->nick) {
                 $discord->channel->createMessage([
                     'channel.id' => intval($user->discord_dm_channel_id),
@@ -115,7 +115,7 @@ class UpdateDiscordUserRoles implements ShouldQueue
                     'content' => 'Hi there! Your roles on the Gander Oceanic Discord have been updated in line with your roster status. If there is a mistake, please contact the Web Team.'
                 ]);
             }
- */
+
             //Counter!
             $counter++;
         }

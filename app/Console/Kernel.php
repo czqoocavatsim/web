@@ -109,7 +109,7 @@ class Kernel extends ConsoleKernel
         $schedule->job(new DiscordTrainingWeeklyUpdates())->weeklyOn(6, '6:00');
 
         // Discord role updating
-        //$schedule->job(new UpdateDiscordUserRoles)->twiceDaily(6, 18);
+        $schedule->job(new UpdateDiscordUserRoles)->twiceDaily(2, 14);
     }
 
     /**
