@@ -9,6 +9,7 @@ use App\Jobs\ProcessSoloCertExpiryWarnings;
 use App\Jobs\ProcessShanwickController;
 use App\Jobs\DiscordTrainingWeeklyUpdates;
 use App\Jobs\UpdateDiscordUserRoles;
+use App\Jobs\DiscordAccountCheck;
 use App\Models\Roster\RosterMember;
 use App\Notifications\Network\OneWeekInactivityReminder;
 use App\Notifications\Network\TwoWeekInactivityReminder;
@@ -109,8 +110,8 @@ class Kernel extends ConsoleKernel
         // Check Training Threads Status (Once per week)
         $schedule->job(new DiscordTrainingWeeklyUpdates())->weeklyOn(6, '6:00');
 
-        // Discord role updating
-        // $schedule->job(new UpdateDiscordUserRoles)->twiceDaily(2, 14);
+        // Check If Account is Linked
+        $schedule->job(new DiscordAccountCheck)->dailyAt('7:10');
     }
 
     /**
