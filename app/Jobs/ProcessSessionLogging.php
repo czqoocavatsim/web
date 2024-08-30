@@ -162,11 +162,26 @@ class ProcessSessionLogging implements ShouldQueue
 
                 //If there is an associated roster member, give them the hours and set as active
                 if ($rosterMember = $log->rosterMember) {
+
+                    // Set variables
+                    $currency = $log->session_start->floatDiffInMinutes(Carbon::now()) / 60;
+                    $monthly_hours = $log->session_start->floatDiffInMinutes(Carbon::now()) / 60;
+
+                    // Controller is either Certified or In Training
                     if (($rosterMember->certification == 'certified' || $rosterMember->certification == 'training')) {
-                        $rosterMember->currency += $log->session_start->floatDiffInMinutes(Carbon::now()) / 60;
-                        $rosterMember->monthly_hours += $log->session_start->floatDiffInMinutes(Carbon::now()) / 60;
-                        $rosterMember->active = 1;
-                        $rosterMember->save();
+
+                        // Only add hours if more than 30mins
+                        if($currency > 0.49){
+                            $rosterMember->currency += $currency;
+                            $rosterMember->monthly_hours += $monthly_hours;
+                            $rosterMember->save();
+                        }
+
+                        // Set user as active if more than 1 hour
+                        if($rosterMember->currency > 0.99){
+                            $rosterMember->active = 1;
+                            $rosterMember->save();
+                        }
                     }
                 }
             }

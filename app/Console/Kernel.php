@@ -42,7 +42,7 @@ class Kernel extends ConsoleKernel
         $schedule->job(new ProcessSessionLogging())->everyMinute();
 
         //Inactivity checks
-        $schedule->job(new ProcessRosterInactivity())->dailyAt('8:30');
+        $schedule->job(new ProcessRosterInactivity())->daily();
 
         //CRONS FOR INACTIVITY EMAILS 2 weeks
         // $schedule->call(function () {
@@ -78,28 +78,21 @@ class Kernel extends ConsoleKernel
         //     $discord->sendMessage(753086414811562014, 'Sent '.$count.' one-week warning inactivity emails');
         // })->cron('00 00 23 MAR,JUN,SEP,DEC *'); // 1 week before end of quarter*/
 
-        /// Monthly leaderboard wipe
-        $schedule->call(function () {
-            // Loop through all roster members
-            foreach (RosterMember::all() as $rosterMember) {
-                // Reset the hours for every member
-                $rosterMember->monthly_hours = 0.0;
-                $rosterMember->save();
-            }
-        })->monthlyOn(1, '00:00');
+        // Monthly Statistics Breakdown
+        $schedule->job(new ProcessShanwickController())->monthlyOn(1, '00:00');
 
-        // Quarterly Currency Wipe
-        $schedule->call(function () {
-            // Loop through all roster members
-            foreach (RosterMember::all() as $rosterMember) {
-                // Reset the hours for every member
-                $rosterMember->currency = 0.0;
-                $rosterMember->save();
-            }
-        })->cron('15 00 01 JAN,APR,JUL,OCT *');
+        /// Monthly leaderboard wipe
+        // $schedule->call(function () {
+        //     // Loop through all roster members
+        //     foreach (RosterMember::all() as $rosterMember) {
+        //         // Reset the hours for every member
+        //         $rosterMember->monthly_hours = 0.0;
+        //         $rosterMember->save();
+        //     }
+        // })
 
         //Solo cert expiry warning
-        $schedule->job(new ProcessSoloCertExpiryWarnings())->daily();
+        // $schedule->job(new ProcessSoloCertExpiryWarnings())->daily();
 
         // Shanwick Controller Roster Update
         $schedule->job(new ProcessShanwickController())->daily();

@@ -27,8 +27,6 @@ class DiscordAccountCheck implements ShouldQueue
      * @return void
      */
 
-    protected $signature = 'discord:accountupdate';
-
     public function handle()
     {
         // Initialise some variables

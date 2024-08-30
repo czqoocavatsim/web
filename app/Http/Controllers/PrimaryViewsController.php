@@ -64,6 +64,8 @@ class PrimaryViewsController extends Controller
     {
         $user = Auth::user();
 
+        $sessions = SessionLog::where('cid', Auth::user()->id)->where('created_at', '>=', Carbon::now()->subMonths(12))->orderBy('created_at', 'desc')->get();
+
         $atcResources = AtcResource::all()->sortBy('title');
 
         $bannerCollection = RotationImage::all();
@@ -73,6 +75,6 @@ class PrimaryViewsController extends Controller
             $bannerImg = null;
         }
 
-        return view('my.index', compact('atcResources', 'bannerImg'));
+        return view('my.index', compact('atcResources', 'bannerImg', 'sessions'));
     }
 }
