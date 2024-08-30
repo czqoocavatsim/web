@@ -139,14 +139,14 @@ Gander Oceanic**');
                 $termination_notice++;
             }
         }
-
-        // Send Web Notification if any changes have been made
-        $discord = new DiscordClient();
-        $discord->sendMessageWithEmbed(env('DISCORD_WEB_LOGS'), 'AUTO: Roster Inactivity Update', 
-'60 Days till Removed: '.$first_notice.'
-30 Days till Removed: '.$second_notice.'
-7 Days till Removed: '.$third_notice.'
-Removed from Roster: '.$termination_notice
-);
     }
+
+    // Send Web Notification if any changes have been made
+    $discord = new DiscordClient();
+    $discord->sendMessageWithEmbed(env('DISCORD_WEB_LOGS'), 'AUTO: Roster Inactivity Update', 
+    '60 Days till Removed: '.$first_notice.'
+    30 Days till Removed: '.$second_notice.'
+    7 Days till Removed: '.$third_notice.'
+    Removed from Roster: '.$termination_notice
+    );
 }}
