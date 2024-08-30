@@ -65,10 +65,16 @@ class DiscordAccountCheck implements ShouldQueue
                     $discord = new DiscordClient();
 
                     $discord->assignRole($discord_user['user']['id'], '1278606316906090527');
+
+                    // Add one role
+                    $discord_not_linked++;
                 }
 
             }
         }
+
+        // Tell the log chat
+        $discord->sendMessageWithEmbed(env('DISCORD_WEB_LOGS'), 'AUTO: Users Not Linked',$discord_not_linked. ' members are not linked with CZQO. Role has been assigned');
     }
 
 }

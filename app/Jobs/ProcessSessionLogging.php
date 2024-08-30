@@ -78,6 +78,7 @@ class ProcessSessionLogging implements ShouldQueue
                     if (in_array($session->cid, $allRoster)) {
                         // Controller is authorised, send message if discord_id is not set
                         if($session->discord_id == null){
+                            // Discord Message
                             try{
                                 $discord = new DiscordClient();
                                 $discord_id = $discord->ControllerConnection($controller->callsign, $name);
@@ -87,6 +88,13 @@ class ProcessSessionLogging implements ShouldQueue
                             } catch (\Exception $e) {
                                 $discord = new DiscordClient();
                                 $discord->sendMessageWithEmbed(env('DISCORD_WEB_LOGS'), 'Discord Controller Connect Error', $e->getMessage());
+                            }
+
+                            // Add Discord Role
+                            if($log->user && $log->user->hasDiscord() && $log->user->member_of_czqo){
+                                $discord = new DiscordClient();
+
+                                $discord->assignRole($log->user->discord_user_id, '1278868454606377040');
                             }
                         }
                     } else {
@@ -116,6 +124,7 @@ class ProcessSessionLogging implements ShouldQueue
         //Check existing sessions in db
         $sessionLogs = SessionLog::whereNull('session_end')->get();
         foreach ($sessionLogs as $log) {
+            // Controller has now disconnected
             if ((!in_array($log->callsign, $positionsFound)) || $vatsimData->searchCallsign($log->callsign, true)->cid != $log->cid) {
                 $log->session_end = Carbon::now();
                 $log->duration = $log->session_start->floatDiffInMinutes(Carbon::now()) / 60;
@@ -129,7 +138,9 @@ class ProcessSessionLogging implements ShouldQueue
                     $name = $log->cid;
                 }        
 
+                // Discord ID is not null (message has not yet been sent)
                 if($log->discord_id !== null){
+                    // Update Disconnect Message
                     try{
                         $discord = new DiscordClient();
                         $data = $discord->ControllerDisconnect($log->discord_id, $log->callsign, $name, $log->session_start, $log->duration);
@@ -137,16 +148,24 @@ class ProcessSessionLogging implements ShouldQueue
                         $discord = new DiscordClient();
                         $discord->sendMessageWithEmbed(env('DISCORD_WEB_LOGS'), 'Discord Controller Disconnect Error', $e->getMessage());
                     }
+
+                    // Remove Discord Role
+                    if($log->user && $log->user->hasDiscord() && $log->user->member_of_czqo){
+                        $discord = new DiscordClient();
+
+                        $discord->removeRole($log->user->discord_user_id, '1278868454606377040');
+                    }
                 }
 
                 $log->discord_id = null;
                 $log->save;
 
-                //If there is an associated roster member, give them the hours
+                //If there is an associated roster member, give them the hours and set as active
                 if ($rosterMember = $log->rosterMember) {
-                    if (($rosterMember->certification == 'certified' || $rosterMember->certification == 'training') && $rosterMember->active) {
+                    if (($rosterMember->certification == 'certified' || $rosterMember->certification == 'training')) {
                         $rosterMember->currency += $log->session_start->floatDiffInMinutes(Carbon::now()) / 60;
                         $rosterMember->monthly_hours += $log->session_start->floatDiffInMinutes(Carbon::now()) / 60;
+                        $rosterMember->active = 1;
                         $rosterMember->save();
                     }
                 }
