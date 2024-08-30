@@ -42,7 +42,7 @@ class Kernel extends ConsoleKernel
         $schedule->job(new ProcessSessionLogging())->everyMinute();
 
         //Inactivity checks
-        $schedule->job(new ProcessRosterInactivity())->cron('00 00 01 JAN,APR,JUL,OCT *');
+        $schedule->job(new ProcessRosterInactivity())->dailyAt('2:10');
 
         //CRONS FOR INACTIVITY EMAILS 2 weeks
         // $schedule->call(function () {

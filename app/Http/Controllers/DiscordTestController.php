@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Services\DiscordClient;
-use App\Jobs\DiscordAccountCheck;
+use App\Jobs\ProcessRosterInactivity;
 
 class DiscordTestController extends Controller
 {
@@ -26,7 +26,7 @@ class DiscordTestController extends Controller
     public function Job()
     {
         // Dispatch the job
-        $job = DiscordAccountCheck::dispatch();
+        $job = ProcessRosterInactivity::dispatch();
 
         // Call the handle method directly to get the result synchronously
         $result = $job->handle();
@@ -66,5 +66,11 @@ This will assist with future upgrades to the Discord Infrastructure.
             $discord->removeRole(200426385863344129, $roles['student']);
 
             dd($discord);
+    }
+
+    public function sendMessage()
+    {
+        $discord = new DiscordClient();
+        $discord->sendDM('200426385863344129', 'Test message');
     }
 }
