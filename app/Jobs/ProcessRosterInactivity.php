@@ -67,7 +67,7 @@ class ProcessRosterInactivity implements ShouldQueue
 
 
             // Check if there was a last session
-            if($last_session != null){
+            if($last_session != null && $roster->certification === "certified"){
                 
                 // Currency is less than 1 hour and last connection was 305 days ago.
                 if($roster->active && $currency < 1 && $last_session->created_at->diffInDays(now()) == 305){
@@ -108,7 +108,9 @@ class ProcessRosterInactivity implements ShouldQueue
 
             // No Session was returned within the last 365 Days.
             } else {
-                $removeController = true;
+                if($roster->certification === "certified"){
+                    $removeController = true;
+                }
             }
 
 
@@ -139,7 +141,12 @@ Gander Oceanic**');
         }
 
         // Send Web Notification if any changes have been made
-
-        
+        $discord = new DiscordClient();
+        $discord->sendMessageWithEmbed(env('DISCORD_WEB_LOGS'), 'AUTO: Roster Inactivity Update', 
+'60 Days till Removed: '.$first_notice.'
+30 Days till Removed: '.$second_notice.'
+7 Days till Removed: '.$third_notice.'
+Removed from Roster: '.$termination_notice
+);
     }
 }}

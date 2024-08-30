@@ -395,6 +395,10 @@ class InstructingController extends Controller
         //Find student
         $student = Student::where('user_id', $cid)->firstOrFail();
 
+        // Delete Roster Entry
+        $roster = RosterMember::where('cid', $cid)->firstOrFail();
+        $roster->delete();
+
         //Make as not current
         $student->current = false;
 
