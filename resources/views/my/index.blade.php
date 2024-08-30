@@ -370,13 +370,13 @@
 
                         <h3 class="font-weight-bold blue-text mt-4 pb-2">Your Connections</h3>
                         <p class="mt-2">List of all your Gander Oceanic connections to VATSIM over the last 12 Months.</p>
-                        <p class="mt-0">Connections less than 30 minutes will show up red.</p>
+                        <p class="mt-0">Connections less than 30 minutes are shown in red, and do not count towards Controller Currency.</p>
                         <table class="table dt table-hover table-bordered">
                             <thead>
                                 <th>Position</th>
                                 <th>Logon</th>
                                 <th>Logoff</th>
-                                <th>TIme</th>
+                                <th>Time</th>
                             </thead>
                             <tbody>
                                 @foreach ($sessions as $s)
