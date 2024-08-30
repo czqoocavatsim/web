@@ -40,17 +40,23 @@ class DiscordClient
 
     public function sendDM($userId, $title, $message)
     {
-        $response = $this->client->post("https://discord.com/api/v10/users/@me/channels", [
-            'json' => [
-                'recipient_id' => $userId, // Replace $userId with the Discord user ID
-            ],
-        ]);
-        
-        $channel = json_decode($response->getBody(), true);
-        $channelId = $channel['id'];
-        
-        // Step 2: Send the Message to the DM Channel
-        $this->sendMessageWithEmbed($channelId, $title, $message);
+        try{
+
+            $response = $this->client->post("https://discord.com/api/v10/users/@me/channels", [
+                'json' => [
+                    'recipient_id' => $userId, // Replace $userId with the Discord user ID
+                ],
+            ]);
+            
+            $channel = json_decode($response->getBody(), true);
+            $channelId = $channel['id'];
+            
+            // Step 2: Send the Message to the DM Channel
+            $this->sendMessageWithEmbed($channelId, $title, $message);
+
+        } catch (GuzzleHttp\Exception\ClientException $e) {
+
+        }
     }
 
     public function sendMessageWithEmbed($channelId, $title, $description)
