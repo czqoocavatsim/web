@@ -18,6 +18,7 @@
         <th>Name</th>
         <th>Status</th>
         <th>Active</th>
+        <th>Currency</th>
         <th>Action</th>
     </thead>
     <tbody>
@@ -60,6 +61,16 @@
                     <td class="bg-danger text-white">
                         Inactive
                     </td>
+                @endif
+
+                @if($r->currency < 1)
+                <td class="bg-danger text-dark">
+                    {{$r->currency}}
+                </td>
+                @else
+                <td class="bg-success text-white">
+                    {{$r->currency}}
+                </td>
                 @endif
                 <td>
                     <a href="{{route('training.admin.roster.viewcontroller', $r->cid)}}"><i class="fas fa-eye"></i>&nbsp;View</a>
