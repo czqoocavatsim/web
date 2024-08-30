@@ -42,7 +42,7 @@ class Kernel extends ConsoleKernel
         $schedule->job(new ProcessSessionLogging())->everyMinute();
 
         //Inactivity checks
-        $schedule->job(new ProcessRosterInactivity())->daily();
+        $schedule->job(new ProcessRosterInactivity())->dailyAt('14:05');
 
         //CRONS FOR INACTIVITY EMAILS 2 weeks
         // $schedule->call(function () {
@@ -80,16 +80,6 @@ class Kernel extends ConsoleKernel
 
         // Monthly Statistics Breakdown
         $schedule->job(new ProcessShanwickController())->monthlyOn(1, '00:00');
-
-        /// Monthly leaderboard wipe
-        // $schedule->call(function () {
-        //     // Loop through all roster members
-        //     foreach (RosterMember::all() as $rosterMember) {
-        //         // Reset the hours for every member
-        //         $rosterMember->monthly_hours = 0.0;
-        //         $rosterMember->save();
-        //     }
-        // })
 
         //Solo cert expiry warning
         // $schedule->job(new ProcessSoloCertExpiryWarnings())->daily();
