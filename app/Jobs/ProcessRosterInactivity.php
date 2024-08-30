@@ -135,7 +135,7 @@ class ProcessRosterInactivity implements ShouldQueue
 
             }
 
-            $roster->user->removeRole('Certified Controller');
+                $roster->user->removeRole('Certified Controller');
                 $roster->user->assignRole('Guest');
                 $roster->delete();
                 $termination_notice++;
@@ -143,11 +143,14 @@ class ProcessRosterInactivity implements ShouldQueue
     }
 
     // Send Web Notification if any changes have been made
-    $discord = new DiscordClient();
-    $discord->sendMessageWithEmbed(env('DISCORD_WEB_LOGS'), 'AUTO: Roster Inactivity Update', 
-    '60 Days till Removed: '.$first_notice.'
-    30 Days till Removed: '.$second_notice.'
-    7 Days till Removed: '.$third_notice.'
-    Removed from Roster: '.$termination_notice
-    );
+    if($first_notice != 0 || $second_notice !== 0 || $third_notice !== 0 || $termination_notice !== 0){
+        $discord = new DiscordClient();
+        $discord->sendMessageWithEmbed(env('DISCORD_WEB_LOGS'), 'AUTO: Roster Inactivity Update', 
+        'The Following changes have occured to the Controller Roster
+60 Days till Removed: '.$first_notice.'
+30 Days till Removed: '.$second_notice.'
+7 Days till Removed: '.$third_notice.'
+Removed from Roster: '.$termination_notice
+        );
+    }
 }}

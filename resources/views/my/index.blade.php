@@ -353,7 +353,7 @@
                                 {{ $rosterProfile->activeLabelHtml() }}
                             </h3>
                         </div>
-                        <h3 class="font-weight-bold blue-text mt-3 pb-2">Activity</h3>
+                        <h3 class="font-weight-bold blue-text mt-4 pb-2">Activity</h3>
                         @php
                             $currency = auth()->user()->rosterProfile->currency;
                             $class = $currency < 0.1 ? 'red' : ($currency < 1.0 ? 'blue' : 'green');
@@ -364,9 +364,45 @@
                                 class='badge rounded {{ $class }} text-white p-2 shadow-none'>
                                 {{ $currency }} hours recorded
                             </span>
-                        </h3>
+                        </h3>                        
 
-                        <p class="mt-4">You require 1 hour of activity within the last 12 months.</p>
+                        <p class="mt-2">To remain active, you require 60 minutes of connection within the last 12 months.</p>
+
+                        <h3 class="font-weight-bold blue-text mt-4 pb-2">Your Connections</h3>
+                        <p class="mt-2">List of all your Gander Oceanic connections to VATSIM over the last 12 Months.</p>
+                        <p class="mt-0">Connections less than 30 minutes will show up red.</p>
+                        <table class="table dt table-hover table-bordered">
+                            <thead>
+                                <th>Position</th>
+                                <th>Logon</th>
+                                <th>Logoff</th>
+                                <th>TIme</th>
+                            </thead>
+                            <tbody>
+                                @foreach ($sessions as $s)
+                                    <tr>
+                                        <th>{{$s->callsign}}</th>
+                                        <th>{{\Carbon\Carbon::parse($s->session_start)->format('l, d F \a\t Hi\Z')}}</th>
+                                        <th>
+                                            @if($s->session_end === null)
+                                            Currently Connected
+                                            @else
+                                            {{\Carbon\Carbon::parse($s->session_end)->format('l, d F \a\t Hi\Z')}}
+                                            @endif
+                                        </th>
+                                        @if($s->duration < 0.5)
+                                            <td class="bg-danger text-white">
+                                                {{$s->duration}}
+                                            </td>
+                                        @else
+                                        <td class="bg-success text-white">
+                                            {{$s->duration}}
+                                        </td>
+                                        @endif
+                                    </tr>
+                                @endforeach
+                            </tbody>
+                        </table>
                     @else
                         <h3>
                             <span style='font-weight: 400' class='badge rounded p-2 red text-white shadow-none'>

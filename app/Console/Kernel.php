@@ -42,7 +42,7 @@ class Kernel extends ConsoleKernel
         $schedule->job(new ProcessSessionLogging())->everyMinute();
 
         //Inactivity checks
-        $schedule->job(new ProcessRosterInactivity())->dailyAt('8:30');
+        $schedule->job(new ProcessRosterInactivity())->daily();
 
         //CRONS FOR INACTIVITY EMAILS 2 weeks
         // $schedule->call(function () {
@@ -99,7 +99,7 @@ class Kernel extends ConsoleKernel
         })->cron('15 00 01 JAN,APR,JUL,OCT *');
 
         //Solo cert expiry warning
-        $schedule->job(new ProcessSoloCertExpiryWarnings())->daily();
+        // $schedule->job(new ProcessSoloCertExpiryWarnings())->daily();
 
         // Shanwick Controller Roster Update
         $schedule->job(new ProcessShanwickController())->daily();
