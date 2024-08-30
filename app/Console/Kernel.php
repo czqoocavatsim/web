@@ -111,7 +111,7 @@ class Kernel extends ConsoleKernel
         $schedule->job(new DiscordTrainingWeeklyUpdates())->weeklyOn(6, '6:00');
 
         // Check If Account is Linked
-        $schedule->job(new DiscordAccountCheck)->dailyAt('7:10');
+        $schedule->job(new DiscordAccountCheck)->weeklyOn(5, '0:30');
     }
 
     /**

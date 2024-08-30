@@ -42,11 +42,15 @@ class DiscordTestController extends Controller
      //New Applicant in Instructor Channel
      $discord = new DiscordClient();
 
-     $discord->sendMessageWithEmbed('1273228164255977492', 'Oceanic Training Cancelled!',
+     $discord->sendMessageWithEmbed('1274827382250934365', 'Discord Account Not Linked on CZQO',
                                     
-'Your training request with Gander Oceanic has been terminated.
+'A number of users within the Discord do not have their Discord linked with the Gander Oceanic Web Service.
 
-If you would like to begin training again, please re-apply via the Gander Website.');   
+We ask that you head to the [Gander Oceanic Website](https://ganderoceanic.ca/my) to link your Discord Account.
+
+This will assist with future upgrades to the Discord Infrastructure.
+
+<@&1278606316906090527>');   
     }
 
     public function DiscordRoles()
