@@ -75,17 +75,17 @@ class ProcessRosterInactivity implements ShouldQueue
     
                     // Send Message to user that they have been set as inactive
                     if($roster->user->member_of_czqo && $roster->user->hasDiscord()){
-                        $discord = new DiscordClient();
-                        $discord->sendDM($roster->user->discord_user_id, 'Roster Status set as Inactive', 'Hello!
+    //                     $discord = new DiscordClient();
+    //                     $discord->sendDM($roster->user->discord_user_id, 'Roster Status set as Inactive', 'Hello!
                         
-    Your status has been set as Inactive with Gander Oceanic. This is because you have not controlled at least one hour, within the last 305 days.
+    // Your status has been set as Inactive with Gander Oceanic. This is because you have not controlled at least one hour, within the last 305 days.
     
-    You have 60 days to control at least one hour, otherwise you will be removed as a certified controller.
+    // You have 60 days to control at least one hour, otherwise you will be removed as a certified controller.
     
-    If you have any questions, please reach out to the Gander Oceanic team on our Discord
+    // If you have any questions, please reach out to the Gander Oceanic team on our Discord
     
-    **Regards,
-    Gander Oceanic**');
+    // **Regards,
+    // Gander Oceanic**');
     
                     }
 
@@ -123,21 +123,22 @@ class ProcessRosterInactivity implements ShouldQueue
             if($removeController === true){
                 // Send Message to user that they have been set as inactive
                 if($roster->user->member_of_czqo && $roster->user->hasDiscord()){
-                    $discord = new DiscordClient();
-                    $discord->sendDM($roster->user->discord_user_id, 'Gander Oceanic Certification Expired', 'Hello!
+//                     $discord = new DiscordClient();
+//                     $discord->sendDM($roster->user->discord_user_id, 'Gander Oceanic Certification Expired', 'Hello!
                     
-Your Oceanic Certification has now been removed. This is because you have failed to control at least 1 hour, within the last 365 days.
+// Your Oceanic Certification has now been removed. This is because you have failed to control at least 1 hour, within the last 365 days.
 
-Should you wish to regain your certification, please apply to do so via the Gander Website.
+// Should you wish to regain your certification, please apply to do so via the Gander Website.
 
-**Regards,
-Gander Oceanic**');
+// **Regards,
+// Gander Oceanic**');
 
-                $roster->user->removeRole('Certified Controller');
+            }
+
+            $roster->user->removeRole('Certified Controller');
                 $roster->user->assignRole('Guest');
                 $roster->delete();
                 $termination_notice++;
-            }
         }
     }
 
