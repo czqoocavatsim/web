@@ -71,7 +71,7 @@ class ProcessMonthlyBreakdown implements ShouldQueue
         $message .= "\nWell done to everyone for your contributions to Gander Oceanic over the last Month! Enjoy ".Carbon::now()->format('F, Y');
 
         $discord = new DiscordClient();
-        $discord->sendMessageWithEmbed('1274861846880456785', 'Gander Oceanic Operations Breakdown - '.Carbon::now()->subMonth()->format('F, Y'), $message);
+        $discord->sendMessageWithEmbed('488265136696459292', 'Gander Oceanic Operations Breakdown - '.Carbon::now()->subMonth()->format('F, Y'), $message);
 
         foreach($roster_member as $roster){
             $roster->monthly_hours = 0.0;
