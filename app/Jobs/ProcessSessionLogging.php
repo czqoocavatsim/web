@@ -170,8 +170,8 @@ class ProcessSessionLogging implements ShouldQueue
                     // Controller is either Certified or In Training
                     if (($rosterMember->certification == 'certified' || $rosterMember->certification == 'training')) {
 
-                        // Only add hours if more than 30mins
-                        if($currency > 0.49){
+                        // Only add hours if more than 30mins (Disabled to 01mins until policy update)
+                        if($currency > 0.00){
                             $rosterMember->currency += $currency;
                             $rosterMember->monthly_hours += $monthly_hours;
                             $rosterMember->save();

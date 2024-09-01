@@ -52,9 +52,9 @@ class ProcessMonthlyBreakdown implements ShouldQueue
         $message .= "\n**__Top 3 Controllers__**\n";
         foreach($top_3 as $t) {
             if($t->user->discord_user_id === null){
-                $message .= "- " . $t->user->fullName('FLC') . " - ".$t->monthly_hours."\n";
+                $message .= "- " . $t->user->fullName('FLC') . " - ".$t->monthly_hours." hours\n";
             } else {
-                $message .= "- <@" . $t->user->discord_user_id . "> - ".$t->monthly_hours."\n";
+                $message .= "- <@" . $t->user->discord_user_id . "> - ".$t->monthly_hours." hours\n";
             }
         }
 

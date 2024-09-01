@@ -63,9 +63,11 @@ class ProcessRosterInactivity implements ShouldQueue
 
             // Go through each session to get some information
             foreach($sessions as $s){
-                if($s->duration > 0.49){
-                    $currency += $s->duration;
-                }
+                // if($s->duration > 0.49){
+                //     $currency += $s->duration;
+                // }
+
+                $currency += $s->duration;
             }
 
 

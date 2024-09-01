@@ -196,7 +196,7 @@
                 </div>
                 <div class="modal-body">
                     <p>This will mark the students training as 'completed', close out all of their training, and add them to the controller roster.</p>
-                    <p>Please do not do this unless the student is actually completed. This is REALLY REALLY painful to reverse</p>
+                    <p>Please do not do this unless the student is actually completed. This is **REALLY REALLY painful** to reverse</p>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-light" data-dismiss="modal">Dismiss</button>
