@@ -7,7 +7,7 @@ use Illuminate\Notifications\Notification;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
 
-class TwoWeekInactivityReminder extends Notification implements ShouldQueue
+class TwoMonthInactivityReminder extends Notification implements ShouldQueue
 {
     use Queueable;
     protected $rosterMember, $cycle;
@@ -46,12 +46,12 @@ class TwoWeekInactivityReminder extends Notification implements ShouldQueue
         return (new MailMessage())
             ->greeting("Hi {$this->rosterMember->user->fullName('FLC')}")
             ->line('**Two Weeks Left - Activity Reminder**')
-            ->line('According to our records, you have not yet fulfilled our currency requirement. You require **6 hours** online controlling on Gander or Shanwick or Bandbox by the end of the quarter, otherwise you will be marked inactive.')
-            ->line('There are two weeks remaining in the current quarter, so this email serves only as a reminder in case you may have forgotten.')
-            ->line("Please don’t hesitate to contact us should you have any concerns, or if you need us to make an accommodation. We're here to help!")
+            ->line('According to our records, you have not yet fulfilled our currency requirement. You require **1 hour** online controlling on EGGX, CZQO or NAT in a 12 Month Period.')
+            ->line('This email serves only as a reminder in case you may have forgotten.')
+            ->line("Please don’t hesitate to contact us should you have any concerns.")
             ->line('*You received this email as there is important information in regard to your status with Gander Oceanic.*')
             ->salutation('Sent automatically through ActivityBot.')
-            ->subject('[NOTICE] Two Weeks To Fulfil Activity Requirement');
+            ->subject('[NOTICE] Two Months To Fulfil Activity Requirement');
     }
 
     /**

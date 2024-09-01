@@ -43,13 +43,13 @@ class ProcessMonthlyBreakdown implements ShouldQueue
             $total_hours += $roster->monthly_hours;
         }
 
+        // Compose the message
         $message = 'It is the beginning of a new month, so here are some wonderful stats for ' . Carbon::now()->subMonth()->format('F, Y') . "\n\n";
 
         $message .= "**__Total Controller Hours__**\n";
         $message .= "- " . $total_hours . " hours\n";
 
         $message .= "\n**__Top 3 Controllers__**\n";
-
         foreach($top_3 as $t) {
             if($t->user->discord_user_id === null){
                 $message .= "- " . $t->user->fullName('FLC') . " - ".$t->monthly_hours."\n";
@@ -59,7 +59,6 @@ class ProcessMonthlyBreakdown implements ShouldQueue
         }
 
         $message .= "\n**__New Certified Controllers__**\n";
-
         foreach($new_controllers as $nc) {
             if($nc->controller->discord_user_id === null){
                 $message .= "- " . $nc->controller->fullName('FLC') . "\n";
@@ -70,8 +69,9 @@ class ProcessMonthlyBreakdown implements ShouldQueue
 
         $message .= "\nWell done to everyone for your contributions to Gander Oceanic over the last Month! Enjoy ".Carbon::now()->format('F, Y');
 
+        // Send the Announcement
         $discord = new DiscordClient();
-        $discord->sendMessageWithEmbed('1274861846880456785', 'Gander Oceanic Operations Breakdown - '.Carbon::now()->subMonth()->format('F, Y'), $message);
+        $discord->sendMessageWithEmbed(env('DISCORD_ANNOUNCEMENTS'), 'Gander Oceanic Operations Breakdown - '.Carbon::now()->subMonth()->format('F, Y'), $message);
 
         foreach($roster_member as $roster){
             $roster->monthly_hours = 0.0;

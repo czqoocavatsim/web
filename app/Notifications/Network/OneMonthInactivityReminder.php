@@ -7,7 +7,7 @@ use Illuminate\Notifications\Notification;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
 
-class OneWeekInactivityReminder extends Notification implements ShouldQueue
+class OneMonthInactivityReminder extends Notification implements ShouldQueue
 {
     use Queueable;
     protected $rosterMember, $cycle;
@@ -45,13 +45,13 @@ class OneWeekInactivityReminder extends Notification implements ShouldQueue
     {
         return (new MailMessage())
             ->greeting("Hi {$this->rosterMember->user->fullName('FLC')}")
-            ->line('**Activity Reminder - One Week till Uncertified**')
+            ->line('**One Month - Activity Reminder**')
             ->line('According to our records, you have not yet fulfilled our currency requirement. You require **1 hour** online controlling on EGGX, CZQO or NAT in a 12 Month Period.')
-            ->line('There is one week remaining in this requirement, so this email serves only as a reminder in case you may have forgotten.')
+            ->line('This email serves only as a reminder in case you may have forgotten.')
             ->line("Please don’t hesitate to contact us should you have any concerns.")
             ->line('*You received this email as there is important information in regard to your status with Gander Oceanic.*')
             ->salutation('Sent automatically through ActivityBot.')
-            ->subject('[NOTICE] One Week To Fulfil Activity Requirement');
+            ->subject('[NOTICE] One Month To Fulfil Activity Requirement');
     }
 
     /**
