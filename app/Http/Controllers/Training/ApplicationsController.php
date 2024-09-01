@@ -442,7 +442,7 @@ class ApplicationsController extends Controller
             $discord->assignRole($student->user->discord_user_id, 482824058141016075);
 
             //Create Instructor Thread
-            $discord->createTrainingThread($student->user->id, '<@'.$student->user->discord_user_id.'>');
+            $discord->createTrainingThread($student->user->fullName('FLC'), '<@'.$student->user->discord_user_id.'>');
 
             // Notify Senior Team that the application was accepted.
             $discord->sendMessageWithEmbed(config('app.env') == 'local' ? intval(config('services.discord.web_logs')) : intval(config('services.discord.applications')), 'Accepted Applicant', $student->user->fullName('FLC').' has just been accepted.', 'error');

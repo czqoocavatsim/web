@@ -11,8 +11,10 @@ use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Support\Facades\Notification;
-use App\Notifications\Roster\RosterStatusChanged;
-use App\Notifications\Roster\RemovedFromRoster;
+use App\Notifications\Network\TwoMonthInactivityReminder;
+use App\Notifications\Network\OneMonthInactivityReminder;
+use App\Notifications\Network\OneWeekInactivityReminder;
+use App\Notifications\Network\ControllerTerminated;
 use App\Services\DiscordClient;
 
 class ProcessRosterInactivity implements ShouldQueue

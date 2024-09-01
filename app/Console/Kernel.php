@@ -8,6 +8,7 @@ use App\Jobs\ProcessSessionReminders;
 use App\Jobs\ProcessSoloCertExpiryWarnings;
 use App\Jobs\ProcessShanwickController;
 use App\Jobs\DiscordTrainingWeeklyUpdates;
+use App\Jobs\ProcessMonthlyBreakdown;
 use App\Jobs\UpdateDiscordUserRoles;
 use App\Jobs\DiscordAccountCheck;
 use App\Models\Roster\RosterMember;
@@ -42,7 +43,25 @@ class Kernel extends ConsoleKernel
         $schedule->job(new ProcessSessionLogging())->everyMinute();
 
         //Inactivity checks
-        $schedule->job(new ProcessRosterInactivity())->dailyAt('14:05');
+        $schedule->job(new ProcessRosterInactivity())->daily();
+
+        // Monthly Statistics Breakdown
+        $schedule->job(new ProcessMonthlyBreakdown())->monthlyOn(1, '00:40');
+
+        //Solo cert expiry warning
+        // $schedule->job(new ProcessSoloCertExpiryWarnings())->daily();
+
+        // Shanwick Controller Roster Update
+        $schedule->job(new ProcessShanwickController())->daily();
+
+        //Training/OTS session reminders
+        $schedule->job(new ProcessSessionReminders())->daily();
+
+        // Check Training Threads Status (Once per week)
+        $schedule->job(new DiscordTrainingWeeklyUpdates())->weeklyOn(6, '6:00');
+
+        // Check If Account is Linked
+        $schedule->job(new DiscordAccountCheck)->weeklyOn(5, '0:30');
 
         //CRONS FOR INACTIVITY EMAILS 2 weeks
         // $schedule->call(function () {
@@ -77,24 +96,6 @@ class Kernel extends ConsoleKernel
         //     $discord = new DiscordClient();
         //     $discord->sendMessage(753086414811562014, 'Sent '.$count.' one-week warning inactivity emails');
         // })->cron('00 00 23 MAR,JUN,SEP,DEC *'); // 1 week before end of quarter*/
-
-        // Monthly Statistics Breakdown
-        $schedule->job(new ProcessShanwickController())->monthlyOn(1, '00:00');
-
-        //Solo cert expiry warning
-        // $schedule->job(new ProcessSoloCertExpiryWarnings())->daily();
-
-        // Shanwick Controller Roster Update
-        $schedule->job(new ProcessShanwickController())->daily();
-
-        //Training/OTS session reminders
-        $schedule->job(new ProcessSessionReminders())->daily();
-
-        // Check Training Threads Status (Once per week)
-        $schedule->job(new DiscordTrainingWeeklyUpdates())->weeklyOn(6, '6:00');
-
-        // Check If Account is Linked
-        $schedule->job(new DiscordAccountCheck)->weeklyOn(5, '0:30');
     }
 
     /**
