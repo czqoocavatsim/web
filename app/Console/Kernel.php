@@ -46,7 +46,7 @@ class Kernel extends ConsoleKernel
         $schedule->job(new ProcessRosterInactivity())->daily();
 
         // Monthly Statistics Breakdown
-        $schedule->job(new ProcessMonthlyBreakdown())->monthlyOn(1, '00:40');
+        $schedule->job(new ProcessMonthlyBreakdown())->monthlyOn(1, '00:01');
 
         //Solo cert expiry warning
         // $schedule->job(new ProcessSoloCertExpiryWarnings())->daily();
@@ -58,10 +58,10 @@ class Kernel extends ConsoleKernel
         $schedule->job(new ProcessSessionReminders())->daily();
 
         // Check Training Threads Status (Once per week)
-        $schedule->job(new DiscordTrainingWeeklyUpdates())->weeklyOn(6, '6:00');
+        $schedule->job(new DiscordTrainingWeeklyUpdates())->weeklyOn(6, '00:01');
 
         // Check If Account is Linked
-        $schedule->job(new DiscordAccountCheck)->weeklyOn(5, '0:30');
+        $schedule->job(new DiscordAccountCheck)->weeklyOn(5, '0:01');
 
         //CRONS FOR INACTIVITY EMAILS 2 weeks
         // $schedule->call(function () {
