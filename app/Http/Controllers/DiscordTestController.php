@@ -3,7 +3,9 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use GuzzleHttp\Client;
 use App\Services\DiscordClient;
+use Illuminate\Support\Facades\Http;
 use App\Jobs\ProcessMonthlyBreakdown;
 
 class DiscordTestController extends Controller
@@ -72,5 +74,22 @@ This will assist with future upgrades to the Discord Infrastructure.
     {
         $discord = new DiscordClient();
         $discord->sendDM('200426385863344129', 'Test message');
+    }
+
+    public function SlashCommand()
+    {
+        $url = 'https://discord.com/api/v10/applications/1118430230839840768/guilds/' . env('DISCORD_GUILD_ID') . '/commands';
+        // For global commands use '/commands' without guild ID.
+
+        $commandData = [
+            'name' => 'hello',
+            'description' => 'Replies with Hello!',
+            'type' => 1, // 1 is for chat input commands (slash commands)
+        ];
+
+        $response = Http::withToken(env('DISCORD_BOT_TOKEN'))
+            ->post($url, $commandData);
+
+        return $response->json();
     }
 }
