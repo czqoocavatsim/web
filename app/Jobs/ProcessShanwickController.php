@@ -266,7 +266,7 @@ class ProcessShanwickController implements ShouldQueue
 
             // Create a Request for the Shanwick Controllers
             $client = new Client(['timeout' => 1000]);
-            $response = $client->request('GET', "https://www.vatsim.uk/api/validations?position=EGGX_FSS");
+            $response = $client->request('GET', 'https://www.vatsim.uk/api/validations?position=EGGX_CTR');
             $data = json_decode($response->getBody(), true);
             $data_json = $data['validated_members'];
             
