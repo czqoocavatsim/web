@@ -4,7 +4,8 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Services\DiscordClient;
-use App\Jobs\ProcessMonthlyBreakdown;
+use Illuminate\Support\Facades\Http;
+use App\Jobs\DiscordTrainingWeeklyUpdates;
 
 class DiscordTestController extends Controller
 {
@@ -26,7 +27,7 @@ class DiscordTestController extends Controller
     public function Job()
     {
         // Dispatch the job
-        $job = ProcessMonthlyBreakdown::dispatch();
+        $job = DiscordTrainingWeeklyUpdates::dispatch();
 
         // Call the handle method directly to get the result synchronously
         $result = $job->handle();
@@ -72,5 +73,20 @@ This will assist with future upgrades to the Discord Infrastructure.
     {
         $discord = new DiscordClient();
         $discord->sendDM('200426385863344129', 'Test message');
+    }
+
+    public function SlashCommand()
+    {
+        $discord = new DiscordClient();
+
+        $response = $discord->getClient()->post("applications/".env('DISCORD_CLIENT_ID')."/guilds/".env('DISCORD_GUILD_ID')."/commands", [
+            'json' => [
+                'name' => 'report-issue',
+                'description' => 'Report a Web Issue',
+                'type' => 1, // 1 for slash commands
+            ]
+        ]);
+        
+        return $response->json();
     }
 }
