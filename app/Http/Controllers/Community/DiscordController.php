@@ -184,11 +184,10 @@ class DiscordController extends Controller
         //Edit user
         $user->discord_user_id = $discord_user['id'];
         $user->discord_username = $discord_user['username'];
-        // $user->member_of_czqo = true;
         $user->discord_avatar = $discord_user['avatar'] ? 'https://cdn.discordapp.com/avatars/'.$discord_user['id'].'/'.$discord_user['avatar'].'.png' : null;
         $user->save();
 
-        return redirect()->route('my.index')->with('success', 'Linked with account '.$discord_user['username'].'!');
+        return redirect()->route('my.index')->with('success', 'Linked with account '.$discord_user['username'].'! Please join our Discord!');
     }
 
     public function joinRedirectDiscord()
@@ -257,7 +256,7 @@ class DiscordController extends Controller
                 'headers' => ['Content-Type' => 'application/x-www-form-urlencoded']
             ]);
         } catch (ClientException $e) {
-            return redirect()->route('my.index')->with('error-modal', $e->getMessage());
+            return redirect()->route('my.index')->with('error-modal', $e->getMessage().'... Unable to get Discord Authorisation Code');
         }
 
         $access_token = json_decode($response->getBody(), true)['access_token'];
@@ -279,7 +278,7 @@ class DiscordController extends Controller
                     ]
                 );
         } catch (ClientException $e) {
-            return redirect()->route('my.index')->with('error-modal', $e->getMessage());
+            return redirect()->route('my.index')->with('error-modal', $e->getMessage().'.... Unable to update User Details.');
         }
 
 
