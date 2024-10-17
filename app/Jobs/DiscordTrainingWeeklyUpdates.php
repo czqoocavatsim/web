@@ -203,11 +203,12 @@ One of our team will make contact with you to organise a session for next if the
 
             // Terminate Training
             {
-                $term_training++;
-                $terminate_names["names"][] = $thread['name'];
                 $s = Student::where('created_at', '<=', Carbon::now()->subDays(60))->where('user_id', $cid)->first();
 
                 if($s != null && $s->hasLabel('Awaiting Exam')){
+                    $term_training++;
+                    $terminate_names["names"][] = $thread['name'];
+
                     //Make as not current
                     $s->current = false;
 
