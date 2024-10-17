@@ -3,10 +3,9 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use GuzzleHttp\Client;
 use App\Services\DiscordClient;
 use Illuminate\Support\Facades\Http;
-use App\Jobs\ProcessMonthlyBreakdown;
+use App\Jobs\DiscordTrainingWeeklyUpdates;
 
 class DiscordTestController extends Controller
 {
@@ -28,7 +27,7 @@ class DiscordTestController extends Controller
     public function Job()
     {
         // Dispatch the job
-        $job = ProcessMonthlyBreakdown::dispatch();
+        $job = DiscordTrainingWeeklyUpdates::dispatch();
 
         // Call the handle method directly to get the result synchronously
         $result = $job->handle();
@@ -78,18 +77,16 @@ This will assist with future upgrades to the Discord Infrastructure.
 
     public function SlashCommand()
     {
-        $url = 'https://discord.com/api/v10/applications/1118430230839840768/guilds/' . env('DISCORD_GUILD_ID') . '/commands';
-        // For global commands use '/commands' without guild ID.
+        $discord = new DiscordClient();
 
-        $commandData = [
-            'name' => 'hello',
-            'description' => 'Replies with Hello!',
-            'type' => 1, // 1 is for chat input commands (slash commands)
-        ];
-
-        $response = Http::withToken(env('DISCORD_BOT_TOKEN'))
-            ->post($url, $commandData);
-
+        $response = $discord->getClient()->post("applications/".env('DISCORD_CLIENT_ID')."/guilds/".env('DISCORD_GUILD_ID')."/commands", [
+            'json' => [
+                'name' => 'report-issue',
+                'description' => 'Report a Web Issue',
+                'type' => 1, // 1 for slash commands
+            ]
+        ]);
+        
         return $response->json();
     }
 }
