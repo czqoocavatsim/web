@@ -12,6 +12,7 @@ use GuzzleHttp\Client;
 use App\Services\DiscordClient;
 use App\Models\Training\Instructing\Records\TrainingSession;
 use App\Models\Users\User;
+use App\Models\Roster\RosterMember;
 use App\Notifications\Training\Instructing\RemovedAsStudent;
 use App\Models\Training\Instructing\Students\StudentStatusLabel;
 use App\Models\Training\Instructing\Links\StudentStatusLabelLink;
@@ -30,49 +31,146 @@ class DiscordAccountCheck implements ShouldQueue
     public function handle()
     {
         // Initialise some variables
-        $discord_not_linked = 0;
+        $checked_users = 0;
+        $accounts_not_linked = 0;
+        $discord_uids = [];
 
         // Get List of Users in Discord
         $discord = new DiscordClient();
         $response = $discord->getClient()->get('guilds/'.env('DISCORD_GUILD_ID').'/members?limit=1000');
-        // $response = $discord->getClient()->get('guilds/'.env('DISCORD_GUILD_ID').'/members');
         $discord_members = json_decode($response->getBody(), true);
-        // $discord_members[0]['nick'] = "Joshua Micallef 1342084";
+
         // dd($discord_members);
 
-        // Get All Users where member_of_czqo = 0 & used_connect = 1
-        $users_not_linked = User::where('member_of_czqo', 0)->where('used_connect', 1)->get()->toArray();
-        // dd($users_not_linked);
+        // Loop through each Discord User and get some key information
+        foreach($discord_members as $members){
+            $discord_uids[] = $members['user']['id'];
+            // dd($members['user']);
+        }
+        // dd($discord_uids);
 
-        // foreach ($threads_data['threads'] as $thread) {
-        //     if (strpos($thread['name'], $cid) !== false) {
+        // Get a complete list of Gander Oceanic Users
+        $users = User::all();
 
-        // Go through each Discord Member
-        foreach($discord_members as $discord_user){
+        // Loop through each DB User
+        foreach($users as $user){
 
-            foreach($users_not_linked as $users){
+            // Skip is discord_user_id is null
+            if($user->discord_user_id == null){
+                continue;
+            } else {
+                $checked_users++;
+            }
 
-                // dd($users);
+            // Add a Sleep Timer - Allows API to not block
+            sleep(2);
 
-                // Variables to be compared
-                $name = $discord_user['nick'];
-                $cid = $users['id'];
+            // Check if user is currently in Discord
+            foreach($discord_uids as $discord_uid){
+                
+                if($user->discord_user_id == $discord_uid){
+                    ## User is in the Discord
+    
+                    // Get Discord Member Information
+                    $discord_member = $discord->getClient()->get('guilds/'.env('DISCORD_GUILD_ID').'/members/'.$discord_uid);
+                    $discord_member = json_decode($discord_member->getBody(), true);
 
-                // CID matches ID of user not linked
-                if (strpos($name, $cid) !== false) {
-                    $discord = new DiscordClient();
-
-                    $discord->assignRole($discord_user['user']['id'], '1278606316906090527');
-
-                    // Add one role
-                    $discord_not_linked++;
+                    if(in_array('482816721280040964', $discord_member['roles'])){
+                        continue;
+                    }
+    
+                    // Update DB information
+                    $user->member_of_czqo = 1;
+                    $user->discord_username = $discord_member['username'];
+                    $user->discord_avatar = $user->avatar ? 'https://cdn.discordapp.com/avatars/'.$user->discord_user_id.'/'.$discord_member['avatar'].'.png' : null;
+                    $user->save();
+    
+                    // Remove ID from the List
+                    foreach ($discord_uids as $key => $discord_member) {
+                        if ($discord_member == $user->discord_user_id) {
+                            // Remove the matched ID from the array
+                            unset($discord_uids[$key]);
+                    
+                            // Optional: break the loop once the match is found and removed
+                            break;
+                        }
+                    }
+    
+                    // Update Discord Information
+                    $rolesToAdd = [];
+                    $discordRoleIds = [
+                        'guest'      => 482835389640343562,
+                        'training'   => 482824058141016075,
+                        'certified'  => 482819739996127259,
+                        'supervisor' => 720502070683369563,
+                    ];
+    
+                    //Add the Member role
+                    array_push($rolesToAdd, $discordRoleIds['guest']);
+    
+                    //Roster?
+                    if (RosterMember::where('user_id', $user->id)->exists()) {
+                        //What status do they have?
+                        $rosterProfile = RosterMember::where('user_id', $user->id)->first();
+                        switch ($rosterProfile->certification) {
+                            case 'certified':
+                                array_push($rolesToAdd, $discordRoleIds['certified']);
+                                break;
+                            case 'training':
+                                array_push($rolesToAdd, $discordRoleIds['training']);
+                                break;
+                        }
+                    }
+    
+                    //Supervisor?
+                    if ($user->rating_short == 'SUP') {
+                        array_push($rolesToAdd, $discordRoleIds['supervisor']);
+                    }
+    
+                    // Update user
+                    $discord->getClient()->patch('guilds/'.env('DISCORD_GUILD_ID').'/members/'.$user->discord_user_id, [
+                        'json' => [
+                            'nick' => $user->FullName('FLC'),
+                            'roles' => $rolesToAdd,
+                        ]
+                    ]);
+    
+                } else {
+                    ## User is NOT in the discord
+    
+                    // Update DB Information
+                    $user->member_of_czqo = 0;
+                    $user->save();
                 }
 
             }
+
+
+            // Add Role to Users not Connected to Gander Oceanic
+            foreach($discord_uids as $discord_uid){
+
+            }
+            
+
         }
 
-        // Tell the log chat
-        $discord->sendMessageWithEmbed(env('DISCORD_WEB_LOGS'), 'AUTO: Users Not Linked',$discord_not_linked. ' members are not linked with CZQO. Role has been assigned');
+        // Variables after looping
+        // dd($discord_uids);
+        // dd($discord_uid);
+        // dd($checked_users);
+
+
+
+
+
+
+
+        // Record Information for Discord
+
+        // Beginning
+        $update_content = "Full list of functions completed this week for Discord Users, <@200426385863344129>";
+
+        $discord->sendMessageWithEmbed(env('DISCORD_WEB_LOGS'), 'WEEKLY: Discord User Update', $update_content);
     }
 
 }
