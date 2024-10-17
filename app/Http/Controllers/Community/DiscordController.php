@@ -320,6 +320,7 @@ class DiscordController extends Controller
         $user->discord_user_id = null;
         $user->member_of_czqo = false;
         $user->discord_avatar = null;
+        $user->discord_username = null;
 
         //If they have a Discord avatar, remove it
         if ($user->avatar_mode == 2) {
