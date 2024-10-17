@@ -79,7 +79,6 @@ class DiscordTrainingWeeklyUpdates implements ShouldQueue
                         $threads_activated["names"][] = $thread['name'];
 
                         // Thread should be active, so lets activate it.
-                        $discord = new DiscordClient();
                         $data = $discord->getClient()->patch('channels/'.$thread['id'], [
                             'json' => [
                                 'locked' => false,
@@ -93,9 +92,6 @@ class DiscordTrainingWeeklyUpdates implements ShouldQueue
 
         // Function for Training Thread Availability Updates
         {
-            // Initialize the DiscordClient inside the handle method
-            $discord = new DiscordClient();
-
             // Get Active Threads
             $response = $discord->getClient()->get('guilds/'.env('DISCORD_GUILD_ID').'/threads/active');
             $all_threads2 = json_decode($response->getBody(), true);
@@ -217,9 +213,6 @@ One of our team will make contact with you to organise a session for next if the
 
                     //Discord Updates
                     if ($s->user->hasDiscord() && $s->user->member_of_czqo) {
-                        //Get Discord client
-                        $discord = new DiscordClient();
-
                         //remove student discord role
                         $discord->removeRole($s->user->discord_user_id, 482824058141016075);
 
@@ -232,9 +225,6 @@ One of our team will make contact with you to organise a session for next if the
                         $discord->sendMessageWithEmbed(config('app.env') == 'local' ? intval(config('services.discord.web_logs')) : intval(config('services.discord.instructors')), 'Training Terminated', $s->user->fullName('FLC').' has had their training terminated. `Exam not completed within 60 days.`', 'error');
                     
                     } else {
-                        //Get Discord client
-                        $discord = new DiscordClient();
-                        
                         // Notify Senior Team that training has been terminated
                         $discord->sendMessageWithEmbed(config('app.env') == 'local' ? intval(config('services.discord.web_logs')) : intval(config('services.discord.instructors')), 'Training Terminated', $s->user->fullName('FLC').' has had their training terminated. `Exam not completed within 60 days.`', 'error');
                     }
