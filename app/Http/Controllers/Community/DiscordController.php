@@ -243,7 +243,7 @@ class DiscordController extends Controller
         //Get access token using returned code
         $http = new Client();
 
-        // try {
+        try {
             $response = $http->post('https://discord.com/api/v10/oauth2/token', [
                 'form_params' => [
                     'client_id' => env('DISCORD_CLIENT_ID'),
@@ -255,15 +255,15 @@ class DiscordController extends Controller
                 ],
                 'headers' => ['Content-Type' => 'application/x-www-form-urlencoded']
             ]);
-        // } catch (ClientException $e) {
-        //     return redirect()->route('my.index')->with('error-modal', $e->getMessage().'... Unable to get Discord Authorisation Code');
-        // }
+        } catch (ClientException $e) {
+            return redirect()->route('my.index')->with('error-modal', $e->getMessage());
+        }
 
         $access_token = json_decode($response->getBody(), true)['access_token'];
 
 
         //Make em join Discord 
-        // try {
+        try {
             $response = (new Client())
                 ->put(
                     'https://discord.com/api/v10/guilds/'.env('DISCORD_GUILD_ID').'/members/'.$user->discord_user_id,
@@ -278,13 +278,13 @@ class DiscordController extends Controller
                         ]
                     ]
                 );
-        // } catch (ClientException $e) {
-        //     return redirect()->route('my.index')->with('error-modal', $e->getMessage().'.... Unable to update User Details.');
-        // }
+        } catch (ClientException $e) {
+            return redirect()->route('my.index')->with('error-modal', $e->getMessage());
+        }
 
 
         //DM them
-        $user->notify(new DiscordWelcome());
+        // $user->notify(new DiscordWelcome()); --- Presently DMs do not work...
 
         $user->member_of_czqo = true;
         $user->save();
