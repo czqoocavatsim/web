@@ -43,7 +43,7 @@ class Kernel extends ConsoleKernel
         $schedule->job(new ProcessSessionLogging())->everyMinute();
 
         //Inactivity checks
-        $schedule->job(new DiscordAccountCheck())->dailyAt('10:30');
+        $schedule->job(new DiscordAccountCheck())->dailyAt('10:40');
 
         //Inactivity checks
         $schedule->job(new ProcessRosterInactivity())->daily();

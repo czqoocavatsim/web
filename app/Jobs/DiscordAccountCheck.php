@@ -113,8 +113,9 @@ class DiscordAccountCheck implements ShouldQueue
                         $discordRoleIds = [
                             'guest'      => 482835389640343562,
                             'training'   => 482824058141016075,
-                            'gander_certified'  => 482819739996127259,
-                            'shanwick_certified' => 482819739996127259,
+                            'certified'  => 482819739996127259,
+                            'gander_certified'  => 1297507926222573568,
+                            'shanwick_certified' => 1297508027280396349,
                             'supervisor' => 720502070683369563,
                         ];
 
@@ -128,6 +129,7 @@ class DiscordAccountCheck implements ShouldQueue
                             switch ($rosterProfile->certification) {
                                 case 'certified':
                                     array_push($rolesToAdd, $discordRoleIds['certified']);
+                                    array_push($rolesToAdd, $discordRoleIds['gander_certified']);
                                     break;
                                 case 'training':
                                     array_push($rolesToAdd, $discordRoleIds['training']);
@@ -139,6 +141,7 @@ class DiscordAccountCheck implements ShouldQueue
                         $shanwickRoster = ShanwickController::where('controller_cid', $user->id)->first();
                         if ($shanwickRoster) {
                             array_push($rolesToAdd, $discordRoleIds['certified']);
+                            array_push($rolesToAdd, $discordRoleIds['shanwick_certified']);
                         }
 
                         //Supervisor?
@@ -190,10 +193,10 @@ class DiscordAccountCheck implements ShouldQueue
         foreach($discord_uids as $discord_uid){
             $accounts_not_linked++; //records that Account Not Linked Role Assigned
 
-            // sleep(3);
+            sleep(3);
 
-            // // add role
-            // $discord->getClient()->put('guilds/'.env('DISCORD_GUILD_ID').'/members/'.$discord_uid.'/roles/1297422968472997908');
+            // add role
+            $discord->getClient()->put('guilds/'.env('DISCORD_GUILD_ID').'/members/'.$discord_uid.'/roles/1297422968472997908');
         }
 
 
@@ -218,7 +221,7 @@ class DiscordAccountCheck implements ShouldQueue
         $update_content .= "\n- Script Time: " . $start_time->diffForHumans($end_time, ['parts' => 2, 'short' => true, 'syntax' => Carbon::DIFF_ABSOLUTE]) . ".";
 
 
-        $discord->sendMessageWithEmbed(env('DISCORD_WEB_LOGS'), 'WEEKLY: Discord User Update', $update_content);
+        $discord->sendMessageWithEmbed(env('DISCORD_WEB_LOGS'), 'DAILY: Discord User Update', $update_content);
     }
 
 }
