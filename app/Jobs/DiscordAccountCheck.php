@@ -58,7 +58,7 @@ class DiscordAccountCheck implements ShouldQueue
         // dd($discord_uids);
 
         // Get a complete list of Gander Oceanic Users
-        $users = User::all();
+        $users = User::whereNotNull('discord_user_id')->get();
 
         // Loop through each DB User
         foreach($users as $user){
@@ -163,7 +163,7 @@ class DiscordAccountCheck implements ShouldQueue
 
                         $discord->sendMessageWithEmbed(
                             '1297517512904409099',
-                            'IN DISCORD: '.$user->fullName('FLC'), 
+                            'IN DISCORD - '.$user->fullName('FLC'), 
                             'User is in the Discord. '.$user->member_of_czqo,
                         );
 
@@ -188,7 +188,7 @@ class DiscordAccountCheck implements ShouldQueue
 
                     $discord->sendMessageWithEmbed(
                         '1297517512904409099',
-                        'NOT IN DISCORD '.$user->fullName('FLC'), 
+                        'NOT IN DISCORD - '.$user->fullName('FLC'), 
                         'User is NOT in the Discord. '.$user->member_of_czqo,
                     );
                 }
@@ -206,7 +206,7 @@ class DiscordAccountCheck implements ShouldQueue
 
             $discord->sendMessageWithEmbed(
                 '1297517512904409099',
-                'NOT LINKED: '.$user->fullName('FLC'), 
+                'NOT LINKED - '.$user->fullName('FLC'), 
                 'User is not linked with CZQO.',
             );
         }
