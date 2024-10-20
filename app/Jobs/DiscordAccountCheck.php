@@ -23,7 +23,7 @@ class DiscordAccountCheck implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
-    public $timeout = 1400;
+    public $timeout = 3000;
 
     /**
      * Execute the job.
@@ -34,7 +34,7 @@ class DiscordAccountCheck implements ShouldQueue
     public function handle()
     {
         // Timeout length (seconds)
-        ini_set('max_execution_time', 1400);
+        ini_set('max_execution_time', 3000);
 
         // Script Start Time
         $start_time = Carbon::now();
@@ -73,7 +73,7 @@ class DiscordAccountCheck implements ShouldQueue
             }
 
             // Add a Sleep Timer - Allows API to not block
-            sleep(6);
+            sleep(2);
 
             // Check if user is currently in Discord
                 if (in_array($user->discord_user_id, $discord_uids)) {
@@ -142,6 +142,16 @@ class DiscordAccountCheck implements ShouldQueue
                         if ($shanwickRoster) {
                             array_push($rolesToAdd, $discordRoleIds['certified']);
                             array_push($rolesToAdd, $discordRoleIds['shanwick_certified']);
+                        }
+
+                        //Enroute Controller
+                        if($user->rating_short == 'C1'){
+                            array_push($rolesToAdd, $discordRoleIds['enroute']);
+                        }
+
+                        //Enroute Controller
+                        if($user->rating_short == 'C3'){
+                            array_push($rolesToAdd, $discordRoleIds['senior_enroute']);
                         }
 
                         //Supervisor?
