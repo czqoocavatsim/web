@@ -129,7 +129,7 @@ class User extends Authenticatable
         'id', 'fname', 'lname', 'email', 'rating_id', 'rating_short', 'rating_long', 'rating_GRP',
         'reg_date', 'region_code', 'region_name', 'division_code', 'division_name',
         'subdivision_code', 'subdivision_name', 'permissions', 'init', 'gdpr_subscribed_emails', 'avatar', 'bio', 'display_cid_only', 'display_fname', 'display_last_name',
-        'discord_user_id', 'discord_dm_channel_id', 'avatar_mode', 'used_connect',
+        'discord_user_id', 'member_of_czqo', 'discord_username', 'discord_dm_channel_id', 'avatar_mode', 'used_connect',
     ];
 
     /**
