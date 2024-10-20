@@ -62,11 +62,14 @@ class DiscordTestController extends Controller
                                     
 'Dear Gander Members,
 
-If you are seeing this message, it means your discord account is not linked with our Gander Oceanic Website. As such, your access to the discord has been limited until you link your account.
+If you have been pinged in this message, it means your discord account is not linked with our Gander Oceanic Website.
 
 We ask that you head to the [Gander Oceanic Website](https://ganderoceanic.ca/my) to link your Discord Account. Your roles will be assigned at 0400z each day.
 
-This will assist with future upgrades to the Discord Infrastructure.
+Access for users not linked will be limited from the 11/31/2024.
+
+Thank You,
+Gander Oceanic Team
 
 <@&1278606316906090527>');   
     }

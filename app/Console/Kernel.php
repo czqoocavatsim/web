@@ -43,6 +43,9 @@ class Kernel extends ConsoleKernel
         $schedule->job(new ProcessSessionLogging())->everyMinute();
 
         //Inactivity checks
+        $schedule->job(new DiscordAccountCheck())->dailyAt('5:40');
+
+        //Inactivity checks
         $schedule->job(new ProcessRosterInactivity())->daily();
 
         // Monthly Statistics Breakdown
@@ -59,9 +62,6 @@ class Kernel extends ConsoleKernel
 
         // Check Training Threads Status (Once per week)
         $schedule->job(new DiscordTrainingWeeklyUpdates())->weeklyOn(6, '00:01');
-
-        // Check If Account is Linked
-        $schedule->job(new DiscordAccountCheck)->weeklyOn(5, '0:01');
 
         //CRONS FOR INACTIVITY EMAILS 2 weeks
         // $schedule->call(function () {
