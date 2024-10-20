@@ -205,13 +205,15 @@ class DiscordAccountCheck implements ShouldQueue
         foreach($discord_uids as $discord_uid){
             $accounts_not_linked++; //records that Account Not Linked Role Assigned
 
+            sleep(2);
+
             // add role
             $discord->getClient()->put('guilds/'.env('DISCORD_GUILD_ID').'/members/'.$discord_uid.'/roles/1297422968472997908');
 
             $discord->sendMessageWithEmbed(
                 '1297517512904409099',
-                'NOT LINKED - '.$user->fullName('FLC'), 
-                'User is not linked with CZQO.',
+                'NOT LINKED - '.$discord_uid, 
+                'Discord User is not connected with Gander Oceanic.',
             );
         }
 
