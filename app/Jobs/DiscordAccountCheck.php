@@ -42,6 +42,7 @@ class DiscordAccountCheck implements ShouldQueue
         // Initialise some variables
         $checked_users = 0;
         $accounts_not_linked = 0;
+        $in_discord = 0;
         $not_in_discord = 0;
         $discord_uids = [];
 
@@ -50,14 +51,11 @@ class DiscordAccountCheck implements ShouldQueue
         $response = $discord->getClient()->get('guilds/'.env('DISCORD_GUILD_ID').'/members?limit=1000');
         $discord_members = json_decode($response->getBody(), true);
 
-        // dd($discord_members);
-
         // Loop through each Discord User and get some key information
         foreach($discord_members as $members){
             $discord_uids[] = $members['user']['id'];
             // dd($members['user']);
         }
-        // dd($discord_uids);
 
         // Get a complete list of Gander Oceanic Users
         $users = User::whereNotNull('discord_user_id')->get();
@@ -77,8 +75,10 @@ class DiscordAccountCheck implements ShouldQueue
 
             // Check if user is currently in Discord
                 if (in_array($user->discord_user_id, $discord_uids)) {
+
                     ## User is in the Discord
                     $discord_uid = $user->discord_user_id;
+                    $in_discord++;
 
                     // Get Discord Member Information
                     $discord_member = $discord->getClient()->get('guilds/'.env('DISCORD_GUILD_ID').'/members/'.$discord_uid);
@@ -172,13 +172,6 @@ class DiscordAccountCheck implements ShouldQueue
                                 $rolesToAdd[] = $roleId;  // Add the role ID to rolesToAdd if present in user's roles
                             }
                         }
-
-                        $discord->sendMessageWithEmbed(
-                            '1297517512904409099',
-                            'IN DISCORD - '.$user->fullName('FLC'), 
-                            'User is in the Discord. '.$user->member_of_czqo,
-                        );
-
                     }
                     
     
@@ -209,12 +202,6 @@ class DiscordAccountCheck implements ShouldQueue
 
             // add role
             $discord->getClient()->put('guilds/'.env('DISCORD_GUILD_ID').'/members/'.$discord_uid.'/roles/1297422968472997908');
-
-            $discord->sendMessageWithEmbed(
-                '1297517512904409099',
-                'NOT LINKED - '.$discord_uid, 
-                'Discord User is not connected with Gander Oceanic.',
-            );
         }
 
 
@@ -227,7 +214,8 @@ class DiscordAccountCheck implements ShouldQueue
         $update_content .= "\n\n **__Accounts:__**";
 
         // Users which are linked in Discord
-        $update_content .= "\n- Accounts Linked: ".$checked_users." (name/roles updated)";
+        $update_content .= "\n- Total Accounts: ".$checked_users." (name/roles updated)";
+        $update_content .= "\n- Linked & In Discord: ".$in_discord;
         $update_content .= "\n- Linked but not in Discord: ".$not_in_discord;
 
         // Accounts not linked
