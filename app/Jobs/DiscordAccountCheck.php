@@ -31,7 +31,7 @@ class DiscordAccountCheck implements ShouldQueue
     public function handle()
     {
         // Timeout length (seconds)
-        ini_set('max_execution_time', 1200);
+        ini_set('max_execution_time', 2000);
 
         // Script Start Time
         $start_time = Carbon::now();
@@ -130,6 +130,12 @@ class DiscordAccountCheck implements ShouldQueue
                                     array_push($rolesToAdd, $discordRoleIds['training']);
                                     break;
                             }
+                        }
+
+                        // Shankwick Roster Members
+                        $shanwickRoster = ShanwickRoster::where('controller_cid', $user->id)->first();
+                        if ($shanwickRoster) {
+                            array_push($rolesToAdd, $discordRoleIds['certified']);
                         }
 
                         //Supervisor?
