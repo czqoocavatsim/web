@@ -23,7 +23,7 @@ class DiscordAccountCheck implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
-    public $timeout = 3000;
+    public $timeout = 5000;
 
     /**
      * Execute the job.
@@ -34,7 +34,7 @@ class DiscordAccountCheck implements ShouldQueue
     public function handle()
     {
         // Timeout length (seconds)
-        ini_set('max_execution_time', 3000);
+        ini_set('max_execution_time', 5000);
 
         // Script Start Time
         $start_time = Carbon::now();
@@ -197,12 +197,6 @@ class DiscordAccountCheck implements ShouldQueue
                     // Update DB Information
                     $user->member_of_czqo = false;
                     $user->save();
-
-                    $discord->sendMessageWithEmbed(
-                        '1297517512904409099',
-                        'NOT IN DISCORD - '.$user->fullName('FLC'), 
-                        'User is NOT in the Discord. '.$user->member_of_czqo,
-                    );
                 }
 
         }
