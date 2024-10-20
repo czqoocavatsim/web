@@ -144,15 +144,15 @@ class DiscordAccountCheck implements ShouldQueue
                             array_push($rolesToAdd, $discordRoleIds['shanwick_certified']);
                         }
 
-                        //Enroute Controller
-                        if($user->rating_short == 'C1'){
-                            array_push($rolesToAdd, $discordRoleIds['enroute']);
-                        }
+                        // //Enroute Controller
+                        // if($user->rating_short == 'C1'){
+                        //     array_push($rolesToAdd, $discordRoleIds['enroute']);
+                        // }
 
-                        //Enroute Controller
-                        if($user->rating_short == 'C3'){
-                            array_push($rolesToAdd, $discordRoleIds['senior_enroute']);
-                        }
+                        // //Enroute Controller
+                        // if($user->rating_short == 'C3'){
+                        //     array_push($rolesToAdd, $discordRoleIds['senior_enroute']);
+                        // }
 
                         //Supervisor?
                         if ($user->rating_short == 'SUP') {
