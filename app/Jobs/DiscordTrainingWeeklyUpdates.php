@@ -185,14 +185,14 @@ One of our team will make contact with you to organise a session for next if the
                 // SendEmbed to ask student to send availability
                 $discord->sendEmbedInTrainingThread($cid, "Exam Not Requested", 'Hello, <@'.$student_exam->user->discord_user_id.'>
 
-                Our records indicate that you have not requested, or completed your exam within a month of your Application being approved.
+Our records indicate that you have not requested, or completed your exam within a month of your Application being approved.
                 
-                Please read the above message in order to understand how to request the exam.
+Please read the above message in order to understand how to request the exam.
                 
-                Should you not request, and pass the exam within 60 days of your application being accepted, your training will be automatically terminated, and you will need to reapply to begin your training once more.
+Should you not request, and pass the exam within 60 days of your application being accepted, your training will be automatically terminated, and you will need to reapply to begin your training once more.
                 
-                **Kind Regards,
-                Gander Oceanic Training Team**');
+**Kind Regards,
+Gander Oceanic Training Team**');
                 }
             }
 

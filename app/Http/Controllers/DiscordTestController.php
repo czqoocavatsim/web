@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Services\DiscordClient;
 use Illuminate\Support\Facades\Http;
-use App\Jobs\DiscordTrainingWeeklyUpdates;
+use App\Jobs\DiscordAccountCheck;
 use App\Jobs\ProcessShanwickController;
 
 class DiscordTestController extends Controller
@@ -28,7 +28,7 @@ class DiscordTestController extends Controller
     public function Job()
     {
         // Dispatch the job
-        $job = DiscordTrainingWeeklyUpdates::dispatch();
+        $job = DiscordAccountCheck::dispatch();
 
         // Call the handle method directly to get the result synchronously
         $result = $job->handle();
@@ -60,9 +60,11 @@ class DiscordTestController extends Controller
 
      $discord->sendMessageWithEmbed('1274827382250934365', 'Discord Account Not Linked on CZQO',
                                     
-'A number of users within the Discord do not have their Discord linked with the Gander Oceanic Web Service.
+'Dear Gander Members,
 
-We ask that you head to the [Gander Oceanic Website](https://ganderoceanic.ca/my) to link your Discord Account.
+If you are seeing this message, it means your discord account is not linked with our Gander Oceanic Website. As such, your access to the discord has been limited until you link your account.
+
+We ask that you head to the [Gander Oceanic Website](https://ganderoceanic.ca/my) to link your Discord Account. Your roles will be assigned at 0400z each day.
 
 This will assist with future upgrades to the Discord Infrastructure.
 
