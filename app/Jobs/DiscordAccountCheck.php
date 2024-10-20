@@ -13,6 +13,7 @@ use App\Services\DiscordClient;
 use App\Models\Training\Instructing\Records\TrainingSession;
 use App\Models\Users\User;
 use App\Models\Roster\RosterMember;
+use App\Models\Network\ShanwickController;
 use App\Notifications\Training\Instructing\RemovedAsStudent;
 use App\Models\Training\Instructing\Students\StudentStatusLabel;
 use App\Models\Training\Instructing\Links\StudentStatusLabelLink;
@@ -39,6 +40,7 @@ class DiscordAccountCheck implements ShouldQueue
         // Initialise some variables
         $checked_users = 0;
         $accounts_not_linked = 0;
+        $not_in_discord = 0;
         $discord_uids = [];
 
         // Get List of Users in Discord
@@ -89,7 +91,7 @@ class DiscordAccountCheck implements ShouldQueue
                     }
     
                     // Update DB information
-                    $user->member_of_czqo = 1;
+                    $user->member_of_czqo = true;
                     $user->discord_username = $discord_member['user']['username'];
                     $user->discord_avatar = $user->avatar ? 'https://cdn.discordapp.com/avatars/'.$user->discord_user_id.'/'.$discord_member['user']['avatar'].'.png' : null;
                     $user->save();
@@ -111,14 +113,15 @@ class DiscordAccountCheck implements ShouldQueue
                         $discordRoleIds = [
                             'guest'      => 482835389640343562,
                             'training'   => 482824058141016075,
-                            'certified'  => 482819739996127259,
+                            'gander_certified'  => 482819739996127259,
+                            'shanwick_certified' => 482819739996127259,
                             'supervisor' => 720502070683369563,
                         ];
 
                         //Add the Member role to each user
                         array_push($rolesToAdd, $discordRoleIds['guest']);
 
-                        //Roster Member?
+                        //Gander Roster Member
                         if (RosterMember::where('user_id', $user->id)->exists()) {
                             //What status do they have?
                             $rosterProfile = RosterMember::where('user_id', $user->id)->first();
@@ -133,7 +136,7 @@ class DiscordAccountCheck implements ShouldQueue
                         }
 
                         // Shankwick Roster Members
-                        $shanwickRoster = ShanwickRoster::where('controller_cid', $user->id)->first();
+                        $shanwickRoster = ShanwickController::where('controller_cid', $user->id)->first();
                         if ($shanwickRoster) {
                             array_push($rolesToAdd, $discordRoleIds['certified']);
                         }
@@ -172,9 +175,10 @@ class DiscordAccountCheck implements ShouldQueue
     
                 } else {
                     ## User is NOT in the discord
-    
+                    $not_in_discord++;
+
                     // Update DB Information
-                    $user->member_of_czqo = 0;
+                    $user->member_of_czqo = false;
                     $user->save();
                 }
 
@@ -186,10 +190,10 @@ class DiscordAccountCheck implements ShouldQueue
         foreach($discord_uids as $discord_uid){
             $accounts_not_linked++; //records that Account Not Linked Role Assigned
 
-            sleep(3);
+            // sleep(3);
 
-            // add role
-            $discord->getClient()->put('guilds/'.env('DISCORD_GUILD_ID').'/members/'.$discord_uid.'/roles/1297422968472997908');
+            // // add role
+            // $discord->getClient()->put('guilds/'.env('DISCORD_GUILD_ID').'/members/'.$discord_uid.'/roles/1297422968472997908');
         }
 
 
@@ -202,16 +206,17 @@ class DiscordAccountCheck implements ShouldQueue
         $update_content .= "\n\n **__Accounts:__**";
 
         // Users which are linked in Discord
-        $update_content .= "\n- Linked to Discord: ".$checked_users." (name/roles updated)";
+        $update_content .= "\n- Accounts Linked: ".$checked_users." (name/roles updated)";
+        $update_content .= "\n- Linked but not in Discord: ".$not_in_discord;
 
         // Accounts not linked
         $update_content .= "\n- Not Linked to Discord: ".$accounts_not_linked." (role assigned)";
 
         // Completion Time
         $end_time = Carbon::now();
-        $seconds = $start_time->diffInSeconds($end_time);
         $update_content .= "\n\n**__Script Time:__**";
-        $update_content .= "\n- Script Time: ".$seconds." seconds.";
+        $update_content .= "\n- Script Time: " . $start_time->diffForHumans($end_time, ['parts' => 2, 'short' => true, 'syntax' => Carbon::DIFF_ABSOLUTE]) . ".";
+
 
         $discord->sendMessageWithEmbed(env('DISCORD_WEB_LOGS'), 'WEEKLY: Discord User Update', $update_content);
     }
