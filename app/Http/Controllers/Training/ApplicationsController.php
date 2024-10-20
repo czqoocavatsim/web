@@ -57,8 +57,8 @@ class ApplicationsController extends Controller
             return view('training.applications.apply')->with('allowed', 'rating');
         }
 
+        // Redirect if user is not a member of the Discord
         if(auth()->user()->member_of_czqo == 0){
-
             return view('training.applications.apply')->with('allowed', 'discord');
         }
 
