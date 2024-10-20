@@ -19,7 +19,7 @@ class ProcessShanwickController implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
-    public $timeout = 300;
+    public $timeout = 600;
 
     /**
      * Create a new job instance.
@@ -39,7 +39,7 @@ class ProcessShanwickController implements ShouldQueue
     public function handle()
     {
             // Data to Start Off With
-            ini_set('max_execution_time', 300);
+            ini_set('max_execution_time', 600);
 
             // VATSIM Region List
             $vatsim_regions = [

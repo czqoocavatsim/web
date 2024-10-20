@@ -23,7 +23,7 @@ class DiscordAccountCheck implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
-    public $timeout = 5000;
+    public $timeout = 7200;
 
     /**
      * Execute the job.
@@ -34,7 +34,7 @@ class DiscordAccountCheck implements ShouldQueue
     public function handle()
     {
         // Timeout length (seconds)
-        ini_set('max_execution_time', 5000);
+        ini_set('max_execution_time', 7200);
 
         // Script Start Time
         $start_time = Carbon::now();
@@ -73,7 +73,7 @@ class DiscordAccountCheck implements ShouldQueue
             }
 
             // Add a Sleep Timer - Allows API to not block
-            sleep(2);
+            sleep(3);
 
             // Check if user is currently in Discord
                 if (in_array($user->discord_user_id, $discord_uids)) {
@@ -237,7 +237,7 @@ class DiscordAccountCheck implements ShouldQueue
         $update_content .= "\n- Script Time: " . $start_time->diffForHumans($end_time, ['parts' => 2, 'short' => true, 'syntax' => Carbon::DIFF_ABSOLUTE]) . ".";
 
 
-        $discord->sendMessageWithEmbed(env('DISCORD_WEB_LOGS'), 'DAILY: Discord User Update', $update_content);
+        $discord->sendMessageWithEmbed(env('DISCORD_SERVER_LOGS'), 'DAILY: Discord User Update', $update_content);
     }
 
 }
