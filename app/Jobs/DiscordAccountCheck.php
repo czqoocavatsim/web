@@ -30,6 +30,12 @@ class DiscordAccountCheck implements ShouldQueue
 
     public function handle()
     {
+        // Timeout length (seconds)
+        ini_set('max_execution_time', 1200);
+
+        // Script Start Time
+        $start_time = Carbon::now();
+
         // Initialise some variables
         $checked_users = 0;
         $accounts_not_linked = 0;
@@ -68,6 +74,7 @@ class DiscordAccountCheck implements ShouldQueue
             // Check if user is currently in Discord
             foreach($discord_uids as $discord_uid){
                 
+
                 if($user->discord_user_id == $discord_uid){
                     ## User is in the Discord
     
@@ -75,57 +82,79 @@ class DiscordAccountCheck implements ShouldQueue
                     $discord_member = $discord->getClient()->get('guilds/'.env('DISCORD_GUILD_ID').'/members/'.$discord_uid);
                     $discord_member = json_decode($discord_member->getBody(), true);
 
-                    if(in_array('482816721280040964', $discord_member['roles'])){
-                        continue;
+                    // Discord Account is Linked. Remove from Check
+                    $key = array_search($user->discord_user_id, $discord_uids);
+                    if ($key !== false) {
+                        unset($discord_uids[$key]);
                     }
     
                     // Update DB information
                     $user->member_of_czqo = 1;
-                    $user->discord_username = $discord_member['username'];
-                    $user->discord_avatar = $user->avatar ? 'https://cdn.discordapp.com/avatars/'.$user->discord_user_id.'/'.$discord_member['avatar'].'.png' : null;
+                    $user->discord_username = $discord_member['user']['username'];
+                    $user->discord_avatar = $user->avatar ? 'https://cdn.discordapp.com/avatars/'.$user->discord_user_id.'/'.$discord_member['user']['avatar'].'.png' : null;
                     $user->save();
+
+                    // Skip if User has 'Senior Staff' Role, skip as bot doesnt have power
+                    if(in_array('482816721280040964', $discord_member['roles'])){
+                        continue;
+                    }
+
+                    // Skip if User has 'Staff Member' Role, lets skip them for now as roles need to be finished
+                    if(in_array('752767906768748586', $discord_member['roles'])){
+                        continue;
+                    }
     
-                    // Remove ID from the List
-                    foreach ($discord_uids as $key => $discord_member) {
-                        if ($discord_member == $user->discord_user_id) {
-                            // Remove the matched ID from the array
-                            unset($discord_uids[$key]);
+                    // Roles Calculation
+                    {
+                        // Generic Roles users can have by default
+                        $rolesToAdd = [];
+                        $discordRoleIds = [
+                            'guest'      => 482835389640343562,
+                            'training'   => 482824058141016075,
+                            'certified'  => 482819739996127259,
+                            'supervisor' => 720502070683369563,
+                        ];
+
+                        //Add the Member role to each user
+                        array_push($rolesToAdd, $discordRoleIds['guest']);
+
+                        //Roster Member?
+                        if (RosterMember::where('user_id', $user->id)->exists()) {
+                            //What status do they have?
+                            $rosterProfile = RosterMember::where('user_id', $user->id)->first();
+                            switch ($rosterProfile->certification) {
+                                case 'certified':
+                                    array_push($rolesToAdd, $discordRoleIds['certified']);
+                                    break;
+                                case 'training':
+                                    array_push($rolesToAdd, $discordRoleIds['training']);
+                                    break;
+                            }
+                        }
+
+                        //Supervisor?
+                        if ($user->rating_short == 'SUP') {
+                            array_push($rolesToAdd, $discordRoleIds['supervisor']);
+                        }
+
+                        // Check Assigned Discord Roles, and keep them assigned
+                        $roleIdsToCheck = [
+                            635449323089559572, //AFV Dev Role
+                            634656628335050762, //Shanwick Team
+                            497351197280174080, //VATCAN Divisional Staff
+                            497359834010615809, //VATSIM Senior Staff
+                            1257807978531389561]; //VATSYS Beta Tester
+
+                        foreach ($roleIdsToCheck as $roleId) {
+                            if (in_array($roleId, $discord_member['roles'])) {
+                                $rolesToAdd[] = $roleId;  // Add the role ID to rolesToAdd if present in user's roles
+                            }
+                        }
+
+                        // dd($rolesToAdd);
+
+                    }
                     
-                            // Optional: break the loop once the match is found and removed
-                            break;
-                        }
-                    }
-    
-                    // Update Discord Information
-                    $rolesToAdd = [];
-                    $discordRoleIds = [
-                        'guest'      => 482835389640343562,
-                        'training'   => 482824058141016075,
-                        'certified'  => 482819739996127259,
-                        'supervisor' => 720502070683369563,
-                    ];
-    
-                    //Add the Member role
-                    array_push($rolesToAdd, $discordRoleIds['guest']);
-    
-                    //Roster?
-                    if (RosterMember::where('user_id', $user->id)->exists()) {
-                        //What status do they have?
-                        $rosterProfile = RosterMember::where('user_id', $user->id)->first();
-                        switch ($rosterProfile->certification) {
-                            case 'certified':
-                                array_push($rolesToAdd, $discordRoleIds['certified']);
-                                break;
-                            case 'training':
-                                array_push($rolesToAdd, $discordRoleIds['training']);
-                                break;
-                        }
-                    }
-    
-                    //Supervisor?
-                    if ($user->rating_short == 'SUP') {
-                        array_push($rolesToAdd, $discordRoleIds['supervisor']);
-                    }
     
                     // Update user
                     $discord->getClient()->patch('guilds/'.env('DISCORD_GUILD_ID').'/members/'.$user->discord_user_id, [
@@ -145,23 +174,17 @@ class DiscordAccountCheck implements ShouldQueue
 
             }
 
-
-            // Add Role to Users not Connected to Gander Oceanic
-            foreach($discord_uids as $discord_uid){
-
-            }
-            
-
         }
 
-        // Variables after looping
-        // dd($discord_uids);
-        // dd($discord_uid);
-        // dd($checked_users);
+        // Add Role to Users not Connected to Gander Oceanic
+        foreach($discord_uids as $discord_uid){
+            $accounts_not_linked++; //records that Account Not Linked Role Assigned
 
+            sleep(3);
 
-
-
+            // add role
+            $discord->getClient()->put('guilds/'.env('DISCORD_GUILD_ID').'/members/'.$discord_uid.'/roles/1297422968472997908');
+        }
 
 
 
@@ -169,6 +192,20 @@ class DiscordAccountCheck implements ShouldQueue
 
         // Beginning
         $update_content = "Full list of functions completed this week for Discord Users, <@200426385863344129>";
+
+        $update_content .= "\n\n **__Accounts:__**";
+
+        // Users which are linked in Discord
+        $update_content .= "\n- Linked to Discord: ".$checked_users." (name/roles updated)";
+
+        // Accounts not linked
+        $update_content .= "\n- Not Linked to Discord: ".$accounts_not_linked." (role assigned)";
+
+        // Completion Time
+        $end_time = Carbon::now();
+        $seconds = $start_time->diffInSeconds($end_time);
+        $update_content .= "\n\n**__Script Time:__**";
+        $update_content .= "\n- Script Time: ".$seconds." seconds.";
 
         $discord->sendMessageWithEmbed(env('DISCORD_WEB_LOGS'), 'WEEKLY: Discord User Update', $update_content);
     }
