@@ -58,20 +58,20 @@ class DiscordTestController extends Controller
      //New Applicant in Instructor Channel
      $discord = new DiscordClient();
 
-     $discord->sendMessageWithEmbed('1274827382250934365', 'Discord Account Not Linked on CZQO',
+     $discord->sendMessageWithEmbed('488265136696459292', 'Discord Account Not Linked on CZQO',
                                     
 'Dear Gander Members,
 
-If you have been pinged in this message, it means your discord account is not linked with our Gander Oceanic Website.
+If you have been pinged in this message, it means your discord account is not linked on the Gander Oceanic Website.
 
-We ask that you head to the [Gander Oceanic Website](https://ganderoceanic.ca/my) to link your Discord Account. Your roles will be assigned at 0400z each day.
+We ask that you head to the [Gander Oceanic Website](https://ganderoceanic.ca/my) to link your Discord Account. This will automatically update your roles and name with Gander Oceanic daily.
 
 Access for users not linked will be limited from the 11/31/2024.
 
 Thank You,
 Gander Oceanic Team
 
-<@&1278606316906090527>');   
+<@&1297422968472997908>');   
     }
 
     public function DiscordRoles()

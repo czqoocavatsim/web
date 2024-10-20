@@ -74,12 +74,10 @@ class DiscordAccountCheck implements ShouldQueue
             sleep(2);
 
             // Check if user is currently in Discord
-            foreach($discord_uids as $discord_uid){
-                
-
-                if($user->discord_user_id == $discord_uid){
+                if (in_array($user->discord_user_id, $discord_uids)) {
                     ## User is in the Discord
-    
+                    $discord_uid = $user->discord_user_id;
+
                     // Get Discord Member Information
                     $discord_member = $discord->getClient()->get('guilds/'.env('DISCORD_GUILD_ID').'/members/'.$discord_uid);
                     $discord_member = json_decode($discord_member->getBody(), true);
@@ -163,7 +161,11 @@ class DiscordAccountCheck implements ShouldQueue
                             }
                         }
 
-                        // dd($rolesToAdd);
+                        $discord->sendMessageWithEmbed(
+                            '1297517512904409099',
+                            'IN DISCORD: '.$user->fullName('FLC'), 
+                            'User is in the Discord. '.$user->member_of_czqo,
+                        );
 
                     }
                     
@@ -183,9 +185,13 @@ class DiscordAccountCheck implements ShouldQueue
                     // Update DB Information
                     $user->member_of_czqo = false;
                     $user->save();
-                }
 
-            }
+                    $discord->sendMessageWithEmbed(
+                        '1297517512904409099',
+                        'NOT IN DISCORD '.$user->fullName('FLC'), 
+                        'User is NOT in the Discord. '.$user->member_of_czqo,
+                    );
+                }
 
         }
 
@@ -197,6 +203,12 @@ class DiscordAccountCheck implements ShouldQueue
 
             // add role
             $discord->getClient()->put('guilds/'.env('DISCORD_GUILD_ID').'/members/'.$discord_uid.'/roles/1297422968472997908');
+
+            $discord->sendMessageWithEmbed(
+                '1297517512904409099',
+                'NOT LINKED: '.$user->fullName('FLC'), 
+                'User is not linked with CZQO.',
+            );
         }
 
 
