@@ -193,10 +193,10 @@ class DiscordAccountCheck implements ShouldQueue
         foreach($discord_uids as $discord_uid){
             $accounts_not_linked++; //records that Account Not Linked Role Assigned
 
-            // sleep(3);
+            sleep(3);
 
-            // // add role
-            // $discord->getClient()->put('guilds/'.env('DISCORD_GUILD_ID').'/members/'.$discord_uid.'/roles/1297422968472997908');
+            // add role
+            $discord->getClient()->put('guilds/'.env('DISCORD_GUILD_ID').'/members/'.$discord_uid.'/roles/1297422968472997908');
         }
 
 
