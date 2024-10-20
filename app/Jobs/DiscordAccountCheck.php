@@ -23,6 +23,8 @@ class DiscordAccountCheck implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
+    public $timeout = 1400;
+
     /**
      * Execute the job.
      *
