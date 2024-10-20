@@ -23,6 +23,8 @@ class DiscordAccountCheck implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
+    public $timeout = 1400;
+
     /**
      * Execute the job.
      *
@@ -32,7 +34,7 @@ class DiscordAccountCheck implements ShouldQueue
     public function handle()
     {
         // Timeout length (seconds)
-        ini_set('max_execution_time', 2000);
+        ini_set('max_execution_time', 1400);
 
         // Script Start Time
         $start_time = Carbon::now();
