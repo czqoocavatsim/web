@@ -330,7 +330,7 @@ Gander Oceanic Training Team**');
             }
 
             // Send Message
-            $discord->sendMessageWithEmbed(env('DISCORD_WEB_LOGS'), 'WEEKLY: Discord Training Thread Updates', $update_content);
+            $discord->sendMessageWithEmbed(env('DISCORD_SERVER_LOGS'), 'WEEKLY: Discord Training Thread Updates', $update_content);
         }
     }
 }

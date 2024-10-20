@@ -151,7 +151,7 @@ class ProcessRosterInactivity implements ShouldQueue
     // Send Web Notification if any changes have been made
     if($first_notice != 0 || $second_notice !== 0 || $third_notice !== 0 || $termination_notice !== 0){
         $discord = new DiscordClient();
-        $discord->sendMessageWithEmbed(env('DISCORD_WEB_LOGS'), 'AUTO: Roster Inactivity Update', 
+        $discord->sendMessageWithEmbed(env('DISCORD_SERVER_LOGS'), 'AUTO: Roster Inactivity Update', 
         'The Following changes have occured to the Controller Roster
 60 Days till Removed: '.$first_notice.'
 30 Days till Removed: '.$second_notice.'
