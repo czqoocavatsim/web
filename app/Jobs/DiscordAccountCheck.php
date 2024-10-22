@@ -94,6 +94,11 @@ class DiscordAccountCheck implements ShouldQueue
                     $user->discord_username = $discord_member['user']['username'];
                     $user->discord_avatar = $user->avatar ? 'https://cdn.discordapp.com/avatars/'.$user->discord_user_id.'/'.$discord_member['user']['avatar'].'.png' : null;
                     $user->save();
+
+                    // Skip Gary (Discord Owner)
+                    if($user->discord_user_id == 350995372627197954){
+                        continue;
+                    }
     
                     // Roles Calculation
                     {
@@ -234,14 +239,13 @@ class DiscordAccountCheck implements ShouldQueue
                         $name = $user->FullName('FLC');
                     }
 
-                    
-                // Update user
-                $discord->getClient()->patch('guilds/'.env('DISCORD_GUILD_ID').'/members/'.$user->discord_user_id, [
-                    'json' => [
-                        'nick' => $name,
-                        'roles' => $discord_roles,
-                    ]
-                ]);
+                    // Update user
+                    $discord->getClient()->patch('guilds/'.env('DISCORD_GUILD_ID').'/members/'.$user->discord_user_id, [
+                        'json' => [
+                            'nick' => $name,
+                            'roles' => $discord_roles,
+                        ]
+                    ]);
 
     
                 } else {
@@ -259,7 +263,7 @@ class DiscordAccountCheck implements ShouldQueue
         foreach($discord_uids as $discord_uid){
             $accounts_not_linked++; //records that Account Not Linked Role Assigned
 
-            sleep(2);
+            sleep(1);
 
             // add role
             $discord->getClient()->put('guilds/'.env('DISCORD_GUILD_ID').'/members/'.$discord_uid.'/roles/1297422968472997908');
