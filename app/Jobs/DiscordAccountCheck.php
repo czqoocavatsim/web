@@ -100,10 +100,10 @@ class DiscordAccountCheck implements ShouldQueue
                         continue;
                     }
 
-                    // Skip Joshua (Broken for him)
-                    if($user->discord_user_id == 200426385863344129){
-                        continue;
-                    }
+                    // // Skip Joshua (Broken for him)
+                    // if($user->discord_user_id == 200426385863344129){
+                    //     continue;
+                    // }
     
                     // Roles Calculation
                     {
@@ -252,7 +252,14 @@ class DiscordAccountCheck implements ShouldQueue
                     //     ]
                     // ]);
 
-                    $discord->sendMessageWithEmbed('488265136696459292', 'Roles: '. $user->fullName('FLC'), $discord_roles);   
+                    $message = "Roles:";
+
+                    foreach($discord_roles as $roles){
+                        $message .= "\n-".$roles;
+                    }  
+
+                    $discord->sendMessageWithEmbed('1274827382250934365', 'Roles: '. $user->fullName('FLC'), $message);
+                     
 
     
                 } else {
@@ -267,14 +274,14 @@ class DiscordAccountCheck implements ShouldQueue
         }
 
         // Add Role to Users not Connected to Gander Oceanic
-        foreach($discord_uids as $discord_uid){
-            $accounts_not_linked++; //records that Account Not Linked Role Assigned
+        // foreach($discord_uids as $discord_uid){
+        //     $accounts_not_linked++; //records that Account Not Linked Role Assigned
 
-            sleep(1);
+        //     sleep(1);
 
-            // add role
-            $discord->getClient()->put('guilds/'.env('DISCORD_GUILD_ID').'/members/'.$discord_uid.'/roles/1297422968472997908');
-        }
+        //     // add role
+        //     $discord->getClient()->put('guilds/'.env('DISCORD_GUILD_ID').'/members/'.$discord_uid.'/roles/1297422968472997908');
+        // }
 
 
 
