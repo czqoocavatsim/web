@@ -230,10 +230,6 @@ class DiscordAccountCheck implements ShouldQueue
                         }
 
                         $discord_roles = array_unique($rolesToAdd);
-
-                        // Check if the roles are different between Discord and the DB
-                        $diff1 = array_diff($discord_member['roles'], $rolesToAdd);
-                        $diff2 = array_diff($rolesToAdd, $discord_member['roles']);
                     }
 
                     // Name Format for ZQO Members and Other Members
@@ -243,20 +239,13 @@ class DiscordAccountCheck implements ShouldQueue
                         $name = $user->FullName('FLC');
                     }
 
-                    
-                // Name is same on Discord, as well as roles
-                if ($name == $discord_member['nick'] && (!empty($diff1) || !empty($diff2))) {
-                    // Sleep API Check
-                    sleep(2);
-
                     // Update user
                     $discord->getClient()->patch('guilds/'.env('DISCORD_GUILD_ID').'/members/'.$user->discord_user_id, [
                         'json' => [
                             'nick' => $name,
-                            'roles' => $rolesToAdd,
+                            'roles' => $discord_roles,
                         ]
                     ]);
-                }
 
     
                 } else {
