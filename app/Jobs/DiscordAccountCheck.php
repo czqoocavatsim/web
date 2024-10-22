@@ -77,6 +77,8 @@ class DiscordAccountCheck implements ShouldQueue
                     $discord_uid = $user->discord_user_id;
                     $in_discord++;
 
+                    sleep(1);
+                    
                     // Get Discord Member Information
                     $discord_member = $discord->getClient()->get('guilds/'.env('DISCORD_GUILD_ID').'/members/'.$discord_uid);
                     $discord_member = json_decode($discord_member->getBody(), true);
