@@ -78,7 +78,7 @@ class DiscordAccountCheck implements ShouldQueue
                     $in_discord++;
 
                     sleep(1);
-                    
+
                     // Get Discord Member Information
                     $discord_member = $discord->getClient()->get('guilds/'.env('DISCORD_GUILD_ID').'/members/'.$discord_uid);
                     $discord_member = json_decode($discord_member->getBody(), true);
@@ -223,6 +223,8 @@ class DiscordAccountCheck implements ShouldQueue
                                 $rolesToAdd[] = $roleId;  // Add the role ID to rolesToAdd if present in user's roles
                             }
                         }
+
+                        $rolesToAdd = array_diff($rolesToAdd, $discord_member['roles']);
                     }
 
                     // Name Format for ZQO Members and Other Members
