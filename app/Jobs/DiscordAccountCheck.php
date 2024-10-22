@@ -94,6 +94,11 @@ class DiscordAccountCheck implements ShouldQueue
                     $user->discord_username = $discord_member['user']['username'];
                     $user->discord_avatar = $user->avatar ? 'https://cdn.discordapp.com/avatars/'.$user->discord_user_id.'/'.$discord_member['user']['avatar'].'.png' : null;
                     $user->save();
+
+                    // Skip Gary (Discord Owner)
+                    if($user->discord_user_id == 350995372627197954){
+                        continue;
+                    }
     
                     // Roles Calculation
                     {
@@ -225,6 +230,10 @@ class DiscordAccountCheck implements ShouldQueue
                         }
 
                         $discord_roles = array_unique($rolesToAdd);
+
+                        // Check if the roles are different between Discord and the DB
+                        $diff1 = array_diff($discord_member['roles'], $rolesToAdd);
+                        $diff2 = array_diff($rolesToAdd, $discord_member['roles']);
                     }
 
                     // Name Format for ZQO Members and Other Members
@@ -235,13 +244,19 @@ class DiscordAccountCheck implements ShouldQueue
                     }
 
                     
-                // Update user
-                $discord->getClient()->patch('guilds/'.env('DISCORD_GUILD_ID').'/members/'.$user->discord_user_id, [
-                    'json' => [
-                        'nick' => $name,
-                        'roles' => $discord_roles,
-                    ]
-                ]);
+                // Name is same on Discord, as well as roles
+                if ($name == $discord_member['nick'] && (!empty($diff1) || !empty($diff2))) {
+                    // Sleep API Check
+                    sleep(2);
+
+                    // Update user
+                    $discord->getClient()->patch('guilds/'.env('DISCORD_GUILD_ID').'/members/'.$user->discord_user_id, [
+                        'json' => [
+                            'nick' => $name,
+                            'roles' => $rolesToAdd,
+                        ]
+                    ]);
+                }
 
     
                 } else {
@@ -259,7 +274,7 @@ class DiscordAccountCheck implements ShouldQueue
         foreach($discord_uids as $discord_uid){
             $accounts_not_linked++; //records that Account Not Linked Role Assigned
 
-            sleep(2);
+            sleep(1);
 
             // add role
             $discord->getClient()->put('guilds/'.env('DISCORD_GUILD_ID').'/members/'.$discord_uid.'/roles/1297422968472997908');
