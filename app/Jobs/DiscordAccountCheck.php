@@ -70,11 +70,12 @@ class DiscordAccountCheck implements ShouldQueue
                 $checked_users++;
             }
 
-            // Add a Sleep Timer - Allows API to not block
-            sleep(1);
-
             // Check if user is currently in Discord
                 if (in_array($user->discord_user_id, $discord_uids)) {
+
+                    if($user->discord_user_id !== 200426385863344129){
+                        continue;
+                    }
 
                     ## User is in the Discord
                     $discord_uid = $user->discord_user_id;
@@ -95,23 +96,13 @@ class DiscordAccountCheck implements ShouldQueue
                     $user->discord_username = $discord_member['user']['username'];
                     $user->discord_avatar = $user->avatar ? 'https://cdn.discordapp.com/avatars/'.$user->discord_user_id.'/'.$discord_member['user']['avatar'].'.png' : null;
                     $user->save();
-
-                    // Skip if User has 'Senior Staff' Role, skip as bot doesnt have power
-                    if(in_array('482816721280040964', $discord_member['roles'])){
-                        continue;
-                    }
-
-                    // Skip if User has 'Staff Member' Role, lets skip them for now as roles need to be finished
-                    if(in_array('752767906768748586', $discord_member['roles'])){
-                        continue;
-                    }
     
                     // Roles Calculation
                     {
-                        // Generic Roles users can have by default
+                        // Roles assigned to general members
                         $rolesToAdd = [];
                         $discordRoleIds = [
-                            'guest'      => 482835389640343562,
+                            'member'      => 482835389640343562,
                             'training'   => 482824058141016075,
                             'certified'  => 482819739996127259,
                             'gander_certified'  => 1297507926222573568,
@@ -120,7 +111,7 @@ class DiscordAccountCheck implements ShouldQueue
                         ];
 
                         //Add the Member role to each user
-                        array_push($rolesToAdd, $discordRoleIds['guest']);
+                        array_push($rolesToAdd, $discordRoleIds['member']);
 
                         //Gander Roster Member
                         if (RosterMember::where('user_id', $user->id)->exists()) {
@@ -144,19 +135,81 @@ class DiscordAccountCheck implements ShouldQueue
                             array_push($rolesToAdd, $discordRoleIds['shanwick_certified']);
                         }
 
-                        // //Enroute Controller
-                        // if($user->rating_short == 'C1'){
-                        //     array_push($rolesToAdd, $discordRoleIds['enroute']);
-                        // }
-
-                        // //Enroute Controller
-                        // if($user->rating_short == 'C3'){
-                        //     array_push($rolesToAdd, $discordRoleIds['senior_enroute']);
-                        // }
-
                         //Supervisor?
                         if ($user->rating_short == 'SUP') {
                             array_push($rolesToAdd, $discordRoleIds['supervisor']);
+                        }
+
+                        // Full list of staff roles
+                        $staffRoleIDs = [
+                            'discord_admin' => 752756810104176691,
+                            'oca_chief' => 524435557472796686,
+                            'deputy_oca_chief' => 783558030842527784,
+                            'chief_instructor' => 783558130100731924,
+                            'events_marketing_director' =>783558227174227979 ,
+                            'operations_director' => 783558276334747678,
+                            'it_director' => 783558309717868544,
+                            'senior_staff' => 482816721280040964,
+
+                            'staff_instructor' => 482816758185590787,
+                            'staff_web' => 482817113023578125,
+                            'events_marketing_staff' => 666760228372480020,
+                            'operations_staff' => 770615953465409536,
+                            'staff_member' => 752767906768748586,
+                        ];
+
+                        // Role Groups
+                        if($user->hasRole('Administrator')) {
+                            array_push($rolesToAdd, $staffRoleIDs['discord_admin']);
+                        }
+                        
+                        if($user->hasRole('Instructor') || $user->hasRole('Assessor')) {
+                            array_push($rolesToAdd, $staffRoleIDs['staff_instructor']);
+                            array_push($rolesToAdd, $staffRoleIDs['staff_member']);
+                        }
+
+                        if($user->hasRole('Web Team')) {
+                            array_push($rolesToAdd, $staffRoleIDs['staff_web']);
+                            array_push($rolesToAdd, $staffRoleIDs['staff_member']);
+                        }
+
+                        if($user->hasRole('Events and Marketing Team')) {
+                            array_push($rolesToAdd, $staffRoleIDs['events_marketing_staff']);
+                            array_push($rolesToAdd, $staffRoleIDs['staff_member']);
+                        }
+
+                        if($user->hasRole('Operations Team')) {
+                            array_push($rolesToAdd, $staffRoleIDs['operations_staff']);
+                            array_push($rolesToAdd, $staffRoleIDs['staff_member']);
+                        }
+
+                        if($user->staffProfile && $user->staffProfile->group_id == 1){
+                            switch ($user->staffProfile->position) {
+                                case 'FIR Chief':
+                                    array_push($rolesToAdd, $staffRoleIDs['oca_chief']);
+                                    array_push($rolesToAdd, $staffRoleIDs['senior_staff']);
+                                    break;
+                                case 'Deputy FIR Chief':
+                                    array_push($rolesToAdd, $discordRoleIds['deputy_oca_chief']);
+                                    array_push($rolesToAdd, $staffRoleIDs['senior_staff']);
+                                    break;
+                                case 'Chief Instructor':
+                                    array_push($rolesToAdd, $discordRoleIds['chief_instructor']);
+                                    array_push($rolesToAdd, $staffRoleIDs['senior_staff']);
+                                    break;
+                                case 'Events and Marketing Director':
+                                    array_push($rolesToAdd, $discordRoleIds['events_marketing_director']);
+                                    array_push($rolesToAdd, $staffRoleIDs['senior_staff']);
+                                    break;
+                                case 'Operations Director':
+                                    array_push($rolesToAdd, $discordRoleIds['operations_director']);
+                                    array_push($rolesToAdd, $staffRoleIDs['senior_staff']);
+                                    break;
+                                case 'IT Director':
+                                    array_push($rolesToAdd, $discordRoleIds['it_director']);
+                                    array_push($rolesToAdd, $staffRoleIDs['senior_staff']);
+                                    break;
+                            }
                         }
 
                         // Check Assigned Discord Roles, and keep them assigned
@@ -173,15 +226,32 @@ class DiscordAccountCheck implements ShouldQueue
                             }
                         }
                     }
-                    
-    
-                    // Update user
-                    $discord->getClient()->patch('guilds/'.env('DISCORD_GUILD_ID').'/members/'.$user->discord_user_id, [
-                        'json' => [
-                            'nick' => $user->FullName('FLC'),
-                            'roles' => $rolesToAdd,
-                        ]
-                    ]);
+
+                    // Name Format for ZQO Members and Other Members
+                    if($user->staffProfile && $user->staffProfile->group_id == 1){
+                        $name = $user->Fullname('FL')." ZQO".$user->staffProfile->id;
+                    } else {
+                        $name = $user->FullName('FLC');
+                    }
+
+                    // Check if the roles are different between Discord and the DB
+                    $diff1 = array_diff($discord_member['roles'], $rolesToAdd);
+                    $diff2 = array_diff($rolesToAdd, $discord_member['roles']);
+
+                    // Name is same on Discord, as well as roles
+                    if ($name == $discord_member['nick'] && (!empty($diff1) || !empty($diff2))) {
+                        // Update user
+                        $discord->getClient()->patch('guilds/'.env('DISCORD_GUILD_ID').'/members/'.$user->discord_user_id, [
+                            'json' => [
+                                'nick' => $name,
+                                'roles' => $rolesToAdd,
+                            ]
+                        ]);
+
+                        // Sleep API Check
+                        sleep(2);
+
+                    }
     
                 } else {
                     ## User is NOT in the discord
@@ -198,8 +268,8 @@ class DiscordAccountCheck implements ShouldQueue
         foreach($discord_uids as $discord_uid){
             $accounts_not_linked++; //records that Account Not Linked Role Assigned
 
-            sleep(1);
-
+            sleep(2);
+            
             // add role
             $discord->getClient()->put('guilds/'.env('DISCORD_GUILD_ID').'/members/'.$discord_uid.'/roles/1297422968472997908');
         }
@@ -207,7 +277,6 @@ class DiscordAccountCheck implements ShouldQueue
 
 
         // Record Information for Discord
-
         // Beginning
         $update_content = "Full list of functions completed this week for Discord Users, <@200426385863344129>";
 
