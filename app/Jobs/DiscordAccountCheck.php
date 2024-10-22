@@ -151,6 +151,7 @@ class DiscordAccountCheck implements ShouldQueue
 
                         // Check Assigned Discord Roles, and keep them assigned
                         $roleIdsToCheck = [
+                            1214350179151650898, //Exam Request
                             635449323089559572, //AFV Dev Role
                             634656628335050762, //Shanwick Team
                             497351197280174080, //VATCAN Divisional Staff
