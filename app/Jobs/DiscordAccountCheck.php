@@ -73,10 +73,6 @@ class DiscordAccountCheck implements ShouldQueue
             // Check if user is currently in Discord
                 if (in_array($user->discord_user_id, $discord_uids)) {
 
-                    if($user->discord_user_id !== 200426385863344129){
-                        continue;
-                    }
-
                     ## User is in the Discord
                     $discord_uid = $user->discord_user_id;
                     $in_discord++;
