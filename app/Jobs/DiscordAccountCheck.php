@@ -190,23 +190,23 @@ class DiscordAccountCheck implements ShouldQueue
                                     array_push($rolesToAdd, $staffRoleIDs['senior_staff']);
                                     break;
                                 case 'Deputy FIR Chief':
-                                    array_push($rolesToAdd, $discordRoleIds['deputy_oca_chief']);
+                                    array_push($rolesToAdd, $staffRoleIDs['deputy_oca_chief']);
                                     array_push($rolesToAdd, $staffRoleIDs['senior_staff']);
                                     break;
                                 case 'Chief Instructor':
-                                    array_push($rolesToAdd, $discordRoleIds['chief_instructor']);
+                                    array_push($rolesToAdd, $staffRoleIDs['chief_instructor']);
                                     array_push($rolesToAdd, $staffRoleIDs['senior_staff']);
                                     break;
                                 case 'Events and Marketing Director':
-                                    array_push($rolesToAdd, $discordRoleIds['events_marketing_director']);
+                                    array_push($rolesToAdd, $staffRoleIDs['events_marketing_director']);
                                     array_push($rolesToAdd, $staffRoleIDs['senior_staff']);
                                     break;
                                 case 'Operations Director':
-                                    array_push($rolesToAdd, $discordRoleIds['operations_director']);
+                                    array_push($rolesToAdd, $staffRoleIDs['operations_director']);
                                     array_push($rolesToAdd, $staffRoleIDs['senior_staff']);
                                     break;
                                 case 'IT Director':
-                                    array_push($rolesToAdd, $discordRoleIds['it_director']);
+                                    array_push($rolesToAdd, $staffRoleIDs['it_director']);
                                     array_push($rolesToAdd, $staffRoleIDs['senior_staff']);
                                     break;
                             }
@@ -269,7 +269,7 @@ class DiscordAccountCheck implements ShouldQueue
             $accounts_not_linked++; //records that Account Not Linked Role Assigned
 
             sleep(2);
-            
+
             // add role
             $discord->getClient()->put('guilds/'.env('DISCORD_GUILD_ID').'/members/'.$discord_uid.'/roles/1297422968472997908');
         }
