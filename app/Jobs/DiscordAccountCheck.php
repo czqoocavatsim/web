@@ -165,6 +165,13 @@ class DiscordAccountCheck implements ShouldQueue
 
                         $discord_roles = array_unique($mainRoles);
 
+                        // Name Format for ZQO Members and Other Members
+                        if($user->staffProfile && $user->staffProfile->group_id == 1){
+                            $name = $user->Fullname('FL')." ZQO".$user->staffProfile->id;
+                        } else {
+                            $name = $user->FullName('FLC');
+                        }
+
                         // Update user with main roles - Will temp remove staff roles
                         $discord->getClient()->patch('guilds/'.env('DISCORD_GUILD_ID').'/members/'.$user->discord_user_id, [
                             'json' => [
@@ -244,13 +251,6 @@ class DiscordAccountCheck implements ShouldQueue
                                     break;
                             }
                         }
-                    }
-
-                    // Name Format for ZQO Members and Other Members
-                    if($user->staffProfile && $user->staffProfile->group_id == 1){
-                        $name = $user->Fullname('FL')." ZQO".$user->staffProfile->id;
-                    } else {
-                        $name = $user->FullName('FLC');
                     }
 
                     foreach ($staffRoles as $role){
