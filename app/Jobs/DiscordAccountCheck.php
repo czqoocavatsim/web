@@ -243,7 +243,7 @@ class DiscordAccountCheck implements ShouldQueue
                     $discord->getClient()->patch('guilds/'.env('DISCORD_GUILD_ID').'/members/'.$user->discord_user_id, [
                         'json' => [
                             'nick' => $name,
-                            'roles' => $discord_roles,
+                            'roles' => $rolesToAdd,
                         ]
                     ]);
 
@@ -273,7 +273,7 @@ class DiscordAccountCheck implements ShouldQueue
 
         // Record Information for Discord
         // Beginning
-        $update_content = "Full list of functions completed this week for Discord Users, <@200426385863344129>";
+        $update_content = "Full list of functions completed this week for Discord Users";
 
         $update_content .= "\n\n **__Accounts:__**";
 
