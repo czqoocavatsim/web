@@ -99,6 +99,11 @@ class DiscordAccountCheck implements ShouldQueue
                     if($user->discord_user_id == 350995372627197954){
                         continue;
                     }
+
+                    // Skip Joshua (Broken for him)
+                    if($user->discord_user_id == 200426385863344129){
+                        continue;
+                    }
     
                     // Roles Calculation
                     {
@@ -240,12 +245,14 @@ class DiscordAccountCheck implements ShouldQueue
                     }
 
                     // Update user
-                    $discord->getClient()->patch('guilds/'.env('DISCORD_GUILD_ID').'/members/'.$user->discord_user_id, [
-                        'json' => [
-                            'nick' => $name,
-                            'roles' => $rolesToAdd,
-                        ]
-                    ]);
+                    // $discord->getClient()->patch('guilds/'.env('DISCORD_GUILD_ID').'/members/'.$user->discord_user_id, [
+                    //     'json' => [
+                    //         'nick' => $name,
+                    //         'roles' => $discord_roles,
+                    //     ]
+                    // ]);
+
+                    $discord->sendMessageWithEmbed('488265136696459292', 'Roles: '. $user->fullName('FLC'), $discord_roles);   
 
     
                 } else {
