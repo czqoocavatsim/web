@@ -255,7 +255,7 @@ class DiscordAccountCheck implements ShouldQueue
                     }
 
                     foreach ($staffRoles as $role){
-                        sleep(0.2);
+                        sleep(0.75);
 
                         // add role
                         $discord->getClient()->put('guilds/'.env('DISCORD_GUILD_ID').'/members/'.$discord_uid.'/roles/'.$role);
