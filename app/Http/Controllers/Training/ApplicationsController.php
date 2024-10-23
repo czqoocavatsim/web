@@ -142,14 +142,15 @@ class ApplicationsController extends Controller
         //Dispatch event
         // Notification::route('mail', CoreSettings::find(1)->emailfirchief)->notify(new NewApplicationStaff($application));
         // Notification::route('mail', CoreSettings::find(1)->emaildepfirchief)->notify(new NewApplicationStaff($application));
-        Notification::route('mail', CoreSettings::find(1)->emailcinstructor)->notify(new NewApplicationStaff($application));
+        // Notification::route('mail', CoreSettings::find(1)->emailcinstructor)->notify(new NewApplicationStaff($application));
 
 
         //New Applicant in Instructor Channel
         $discord = new DiscordClient();
-        $discord->sendMessageWithEmbed(config('app.env') == 'local' ? intval(config('services.discord.web_logs')) : intval(config('services.discord.applications')), 'New Training Applicant!', $application->user->fullName('FLC').' has just applied to control at Gander Oceanic!
-        
-[View their application now](https://ganderoceanic.ca/admin/training/applications/'.$application->reference_id.')');
+        $discord_message_id = $discord->ControllerEndorsementApplication($application->user->fullName('FLC'), $application->applicant_statement, $application->reference_id);
+
+        $application->discord_message_id = $discord_message_id;
+        $application->save();
 
         //Redirect to application page
         return redirect()->route('training.applications.show', $application->reference_id);
@@ -231,6 +232,10 @@ class ApplicationsController extends Controller
         //Dispatch event
         Notification::route('mail', CoreSettings::find(1)->emailfirchief)->notify(new ApplicationWithdrawnStaff($application));
         Notification::route('mail', CoreSettings::find(1)->emaildepfirchief)->notify(new ApplicationWithdrawnStaff($application));
+
+        //Discord - User withdrew application
+        $discord = new DiscordClient();
+        $discord->ControllerEndorsementResponse($application->user->fullName('FLC'), auth()->user()->fullName('FLC'), $application->discord_message_id, $application->reference_id, 'withdrawn');
 
         //Return
         $request->session()->flash('alreadyApplied', 'Application withdrawn.');
@@ -443,9 +448,6 @@ class ApplicationsController extends Controller
 
             //Create Instructor Thread
             $discord->createTrainingThread($student->user->fullName('FLC'), '<@'.$student->user->discord_user_id.'>');
-
-            // Notify Senior Team that the application was accepted.
-            $discord->sendMessageWithEmbed(config('app.env') == 'local' ? intval(config('services.discord.web_logs')) : intval(config('services.discord.applications')), 'Accepted Applicant', $student->user->fullName('FLC').' has just been accepted.', 'error');
         
         } else {
             Session::flash('info', 'Unable to add Discord permissions automatically, as the member is not in the Discord.');
@@ -474,6 +476,10 @@ class ApplicationsController extends Controller
         //Notify staff
         //Notification::route('mail', CoreSettings::find(1)->emailcinstructor)->notify(new ApplicationAcceptedStaff($application));
 
+        //Discord - User withdrew application
+        $discord = new DiscordClient();
+        $discord->ControllerEndorsementResponse($application->user->fullName('FLC'), auth()->user()->fullName('FLC'), $application->discord_message_id, $application->reference_id, 'accepted');
+
         //Return
         $request->session()->flash('alreadyApplied', 'Accepted!');
 
@@ -498,11 +504,9 @@ class ApplicationsController extends Controller
         ]);
         $update->save();
 
-        // Notify Senior Team that new Applicant has been rejected.
-        $discord->sendMessageWithEmbed(config('app.env') == 'local' ? intval(config('services.discord.web_logs')) : intval(config('services.discord.applications')), 'Application Denied', $student->user->fullName('FLC')."'s application has been denied.", 'error');
-
-        //Notify user
-        $application->user->notify(new ApplicationRejectedApplicant($application));
+        //Discord - User withdrew application
+        $discord = new DiscordClient();
+        $discord->ControllerEndorsementResponse($application->user->fullName('FLC'), auth()->user()->fullName('FLC'), $application->discord_message_id, $application->reference_id, 'rejected');
 
         //Return
         $request->session()->flash('alreadyApplied', 'Rejected');
