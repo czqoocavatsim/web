@@ -291,7 +291,9 @@ class DiscordController extends Controller
 
         //Log it
         $discord = new DiscordClient();
-        $discord->sendMessage(482860026831175690, '['.Carbon::now()->toDateTimeString().'] <@'.$user->discord_user_id.'> ('.auth()->id().') has joined the guild');
+        $discord->sendMessageWithEmbed('482860026831175690', 'New Member has Joined the Guild', 
+    
+'<@'.$user->discord_user_id.'> ('.$user->id.') has just joined the guild.');
 
         //And back to the dashboard
         return redirect()->route('my.index')->with('success', 'You have joined the CZQO Discord server!');
