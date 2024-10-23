@@ -74,7 +74,7 @@ class DiscordClient
             ]
         ]);
 
-        return $response->getStatusCode() == 200;
+        return $response;
     }
 
     public function ControllerConnection($callsign, $name)
@@ -122,6 +122,87 @@ Time: '.sprintf('%d hours %d minutes', intdiv($total_time, 1), ($total_time - in
         $responseData = json_decode($response->getBody(), true);
 
         return $responseData;
+    }
+
+    // New Controller Application - Message to Senior Leadership
+    public function ControllerEndorsementApplication($name, $statement, $refId)
+    {
+        $response = $this->client->post("channels/".env('DISCORD_APPLICATIONS')."/messages", [
+            'json' => [
+                "tts" => false,
+                "embeds" => [
+                    [
+                        'title' => 'New Controller Application',
+                        'description' =>
+$name. ' has just applied to join Gander Oceanic!
+
+**__Applicant Statement:__**
+```'.$statement.'```
+
+[View their application](https://ganderoceanic.ca/admin/training/applications/'.$refId.')',
+                        'color' => hexdec('0080C9'),
+                    ]
+                ]
+            ]
+        ]);
+
+        $response = json_decode($response->getBody(), true);
+
+        return $response['id'];
+        
+    }
+
+    public function ControllerEndorsementResponse($app_name, $auth_name, $messageId, $refId, $status)
+    {
+        // Student Withdraws Application
+        if($status == "withdrawn"){ 
+            $response = $this->client->patch("channels/".env('DISCORD_APPLICATIONS')."/messages/".$messageId, [
+                'json' => [
+                    "tts" => false,
+                    "embeds" => [
+                        [
+                            'title' => 'Controller Application has been Withdrawn',
+                            'description' => $app_name. ' has withdrawn their application.',
+                            'color' => hexdec('7d7d7d'),
+                        ]
+                    ]
+                ]
+            ]);
+        }
+
+        if($status == "accepted"){
+            $response = $this->client->patch("channels/".env('DISCORD_APPLICATIONS')."/messages/".$messageId, [
+                'json' => [
+                    "tts" => false,
+                    "embeds" => [
+                        [
+                            'title' => 'Controller Application Accepted',
+                            'description' => $app_name. ' Application has been accepted by '.$auth_name.'
+                            
+[View the application](https://ganderoceanic.ca/admin/training/applications/'.$refId.')',
+                            'color' => hexdec('1ce335'),
+                        ]
+                    ]
+                ]
+            ]);
+        }
+
+        if($status == "rejected"){
+            $response = $this->client->patch("channels/".env('DISCORD_APPLICATIONS')."/messages/".$messageId, [
+                'json' => [
+                    "tts" => false,
+                    "embeds" => [
+                        [
+                            'title' => 'Controller Application Rejected',
+                            'description' => $app_name. ' Application has been rejected by '.$auth_name.'
+                            
+[View the application](https://ganderoceanic.ca/admin/training/applications/'.$refId.')',
+                            'color' => hexdec('dc3b23'),
+                        ]
+                    ]
+                ]
+            ]);
+        }
     }
 
     public function assignRole($discordId, $roleId)

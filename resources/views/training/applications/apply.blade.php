@@ -67,7 +67,7 @@
     </div>
     <h4 class="blue-text mt-4 mb-3">Finish your application</h4>
     <div class="list-group-item p-4 z-depth-1">
-        <p>By applying to Gander Oceanic you acknowledge the activity requirements for after you receive your endorsement. You will be required to control 6 hours each quarter. Failure to meet the requirement without justification may lead to the revokation of your endorsement.</p>
+        <p>By applying to Gander Oceanic you acknowledge the activity requirements for after you receive your endorsement. You will be required to control a minimum of 60 minutes per year. Failure to do so will result in the removal of your controller endorsement.</p>
         <p>You also agree to comply with our General and Training policies.</p>
         <div class="custom-control custom-checkbox">
             <input type="checkbox" class="custom-control-input" required name="agreeActivity" id="agreeActivity">
@@ -129,24 +129,20 @@
                 <p style="font-size: 1.2em;" class="mt-3">
                     If you believe there has been an error, please contact us so that we can investigate.
                 </p>
-                <p style="font-size: 1.2em;" class="mt-3">
-                    <a class="font-weight-bold text-body" href="https://cts.vatsim.uk/home/validations.php?view=16">View VATUK Shanwick roster &nbsp;&nbsp;<i class="fas fa-arrow-right blue-text"></i></a>
-                </p>
     </div>
 @break
 
 @case('discord')
-
 <div class="container py-4">
-    <h1 class="font-weight-bold red-text">Discord Account Details Missing</h1>
+    <h1 class="font-weight-bold red-text">{{Auth::user()->Fullname('F')}}, You are not in the Gander Oceanic Discord</h1>
     <p style="font-size: 1.2em;" class="mt-3">
-        You must be a member of the Gander Oceanic Discord to begin your training. Once you do so, you will be able to apply.
+        Gander Oceanic Training is completed on the Gander Oceanic Discord. Our records indicate that you are not currently connected to our server.
     </p>
     <p style="font-size: 1.2em;" class="mt-3">
-        If you are already a member of the Discord, you need to relink your discord account so we have your information.
+        Please head to <a href="{{route('my.index')}}">myCZQO</a> to link your Discord Account, and join our Discord Server.
     </p>
     <p style="font-size: 1.2em;" class="mt-3">
-        <a href="{{route('my.index')}}">Join Discord via myCZQO.</a>
+        If you encounter any further issues once you have joined the discord, please reach out to <b>Joshua Micallef - ZQO3</b> via Discord, who can investigate any issues.
     </p>
 </div>
 
