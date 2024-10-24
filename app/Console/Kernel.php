@@ -6,7 +6,7 @@ use App\Jobs\ProcessRosterInactivity;
 use App\Jobs\ProcessSessionLogging;
 use App\Jobs\ProcessSessionReminders;
 use App\Jobs\ProcessSoloCertExpiryWarnings;
-use App\Jobs\ProcessShanwickController;
+use App\Jobs\ProcessShanwickControllers;
 use App\Jobs\DiscordTrainingWeeklyUpdates;
 use App\Jobs\ProcessMonthlyBreakdown;
 use App\Jobs\UpdateDiscordUserRoles;
@@ -39,22 +39,22 @@ class Kernel extends ConsoleKernel
      */
     protected function schedule(Schedule $schedule)
     {
-        // Activitybot session logging
+        // Active Network Sessions
         $schedule->job(new ProcessSessionLogging())->everyMinute();
 
-        //Inactivity checks
-        $schedule->job(new DiscordAccountCheck())->dailyAt('04:00');
+        //Discord Update
+        $schedule->job(new DiscordAccountCheck())->dailyAt('02:00');
 
-        //Inactivity checks
+        //Roster Inactivity checks
         $schedule->job(new ProcessRosterInactivity())->daily();
 
         // Shanwick Controller Roster Update
-        $schedule->job(new ProcessShanwickController())->daily();
+        $schedule->job(new ProcessShanwickControllers())->daily();
 
         //Training/OTS session reminders
         $schedule->job(new ProcessSessionReminders())->daily();
 
-        // Check Training Threads Status (Once per week)
+        // Check Training Threads Status (Saturday)
         $schedule->job(new DiscordTrainingWeeklyUpdates())->weeklyOn(6, '00:01');
 
         // Monthly Statistics Breakdown

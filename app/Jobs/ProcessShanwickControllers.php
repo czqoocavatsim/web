@@ -15,7 +15,7 @@ use Illuminate\Http\Request;
 use GuzzleHttp\Client;
 use Carbon\Carbon;
 
-class ProcessShanwickController implements ShouldQueue
+class ProcessShanwickControllers implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
@@ -264,8 +264,8 @@ class ProcessShanwickController implements ShouldQueue
                 ]
             ];
 
-            // Create a Request for the Shanwick Controllers
-            $client = new Client(['timeout' => 1000]);
+            // Create a Request for the Shanwick Controllers         
+            $client = new Client(['timeout' => 1000, 'connect_timeout' => 60]);
             $URL = "https://www.vatsim.uk/api/validations?position=EGGX_CTR";
             $response = $client->request('GET', $URL);
             $data = json_decode($response->getBody(), true);

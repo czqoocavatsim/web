@@ -23,54 +23,22 @@ class DiscordController extends Controller
     {
         $data = $request->all();
 
-        return $data;
+        if ($data['type'] == 1) {
+            // Discord is verifying the endpoint
+            return response()->json(['type' => 1]);
+        }
 
-    // Handle Discord's PING request
-    if ($data['type'] == 1) {
-        return response()->json(['type' => 1]);
-    }
-
-    // Handle the "create_issue" slash command
-    if ($data['type'] == 2 && $data['data']['name'] == 'report-issue') {
-        // Open a modal for the user to input the issue details
-        return response()->json([
-            'type' => 9, // Opens a modal
-            'data' => [
-                'custom_id' => 'create_github_issue_modal',
-                'title' => 'Create GitHub Issue',
-                'components' => [
-                    [
-                        'type' => 1, // Action row (holds input fields)
-                        'components' => [
-                            [
-                                'type' => 4, // Input field for issue title
-                                'custom_id' => 'issue_title',
-                                'label' => 'Issue Title',
-                                'style' => 1, // Short text
-                                'placeholder' => 'Enter issue title',
-                                'required' => true
-                            ]
-                        ]
-                    ],
-                    [
-                        'type' => 1, // Action row for issue description
-                        'components' => [
-                            [
-                                'type' => 4, // Input field for issue description
-                                'custom_id' => 'issue_description',
-                                'label' => 'Issue Description',
-                                'style' => 2, // Paragraph
-                                'placeholder' => 'Describe the issue in detail...',
-                                'required' => true
-                            ]
-                        ]
-                    ]
+        if ($data['type'] == 2 && $data['data']['name'] == 'hello') {
+            // Slash command invoked
+            return response()->json([
+                'type' => 4, // Channel message with source
+                'data' => [
+                    'content' => 'Hello, world!'
                 ]
-            ]
-        ]);
-    }
+            ]);
+        }
 
-    return response()->json(['error' => 'Invalid request'], 400);
+        return response()->json(['error' => 'Invalid request']);
     }
 
     public function joinShortcut()

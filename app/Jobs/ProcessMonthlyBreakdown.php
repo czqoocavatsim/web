@@ -44,7 +44,7 @@ class ProcessMonthlyBreakdown implements ShouldQueue
         }
 
         // Compose the message
-        $message = 'It is the beginning of a new month, so here are some wonderful stats for ' . Carbon::now()->subMonth()->format('F, Y') . "\n\n";
+        $message = 'It is the beginning of a new month, so here the stats for Gander Oceanic during ' . Carbon::now()->subMonth()->format('F, Y') . "\n\n";
 
         $message .= "**__Total Controller Hours__**\n";
         $message .= "- " . $total_hours . " hours\n";
@@ -67,11 +67,11 @@ class ProcessMonthlyBreakdown implements ShouldQueue
             }
         }
 
-        $message .= "\nWell done to everyone for your contributions to Gander Oceanic over the last Month! Enjoy ".Carbon::now()->format('F, Y');
+        $message .= "\nA massive thank you to all of the above Controllers for providing ATC Services within Gander during ".Carbon::now()->subMonth()->format('F, Y');
 
         // Send the Announcement
         $discord = new DiscordClient();
-        $discord->sendMessageWithEmbed(env('DISCORD_ANNOUNCEMENTS'), 'Gander Oceanic Operations Breakdown - '.Carbon::now()->subMonth()->format('F, Y'), $message);
+        $discord->sendMessageWithEmbed(env('DISCORD_ANNOUNCEMENTS'), 'Gander Oceanic | Operations Breakdown | '.Carbon::now()->subMonth()->format('F, Y'), $message);
 
         foreach($roster_member as $roster){
             $roster->monthly_hours = 0.0;

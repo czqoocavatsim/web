@@ -31,6 +31,46 @@
         </h3>
     </div>
 </div>
+<div class="row">
+    <div class="col-lg">
+    <h3 class="font-weight-bold blue-text mt-4 pb-2">Controller Connections</h3>
+    <p class="mt-2">List of {{$rosterMember->user->fullName('F')}}'s connections over the last 12 Months.</p>
+    {{-- <p class="mt-0">Connections less than 30 minutes are shown in red, and do not count towards Controller Currency.</p> --}}
+    <p class="mt-0">Connections less than 30 minutes are shown in red.</p>
+    <table class="table dt table-hover table-bordered">
+        <thead>
+            <th>Position</th>
+            <th>Logon</th>
+            <th>Logoff</th>
+            <th>Time</th>
+        </thead>
+        <tbody>
+            @foreach ($sessions as $s)
+                <tr>
+                    <th>{{$s->callsign}}</th>
+                    <th>{{\Carbon\Carbon::parse($s->session_start)->format('l, d F \a\t Hi\Z')}}</th>
+                    <th>
+                        @if($s->session_end === null)
+                        Currently Connected
+                        @else
+                        {{\Carbon\Carbon::parse($s->session_end)->format('l, d F \a\t Hi\Z')}}
+                        @endif
+                    </th>
+                    @if($s->duration < 0.5)
+                        <td class="bg-danger text-white">
+                            {{$s->duration}}
+                        </td>
+                    @else
+                    <td class="bg-success text-white">
+                        {{$s->duration}}
+                    </td>
+                    @endif
+                </tr>
+            @endforeach
+        </tbody>
+    </table>
+    </div>
+</div>
 
 <!--Delete modal-->
 <div class="modal fade" id="removeRosterMemberModal" tabindex="-1" role="dialog">

@@ -406,7 +406,6 @@ class InstructingController extends Controller
         $student->user->removeRole('Student');
 
         //Discord Updates
-        if ($student->user->hasDiscord() && $student->user->member_of_czqo) {
             //Get Discord client
             $discord = new DiscordClient();
 
@@ -420,16 +419,6 @@ class InstructingController extends Controller
 
             // Notify Senior Team that new training has been terminated.
             $discord->sendMessageWithEmbed(config('app.env') == 'local' ? intval(config('services.discord.web_logs')) : intval(config('services.discord.instructors')), 'Training Terminated', $student->user->fullName('FLC').' has had their training terminated.', 'error');
-        
-        } else {
-            Session::flash('info', 'Unable to add Discord permissions automatically, as the member is not in the Discord.');
-
-            //Get Discord client
-            $discord = new DiscordClient();
-            
-            // Notify Senior Team that training has been terminated
-            $discord->sendMessageWithEmbed(config('app.env') == 'local' ? intval(config('services.discord.web_logs')) : intval(config('services.discord.instructors')), 'Training Terminated', $student->user->fullName('FLC').' has had their training terminated.', 'error');
-        }
 
         //Remove labels and instructor links and availability
         foreach ($student->labels as $label) {
@@ -503,7 +492,6 @@ class InstructingController extends Controller
         ]);
         $controller_cert->save();
 
-        if ($student->user->hasDiscord() && $student->user->member_of_czqo) {
             // Update Thread Tag to match site
             $discord = new DiscordClient();
             $discord->EditThreadTag('Completed', $student->user->id);
@@ -511,9 +499,6 @@ class InstructingController extends Controller
             // Close Training Thread Out & Send Completion Message
             $discord = new DiscordClient();
             $discord->closeTrainingThread($student->user->fullName('FLC'), $student->user->discord_user_id, 'certify');
-        } else {
-
-        }
 
         // Update Roster with Certification Status
         $rosterMember = RosterMember::where('cid', $cid)->firstOrFail();
