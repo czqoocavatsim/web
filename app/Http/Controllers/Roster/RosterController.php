@@ -9,6 +9,7 @@ use App\Services\DiscordClient;
 use App\Models\News\Announcement;
 use App\Models\Network\ShanwickController;
 use App\Models\Roster\RosterMember;
+use App\Models\Network\SessionLog;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Session;
@@ -157,8 +158,10 @@ class RosterController extends Controller
         //Get roster member
         $rosterMember = RosterMember::where('cid', $cid)->firstOrFail();
 
+        $sessions = SessionLog::where('cid', $cid)->where('created_at', '>=', Carbon::now()->subMonths(12))->orderBy('created_at', 'desc')->get();
+
         //Return view
-        return view('admin.training.roster.controller', compact('rosterMember'));
+        return view('admin.training.roster.controller', compact('rosterMember', 'sessions'));
     }
 
     public function removeRosterMember($cid)

@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Services\DiscordClient;
 use Illuminate\Support\Facades\Http;
-use App\Jobs\DiscordAccountCheck;
+use App\Jobs\ProcessShanwickControllers;
 use App\Jobs\ProcessShanwickController;
 
 class DiscordTestController extends Controller
@@ -28,7 +28,7 @@ class DiscordTestController extends Controller
     public function Job()
     {
         // Dispatch the job
-        $job = DiscordAccountCheck::dispatch();
+        $job = ProcessShanwickControllers::dispatch();
 
         // Call the handle method directly to get the result synchronously
         $result = $job->handle();
@@ -58,18 +58,14 @@ class DiscordTestController extends Controller
      //New Applicant in Instructor Channel
      $discord = new DiscordClient();
 
-     $discord->sendMessageWithEmbed('1298229107334844518', '',
+     $discord->sendMessageWithEmbed(env('DISCORD_ANNOUNCEMENTS'), 'NEWS: Gander Oceanic Training - Open for C1+',
                                     
-'## :mega: Staff Role Updates
+'We have an exciting opportunity for C1 controllers to join and be trained as oceanic controllers with Gander Oceanic. Our division boasts a dedicated and knowledgeable team of instructors who are committed to investing time into our students to help them attain oceanic controller status.
 
-Dear Valued Staff,
+[Read this article](<https://ganderoceanic.ca/news/gander-oceanic-training-open-for-c1-2024-10-24>) to find out more, and details of how to apply!
 
-Roles have been updated & synced with the Gander Core. As such, some of you may be missing staff roles.
-
-If so, please DM <@200426385863344129> so he can fix this for you.
-
-Thanks all,
-Gander Oceanic Web Team
+**Thanks all,
+Gander Oceanic Training Department**
 ');   
 
     }

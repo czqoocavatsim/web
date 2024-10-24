@@ -44,6 +44,7 @@ class DiscordAccountCheck implements ShouldQueue
         $accounts_not_linked = 0;
         $in_discord = 0;
         $not_in_discord = 0;
+        $user_updated = 0;
         $discord_uids = [];
 
         // Get List of Users in Discord
@@ -77,7 +78,7 @@ class DiscordAccountCheck implements ShouldQueue
                     $discord_uid = $user->discord_user_id;
                     $in_discord++;
 
-                    sleep(1);
+                    sleep(0.2);
 
                     // Get Discord Member Information
                     $discord_member = $discord->getClient()->get('guilds/'.env('DISCORD_GUILD_ID').'/members/'.$discord_uid);
@@ -173,14 +174,6 @@ class DiscordAccountCheck implements ShouldQueue
                             $name = $user->FullName('FLC');
                         }
 
-                        // Update user with main roles - Will temp remove staff roles
-                        $discord->getClient()->patch('guilds/'.env('DISCORD_GUILD_ID').'/members/'.$user->discord_user_id, [
-                            'json' => [
-                                'nick' => $name,
-                                'roles' => $discord_roles,
-                            ]
-                        ]);
-
                         // Full list of staff roles
                         $staffRoleIDs = [
                             'discord_admin' => 752756810104176691,
@@ -254,11 +247,32 @@ class DiscordAccountCheck implements ShouldQueue
                         }
                     }
 
-                    foreach ($staffRoles as $role){
-                        sleep(0.75);
+                    // Combine mainRoles and staffRoles into a single array
+                    $combinedRoles = array_merge($mainRoles, $staffRoles);
+                    $combinedRoles = array_unique($combinedRoles);
 
-                        // add role
-                        $discord->getClient()->put('guilds/'.env('DISCORD_GUILD_ID').'/members/'.$discord_uid.'/roles/'.$role);
+                    // Any Differences?
+                    $rolesToAssign = array_diff($combinedRoles, $discord_member['roles']);
+                    $rolesToRemove = array_diff($discord_member['roles'], $combinedRoles);
+
+                    if (!empty($rolesToAssign) || !empty($rolesToRemove)) {
+
+                        $user_updated++;
+
+                        // Update user with main roles - Will temp remove staff roles
+                        $discord->getClient()->patch('guilds/'.env('DISCORD_GUILD_ID').'/members/'.$user->discord_user_id, [
+                            'json' => [
+                                'nick' => $name,
+                                'roles' => $discord_roles,
+                            ]
+                        ]);
+
+                        foreach ($staffRoles as $role){
+                            // sleep(0.75);
+
+                            // add role
+                            $discord->getClient()->put('guilds/'.env('DISCORD_GUILD_ID').'/members/'.$discord_uid.'/roles/'.$role);
+                        }
                     }
                      
 
@@ -278,7 +292,7 @@ class DiscordAccountCheck implements ShouldQueue
         foreach($discord_uids as $discord_uid){
             $accounts_not_linked++; //records that Account Not Linked Role Assigned
 
-            sleep(1);
+            // sleep(1);
 
             // // Update user with main roles - Will temp remove staff roles
             // $discord->getClient()->patch('guilds/'.env('DISCORD_GUILD_ID').'/members/'.$user->discord_user_id, [
@@ -292,8 +306,7 @@ class DiscordAccountCheck implements ShouldQueue
             $discord->getClient()->put('guilds/'.env('DISCORD_GUILD_ID').'/members/'.$discord_uid.'/roles/1297422968472997908');
         }
 
-
-
+        if($user_updated > 0){
         // Record Information for Discord
         // Beginning
         $update_content = "Full list of functions completed this week for Discord Users";
@@ -301,6 +314,7 @@ class DiscordAccountCheck implements ShouldQueue
         $update_content .= "\n\n **__Accounts:__**";
 
         // Users which are linked in Discord
+        $update_content .= "\n- Users Updated: ".$user_updated;
         $update_content .= "\n- Total Accounts: ".$checked_users." (name/roles updated)";
         $update_content .= "\n- Linked & In Discord: ".$in_discord;
         $update_content .= "\n- Linked but not in Discord: ".$not_in_discord;
@@ -315,6 +329,7 @@ class DiscordAccountCheck implements ShouldQueue
 
 
         $discord->sendMessageWithEmbed(env('DISCORD_SERVER_LOGS'), 'DAILY: Discord User Update', $update_content);
+        }
     }
 
 }

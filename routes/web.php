@@ -75,9 +75,9 @@ Route::prefix('auth')->group(function () {
 
 // Discord shortcut
 Route::get('/discord', [DiscordController::class, 'joinShortcut']);
-Route::get('/discord/function-test', [DiscordTestController::class, 'SendEmbed']);
+Route::get('/discord/function-test', [DiscordTestController::class, 'Job']);
 Route::get('/discord/function-test2', [DiscordTestController::class, 'SendMessage']);
-Route::post('/discord/bot-webhook', [DiscordController::class, 'handelDiscordCommand']);
+Route::post('/discord/slash-commands', [DiscordController::class, 'handelDiscordCommand']);
 
 // Public news articles
 Route::get('/news/{id}', [NewsController::class, 'viewArticlePublic'])->name('news.articlepublic')->where('id', '[0-9]+');

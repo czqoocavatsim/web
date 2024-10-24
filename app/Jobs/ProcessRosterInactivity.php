@@ -46,6 +46,11 @@ class ProcessRosterInactivity implements ShouldQueue
         $second_notice = 0; //335 Days without controlling
         $third_notice = 0; //358 Days without controlling
         $termination_notice = 0; //365 Days without controlling (one year)
+
+        $first_names = [];
+        $second_names = [];
+        $third_names = [];
+        $termination_names = [];
         
         $roster_controllers = RosterMember::all();
 
@@ -54,19 +59,24 @@ class ProcessRosterInactivity implements ShouldQueue
 
             // get sessions within the last 12 months
             $sessions = SessionLog::where('cid', $roster->cid)->where('created_at', '>=', Carbon::now()->subMonths(12))->orderBy('created_at', 'asc')->get();
-            $last_session = SessionLog::where('cid', $roster->cid)->orderBy('created_at', 'desc')->first();
+            $last_session = SessionLog::where('cid', $roster->cid)->where('created_at', '>=', Carbon::now()->subMonths(12))->orderBy('created_at', 'desc')->first();
 
+            // user being checked.
+            $name = $roster->user->discord_user_id;
+            
             // Set some variables (default values)
             $currency = 0; //Assume no connections
             $active_status = 1; //Assume roster member is active
-            $removeController = false; //Remove controller (false by default)
 
             // Go through each session to get some information
             foreach($sessions as $s){
+                
+                // //Counts sessions only greater than 30mins in length
                 // if($s->duration > 0.49){
                 //     $currency += $s->duration;
                 // }
 
+                // Total Currency
                 $currency += $s->duration;
             }
 
@@ -78,85 +88,84 @@ class ProcessRosterInactivity implements ShouldQueue
                 // Currency is less than 1 hour and last connection was 305 days ago.
                 if($roster->active && $currency < 1 && $last_session->created_at->diffInDays(now()) == 305){
                     $active_status = 0;
-    
-                    // Send Message to user that they have been set as inactive
-                    if($roster->user->member_of_czqo && $roster->user->hasDiscord()){
-    //                     $discord = new DiscordClient();
-    //                     $discord->sendDM($roster->user->discord_user_id, 'Roster Status set as Inactive', 'Hello!
-                        
-    // Your status has been set as Inactive with Gander Oceanic. This is because you have not controlled at least one hour, within the last 305 days.
-    
-    // You have 60 days to control at least one hour, otherwise you will be removed as a certified controller.
-    
-    // If you have any questions, please reach out to the Gander Oceanic team on our Discord
-    
-    // **Regards,
-    // Gander Oceanic**');
-    
-                    }
+
+                    $first_names[] = "<@".$name.">";
 
                     $first_notice++;
                 };
 
                 // User in inactive, has < 1hr of activity, and has not controlled for 335 days
-                if(!$roster->active && $currency < 1 && $last_session->created_at->diffInDays(now()) == 335){
+                if($currency < 1 && $last_session->created_at->diffInDays(now()) == 335){
+                    $second_names[] = "<@".$name.">";
 
                     $second_notice++;
                 }
 
 
                 // User is inactive, has <1hr of activity and has not controlled for 358 Days
-                if(!$roster->active && $currency < 1 && $last_session->created_at->diffInDays(now()) == 358){
+                if($currency < 1 && $last_session->created_at->diffInDays(now()) == 358){
+                    $third_names[] = "<@".$name.">";
 
                     $third_notice++;
                 }
+
+                // Save Roster Information based of above if statements
+                $roster->active = $active_status;
+                $roster->currency = $currency;
+                $roster->save();
 
 
             // No Session was returned within the last 365 Days.
             } else {
                 if($roster->certification === "certified"){
-                    $removeController = true;
-                }
-            }
-
-
-            // Save Roster Information
-            $roster->active = $active_status;
-            $roster->currency = $currency;
-            $roster->save();
-
-            // Delete Controller if they should be removed.
-            if($removeController === true){
-                // Send Message to user that they have been set as inactive
-                if($roster->user->member_of_czqo && $roster->user->hasDiscord()){
-//                     $discord = new DiscordClient();
-//                     $discord->sendDM($roster->user->discord_user_id, 'Gander Oceanic Certification Expired', 'Hello!
-                    
-// Your Oceanic Certification has now been removed. This is because you have failed to control at least 1 hour, within the last 365 days.
-
-// Should you wish to regain your certification, please apply to do so via the Gander Website.
-
-// **Regards,
-// Gander Oceanic**');
-
-            }
-
+                $termination_notice++;
+                $termination_names[] = "<@".$name.">";
+                
                 $roster->user->removeRole('Certified Controller');
                 $roster->user->assignRole('Guest');
                 $roster->delete();
-                $termination_notice++;
+                }
+            }
+    }
+
+    #Generate Discord Message
+    $message_contents = "The following changes have been made to the Controller Roster.";
+
+    if($first_notice != 0){
+        $message_contents .= "\n\n**60 Days Until Removed (Set as Inactive)**";
+
+        foreach($first_names as $n){
+            $message_contents .= "\n- ".$n;
+        }
+    }
+
+    if($second_notice != 0){
+        $message_contents .= "\n\n**30 Days Until Removed**";
+
+        foreach($second_names as $n){
+            $message_contents .= "\n- ".$n;
+        }
+    }
+    
+    if($third_notice != 0){
+        $message_contents .= "\n\n**7 Days Until Removed**";
+
+        foreach($third_names as $n){
+            $message_contents .= "\n- ".$n;
+        }
+    }
+
+    if($termination_notice != 0){
+        $message_contents .= "\n\n**Removed from Roster**";
+
+        foreach($termination_names as $n){
+            $message_contents .= "\n- ".$n;
         }
     }
 
     // Send Web Notification if any changes have been made
     if($first_notice != 0 || $second_notice !== 0 || $third_notice !== 0 || $termination_notice !== 0){
         $discord = new DiscordClient();
-        $discord->sendMessageWithEmbed(env('DISCORD_SERVER_LOGS'), 'AUTO: Roster Inactivity Update', 
-        'The Following changes have occured to the Controller Roster
-60 Days till Removed: '.$first_notice.'
-30 Days till Removed: '.$second_notice.'
-7 Days till Removed: '.$third_notice.'
-Removed from Roster: '.$termination_notice
-        );
+        $discord->sendMessageWithEmbed(env('DISCORD_SERVER_LOGS'), 'ROSTER: Currency Update', $message_contents);
     }
 }}
