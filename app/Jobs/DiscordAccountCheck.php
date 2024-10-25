@@ -83,7 +83,7 @@ class DiscordAccountCheck implements ShouldQueue
                     $in_discord++;
 
                     foreach($discord_member_contents as $discord_members2){
-                        if ($discord_members2['user']['id'] == $discord_uid) {
+                        if ($discord_members2['user']['id'] === $discord_uid) {
                             $discord_member = $discord_members2;
                         }
                     }
