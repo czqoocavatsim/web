@@ -83,6 +83,8 @@ class DiscordAccountCheck implements ShouldQueue
                     $discord_member = $discord->getClient()->get('guilds/'.env('DISCORD_GUILD_ID').'/members/'.$discord_uid);
                     $discord_member = json_decode($discord_member->getBody(), true);
 
+                    dd($discord_member);
+
                     // Discord Account is Linked. Remove from Check
                     $key = array_search($user->discord_user_id, $discord_uids);
                     if ($key !== false) {
@@ -261,7 +263,7 @@ class DiscordAccountCheck implements ShouldQueue
                         $message .= "\n- $role";
                     }
 
-                    if (!empty($rolesToAssign) || !empty($rolesToRemove) || $name !== $discord_member['user']['username']) {
+                    if (!empty($rolesToAssign) || !empty($rolesToRemove) || $name !== $discord_member['nick']) {
                         $message .= "\n\n**User Roles Updated!**";
 
                         sleep(0.5);
@@ -282,9 +284,11 @@ class DiscordAccountCheck implements ShouldQueue
                             // add role
                             $discord->getClient()->put('guilds/'.env('DISCORD_GUILD_ID').'/members/'.$discord_uid.'/roles/'.$role);
                         }
+                    } else {
+                        $message .= "\n\n**NO UPDATE CONDUCTED**";
                     }
 
-                    $discord->sendMessageWithEmbed('1274827382250934365', 'USER: '.$name, $message);
+                    $discord->sendMessageWithEmbed('1299248165551210506', 'USER: '.$name, $message);
                      
 
     
