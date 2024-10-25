@@ -288,7 +288,7 @@ class DiscordAccountCheck implements ShouldQueue
                         foreach ($staffRoles as $role){
 
                             // Slow down multi role add. Allow API to catch up
-                            sleep(0.75);
+                            sleep(2.75);
 
                             // add role
                             $discord->getClient()->put('guilds/'.env('DISCORD_GUILD_ID').'/members/'.$discord_uid.'/roles/'.$role);
@@ -345,7 +345,7 @@ class DiscordAccountCheck implements ShouldQueue
         // Beginning
         $update_content = "Full list of functions completed this week for Discord Users";
 
-        $update_content2 .= "\n\n **__Updated Users:__**";
+        $update_content2 = "\n\n **__Updated Users:__**";
         foreach($in_discord_name as $name){
             $update_content2 .= "\n- ".$name;
         }
