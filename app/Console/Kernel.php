@@ -46,7 +46,7 @@ class Kernel extends ConsoleKernel
         $schedule->job(new DiscordAccountCheck())->dailyAt('04:00');
 
         //Roster Inactivity checks
-        $schedule->job(new ProcessRosterInactivity())->daily();
+        $schedule->job(new ProcessRosterInactivity())->dailyAt('23:55');
 
         // Shanwick Controller Roster Update
         $schedule->job(new ProcessShanwickControllers())->daily();

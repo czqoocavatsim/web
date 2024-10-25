@@ -11,10 +11,7 @@ use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Support\Facades\Notification;
-use App\Notifications\Network\TwoMonthInactivityReminder;
-use App\Notifications\Network\OneMonthInactivityReminder;
-use App\Notifications\Network\OneWeekInactivityReminder;
-use App\Notifications\Network\ControllerTerminated;
+use App\Notifications\Roster\TwoMonthFromRemoval;
 use App\Services\DiscordClient;
 
 class ProcessRosterInactivity implements ShouldQueue
@@ -42,10 +39,10 @@ class ProcessRosterInactivity implements ShouldQueue
     public function handle()
     {
         // Counter Variables (For Message at End)
-        $first_notice = 0; //305 Days without controlling
-        $second_notice = 0; //335 Days without controlling
-        $third_notice = 0; //358 Days without controlling
-        $termination_notice = 0; //365 Days without controlling (one year)
+        $first_notice = 0; //1NOV message sent out
+        $second_notice = 0; //1DEC message sent out
+        $third_notice = 0; //24DEC message
+        $termination_notice = 0; //31DEC Message Sent Out
 
         $first_names = [];
         $second_names = [];
@@ -53,20 +50,24 @@ class ProcessRosterInactivity implements ShouldQueue
         $termination_names = [];
         
         $roster_controllers = RosterMember::all();
+        // dd($roster_controllers);
 
         // Lets now go through each RosterMember (gotta update dem all)
         foreach($roster_controllers as $roster){
 
-            // get sessions within the last 12 months
-            $sessions = SessionLog::where('cid', $roster->cid)->where('created_at', '>=', Carbon::now()->subMonths(12))->orderBy('created_at', 'asc')->get();
-            $last_session = SessionLog::where('cid', $roster->cid)->where('created_at', '>=', Carbon::now()->subMonths(12))->orderBy('created_at', 'desc')->first();
+            // get sessions since start of year
+            $sessions = SessionLog::where('cid', $roster->cid)->where('created_at', '>=', Carbon::now()->startOfYear())->orderBy('created_at', 'asc')->get();
 
-            // user being checked.
-            $name = $roster->user->discord_user_id;
-            
+            // Name of user being checked - Will link to the Users Roster Profile
+            $name = "[" . $roster->user->fullName('FLC') . "](" . route('training.admin.roster.viewcontroller', $roster->cid) . ")";
+
             // Set some variables (default values)
             $currency = 0; //Assume no connections
-            $active_status = 1; //Assume roster member is active
+            if($roster->active) { //Assume based off current set
+                $active_status = 1;
+            } else {
+                $active_status = 0;
+            }
 
             // Go through each session to get some information
             foreach($sessions as $s){
@@ -80,59 +81,61 @@ class ProcessRosterInactivity implements ShouldQueue
                 $currency += $s->duration;
             }
 
-
-
-            // Check if there was a last session
-            if($last_session != null && $roster->certification === "certified"){
-                
-                // Currency is less than 1 hour and last connection was 305 days ago.
-                if($roster->active && $currency < 1 && $last_session->created_at->diffInDays(now()) == 305){
-                    $active_status = 0;
-
-                    $first_names[] = "<@".$name.">";
-
-                    $first_notice++;
-                };
-
-                // User in inactive, has < 1hr of activity, and has not controlled for 335 days
-                if($currency < 1 && $last_session->created_at->diffInDays(now()) == 335){
-                    $second_names[] = "<@".$name.">";
-
-                    $second_notice++;
-                }
-
-
-                // User is inactive, has <1hr of activity and has not controlled for 358 Days
-                if($currency < 1 && $last_session->created_at->diffInDays(now()) == 358){
-                    $third_names[] = "<@".$name.">";
-
-                    $third_notice++;
-                }
-
-                // Save Roster Information based of above if statements
-                $roster->active = $active_status;
-                $roster->currency = $currency;
-                $roster->save();
-
-
-            // No Session was returned within the last 365 Days.
-            } else {
-                if($roster->certification === "certified"){
-                $termination_notice++;
-                $termination_names[] = "<@".$name.">";
-                
-                $roster->user->removeRole('Certified Controller');
-                $roster->user->assignRole('Guest');
-                $roster->delete();
-                }
+            // If Currency is greater than 1, set status active
+            if($currency > 0.99){
+                $active_status = 1;
             }
-    }
+
+            // 1NOV - 2 Month Activity Check
+            if($roster->active && Carbon::now()->format('d/m') == "11/11" && $roster->currency < 1) {
+                $active_status = 0;
+
+                $first_names[] = $name;
+
+                $first_notice++;
+                
+                Notification::send($roster->user, new TwoMonthFromRemoval($roster->user));
+            }
+
+            // 1DEC - 1 Month till Removal
+            if(Carbon::now()->format('d/m') == "1/12" && $roster->currency < 1){
+                $second_names[] = $name;
+
+                $second_notice++;
+            }
+
+            // 24DEC - 7 Days Till Removal
+            if(Carbon::now()->format('d/m') == "24/12" && $roster->currency < 1){
+                $third_names[] = $name;
+
+                $third_notice++;
+            }
+
+            // End Of Year - Reset Time
+            if(Carbon::now()->format('d/m') == "31/12"){
+
+                // User to be terminated
+                if($roster->currency < 1){
+                    $termination_names[] = $name;
+
+                    $termination_notice++;
+                }
+
+                // Set Total Currency back to Zero (New Year Begins)
+                $currency = 0;
+            }
+
+            // Save Roster Information based of above if statements
+            $roster->active = $active_status;
+            $roster->currency = $currency;
+            $roster->save();
+        }
 
     #Generate Discord Message
     $message_contents = "The following changes have been made to the Controller Roster.";
 
     if($first_notice != 0){
-        $message_contents .= "\n\n**60 Days Until Removed (Set as Inactive)**";
+        $message_contents .= "\n\n**60 Days To Complete Activity (Set as Inactive)**";
 
         foreach($first_names as $n){
             $message_contents .= "\n- ".$n;
