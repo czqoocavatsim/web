@@ -87,7 +87,7 @@ class ProcessRosterInactivity implements ShouldQueue
             }
 
             // 1NOV - 2 Month Activity Check
-            if($roster->active && Carbon::now()->format('d/m') == "11/11" && $roster->currency < 1) {
+            if($roster->certification == "certified" && $roster->active && Carbon::now()->format('d/m') == "1/11" && $roster->currency < 1) {
                 $active_status = 0;
 
                 $first_names[] = $name;
@@ -98,21 +98,21 @@ class ProcessRosterInactivity implements ShouldQueue
             }
 
             // 1DEC - 1 Month till Removal
-            if(Carbon::now()->format('d/m') == "1/12" && $roster->currency < 1){
+            if($roster->certification == "certified" && Carbon::now()->format('d/m') == "1/12" && $roster->currency < 1){
                 $second_names[] = $name;
 
                 $second_notice++;
             }
 
             // 24DEC - 7 Days Till Removal
-            if(Carbon::now()->format('d/m') == "24/12" && $roster->currency < 1){
+            if($roster->certification == "certified" && Carbon::now()->format('d/m') == "24/12" && $roster->currency < 1){
                 $third_names[] = $name;
 
                 $third_notice++;
             }
 
             // End Of Year - Reset Time
-            if(Carbon::now()->format('d/m') == "31/12"){
+            if($roster->certification == "certified" && Carbon::now()->format('d/m') == "31/12"){
 
                 // User to be terminated
                 if($roster->currency < 1){
