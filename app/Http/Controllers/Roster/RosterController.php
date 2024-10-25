@@ -158,7 +158,7 @@ class RosterController extends Controller
         //Get roster member
         $rosterMember = RosterMember::where('cid', $cid)->firstOrFail();
 
-        $sessions = SessionLog::where('cid', $cid)->where('created_at', '>=', Carbon::now()->subMonths(12))->orderBy('created_at', 'desc')->get();
+        $sessions = SessionLog::where('cid', $cid)->where('created_at', '>=', Carbon::now()->startOfYear())->orderBy('created_at', 'desc')->get();
 
         //Return view
         return view('admin.training.roster.controller', compact('rosterMember', 'sessions'));
