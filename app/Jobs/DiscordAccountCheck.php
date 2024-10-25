@@ -259,6 +259,10 @@ class DiscordAccountCheck implements ShouldQueue
                     $rolesToRemove = array_diff($discord_member['roles'], $combinedRoles);
 
                     if (!empty($rolesToAssign) || !empty($rolesToRemove) || $name !== $discord_member['nick']) {
+                        
+                        // Sleep for 1 second (let API catch up)
+                        sleep(1);
+
                         $message = "Assign Roles:";
                         foreach($rolesToAssign as $role){
                             $message .= "\n- $role";
@@ -281,6 +285,8 @@ class DiscordAccountCheck implements ShouldQueue
                         ]);
 
                         foreach ($staffRoles as $role){
+
+                            // Slow down multi role add. Allow API to catch up
                             sleep(0.75);
 
                             // add role
@@ -316,7 +322,7 @@ class DiscordAccountCheck implements ShouldQueue
 
             $accounts_not_linked++; //records that Account Not Linked Role Assigned
 
-            sleep(0.75);
+            sleep(1);
 
             // // Update user with main roles - Will temp remove staff roles
             $discord->getClient()->patch('guilds/'.env('DISCORD_GUILD_ID').'/members/'.$user->discord_user_id, [
