@@ -82,15 +82,23 @@ class DiscordAccountCheck implements ShouldQueue
                     $discord_uid = $user->discord_user_id;
                     $in_discord++;
 
+                    $discord_member_details = false;
+
                     foreach($discord_member_contents as $discord_members2){
                         if ($discord_members2['user']['id'] === $discord_uid) {
                             $discord_member = $discord_members2;
+
+                            $discord_member_details = true;
+
+                            break;
                         }
                     }
 
-                    // // Get Discord Member Information
-                    // $discord_member = $discord->getClient()->get('guilds/'.env('DISCORD_GUILD_ID').'/members/'.$discord_uid);
-                    // $discord_member = json_decode($discord_member->getBody(), true);
+                    if($discord_member_details === false){
+                    // Get Discord Member Information
+                    $discord_member = $discord->getClient()->get('guilds/'.env('DISCORD_GUILD_ID').'/members/'.$discord_uid);
+                    $discord_member = json_decode($discord_member->getBody(), true);
+                    }
 
                     // Discord Account is Linked. Remove from Check
                     $key = array_search($user->discord_user_id, $discord_uids);
