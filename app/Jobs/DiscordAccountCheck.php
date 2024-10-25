@@ -281,7 +281,7 @@ class DiscordAccountCheck implements ShouldQueue
                         ]);
 
                         foreach ($staffRoles as $role){
-                            sleep(0.5);
+                            sleep(0.75);
 
                             // add role
                             $discord->getClient()->put('guilds/'.env('DISCORD_GUILD_ID').'/members/'.$discord_uid.'/roles/'.$role);
@@ -316,7 +316,7 @@ class DiscordAccountCheck implements ShouldQueue
 
             $accounts_not_linked++; //records that Account Not Linked Role Assigned
 
-            sleep(0.5);
+            sleep(0.75);
 
             // // Update user with main roles - Will temp remove staff roles
             $discord->getClient()->patch('guilds/'.env('DISCORD_GUILD_ID').'/members/'.$user->discord_user_id, [
