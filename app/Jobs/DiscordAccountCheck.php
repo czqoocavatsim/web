@@ -59,8 +59,6 @@ class DiscordAccountCheck implements ShouldQueue
             $discord_member_contents[] = $members;
         }
 
-        // dd($discord_member_contents);
-
         // Get a complete list of Gander Oceanic Users
         $users = User::whereNotNull('discord_user_id')->get();
 
@@ -77,28 +75,21 @@ class DiscordAccountCheck implements ShouldQueue
             // Check if user is currently in Discord
                 if (in_array($user->discord_user_id, $discord_uids)) {
 
-                    
+                    // dd($discord_uids);
+
                     ## User is in the Discord
                     $discord_uid = $user->discord_user_id;
                     $in_discord++;
 
-                    $discord_member_details = false;
-
                     foreach($discord_member_contents as $discord_members2){
-                        if ($discord_members2['user']['id'] === $discord_uid) {
+
+                        if ($discord_members2['user']['id'] == $discord_uid) {
                             $discord_member = $discord_members2;
 
-                            $discord_member_details = true;
+                            // dd($discord_uid);
 
                             break;
                         }
-                    }
-
-                    if($discord_member_details === false){
-                        sleep(1);
-                        // Get Discord Member Information
-                        $discord_member = $discord->getClient()->get('guilds/'.env('DISCORD_GUILD_ID').'/members/'.$discord_uid);
-                        $discord_member = json_decode($discord_member->getBody(), true);
                     }
 
                     // Discord Account is Linked. Remove from Check
@@ -185,6 +176,8 @@ class DiscordAccountCheck implements ShouldQueue
                         } else {
                             $name = $user->FullName('FLC');
                         }
+
+                        $in_discord_name[] = $name;
 
                         // Full list of staff roles
                         $staffRoleIDs = [
@@ -300,11 +293,10 @@ class DiscordAccountCheck implements ShouldQueue
                             // add role
                             $discord->getClient()->put('guilds/'.env('DISCORD_GUILD_ID').'/members/'.$discord_uid.'/roles/'.$role);
                         }
-                    } else {
-                        $message = "User Not Updated";
-                    }
 
-                    $discord->sendMessageWithEmbed('1299248165551210506', 'USER: '.$name, $message);
+                        $discord->sendMessageWithEmbed('1299248165551210506', 'USER: '.$name, $message);
+
+                    }
                      
 
     
@@ -353,16 +345,20 @@ class DiscordAccountCheck implements ShouldQueue
         // Beginning
         $update_content = "Full list of functions completed this week for Discord Users";
 
-        $update_content .= "\n\n **__Accounts:__**";
+        $update_content .= "\n\n **__Updated Users:__**";
+        foreach($in_discord_name as $name){
+            $update_content .= "\n- ".$name;
+        }
+
+        $update_content .= "\n\n **__General Information:__**";
 
         // Users which are linked in Discord
-        $update_content .= "\n- Users Updated: ".$user_updated;
-        $update_content .= "\n- Total Accounts: ".$checked_users." (name/roles updated)";
-        $update_content .= "\n- Linked & In Discord: ".$in_discord;
-        $update_content .= "\n- Linked but not in Discord: ".$not_in_discord;
+        $update_content .= "\n- Accounts Linked in Core: ".$checked_users;
+        $update_content .= "\n- Linked - in Discord: ".$in_discord;
+        $update_content .= "\n- Linked - not in Discord: ".$not_in_discord;
 
         // Accounts not linked
-        $update_content .= "\n- Not Linked to Discord: ".$accounts_not_linked." (role assigned)";
+        $update_content .= "\n- Not Linked - in Discord: ".$accounts_not_linked." (No Account Role Assigned)";
 
         // Completion Time
         $end_time = Carbon::now();
