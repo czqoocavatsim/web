@@ -315,12 +315,12 @@ class DiscordAccountCheck implements ShouldQueue
         foreach($discord_uids as $discord_uid){
             
             // Skip the Bot (Gander)
-            if($discord_uid === 1133048493850771616){
+            if($discord_uid == 1133048493850771616){
                 continue;
             }
 
             // Skip the Bot (QFA100)
-            if($discord_uid === 1133048493850771616){
+            if($discord_uid == 1133048493850771616){
                 continue;
             }
 
@@ -345,9 +345,9 @@ class DiscordAccountCheck implements ShouldQueue
         // Beginning
         $update_content = "Full list of functions completed this week for Discord Users";
 
-        $update_content .= "\n\n **__Updated Users:__**";
+        $update_content2 .= "\n\n **__Updated Users:__**";
         foreach($in_discord_name as $name){
-            $update_content .= "\n- ".$name;
+            $update_content2 .= "\n- ".$name;
         }
 
         $update_content .= "\n\n **__General Information:__**";
@@ -367,6 +367,7 @@ class DiscordAccountCheck implements ShouldQueue
 
 
         $discord->sendMessageWithEmbed(env('DISCORD_SERVER_LOGS'), 'DAILY: Discord User Update', $update_content);
+        $discord->sendMessageWithEmbed(env('DISCORD_SERVER_LOGS'), '', $update_content2);
         }
     }
 
