@@ -325,12 +325,12 @@ class DiscordAccountCheck implements ShouldQueue
             sleep(1);
 
             // // Update user with main roles - Will temp remove staff roles
-            $discord->getClient()->patch('guilds/'.env('DISCORD_GUILD_ID').'/members/'.$user->discord_user_id, [
-                'json' => [
-                    'nick' => $name,
-                    'roles' => $discord_roles,
-                ]
-            ]);
+            // $discord->getClient()->patch('guilds/'.env('DISCORD_GUILD_ID').'/members/'.$user->discord_user_id, [
+            //     'json' => [
+            //         'nick' => $name,
+            //         'roles' => $discord_roles,
+            //     ]
+            // ]);
 
             // add role
             $discord->getClient()->put('guilds/'.env('DISCORD_GUILD_ID').'/members/'.$discord_uid.'/roles/1297422968472997908');
