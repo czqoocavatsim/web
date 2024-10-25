@@ -177,8 +177,6 @@ class DiscordAccountCheck implements ShouldQueue
                             $name = $user->FullName('FLC');
                         }
 
-                        $in_discord_name[] = $name;
-
                         // Full list of staff roles
                         $staffRoleIDs = [
                             'discord_admin' => 752756810104176691,
@@ -262,6 +260,9 @@ class DiscordAccountCheck implements ShouldQueue
 
                     if (!empty($rolesToAssign) || !empty($rolesToRemove) || $name !== $discord_member['nick']) {
                         
+                        // Get Name
+                        $in_discord_name[] = $name;
+
                         // Sleep for 1 second (let API catch up)
                         sleep(1);
 
@@ -315,7 +316,7 @@ class DiscordAccountCheck implements ShouldQueue
         foreach($discord_uids as $discord_uid){
             
             // Skip the Bot (Gander)
-            if($discord_uid == 1133048493850771616){
+            if($discord_uid == 1118430230839840768){
                 continue;
             }
 
@@ -345,9 +346,9 @@ class DiscordAccountCheck implements ShouldQueue
         // Beginning
         $update_content = "Full list of functions completed this week for Discord Users";
 
-        $update_content2 = "\n\n **__Updated Users:__**";
+        $update_content .= "\n\n **__Updated Users:__**";
         foreach($in_discord_name as $name){
-            $update_content2 .= "\n- ".$name;
+            $update_content .= "\n- ".$name;
         }
 
         $update_content .= "\n\n **__General Information:__**";
@@ -365,9 +366,7 @@ class DiscordAccountCheck implements ShouldQueue
         $update_content .= "\n\n**__Script Time:__**";
         $update_content .= "\n- Script Time: " . $start_time->diffForHumans($end_time, ['parts' => 2, 'short' => true, 'syntax' => Carbon::DIFF_ABSOLUTE]) . ".";
 
-
         $discord->sendMessageWithEmbed(env('DISCORD_SERVER_LOGS'), 'DAILY: Discord User Update', $update_content);
-        $discord->sendMessageWithEmbed(env('DISCORD_SERVER_LOGS'), '', $update_content2);
         }
     }
 
