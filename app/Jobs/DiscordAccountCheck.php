@@ -55,7 +55,6 @@ class DiscordAccountCheck implements ShouldQueue
         // Loop through each Discord User and get some key information
         foreach($discord_members as $members){
             $discord_uids[] = $members['user']['id'];
-            // dd($members['user']);
         }
 
         // Get a complete list of Gander Oceanic Users
@@ -78,7 +77,7 @@ class DiscordAccountCheck implements ShouldQueue
                     $discord_uid = $user->discord_user_id;
                     $in_discord++;
 
-                    sleep(0.2);
+                    sleep(1);
 
                     // Get Discord Member Information
                     $discord_member = $discord->getClient()->get('guilds/'.env('DISCORD_GUILD_ID').'/members/'.$discord_uid);
@@ -100,11 +99,6 @@ class DiscordAccountCheck implements ShouldQueue
                     if($user->discord_user_id == 350995372627197954){
                         continue;
                     }
-
-                    // // Skip Joshua (Broken for him)
-                    // if($user->discord_user_id == 200426385863344129){
-                    //     continue;
-                    // }
     
                     // Roles Calculation
                     {
@@ -255,7 +249,22 @@ class DiscordAccountCheck implements ShouldQueue
                     $rolesToAssign = array_diff($combinedRoles, $discord_member['roles']);
                     $rolesToRemove = array_diff($discord_member['roles'], $combinedRoles);
 
-                    if (!empty($rolesToAssign) || !empty($rolesToRemove)) {
+                    $message = "Assign Roles:";
+
+                    foreach($rolesToAssign as $role){
+                        $message .= "\n- $role";
+                    }
+
+                    $message .= "\n\nRemove Roles:";
+
+                    foreach($rolesToRemove as $role){
+                        $message .= "\n- $role";
+                    }
+
+                    if (!empty($rolesToAssign) || !empty($rolesToRemove) || $name !== $discord_member['user']['username']) {
+                        $message .= "\n\n**User Roles Updated!**";
+
+                        sleep(0.5);
 
                         $user_updated++;
 
@@ -268,12 +277,14 @@ class DiscordAccountCheck implements ShouldQueue
                         ]);
 
                         foreach ($staffRoles as $role){
-                            // sleep(0.75);
+                            sleep(0.75);
 
                             // add role
                             $discord->getClient()->put('guilds/'.env('DISCORD_GUILD_ID').'/members/'.$discord_uid.'/roles/'.$role);
                         }
                     }
+
+                    $discord->sendMessageWithEmbed('1274827382250934365', 'USER: '.$name, $message);
                      
 
     
@@ -290,9 +301,15 @@ class DiscordAccountCheck implements ShouldQueue
 
         // Add Role to Users not Connected to Gander Oceanic
         foreach($discord_uids as $discord_uid){
+            
+            // Skip the Bots
+            if($discord_uid === 1133048493850771616 || $discord_uid === 1118430230839840768){
+                continue;
+            }
+
             $accounts_not_linked++; //records that Account Not Linked Role Assigned
 
-            // sleep(1);
+            sleep(1);
 
             // // Update user with main roles - Will temp remove staff roles
             // $discord->getClient()->patch('guilds/'.env('DISCORD_GUILD_ID').'/members/'.$user->discord_user_id, [

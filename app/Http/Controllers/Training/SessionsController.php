@@ -81,10 +81,9 @@ class SessionsController extends Controller
 
         //Discord Notification in Training Thread
         $discord = new DiscordClient();
-        $discord->sendEmbedInTrainingThread($session->student->user->id, 'Training Session Booked', 
-'Hello, '. $session->student->user->fullName('F').'!
-
-A training session has been created for you on <t:'.Carbon::parse($request->get('scheduled_time'))->timestamp.':F>.
+        $discord->sendMessage($session->student->user->id, '<@'.$session->student->user->discord_user_id.'>');
+        $discord->sendEmbedInTrainingThread($session->student->user->id, 'New Training Session Booked', 
+'A training session has been created for you on <t:'.Carbon::parse($request->get('scheduled_time'))->timestamp.':F>.
 
 Please reach out to your instructor in this training thread if you have any questions.');
         
@@ -136,6 +135,7 @@ Please reach out to your instructor in this training thread if you have any ques
 
          //Discord Notification in Training Thread
          $discord = new DiscordClient();
+         $discord->sendMessage($session->student->user->id, '<@'.$session->student->user->discord_user_id.'>');
          $discord->sendEmbedInTrainingThread($session->student->user->id, 'Training Session Time Changed', 
  'Hello, '. $session->student->user->fullName('F').'!
  
@@ -238,12 +238,11 @@ Please reach out to your instructor in this training thread if you have any ques
 
         //Discord Notification in Training Thread
         $discord = new DiscordClient();
+        $discord->sendMessage($session->student->user->id, '<@'.$session->student->user->discord_user_id.'>');
         $discord->sendEmbedInTrainingThread($session->student->user->id, 'Training Session Cancelled', 
-'Hello, '. $session->student->user->fullName('F').'!
+'A training session which was planned has been cancelled.
 
-A training session which was planned has been cancelled.
-
-Please contact your instructor if you believe this was a mistake.');
+Please contact your instructor if you believe this was a mistake, or to reorganise a new session.');
 
         //Soft delete session
         $session->delete();

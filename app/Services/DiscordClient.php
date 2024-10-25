@@ -309,8 +309,9 @@ Good luck with your study!',
             if (strpos($thread['name'], $cid) !== false) {
 
                 if($status == "certify"){
+                    $this->sendMessage($thread['id'], '<@'.$discord_id.'>');
                     $this->sendMessageWithEmbed($thread['id'], 'Oceanic Training Completed!',
-'Congratulations <@'.$discord_id.'>, you have now been certified on Gander & Shanwick Oceanic!
+'Congratulations, you have now been certified on Gander & Shanwick Oceanic!
                 
 This training thread will now be closed due to the completion of your training. Your discord roles will automatically be updated within the next 24
 
@@ -323,16 +324,17 @@ Gander Oceanic Training Team**');
 
                 } elseif($status == "cancel") {
                     $this->sendMessageWithEmbed($thread['id'], 'Oceanic Training Cancelled',
-'<@'.$discord_id.'>, Your training request with Gander Oceanic has been terminated at <t:'.Carbon::now()->timestamp.':F>
+'Your training request with Gander Oceanic has been terminated at <t:'.Carbon::now()->timestamp.':F>
 
 If you would like to begin training again, please re-apply via the Gander Website.
 
 **Kind Regards,
 Gander Oceanic Training Team**');
+                    $this->sendMessage($thread['id'], '<@'.$discord_id.'>');
 
                 } elseif($status == "terminate"){
                     $this->sendMessageWithEmbed($thread['id'], 'Oceanic Training Terminated',
-'<@'.$discord_id.'>, Your training request with Gander Oceanic has been terminated at <t:'.Carbon::now()->timestamp.':F>. 
+'Your training request with Gander Oceanic has been terminated at <t:'.Carbon::now()->timestamp.':F>. 
                     
 This is due to not completing the Exam within 60 Days of your application being accepted.
                     
@@ -340,6 +342,7 @@ If you would like to begin training again, please re-apply via the Gander Websit
 
 **Kind Regards,
 Gander Oceanic Training Team**');
+                    $this->sendMessage($thread['id'], '<@'.$discord_id.'>');
                 }
 
                 // Lock and Archive the Thread
