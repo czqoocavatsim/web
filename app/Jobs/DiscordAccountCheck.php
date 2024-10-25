@@ -325,6 +325,11 @@ class DiscordAccountCheck implements ShouldQueue
                 continue;
             }
 
+            // Skip Server Owner (Gary)
+            if($discord_uid == 350995372627197954){
+                continue;
+            }
+
             $accounts_not_linked++; //records that Account Not Linked Role Assigned
 
             sleep(1);
