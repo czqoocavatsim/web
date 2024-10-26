@@ -12,6 +12,8 @@ use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Support\Facades\Notification;
 use App\Notifications\Roster\TwoMonthFromRemoval;
+use App\Notifications\Roster\OneMonthFromRemoval;
+use App\Notifications\Roster\SevenDaysFromRemoval;
 use App\Services\DiscordClient;
 
 class ProcessRosterInactivity implements ShouldQueue
@@ -94,24 +96,32 @@ class ProcessRosterInactivity implements ShouldQueue
 
                 $first_notice++;
                 
-                Notification::send($roster->user, new TwoMonthFromRemoval($roster->user));
+                Notification::send($roster->user, new TwoMonthFromRemoval($roster->user, $currency));
             }
 
             // 1DEC - 1 Month till Removal
             if($roster->certification == "certified" && Carbon::now()->format('d/m') == "1/12" && $roster->currency < 1){
+                $active_status = 0;
+
                 $second_names[] = $name;
 
                 $second_notice++;
+
+                Notification::send($roster->user, new OneMonthFromRemoval($roster->user, $currency));
             }
 
             // 24DEC - 7 Days Till Removal
             if($roster->certification == "certified" && Carbon::now()->format('d/m') == "24/12" && $roster->currency < 1){
+                $active_status = 0;
+
                 $third_names[] = $name;
 
                 $third_notice++;
+
+                Notification::send($roster->user, new SevenDaysFromRemoval($roster->user, $currency));
             }
 
-            // End Of Year - Reset Time
+            // End Of Year - Reset Time & Get Users to Remove
             if($roster->certification == "certified" && Carbon::now()->format('d/m') == "31/12"){
 
                 // User to be terminated

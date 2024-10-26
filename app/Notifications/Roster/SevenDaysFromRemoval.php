@@ -7,7 +7,7 @@ use Illuminate\Notifications\Notification;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
 
-class TwoMonthFromRemoval extends Notification
+class SevenDaysFromRemoval extends Notification
 {
     use Queueable;
     protected $user;
@@ -45,9 +45,9 @@ class TwoMonthFromRemoval extends Notification
     public function toMail($notifiable)
     {
         return (new MailMessage())->view(
-            'emails.roster.twomonthstillremoval',
+            'emails.roster.sevendaystillremoval',
             ['user' => $this->user, 'currency' => $this->currency]
-        )->subject('Two Months to Fulfill Activity Requirements');
+        )->subject('One Week to Fulfill Activity Requirements');
     }
 
     /**
