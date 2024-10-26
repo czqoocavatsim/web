@@ -5,6 +5,7 @@ namespace App\Services;
 use GuzzleHttp\Client;
 use App\Jobs\ProcessDiscordRoles;
 use GuzzleHttp\Exception\ClientException;
+use App\Models\Users\User;
 use Carbon\Carbon;
 
 class DiscordClient
@@ -302,6 +303,8 @@ Good luck with your study!',
         // Get active Discord Threads
         $active_threads = $this->client->get('guilds/'.env('DISCORD_GUILD_ID').'/threads/active');
 
+        $user = User::find($cid);
+
         // Decode Data
         $threads_data = json_decode($active_threads->getBody(), true);
 
@@ -309,7 +312,6 @@ Good luck with your study!',
             if (strpos($thread['name'], $cid) !== false) {
 
                 if($status == "certify"){
-                    $this->sendMessage($thread['id'], '<@'.$discord_id.'>');
                     $this->sendMessageWithEmbed($thread['id'], 'Oceanic Training Completed!',
 'Congratulations, you have now been certified on Gander & Shanwick Oceanic!
                 
@@ -321,6 +323,8 @@ Enjoy controlling Gander & Shanwick OCA!
 
 **Kind Regards,
 Gander Oceanic Training Team**');
+                    $this->sendMessage($thread['id'], '<@'.$discord_id.'>');
+
 
                 } elseif($status == "cancel") {
                     $this->sendMessageWithEmbed($thread['id'], 'Oceanic Training Cancelled',
@@ -332,6 +336,7 @@ If you would like to begin training again, please re-apply via the Gander Websit
 Gander Oceanic Training Team**');
                     $this->sendMessage($thread['id'], '<@'.$discord_id.'>');
 
+                    
                 } elseif($status == "terminate"){
                     $this->sendMessageWithEmbed($thread['id'], 'Oceanic Training Terminated',
 'Your training request with Gander Oceanic has been terminated at <t:'.Carbon::now()->timestamp.':F>. 
@@ -402,14 +407,20 @@ Gander Oceanic Training Team**');
         // Get active Discord Threads
         $active_threads = $this->client->get('guilds/'.env('DISCORD_GUILD_ID').'/threads/active');
 
+        $user = User::find($cid);
+
         // Decode Data
         $threads_data = json_decode($active_threads->getBody(), true);
 
         // Loop through all threads to find students training record
         foreach ($threads_data['threads'] as $thread) {
             if (strpos($thread['name'], $cid) !== false) {
+
                 // Send Embed Message
                 $this->sendMessageWithEmbed($thread['id'], $title, $message);
+
+                // Tag Student
+                $this->sendMessage($thread['id'], '<@'.$user->discord_user_id.'>');
             }
         }
     }

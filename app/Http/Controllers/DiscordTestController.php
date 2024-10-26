@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Services\DiscordClient;
 use Illuminate\Support\Facades\Http;
-use App\Jobs\ProcessRosterInactivity;
+use App\Jobs\DiscordTrainingWeeklyUpdates;
 use App\Jobs\ProcessShanwickController;
 
 class DiscordTestController extends Controller
@@ -28,7 +28,7 @@ class DiscordTestController extends Controller
     public function Job()
     {
         // Dispatch the job
-        $job = ProcessRosterInactivity::dispatch();
+        $job = DiscordTrainingWeeklyUpdates::dispatch();
 
         // Call the handle method directly to get the result synchronously
         $result = $job->handle();

@@ -349,7 +349,7 @@ class DiscordAccountCheck implements ShouldQueue
         if($user_updated > 0){
         // Record Information for Discord
         // Beginning
-        $update_content = "Full list of functions completed this week for Discord Users";
+        $update_content = "Updates were conducted for Discord.";
 
         $update_content .= "\n\n **__Updated Users:__**";
         foreach($in_discord_name as $name){

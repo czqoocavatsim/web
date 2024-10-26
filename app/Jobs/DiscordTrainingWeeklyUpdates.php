@@ -158,9 +158,8 @@ class DiscordTrainingWeeklyUpdates implements ShouldQueue
                                 $avail_maessage_names["names"][] = $thread['name'];
 
                                 // SendEmbed to ask student to send availability
-                                $discord->sendEmbedInTrainingThread($cid, "Please Provide Availability", 'Hello, <@'.$student->user->discord_user_id.'>
-
-As we head into the Weekend, we ask you please provide your availability for next week. Please ensure to tag the `@Instructor` role with all times you are available. Please provide these times in Zulu Format.
+                                $discord->sendEmbedInTrainingThread($cid, "Please Provide Your Availability", 
+'As we head into the Weekend, we ask you please provide your availability for next week. Please ensure to tag the `@Instructor` role with all times you are available. Please provide these times in Zulu Format.
 
 One of our team will make contact with you to organise a session for next if they have availability matching yours.
 
@@ -183,9 +182,8 @@ One of our team will make contact with you to organise a session for next if the
                 $exam_request_names["names"][] = $thread['name'];
                 
                 // SendEmbed to ask student to send availability
-                $discord->sendEmbedInTrainingThread($cid, "Exam Not Requested", 'Hello, <@'.$student_exam->user->discord_user_id.'>
-
-Our records indicate that you have not requested, or completed your exam within a month of your Application being approved.
+                $discord->sendEmbedInTrainingThread($cid, "Exam Not Requested", 
+'Our records indicate that you have not requested, or completed your exam within a month of your Application being approved.
                 
 Please read the above message in order to understand how to request the exam.
                 
@@ -257,30 +255,15 @@ Gander Oceanic Training Team**');
                     $s->save();
                 }
             }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-                }
-            }
         }
+    }
+}
 
         ## DISCORD UPDATE
         {
             // Beginning
             if($avail_message > 0 || $avail_message > 0 ||  $await_exam_count > 0 || $term_training > 0) {
-                $update_content = "Full list of functions completed this week for the Discord Threads, <@200426385863344129>";
+                $update_content = "The following updates have been conducted for the Gander Training Threads.";
             } else {
                 $update_content = "No Thread Updates for this week.";
             }
@@ -292,7 +275,7 @@ Gander Oceanic Training Team**');
 
                 // get Thread Names
                 foreach ($threads_activated["names"] as $name){
-                    $update_content .= "\n - " . $name;
+                    $update_content .= "\n- " . $name;
                 }
             }
 
@@ -303,7 +286,7 @@ Gander Oceanic Training Team**');
 
                 // get Thread Names
                 foreach ($avail_maessage_names["names"] as $name){
-                    $update_content .= "\n - " . $name;
+                    $update_content .= "\n- " . $name;
                 }
             }
 
@@ -314,7 +297,7 @@ Gander Oceanic Training Team**');
 
                 // get Thread Names
                 foreach ($exam_request_names["names"] as $name){
-                    $update_content .= "\n - " . $name;
+                    $update_content .= "\n- " . $name;
                 }
             }
 
@@ -325,7 +308,7 @@ Gander Oceanic Training Team**');
 
                 // get Thread Names
                 foreach ($terminate_names["names"] as $name){
-                    $update_content .= "\n - " . $name;
+                    $update_content .= "\n- " . $name;
                 }
             }
 
