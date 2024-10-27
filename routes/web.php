@@ -280,7 +280,7 @@ Route::group(['middleware' => 'auth'], function () {
                         Route::post('/students/add', [InstructingController::class, 'addStudent'])->name('instructing.students.add')->middleware('can:edit students');
                         Route::get('/students/{cid}', [InstructingController::class, 'viewStudent'])->name('instructing.students.view');
                         Route::get('/students/{cid}/records/training-notes', [RecordsController::class, 'studentTrainingNotes'])->name('instructing.students.records.training-notes');
-                        Route::get('/students/{cid}/remove', [InstructingController::class, 'removeStudent'])->name('instructing.students.remove')->middleware('can:edit students');
+                        Route::post('/students/remove', [InstructingController::class, 'removeStudent'])->name('instructing.students.remove')->middleware('can:edit students');
                         Route::get('/students/{cid}/certify', [InstructingController::class, 'certifyStudent'])->name('instructing.students.certify');
                         //Training notes
                         Route::get('/students/{cid}/records/training-notes/create', [RecordsController::class, 'createStudentTrainingNote'])->name('instructing.students.records.training-notes.create')->middleware('can:edit training records');

@@ -271,7 +271,7 @@ $name. ' has just applied to join Gander Oceanic!
     try {
         $response = $this->client->post("channels/".env('DISCORD_TRAINING_FORUM')."/threads", [
             'json' => [
-                'name' => $name,
+                'name' => strtoupper(Carbon::now()->format('dM')).' - '.$name,
                 'applied_tags' => [1271845980865695774], //Tag ID for 'New Request'
                 'message' => [
                     'content' => $user.', your application has now been approved. Welcome to Gander Oceanic! 
