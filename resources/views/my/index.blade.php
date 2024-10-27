@@ -534,6 +534,13 @@
                                                     <i style="margin-right: 10px;" class="fas fa-wifi fa-fw"></i>View Network Data
                                                 </a>
                                             @endcan
+
+                                            {{-- @can('view users')
+                                            <a href="{{ route('network.index') }}"
+                                                    class="waves-effect list-group-item list-group-item-action">
+                                                    <i style="margin-right: 10px;" class="fas fa-notebook fa-fw"></i>See Connection Information
+                                                </a>
+                                            @endcan --}}
                                         </div>
                                     </div>
                                 </div>

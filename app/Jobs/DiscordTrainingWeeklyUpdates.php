@@ -32,6 +32,9 @@ class DiscordTrainingWeeklyUpdates implements ShouldQueue
     {
         // Check all Training Threads are open and dont expire for one week
         {
+            // Script Start Time
+            $start_time = Carbon::now();
+            
             // Initialize the DiscordClient inside the handle method
             $discord = new DiscordClient();
 
@@ -268,11 +271,7 @@ Gander Oceanic Training Team**');
         ## DISCORD UPDATE
         {
             // Beginning
-            if($avail_message > 0 || $avail_message > 0 ||  $await_exam_count > 0 || $term_training > 0) {
-                $update_content = "The following updates have been conducted for the Gander Training Threads.";
-            } else {
-                $update_content = "No Thread Updates for this week.";
-            }
+            $update_content = "The following updates have been conducted for the Gander Training Threads.";
 
             // User Activiations
             if($to_activate > 0){
@@ -318,8 +317,16 @@ Gander Oceanic Training Team**');
                 }
             }
 
-            // Send Message
-            $discord->sendMessageWithEmbed(env('DISCORD_SERVER_LOGS'), 'WEEKLY: Discord Training Thread Updates', $update_content);
+            // Beginning
+            if($avail_message > 0 || $avail_message > 0 ||  $await_exam_count > 0 || $term_training > 0) {
+                // Completion Time
+                $end_time = Carbon::now();
+                $update_content .= "\n\n**__Script Time:__**";
+                $update_content .= "\n- Script Time: " . $start_time->diffForHumans($end_time, ['parts' => 2, 'short' => true, 'syntax' => Carbon::DIFF_ABSOLUTE]) . ".";
+
+                // Send Message
+                $discord->sendMessageWithEmbed(env('DISCORD_SERVER_LOGS'), 'WEEKLY: Discord Training Thread Updates', $update_content);
+            }
         }
     }
 }
