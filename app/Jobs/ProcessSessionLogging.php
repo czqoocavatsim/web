@@ -77,15 +77,19 @@ class ProcessSessionLogging implements ShouldQueue
                     //Check if Controller is Authorised to open a position (training/certified)
                     if (in_array($session->cid, $allRoster)) {
                         // Controller is authorised, send message if discord_id is not set
-                        if($session->discord_id == null){
+                        if($session->discord_id == null ){
                             // Discord Message
                             try{
+                                $session->discord_id = $discord_id;
+                                $session->save();
+                                
                                 $discord = new DiscordClient();
                                 $discord_id = $discord->ControllerConnection($controller->callsign, $name);
     
-                                $session->discord_id = $discord_id;
-                                $session->save();
                             } catch (\Exception $e) {
+                                $session->discord_id = 0;
+                                $session->save();
+
                                 $discord = new DiscordClient();
                                 $discord->sendMessageWithEmbed(env('DISCORD_WEB_LOGS'), 'Discord Controller Connect Error', $e->getMessage());
                             }
@@ -99,7 +103,7 @@ class ProcessSessionLogging implements ShouldQueue
                         }
                     } else {
                         // Controller is not authorised. Let Senior Team know.
-                        if($session->discord_id == null){
+                        if($session->discord_id == null || $session->discord_id !== 0){
                             try{
                                 // Save ID so it doesnt keep spamming
                                 $session->discord_id = $discord_id;

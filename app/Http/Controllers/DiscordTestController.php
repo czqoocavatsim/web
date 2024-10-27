@@ -58,14 +58,16 @@ class DiscordTestController extends Controller
      //New Applicant in Instructor Channel
      $discord = new DiscordClient();
 
-     $discord->sendMessageWithEmbed(env('DISCORD_ANNOUNCEMENTS'), 'NEWS: Gander Oceanic Training - Open for C1+',
+     $discord->sendMessageWithEmbed('1251878526576103524', '',
                                     
-'We have an exciting opportunity for C1 controllers to join and be trained as oceanic controllers with Gander Oceanic. Our division boasts a dedicated and knowledgeable team of instructors who are committed to investing time into our students to help them attain oceanic controller status.
+'## vatSys Development Channel
 
-[Read this article](<https://ganderoceanic.ca/news/gander-oceanic-training-open-for-c1-2024-10-24>) to find out more, and details of how to apply!
+Due to an issue during role access updates conducted today, access to the VATSYS Development Channel has been reset.
+
+Controllers who would like to gain access to the channel are asked to tag <@200426385863344129> in <#836707337829089322> and you will be given access.
 
 **Thanks all,
-Gander Oceanic Training Department**
+Gander Oceanic Team**
 ');   
 
     }
