@@ -174,6 +174,10 @@
                     <p>This will mark the student as 'not current', virtually deleting them. This will also notify the person of their removal via email.</p>
                     <img src="https://tenor.com/view/bartsimpson-boot-simpsons-thesimpsons-homer-gif-9148667.gif" alt="">
                 </div>
+                <div class="modal-body">
+                    <label>Reason for Termination.</label>
+                    <textarea required type="text" value="{{old('reason')}}" name="reason" maxlength="400" id="" class="form-control" placeholder="Please provide the reason for termination."></textarea>
+                </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-light" data-dismiss="modal">Dismiss</button>
                     <a href="{{route('training.admin.instructing.students.remove', $student->user->id)}}" role="button" class="btn btn-danger">Remove</a>

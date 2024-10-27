@@ -12,6 +12,7 @@ use GuzzleHttp\Client;
 use App\Services\DiscordClient;
 use App\Models\Training\Instructing\Records\TrainingSession;
 use App\Models\Users\User;
+use App\Models\Roster\RosterMember;
 use App\Models\Training\Instructing\Students\Student;
 use App\Notifications\Training\Instructing\RemovedAsStudent;
 use App\Models\Training\Instructing\Students\StudentStatusLabel;
@@ -220,12 +221,16 @@ Gander Oceanic Training Team**');
                         $discord->closeTrainingThread($s->user->id, $s->user->discord_user_id, 'terminate');
 
                         // Notify Senior Team that new training has been terminated.
-                        $discord->sendMessageWithEmbed(config('app.env') == 'local' ? intval(config('services.discord.web_logs')) : intval(config('services.discord.instructors')), 'Training Terminated', $s->user->fullName('FLC').' has had their training terminated. `Exam not completed within 60 days.`', 'error');
+                        $discord->sendMessageWithEmbed(config('app.env') == 'local' ? intval(config('services.discord.web_logs')) : intval(config('services.discord.instructors')), 'Training Terminated', $s->user->fullName('FLC')." has had their training terminated. \n\nReason:\n`Exam not completed within 60 days.`", 'error');
                     
                     } else {
                         // Notify Senior Team that training has been terminated
-                        $discord->sendMessageWithEmbed(config('app.env') == 'local' ? intval(config('services.discord.web_logs')) : intval(config('services.discord.instructors')), 'Training Terminated', $s->user->fullName('FLC').' has had their training terminated. `Exam not completed within 60 days.`', 'error');
+                        $discord->sendMessageWithEmbed(config('app.env') == 'local' ? intval(config('services.discord.web_logs')) : intval(config('services.discord.instructors')), 'Training Terminated', $s->user->fullName('FLC')." has had their training terminated. \n\nReason:\n`Exam not completed within 60 days.`", 'error');
                     }
+
+                    // Delete Roster Entry
+                    $roster = RosterMember::where('cid', $s->user->id)->first();
+                    $roster->delete();
 
                     foreach ($s->labels as $label) {
                         if (!in_array($label->label()->name, ['inactive'])) {
@@ -253,6 +258,7 @@ Gander Oceanic Training Team**');
 
                     //Save
                     $s->save();
+
                 }
             }
         }

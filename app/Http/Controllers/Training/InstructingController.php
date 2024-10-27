@@ -201,6 +201,7 @@ class InstructingController extends Controller
             'cid.required' => 'A controller CID is required.',
             'cid.min'      => 'CIDs are a minimum of 8 characters.',
             'cid.integer'  => 'CIDs must be an integer.',
+            'reason.required' => 'A reason is required.'
         ];
 
         //Validate
@@ -289,7 +290,7 @@ class InstructingController extends Controller
             $discord->createTrainingThread($student->user->fullName('FLC'), '<@'.$student->user->discord_user_id.'>');
 
             // Notify Senior Team that the application was accepted.
-            $discord->sendMessageWithEmbed(config('app.env') == 'local' ? intval(config('services.discord.web_logs')) : intval(config('services.discord.applications')), 'Manually Added Student', $student->user->fullName('FLC').' has just been added as a manual student. Their training record has been created automatically.', 'error');
+            $discord->sendMessageWithEmbed(config('app.env') == 'local' ? intval(config('services.discord.web_logs')) : intval(config('services.discord.applications')), 'Manually Added Student', $student->user->fullName('FLC')." has just been added as a manual student by ".auth()->user()->fullName('FLC')."\n\nReason\n```".$request->reason."```", 'error');
         
         } else {
             Session::flash('info', 'Unable to add Discord permissions automatically, as the member is not in the Discord.');
