@@ -329,45 +329,45 @@ class ProcessShanwickControllers implements ShouldQueue
                 }
             }
 
-            // Update from VATSIM API
-            if (Carbon::now()->isMonday()) {
-                foreach($get_vatsim_data as $data2){
-                    // User not in CZQO DB. Get Data from VATSIM.
-                    $client2 = new Client(['timeout' => 1000]);
-                    $response2 = $client2->request('GET', 'https://api.vatsim.net/v2/members/'.$data2);
-                    $data_controller = json_decode($response2->getBody(), true);
+            // // Update from VATSIM API
+            // if (Carbon::now()->isMonday()) {
+            //     foreach($get_vatsim_data as $data2){
+            //         // User not in CZQO DB. Get Data from VATSIM.
+            //         $client2 = new Client(['timeout' => 1000]);
+            //         $response2 = $client2->request('GET', 'https://api.vatsim.net/v2/members/'.$data2);
+            //         $data_controller = json_decode($response2->getBody(), true);
                     
-                    foreach($vatsim_ratings as $rating){
-                        if($rating['id'] == $data_controller['rating']){
-                            $rating_id = $rating['short'];
-                        }
-                    }
+            //         foreach($vatsim_ratings as $rating){
+            //             if($rating['id'] == $data_controller['rating']){
+            //                 $rating_id = $rating['short'];
+            //             }
+            //         }
 
-                    foreach($vatsim_divisions as $division){
-                        if($division['id']= $data_controller['division_id']){
-                            $division_code = $division['id'];
-                            $division_name = $division['name'];
-                        }
-                    }
+            //         foreach($vatsim_divisions as $division){
+            //             if($division['id']= $data_controller['division_id']){
+            //                 $division_code = $division['id'];
+            //                 $division_name = $division['name'];
+            //             }
+            //         }
 
-                    foreach($vatsim_regions as $region){
-                        if($region['id']= $data_controller['region_id']){
-                            $region_code = $region['id'];
-                            $region_name = $region['name'];
-                        }
-                    }
+            //         foreach($vatsim_regions as $region){
+            //             if($region['id']= $data_controller['region_id']){
+            //                 $region_code = $region['id'];
+            //                 $region_name = $region['name'];
+            //             }
+            //         }
 
-                    ShanwickController::UpdateorCreate([
-                        'controller_cid' => $data2,
-                        'name' => $data2,
-                        'rating' => $rating_id,
-                        'division' => $division_code,
-                        'division_name' => null,
-                        'region_code' => $region_code,
-                        'region_name' => null,
-                    ]);
-                }
-            }
+            //         ShanwickController::UpdateorCreate([
+            //             'controller_cid' => $data2,
+            //             'name' => $data2,
+            //             'rating' => $rating_id,
+            //             'division' => $division_code,
+            //             'division_name' => null,
+            //             'region_code' => $region_code,
+            //             'region_name' => null,
+            //         ]);
+            //     }
+            // }
 
             // Delete following CIDs from DB
             $shanwick_table = ShanwickController::all();
