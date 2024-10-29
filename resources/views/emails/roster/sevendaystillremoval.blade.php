@@ -7,6 +7,8 @@
 
 <p>This is a friendly reminder that you must control a minimum of 1 hour per calendar year. You currently have {{round($currency * 60)}} minutes recorded on Gander & Shanwick Positions.</p>
 
+<p>You have Seven Days to meet the currency requirement, or you will be removed from the Gander Oceanic Roster.</p>
+
 <p>If you believe this is a mistake or have any questions, please email the <a href="{{route('staff')}}">Chief Instructor</a> with your query.</p>
 @endsection
 

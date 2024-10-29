@@ -161,6 +161,7 @@
     </div>
 
     <!--Delete modal-->
+
     <div class="modal fade" id="deleteStudentModal" tabindex="-1" role="dialog">
         <div class="modal-dialog modal-dialog-centered" role="document">
             <div class="modal-content">
@@ -170,15 +171,35 @@
                         <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
-                <div class="modal-body">
-                    <p>This will mark the student as 'not current', virtually deleting them. This will also notify the person of their removal via email.</p>
-                    <img src="https://tenor.com/view/bartsimpson-boot-simpsons-thesimpsons-homer-gif-9148667.gif" alt="">
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-light" data-dismiss="modal">Dismiss</button>
-                    <a href="{{route('training.admin.instructing.students.remove', $student->user->id)}}" role="button" class="btn btn-danger">Remove</a>
-                </div>
+                
+                <form action="{{route('training.admin.instructing.students.remove')}}" method="POST">
+                    @csrf
+                    <div class="modal-body">
+                        <p>This will mark the student as 'inactive', which will basically remove them from the System. It will also email them.</p>
+                        @if($errors->addStudentErrors->any())
+                        <div class="alert alert-danger">
+                            <h4>There were errors</h4>
+                            <ul class="pl-0 ml-0 list-unstyled">
+                                @foreach ($errors->addStudentErrors->all() as $error)
+                                    <li>{{ $error }}</li>
+                                @endforeach
+                            </ul>
+                        </div>
+                        @endif
+
+                        <input required type="hidden" value={{$student->user->id}} name="cid" maxlength="9" id="" class="form-control" placeholder="1300001">
+            
+                        <div class="form-group">
+                            <label for="reason">Reason for Termination*</label>
+                            <input required type="text" value="{{old('reason')}}" name="reason" maxlength="400" id="reason" class="form-control" placeholder="Reason for terminating {{$student->user->fullName('F')}} here.">
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-light" data-dismiss="modal">Close</button>
+                        <input type="submit" class="btn btn-primary" value="Add">
+                    </div>
                 </form>
+
             </div>
         </div>
     </div>

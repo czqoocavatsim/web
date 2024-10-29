@@ -12,6 +12,7 @@ use GuzzleHttp\Client;
 use App\Services\DiscordClient;
 use App\Models\Training\Instructing\Records\TrainingSession;
 use App\Models\Users\User;
+use App\Models\Roster\RosterMember;
 use App\Models\Training\Instructing\Students\Student;
 use App\Notifications\Training\Instructing\RemovedAsStudent;
 use App\Models\Training\Instructing\Students\StudentStatusLabel;
@@ -31,6 +32,9 @@ class DiscordTrainingWeeklyUpdates implements ShouldQueue
     {
         // Check all Training Threads are open and dont expire for one week
         {
+            // Script Start Time
+            $start_time = Carbon::now();
+            
             // Initialize the DiscordClient inside the handle method
             $discord = new DiscordClient();
 
@@ -158,9 +162,8 @@ class DiscordTrainingWeeklyUpdates implements ShouldQueue
                                 $avail_maessage_names["names"][] = $thread['name'];
 
                                 // SendEmbed to ask student to send availability
-                                $discord->sendEmbedInTrainingThread($cid, "Please Provide Availability", 'Hello, <@'.$student->user->discord_user_id.'>
-
-As we head into the Weekend, we ask you please provide your availability for next week. Please ensure to tag the `@Instructor` role with all times you are available. Please provide these times in Zulu Format.
+                                $discord->sendEmbedInTrainingThread($cid, "Please Provide Your Availability", 
+'As we head into the Weekend, we ask you please provide your availability for next week. Please ensure to tag the `@Instructor` role with all times you are available. Please provide these times in Zulu Format.
 
 One of our team will make contact with you to organise a session for next if they have availability matching yours.
 
@@ -183,9 +186,8 @@ One of our team will make contact with you to organise a session for next if the
                 $exam_request_names["names"][] = $thread['name'];
                 
                 // SendEmbed to ask student to send availability
-                $discord->sendEmbedInTrainingThread($cid, "Exam Not Requested", 'Hello, <@'.$student_exam->user->discord_user_id.'>
-
-Our records indicate that you have not requested, or completed your exam within a month of your Application being approved.
+                $discord->sendEmbedInTrainingThread($cid, "Exam Not Requested", 
+'Our records indicate that you have not requested, or completed your exam within a month of your Application being approved.
                 
 Please read the above message in order to understand how to request the exam.
                 
@@ -222,12 +224,16 @@ Gander Oceanic Training Team**');
                         $discord->closeTrainingThread($s->user->id, $s->user->discord_user_id, 'terminate');
 
                         // Notify Senior Team that new training has been terminated.
-                        $discord->sendMessageWithEmbed(config('app.env') == 'local' ? intval(config('services.discord.web_logs')) : intval(config('services.discord.instructors')), 'Training Terminated', $s->user->fullName('FLC').' has had their training terminated. `Exam not completed within 60 days.`', 'error');
+                        $discord->sendMessageWithEmbed(config('app.env') == 'local' ? intval(config('services.discord.web_logs')) : intval(config('services.discord.instructors')), 'Training Terminated', $s->user->fullName('FLC')." has had their training terminated. \n\nReason:\n`Exam not completed within 60 days.`", 'error');
                     
                     } else {
                         // Notify Senior Team that training has been terminated
-                        $discord->sendMessageWithEmbed(config('app.env') == 'local' ? intval(config('services.discord.web_logs')) : intval(config('services.discord.instructors')), 'Training Terminated', $s->user->fullName('FLC').' has had their training terminated. `Exam not completed within 60 days.`', 'error');
+                        $discord->sendMessageWithEmbed(config('app.env') == 'local' ? intval(config('services.discord.web_logs')) : intval(config('services.discord.instructors')), 'Training Terminated', $s->user->fullName('FLC')." has had their training terminated. \n\nReason:\n`Exam not completed within 60 days.`", 'error');
                     }
+
+                    // Delete Roster Entry
+                    $roster = RosterMember::where('cid', $s->user->id)->first();
+                    $roster->delete();
 
                     foreach ($s->labels as $label) {
                         if (!in_array($label->label()->name, ['inactive'])) {
@@ -255,35 +261,17 @@ Gander Oceanic Training Team**');
 
                     //Save
                     $s->save();
-                }
-            }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
                 }
             }
         }
+    }
+}
 
         ## DISCORD UPDATE
         {
             // Beginning
-            if($avail_message > 0 || $avail_message > 0 ||  $await_exam_count > 0 || $term_training > 0) {
-                $update_content = "Full list of functions completed this week for the Discord Threads, <@200426385863344129>";
-            } else {
-                $update_content = "No Thread Updates for this week.";
-            }
+            $update_content = "The following updates have been conducted for the Gander Training Threads.";
 
             // User Activiations
             if($to_activate > 0){
@@ -292,7 +280,7 @@ Gander Oceanic Training Team**');
 
                 // get Thread Names
                 foreach ($threads_activated["names"] as $name){
-                    $update_content .= "\n - " . $name;
+                    $update_content .= "\n- " . $name;
                 }
             }
 
@@ -303,7 +291,7 @@ Gander Oceanic Training Team**');
 
                 // get Thread Names
                 foreach ($avail_maessage_names["names"] as $name){
-                    $update_content .= "\n - " . $name;
+                    $update_content .= "\n- " . $name;
                 }
             }
 
@@ -314,7 +302,7 @@ Gander Oceanic Training Team**');
 
                 // get Thread Names
                 foreach ($exam_request_names["names"] as $name){
-                    $update_content .= "\n - " . $name;
+                    $update_content .= "\n- " . $name;
                 }
             }
 
@@ -325,12 +313,20 @@ Gander Oceanic Training Team**');
 
                 // get Thread Names
                 foreach ($terminate_names["names"] as $name){
-                    $update_content .= "\n - " . $name;
+                    $update_content .= "\n- " . $name;
                 }
             }
 
-            // Send Message
-            $discord->sendMessageWithEmbed(env('DISCORD_SERVER_LOGS'), 'WEEKLY: Discord Training Thread Updates', $update_content);
+            // Beginning
+            if($avail_message > 0 || $avail_message > 0 ||  $await_exam_count > 0 || $term_training > 0) {
+                // Completion Time
+                $end_time = Carbon::now();
+                $update_content .= "\n\n**__Script Time:__**";
+                $update_content .= "\n- Script Time: " . $start_time->diffForHumans($end_time, ['parts' => 2, 'short' => true, 'syntax' => Carbon::DIFF_ABSOLUTE]) . ".";
+
+                // Send Message
+                $discord->sendMessageWithEmbed(env('DISCORD_SERVER_LOGS'), 'WEEKLY: Discord Training Thread Updates', $update_content);
+            }
         }
     }
 }

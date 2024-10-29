@@ -94,6 +94,11 @@
                         <label for="">Their CID</label>
                         <input required type="text" value="{{old('cid')}}" name="cid" maxlength="9" id="" class="form-control" placeholder="1300001">
                     </div>
+
+                    <div class="form-group">
+                        <label for="">Reason for Manual Add</label>
+                        <textarea required type="text" value="{{old('reason')}}" name="reason" maxlength="400" id="" class="form-control" placeholder="Please provide the reason for a manual add, as opposed for doing so via User Application."></textarea>
+                    </div>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-light" data-dismiss="modal">Close</button>
