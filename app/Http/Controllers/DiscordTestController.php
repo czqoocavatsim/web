@@ -6,7 +6,7 @@ use Illuminate\Http\Request;
 use App\Services\DiscordClient;
 use Illuminate\Support\Facades\Http;
 use App\Jobs\DiscordTrainingWeeklyUpdates;
-use App\Jobs\ProcessShanwickController;
+use App\Jobs\ProcessShanwickControllers;
 
 class DiscordTestController extends Controller
 {
@@ -42,7 +42,7 @@ class DiscordTestController extends Controller
     public function Job2()
     {
         // Dispatch the job
-        $job = ProcessShanwickController::dispatch();
+        $job = ProcessShanwickControllers::dispatch();
 
         // Call the handle method directly to get the result synchronously
         $result = $job->handle();

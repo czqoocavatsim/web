@@ -265,7 +265,7 @@ class ProcessShanwickControllers implements ShouldQueue
             ];
 
             // Create a Request for the Shanwick Controllers         
-            $client = new Client(['timeout' => 1000, 'connect_timeout' => 60]);
+            $client = new Client(['timeout' => 1000, 'connect_timeout' => 1000]);
             $URL = "https://www.vatsim.uk/api/validations?position=EGGX_CTR";
             $response = $client->request('GET', $URL);
             $data = json_decode($response->getBody(), true);
@@ -302,12 +302,14 @@ class ProcessShanwickControllers implements ShouldQueue
                 }
             }
 
+            dd($get_vatsim_data);
             // dd($use_gander_data);
 
             // Get Current Shanwick Details
             $shanwick_data = ShanwickController::all()->pluck('controller_cid');
             $shanwick_data = $shanwick_data->toArray();
             $delete_from_eggx_controllers = array_diff($shanwick_data, $non_czqo);
+
 
             // Update or Create Gander Shanwick Roster
             // Update from CZQO DB

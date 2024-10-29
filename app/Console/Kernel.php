@@ -42,14 +42,14 @@ class Kernel extends ConsoleKernel
         // Active Network Sessions
         $schedule->job(new ProcessSessionLogging())->everyMinute();
 
+        // Shanwick Controller Roster Update
+        $schedule->job(new ProcessShanwickControllers())->cron('0 * * * *'); //Updated Hourly
+
         //Discord Update
         $schedule->job(new DiscordAccountCheck())->dailyAt('02:00');
 
         //Roster Inactivity checks
         $schedule->job(new ProcessRosterInactivity())->dailyAt('23:55');
-
-        // Shanwick Controller Roster Update
-        $schedule->job(new ProcessShanwickControllers())->daily();
 
         //Training/OTS session reminders
         $schedule->job(new ProcessSessionReminders())->daily();
