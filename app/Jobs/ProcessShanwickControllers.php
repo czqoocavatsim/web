@@ -302,7 +302,7 @@ class ProcessShanwickControllers implements ShouldQueue
                 }
             }
 
-            dd($get_vatsim_data);
+            // dd($get_vatsim_data);
             // dd($use_gander_data);
 
             // Get Current Shanwick Details
