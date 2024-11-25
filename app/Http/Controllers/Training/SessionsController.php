@@ -81,7 +81,6 @@ class SessionsController extends Controller
 
         //Discord Notification in Training Thread
         $discord = new DiscordClient();
-        $discord->sendMessage($session->student->user->id, '<@'.$session->student->user->discord_user_id.'>');
         $discord->sendEmbedInTrainingThread($session->student->user->id, 'New Training Session Booked', 
 'A training session has been created for you on <t:'.Carbon::parse($request->get('scheduled_time'))->timestamp.':F>.
 
