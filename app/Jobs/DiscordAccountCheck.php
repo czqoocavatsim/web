@@ -47,6 +47,7 @@ class DiscordAccountCheck implements ShouldQueue
         $user_updated = 0;
         $discord_uids = [];
         $discord_member_contents = [];
+        $in_discord_name = [];
 
         // Get List of Users in Discord
         $discord = new DiscordClient();
