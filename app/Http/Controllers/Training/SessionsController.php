@@ -237,9 +237,8 @@ Please reach out to your instructor in this training thread if you have any ques
 
         //Discord Notification in Training Thread
         $discord = new DiscordClient();
-        $discord->sendMessage($session->student->user->id, '<@'.$session->student->user->discord_user_id.'>');
         $discord->sendEmbedInTrainingThread($session->student->user->id, 'Training Session Cancelled', 
-'A training session which was planned has been cancelled.
+'A training session which was planned has just been cancelled.
 
 Please contact your instructor if you believe this was a mistake, or to reorganise a new session.');
 

@@ -38,6 +38,7 @@ use App\Http\Controllers\Publications\PublicationsController;
 use App\Http\Controllers\TrainingCalendar\TrainingController;
 use App\Http\Controllers\Training\SoloCertificationsController;
 use App\Http\Controllers\DiscordTestController;
+use App\Jobs\ProcessShanwickControllers;
 
 Route::get('/', [PrimaryViewsController::class, 'home'])->name('index');
 Route::get('/map', [PrimaryViewsController::class, 'map'])->name('map');
@@ -56,6 +57,10 @@ Route::get('/privacy', fn() => redirect(route('policies'), 301))->name('privacy'
 Route::get('/events', [EventController::class, 'index'])->name('events.index');
 Route::get('/events/{slug}', [EventController::class, 'viewEvent'])->name('events.view');
 Route::view('/branding', 'about.branding')->name('branding');
+
+Route::get('/roster/update/controller-details', function () {
+    ProcessShanwickControllers::dispatch();
+});
 
 // About
 Route::prefix('about')->group(function () {
