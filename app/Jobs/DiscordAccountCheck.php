@@ -161,7 +161,8 @@ class DiscordAccountCheck implements ShouldQueue
                             634656628335050762, //Shanwick Team
                             497351197280174080, //VATCAN Divisional Staff
                             497359834010615809, //VATSIM Senior Staff
-                            1300054143532138516]; //VATSYS Beta Tester
+                            1300054143532138516, //VATSYS Beta Tester
+                            1278868454606377040]; //Currently Online
 
                         foreach ($roleIdsToCheck as $roleId) {
                             if (in_array($roleId, $discord_member['roles'])) {

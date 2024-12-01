@@ -74,10 +74,10 @@ class ProcessSessionLogging implements ShouldQueue
                         $name = $controller->cid;
                     }        
 
-                    //Check if Controller is Authorised to open a position (training/certified)
+                    // Check if Controller is Authorised to open a position (training/certified)
                     if (in_array($session->cid, $allRoster)) {
                         // Controller is authorised, send message if discord_id is not set
-                        if($session->discord_id == null ){
+                        if($session->discord_id == null){
                             // Discord Message
                             try{
                                 $session->discord_id = $discord_id;
@@ -85,41 +85,30 @@ class ProcessSessionLogging implements ShouldQueue
                                 
                                 $discord = new DiscordClient();
                                 $discord_id = $discord->ControllerConnection($controller->callsign, $name);
-    
                             } catch (\Exception $e) {
-                                $session->discord_id = 0;
-                                $session->save();
-
                                 $discord = new DiscordClient();
                                 $discord->sendMessageWithEmbed(env('DISCORD_WEB_LOGS'), 'Discord Controller Connect Error', $e->getMessage());
                             }
 
                             // Add Discord Role
-                            if($session->user && $session->user->hasDiscord() && $session->user->member_of_czqo){
+                            if($log->user && $log->user->hasDiscord() && $log->user->member_of_czqo){
                                 $discord = new DiscordClient();
 
-                                $discord->assignRole($session->user->discord_user_id, '1278868454606377040');
+                                $discord->assignRole($log->user->discord_user_id, '1278868454606377040');
                             }
                         }
                     } else {
                         // Controller is not authorised. Let Senior Team know.
-                        if($session->discord_id == null || $session->discord_id !== 0){
-                            try{
-                                // Save ID so it doesnt keep spamming
-                                $session->discord_id = $discord_id;
-                                $session->save();
+                        if($session->discord_id == null){
+                            // Save ID so it doesnt keep spamming
+                            $session->discord_id = $discord_id;
+                            $session->save();
 
-                                // Send Discord Message
-                                $discord = new DiscordClient();
-                                $discord_id = $discord->sendMessageWithEmbed('482817715489341441', 'Unauthorised Controller Connection', $session->cid.' has just connected onto VATSIM as '.$session->callsign.' on <t:'.Carbon::now()->timestamp.':F> (local time). 
+                            // Send Discord Message
+                            $discord = new DiscordClient();
+                            $discord_id = $discord->sendMessageWithEmbed('482817715489341441', 'Controller Unauthorised to Control', '<@&482816721280040964>, '.$session->cid.' has just connected onto VATSIM as '.$session->callsign.' on <t:'.Carbon::now()->timestamp.':F>. 
                                 
-**This controller does not appear on our Roster. This means that:**
-- They are not authorised to control; or,
-- The student is currently undergoing training with another division.');
-                            } catch (\Exception $e) {
-                                $discord = new DiscordClient();
-                                $discord->sendMessageWithEmbed(env('DISCORD_WEB_LOGS'), 'Unauthorised Controller Notification Error', $e->getMessage());
-                            }
+**They are not authorised to open this position.**');
                         }
                     }
 
@@ -144,48 +133,31 @@ class ProcessSessionLogging implements ShouldQueue
                     $name = $log->cid;
                 }        
 
-                    // Check if Controller is Authorised to open a position (training/certified)
-                    if (in_array($session->cid, $allRoster)) {
-                        // Controller is authorised, send message if discord_id is not set
-                        if($session->discord_id == null){
-                            // Discord Message
-                            try{
-                                $discord = new DiscordClient();
-                                $discord_id = $discord->ControllerConnection($controller->callsign, $name);
-    
-                                $session->discord_id = $discord_id;
-                                $session->save();
-                            } catch (\Exception $e) {
-                                $discord = new DiscordClient();
-                                $discord->sendMessageWithEmbed(env('DISCORD_WEB_LOGS'), 'Discord Controller Connect Error', $e->getMessage());
-                            }
+                // Discord ID is not null (message has not yet been sent)
+                if($log->discord_id !== null){
+                    // Update Disconnect Message
+                        $discord = new DiscordClient();
+                        $data = $discord->ControllerDisconnect($log->discord_id, $log->callsign, $name, $log->session_start, $log->duration);
 
-                            // Add Discord Role
-                            if($session->user && $session->user->hasDiscord() && $session->user->member_of_czqo){
-                                $discord = new DiscordClient();
+                    // Remove Discord Role
+                    if($log->user && $log->user->hasDiscord() && $log->user->member_of_czqo){
+                        $discord = new DiscordClient();
 
-                                $discord->assignRole($session->user->discord_user_id, '1278868454606377040');
-                            }
-                        }
-                    } else {
-                        // Controller is not authorised. Let Senior Team know.
-                        if($session->discord_id == null){
-                            try{
-                                // Send Discord Message
-                                $discord = new DiscordClient();
-                                $discord_id = $discord->sendMessageWithEmbed('482817715489341441', 'Controller Unauthorised to Control', '<@&482816721280040964>, '.$session->cid.' has just connected onto VATSIM as '.$session->callsign.' on <t:'.Carbon::now()->timestamp.':F>. 
-                                
-**They are not authorised to open this position.**');
-
-                                // Save ID so it doesnt keep spamming
-                                $session->discord_id = $discord_id;
-                                $session->save();
-                            } catch (\Exception $e) {
-                                $discord = new DiscordClient();
-                                $discord->sendMessageWithEmbed(env('DISCORD_WEB_LOGS'), 'Unauthorised Controller Notification Error', $e->getMessage());
-                            }
-                        }
+                        $discord->removeRole($log->user->discord_user_id, '1278868454606377040');
                     }
+                }
+
+                $log->discord_id = null;
+                $log->save;
+
+                //If there is an associated roster member, give them the hours and set as active
+                if ($rosterMember = $log->rosterMember) {
+                    if (($rosterMember->certification == 'certified' || $rosterMember->certification == 'training')) {
+                        $rosterMember->currency += $log->session_start->floatDiffInMinutes(Carbon::now()) / 60;
+                        $rosterMember->monthly_hours += $log->session_start->floatDiffInMinutes(Carbon::now()) / 60;
+                        $rosterMember->save();
+                    }
+                }
             }
         }
     }
