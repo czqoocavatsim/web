@@ -17,11 +17,14 @@ use App\Notifications\Roster\SevenDaysFromRemoval;
 use App\Services\DiscordClient;
 
 class ProcessRosterInactivity implements ShouldQueue
+
 {
     use Dispatchable;
     use InteractsWithQueue;
     use Queueable;
     use SerializesModels;
+
+    public $timeout = 600;
 
     /**
      * Create a new job instance.
@@ -40,6 +43,9 @@ class ProcessRosterInactivity implements ShouldQueue
      */
     public function handle()
     {
+        // Timeout length (seconds)
+        ini_set('max_execution_time', 600);
+
         // Counter Variables (For Message at End)
         $first_notice = 0; //1NOV message sent out
         $second_notice = 0; //1DEC message sent out
@@ -88,21 +94,19 @@ class ProcessRosterInactivity implements ShouldQueue
                 $active_status = 1;
             }
 
-            dd(Carbon::now()->format('d/m'));
-
             // 1NOV - 2 Month Activity Check
-            if($roster->certification == "certified" && $roster->active && Carbon::now()->format('d/m') == "1/11" && $roster->currency < 1) {
+            if($roster->certification == "certified" && $roster->active && Carbon::now()->format('d/m') == "01/12" && $roster->currency < 1) {
                 $active_status = 0;
 
                 $first_names[] = $name;
 
                 $first_notice++;
                 
-                Notification::send($roster->user, new TwoMonthFromRemoval($roster->user, $currency));
+                // Notification::send($roster->user, new TwoMonthFromRemoval($roster->user, $currency));
             }
 
             // 1DEC - 1 Month till Removal
-            if($roster->certification == "certified" && Carbon::now()->format('d/m') == "1/12" && $roster->currency < 1){
+            if($roster->certification == "certified" && Carbon::now()->format('d/m') == "02/12" && $roster->currency < 1){
                 $active_status = 0;
 
                 $second_names[] = $name;
