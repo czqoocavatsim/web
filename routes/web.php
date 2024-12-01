@@ -60,6 +60,7 @@ Route::view('/branding', 'about.branding')->name('branding');
 
 Route::get('/roster/update/controller-details', function () {
     ProcessShanwickControllers::dispatch();
+    return response('ProcessShanwickControllers dispatched successfully');
 });
 
 // About
