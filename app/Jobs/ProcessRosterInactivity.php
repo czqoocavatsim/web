@@ -95,18 +95,18 @@ class ProcessRosterInactivity implements ShouldQueue
             }
 
             // 1NOV - 2 Month Activity Check
-            if($roster->certification == "certified" && $roster->active && Carbon::now()->format('d/m') == "01/12" && $roster->currency < 1) {
+            if($roster->certification == "certified" && $roster->active && Carbon::now()->format('d/m') == "01/11" && $roster->currency < 1) {
                 $active_status = 0;
 
                 $first_names[] = $name;
 
                 $first_notice++;
                 
-                // Notification::send($roster->user, new TwoMonthFromRemoval($roster->user, $currency));
+                Notification::send($roster->user, new TwoMonthFromRemoval($roster->user, $currency));
             }
 
             // 1DEC - 1 Month till Removal
-            if($roster->certification == "certified" && Carbon::now()->format('d/m') == "02/12" && $roster->currency < 1){
+            if($roster->certification == "certified" && Carbon::now()->format('d/m') == "01/12" && $roster->currency < 1){
                 $active_status = 0;
 
                 $second_names[] = $name;
