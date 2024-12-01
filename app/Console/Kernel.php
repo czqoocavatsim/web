@@ -15,6 +15,7 @@ use App\Models\Roster\RosterMember;
 use App\Notifications\Network\OneWeekInactivityReminder;
 use App\Notifications\Network\TwoWeekInactivityReminder;
 use Illuminate\Console\Scheduling\Schedule;
+use Illuminate\Support\Facades\Http;
 use Illuminate\Foundation\Console\Kernel as ConsoleKernel;
 use App\Services\DiscordClient;
 
