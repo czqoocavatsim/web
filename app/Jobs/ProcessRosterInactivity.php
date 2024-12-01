@@ -88,6 +88,8 @@ class ProcessRosterInactivity implements ShouldQueue
                 $active_status = 1;
             }
 
+            dd(Carbon::now()->format('d/m'));
+
             // 1NOV - 2 Month Activity Check
             if($roster->certification == "certified" && $roster->active && Carbon::now()->format('d/m') == "1/11" && $roster->currency < 1) {
                 $active_status = 0;
