@@ -370,7 +370,7 @@ class DiscordAccountCheck implements ShouldQueue
         $update_content .= "\n\n**__Script Time:__**";
         $update_content .= "\n- Script Time: " . $start_time->diffForHumans($end_time, ['parts' => 2, 'short' => true, 'syntax' => Carbon::DIFF_ABSOLUTE]) . ".";
 
-        $discord->sendMessageWithEmbed('1299248165551210506', 'HOURLY: Discord User Update', $update_content);
+        $discord->sendMessageWithEmbed('482860026831175690', 'HOURLY: Discord User Update', $update_content);
         }
     }
 
