@@ -91,10 +91,10 @@ class ProcessSessionLogging implements ShouldQueue
                             }
 
                             // Add Discord Role
-                            if($log->user && $log->user->hasDiscord() && $log->user->member_of_czqo){
+                            if($session->user && $session->user->hasDiscord() && $session->user->member_of_czqo){
                                 $discord = new DiscordClient();
 
-                                $discord->assignRole($log->user->discord_user_id, '1278868454606377040');
+                                $discord->assignRole($session->user->discord_user_id, '1278868454606377040');
                             }
                         }
                     } else {

@@ -297,7 +297,7 @@ class DiscordAccountCheck implements ShouldQueue
                             $discord->getClient()->put('guilds/'.env('DISCORD_GUILD_ID').'/members/'.$discord_uid.'/roles/'.$role);
                         }
 
-                        $discord->sendMessageWithEmbed('1299248165551210506', 'USER: '.$name, $message);
+                        // $discord->sendMessageWithEmbed('1299248165551210506', 'USER: '.$name, $message);
 
                     }
                      
@@ -340,7 +340,7 @@ class DiscordAccountCheck implements ShouldQueue
             $discord->getClient()->patch('guilds/'.env('DISCORD_GUILD_ID').'/members/'.$user->discord_user_id, [
                 'json' => [
                     'nick' => $user->discord_username,
-                    'roles' => 1297422968472997908,
+                    'roles' => [1297422968472997908],
                 ]
             ]);
         }
@@ -348,29 +348,29 @@ class DiscordAccountCheck implements ShouldQueue
         if($user_updated > 0){
         // Record Information for Discord
         // Beginning
-        $update_content = "Updates were conducted for Discord.";
+        // $update_content = "Updates were conducted for Discord.";
 
         $update_content .= "\n\n **__Updated Users:__**";
         foreach($in_discord_name as $name){
             $update_content .= "\n- ".$name;
         }
 
-        $update_content .= "\n\n **__General Information:__**";
+        // $update_content .= "\n\n **__General Information:__**";
 
-        // Users which are linked in Discord
-        $update_content .= "\n- Accounts Linked in Core: ".$checked_users;
-        $update_content .= "\n- Linked - in Discord: ".$in_discord;
-        $update_content .= "\n- Linked - not in Discord: ".$not_in_discord;
+        // // Users which are linked in Discord
+        // $update_content .= "\n- Accounts Linked in Core: ".$checked_users;
+        // $update_content .= "\n- Linked - in Discord: ".$in_discord;
+        // $update_content .= "\n- Linked - not in Discord: ".$not_in_discord;
 
-        // Accounts not linked
-        $update_content .= "\n- Not Linked - in Discord: ".$accounts_not_linked." (No Account Role Assigned)";
+        // // Accounts not linked
+        // $update_content .= "\n- Not Linked - in Discord: ".$accounts_not_linked." (No Account Role Assigned)";
 
         // Completion Time
         $end_time = Carbon::now();
         $update_content .= "\n\n**__Script Time:__**";
         $update_content .= "\n- Script Time: " . $start_time->diffForHumans($end_time, ['parts' => 2, 'short' => true, 'syntax' => Carbon::DIFF_ABSOLUTE]) . ".";
 
-        $discord->sendMessageWithEmbed(env('DISCORD_SERVER_LOGS'), 'DAILY: Discord User Update', $update_content);
+        $discord->sendMessageWithEmbed('1299248165551210506', 'HOURLY: Discord User Update', $update_content);
         }
     }
 
