@@ -340,7 +340,7 @@ class DiscordAccountCheck implements ShouldQueue
             $discord->getClient()->patch('guilds/'.env('DISCORD_GUILD_ID').'/members/'.$user->discord_user_id, [
                 'json' => [
                     'nick' => $user->discord_username,
-                    'roles' => [1297422968472997908],
+                    'roles' => ['1297422968472997908'],
                 ]
             ]);
         }
