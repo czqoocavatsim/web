@@ -315,35 +315,35 @@ class DiscordAccountCheck implements ShouldQueue
         }
 
         // Add Role to Users not Connected to Gander Oceanic
-        foreach($discord_uids as $discord_uid){
+        // foreach($discord_uids as $discord_uid){
             
-            // Skip the Bot (Gander)
-            if($discord_uid == 1118430230839840768){
-                continue;
-            }
+        //     // Skip the Bot (Gander)
+        //     if($discord_uid == 1118430230839840768){
+        //         continue;
+        //     }
 
-            // Skip the Bot (QFA100)
-            if($discord_uid == 1133048493850771616){
-                continue;
-            }
+        //     // Skip the Bot (QFA100)
+        //     if($discord_uid == 1133048493850771616){
+        //         continue;
+        //     }
 
-            // Skip Server Owner (Gary)
-            if($discord_uid == 350995372627197954){
-                continue;
-            }
+        //     // Skip Server Owner (Gary)
+        //     if($discord_uid == 350995372627197954){
+        //         continue;
+        //     }
 
-            $accounts_not_linked++; //records that Account Not Linked Role Assigned
+        //     $accounts_not_linked++; //records that Account Not Linked Role Assigned
 
-            sleep(1);
+        //     sleep(1);
 
-            // // Update user with main roles - Will temp remove staff roles
-            $discord->getClient()->patch('guilds/'.env('DISCORD_GUILD_ID').'/members/'.$user->discord_user_id, [
-                'json' => [
-                    'nick' => $user->discord_username,
-                    'roles' => ['1297422968472997908'],
-                ]
-            ]);
-        }
+        //     // // Update user with main roles - Will temp remove staff roles
+        //     $discord->getClient()->patch('guilds/'.env('DISCORD_GUILD_ID').'/members/'.$user->discord_user_id, [
+        //         'json' => [
+        //             'nick' => $user->discord_username,
+        //             'roles' => ['1297422968472997908'],
+        //         ]
+        //     ]);
+        // }
 
         if($user_updated > 0){
         // Record Information for Discord
