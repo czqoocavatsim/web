@@ -69,6 +69,9 @@ class PrimaryViewsController extends Controller
         $atcResources = AtcResource::all()->sortBy('title');
 
         $bannerCollection = RotationImage::all();
+
+        // return $bannerCollection;
+
         if (!$bannerCollection->isEmpty()) {
             $bannerImg = $bannerCollection->random();
         } else {
