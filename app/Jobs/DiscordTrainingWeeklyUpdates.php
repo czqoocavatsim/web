@@ -56,15 +56,14 @@ class DiscordTrainingWeeklyUpdates implements ShouldQueue
                 }
             }
 
-            // dd($results);
-
             foreach($results['threads'] as $thread){
                 $archiveTimestamp = Carbon::parse($thread['thread_metadata']['archive_timestamp']);
+
                 
                 // Thread was closed within the last 10 days
                 if ($archiveTimestamp >= Carbon::now()->subDays(10) && $archiveTimestamp <= Carbon::now()) {
-                    // Your code to handle the condition
-                    // dd($archiveTimestamp);
+
+                    $tag_terminated = (bool) in_array("1271846598300926054", $thread['applied_tags']);
 
                     // Get the ID of the Training Thread Recently Closed
                     if (preg_match('/\d+$/', $thread['name'], $matches)) {
@@ -76,7 +75,7 @@ class DiscordTrainingWeeklyUpdates implements ShouldQueue
                     // See if CID is still a student
                     $student = Student::where('current', 1)->where('user_id', $cid)->first();
 
-                    if($student !== null){
+                    if($student !== null && $thread['applied_tags'] && $tag_terminated === true){
 
                         $to_activate++;
 
@@ -93,6 +92,8 @@ class DiscordTrainingWeeklyUpdates implements ShouldQueue
                 }
             }
         }
+
+        exit;
 
         // Function for Training Thread Availability Updates
         {

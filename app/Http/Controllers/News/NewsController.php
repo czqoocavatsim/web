@@ -75,14 +75,19 @@ class NewsController extends Controller
 
         //Upload image if it exists
         if ($request->file('image')) {
-            $path = Storage::disk('digitalocean')->put('staff_uploads/news/'.Carbon::now()->toDateString(), $request->file('image'), 'public');
-            $article->image = Storage::url($path);
+            $basePath = 'assets/staff_uploads/news_article';
+            $destinationPath = public_path($basePath);
 
-            //Add to uploaded images
-            $uploadedImg = new UploadedImage();
-            $uploadedImg->path = Storage::url($path);
-            $uploadedImg->user_id = auth()->id();
-            $uploadedImg->save();
+            $file = $request->file('image');
+            $filename = time() . '_' . str_replace(' ', '_', $file->getClientOriginalName());
+            $file->move($destinationPath, $filename);
+
+            $image = new UploadedImage();
+            $image->path = env('APP_URL')."/$basePath/$filename";
+            $image->user_id = auth()->user()->id;
+            $image->save();
+
+            $article->image = env('APP_URL')."/$basePath/$filename";
         }
 
         //If there is a uplaoded image selected lets put it on there
