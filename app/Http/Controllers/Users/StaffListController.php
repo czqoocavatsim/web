@@ -13,40 +13,26 @@ class StaffListController extends Controller
 {
     public function index()
     {
-        $staff = StaffMember::all();
+        // Senior Leadership List
+        $leadership = StaffMember::all();
 
-        // Instructor list
-        $instructors_temp = Instructor::where('current', true)->get(); // Temp
-        $instructors = []; // Actual
+        // Web Team List
+        $web = User::role('Web Team')->get();
 
-        // Helper array
-        $putUpTop = ['Chief Instructor', 'Assistant Chief Instructor'];
+        // Events & Marketing List
+        $events = User::role('Events and Marketing Team')->get();
 
-        foreach ($putUpTop as $tagline) {
-            foreach ($instructors_temp as $inst) {
-                if ($inst->staffPageTagline() == $tagline) {
-                    array_push($instructors, $inst);
-                }
-            }
-        }
+        // Instructor Staff List
+        $instructors = Instructor::join('users', 'instructors.user_id', '=', 'users.id')
+            ->where('instructors.current', true)
+            ->orderBy('users.fname', 'asc')
+            ->select('instructors.*')
+            ->get();
 
-        // Sort assessors to top of array
-        foreach ($instructors_temp as $instructor) {
-            if ($instructor->assessor && !in_array($instructor->staffPageTagline(), $putUpTop)) {
-                array_push($instructors, $instructor);
-            }
-        }
+        
+        $groups = StaffGroup::where('slug', 'seniorstaff')->get();
 
-        // Sort the instructors at the bottom of the array
-        foreach ($instructors_temp as $instructor) {
-            if (!$instructor->assessor) {
-                array_push($instructors, $instructor);
-            }
-        }
-
-        $groups = StaffGroup::all();
-
-        return view('about.staff', compact('staff', 'groups', 'instructors'));
+        return view('about.staff', compact('leadership', 'web', 'events', 'groups', 'instructors'));
     }
 
     public function editIndex()

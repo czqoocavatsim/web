@@ -8,18 +8,19 @@
     <div class="row">
         <div class="col-md-3 mb-3">
             <div class="list-group" style="position: sticky; top: 20px">
-                @foreach($groups as $g)
-                <a href="#{{$g->slug}}" class="list-group-item list-group-item-action">
-                    {{$g->name}}
-                </a>
-                @endforeach
-                <a href="#instructors" class="list-group-item list-group-item-action">Instructors</a>
+                <a href="#leadership" class="list-group-item list-group-item-action">Senior Leadership Team</a>
+                <a href="#events" class="list-group-item list-group-item-action">Events & Marketing Team</a>
+                <a href="#it" class="list-group-item list-group-item-action">IT Team</a>
+                <a href="#training" class="list-group-item list-group-item-action">Training Team</a>
             </div>
         </div>
         <div class="col-md-9">
+
+            {{-- Senior Team --}}
+            <a id="leadership"><h3 class="mb-3 blue-text font-weight-bold">Senior Leadership Team</h3></a>
+            <p style="margin-top: 5px; margin-bottom: 10px;">The Senior Leadership Team for Gander Oceanic. Responsible for the direction and management of the FIR.</p>
+
             @foreach($groups as $g)
-            <a id="{{$g->slug}}"><h3 class="mb-3 blue-text font-weight-bold">{{$g->name}}</h3></a>
-            <p style="margin-top: 5px; margin-bottom: 10px;">{{$g->description}}</p>
             @if ($g->slug == 'seniorstaff')
                 <div class="row">
                     @foreach($g->members as $member)
@@ -36,7 +37,7 @@
                                             @if($member->vacant())
                                             Vacant
                                             @else
-                                            {{$member->user->fullname('FL')}}
+                                            {{$member->user->fullname('FLC')}}
                                             @endif
                                         </h4>
                                         <h5>{{$member->position}}</h5>
@@ -81,9 +82,12 @@
                 @endforeach
             </div>
             @endif
-            <hr>
             @endforeach
-            <a id="instructors"><h3 class="mb-3 blue-text font-weight-bold">Instructors</h3></a>
+            <hr>
+
+            {{-- Events & Marketing Team --}}
+            <a id="events"><h3 class="mb-3 blue-text font-weight-bold">Events & Marketing Team</h3></a>
+            <p style="margin-top: 5px; margin-bottom: 10px;">s</p>
             <div class="row">
                 @foreach ($instructors as $instructor)
                     <div class="col-md-6 mb-3">
@@ -92,7 +96,7 @@
                                 <img src="{{$instructor->user->avatar()}}" style="height: 80px; width:80px;margin-right: 15px; border-radius: 50%;">
                                 <div class="d-flex flex-column">
                                     <h4 class="font-weight-bold">
-                                        {{$instructor->user->fullname('FL')}}
+                                        {{$instructor->user->fullname('FLC')}}
                                     </h4>
                                     <p>{{$instructor->staffPageTagline()}}</p>
                                     <p class="mb-0">
@@ -104,6 +108,55 @@
                     </div>
                 @endforeach
             </div>
+            <hr>
+
+            {{-- IT Team --}}
+            <a id="it"><h3 class="mb-3 blue-text font-weight-bold">IT Team</h3></a>
+            <p style="margin-top: 5px; margin-bottom: 10px;">s</p>
+            <div class="row">
+                @foreach ($web as $weby)
+                    <div class="col-md-6 mb-3">
+                        <div class="card shadow-none grey lighten-4 p-4" style="height: 100%;">
+                            <div class="d-flex flex-row">
+                                <img src="{{$weby->avatar()}}" style="height: 80px; width:80px;margin-right: 15px; border-radius: 50%;">
+                                <div class="d-flex flex-column">
+                                    <h4 class="font-weight-bold">
+                                        {{$weby->fullname('FLC')}} {{$weby->highestRole()->name}}
+                                    </h4>
+                                    <p>{{ $weby->staffProfile->position ?? ($weby->highestRole()->name !== 'IT Director' && $weby->highestRole()->name !== 'Administrator' ? 'Web Assist' : 'IT Director') }}</p>
+
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                @endforeach
+            </div>
+            <hr>
+
+            {{-- Training Team --}}
+            <a id="training"><h3 class="mb-3 blue-text font-weight-bold">Training Team</h3></a>
+            <p style="margin-top: 5px; margin-bottom: 10px;">s</p>
+            <div class="row">
+                @foreach ($instructors as $instructor)
+                    <div class="col-md-6 mb-3">
+                        <div class="card shadow-none grey lighten-4 p-4" style="height: 100%;">
+                            <div class="d-flex flex-row">
+                                <img src="{{$instructor->user->avatar()}}" style="height: 80px; width:80px;margin-right: 15px; border-radius: 50%;">
+                                <div class="d-flex flex-column">
+                                    <h4 class="font-weight-bold">
+                                        {{$instructor->user->fullname('FLC')}}
+                                    </h4>
+                                    <p> {{ $instructor->user->staffProfile->position ?? ($instructor->user->highestRole()->name !== 'Administrator' ? 'Web Support Staff' : 'Web Support Staff') }}</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                @endforeach
+            </div>
+            <hr>
+
+
         </div>
     </div>
     <p class="text-muted mt-3">
@@ -111,7 +164,7 @@
     </p>
 </div>
 
-@foreach ($staff as $member)
+@foreach ($leadership as $member)
     <div class="modal fade" id="viewStaffBio{{$member->id}}" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered" role="document">
             <div class="modal-content">
