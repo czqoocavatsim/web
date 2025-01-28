@@ -80,49 +80,102 @@ class DiscordClient
 
     public function ControllerConnection($callsign, $name)
     {
-        $response = $this->client->post("channels/1275443682992197692/messages", [
-            'json' => [
-                "tts" => false,
-                "embeds" => [
-                    [
-                        'title' => $callsign.' is currently online!',
-                        'description' => 'There is currently ATC being provided over the Ocean!
+        // Check if Callsign is an Instructor Callsign
+        if(str_contains($controller->callsign, '_I_')) {
 
-**Controller:** '.$name.'
-**Online from:** <t:'.Carbon::now()->timestamp.':t>',
-                        'color' => hexdec('6EC40C'),
+            // Yes - Instructor Callsign
+            $response = $this->client->post("channels/1275443682992197692/messages", [
+                'json' => [
+                    "tts" => false,
+                    "embeds" => [
+                        [
+                            'title' => $name.' is currently Instructing!',
+                            'description' => $name.' is currently connected and instructing as '.$callsign,
+                            'color' => hexdec('f59542'),
+                        ]
                     ]
                 ]
-            ]
-        ]);
+            ]);
+    
+            $responseData = json_decode($response->getBody(), true);
+    
+            return $responseData['id'];
 
-        $responseData = json_decode($response->getBody(), true);
 
-        return $responseData['id'];
+        } else {
+            // No - Normal Callsign
+            $response = $this->client->post("channels/1275443682992197692/messages", [
+                'json' => [
+                    "tts" => false,
+                    "embeds" => [
+                        [
+                            'title' => $callsign.' is currently online!',
+                            'description' => 'There is currently ATC being provided over the Ocean!
+    
+    **Controller:** '.$name.'
+    **Connected at:** <t:'.Carbon::now()->timestamp.':t>',
+                            'color' => hexdec('6EC40C'),
+                        ]
+                    ]
+                ]
+            ]);
+    
+            $responseData = json_decode($response->getBody(), true);
+    
+            return $responseData['id'];
+        }
     }
 
     public function ControllerDisconnect($id, $callsign, $name, $connect_time, $total_time)
     {
-        $response = $this->client->patch("channels/1275443682992197692/messages/{$id}", [
-            'json' => [
-                "tts" => false,
-                "embeds" => [
-                    [
-                        'title' => $callsign.' is Offline',
-                        'description' => $name.' was connected to '.$callsign.'.
-                        
-Online from <t:'.Carbon::parse($connect_time)->timestamp.':t> to <t:'.Carbon::now()->timestamp.':t>.
-Time: '.sprintf('%d hours %d minutes', intdiv($total_time, 1), ($total_time - intdiv($total_time, 1)) * 60),
+        // Check if Callsign is an Instructor Callsign
+        if(str_contains($controller->callsign, '_I_')) {
+            // Yes - INS callsign
+            
+            $response = $this->client->patch("channels/1275443682992197692/messages/{$id}", [
+                'json' => [
+                    "tts" => false,
+                    "embeds" => [
+                        [
+                            'title' => $callsign.' is now Offline',
+                            'description' => $name.' was Instructing as '.$callsign.'.
+                            
+Connected from <t:'.Carbon::parse($connect_time)->timestamp.':t> to <t:'.Carbon::now()->timestamp.':t>.
+Total Time: '.sprintf('%d hours %d minutes', intdiv($total_time, 1), ($total_time - intdiv($total_time, 1)) * 60),
 
-                        'color' => hexdec('990000'),
+                            'color' => hexdec('990000'),
+                        ]
                     ]
                 ]
-            ]
-        ]);
+            ]);
+
+            $responseData = json_decode($response->getBody(), true);
+
+            return $responseData;
+        } else {
+            
+            // No - Normal Callsign
+            $response = $this->client->patch("channels/1275443682992197692/messages/{$id}", [
+                'json' => [
+                    "tts" => false,
+                    "embeds" => [
+                        [
+                            'title' => $callsign.' is now Offline',
+                            'description' => $name.' was connected to '.$callsign.'.
+                            
+Connected from <t:'.Carbon::parse($connect_time)->timestamp.':t> to <t:'.Carbon::now()->timestamp.':t>.
+    Total Time: '.sprintf('%d hours %d minutes', intdiv($total_time, 1), ($total_time - intdiv($total_time, 1)) * 60),
+
+                            'color' => hexdec('990000'),
+                        ]
+                    ]
+                ]
+            ]);
 
         $responseData = json_decode($response->getBody(), true);
 
         return $responseData;
+        }
     }
 
     // New Controller Application - Message to Senior Leadership
