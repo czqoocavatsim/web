@@ -59,16 +59,22 @@ class DiscordTestController extends Controller
      //New Applicant in Instructor Channel
      $discord = new DiscordClient();
 
-     $discord->sendMessageWithEmbed('1251878526576103524', '',
+     $discord->sendMessageWithEmbed('1274827382250934365', 'vatSys and Knowledgebase update!',
                                     
-'## vatSys Development Channel
+'We have some fantastic news regarding a few changes to Gander Oceanic over the past few days!
 
-Due to an issue during role access updates conducted today, access to the VATSYS Development Channel has been reset.
+# vatSys Profile Completion
+That vatSys NAT profile is in a public state ready for you to use! You can find a how to guide to get setup and started in the 
 
-Controllers who would like to gain access to the channel are asked to tag <@200426385863344129> in <#836707337829089322> and you will be given access.
+# Gander Oceanic Knowledgebase
+We have made a conserted effort to overhaul the [Gander Oceanic Knowedgebase](https://knowledgebase.ganderoceanic.ca/controller/clients/vatSys/vatsysbasics/) after recognising that a large number of details where outdated. We have overhauled the Controller category, and are now beginning to review the the Pilot Procedures at this time.
 
-**Thanks all,
-Gander Oceanic Team**
+### Controller SOPs are in Progress!
+We plan to introduce all of our Operational Procedures into the Knowledgebase. This will allow for each of our controllers to find all of our operational requirements in an easy location.
+
+If you are interested in helping out with this, please reach out to <@200426385863344129> and we can get you set up with assisting on the Knowledgebase.
+
+Thank you all, and enjoy!
 ');   
 
     }
@@ -91,7 +97,7 @@ Gander Oceanic Team**
     public function sendMessage()
     {
         $discord = new DiscordClient();
-        $discord->sendMessage('1298229107334844518', '<@&752767906768748586>');
+        $discord->sendMessage('1274827382250934365', '<@&482819739996127259>');
     }
 
     public function SlashCommand()

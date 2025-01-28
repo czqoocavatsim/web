@@ -6,15 +6,15 @@
         <h5 class="font-weight-bold blue-text">Current Images</h5>
         <div class="row">
             @foreach ($images as $image)
-                <div class="col-md-3">
+                <div class="col-md-4">
                     <div class="list-group-item rounded z-depth-1 shadow-none">
-                            <img src="{{$image->path}}" alt="" class="img-fluid">
+                            <img src="{{asset($image->path)}}" alt="" class="img-fluid">
                             <div class="mt-2 d-flex flex-row justify-content-between align-items-center">
                                 <div>
-                                    <a href="{{$image->path}}">Path</a>
+                                    <a href="{{asset($image->path)}}" class="btn btn-sm btn-info">View Image</a>
                                 </div>
                                 <div>
-                                    <a href="{{route('settings.rotationimages.deleteimg', $image->id)}}" class="btn btn-sm btn-danger">Delete</a>
+                                    <a href="{{route('settings.rotationimages.deleteimg', $image->id)}}" class="btn btn-sm btn-danger">Delete Image</a>
                                 </div>
                             </div>
                     </div>

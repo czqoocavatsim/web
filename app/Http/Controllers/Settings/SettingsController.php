@@ -108,14 +108,16 @@ class SettingsController extends Controller
             'file' => 'required|image|mimes:jpeg,png,jpg',
         ]);
 
+        $basePath = 'assets/staff_uploads/rotation_images';
+        $destinationPath = public_path($basePath);
+
+        $file = $request->file('file');
+        $filename = time() . '_' . $file->getClientOriginalName();
+        $file->move($destinationPath, $filename);
+
         $image = new RotationImage();
-
-        $basePath = 'staff_uploads/rotation_images/'.Carbon::now()->toDateString().rand(1000, 2000);
-        $path = Storage::disk('digitalocean')->put($basePath, $request->file('file'), 'public');
-        $image->path = Storage::url($path);
-
+        $image->path = "$basePath/$filename";
         $image->user_id = Auth::id();
-
         $image->save();
 
         return redirect()->back()->with('success', 'Image uploaded.');
@@ -123,7 +125,17 @@ class SettingsController extends Controller
 
     public function deleteRotationImage($image_id)
     {
+
+        // return $image_id;
+
         $image = RotationImage::whereId($image_id)->firstOrFail();
+
+        $filePath = public_path($image->path);
+
+        if (file_exists($filePath)) {
+            unlink($filePath);
+        }
+
         $image->delete();
 
         return redirect()->back()->with('info', 'Image deleted.');

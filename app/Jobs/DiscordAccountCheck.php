@@ -181,12 +181,12 @@ class DiscordAccountCheck implements ShouldQueue
 
                         // Full list of staff roles
                         $staffRoleIDs = [
-                            'discord_admin' => 752756810104176691,
-                            'oca_chief' => 524435557472796686,
-                            'deputy_oca_chief' => 783558030842527784,
-                            'chief_instructor' => 783558130100731924,
+                            'discord_admin' => 1328612019619758193,
+                            'fir_director' => 524435557472796686,
+                            'operations_director' => 783558030842527784,
+                            'training_events_director' => 783558130100731924,
                             'events_marketing_director' =>783558227174227979 ,
-                            'operations_director' => 783558276334747678,
+                            'fir_sector_manager' => 783558276334747678,
                             'it_director' => 783558309717868544,
                             'senior_staff' => 482816721280040964,
 
@@ -224,26 +224,23 @@ class DiscordAccountCheck implements ShouldQueue
 
                         if($user->staffProfile && $user->staffProfile->group_id == 1){
                             switch ($user->staffProfile->position) {
-                                case 'FIR Chief':
-                                    array_push($staffRoles, $staffRoleIDs['oca_chief']);
-                                    array_push($staffRoles, $staffRoleIDs['senior_staff']);
-                                    break;
-                                case 'Deputy FIR Chief':
-                                    array_push($staffRoles, $staffRoleIDs['deputy_oca_chief']);
-                                    array_push($staffRoles, $staffRoleIDs['senior_staff']);
-                                    break;
-                                case 'Chief Instructor':
-                                    array_push($staffRoles, $staffRoleIDs['chief_instructor']);
-                                    array_push($staffRoles, $staffRoleIDs['senior_staff']);
-                                    break;
-                                case 'Events and Marketing Director':
-                                    array_push($staffRoles, $staffRoleIDs['events_marketing_director']);
+                                case 'FIR Director':
+                                    array_push($staffRoles, $staffRoleIDs['fir_director']);
                                     array_push($staffRoles, $staffRoleIDs['senior_staff']);
                                     break;
                                 case 'Operations Director':
                                     array_push($staffRoles, $staffRoleIDs['operations_director']);
                                     array_push($staffRoles, $staffRoleIDs['senior_staff']);
                                     break;
+                                case 'Training & Events Director':
+                                    array_push($staffRoles, $staffRoleIDs['training_events_director']);
+                                    array_push($staffRoles, $staffRoleIDs['senior_staff']);
+                                    break;
+                                case 'FIR Sector Manager':
+                                    array_push($staffRoles, $staffRoleIDs['fir_sector_manager']);
+                                    array_push($staffRoles, $staffRoleIDs['senior_staff']);
+                                    break;
+                                
                                 case 'IT Director':
                                     array_push($staffRoles, $staffRoleIDs['it_director']);
                                     array_push($staffRoles, $staffRoleIDs['senior_staff']);
