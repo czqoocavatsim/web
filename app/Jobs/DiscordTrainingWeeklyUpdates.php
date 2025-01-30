@@ -30,7 +30,9 @@ class DiscordTrainingWeeklyUpdates implements ShouldQueue
      */
     public function handle()
     {
-        // Check all Training Threads are open and dont expire for one week
+        
+        ## Training - Daily Updates
+
         {
             // Script Start Time
             $start_time = Carbon::now();
@@ -93,8 +95,6 @@ class DiscordTrainingWeeklyUpdates implements ShouldQueue
             }
         }
 
-        exit;
-
         // Function for Training Thread Availability Updates
         {
             // Get Active Threads
@@ -111,9 +111,6 @@ class DiscordTrainingWeeklyUpdates implements ShouldQueue
                 }
             }
 
-            // dd($results2);
-
-            // Initialise Variables for Loop
             // Number of Messages Sent
             $avail_message = 0;
             $avail_maessage_names = ["names" => []];
@@ -157,14 +154,15 @@ class DiscordTrainingWeeklyUpdates implements ShouldQueue
                             // Check Sessions Upcoming
                             $upcoming_sessions = TrainingSession::where('student_id', $cid)->whereBetween('scheduled_time', [Carbon::now(), Carbon::now()->addDays(7)])->first();
 
-                            if($upcoming_sessions == null){
+                            // Availability Message in Training Thread
+                            if($upcoming_sessions == null && (Carbon::now()->weekOfYear % 2 === 0)){
                                 // There is no sessions within the next week
                                 $avail_message++;
                                 $avail_maessage_names["names"][] = $thread['name'];
 
                                 // SendEmbed to ask student to send availability
                                 $discord->sendEmbedInTrainingThread($cid, "Please Provide Your Availability", 
-'As we head into the Weekend, we ask you please provide your availability for next week. Please ensure to tag the `@Instructor` role with all times you are available. Please provide these times in Zulu Format.
+'As we head into the Weekend, we ask you please provide your availability for the next two weeks. Please provide these times in Zulu Format.
 
 One of our team will make contact with you to organise a session for next if they have availability matching yours.
 

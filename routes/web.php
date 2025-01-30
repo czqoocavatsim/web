@@ -81,7 +81,7 @@ Route::prefix('auth')->group(function () {
 
 // Discord shortcut
 Route::get('/discord', [DiscordController::class, 'joinShortcut']);
-Route::get('/discord/function-test', [DiscordTestController::class, 'SendEmbed']);
+Route::get('/discord/function-test', [DiscordTestController::class, 'Job']);
 Route::get('/discord/function-test2', [DiscordTestController::class, 'SendMessage']);
 Route::post('/discord/slash-commands', [DiscordController::class, 'handelDiscordCommand']);
 

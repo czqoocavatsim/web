@@ -384,7 +384,7 @@ Gander Oceanic Training Team**');
                     $this->sendMessageWithEmbed($thread['id'], 'Oceanic Training Cancelled',
 'Your training request with Gander Oceanic has been terminated at <t:'.Carbon::now()->timestamp.':F>
 
-If you would like to begin training again, please re-apply via the Gander Website.
+If you would like to begin training again, please re-apply via the Gander Oceanic Website.
 
 **Kind Regards,
 Gander Oceanic Training Team**');
@@ -397,7 +397,7 @@ Gander Oceanic Training Team**');
                     
 This is due to not completing the Exam within 60 Days of your application being accepted.
                     
-If you would like to begin training again, please re-apply via the Gander Website.
+If you would like to begin training again, please re-apply via the Gander Oceanic Website.
 
 **Kind Regards,
 Gander Oceanic Training Team**');
