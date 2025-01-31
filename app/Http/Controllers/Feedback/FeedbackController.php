@@ -8,6 +8,7 @@ use App\Models\Feedback\FeedbackType;
 use App\Models\Feedback\FeedbackTypeFieldSubmission;
 use App\Notifications\Feedback\NewFeedbackStaff;
 use Carbon\Carbon;
+use App\Services\DiscordClient;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
@@ -55,6 +56,7 @@ class FeedbackController extends Controller
      */
     public function newFeedbackWritePost(Request $request, $type_slug)
     {
+
         //Get feedback type
         $type = FeedbackType::whereSlug($type_slug)->firstOrFail();
 
@@ -101,6 +103,31 @@ class FeedbackController extends Controller
                 $user->notify(new NewFeedbackStaff($feedback));
             }
         }
+
+        // Discord Notification Section
+        $main_feedback = FeedbackSubmission::all()->where('slug', $feedback->slug)->first();
+        $fields_feedback = FeedbackTypeFieldSubmission::all()->where('submission_id', $main_feedback->id);
+        
+        // Compose the message
+        $message_content = "New feedback has just been received! \n";
+
+        if($fields_feedback !== null){
+            foreach($fields_feedback as $ff){
+                $message_content .= "## ".$ff->name."\n";
+                $message_content .= " - ".$ff->content."\n";
+            }
+        }
+
+        $message_content .= "## Feedback Information\n";
+        $message_content .= " - " . (strlen($main_feedback->submission_content) > 200 ? substr($main_feedback->submission_content, 0, 200) . "..." : $main_feedback->submission_content) . "\n\n";
+        
+        $message_content .= "## Submitter & Feedback Link\n";
+        $message_content .= " - ".$main_feedback->user->fullName('FLC')."\n";
+        $message_content .= " - [Feedback Link](".route('my.feedback.submission', $main_feedback->slug).")";
+
+        // Send the Announcement
+        $discord = new DiscordClient();
+        $discord->sendMessageWithEmbed(1324401086592978955, 'New Feedback Recieved! - '.$type->name, $message_content);
 
         //Return
         return redirect()->route('my.feedback.submission', $feedback->slug)->with('success', 'Feedback submitted! Thank you for helping improve Gander Oceanic.');

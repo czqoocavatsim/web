@@ -59,24 +59,33 @@ class DiscordTestController extends Controller
      //New Applicant in Instructor Channel
      $discord = new DiscordClient();
 
-     $discord->sendMessageWithEmbed('1274827382250934365', 'vatSys and Knowledgebase update!',
+     $discord->sendMessageWithEmbed('488265136696459292', '',
                                     
-'We have some fantastic news regarding a few changes to Gander Oceanic over the past few days!
+'## Gander Oceanic - Submitting your feedback
 
-# vatSys Profile Completion
-That vatSys NAT profile is in a public state ready for you to use! You can find a how to guide to get setup and started in the 
+We wanted to remind members that Gander Oceanic has functionality to **report issues / submit controller feedback** built native into the website.
 
-# Gander Oceanic Knowledgebase
-We have made a conserted effort to overhaul the [Gander Oceanic Knowedgebase](https://knowledgebase.ganderoceanic.ca/controller/clients/vatSys/vatsysbasics/) after recognising that a large number of details where outdated. We have overhauled the Controller category, and are now beginning to review the the Pilot Procedures at this time.
+Any of the following issues can be submitted to the Leadership Team for review and action:
+- Controller Feedback
+- Events / Marketing Feedback
+- Operations Feedback
+- Web Feedback
+- General Feedback (All Other Queries)
 
-### Controller SOPs are in Progress!
-We plan to introduce all of our Operational Procedures into the Knowledgebase. This will allow for each of our controllers to find all of our operational requirements in an easy location.
+This will be the easiest way moving forward for us to work on issues. Functionality will be implemented in the future where staff will update your feedback link with an action status, as well as the ability to request additional information as needed.
 
-If you are interested in helping out with this, please reach out to <@200426385863344129> and we can get you set up with assisting on the Knowledgebase.
+[Submit your feedback here](https://ganderoceanic.ca/my/feedback/new)
 
-Thank you all, and enjoy!
+**Thank you all,
+Gander Oceanic OCA**
 ');   
 
+    }
+
+    public function sendMessage()
+    {
+        $discord = new DiscordClient();
+        $discord->sendMessage('488265136696459292', '<@&482835389640343562>');
     }
 
     public function DiscordRoles()
@@ -92,12 +101,6 @@ Thank you all, and enjoy!
             $discord->removeRole(200426385863344129, $roles['student']);
 
             dd($discord);
-    }
-
-    public function sendMessage()
-    {
-        $discord = new DiscordClient();
-        $discord->sendMessage('1274827382250934365', '<@&482819739996127259>');
     }
 
     public function SlashCommand()
