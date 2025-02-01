@@ -69,6 +69,7 @@ class SessionsController extends Controller
             'student_id'     => $request->get('student_id'),
             'instructor_id'  => Auth::user()->instructorProfile->id,
             'scheduled_time' => $request->get('scheduled_time'),
+            'position_id' => 1,
         ]);
         $session->save();
 
@@ -82,9 +83,9 @@ class SessionsController extends Controller
         //Discord Notification in Training Thread
         $discord = new DiscordClient();
         $discord->sendEmbedInTrainingThread($session->student->user->id, 'New Training Session Booked', 
-'A training session has been created for you on <t:'.Carbon::parse($request->get('scheduled_time'))->timestamp.':F>.
+'A training session has been created for you on <t:'.Carbon::parse($request->get('scheduled_time'))->timestamp.':F> with <@'.Auth::user()->discord_user_id.'>.
 
-Please reach out to your instructor in this training thread if you have any questions.');
+If you have any questions, please reach out to the Instructor in this Training Thread.');
         
         //Return
         return redirect()->route('training.admin.instructing.training-sessions.view', $session->id)->with('success', 'Session created!');
@@ -134,13 +135,12 @@ Please reach out to your instructor in this training thread if you have any ques
 
          //Discord Notification in Training Thread
          $discord = new DiscordClient();
-         $discord->sendMessage($session->student->user->id, '<@'.$session->student->user->discord_user_id.'>');
          $discord->sendEmbedInTrainingThread($session->student->user->id, 'Training Session Time Changed', 
  'Hello, '. $session->student->user->fullName('F').'!
  
- A training session time has been updated. The new time is now <t:'.Carbon::parse($request->get('new_time'))->timestamp.':F>
+Your Training Session with <@'.Auth::user()->discord_user_id.'> has been modified. The new time for your session is now <t:'.Carbon::parse($request->get('new_time'))->timestamp.':F>
  
- Please reach out to your instructor in this training thread if you have any questions.');
+If you have any questions, please reach out to your Instructor.');
 
         //Return
         return redirect()->route('training.admin.instructing.training-sessions.view', $session)->with('success', 'Scheduled time changed!');
@@ -238,9 +238,9 @@ Please reach out to your instructor in this training thread if you have any ques
         //Discord Notification in Training Thread
         $discord = new DiscordClient();
         $discord->sendEmbedInTrainingThread($session->student->user->id, 'Training Session Cancelled', 
-'A training session which was planned has just been cancelled.
+'A training session which was planned on <t:'.Carbon::parse($session->scheduled_time->timestamp).':F> has just been cancelled.
 
-Please contact your instructor if you believe this was a mistake, or to reorganise a new session.');
+If you have any questions, please reach out to your Instructor.');
 
         //Soft delete session
         $session->delete();
