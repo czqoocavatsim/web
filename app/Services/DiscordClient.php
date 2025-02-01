@@ -330,13 +330,18 @@ $name. ' has just applied to join Gander Oceanic!
                 'message' => [
                     'content' => $user.', your application has now been approved. Welcome to Gander Oceanic! 
 
-Please review <#1214345937871179777> in order to get yourself up to speed with our training process. It is pretty easy, but there are a few steps you *must* do in order to begin your training.
+Please review <#1214345937871179777> in order to get yourself up to speed with our training process. It is pretty easy, but there are a few steps you __**must**__ do in order to begin your training.
 
 Once you have done so, and you are ready to attempt the exam, please ping `@exam-request` to have the Oceanic Exam assigned. You will only have 48 Hours to complete this exam, so please make sure you are ready.
 
 After you pass the exam, please provide 7-days of availability for our Instructors.
 
-Good luck with your study!',
+**Note:** *If you do not attempt and pass the exam within two months, your training will automatically terminated. Should this occur, you can reapply via the Gander Website when you wish to return to your training.*
+
+Good luck, and welcome to Gander Oceanic!
+
+**Kindest Regards,**
+***Gander Oceanic Training Team***',
                 ],
             ],
 
@@ -369,7 +374,7 @@ Good luck with your study!',
                     $this->sendMessageWithEmbed($thread['id'], 'Oceanic Training Completed!',
 'Congratulations, you have now been certified on Gander & Shanwick Oceanic!
                 
-This training thread will now be closed due to the completion of your training. Your discord roles will automatically be updated within the next 24
+This training thread will now be closed due to the completion of your training. Your discord roles will automatically be updated within the next 24 hours.
 
 If you have any questions, please reach out to your Instructor, or ask your question in <#836707337829089322>.
 
@@ -382,7 +387,7 @@ Gander Oceanic Training Team**');
 
                 } elseif($status == "cancel") {
                     $this->sendMessageWithEmbed($thread['id'], 'Oceanic Training Cancelled',
-'Your training request with Gander Oceanic has been terminated at <t:'.Carbon::now()->timestamp.':F>
+'Your training request with Gander Oceanic has been terminated on <t:'.Carbon::now()->timestamp.':F>
 
 If you would like to begin training again, please re-apply via the Gander Oceanic Website.
 
@@ -393,7 +398,7 @@ Gander Oceanic Training Team**');
                     
                 } elseif($status == "terminate"){
                     $this->sendMessageWithEmbed($thread['id'], 'Oceanic Training Terminated',
-'Your training request with Gander Oceanic has been terminated at <t:'.Carbon::now()->timestamp.':F>. 
+'Your training request with Gander Oceanic has been terminated on <t:'.Carbon::now()->timestamp.':F>. 
                     
 This is due to not completing the Exam within 60 Days of your application being accepted.
                     
@@ -413,12 +418,6 @@ Gander Oceanic Training Team**');
                 ]);
             }
         }
-
-        // foreach($threads as $thread){
-        //     if($thread['name'] == $name){
-        //         return "Success!";
-        //     }
-        // }
     }
 
     public function EditThreadTag($lable, $cid)

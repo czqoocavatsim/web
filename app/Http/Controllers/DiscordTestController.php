@@ -59,25 +59,38 @@ class DiscordTestController extends Controller
      //New Applicant in Instructor Channel
      $discord = new DiscordClient();
 
-     $discord->sendMessageWithEmbed('488265136696459292', '',
+     $discord->sendMessageWithEmbed('1274827382250934365', '',
                                     
-'## Gander Oceanic - Submitting your feedback
+'## Gander Oceanic - Training Process
 
-We wanted to remind members that Gander Oceanic has functionality to **report issues / submit controller feedback** built native into the website.
+Hello <@&482824058141016075>, welcome to Gander Oceanic!
 
-Any of the following issues can be submitted to the Leadership Team for review and action:
-- Controller Feedback
-- Events / Marketing Feedback
-- Operations Feedback
-- Web Feedback
-- General Feedback (All Other Queries)
+The following is here to assist you in attaining your Oceanic Endorsement
 
-This will be the easiest way moving forward for us to work on issues. Functionality will be implemented in the future where staff will update your feedback link with an action status, as well as the ability to request additional information as needed.
+### 1. Preparing for the Exam
+- A  Computer-Based Training (CBT) for OCA controlling can be found [here](https://vats.im/gandercbt).
+- Review [ATC Resources](https://ganderoceanic.ca/atc/resources) and the [Gander Oceanic Controller Knowledgebase](https://knowledgebase.ganderoceanic.ca/controller/) to begin gaining an understanding of our Operations and Policies.
+After reviewing the above, you will be required to take an exam consisting of 20 Questions in relation to Oceanic proceedings within Gander and Shanwick. This exam is open book, and the pass mark is 80%.
 
-[Submit your feedback here](https://ganderoceanic.ca/my/feedback/new)
+### 2. Taking the Exam
+In order for this exam to be assigned, you must visit the [VATCAN Website](https://vatcan.ca/) and log into the website.
+Once you do this, head to your training thread in <#1226234767138226338> and request the exam by tagging the <@&1214350179151650898>
 
-**Thank you all,
-Gander Oceanic OCA**
+### 3. Live Session
+You will be required to undertake a 90-minute training session with a Gander Oceanic Instructor on the Bandbox NAT_FSS.
+
+> **Note:** *The session is a familiarisation session to ensure that you understand all the aspects within oceanic controlling, Euroscope profile, Plug-ins, CPDLC and Nattrak website.*
+
+Our Instructors are located around the world, and therefor within different timezones. Instructors will aim to find availability with each student as quickly as possible.
+
+Our system will automatically request you to provide new availability each fortnight. We kindly ask you follow the format sent within the message, and provide your times in Zulu Format.
+
+Please ensure that you have reviewed any recent ⁠announcements and have the latest controller pack available prior to your session. 
+
+Good luck with your study!
+
+**Regards,
+*Gander Oceanic Training Team***
 ');   
 
     }
