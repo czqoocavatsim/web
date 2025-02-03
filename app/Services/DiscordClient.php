@@ -81,7 +81,7 @@ class DiscordClient
     public function ControllerConnection($callsign, $name)
     {
         // Check if Callsign is an Instructor Callsign
-        if(str_contains($controller->callsign, '_I_')) {
+        if(str_contains($callsign, '_I_')) {
 
             // Yes - Instructor Callsign
             $response = $this->client->post("channels/1275443682992197692/messages", [
@@ -129,7 +129,7 @@ class DiscordClient
     public function ControllerDisconnect($id, $callsign, $name, $connect_time, $total_time)
     {
         // Check if Callsign is an Instructor Callsign
-        if(str_contains($controller->callsign, '_I_')) {
+        if(str_contains($callsign, '_I_')) {
             // Yes - INS callsign
             
             $response = $this->client->patch("channels/1275443682992197692/messages/{$id}", [
