@@ -226,7 +226,7 @@ Gander Oceanic Training Team**');
                         //remove student discord role
                         $discord->removeRole($s->user->discord_user_id, 482824058141016075);
 
-                        $discord->EditThreadTag('Inactive', $s->user->id);
+                        $discord->EditThreadTag('Terminated', $s->user->id);
 
                         //close training Thread
                         $discord->closeTrainingThread($s->user->id, $s->user->discord_user_id, 'terminate');
