@@ -13,6 +13,7 @@ use App\Models\Roster\RosterMember;
 use App\Models\Users\User;
 use Illuminate\Http\Request;
 use GuzzleHttp\Client;
+use App\Services\DiscordClient;
 use Carbon\Carbon;
 
 class ProcessExternalControllers implements ShouldQueue
@@ -263,6 +264,9 @@ class ProcessExternalControllers implements ShouldQueue
                 ]
             ];
 
+            // Script Start Time
+            $start_time = Carbon::now();
+
             // Get Shanwick API Data         
             $guzzle = new Client(['timeout' => 1000, 'connect_timeout' => 1000]);
             $eggx_api = $guzzle->request('GET', "https://www.vatsim.uk/api/validations?position=EGGX_CTR");
@@ -326,6 +330,12 @@ class ProcessExternalControllers implements ShouldQueue
                         $roster->division_code = $user->division_code;
                         $roster->division_name = $user->division_name;
 
+                        // Check System Roles once per week by reassigning the role
+                        if (Carbon::now()->dayOfWeek === Carbon::SATURDAY && Carbon::now()->hour === 14) {
+                            $user->assignRole('Certified Controller');
+                            $user->removeRole('Guest');
+                        }
+
                     } else {
                         
                         if (Carbon::now()->dayOfWeek === Carbon::MONDAY && Carbon::now()->hour === 4) {
@@ -369,13 +379,17 @@ class ProcessExternalControllers implements ShouldQueue
                     $roster->id = $member['id'];
                     
                     if($user !== null){
-                        // User Entry Exists
+                        // User Entry Exists - Add stuff from their Database1
                         $roster->name = $user->FullName('FL');
                         $roster->rating = $user->rating_short;
                         $roster->region_code = $user->region_code;
                         $roster->region_name = $user->region_name;
                         $roster->division_code = $user->division_code;
                         $roster->division_name = $user->division_name;
+
+                        // Assign System Role to User
+                        $user->assignRole('Certified Controller');
+                        $user->removeRole('Guest');
 
                     } else {
                         sleep(6);
@@ -418,8 +432,33 @@ class ProcessExternalControllers implements ShouldQueue
             // Delete all Non-Existant Users from the Roster
             $old_members = ExternalController::whereNull('valid_during_update')->get();
             foreach($old_members as $om){
+                $user = User::find($om->id);
+
+                // Remove Certified Controller from User Information
+                if($user !== null){
+                    $user->removeRole('Certified Controller');
+                    $user->assignRole('Guest');
+                }
+
                 $om->delete();
             }
+
+
+            // Discord Message
+            ## DISCORD UPDATE
+        {
+            $discord = new DiscordClient;
+            // Beginning
+            $update_content = "External Controller Updates Completed";
+
             
+            $end_time = Carbon::now();
+            $update_content .= "\n\n**__Completion Time:__**";
+            $update_content .= "\n- Script Time: " . $start_time->diffForHumans($end_time, ['parts' => 2, 'short' => true, 'syntax' => Carbon::DIFF_ABSOLUTE]) . ".";
+
+            // Send Message
+            $discord->sendMessageWithEmbed('1299248165551210506', 'HOURLY: External Controller Roster Updates', $update_content);
+            
+        }
     }
 }

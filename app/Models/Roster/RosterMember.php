@@ -77,7 +77,7 @@ class RosterMember extends Model
     {
         switch ($this->certification) {
             case 'certified':
-                return 'Certified';
+                return 'Certified <span class="badge bg-primary">CZQO</span>';
             break;
             case 'not_certified':
                 return 'Not Certified';
@@ -141,7 +141,7 @@ class RosterMember extends Model
         //Colour
         switch ($this->certification) {
             case 'certified':
-                $html .= "green text-white'><i class='fas fa-check-double mr-2'></i>";
+                $html .= "green text-white'><i class='fas fa-check mr-2'></i>";
             break;
             case 'not_certified':
                 $html .= "red text-white'><i class='fas fa-times mr-2'></i>";

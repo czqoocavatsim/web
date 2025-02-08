@@ -8,6 +8,7 @@ use App\Models\News\News;
 use App\Models\Events\Event;
 use Illuminate\Http\Request;
 use App\Models\Network\SessionLog;
+use App\Models\Network\ExternalController;
 use App\Models\Roster\RosterMember;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Cache;
@@ -66,6 +67,8 @@ class PrimaryViewsController extends Controller
 
         $sessions = SessionLog::where('cid', Auth::user()->id)->where('created_at', '>=', Carbon::now()->startOfYear())->orderBy('created_at', 'desc')->get();
 
+        $externalController = ExternalController::find(Auth::user()->id);
+
         $atcResources = AtcResource::all()->sortBy('title');
 
         $bannerCollection = RotationImage::all();
@@ -78,6 +81,6 @@ class PrimaryViewsController extends Controller
             $bannerImg = null;
         }
 
-        return view('my.index', compact('atcResources', 'bannerImg', 'sessions'));
+        return view('my.index', compact('atcResources', 'externalController', 'bannerImg', 'sessions'));
     }
 }
