@@ -162,11 +162,20 @@ class DiscordTrainingWeeklyUpdates implements ShouldQueue
 
                                 // SendEmbed to ask student to send availability
                                 $discord->sendEmbedInTrainingThread($cid, "Please Provide Your Availability", 
-'As we head into the Weekend, we ask you please provide your availability for the next two weeks. Please provide these times in Zulu Format.
+'We ask you to please provide your expected general availability over the next two weeks. Please use the below format.
 
-One of our team will make contact with you to organise a session for next if they have availability matching yours.
+```# Availability:
+Monday: x-x
+Tuesday: x-x
+Wednesday: x-x
+Thursday: x-x
+Friday: x-x
+Saturday: x-x
+Sunday: x-x```
 
-*If you have done this in the past few days, or are unable to provide any times for next week, please disregard this message.*');
+**Note: *These times above are your estimated availability. An instructor will make contact with you to confirm a time if it works with their availability.
+
+Thank you!');
                             }
                         }
                     }
@@ -217,7 +226,7 @@ Gander Oceanic Training Team**');
                         //remove student discord role
                         $discord->removeRole($s->user->discord_user_id, 482824058141016075);
 
-                        $discord->EditThreadTag('Inactive', $s->user->id);
+                        $discord->EditThreadTag('Terminated', $s->user->id);
 
                         //close training Thread
                         $discord->closeTrainingThread($s->user->id, $s->user->discord_user_id, 'terminate');

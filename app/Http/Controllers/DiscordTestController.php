@@ -59,24 +59,46 @@ class DiscordTestController extends Controller
      //New Applicant in Instructor Channel
      $discord = new DiscordClient();
 
-     $discord->sendMessageWithEmbed('1274827382250934365', 'vatSys and Knowledgebase update!',
+     $discord->sendMessageWithEmbed('1214345937871179777', '',
                                     
-'We have some fantastic news regarding a few changes to Gander Oceanic over the past few days!
+'## Gander Oceanic - Training Process
 
-# vatSys Profile Completion
-That vatSys NAT profile is in a public state ready for you to use! You can find a how to guide to get setup and started in the 
+Hello <@&482824058141016075>, welcome to Gander Oceanic!
 
-# Gander Oceanic Knowledgebase
-We have made a conserted effort to overhaul the [Gander Oceanic Knowedgebase](https://knowledgebase.ganderoceanic.ca/controller/clients/vatSys/vatsysbasics/) after recognising that a large number of details where outdated. We have overhauled the Controller category, and are now beginning to review the the Pilot Procedures at this time.
+The following is here to assist you in attaining your Oceanic Endorsement
 
-### Controller SOPs are in Progress!
-We plan to introduce all of our Operational Procedures into the Knowledgebase. This will allow for each of our controllers to find all of our operational requirements in an easy location.
+### 1. Preparing for the Exam
+- A  Computer-Based Training (CBT) for OCA controlling can be found [here](https://vats.im/gandercbt).
+- Review [ATC Resources](https://ganderoceanic.ca/atc/resources) and the [Gander Oceanic Controller Knowledgebase](https://knowledgebase.ganderoceanic.ca/controller/) to begin gaining an understanding of our Operations and Policies.
+After reviewing the above, you will be required to take an exam consisting of 20 Questions in relation to Oceanic proceedings within Gander and Shanwick. This exam is open book, and the pass mark is 80%.
 
-If you are interested in helping out with this, please reach out to <@200426385863344129> and we can get you set up with assisting on the Knowledgebase.
+### 2. Taking the Exam
+In order for this exam to be assigned, you must visit the [VATCAN Website](https://vatcan.ca/) and log into the website.
+Once you do this, head to your training thread in <#1226234767138226338> and request the exam by tagging the <@&1214350179151650898>
 
-Thank you all, and enjoy!
+### 3. Live Session
+You will be required to undertake a 90-minute training session with a Gander Oceanic Instructor on the Bandbox NAT_FSS.
+
+> **Note:** *The session is a familiarisation session to ensure that you understand all the aspects within oceanic controlling, Euroscope profile, Plug-ins, CPDLC and Nattrak website.*
+
+Our Instructors are located around the world, and therefor within different timezones. Instructors will aim to find availability with each student as quickly as possible.
+
+Our system will automatically request you to provide new availability each fortnight. We kindly ask you follow the format sent within the message, and provide your times in Zulu Format.
+
+Please ensure that you have reviewed any recent ⁠announcements and have the latest controller pack available prior to your session. 
+
+Good luck with your study!
+
+**Regards,
+*Gander Oceanic Training Team***
 ');   
 
+    }
+
+    public function sendMessage()
+    {
+        $discord = new DiscordClient();
+        $discord->sendMessage('488265136696459292', '<@&482835389640343562>');
     }
 
     public function DiscordRoles()
@@ -92,12 +114,6 @@ Thank you all, and enjoy!
             $discord->removeRole(200426385863344129, $roles['student']);
 
             dd($discord);
-    }
-
-    public function sendMessage()
-    {
-        $discord = new DiscordClient();
-        $discord->sendMessage('1274827382250934365', '<@&482819739996127259>');
     }
 
     public function SlashCommand()
