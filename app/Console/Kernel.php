@@ -6,7 +6,7 @@ use App\Jobs\ProcessRosterInactivity;
 use App\Jobs\ProcessSessionLogging;
 use App\Jobs\ProcessSessionReminders;
 use App\Jobs\ProcessSoloCertExpiryWarnings;
-use App\Jobs\ProcessExternalController;
+use App\Jobs\ProcessExternalControllers;
 use App\Jobs\DiscordTrainingWeeklyUpdates;
 use App\Jobs\ProcessMonthlyBreakdown;
 use App\Jobs\UpdateDiscordUserRoles;
@@ -44,7 +44,7 @@ class Kernel extends ConsoleKernel
         $schedule->job(new ProcessSessionLogging())->everyMinute();
 
         // External Controllers
-        $schedule->job(new ProcessExternalController())->cron('5 * * * *'); //Updated Hourly
+        $schedule->job(new ProcessExternalControllers())->cron('5 * * * *'); //Updated Hourly
 
         //Discord Update
         $schedule->job(new DiscordAccountCheck())->cron('15 * * * *'); //Updated Hourly
