@@ -59,7 +59,7 @@ class DiscordTestController extends Controller
      //New Applicant in Instructor Channel
      $discord = new DiscordClient();
 
-     $discord->sendMessageWithEmbed('1274827382250934365', '',
+     $discord->sendMessageWithEmbed('1214345937871179777', '',
                                     
 '## Gander Oceanic - Training Process
 
