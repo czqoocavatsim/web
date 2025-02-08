@@ -17,8 +17,11 @@
 </div>
 <div class="container py-4">
         <p class="text-muted">Please note that the 'full name' field on this roster is dependent on the controller's name settings on the CZQO Core system.<br></p>
-        <p class="text-muted">This Roster shows the combined endorsements of Shanwick and Gander controllers.<br><i class="fas fa-certificate"></i> = Certified by VATSIM UK</p>
-        <p class="text-muted">Controllers with active status are endorsed to open & control either CZQO, EGGX and/or NAT_FSS positions.<br></p>
+        <p class="text-muted">This Roster shows the combined roster of Gander, Shanwick and New York Oceanic controllers.
+            <br><span class="badge bg-danger">EGGX</span> = Certified by VATSIM UK
+            <br><span class="badge bg-secondary">KZNY</span> = Certified by New York ARTCC
+            <br><span class="badge bg-primary">CZQO</span> = Certified by Gander Oceanic</p>
+        <p class="text-muted">Controllers with active status are endorsed to open & control either CZQO_CTR, EGGX_CTR, NY_FSS and/or NAT_FSS positions.<br></p>
         <table id="rosterTable" class="table table-hover">
             <thead>
                 <tr>
@@ -34,13 +37,13 @@
             @foreach ($roster as $controller)
                 <tr>
                     <th scope="row"><b>{{$controller->user->id}}</b>
-                    @if($controller->eggx !== null)<i style="opacity: 30%;" class="fas fa-certificate"></i>@endif
+
                     </th>
                     <td>
                         {{$controller->user->fullName('FL')}}
                         @if ($controller->activeSoloCertification())
                         <i title="Solo certification active - expires {{$controller->activeSoloCertification()->expires->toDateString()}}" class="fas fa-certificate"></i>
-                    @endif
+                        @endif
                     </td>
                     <td>
                         {{$controller->user->rating_short}}
@@ -55,7 +58,10 @@
                     @endif
                     @if ($controller->certification == "certified")
                     <td class="bg-success text-white">
-                        Certified
+                        Certified 
+                        @if($controller->origin == "eggx")<span class="badge bg-danger">EGGX</span>
+                        @elseif($controller->origin == "zny")<span class="badge bg-secondary">KZNY</span>
+                        @else<span class="badge bg-primary">CZQO</span>@endif
                     </td>
                     @elseif ($controller->certification == "not_certified")
                         <td class="bg-danger text-white">
@@ -63,7 +69,7 @@
                         </td>
                     @elseif ($controller->certification == "training")
                         <td class="bg-warning text-dark">
-                            Training
+                            In Training
                         </td>
                     @else
                         <td>

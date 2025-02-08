@@ -7,7 +7,7 @@ use App\Models\Users\User;
 use Illuminate\Http\Request;
 use App\Services\DiscordClient;
 use App\Models\News\Announcement;
-use App\Models\Network\ShanwickController;
+use App\Models\Network\ExternalController;
 use App\Models\Roster\RosterMember;
 use App\Models\Network\SessionLog;
 use App\Http\Controllers\Controller;
@@ -30,15 +30,15 @@ class RosterController extends Controller
             ->get();
 
         // Get EGGX Roster
-        $shanwick_controllers = ShanwickController::all();
+        $external_controllers = ExternalController::all();
 
         // Transform EGGX data into Eloquent Model (For Full Name etc)
-        $eggx_roster = $shanwick_controllers->map(function($controller) {
+        $full_roster = $external_controllers->map(function($controller) {
             return $this->transformShanwickControllerToRoster($controller);
         });
 
         // Combine Data
-        $roster = $czqo_roster->concat($eggx_roster);   
+        $roster = $czqo_roster->concat($full_roster);   
 
         // return $roster;
         
@@ -385,20 +385,25 @@ class RosterController extends Controller
         $rosterMember = new RosterMember();
         $rosterMember->certification = 'certified';
         $rosterMember->active = 1;
-        $rosterMember->eggx = true;
-        $rosterMember->user_id = $shanwickController->controller_cid;
+        $rosterMember->origin = $shanwickController->visiting_origin;
+        $rosterMember->user_id = $shanwickController->id;
         
+        $user = User::find($shanwickController->id);
+        if($user !== null){
+            $rosterMember->user = $user;
+        } else {
+            $rosterMember->user = new User();
+            $rosterMember->user->id = $shanwickController->id;
+            $rosterMember->user->fname = null;
+            $rosterMember->user->lname = null;
+            $rosterMember->user->rating_short = $shanwickController->rating;
+            $rosterMember->user->display_fname = null;
+            $rosterMember->user->display_cid_only = 1;
+            $rosterMember->user->display_last_name = 0;
+            $rosterMember->user->division_name = $shanwickController->division_name;
+            $rosterMember->user->division_code = $shanwickController->division_code;
+        }
         // Create a pseudo-user object
-        $rosterMember->user = new User();
-        $rosterMember->user->id = $shanwickController->controller_cid;
-        $rosterMember->user->fname = null;
-        $rosterMember->user->lname = null;
-        $rosterMember->user->rating_short = $shanwickController->rating;
-        $rosterMember->user->display_fname = null;
-        $rosterMember->user->display_cid_only = 1;
-        $rosterMember->user->display_last_name = 0;
-        $rosterMember->user->division_name = null;
-        $rosterMember->user->division_code = $shanwickController->division;
 
         return $rosterMember;
     }
