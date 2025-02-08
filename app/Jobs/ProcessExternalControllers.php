@@ -422,7 +422,7 @@ class ProcessExternalControllers implements ShouldQueue
                     
                     
                     $roster->visiting_origin = $member['visiting_origin'];
-                    $roster->valid_during_update = null;
+                    $roster->valid_during_update = 1;
                     $roster->save();
                 }
             }
