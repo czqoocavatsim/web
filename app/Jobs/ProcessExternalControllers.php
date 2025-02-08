@@ -446,19 +446,19 @@ class ProcessExternalControllers implements ShouldQueue
 
             // Discord Message
             ## DISCORD UPDATE
-        {
-            $discord = new DiscordClient;
-            // Beginning
-            $update_content = "External Controller Updates Completed";
+        // {
+        //     $discord = new DiscordClient;
+        //     // Beginning
+        //     $update_content = "External Controller Updates Completed";
 
             
-            $end_time = Carbon::now();
-            $update_content .= "\n\n**__Completion Time:__**";
-            $update_content .= "\n- Script Time: " . $start_time->diffForHumans($end_time, ['parts' => 2, 'short' => true, 'syntax' => Carbon::DIFF_ABSOLUTE]) . ".";
+        //     $end_time = Carbon::now();
+        //     $update_content .= "\n\n**__Completion Time:__**";
+        //     $update_content .= "\n- Script Time: " . $start_time->diffForHumans($end_time, ['parts' => 2, 'short' => true, 'syntax' => Carbon::DIFF_ABSOLUTE]) . ".";
 
-            // Send Message
-            $discord->sendMessageWithEmbed('1299248165551210506', 'HOURLY: External Controller Roster Updates', $update_content);
+        //     // Send Message
+        //     $discord->sendMessageWithEmbed('1299248165551210506', 'HOURLY: External Controller Roster Updates', $update_content);
             
-        }
+        // }
     }
 }
