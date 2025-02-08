@@ -44,10 +44,10 @@ class Kernel extends ConsoleKernel
         $schedule->job(new ProcessSessionLogging())->everyMinute();
 
         // External Controllers
-        $schedule->job(new ExternalController())->cron('6 * * * *'); //Updated Hourly
+        $schedule->job(new ExternalController())->cron('5 * * * *'); //Updated Hourly
 
         //Discord Update
-        $schedule->job(new DiscordAccountCheck())->cron('1 * * * *'); //Updated Hourly
+        $schedule->job(new DiscordAccountCheck())->cron('15 * * * *'); //Updated Hourly
 
         //Roster Inactivity checks
         $schedule->job(new ProcessRosterInactivity())->dailyAt('23:55');
