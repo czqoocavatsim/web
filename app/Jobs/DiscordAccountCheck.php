@@ -13,7 +13,7 @@ use App\Services\DiscordClient;
 use App\Models\Training\Instructing\Records\TrainingSession;
 use App\Models\Users\User;
 use App\Models\Roster\RosterMember;
-use App\Models\Network\ShanwickController;
+use App\Models\Network\ExternalController;
 use App\Notifications\Training\Instructing\RemovedAsStudent;
 use App\Models\Training\Instructing\Students\StudentStatusLabel;
 use App\Models\Training\Instructing\Links\StudentStatusLabelLink;
@@ -121,6 +121,7 @@ class DiscordAccountCheck implements ShouldQueue
                             'certified'  => 482819739996127259,
                             'gander_certified'  => 1297507926222573568,
                             'shanwick_certified' => 1297508027280396349,
+                            'zny_certified' => 1302030442916089866,
                             'supervisor' => 720502070683369563,
                         ];
 
@@ -143,10 +144,16 @@ class DiscordAccountCheck implements ShouldQueue
                         }
 
                         // Shankwick Roster Members
-                        $shanwickRoster = ShanwickController::where('controller_cid', $user->id)->first();
-                        if ($shanwickRoster) {
-                            array_push($mainRoles, $discordRoleIds['certified']);
-                            array_push($mainRoles, $discordRoleIds['shanwick_certified']);
+                        $externalController = ExternalController::find($user->id);
+                        if ($externalController !== null) {
+                            
+                            if($externalController->visiting_origin == "eggx"){
+                                array_push($mainRoles, $discordRoleIds['certified']);
+                                array_push($mainRoles, $discordRoleIds['shanwick_certified']);
+                            } elseif($externalController->visiting_origin == "zny") {
+                                array_push($mainRoles, $discordRoleIds['certified']);
+                                array_push($mainRoles, $discordRoleIds['zny_certified']);
+                            }
                         }
 
                         //Supervisor?

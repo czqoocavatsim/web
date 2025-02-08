@@ -38,7 +38,7 @@ use App\Http\Controllers\Publications\PublicationsController;
 use App\Http\Controllers\TrainingCalendar\TrainingController;
 use App\Http\Controllers\Training\SoloCertificationsController;
 use App\Http\Controllers\DiscordTestController;
-use App\Jobs\ProcessShanwickControllers;
+use App\Jobs\ProcessExternalControllers;
 
 Route::get('/', [PrimaryViewsController::class, 'home'])->name('index');
 Route::get('/map', [PrimaryViewsController::class, 'map'])->name('map');
@@ -59,9 +59,12 @@ Route::get('/events/{slug}', [EventController::class, 'viewEvent'])->name('event
 Route::view('/branding', 'about.branding')->name('branding');
 
 Route::get('/roster/update/controller-details', function () {
-    ProcessShanwickControllers::dispatch();
-    return response('ProcessShanwickControllers dispatched successfully');
+    $job = new ProcessExternalControllers();
+    $result = $job->handle();
+
+    return response()->json(['message' => 'Process completed', 'data' => $result]);
 });
+
 
 // About
 Route::prefix('about')->group(function () {

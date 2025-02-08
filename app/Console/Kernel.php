@@ -43,13 +43,11 @@ class Kernel extends ConsoleKernel
         // Active Network Sessions
         $schedule->job(new ProcessSessionLogging())->everyMinute();
 
-        // Shanwick Controller Roster Update
-        $schedule->call(function () {
-            Http::get('https://ganderoceanic.ca/roster/update/controller-details');
-        })->cron('0 * * * *'); //Updated Hourly
+        // External Controllers
+        $schedule->job(new ExternalController())->cron('5 * * * *'); //Updated Hourly
 
         //Discord Update
-        $schedule->job(new DiscordAccountCheck())->cron('0 * * * *'); //Updated Hourly
+        $schedule->job(new DiscordAccountCheck())->cron('15 * * * *'); //Updated Hourly
 
         //Roster Inactivity checks
         $schedule->job(new ProcessRosterInactivity())->dailyAt('23:55');

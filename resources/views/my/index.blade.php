@@ -404,17 +404,44 @@
                                 @endforeach
                             </tbody>
                         </table>
+
                     @else
-                        <h3>
-                            <span style='font-weight: 400' class='badge rounded p-2 red text-white shadow-none'>
-                                <i class="fas fa-times mr-2"></i>&nbsp;Not Gander Certified
-                            </span>
-                        </h3>
+                    {{-- User is not in the RosterMember DB --}}
+                        
+
+                            {{-- Check if they are an ExternalController --}}
+                            @if($externalController !== null)
+                            <h3>
+                                <span style='font-weight: 400' class='badge rounded p-2 green text-white shadow-none'>
+                                    <i class="fas fa-check mr-2"></i>&nbsp;Oceanic Certified by
+                                        @if($externalController->visiting_origin == "eggx")<span class="badge bg-danger">EGGX</span>
+                                        @elseif($externalController->visiting_origin == "zny")<span class="badge bg-secondary">KZNY</span>@endif
+                                </span>
+
+                                <span style='font-weight: 400' class='badge rounded p-2 green text-white shadow-none'>
+                                    <i class="fas fa-check mr-2"></i>&nbsp;Active
+                                </span>
+                            </h3><br>
+
+                            <h3 class="font-weight-bold blue-text pb-2">Partnership Controllers, Please Note</h3>
+                                <li>Your certification status on this page is dictated by your endorsement operator listed above.</li>
+                                <li>Your Activity Requirements within Gander are assumed correct. Should your Certification Status be removed by your home division due to their policy, your access on Gander Oceanic will be removed within 24 Hours.</li>
+                                <li>You are authorised to open any EGGX_CTR, CZQO_CTR, NY_FSS or NAT_FSS Position while holding this endorsement.</li>
+                                <li>Any questions regarding Activity Requirements should be directed towards the <a href="{{ route('my.feedback.new.write', ['operations']) }}">Gander Oceanic Operations Staff Team</a> who will assist you with your query.</li>
+
+                            @else
+                            <h3>
+                            {{-- User is not either a Local, or External Certified Controller --}}
+                                <span style='font-weight: 400' class='badge rounded p-2 red text-white shadow-none'>
+                                    <i class="fas fa-times mr-2"></i>&nbsp;No Certification
+                                </span>
+                            </h3>
+                            @endif
                         @if ($user->rating_id >= 5 &&
-                                $user->can('start applications'))
+                                $user->can('start applications') && $externalController == null)
                             <div class="list-group-item rounded p-4 my-3 z-depth-1 shadow-none w-50 mt-4">
-                                <h4 class="blue-text"><i style="margin-right: 10px;">👋</i>Apply for Gander Oceanic
-                                    Certification</h4>
+                                <h4 class="blue-text"><i style="margin-right: 10px;">👋</i>
+                                    Apply for Gander Oceanic Certification</h4>
                                 <p style="font-size: 1.1em;">Interested in joining our team of oceanic controllers?</p>
                                 <p style="font-size: 1.2em;" class="mt-3 mb-0">
                                     <a class="font-weight-bold text-body"
