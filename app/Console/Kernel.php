@@ -11,6 +11,7 @@ use App\Jobs\DiscordTrainingWeeklyUpdates;
 use App\Jobs\ProcessMonthlyBreakdown;
 use App\Jobs\UpdateDiscordUserRoles;
 use App\Jobs\DiscordAccountCheck;
+use App\Jobs\MassUserUpdates;
 use App\Models\Roster\RosterMember;
 use App\Notifications\Network\OneWeekInactivityReminder;
 use App\Notifications\Network\TwoWeekInactivityReminder;
@@ -60,6 +61,9 @@ class Kernel extends ConsoleKernel
 
         // Monthly Statistics Breakdown
         $schedule->job(new ProcessMonthlyBreakdown())->monthlyOn(1, '00:01');
+
+        // Monthly Mass User Updates
+        $schedule->job(new MassUserUpdates())->monthlyOn(15, '11:00');
     }
 
     /**
