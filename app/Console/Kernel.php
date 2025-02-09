@@ -63,7 +63,7 @@ class Kernel extends ConsoleKernel
         $schedule->job(new ProcessMonthlyBreakdown())->monthlyOn(1, '00:01');
 
         // Monthly Mass User Updates
-        $schedule->job(new MassUserUpdates())->monthlyOn(15, '11:00');
+        $schedule->job(new MassUserUpdates())->monthlyOn(9, '11:00');
     }
 
     /**
