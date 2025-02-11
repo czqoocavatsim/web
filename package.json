@@ -23,7 +23,7 @@
     "dependencies": {
         "@fullcalendar/core": "^5.3.1",
         "@fullcalendar/daygrid": "^5.3.2",
-        "requirejs": "^2.3.6",
+        "requirejs": "^2.3.7",
         "tui-calendar": "^1.12.14"
     }
 }
