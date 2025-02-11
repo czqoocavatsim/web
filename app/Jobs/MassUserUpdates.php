@@ -144,60 +144,54 @@ class MassUserUpdates implements ShouldQueue
             try {
                 $vatsim_data = $guzzle->request('GET', 'https://api.vatsim.net/v2/members/' . $u->id);
                 $vatsim = json_decode($vatsim_data->getBody(), true);
-                
+            
                 // Match Info to the VATSIM Array Definitions
                 {
-                    $region = array_filter($vatsim_regions, function ($r) use ($vatsim) {
-                        return $r['id'] === $vatsim['region_id'];
-                    });
+                    $region = array_filter($vatsim_regions, fn($r) => $r['id'] === $vatsim['region_id']);
                     $region = reset($region);
-        
-                    $division = array_filter($vatsim_divisions, function ($d) use ($vatsim) {
-                        return $d['id'] === $vatsim['division_id'];
-                    });
+            
+                    $division = array_filter($vatsim_divisions, fn($d) => $d['id'] === $vatsim['division_id']);
                     $division = reset($division);
-
-                    $subdivision = array_filter($vatsim_subdivisions, function ($sd) use ($vatsim) {
-                        return $sd['code'] === $vatsim['subdivision_id'];
-                    });
+            
+                    $subdivision = array_filter($vatsim_subdivisions, fn($sd) => $sd['code'] === $vatsim['subdivision_id']);
                     $subdivision = reset($subdivision) ?: null;
                     $subdivisionFullname = $subdivision['fullname'] ?? null;
-        
-                    $rating = array_filter($vatsim_ratings, function ($s) use ($vatsim) {
-                        return $s['id'] === $vatsim['rating'];
-                    });
+            
+                    $rating = array_filter($vatsim_ratings, fn($s) => $s['id'] === $vatsim['rating']);
                     $rating = reset($rating);
                 }
-
-                // Subdivision Calculations - Because for Some Reason its a bit weird
-
-                    // Lets Update the User Data based off the API Return
-                    $u->rating_id = $vatsim['rating'];
-                    $u->rating_short = $rating['short'];
-                    $u->rating_long = $rating['long'];
-                    $u->rating_GRP = $rating['long'];
-                    $u->reg_date = Carbon::parse($vatsim['reg_date'])->format('Y-m-d H:i:s');
-                    $u->region_code = $vatsim['region_id'];
-                    $u->region_name = $region['name'];
-                    $u->division_code = $vatsim['division_id'];
-                    $u->division_name = $division['name'];
-                    $u->subdivision_code = $vatsim['subdivision_id'];
-                    $u->subdivision_name = $subdivisionFullname;
-                    $u->updated_at = Carbon::now()->format('Y-m-d H:i:s');
-                    $u->save();
-
-                    // Add One to Successful User Update
-                    $user_updated++;
-
-                    sleep(7);
-                
-            } catch (\GuzzleHttp\Exception\ClientException $e) {
-
+            
+                // Lets Update the User Data based off the API Return
+                $u->rating_id = $vatsim['rating'];
+                $u->rating_short = $rating['short'];
+                $u->rating_long = $rating['long'];
+                $u->rating_GRP = $rating['long'];
+                $u->reg_date = Carbon::parse($vatsim['reg_date'])->format('Y-m-d H:i:s');
+                $u->region_code = $vatsim['region_id'];
+                $u->region_name = $region['name'];
+                $u->division_code = $vatsim['division_id'];
+                $u->division_name = $division['name'];
+                $u->subdivision_code = $vatsim['subdivision_id'];
+                $u->subdivision_name = $subdivisionFullname;
+                $u->updated_at = Carbon::now()->format('Y-m-d H:i:s');
+                $u->save();
+            
+                // Add One to Successful User Update
+                $user_updated++;
+            
+                sleep(7);
+            
+            } catch (\GuzzleHttp\Exception\ClientException | \GuzzleHttp\Exception\ServerException $e) {
                 $vatsim_api_failed++;
                 sleep(7);
                 continue;
-                
+            } catch (\Exception $e) {
+                // Catch any other unexpected errors
+                $vatsim_api_failed++;
+                sleep(7);
+                continue;
             }
+            
         }
 
         // Record Information for Discord
