@@ -23,7 +23,7 @@ class MassUserUpdates implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
-    public $timeout = 48000;
+    public $timeout = 60000;
 
     /**
      * Execute the job.
@@ -34,7 +34,7 @@ class MassUserUpdates implements ShouldQueue
     public function handle()
     {
         // Timeout length (seconds)
-        ini_set('max_execution_time', 48000);
+        ini_set('max_execution_time', 60000);
 
         // Guzzle Client Initialization
         $guzzle = new Client(['timeout' => 1000, 'connect_timeout' => 1000]);
@@ -133,6 +133,9 @@ class MassUserUpdates implements ShouldQueue
         // Get full User list
         $user = User::all();
 
+        $total_users = count($user);
+        $users_counted = 0;
+
         foreach($user as $u){
 
             // Ignore the following IDs (not actually members)
@@ -175,6 +178,11 @@ class MassUserUpdates implements ShouldQueue
                 $u->subdivision_name = $subdivisionFullname;
                 $u->updated_at = Carbon::now()->format('Y-m-d H:i:s');
                 $u->save();
+
+                // Discord Check for First Update (To be deleted once satisfied)
+                $users_counted++;
+                $discord = new DiscordClient();
+                $discord->sendMessage('1338045308835463293', 'UPDATE SUCCESS FOR: '.$u->FullName('FLC').' ('.$users_counted.'/'. $total_users.' users).');
             
                 // Add One to Successful User Update
                 $user_updated++;
@@ -182,10 +190,20 @@ class MassUserUpdates implements ShouldQueue
                 sleep(7);
             
             } catch (\GuzzleHttp\Exception\ClientException | \GuzzleHttp\Exception\ServerException $e) {
+                // Discord Check for First Update (To be deleted once satisfied)
+                $users_counted++;
+                $discord = new DiscordClient();
+                $discord->sendMessage('1338045308835463293', 'UPDATE FAILED FOR: '.$u->FullName('FLC').' ('.$users_counted.'/'. $total_users.' users).');
+            
                 $vatsim_api_failed++;
                 sleep(7);
                 continue;
             } catch (\Exception $e) {
+                // Discord Check for First Update (To be deleted once satisfied)
+                $users_counted++;
+                $discord = new DiscordClient();
+                $discord->sendMessage('1338045308835463293', 'UPDATE FAILED FOR UNEXPECTED ERROR: '.$u->FullName('FLC').' ('.$users_counted.'/'. $total_users.' users).');
+            
                 // Catch any other unexpected errors
                 $vatsim_api_failed++;
                 sleep(7);
@@ -209,7 +227,7 @@ class MassUserUpdates implements ShouldQueue
         $update_content .= "\n- Script Time: " . $start_time->diffForHumans($end_time, ['parts' => 2, 'short' => true, 'syntax' => Carbon::DIFF_ABSOLUTE]) . ".";
 
         $discord = new DiscordClient();
-        $discord->sendMessageWithEmbed('1338045308835463293', 'QUARTERLY: Mass User Updates', $update_content);
+        $discord->sendMessageWithEmbed('1297573259663118368', 'MONTHLY: Mass User Updates', $update_content);
     }
 
 }
