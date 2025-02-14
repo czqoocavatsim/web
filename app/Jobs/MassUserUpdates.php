@@ -215,7 +215,7 @@ class MassUserUpdates implements ShouldQueue
         $update_content .= "\n- Script Time: " . $start_time->diffForHumans($end_time, ['parts' => 2, 'short' => true, 'syntax' => Carbon::DIFF_ABSOLUTE]) . ".";
 
         $discord = new DiscordClient();
-        $discord->sendMessageWithEmbed('1338045308835463293', 'QUARTERLY: Mass User Updates', $update_content);
+        $discord->sendMessageWithEmbed('1297573259663118368', 'MONTHLY: Mass User Updates', $update_content);
     }
 
 }
