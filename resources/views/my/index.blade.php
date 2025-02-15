@@ -557,7 +557,7 @@
                                                     <i style="margin-right: 10px;" class="fas fa-users fa-fw"></i>Users
                                                 </a>
                                                 {{-- Tickets Page --}}
-                                                <a href="{{ route('') }}"class="waves-effect list-group-item list-group-item-action">
+                                                <a href="{{ route('community.tickets.all') }}"class="waves-effect list-group-item list-group-item-action">
                                                     <i style="margin-right: 10px;" class="fas fa-envelope fa-fw"></i>Tickets
                                                 </a>
                                             @endcan

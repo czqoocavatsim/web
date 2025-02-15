@@ -18,6 +18,15 @@
                         </div>
                     </li>
                 </a>
+
+                <a class="myczqo-tab {{Request::is('admin/community/tickets/all') || Request::is('admin/community/tickets/*') ? 'active' : ''}} no-click" data-myczqo-tab="none" href="{{route('community.tickets.all')}}">
+                    <li class="w-100">
+                        <div class="d-flex h-100 flex-row justify-content-left align-items-center">
+                            <i style="font-size: 1.6em; margin-right: 10px;" class="fas fa-envelope fa-fw"></i>
+                            <span style="font-size: 1.1em;">Tickets</span>
+                        </div>
+                    </li>
+                </a>
                 @endcan
             </ul>
         </div>

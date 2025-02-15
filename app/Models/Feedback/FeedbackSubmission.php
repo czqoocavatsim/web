@@ -87,6 +87,11 @@ class FeedbackSubmission extends Model
         return $this->belongsTo(User::class);
     }
 
+    public function Assigneduser()
+    {
+        return $this->belongsTo(User::class, 'assigned_user');
+    }
+
     /**
      * Returns the model of the type of feedback it is.
      *

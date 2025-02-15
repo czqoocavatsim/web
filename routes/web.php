@@ -389,7 +389,8 @@ Route::group(['middleware' => 'auth'], function () {
             });
 
             Route::group(['prefix' => 'community/tickets'], function () {
-                Route::get('/all', [TicketController::class, 'index'])->name('community.tickets.all');
+                Route::get('/all', [TicketController::class, 'adminViewAllTickets'])->name('community.tickets.all');
+                Route::get('/view/{id}', [TicketController::class, 'adminViewTicket'])->name('community.tickets.view');
             });
         });
     });
