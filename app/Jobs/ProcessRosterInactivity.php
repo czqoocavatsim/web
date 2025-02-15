@@ -2,7 +2,7 @@
 
 namespace App\Jobs;
 
-use App\Models\Roster\RosterMember;
+use App\Models\Users\User;
 use App\Models\Network\SessionLog;
 use Carbon\Carbon;
 use Illuminate\Bus\Queueable;
@@ -11,6 +11,7 @@ use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Support\Facades\Notification;
+use App\Notifications\Roster\QuarterBeforeRemoval;
 use App\Notifications\Roster\TwoMonthFromRemoval;
 use App\Notifications\Roster\OneMonthFromRemoval;
 use App\Notifications\Roster\SevenDaysFromRemoval;
@@ -47,6 +48,7 @@ class ProcessRosterInactivity implements ShouldQueue
         ini_set('max_execution_time', 600);
 
         // Counter Variables (For Message at End)
+        $q4_notice = 0;
         $first_notice = 0; //1NOV message sent out
         $second_notice = 0; //1DEC message sent out
         $third_notice = 0; //24DEC message
@@ -79,23 +81,35 @@ class ProcessRosterInactivity implements ShouldQueue
 
             // Go through each session to get some information
             foreach($sessions as $s){
-                
-                // //Counts sessions only greater than 30mins in length
-                // if($s->duration > 0.49){
-                //     $currency += $s->duration;
-                // }
+                // Ignore if student/instructing
+                if($s->is_student || $s->is_instructing){
+                    continue;
+                }
 
-                // Total Currency
-                $currency += $s->duration;
+                //Counts sessions only greater than 30mins in length
+                if($s->duration > 0.49){
+                    $currency += $s->duration;
+                }
             }
 
             // If Currency is greater than 1, set status active
-            if($currency > 0.99){
+            if($currency > 6){
                 $active_status = 1;
             }
 
+            // 1OCT - Q4 Begins and Controller has not achieved 6hrs
+            if($roster->certification == "certified" && $roster->active && Carbon::now()->format('d/m') == "01/10" && $roster->currency < 6) {
+                $active_status = 0;
+
+                $q4_names[] = $name ." (". $roster->currency ." hrs)";
+
+                $q4_notice++;
+                
+                Notification::send($roster->user, new QuarterBeforeRemoval($roster->user, $currency));
+            }
+
             // 1NOV - 2 Month Activity Check
-            if($roster->certification == "certified" && $roster->active && Carbon::now()->format('d/m') == "01/11" && $roster->currency < 1) {
+            if($roster->certification == "certified" && $roster->active && Carbon::now()->format('d/m') == "01/11" && $roster->currency < 6) {
                 $active_status = 0;
 
                 $first_names[] = $name ." (". $roster->currency ." hrs)";
@@ -106,7 +120,7 @@ class ProcessRosterInactivity implements ShouldQueue
             }
 
             // 1DEC - 1 Month till Removal
-            if($roster->certification == "certified" && Carbon::now()->format('d/m') == "01/12" && $roster->currency < 1){
+            if($roster->certification == "certified" && Carbon::now()->format('d/m') == "01/12" && $roster->currency < 6){
                 $active_status = 0;
 
                 $second_names[] = $name ." (". $roster->currency ." hrs)";
@@ -117,7 +131,7 @@ class ProcessRosterInactivity implements ShouldQueue
             }
 
             // 24DEC - 7 Days Till Removal
-            if($roster->certification == "certified" && Carbon::now()->format('d/m') == "24/12" && $roster->currency < 1){
+            if($roster->certification == "certified" && Carbon::now()->format('d/m') == "24/12" && $roster->currency < 6){
                 $active_status = 0;
 
                 $third_names[] = $name ." (". $roster->currency ." hrs)";
@@ -131,7 +145,7 @@ class ProcessRosterInactivity implements ShouldQueue
             if($roster->certification == "certified" && Carbon::now()->format('d/m') == "31/12"){
 
                 // User to be terminated
-                if($roster->currency < 1){
+                if($roster->currency < 6){
                     $termination_names[] = $name ."(". $roster->currency ." hrs)";
 
                     $termination_notice++;
@@ -150,6 +164,14 @@ class ProcessRosterInactivity implements ShouldQueue
     #Generate Discord Message
     $message_contents = "The following changes have been made to the Controller Roster.";
 
+    if($q4_notice != 0){
+        $message_contents .= "\n\n**90 Days To Complete Activity**";
+
+        foreach($q4_names as $n){
+            $message_contents .= "\n- ".$n;
+        }
+    }
+    
     if($first_notice != 0){
         $message_contents .= "\n\n**60 Days To Complete Activity (Set as Inactive)**";
 

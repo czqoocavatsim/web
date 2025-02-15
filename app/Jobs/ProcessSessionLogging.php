@@ -2,9 +2,10 @@
 
 namespace App\Jobs;
 
+use App\Models\Users\User;
 use App\Models\Network\MonitoredPosition;
 use App\Models\Network\SessionLog;
-use App\Models\Network\ShanwickController;
+use App\Models\Network\ExternalController;
 use App\Models\Roster\RosterMember;
 use Carbon\Carbon;
 use Illuminate\Bus\Queueable;
@@ -45,8 +46,16 @@ class ProcessSessionLogging implements ShouldQueue
 
         $vatsimData = new VATSIMClient();
 
+        $instructor_ids = [];
+        $users = User::all();
+        foreach($users as $u){
+            if($u->InstructorProfile){
+                $instructor_ids[] = $u->id;
+            }
+        }
+
         $czqoRoster = RosterMember::all()->pluck('user_id')->toArray();
-        $eggxRoster = ShanwickController::all()->pluck('controller_cid')->toArray();
+        $eggxRoster = ExternalController::all()->pluck('id')->toArray();
         $allRoster = array_unique(array_merge($czqoRoster, $eggxRoster));
 
         $positionsFound = [];
@@ -68,8 +77,21 @@ class ProcessSessionLogging implements ShouldQueue
                         'roster_member_id' => RosterMember::where('cid', $controller->cid)->value('id') ?? null,
                     ]);
 
+                    // Instructing Training Session
+                    if(str_contains($controller->callsign, '_I_') && $session->user->InstructorProfile){
+                        $session->is_instructing = 1;
+                        $session->save();
+                    }
+
+                    // Student Training Session Session
+                    if($session->user->studentProfile){
+                        $session->is_student = 1;
+                        $session->save();
+                    }
+
+                    // Controller Name for the Discord
                     if($session->user){
-                        $name = $session->user->fullName('FLC');
+                        $name = '<@'.$session->user->discord_user_id.'>';
                     } else {
                         $name = $controller->cid;
                     }        
