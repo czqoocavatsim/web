@@ -353,58 +353,95 @@
                                 {{ $rosterProfile->activeLabelHtml() }}
                             </h3>
                         </div>
-                        <h3 class="font-weight-bold blue-text mt-4 pb-2">Activity</h3>
+                        <h3 class="font-weight-bold blue-text mt-4 pb-2">Your Hours</h3>
                         @php
                             $currency = auth()->user()->rosterProfile->currency;
-                            $class = $currency < 0.1 ? 'red' : ($currency < 1.0 ? 'blue' : 'green');
+                            $class = $currency < 0.5 ? 'red' : ($currency < 6.0 ? 'blue' : 'green');
                         @endphp
 
                         <h3>
                             <span style='font-weight: 400'
                                 class='badge rounded {{ $class }} text-white p-2 shadow-none'>
-                                {{ $currency }} hours recorded
+
+                                @if($currency == 0)
+                                    <td class="bg-success text-white">
+                                        0m
+                                    </td>
+                                @elseif($currency < 1)
+                                    <td class="bg-success text-white">
+                                        {{ str_pad(round(($currency - floor($currency)) * 60), 2, '0', STR_PAD_LEFT) }}m
+                                    </td>
+                                @else
+                                    <td class="bg-success text-white">
+                                        {{ floor($currency) }}h {{ str_pad(round(($currency - floor($currency)) * 60), 2, '0', STR_PAD_LEFT) }}m
+                                    </td>
+                                @endif
                             </span>
                         </h3>                        
 
-                        <p class="mt-2">To remain active, you require 60 minutes of connection during this calendar year.</p>
+                        <p class="mt-2">In order to remain active, you require a minimum of six hours recorded during the calendar year.</p>
 
                         <h3 class="font-weight-bold blue-text mt-4 pb-2">Your Connections</h3>
-                        <p class="mt-2">List of all your Gander Oceanic connections to VATSIM during {{\Carbon\Carbon::now()->format('Y')}}.</p>
-                        {{-- <p class="mt-0">Connections less than 30 minutes are shown in red, and do not count towards Controller Currency.</p> --}}
-                        <p class="mt-0">Connections less than 30 minutes are shown in red.</p>
-                        <table class="table dt table-hover table-bordered">
-                            <thead>
-                                <th>Position</th>
-                                <th>Logon</th>
-                                <th>Logoff</th>
-                                <th>Time</th>
-                            </thead>
-                            <tbody>
-                                @foreach ($sessions as $s)
-                                    <tr>
-                                        <th>{{$s->callsign}}</th>
-                                        <th>{{\Carbon\Carbon::parse($s->session_start)->format('l, d F \a\t Hi\Z')}}</th>
-                                        <th>
-                                            @if($s->session_end === null)
-                                            Currently Connected
-                                            @else
-                                            {{\Carbon\Carbon::parse($s->session_end)->format('l, d F \a\t Hi\Z')}}
-                                            @endif
-                                        </th>
-                                        @if($s->duration < 0.5)
-                                            <td class="bg-danger text-white">
-                                                {{$s->duration}}
-                                            </td>
-                                        @else
-                                        <td class="bg-success text-white">
-                                            {{$s->duration}}
-                                        </td>
-                                        @endif
-                                    </tr>
-                                @endforeach
-                            </tbody>
-                        </table>
 
+                        @if(!$sessions->isEmpty())
+                            <p class="mt-2">List of all your Gander Oceanic connections to VATSIM during {{\Carbon\Carbon::now()->format('Y')}}.</p>
+                            <table class="table table-bordered" data-toggle="table" data-pagination="true" data-page-size="2">
+                                <thead>
+                                    <th>Position</th>
+                                    <th>Logon</th>
+                                    <th>Logoff</th>
+                                    <th>Time</th>
+                                </thead>
+                                <tbody>
+                                    @foreach ($sessions as $s)
+
+                                        {{-- Change background color depending on the status --}}
+                                        @if($s->is_student)
+                                            <tr style="background-color: rgba(0, 242, 255, 0.3);">
+                                        @elseif($s->is_instructing)
+                                            <tr style="background-color: rgba(255, 200, 0, 0.3);">
+                                        @else
+                                            <tr>
+                                        @endif
+
+                                            <th>{{$s->callsign}}</th>
+                                            <th>{{\Carbon\Carbon::parse($s->session_start)->format('l, d F \a\t Hi\Z')}}</th>
+                                            <th>
+                                                @if($s->session_end === null)
+                                                Currently Connected
+                                                @else
+                                                {{\Carbon\Carbon::parse($s->session_end)->format('l, d F \a\t Hi\Z')}}
+                                                @endif
+                                            </th>
+                                            @if($s->duration < 0.5)
+                                                <td>
+                                                    {{ str_pad(round(($s->duration - floor($s->duration)) * 60), 2, '0', STR_PAD_LEFT) }}m <i style="color: red;" class="fas fa-times"></i>
+                                                </td>
+                                            @else
+                                                @if($s->duration < 1)
+                                                    <td>
+                                                        {{ str_pad(round(($s->duration - floor($s->duration)) * 60), 2, '0', STR_PAD_LEFT) }}m
+                                                    </td>
+                                                @else
+                                                    <td>
+                                                        {{ floor($s->duration) }}h {{ str_pad(round(($s->duration - floor($s->duration)) * 60), 2, '0', STR_PAD_LEFT) }}m
+                                                    </td>
+                                                @endif
+                                            @endif
+                                        </tr>
+                                    @endforeach
+                                </tbody>
+                            </table>
+
+                            <h5 class="font-weight-bold blue-text mt-4 pb-2">Notes for Table</h5>
+                            <li>Connections of less than 30 minutes will show with a <i style="color: red;" class="fas fa-times"></i> within the time collum and <b>will not</b> count towards your Activity.</li>
+                            <li>Connections while connected as a Gander Oceanic Student will show in Cyan, and <b>will not</b> count towards your Activity.</li>
+                            @if(Auth::user()->InstructorProfile ==! null)
+                                <li>Connections while connected as a Gander Oceanic Instructor will show in Yellow, and <b>will not</b> count towards your Activity.</li>
+                            @endif
+                        @else
+                            <p class="mt-0">You have not recorded any hours so far this year. Connect to the network in order to record a session!</p>
+                        @endif
                     @else
                     {{-- User is not in the RosterMember DB --}}
                         
