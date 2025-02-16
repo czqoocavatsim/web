@@ -17,19 +17,39 @@
                 <p class="mt-1" style="font-size: 1.1em;"><b>Ticket Status:</b>
                     @if($ticket->status == 0)
                         <span class="badge bg-primary">Pending</span>
-                        <a href="">Pick Up Ticket</a>
                     @elseif($ticket->status == 1)
                         <span class="badge bg-warning">In Progress</span>
                     @else
                         <span class="badge bg-success">Completed</span>
                     @endif
                 </p>
-                <p style="font-size: 1.1em;"><b>Assigned Agent:</b> {{$ticket->assignedUser->fullName('FLC')}}</p>
+                <p style="font-size: 1.1em;"><b>Assigned Agent:</b> @if($ticket->assigned_user !== null){{$ticket->assignedUser->fullName('FLC')}}@else N/A @endif</p>
+                <p class="mt-1" style="font-size: 1.1em;"><b>Ticket Actions:</b>
+                    @if($ticket->status == 0)
+                        <a href="{{route('community.tickets.pickup', [$ticket->id])}}">Pick Up Ticket</a>
+                    @elseif($ticket->status == 1)
+                        <a href="{{route('community.tickets.drop', [$ticket->id])}}">Drop Ticket</a>
+                    @else
+                        N/A
+                    @endif
+                </p>
             </div>
         </div>
-        
-        <div class="comment-box mb-2" style="background-color:rgba(0, 38, 255, 0.227); min-height: 15vh;">
-            <div class="comment-content">{{$ticket->submission_content}}</div>
+       
+{{-- Ticket Main Comment Div --}}
+<div class="comment-box mb-2" style="background-color:rgba(0, 38, 255, 0.227); min-height: 15vh;">
+<div class="comment-content"><b><u>Details:</u></b>
+{{$ticket->submission_content}}
+@if(!$ticket_fields->isEmpty())
+
+<b><u>Ticket Information Fields:</u></b>
+@foreach($ticket_fields as $tf)
+<b>Type:</b> {{$tf->name}}
+<b>Content:</b> {{$tf->content}}
+@endforeach
+@endif
+</div>
+
         </div>
 
         <h3 class="fw-700 blue-text mb-1 mt-4">Ticket Communications</h3>

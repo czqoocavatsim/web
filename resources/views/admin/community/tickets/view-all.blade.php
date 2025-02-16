@@ -22,7 +22,7 @@
                             <td>{{$ticket->user->FullName('FLC')}}</td>
                             <td>
                                 @if($ticket->status == 0)
-                                    UnAssigned
+                                    Pending
                                 @elseif($ticket->status == 1)
                                     In Progress by {{$ticket->Assigneduser->FullName('FLC')}}
                                 @endif
