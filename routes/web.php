@@ -388,11 +388,12 @@ Route::group(['middleware' => 'auth'], function () {
                 Route::delete('/users/{id}/remove/permission', [UsersController::class, 'removeUserPermission'])->name('community.users.remove.permission')->middleware('can:edit user data');
             });
 
-            Route::group(['prefix' => 'community/tickets'], function () {
+            Route::group(['middleware' => ['role:Administrator|Senior Staff'], 'prefix' => 'community/tickets'], function () {
                 Route::get('/all', [TicketController::class, 'adminViewAllTickets'])->name('community.tickets.all');
-                Route::get('/view/{id}', [TicketController::class, 'adminViewTicket'])->name('community.tickets.view');
-                Route::get('/pickup/{id}', [TicketController::class, 'adminPickupTicket'])->name('community.tickets.pickup');
-                Route::get('/drop/{id}', [TicketController::class, 'adminDropTicket'])->name('community.tickets.drop');
+                Route::get('/view/{slug}', [TicketController::class, 'adminViewTicket'])->name('community.tickets.view');
+                Route::get('/pickup/{slug}', [TicketController::class, 'adminPickupTicket'])->name('community.tickets.pickup');
+                Route::get('/drop/{slug}', [TicketController::class, 'adminDropTicket'])->name('community.tickets.drop');
+                Route::post('/add-comment/{slug}', [TicketController::class, 'adminAddTicketComment'])->name('community.tickets.comment.add');
             });
         });
     });

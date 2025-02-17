@@ -28,7 +28,7 @@
                                 @endif
                             </td>
                             <td>
-                                <a class="blue-text" href="{{route('community.tickets.view', $ticket->id)}}"><i class="fa fa-eye"></i> View Ticket</a>
+                                <a class="blue-text" href="{{route('community.tickets.view', $ticket->slug)}}"><i class="fa fa-eye"></i> View Ticket</a>
                             </td>
                         </tr>
                     @endforeach
@@ -36,11 +36,11 @@
                 </table>
             @endif
 
-            <h3 class="fw-700 blue-text mb-0">Closed Tickets</h3>
+            <h3 class="fw-700 blue-text mb-0 mt-4">Closed Tickets</h3>
             @if($closed_tickets->isEmpty())
                 <p>There are currently no closed tickets
             @else
-                <table id="dataTable" class="table table-hover">
+                <table id="dataTable2" class="table table-hover">
                     <thead>
                     <tr>
                         <th scope="col">Category</th>
@@ -69,6 +69,10 @@
 <script>
     $(document).ready(function() {
         $('#dataTable').DataTable();
+    } );
+
+    $(document).ready(function() {
+        $('#dataTable2').DataTable();
     } );
 </script>
 @endsection

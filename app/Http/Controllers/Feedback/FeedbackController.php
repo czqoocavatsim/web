@@ -75,13 +75,20 @@ class FeedbackController extends Controller
             return redirect()->route('my.feedback.new.write', $type->slug)->withInput()->withErrors($validator, 'newFeedbackErrors');
         }
 
+        // Create a unique Slug that is not in the DB yet
+        do {
+            $slug = Str::random(10);
+            $check_slug = FeedbackSubmission::where('slug', $slug)->first();
+        } while ($check_slug);
+
         //Create feedback
         $feedback = new FeedbackSubmission([
             'user_id'               => Auth::id(),
             'type_id'               => $type->id,
             'submission_content'    => $request->get('submission_content'),
             'permission_to_publish' => $request->get('publishPermission') == 'on' ? true : false,
-            'slug'                  => Str::slug(Auth::user()->display_fname[0].Auth::user()->lname[0].'-'.Carbon::now()->toDayDateTimeString()),
+            'slug'                  => $slug,
+            'status'                => 0,
         ]);
         $feedback->save();
 
@@ -105,6 +112,7 @@ class FeedbackController extends Controller
         }
 
         // Discord Notification Section
+        $discord = new DiscordClient();
         $main_feedback = FeedbackSubmission::all()->where('slug', $feedback->slug)->first();
         $fields_feedback = FeedbackTypeFieldSubmission::all()->where('submission_id', $main_feedback->id);
         
@@ -126,7 +134,6 @@ class FeedbackController extends Controller
         $message_content .= " - [Feedback Link](".route('my.feedback.submission', $main_feedback->slug).")";
 
         // Send the Announcement
-        $discord = new DiscordClient();
         $discord->sendMessageWithEmbed(1324401086592978955, 'New Feedback Recieved! - '.$type->name, $message_content);
 
         //Return
