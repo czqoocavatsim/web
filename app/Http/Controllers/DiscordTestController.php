@@ -9,6 +9,7 @@ use App\Jobs\ProcessRosterInactivity;
 use App\Jobs\DiscordTrainingWeeklyUpdates;
 use App\Jobs\ProcessShanwickControllers;
 use App\Jobs\MassUserUpdates;
+use App\Jobs\DiscordAccountCheck;
 
 class DiscordTestController extends Controller
 {
@@ -30,7 +31,7 @@ class DiscordTestController extends Controller
     public function Job()
     {
         // Dispatch the job
-        $job = MassUserUpdates::dispatch();
+        $job = DiscordAccountCheck::dispatch();
 
         // Call the handle method directly to get the result synchronously
         $result = $job->handle();

@@ -149,7 +149,7 @@ class Event extends Model
                 return $output->name;
             }
         } catch (Exception $e) {
-            return $output->name;
+            return null;
         }
     }
 
@@ -177,7 +177,7 @@ class Event extends Model
                 return $output->name;
             }
         } catch (Exception $e) {
-            return $output->name;
+            return null;
         }
     }
 

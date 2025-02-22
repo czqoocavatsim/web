@@ -129,7 +129,40 @@ class MassUserUpdates implements ShouldQueue
                 "short" => "ADM",
                 "long" => "Administrator"
             ]
-        ];    
+        ];
+
+        $vatsim_pilot_ratings = [
+            [
+                "id" => 1,
+                "short" => "PPL",
+                "long" => "Private Pilot License"
+            ],
+            [
+                "id" => 3,
+                "short" => "IR",
+                "long" => "Instrument Rating"
+            ],
+            [
+                "id" => 7,
+                "short" => "CMEL",
+                "long" => "Commercial Multi-Engine License"
+            ],
+            [
+                "id" => 15,
+                "short" => "ATPL",
+                "long" => "Air Transport Pilot License"
+            ],
+            [
+                "id" => 31,
+                "short" => "FI",
+                "long" => "Flight Instructor"
+            ],
+            [
+                "id" => 63,
+                "short" => "FE",
+                "long" => "Flight Examiner"
+            ]
+        ];        
 
         // Get full User list
         $user = User::all();
@@ -162,6 +195,11 @@ class MassUserUpdates implements ShouldQueue
             
                     $rating = array_filter($vatsim_ratings, fn($s) => $s['id'] === $vatsim['rating']);
                     $rating = reset($rating);
+
+                    $pilot_rating = array_filter($vatsim_pilot_ratings, fn($pr) => $pr['id'] === $vatsim['pilotrating']);
+                    $pilot_rating = reset($pilot_rating) ?: null;
+                    $pilotratingshortname = $pilot_rating['short'] ?? null;
+                    $pilotratinglongname = $pilot_rating['long'] ?? null;
                 }
             
                 // Lets Update the User Data based off the API Return
@@ -172,6 +210,9 @@ class MassUserUpdates implements ShouldQueue
                 if ($u->rating_short != $rating['short']) $needsUpdate = true;
                 if ($u->rating_long != $rating['long']) $needsUpdate = true;
                 if ($u->rating_GRP != $rating['long']) $needsUpdate = true;
+                if ($u->pilotrating_id != $vatsim['pilotrating']) $needsUpdate = true;
+                if ($u->pilotrating_short != $pilotratingshortname) $needsUpdate = true;
+                if ($u->pilotrating_long != $pilotratinglongname) $needsUpdate = true;
                 if ($u->reg_date != Carbon::parse($vatsim['reg_date'])->format('Y-m-d H:i:s')) $needsUpdate = true;
                 if ($u->region_code != $vatsim['region_id']) $needsUpdate = true;
                 if ($u->region_name != $region['name']) $needsUpdate = true;
@@ -185,6 +226,9 @@ class MassUserUpdates implements ShouldQueue
                     $u->rating_short = $rating['short'];
                     $u->rating_long = $rating['long'];
                     $u->rating_GRP = $rating['long'];
+                    $u->pilotrating_id = $vatsim['pilotrating'];
+                    $u->pilotrating_short = $pilotratingshortname;
+                    $u->pilotrating_long = $pilotratinglongname;
                     $u->reg_date = Carbon::parse($vatsim['reg_date'])->format('Y-m-d H:i:s');
                     $u->region_code = $vatsim['region_id'];
                     $u->region_name = $region['name'];
@@ -198,13 +242,8 @@ class MassUserUpdates implements ShouldQueue
                     $user_updated++;
                 } else {
                     $user_not_updated++;
-                }
-
-                // Discord Check for First Update (To be deleted once satisfied)
-                $users_counted++;
-                $discord = new DiscordClient();
-                $discord->sendMessage('1338045308835463293', 'UPDATE SUCCESS FOR: '.$u->FullName('FLC').' ('.$users_counted.'/'. $total_users.' users).');               
-            
+                }             
+              
                 sleep(7);
             
             } catch (\GuzzleHttp\Exception\ClientException | \GuzzleHttp\Exception\ServerException $e) {
