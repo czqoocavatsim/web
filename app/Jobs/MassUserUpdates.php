@@ -19,11 +19,11 @@ use App\Models\Training\Instructing\Students\StudentStatusLabel;
 use App\Models\Training\Instructing\Links\StudentStatusLabelLink;
 use Carbon\Carbon;
 
-class DiscordAccountCheck implements ShouldQueue
+class MassUserUpdates implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
-    public $timeout = 7200;
+    public $timeout = 48000;
 
     /**
      * Execute the job.
@@ -34,378 +34,255 @@ class DiscordAccountCheck implements ShouldQueue
     public function handle()
     {
         // Timeout length (seconds)
-        ini_set('max_execution_time', 7200);
+        ini_set('max_execution_time', 48000);
 
-        // Script Start Time
+        // Guzzle Client Initialization
+        $guzzle = new Client(['timeout' => 1000, 'connect_timeout' => 1000]);
+
+        // Discord Bot Variable Initialisation
         $start_time = Carbon::now();
-
-        // Initialise some variables
-        $checked_users = 0;
-        $accounts_not_linked = 0;
-        $in_discord = 0;
-        $not_in_discord = 0;
         $user_updated = 0;
-        $discord_uids = [];
-        $discord_member_contents = [];
-        $in_discord_name = [];
+        $user_not_updated = 0;
+        $vatsim_api_failed = 0;
 
-        // Get List of Users in Discord
-        $discord = new DiscordClient();
-        $response = $discord->getClient()->get('guilds/'.env('DISCORD_GUILD_ID').'/members?limit=1000');
-        $discord_members = json_decode($response->getBody(), true);
+        // VATSIM Region List
+        $vatsim_region_pull = $guzzle->request('GET', 'https://api.vatsim.net/api/regions');
+        $vatsim_regions = json_decode($vatsim_region_pull->getBody(), true);
 
-        // Loop through each Discord User and get some key information
-        foreach($discord_members as $members){
-            $discord_uids[] = $members['user']['id'];
-            $discord_member_contents[] = $members;
-        }
+        // VATSIM Division List
+        $vatsim_division_pull = $guzzle->request('GET', 'https://api.vatsim.net/api/divisions');
+        $vatsim_divisions = json_decode($vatsim_division_pull->getBody(), true);
 
-        // Get a complete list of Gander Oceanic Users
-        $users = User::whereNotNull('discord_user_id')->get();
+        // VATSIM Division List
+        $vatsim_subdivisions_pull = $guzzle->request('GET', 'https://api.vatsim.net/api/subdivisions');
+        $vatsim_subdivisions = json_decode($vatsim_subdivisions_pull->getBody(), true);
 
-        // Loop through each DB User
-        foreach($users as $user){
+        // VATSIM Rating List
+        $vatsim_ratings = [
+            [
+                "id" => -1,
+                "short" => "INAC",
+                "long" => "Inactive"
+            ],
+            [
+                "id" => 0,
+                "short" => "SUS",
+                "long" => "Suspended"
+            ],
+            [
+                "id" => 1,
+                "short" => "OBS",
+                "long" => "Observer"
+            ],
+            [
+                "id" => 2,
+                "short" => "S1",
+                "long" => "Tower Trainee"
+            ],
+            [
+                "id" => 3,
+                "short" => "S2",
+                "long" => "Tower Controller"
+            ],
+            [
+                "id" => 4,
+                "short" => "S3",
+                "long" => "Senior Student"
+            ],
+            [
+                "id" => 5,
+                "short" => "C1",
+                "long" => "Enroute Controller"
+            ],
+            [
+                "id" => 6,
+                "short" => "C2",
+                "long" => "Controller 2 (not in use)"
+            ],
+            [
+                "id" => 7,
+                "short" => "C3",
+                "long" => "Senior Controller"
+            ],
+            [
+                "id" => 8,
+                "short" => "I1",
+                "long" => "Instructor"
+            ],
+            [
+                "id" => 9,
+                "short" => "I2",
+                "long" => "Instructor 2 (not in use)"
+            ],
+            [
+                "id" => 10,
+                "short" => "I3",
+                "long" => "Senior Instructor"
+            ],
+            [
+                "id" => 11,
+                "short" => "SUP",
+                "long" => "Supervisor"
+            ],
+            [
+                "id" => 12,
+                "short" => "ADM",
+                "long" => "Administrator"
+            ]
+        ];
 
-            // Skip is discord_user_id is null
-            if($user->discord_user_id == null){
+        $vatsim_pilot_ratings = [
+            [
+                "id" => 1,
+                "short" => "PPL",
+                "long" => "Private Pilot License"
+            ],
+            [
+                "id" => 3,
+                "short" => "IR",
+                "long" => "Instrument Rating"
+            ],
+            [
+                "id" => 7,
+                "short" => "CMEL",
+                "long" => "Commercial Multi-Engine License"
+            ],
+            [
+                "id" => 15,
+                "short" => "ATPL",
+                "long" => "Air Transport Pilot License"
+            ],
+            [
+                "id" => 31,
+                "short" => "FI",
+                "long" => "Flight Instructor"
+            ],
+            [
+                "id" => 63,
+                "short" => "FE",
+                "long" => "Flight Examiner"
+            ]
+        ];        
+
+        // Get full User list
+        $user = User::all();
+        $total_users = count($user);
+        $users_counted = 0;
+
+        foreach($user as $u){
+
+            // Ignore the following IDs (not actually members)
+            if($u->id == 1 || $u->id == 2){
                 continue;
-            } else {
-                $checked_users++;
             }
 
-            // Check if user is currently in Discord
-                if (in_array($user->discord_user_id, $discord_uids)) {
+            // Try to Update the User, or Record as a Failure
+            try {
+                $vatsim_data = $guzzle->request('GET', 'https://api.vatsim.net/v2/members/' . $u->id);
+                $vatsim = json_decode($vatsim_data->getBody(), true);
+            
+                // Match Info to the VATSIM Array Definitions
+                {
+                    $region = array_filter($vatsim_regions, fn($r) => $r['id'] === $vatsim['region_id']);
+                    $region = reset($region);
+            
+                    $division = array_filter($vatsim_divisions, fn($d) => $d['id'] === $vatsim['division_id']);
+                    $division = reset($division);
+            
+                    $subdivision = array_filter($vatsim_subdivisions, fn($sd) => $sd['code'] === $vatsim['subdivision_id']);
+                    $subdivision = reset($subdivision) ?: null;
+                    $subdivisionFullname = $subdivision['fullname'] ?? null;
+            
+                    $rating = array_filter($vatsim_ratings, fn($s) => $s['id'] === $vatsim['rating']);
+                    $rating = reset($rating);
 
-                    // dd($discord_uids);
-
-                    ## User is in the Discord
-                    $discord_uid = $user->discord_user_id;
-                    $in_discord++;
-
-                    foreach($discord_member_contents as $discord_members2){
-
-                        if ($discord_members2['user']['id'] == $discord_uid) {
-                            $discord_member = $discord_members2;
-
-                            // dd($discord_uid);
-
-                            break;
-                        }
-                    }
-
-                    // Discord Account is Linked. Remove from Check
-                    $key = array_search($user->discord_user_id, $discord_uids);
-                    if ($key !== false) {
-                        unset($discord_uids[$key]);
-                    }
-    
-                    // Update DB information
-                    $user->member_of_czqo = true;
-                    $user->discord_username = $discord_member['user']['username'];
-                    $user->discord_avatar = $user->avatar ? 'https://cdn.discordapp.com/avatars/'.$user->discord_user_id.'/'.$discord_member['user']['avatar'].'.png' : null;
-                    $user->save();
-
-                    // Skip Gary (Discord Owner)
-                    if($user->discord_user_id == 350995372627197954){
-                        continue;
-                    }
-    
-                    // Roles Calculation
-                    {
-                        // Roles assigned to general members
-                        $mainRoles = [];
-                        $staffRoles = [];
-                        $discordRoleIds = [
-                            'member'      => 482835389640343562,
-                            'training'   => 482824058141016075,
-                            'certified'  => 482819739996127259,
-                            'gander_certified'  => 1297507926222573568,
-                            'shanwick_certified' => 1297508027280396349,
-                            'zny_certified' => 1302030442916089866,
-                            's1' => 1342639858027462769,
-                            's2' => 1342640729012568145,
-                            's3' => 1342640763183435807,
-                            'c1' => 1342640783211233280,
-                            'c3' => 1342640799837585468,
-                            'ins' => 1342640831043211344,
-                            'sup' => 720502070683369563,
-                            'adm' => 1342640950412967937,
-                            'ppl' => 1342642295157297203,
-                            'ir' => 1342642432147460281,
-                            'cmel' => 1342642434299002961,
-                            'atpl' => 1342642436408606851,
-                            'fi' => 1342642438162088091,
-                            'fe' => 1342642440846311556,
-                        ];
-
-                        //Add the Member role to each user
-                        array_push($mainRoles, $discordRoleIds['member']);
-
-                        //Gander Roster Member
-                        if (RosterMember::where('user_id', $user->id)->exists()) {
-                            //What status do they have?
-                            $rosterProfile = RosterMember::where('user_id', $user->id)->first();
-                            switch ($rosterProfile->certification) {
-                                case 'certified':
-                                    array_push($mainRoles, $discordRoleIds['certified']);
-                                    array_push($mainRoles, $discordRoleIds['gander_certified']);
-                                    break;
-                                case 'training':
-                                    array_push($mainRoles, $discordRoleIds['training']);
-                                    break;
-                            }
-                        }
-
-                        // Shankwick Roster Members
-                        $externalController = ExternalController::find($user->id);
-                        if ($externalController !== null) {
-                            
-                            if($externalController->visiting_origin == "eggx"){
-                                array_push($mainRoles, $discordRoleIds['certified']);
-                                array_push($mainRoles, $discordRoleIds['shanwick_certified']);
-                            } elseif($externalController->visiting_origin == "zny") {
-                                array_push($mainRoles, $discordRoleIds['certified']);
-                                array_push($mainRoles, $discordRoleIds['zny_certified']);
-                            }
-                        }
-
-                        //VATSIM Ratings Calculation
-                        {
-                            // Calculate Controller Rating
-                            if ($user->rating_short == 'S1') {
-                                array_push($mainRoles, $discordRoleIds['s1']);
-                            } elseif($user->rating_short == 'S2') {
-                                array_push($mainRoles, $discordRoleIds['s2']);
-                            } elseif($user->rating_short == 'S3') {
-                                array_push($mainRoles, $discordRoleIds['s3']);
-                            } elseif($user->rating_short == 'C1') {
-                                array_push($mainRoles, $discordRoleIds['c1']);
-                            } elseif($user->rating_short == 'C3') {
-                                array_push($mainRoles, $discordRoleIds['c3']);
-                            } elseif($user->rating_short == 'I1' || $user->rating_short == 'I3') {
-                                array_push($mainRoles, $discordRoleIds['ins']);
-                            } elseif($user->rating_short == 'SUP') {
-                                array_push($mainRoles, $discordRoleIds['sup']);
-                            } elseif($user->rating_short == 'ADM') {
-                                array_push($mainRoles, $discordRoleIds['adm']);
-                            }
-                        }
-
-                        // Check Assigned Discord Roles, and keep them assigned
-                        $roleIdsToCheck = [
-                            1214350179151650898, //Exam Request
-                            635449323089559572, //AFV Dev Role
-                            634656628335050762, //Shanwick Team
-                            497351197280174080, //VATCAN Divisional Staff
-                            497359834010615809, //VATSIM Senior Staff
-                            1300054143532138516, //VATSYS Beta Tester
-                            1278868454606377040]; //Currently Online
-
-                        foreach ($roleIdsToCheck as $roleId) {
-                            if (in_array($roleId, $discord_member['roles'])) {
-                                $mainRoles[] = $roleId;  // Add the role ID to mainRoles if present in user's roles
-                            }
-                        }
-
-                        $discord_roles = array_unique($mainRoles);
-
-                        // Name Format for ZQO Members and Other Members
-                        if($user->staffProfile && $user->staffProfile->group_id == 1){
-                            $name = $user->Fullname('FL')." ZQO".$user->staffProfile->id;
-                        } else {
-                            $name = $user->FullName('FLC');
-                        }
-
-                        // Full list of staff roles
-                        $staffRoleIDs = [
-                            'discord_admin' => 1328612019619758193,
-                            'fir_director' => 524435557472796686,
-                            'operations_director' => 783558030842527784,
-                            'training_events_director' => 783558130100731924,
-                            'events_marketing_director' =>783558227174227979 ,
-                            'fir_sector_manager' => 783558276334747678,
-                            'it_director' => 783558309717868544,
-                            'senior_staff' => 482816721280040964,
-
-                            'staff_instructor' => 482816758185590787,
-                            'staff_web' => 482817113023578125,
-                            'events_marketing_staff' => 666760228372480020,
-                            'operations_staff' => 770615953465409536,
-                            'staff_member' => 752767906768748586,
-                        ];
-
-                        // Role Groups
-                        if($user->hasRole('Administrator')) {
-                            array_push($staffRoles, $staffRoleIDs['discord_admin']);
-                        }
-                        
-                        if($user->hasRole('Instructor') || $user->hasRole('Assessor')) {
-                            array_push($staffRoles, $staffRoleIDs['staff_instructor']);
-                            array_push($staffRoles, $staffRoleIDs['staff_member']);
-                        }
-
-                        if($user->hasRole('Web Team')) {
-                            array_push($staffRoles, $staffRoleIDs['staff_web']);
-                            array_push($staffRoles, $staffRoleIDs['staff_member']);
-                        }
-
-                        if($user->hasRole('Events and Marketing Team')) {
-                            array_push($staffRoles, $staffRoleIDs['events_marketing_staff']);
-                            array_push($staffRoles, $staffRoleIDs['staff_member']);
-                        }
-
-                        if($user->hasRole('Operations Team')) {
-                            array_push($staffRoles, $staffRoleIDs['operations_staff']);
-                            array_push($staffRoles, $staffRoleIDs['staff_member']);
-                        }
-
-                        if($user->staffProfile && $user->staffProfile->group_id == 1){
-                            switch ($user->staffProfile->position) {
-                                case 'FIR Director':
-                                    array_push($staffRoles, $staffRoleIDs['fir_director']);
-                                    array_push($staffRoles, $staffRoleIDs['senior_staff']);
-                                    break;
-                                case 'Operations Director':
-                                    array_push($staffRoles, $staffRoleIDs['operations_director']);
-                                    array_push($staffRoles, $staffRoleIDs['senior_staff']);
-                                    break;
-                                case 'Training & Events Director':
-                                    array_push($staffRoles, $staffRoleIDs['training_events_director']);
-                                    array_push($staffRoles, $staffRoleIDs['senior_staff']);
-                                    break;
-                                case 'FIR Sector Manager':
-                                    array_push($staffRoles, $staffRoleIDs['fir_sector_manager']);
-                                    array_push($staffRoles, $staffRoleIDs['senior_staff']);
-                                    break;
-                                
-                                case 'IT Director':
-                                    array_push($staffRoles, $staffRoleIDs['it_director']);
-                                    array_push($staffRoles, $staffRoleIDs['senior_staff']);
-                                    break;
-                            }
-                        }
-                    }
-
-                    // Combine mainRoles and staffRoles into a single array
-                    $combinedRoles = array_merge($mainRoles, $staffRoles);
-                    $combinedRoles = array_unique($combinedRoles);
-
-                    // Any Differences?
-                    $rolesToAssign = array_diff($combinedRoles, $discord_member['roles']);
-                    $rolesToRemove = array_diff($discord_member['roles'], $combinedRoles);
-
-                    if (!empty($rolesToAssign) || !empty($rolesToRemove) || $name !== $discord_member['nick']) {
-                        
-                        // Get Name
-                        $in_discord_name[] = $name;
-
-                        // Sleep for 1 second (let API catch up)
-                        sleep(1);
-
-                        $message = "Assign Roles:";
-                        foreach($rolesToAssign as $role){
-                            $message .= "\n- $role";
-                        }
-                        $message .= "\n\nRemove Roles:";
-                        foreach($rolesToRemove as $role){
-                            $message .= "\n- $role";
-                        }
-                        $message .= "\n\n**User Roles Updated!**";
-
-                        $user_updated++;
-
-                        // Update user with main roles - Will temp remove staff roles
-                        $discord->getClient()->patch('guilds/'.env('DISCORD_GUILD_ID').'/members/'.$user->discord_user_id, [
-                            'json' => [
-                                'nick' => $name,
-                                'roles' => $discord_roles,
-                            ]
-                        ]);
-
-                        foreach ($staffRoles as $role){
-
-                            // Slow down multi role add. Allow API to catch up
-                            sleep(2.75);
-
-                            // add role
-                            $discord->getClient()->put('guilds/'.env('DISCORD_GUILD_ID').'/members/'.$discord_uid.'/roles/'.$role);
-                        }
-
-                        // $discord->sendMessageWithEmbed('1299248165551210506', 'USER: '.$name, $message);
-
-                    }
-                     
-
-    
-                } else {
-                    ## User is NOT in the discord
-                    $not_in_discord++;
-
-                    // Update DB Information
-                    $user->member_of_czqo = false;
-                    $user->save();
+                    $pilot_rating = array_filter($vatsim_pilot_ratings, fn($pr) => $pr['id'] === $vatsim['pilotrating']);
+                    $pilot_rating = reset($pilot_rating) ?: null;
+                    $pilotratingshortname = $pilot_rating['short'] ?? null;
+                    $pilotratinglongname = $pilot_rating['long'] ?? null;
                 }
+            
+                // Lets Update the User Data based off the API Return
+                $needsUpdate = false;
 
+                // Compare each attribute
+                if ($u->rating_id != $vatsim['rating']) $needsUpdate = true;
+                if ($u->rating_short != $rating['short']) $needsUpdate = true;
+                if ($u->rating_long != $rating['long']) $needsUpdate = true;
+                if ($u->rating_GRP != $rating['long']) $needsUpdate = true;
+                if ($u->pilotrating_id != $vatsim['pilotrating']) $needsUpdate = true;
+                if ($u->pilotrating_short != $pilotratingshortname) $needsUpdate = true;
+                if ($u->pilotrating_long != $pilotratinglongname) $needsUpdate = true;
+                if ($u->reg_date != Carbon::parse($vatsim['reg_date'])->format('Y-m-d H:i:s')) $needsUpdate = true;
+                if ($u->region_code != $vatsim['region_id']) $needsUpdate = true;
+                if ($u->region_name != $region['name']) $needsUpdate = true;
+                if ($u->division_code != $vatsim['division_id']) $needsUpdate = true;
+                if ($u->division_name != $division['name']) $needsUpdate = true;
+                if ($u->subdivision_code != $vatsim['subdivision_id']) $needsUpdate = true;
+                if ($u->subdivision_name != $subdivisionFullname) $needsUpdate = true;
+
+                if ($needsUpdate) {
+                    $u->rating_id = $vatsim['rating'];
+                    $u->rating_short = $rating['short'];
+                    $u->rating_long = $rating['long'];
+                    $u->rating_GRP = $rating['long'];
+                    $u->pilotrating_id = $vatsim['pilotrating'];
+                    $u->pilotrating_short = $pilotratingshortname;
+                    $u->pilotrating_long = $pilotratinglongname;
+                    $u->reg_date = Carbon::parse($vatsim['reg_date'])->format('Y-m-d H:i:s');
+                    $u->region_code = $vatsim['region_id'];
+                    $u->region_name = $region['name'];
+                    $u->division_code = $vatsim['division_id'];
+                    $u->division_name = $division['name'];
+                    $u->subdivision_code = $vatsim['subdivision_id'];
+                    $u->subdivision_name = $subdivisionFullname;
+                    $u->updated_at = Carbon::now()->format('Y-m-d H:i:s');
+                    $u->save();
+
+                    $user_updated++;
+                } else {
+                    $user_not_updated++;
+                }             
+            
+                sleep(7);
+            
+            } catch (\GuzzleHttp\Exception\ClientException | \GuzzleHttp\Exception\ServerException $e) {
+                $users_counted++;
+                $discord = new DiscordClient();
+                $discord->sendMessage('1338045308835463293', 'UPDATE FAILED FOR: '.$u->FullName('FLC').' ('.$users_counted.'/'. $total_users.' users).');
+            
+                $vatsim_api_failed++;
+                sleep(7);
+                continue;
+            } catch (\Exception $e) {
+                $users_counted++;
+                $discord = new DiscordClient();
+                $discord->sendMessage('1338045308835463293', 'UPDATE FAILED FOR UNEXPECTED ERROR: '.$u->FullName('FLC').' ('.$users_counted.'/'. $total_users.' users).');
+            
+                $vatsim_api_failed++;
+                sleep(7);
+                continue;
+            }
+            
         }
 
-        // Add Role to Users not Connected to Gander Oceanic
-        // foreach($discord_uids as $discord_uid){
-            
-        //     // Skip the Bot (Gander)
-        //     if($discord_uid == 1118430230839840768){
-        //         continue;
-        //     }
-
-        //     // Skip the Bot (QFA100)
-        //     if($discord_uid == 1133048493850771616){
-        //         continue;
-        //     }
-
-        //     // Skip Server Owner (Gary)
-        //     if($discord_uid == 350995372627197954){
-        //         continue;
-        //     }
-
-        //     $accounts_not_linked++; //records that Account Not Linked Role Assigned
-
-        //     sleep(1);
-
-        //     // // Update user with main roles - Will temp remove staff roles
-        //     $discord->getClient()->patch('guilds/'.env('DISCORD_GUILD_ID').'/members/'.$user->discord_user_id, [
-        //         'json' => [
-        //             'nick' => $user->discord_username,
-        //             'roles' => ['1297422968472997908'],
-        //         ]
-        //     ]);
-        // }
-
-        if($user_updated > 0){
         // Record Information for Discord
         // Beginning
-        $update_content = "Updates were conducted for Discord.";
+        $update_content = "Quarterly User Database Updates were just completed";
 
-        $update_content .= "\n\n **__Updated Users:__**";
-        foreach($in_discord_name as $name){
-            $update_content .= "\n- ".$name;
-        }
+        $update_content .= "\n\n **__Information:__**";
+        $update_content .= "\n- Successful Updates: ".$user_updated;
+        $update_content .= "\n- No Update Required: ".$user_not_updated;
+        $update_content .= "\n- Failed Updates: ".$vatsim_api_failed;
 
-        // $update_content .= "\n\n **__General Information:__**";
-
-        // // Users which are linked in Discord
-        // $update_content .= "\n- Accounts Linked in Core: ".$checked_users;
-        // $update_content .= "\n- Linked - in Discord: ".$in_discord;
-        // $update_content .= "\n- Linked - not in Discord: ".$not_in_discord;
-
-        // // Accounts not linked
-        // $update_content .= "\n- Not Linked - in Discord: ".$accounts_not_linked." (No Account Role Assigned)";
 
         // Completion Time
         $end_time = Carbon::now();
         $update_content .= "\n\n**__Script Time:__**";
         $update_content .= "\n- Script Time: " . $start_time->diffForHumans($end_time, ['parts' => 2, 'short' => true, 'syntax' => Carbon::DIFF_ABSOLUTE]) . ".";
 
-        $discord->sendMessageWithEmbed('482860026831175690', 'HOURLY: Discord User Update', $update_content);
-        }
+        $discord = new DiscordClient();
+        $discord->sendMessageWithEmbed('1297573259663118368', 'WEEKLY: Mass User Updates', $update_content);
     }
 
 }
