@@ -70,6 +70,7 @@
                 </a>
                 @endif
                 @can('start applications')
+                
                 <a class="myczqo-tab {{Request::is('training/applications/apply') ? 'active' : ''}} no-click" data-myczqo-tab="none" href="{{route('training.applications.apply')}}">
                     <li class="w-100">
                         <div class="d-flex h-100 flex-row justify-content-left align-items-center">
