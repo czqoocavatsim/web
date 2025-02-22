@@ -13,9 +13,12 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::table('session_logs', function (Blueprint $table) {
-            $table->string('is_student')->nullable();
-            $table->string('is_instructing')->nullable();
+        Schema::create('ctp_dates', function (Blueprint $table) {
+            $table->id();
+            $table->string('edition');
+            $table->dateTime('oca_start');
+            $table->dateTime('oca_end');
+            $table->timestamps();
         });
     }
 
@@ -26,9 +29,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::table('session_logs', function (Blueprint $table) {
-            $table->dropColumn(['is_student']);
-            $table->dropColumn(['is_instructing']);
-        });
+        //
     }
 };

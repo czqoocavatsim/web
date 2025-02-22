@@ -81,11 +81,6 @@ class ProcessRosterInactivity implements ShouldQueue
 
             // Go through each session to get some information
             foreach($sessions as $s){
-                // Ignore if student/instructing
-                if($s->is_student || $s->is_instructing){
-                    continue;
-                }
-
                 //Counts sessions only greater than 30mins in length
                 if($s->duration > 0.49){
                     $currency += $s->duration;

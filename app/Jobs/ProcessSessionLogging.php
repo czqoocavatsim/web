@@ -6,6 +6,7 @@ use App\Models\Users\User;
 use App\Models\Network\MonitoredPosition;
 use App\Models\Network\SessionLog;
 use App\Models\Network\ExternalController;
+use App\Models\Network\CTPDates;
 use App\Models\Roster\RosterMember;
 use Carbon\Carbon;
 use Illuminate\Bus\Queueable;
@@ -39,8 +40,10 @@ class ProcessSessionLogging implements ShouldQueue
      */
     public function handle()
     {
-        //BEGIN CONTROLLER SESSION CHECK
+        $ctp_events = CTPDates::where('oca_end', '>', Carbon::now())->get();
 
+
+        //BEGIN CONTROLLER SESSION CHECK
         //Get monitored positions
         $monitoredPositions = MonitoredPosition::all();
 
@@ -83,11 +86,13 @@ class ProcessSessionLogging implements ShouldQueue
                         $session->save();
                     }
 
-                    // Student Training Session Session
+                    // Student Training Session
                     if($session->user->studentProfile){
                         $session->is_student = 1;
                         $session->save();
                     }
+
+
 
                     // Controller Name for the Discord
                     if($session->user){
