@@ -243,7 +243,7 @@ class MassUserUpdates implements ShouldQueue
                 } else {
                     $user_not_updated++;
                 }             
-            
+              
                 sleep(7);
             
             } catch (\GuzzleHttp\Exception\ClientException | \GuzzleHttp\Exception\ServerException $e) {
