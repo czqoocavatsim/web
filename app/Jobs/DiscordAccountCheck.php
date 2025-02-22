@@ -122,7 +122,20 @@ class DiscordAccountCheck implements ShouldQueue
                             'gander_certified'  => 1297507926222573568,
                             'shanwick_certified' => 1297508027280396349,
                             'zny_certified' => 1302030442916089866,
-                            'supervisor' => 720502070683369563,
+                            's1' => 1342639858027462769,
+                            's2' => 1342640729012568145,
+                            's3' => 1342640763183435807,
+                            'c1' => 1342640783211233280,
+                            'c3' => 1342640799837585468,
+                            'ins' => 1342640831043211344,
+                            'sup' => 720502070683369563,
+                            'adm' => 1342640950412967937,
+                            'ppl' => 1342642295157297203,
+                            'ir' => 1342642432147460281,
+                            'cmel' => 1342642434299002961,
+                            'atpl' => 1342642436408606851,
+                            'fi' => 1342642438162088091,
+                            'fe' => 1342642440846311556,
                         ];
 
                         //Add the Member role to each user
@@ -156,9 +169,26 @@ class DiscordAccountCheck implements ShouldQueue
                             }
                         }
 
-                        //Supervisor?
-                        if ($user->rating_short == 'SUP') {
-                            array_push($mainRoles, $discordRoleIds['supervisor']);
+                        //VATSIM Ratings Calculation
+                        {
+                            // Calculate Controller Rating
+                            if ($user->rating_short == 'S1') {
+                                array_push($mainRoles, $discordRoleIds['s1']);
+                            } elseif($user->rating_short == 'S2') {
+                                array_push($mainRoles, $discordRoleIds['s2']);
+                            } elseif($user->rating_short == 'S3') {
+                                array_push($mainRoles, $discordRoleIds['s3']);
+                            } elseif($user->rating_short == 'C1') {
+                                array_push($mainRoles, $discordRoleIds['c1']);
+                            } elseif($user->rating_short == 'C3') {
+                                array_push($mainRoles, $discordRoleIds['c3']);
+                            } elseif($user->rating_short == 'I1' || $user->rating_short == 'I3') {
+                                array_push($mainRoles, $discordRoleIds['ins']);
+                            } elseif($user->rating_short == 'SUP') {
+                                array_push($mainRoles, $discordRoleIds['sup']);
+                            } elseif($user->rating_short == 'ADM') {
+                                array_push($mainRoles, $discordRoleIds['adm']);
+                            }
                         }
 
                         // Check Assigned Discord Roles, and keep them assigned

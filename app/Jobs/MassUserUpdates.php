@@ -42,6 +42,7 @@ class MassUserUpdates implements ShouldQueue
         // Discord Bot Variable Initialisation
         $start_time = Carbon::now();
         $user_updated = 0;
+        $user_not_updated = 0;
         $vatsim_api_failed = 0;
 
         // VATSIM Region List
@@ -132,6 +133,8 @@ class MassUserUpdates implements ShouldQueue
 
         // Get full User list
         $user = User::all();
+        $total_users = count($user);
+        $users_counted = 0;
 
         foreach($user as $u){
 
@@ -162,31 +165,61 @@ class MassUserUpdates implements ShouldQueue
                 }
             
                 // Lets Update the User Data based off the API Return
-                $u->rating_id = $vatsim['rating'];
-                $u->rating_short = $rating['short'];
-                $u->rating_long = $rating['long'];
-                $u->rating_GRP = $rating['long'];
-                $u->reg_date = Carbon::parse($vatsim['reg_date'])->format('Y-m-d H:i:s');
-                $u->region_code = $vatsim['region_id'];
-                $u->region_name = $region['name'];
-                $u->division_code = $vatsim['division_id'];
-                $u->division_name = $division['name'];
-                $u->subdivision_code = $vatsim['subdivision_id'];
-                $u->subdivision_name = $subdivisionFullname;
-                $u->updated_at = Carbon::now()->format('Y-m-d H:i:s');
-                $u->save();
-            
-                // Add One to Successful User Update
-                $user_updated++;
+                $needsUpdate = false;
+
+                // Compare each attribute
+                if ($u->rating_id != $vatsim['rating']) $needsUpdate = true;
+                if ($u->rating_short != $rating['short']) $needsUpdate = true;
+                if ($u->rating_long != $rating['long']) $needsUpdate = true;
+                if ($u->rating_GRP != $rating['long']) $needsUpdate = true;
+                if ($u->reg_date != Carbon::parse($vatsim['reg_date'])->format('Y-m-d H:i:s')) $needsUpdate = true;
+                if ($u->region_code != $vatsim['region_id']) $needsUpdate = true;
+                if ($u->region_name != $region['name']) $needsUpdate = true;
+                if ($u->division_code != $vatsim['division_id']) $needsUpdate = true;
+                if ($u->division_name != $division['name']) $needsUpdate = true;
+                if ($u->subdivision_code != $vatsim['subdivision_id']) $needsUpdate = true;
+                if ($u->subdivision_name != $subdivisionFullname) $needsUpdate = true;
+
+                if ($needsUpdate) {
+                    $u->rating_id = $vatsim['rating'];
+                    $u->rating_short = $rating['short'];
+                    $u->rating_long = $rating['long'];
+                    $u->rating_GRP = $rating['long'];
+                    $u->reg_date = Carbon::parse($vatsim['reg_date'])->format('Y-m-d H:i:s');
+                    $u->region_code = $vatsim['region_id'];
+                    $u->region_name = $region['name'];
+                    $u->division_code = $vatsim['division_id'];
+                    $u->division_name = $division['name'];
+                    $u->subdivision_code = $vatsim['subdivision_id'];
+                    $u->subdivision_name = $subdivisionFullname;
+                    $u->updated_at = Carbon::now()->format('Y-m-d H:i:s');
+                    $u->save();
+
+                    $user_updated++;
+                } else {
+                    $user_not_updated++;
+                }
+
+                // Discord Check for First Update (To be deleted once satisfied)
+                $users_counted++;
+                $discord = new DiscordClient();
+                $discord->sendMessage('1338045308835463293', 'UPDATE SUCCESS FOR: '.$u->FullName('FLC').' ('.$users_counted.'/'. $total_users.' users).');               
             
                 sleep(7);
             
             } catch (\GuzzleHttp\Exception\ClientException | \GuzzleHttp\Exception\ServerException $e) {
+                $users_counted++;
+                $discord = new DiscordClient();
+                $discord->sendMessage('1338045308835463293', 'UPDATE FAILED FOR: '.$u->FullName('FLC').' ('.$users_counted.'/'. $total_users.' users).');
+            
                 $vatsim_api_failed++;
                 sleep(7);
                 continue;
             } catch (\Exception $e) {
-                // Catch any other unexpected errors
+                $users_counted++;
+                $discord = new DiscordClient();
+                $discord->sendMessage('1338045308835463293', 'UPDATE FAILED FOR UNEXPECTED ERROR: '.$u->FullName('FLC').' ('.$users_counted.'/'. $total_users.' users).');
+            
                 $vatsim_api_failed++;
                 sleep(7);
                 continue;
@@ -200,6 +233,7 @@ class MassUserUpdates implements ShouldQueue
 
         $update_content .= "\n\n **__Information:__**";
         $update_content .= "\n- Successful Updates: ".$user_updated;
+        $update_content .= "\n- No Update Required: ".$user_not_updated;
         $update_content .= "\n- Failed Updates: ".$vatsim_api_failed;
 
 
@@ -209,7 +243,7 @@ class MassUserUpdates implements ShouldQueue
         $update_content .= "\n- Script Time: " . $start_time->diffForHumans($end_time, ['parts' => 2, 'short' => true, 'syntax' => Carbon::DIFF_ABSOLUTE]) . ".";
 
         $discord = new DiscordClient();
-        $discord->sendMessageWithEmbed('1338045308835463293', 'QUARTERLY: Mass User Updates', $update_content);
+        $discord->sendMessageWithEmbed('1297573259663118368', 'WEEKLY: Mass User Updates', $update_content);
     }
 
 }
