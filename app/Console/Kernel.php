@@ -48,6 +48,9 @@ class Kernel extends ConsoleKernel
         //Discord Update
         $schedule->job(new DiscordAccountCheck())->cron('15 * * * *'); //Updated Hourly
 
+        // External Controllers
+        $schedule->job(new ProcessExternalControllers())->cron('5 * * * *'); //Updated Hourly
+
         //Roster Inactivity checks
         $schedule->job(new ProcessRosterInactivity())->dailyAt('23:55');
 
@@ -57,16 +60,16 @@ class Kernel extends ConsoleKernel
         // Check Training Threads Status (Saturday)
         $schedule->job(new DiscordTrainingWeeklyUpdates())->weeklyOn(6, '00:01');
 
+        // Mass User  (Sunday)
+        $schedule->job(new MassUserUpdates())->weeklyOn(7, '03:45');
+
         // Monthly Statistics Breakdown
         $schedule->job(new ProcessMonthlyBreakdown())->monthlyOn(1, '00:01');
 
 
         # SECONDARY WORKER
-        // Weekly Mass User Updates
-        $schedule->job((new MassUserUpdates())->onQueue('secondary'))->weeklyOn(7, '03:32');
 
-        // External Controllers
-        $schedule->job(new ProcessExternalControllers())->cron('5 * * * *'); //Updated Hourly
+        
     }
 
     /**

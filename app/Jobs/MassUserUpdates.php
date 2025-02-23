@@ -37,7 +37,7 @@ class MassUserUpdates implements ShouldQueue
         ini_set('max_execution_time', 60000);
 
         // Guzzle Client Initialization
-        $guzzle = new Client(['timeout' => 10, 'connect_timeout' => 5]);
+        $guzzle = new Client(['timeout' => 100, 'connect_timeout' => 55]);
 
         // Discord Bot Variable Initialisation
         $start_time = Carbon::now();
