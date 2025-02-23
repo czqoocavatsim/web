@@ -4,7 +4,7 @@ namespace App\Jobs;
 
 use App\Models\Network\MonitoredPosition;
 use App\Models\Network\SessionLog;
-use App\Models\Network\ShanwickController;
+use App\Models\Network\ExternalController;
 use App\Models\Roster\RosterMember;
 use Carbon\Carbon;
 use Illuminate\Bus\Queueable;
@@ -46,7 +46,7 @@ class ProcessSessionLogging implements ShouldQueue
         $vatsimData = new VATSIMClient();
 
         $czqoRoster = RosterMember::all()->pluck('user_id')->toArray();
-        $eggxRoster = ShanwickController::all()->pluck('controller_cid')->toArray();
+        $eggxRoster = ExternalController::all()->pluck('id')->toArray();
         $allRoster = array_unique(array_merge($czqoRoster, $eggxRoster));
 
         $positionsFound = [];

@@ -23,7 +23,7 @@ class MassUserUpdates implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
-    public $timeout = 48000;
+    public $timeout = 60000;
 
     /**
      * Execute the job.
@@ -34,10 +34,10 @@ class MassUserUpdates implements ShouldQueue
     public function handle()
     {
         // Timeout length (seconds)
-        ini_set('max_execution_time', 48000);
+        ini_set('max_execution_time', 60000);
 
         // Guzzle Client Initialization
-        $guzzle = new Client(['timeout' => 1000, 'connect_timeout' => 1000]);
+        $guzzle = new Client(['timeout' => 10, 'connect_timeout' => 5]);
 
         // Discord Bot Variable Initialisation
         $start_time = Carbon::now();
@@ -242,14 +242,18 @@ class MassUserUpdates implements ShouldQueue
                     $user_updated++;
                 } else {
                     $user_not_updated++;
-                }             
+                }        
+
+                $users_counted++;
+                $discord = new DiscordClient();
+                $discord->sendMessage('1343024277225607208', 'UPDATE COMPLETED: '.$u->FullName('FLC').' ('.$users_counted.'/'. $total_users.' users).');
               
                 sleep(7);
             
             } catch (\GuzzleHttp\Exception\ClientException | \GuzzleHttp\Exception\ServerException $e) {
                 $users_counted++;
                 $discord = new DiscordClient();
-                $discord->sendMessage('1338045308835463293', 'UPDATE FAILED FOR: '.$u->FullName('FLC').' ('.$users_counted.'/'. $total_users.' users).');
+                $discord->sendMessage('1343024277225607208', 'UPDATE FAILED CLIENT/SERVER: '.$u->FullName('FLC').' ('.$users_counted.'/'. $total_users.' users).');
             
                 $vatsim_api_failed++;
                 sleep(7);
@@ -257,7 +261,7 @@ class MassUserUpdates implements ShouldQueue
             } catch (\Exception $e) {
                 $users_counted++;
                 $discord = new DiscordClient();
-                $discord->sendMessage('1338045308835463293', 'UPDATE FAILED FOR UNEXPECTED ERROR: '.$u->FullName('FLC').' ('.$users_counted.'/'. $total_users.' users).');
+                $discord->sendMessage('1343024277225607208', 'UPDATE FAILED EXCEPTION: '.$u->FullName('FLC').' ('.$users_counted.'/'. $total_users.' users).');
             
                 $vatsim_api_failed++;
                 sleep(7);

@@ -84,9 +84,8 @@ Route::prefix('auth')->group(function () {
 
 // Discord shortcut
 Route::get('/discord', [DiscordController::class, 'joinShortcut']);
-Route::get('/discord/function-test', [DiscordTestController::class, 'Job']);
-Route::get('/discord/function-test2', [DiscordTestController::class, 'Job2']);
-Route::post('/discord/slash-commands', [DiscordController::class, 'handelDiscordCommand']);
+Route::get('/discord/function-test', [DiscordTestController::class, 'Job'])->middleware('role:Administrator');
+Route::get('/discord/function-test2', [DiscordTestController::class, 'Job2'])->middleware('role:Administrator');
 
 // Public news articles
 Route::get('/news/{id}', [NewsController::class, 'viewArticlePublic'])->name('news.articlepublic')->where('id', '[0-9]+');
