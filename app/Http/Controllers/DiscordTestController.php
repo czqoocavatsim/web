@@ -10,6 +10,7 @@ use App\Jobs\DiscordTrainingWeeklyUpdates;
 use App\Jobs\ProcessShanwickControllers;
 use App\Jobs\ProcessSessionLogging;
 use App\Jobs\MassUserUpdates;
+use App\Jobs\DiscordAccountCheck;
 
 use App\Models\Users\User;
 use Illuminate\Support\Facades\Notification;

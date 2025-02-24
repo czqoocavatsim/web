@@ -35,13 +35,16 @@ class PrimaryViewsController extends Controller
         //Top controllers
         $topControllers = RosterMember::where('monthly_hours', '>', 0)->get()->sortByDesc('monthly_hours')->take(3);
 
+        //Top controllers
+        $yearControllers = RosterMember::where('currency', '>', 0)->get()->sortByDesc('currency')->take(3);
+
         //CTP Mode?
         $ctpMode = false;
         if (config('app.ctp_home_page')) {
             $ctpMode = true;
         }
 
-        return view('index', compact('controllers', 'news', 'certifications', 'nextEvent', 'topControllers', 'ctpMode'));
+        return view('index', compact('controllers', 'news', 'certifications', 'nextEvent', 'topControllers', 'yearControllers', 'ctpMode'));
     }
 
     /*

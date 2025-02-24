@@ -41,14 +41,15 @@ class Kernel extends ConsoleKernel
      */
     protected function schedule(Schedule $schedule)
     {
+        # PRIMARY WORKER
         // Active Network Sessions
         $schedule->job(new ProcessSessionLogging())->everyMinute();
 
-        // External Controllers
-        $schedule->job(new ProcessExternalControllers())->cron('5 * * * *'); //Updated Hourly
-
         //Discord Update
         $schedule->job(new DiscordAccountCheck())->cron('15 * * * *'); //Updated Hourly
+
+        // External Controllers
+        $schedule->job(new ProcessExternalControllers())->cron('5 * * * *'); //Updated Hourly
 
         //Roster Inactivity checks
         $schedule->job(new ProcessRosterInactivity())->dailyAt('23:55');
@@ -59,11 +60,16 @@ class Kernel extends ConsoleKernel
         // Check Training Threads Status (Saturday)
         $schedule->job(new DiscordTrainingWeeklyUpdates())->weeklyOn(6, '00:01');
 
+        // Mass User  (Sunday)
+        $schedule->job(new MassUserUpdates())->weeklyOn(3, '12:00');
+
         // Monthly Statistics Breakdown
         $schedule->job(new ProcessMonthlyBreakdown())->monthlyOn(1, '00:01');
 
-        // Monthly Mass User Updates
-        $schedule->job(new MassUserUpdates())->monthlyOn(12, '16:00');
+
+        # SECONDARY WORKER
+
+        
     }
 
     /**

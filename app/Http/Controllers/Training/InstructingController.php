@@ -336,13 +336,6 @@ class InstructingController extends Controller
         $instructor->staff_email = $request->get('staff_email');
         $instructor->save();
 
-        //If assessor, give role, vice versa
-        if ($instructor->assessor) {
-            $instructor->user->assignRole('Assessor');
-        } else {
-            $instructor->user->removeRole('Assessor');
-        }
-
         //Return view
         return redirect()->route('training.admin.instructing.instructors.view', $instructor->user_id)->with('success', 'Edited!');
     }
@@ -362,7 +355,6 @@ class InstructingController extends Controller
 
         //Remove permissions
         $instructor->user->removeRole('Instructor');
-        $instructor->user->removeRole('Assessor');
 
         //Remove role on Discord if able
         try {

@@ -122,7 +122,20 @@ class DiscordAccountCheck implements ShouldQueue
                             'gander_certified'  => 1297507926222573568,
                             'shanwick_certified' => 1297508027280396349,
                             'zny_certified' => 1302030442916089866,
-                            'supervisor' => 720502070683369563,
+                            's1' => 1342639858027462769,
+                            's2' => 1342640729012568145,
+                            's3' => 1342640763183435807,
+                            'c1' => 1342640783211233280,
+                            'c3' => 1342640799837585468,
+                            'ins' => 1342640831043211344,
+                            'sup' => 720502070683369563,
+                            'adm' => 1342640950412967937,
+                            'ppl' => 1342642295157297203,
+                            'ir' => 1342642432147460281,
+                            'cmel' => 1342642434299002961,
+                            'atpl' => 1342642436408606851,
+                            'fi' => 1342642438162088091,
+                            'fe' => 1342642440846311556,
                         ];
 
                         //Add the Member role to each user
@@ -156,9 +169,54 @@ class DiscordAccountCheck implements ShouldQueue
                             }
                         }
 
-                        //Supervisor?
-                        if ($user->rating_short == 'SUP') {
-                            array_push($mainRoles, $discordRoleIds['supervisor']);
+                        //VATSIM Ratings Calculation
+                        {
+                            // Calculate Controller Rating
+                            if ($user->rating_short == 'S1') {
+                                array_push($mainRoles, $discordRoleIds['s1']);
+                            }
+                            if($user->rating_short == 'S2') {
+                                array_push($mainRoles, $discordRoleIds['s2']);
+                            }
+                            if($user->rating_short == 'S3') {
+                                array_push($mainRoles, $discordRoleIds['s3']);
+                            }
+                            if($user->rating_short == 'C1') {
+                                array_push($mainRoles, $discordRoleIds['c1']);
+                            }
+                            if($user->rating_short == 'C3') {
+                                array_push($mainRoles, $discordRoleIds['c3']);
+                            }
+                            if($user->rating_short == 'I1' || $user->rating_short == 'I3') {
+                                array_push($mainRoles, $discordRoleIds['ins']);
+                            }
+                            if($user->rating_short == 'SUP') {
+                                array_push($mainRoles, $discordRoleIds['sup']);
+                            }
+                            if($user->rating_short == 'ADM') {
+                                array_push($mainRoles, $discordRoleIds['adm']);
+                            }
+
+
+                            // Calculate Pilot Rating
+                            if($user->pilotrating_short == 'PPL'){
+                                array_push($mainRoles, $discordRoleIds['ppl']);
+                            }
+                            if($user->pilotrating_short == 'IR'){
+                                array_push($mainRoles, $discordRoleIds['ir']);
+                            }
+                            if($user->pilotrating_short == 'CMEL'){
+                                array_push($mainRoles, $discordRoleIds['cmel']);
+                            }
+                            if($user->pilotrating_short == 'ATPL'){
+                                array_push($mainRoles, $discordRoleIds['atpl']);
+                            }
+                            if($user->pilotrating_short == 'FI'){
+                                array_push($mainRoles, $discordRoleIds['fi']);
+                            }
+                            if($user->pilotrating_short == 'FE'){
+                                array_push($mainRoles, $discordRoleIds['fe']);
+                            }
                         }
 
                         // Check Assigned Discord Roles, and keep them assigned
@@ -169,7 +227,8 @@ class DiscordAccountCheck implements ShouldQueue
                             497351197280174080, //VATCAN Divisional Staff
                             497359834010615809, //VATSIM Senior Staff
                             1300054143532138516, //VATSYS Beta Tester
-                            1278868454606377040]; //Currently Online
+                            1278868454606377040, //Currently Online
+                        ];
 
                         foreach ($roleIdsToCheck as $roleId) {
                             if (in_array($roleId, $discord_member['roles'])) {

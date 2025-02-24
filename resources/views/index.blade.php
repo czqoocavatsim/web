@@ -35,7 +35,7 @@
                 <div class="col-md-6 mb-4">
                     @if ($news)
                         <div class="view"
-                            style="height: 330px !important; @if ($news->image) background-image:url({{ $news->image }}); background-size: cover; background-position-x: center; @else background: var(--czqo-blue); @endif">
+                            style="height: 330px !important; @if ($news->image) background-image:url({{ $news->image }}); background-size: cover; background-position-x: center; @else background-image:url('https://ganderoceanic.ca/assets/staff_uploads/news_article/default.png'); background-size: cover; background-position-x: center; @endif">
                             <div class="mask rgba-stylish-light flex-left p-4 justify-content-end d-flex flex-column h-100">
                                 <div class="container">
                                     <h1 class="font-weight-bold white-text">
@@ -63,33 +63,35 @@
                         @if (count($controllers) < 1)
                             <li class="mb-2">
                                 <div class="d-flex flex-row justify-content-between align-items-center mb-1">
-                                    <h4 class="m-0 white-text"><i class="fas fa-sad-tear" style="margin-right: 1rem;"></i>No
-                                        controllers online</h4>
+                                    <h4 class="m-0 white-text"><i class="fas fa-sad-tear" style="margin-right: 1rem;"></i>No controllers online</h4>
                                 </div>
                             </li>
-                        @endif
-                        @foreach ($controllers as $controller)
-                            <li>
-                                <div class="white-text d-flex flex-row justify-content-between align-items-center">
-                                    <h4 class="font-weight-bold m-0">{{ $controller->callsign }}</h4>
-                                    <div class="my-1">{{$controller->session_start->diff(\Carbon\Carbon::now())->format('%h:%I')}} Online</div>
-                                    <div style="font-size: 1.1em;">
-                                        @if (auth()->check() && ($rosterMember = $controller->rosterMember))
-                                            <img src="{{ $rosterMember->user->avatar() }}"
-                                                style="height: 35px; !important; width: 35px !important; margin-left: 10px; margin-right: 5px; margin-bottom: 3px; border-radius: 50%;">
-                                            {{ $rosterMember->user->fullName('FLC') }}
+                        @else
+                        <table class="table table-hover" style="color: white;">
+                            <thead>
+                            <tr>
+                                <th scope="col">Callsign</th>
+                                <th scope="col">Time Online</th>
+                                <th scope="col">Controller</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            @foreach ($controllers as $controller)
+                                <tr>
+                                    <th scope="row"><b>{{$controller->callsign}}</b></th>
+                                    <td>{{$controller->user->fullName('FLC')}}</td>
+                                    <td>
+                                        @if ($controller->session_start->diff(\Carbon\Carbon::now())->h > 0)
+                                            {{ $controller->session_start->diff(\Carbon\Carbon::now())->h }}hr {{ $controller->session_start->diff(\Carbon\Carbon::now())->i }}min
                                         @else
-                                            <div class="my-1">
-                                                @if (auth()->check())
-                                                    {{ $controller->searchCallsign()->name ?? '' }}
-                                                @endif {{ $controller['cid'] }}
-                                            </div>
+                                            {{ $controller->session_start->diff(\Carbon\Carbon::now())->i }}m
                                         @endif
-                                    </div>
-                                </div>
-                            </li>
-                            <hr class="my-2">
-                        @endforeach
+                                    </td>
+                                </tr>
+                            @endforeach
+                            </tbody>
+                        </table>
+                        @endif
                     </ul>
                 </div>
             </div>
@@ -97,66 +99,10 @@
     </div>
     <div class="container my-5">
         <div class="row">
+            
+
             <div class="col-md-4 mb-4">
-                <div class="d-flex flex-row justify-content-left">
-                    <img style="margin-top: -7px;height: 80px;" src="{{ asset('img/Twitter_Logo_Blue.png') }}"
-                        alt="">
-                    <div>
-                        <h2 class="font-weight-bold blue-text">Latest Tweets</h2>
-                        <a href="https://twitter.com/ganderocavatsim/" class="text-body">
-                            <p class="mt-0 fw-400" style="font-size: 1.2em;">@ganderocavatsim</p>
-                        </a>
-                    </div>
-                </div>
-                <div class="list-group z-depth-1">
-                    {{-- @if ($tweets)
-                    @foreach ($tweets as $t)
-                        <a href="https://twitter.com/ganderocavatsim/status/{{$t->id}}" target="_blank" class="list-group-item list-group-item-action waves-effect">
-                            <p>
-                                {{$t->text}}
-                            </p>
-                            <p class="text-muted mb-0">
-                                {{Carbon\Carbon::create($t->created_at)->diffForHumans()}}
-                                @if ($t->retweeted)
-                                &nbsp;&nbsp;•&nbsp;&nbsp;
-                                <i class="fas fa-retweet"></i>
-                                Retweet of {{$t->retweeted_status->user->name}}
-                                @endif
-                                @if ($t->in_reply_to_user_id)
-                                &nbsp;&nbsp;•&nbsp;&nbsp;
-                                <i class="fas fa-reply"></i>
-                                In Reply To {{$t->in_reply_to_screen_name}}
-                                @endif
-                            </p>
-                        </a>
-                    @endforeach
-                    @else --}}
-                    No recent tweets
-                    {{-- @endif --}}
-                </div>
-            </div>
-            <div class="col-md-4 mb-4">
-                <h2 class="font-weight-bold blue-text mb-4">Our Newest Controllers</h2>
-                @if (count($certifications) > 0)
-                    @foreach ($certifications as $cert)
-                        <div class="d-flex flex-row mb-2">
-                            <img src="{{ $cert->controller->avatar() }}"
-                                style="height: 55px !important; width: 55px !important; margin-right: 10px; margin-bottom: 3px; border-radius: 50%;">
-                            <div class="d-flex flex-column">
-                                <h4 class="fw-400">{{ $cert->controller->fullName('FL') }}</h4>
-                                <p title="{{ $cert->timestamp->toDayDateTimeString() }}">
-                                    {{ $cert->timestamp->diffForHumans() }}</p>
-                            </div>
-                        </div>
-                    @endforeach
-                @elseif (!auth()->check())
-                    Login with VATSIM to view our newest controllers!
-                @else
-                    No data available.
-                @endif
-            </div>
-            <div class="col-md-4 mb-4">
-                <h2 class="font-weight-bold blue-text mb-4">Top Controllers</h2>
+                <h2 class="font-weight-bold blue-text mb-4">{{\Carbon\Carbon::now()->format('F')}} Top Controllers</h2>
                 @if (auth()->check())
                     <ul class="list-unstyled">
                         @php $index = 1; @endphp
@@ -180,7 +126,13 @@
                                                 style="height: 35px; !important; width: 35px !important; margin-left: 10px; margin-right: 5px; margin-bottom: 3px; border-radius: 50%;">
                                             <div class="d-flex flex-column ml-2">
                                                 <h4 class="fw-400">{{ $c->user->fullName('FL') }}</h4>
-                                                <p>{{ $c->monthly_hours }} hours this month</p>
+                                                <p>
+                                                    @if($c->monthly_hours < 1)
+                                                        {{ str_pad(round(($c->monthly_hours - floor($c->monthly_hours)) * 60), 2, '0', STR_PAD_LEFT) }}m recorded this month
+                                                    @else
+                                                        {{ floor($c->monthly_hours) }}h {{ str_pad(round(($c->monthly_hours - floor($c->monthly_hours)) * 60), 2, '0', STR_PAD_LEFT) }}m recorded this month
+                                                    @endif
+                                                </p>
                                             </div>
                                         </span>
                                     </p>
@@ -189,6 +141,77 @@
                             @php $index++; @endphp
                         @endforeach
                         @if (count($topControllers) < 1)
+                            No data available.
+                        @endif
+                    </ul>
+                @else
+                    Login with VATSIM to check our top controllers!
+                @endif
+            </div>
+
+            {{-- new certifications --}}
+            <div class="col-md-4 mb-4">
+                <h2 class="font-weight-bold blue-text mb-4">Our Newest Controllers</h2>
+                @if (count($certifications) > 0)
+                    @foreach ($certifications as $cert)
+                        <div class="d-flex flex-row mb-2">
+                            <img src="{{ $cert->controller->avatar() }}"
+                                style="height: 55px !important; width: 55px !important; margin-right: 10px; margin-bottom: 3px; border-radius: 50%;">
+                            <div class="d-flex flex-column">
+                                <h4 class="fw-400">{{ $cert->controller->fullName('FL') }}</h4>
+                                <p title="{{ $cert->timestamp->toDayDateTimeString() }}">
+                                    {{ $cert->timestamp->diffForHumans() }}</p>
+                            </div>
+                        </div>
+                    @endforeach
+                @elseif (!auth()->check())
+                    Login with VATSIM to view our newest controllers!
+                @else
+                    No data available.
+                @endif
+            </div>
+
+            {{-- Controller's of the Year --}}
+            <div class="col-md-4 mb-4">
+                <h2 class="font-weight-bold blue-text mb-4">{{\Carbon\Carbon::now()->format('Y')}} Top Controllers</h2>
+                @if (auth()->check())
+                    <ul class="list-unstyled">
+                        @php $index = 1; @endphp
+                        @foreach ($yearControllers as $c)
+                            <li class="mb-1">
+                                <div class="d-flex flex-row">
+                                    <span class="font-weight-bold blue-text" style="font-size: 1.9em;">
+                                        @if ($index == 1)
+                                            <i class="fas fa-trophy amber-text fa-fw"></i>
+                                        @elseif ($index == 2)
+                                            <i class="fas fa-trophy blue-grey-text fa-fw"></i>
+                                        @elseif ($index == 3)
+                                            <i class="fas fa-trophy brown-text fa-fw"></i>
+                                        @else
+                                            {{ $index }}.
+                                        @endif
+                                    </span>
+                                    <p class="mb-0 ml-1">
+                                        <span style="font-size: 1.4em;">
+                                            <img src="{{ $c->user->avatar() }}"
+                                                style="height: 35px; !important; width: 35px !important; margin-left: 10px; margin-right: 5px; margin-bottom: 3px; border-radius: 50%;">
+                                            <div class="d-flex flex-column ml-2">
+                                                <h4 class="fw-400">{{ $c->user->fullName('FL') }}</h4>
+                                                <p>
+                                                    @if($c->currency < 1)
+                                                        {{ str_pad(round(($c->currency - floor($c->currency)) * 60), 2, '0', STR_PAD_LEFT) }}m recorded in {{\Carbon\Carbon::now()->format('Y')}}
+                                                    @else
+                                                        {{ floor($c->currency) }}h {{ str_pad(round(($c->currency - floor($c->currency)) * 60), 2, '0', STR_PAD_LEFT) }}m recorded in {{\Carbon\Carbon::now()->format('Y')}}
+                                                    @endif
+                                                </p>
+                                            </div>
+                                        </span>
+                                    </p>
+                                </div>
+                            </li>
+                            @php $index++; @endphp
+                        @endforeach
+                        @if (count($yearControllers) < 1)
                             No data available.
                         @endif
                     </ul>
@@ -232,36 +255,44 @@
                             <i class="fab fa-discord fa-2x" style="vertical-align:middle;"></i>
                         </span>
                     </a>
-                    <a class="border-0 list-group-item list-group-item-action waves-effect"
+                    {{-- <a class="border-0 list-group-item list-group-item-action waves-effect"
                         href="https://twitter.com/ganderocavatsim" style="text-decoration:none;">
                         <span class="blue-text">Twitter</span>
                         &nbsp;
                         <span class="blue-text">
                             <i class="fab fa-twitter fa-2x" style="vertical-align:middle;"></i>
                         </span>
-                    </a>
-                    <a class="border-0 list-group-item list-group-item-action waves-effect"
+                    </a> --}}
+                    {{-- <a class="border-0 list-group-item list-group-item-action waves-effect"
                         href="https://www.facebook.com/ganderocavatsim" style="text-decoration:none;">
                         <span class="blue-text">Facebook</span>
                         &nbsp;
                         <span class="blue-text">
                             <i class="fab fa-facebook fa-2x" style="vertical-align:middle;"></i>
                         </span>
-                    </a>
-                    <a class="border-0 list-group-item list-group-item-action waves-effect"
+                    </a> --}}
+                    {{-- <a class="border-0 list-group-item list-group-item-action waves-effect"
                         href="https://www.youtube.com/channel/UC3norFpW3Cw4ryGR7ourjcA" style="text-decoration:none;">
                         <span class="blue-text">YouTube Channel</span>
                         &nbsp;
                         <span class="blue-text">
                             <i class="fab fa-youtube fa-2x" style="vertical-align:middle;"></i>
                         </span>
-                    </a>
+                    </a> --}}
                     <a class="border-0 list-group-item list-group-item-action waves-effect"
                         href="https://knowledgebase.ganderoceanic.ca" style="text-decoration:none;">
-                        <span class="blue-text">Knowledge Base</span>
+                        <span class="blue-text">ZQO Knowledgebase</span>
                         &nbsp;
                         <span class="blue-text">
                             <i class="fas fa-book fa-2x" style="vertical-align:middle;"></i>
+                        </span>
+                    </a>
+                    <a class="border-0 list-group-item list-group-item-action waves-effect"
+                        href="https://nattrak.vatsim.net/" style="text-decoration:none;">
+                        <span class="blue-text">NATTRAK Website</span>
+                        &nbsp;
+                        <span class="blue-text">
+                            <i class="fa fa-satellite-dish fa-2x" style="vertical-align:middle;"></i>
                         </span>
                     </a>
                 </div>
@@ -280,6 +311,10 @@
             speed: 0.2,
             zIndex: -1
         });
+
+        $(document).ready(function() {
+            $('#dataTable').DataTable();
+        } );
     </script>
 
 @endsection
