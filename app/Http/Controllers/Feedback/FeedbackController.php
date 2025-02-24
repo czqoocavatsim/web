@@ -131,7 +131,7 @@ class FeedbackController extends Controller
         
         $message_content .= "## Submitter & Feedback Link\n";
         $message_content .= " - ".$main_feedback->user->fullName('FLC')."\n";
-        $message_content .= " - [Feedback Link](".route('my.feedback.submission', $main_feedback->slug).")";
+        $message_content .= " - [Feedback Link](".route('community.tickets.view', $main_feedback->slug).")";
 
         // Send the Announcement
         $discord->sendMessageWithEmbed(1324401086592978955, 'New Feedback Recieved! - '.$type->name, $message_content);

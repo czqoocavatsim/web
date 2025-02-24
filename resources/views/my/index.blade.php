@@ -73,7 +73,7 @@
                         <li class="w-100">
                             <div class="d-flex h-100 flex-row justify-content-left align-items-center">
                                 <i style="font-size: 1.6em; margin-right: 10px;" class="fas fa-user-circle fa-fw"></i>
-                                <span style="font-size: 1.1em;">{{ $user->fullName('F') }}</span>
+                                <span style="font-size: 1.1em;">{{ $user->fullName('FL') }}'s Profile</span>
                             </div>
                         </li>
                     </a>

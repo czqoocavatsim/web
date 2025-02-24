@@ -63,8 +63,7 @@ class FeedbackSubmission extends Model
      * @var array
      */
     protected $fillable = [
-        'user_id', 'type_id', 'submission_content', 'permission_to_publish', 'slug',
-    ];
+        'user_id', 'type_id', 'submission_content', 'permission_to_publish', 'slug', 'status'];
 
     /**
      * The attributes that are hidden from arrays.
