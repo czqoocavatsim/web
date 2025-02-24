@@ -2,9 +2,11 @@
 
 namespace App\Jobs;
 
+use App\Models\Users\User;
 use App\Models\Network\MonitoredPosition;
 use App\Models\Network\SessionLog;
 use App\Models\Network\ExternalController;
+use App\Models\Network\CTPDates;
 use App\Models\Roster\RosterMember;
 use Carbon\Carbon;
 use Illuminate\Bus\Queueable;
@@ -38,12 +40,21 @@ class ProcessSessionLogging implements ShouldQueue
      */
     public function handle()
     {
-        //BEGIN CONTROLLER SESSION CHECK
+        $ctp_events = CTPDates::where('oca_start', '<', Carbon::now())->where('oca_end', '>', Carbon::now())->get();
 
+        //BEGIN CONTROLLER SESSION CHECK
         //Get monitored positions
         $monitoredPositions = MonitoredPosition::all();
 
         $vatsimData = new VATSIMClient();
+
+        $instructor_ids = [];
+        $users = User::all();
+        foreach($users as $u){
+            if($u->InstructorProfile){
+                $instructor_ids[] = $u->id;
+            }
+        }
 
         $czqoRoster = RosterMember::all()->pluck('user_id')->toArray();
         $eggxRoster = ExternalController::all()->pluck('id')->toArray();
@@ -64,12 +75,32 @@ class ProcessSessionLogging implements ShouldQueue
                 ], [
                         'session_start' => Carbon::now(),
                         'emails_sent' => 0,
+                        'is_ctp' => 0,
                         'monitored_position_id' => $position->id,
                         'roster_member_id' => RosterMember::where('cid', $controller->cid)->value('id') ?? null,
                     ]);
 
+                    // Instructing Training Session
+                    if(str_contains($controller->callsign, '_I_') && $session->user->InstructorProfile){
+                        $session->is_instructing = 1;
+                        $session->save();
+                    }
+
+                    // Student Training Session
+                    if($session->user->studentProfile){
+                        $session->is_student = 1;
+                        $session->save();
+                    }
+
+                    // Session During CTP
+                    if($ctp_events){
+                        $session->is_ctp = 1;
+                    }
+
+
+                    // Controller Name for the Discord
                     if($session->user){
-                        $name = $session->user->fullName('FLC');
+                        $name = '<@'.$session->user->discord_user_id.'>';
                     } else {
                         $name = $controller->cid;
                     }        
@@ -125,8 +156,8 @@ class ProcessSessionLogging implements ShouldQueue
                 $log->duration = $log->session_start->floatDiffInMinutes(Carbon::now()) / 60;
                 $log->save();
 
-                // dd($log);
 
+                // Name if in DB, otherwise use CID
                 if($log->user){
                     $name = $log->user->fullName('FLC');
                 } else {

@@ -12,6 +12,13 @@ use App\Jobs\ProcessSessionLogging;
 use App\Jobs\MassUserUpdates;
 use App\Jobs\DiscordAccountCheck;
 
+use App\Models\Users\User;
+use Illuminate\Support\Facades\Notification;
+use App\Notifications\Roster\QuarterBeforeRemoval;
+use App\Notifications\Roster\TwoMonthFromRemoval;
+use App\Notifications\Roster\OneMonthFromRemoval;
+use App\Notifications\Roster\SevenDaysFromRemoval;
+
 class DiscordTestController extends Controller
 {
     public function ThreadTest()
@@ -32,7 +39,7 @@ class DiscordTestController extends Controller
     public function Job()
     {
         // Dispatch the job
-        $job = MassUserUpdates::dispatch();
+        $job = ProcessSessionLogging::dispatch();
 
         // Call the handle method directly to get the result synchronously
         $result = $job->handle();
@@ -46,7 +53,7 @@ class DiscordTestController extends Controller
     public function Job2()
     {
         // Dispatch the job
-        $job = ProcessSessionLogging::dispatch();
+        $job = ProcessRosterInactivity::dispatch();
 
         // Call the handle method directly to get the result synchronously
         $result = $job->handle();
@@ -55,6 +62,15 @@ class DiscordTestController extends Controller
             'message' => 'Job executed successfully',
             'data' => $result,
         ]);
+    }
+
+    public function email()
+    {
+        $user = User::find('1342084');
+
+        $currency = 0.55;
+
+        Notification::send($user, new SevenDaysFromRemoval($user, $currency));
     }
 
     public function SendEmbed()
