@@ -385,7 +385,7 @@
 
                         @if(!$sessions->isEmpty())
                             <p class="mt-2">List of all your Gander Oceanic connections to VATSIM during {{\Carbon\Carbon::now()->format('Y')}}.</p>
-                            <table class="table table-bordered" data-toggle="table" data-pagination="true" data-page-size="2">
+                            <table id="dataTable" class="table table-hover">
                                 <thead>
                                     <th>Position</th>
                                     <th>Logon</th>
@@ -901,5 +901,12 @@
         </div>
     @endif
     <!--End join guild modal-->
+
+
+    <script>
+        $(document).ready(function() {
+            $('#dataTable').DataTable();
+        } );
+    </script>
 
 @stop
