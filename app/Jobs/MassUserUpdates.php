@@ -53,7 +53,7 @@ class MassUserUpdates implements ShouldQueue
         $vatsim_division_pull = $guzzle->request('GET', 'https://api.vatsim.net/api/divisions');
         $vatsim_divisions = json_decode($vatsim_division_pull->getBody(), true);
 
-        // VATSIM Division List
+        // VATSIM Subdivision List
         $vatsim_subdivisions_pull = $guzzle->request('GET', 'https://api.vatsim.net/api/subdivisions');
         $vatsim_subdivisions = json_decode($vatsim_subdivisions_pull->getBody(), true);
 
@@ -245,8 +245,8 @@ class MassUserUpdates implements ShouldQueue
                 }        
 
                 $users_counted++;
-                $discord = new DiscordClient();
-                $discord->sendMessage('1343024277225607208', 'UPDATE COMPLETED: '.$u->FullName('FLC').' ('.$users_counted.'/'. $total_users.' users).');
+                // $discord = new DiscordClient();
+                // $discord->sendMessage('1343024277225607208', 'UPDATE COMPLETED: '.$u->FullName('FLC').' ('.$users_counted.'/'. $total_users.' users).');
               
                 sleep(7);
             
@@ -274,10 +274,10 @@ class MassUserUpdates implements ShouldQueue
         // Beginning
         $update_content = "Quarterly User Database Updates were just completed";
 
-        $update_content .= "\n\n **__Information:__**";
-        $update_content .= "\n- Successful Updates: ".$user_updated;
+        $update_content .= "\n\n **__User Updates:__**";
         $update_content .= "\n- No Update Required: ".$user_not_updated;
-        $update_content .= "\n- Failed Updates: ".$vatsim_api_failed;
+        $update_content .= "\n- Successful: ".$user_updated;
+        $update_content .= "\n- Failed: ".$vatsim_api_failed;
 
 
         // Completion Time

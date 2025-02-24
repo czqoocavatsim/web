@@ -58,13 +58,6 @@ Route::get('/events', [EventController::class, 'index'])->name('events.index');
 Route::get('/events/{slug}', [EventController::class, 'viewEvent'])->name('events.view');
 Route::view('/branding', 'about.branding')->name('branding');
 
-Route::get('/roster/update/controller-details', function () {
-    $job = new ProcessExternalControllers();
-    $result = $job->handle();
-
-    return response()->json(['message' => 'Process completed', 'data' => $result]);
-});
-
 
 // About
 Route::prefix('about')->group(function () {
@@ -84,8 +77,16 @@ Route::prefix('auth')->group(function () {
 
 // Discord shortcut
 Route::get('/discord', [DiscordController::class, 'joinShortcut']);
+
+// Management Functions
 Route::get('/discord/function-test', [DiscordTestController::class, 'Job'])->middleware('role:Administrator');
 Route::get('/discord/function-test2', [DiscordTestController::class, 'Job2'])->middleware('role:Administrator');
+Route::get('/roster/update/controller-details', function () {
+    $job = new ProcessExternalControllers();
+    $result = $job->handle();
+
+    return response()->json(['message' => 'Process completed', 'data' => $result]);
+})->middleware('role:Administrator');;
 
 // Public news articles
 Route::get('/news/{id}', [NewsController::class, 'viewArticlePublic'])->name('news.articlepublic')->where('id', '[0-9]+');
