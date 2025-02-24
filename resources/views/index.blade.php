@@ -66,7 +66,7 @@
                                     <h4 class="m-0 white-text"><i class="fas fa-sad-tear" style="margin-right: 1rem;"></i>No controllers online</h4>
                                 </div>
                             </li>
-                        @endif
+                        @else
                         <table class="table table-hover" style="color: white;">
                             <thead>
                             <tr>
@@ -91,6 +91,7 @@
                             @endforeach
                             </tbody>
                         </table>
+                        @endif
                     </ul>
                 </div>
             </div>
