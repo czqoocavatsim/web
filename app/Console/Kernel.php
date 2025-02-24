@@ -61,7 +61,7 @@ class Kernel extends ConsoleKernel
         $schedule->job(new DiscordTrainingWeeklyUpdates())->weeklyOn(6, '00:01');
 
         // Mass User  (Sunday)
-        $schedule->job(new MassUserUpdates())->weeklyOn(7, '03:45');
+        $schedule->job(new MassUserUpdates())->weeklyOn(3, '12:00');
 
         // Monthly Statistics Breakdown
         $schedule->job(new ProcessMonthlyBreakdown())->monthlyOn(1, '00:01');
