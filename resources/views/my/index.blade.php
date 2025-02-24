@@ -394,23 +394,19 @@
                                 </thead>
                                 <tbody>
                                     @foreach ($sessions as $s)
-
-                                        {{-- Change background color depending on the status --}}
-                                        @if($s->is_student)
-                                            <tr style="background-color: rgba(0, 242, 255, 0.3);">
-                                        @elseif($s->is_instructing)
-                                            <tr style="background-color: rgba(255, 200, 0, 0.3);">
-                                        @else
-                                            <tr>
-                                        @endif
-
-                                            <th>{{$s->callsign}}</th>
-                                            <th>{{\Carbon\Carbon::parse($s->session_start)->format('l, d F \a\t Hi\Z')}}</th>
+                                        <tr>
+                                            <th>
+                                                {{$s->callsign}}
+                                                @if($s->is_instructing == 1)<span class="badge bg-danger">Instructing</span>@endif
+                                                @if($s->is_student == 1)<span class="badge bg-warning">Training</span>@endif
+                                                @if($s->is_ctp)<span class="badge bg-primary">CTP</span>@endif
+                                            </th>
+                                            <th>{{\Carbon\Carbon::parse($s->session_start)->format('m/d/Y \a\t Hi\Z')}}</th>
                                             <th>
                                                 @if($s->session_end === null)
                                                 Currently Connected
                                                 @else
-                                                {{\Carbon\Carbon::parse($s->session_end)->format('l, d F \a\t Hi\Z')}}
+                                                {{\Carbon\Carbon::parse($s->session_end)->format('m/d/Y \a\t Hi\Z')}}
                                                 @endif
                                             </th>
                                             @if($s->duration < 0.5)
@@ -434,11 +430,7 @@
                             </table>
 
                             <h5 class="font-weight-bold blue-text mt-4 pb-2">Notes for Table</h5>
-                            <li>Connections of less than 30 minutes will show with a <i style="color: red;" class="fas fa-times"></i> within the time collum and <b>will not</b> count towards your Activity.</li>
-                            <li>Connections while connected as a Gander Oceanic Student will show in Cyan, and <b>will not</b> count towards your Activity.</li>
-                            @if(Auth::user()->InstructorProfile ==! null)
-                                <li>Connections while connected as a Gander Oceanic Instructor will show in Yellow, and <b>will not</b> count towards your Activity.</li>
-                            @endif
+                            <li>Connections of less than 30 minutes will show with a <i style="color: red;" class="fas fa-times"></i> within the time collum.</li>
                         @else
                             <p class="mt-0">You have not recorded any hours so far this year. Connect to the network in order to record a session!</p>
                         @endif
@@ -461,7 +453,7 @@
                             </h3><br>
 
                             <h3 class="font-weight-bold blue-text pb-2">Partnership Controllers, Please Note</h3>
-                                <li>Your certification status on this page is dictated by your endorsement operator listed above.</li>
+                                <li>Your certification status on this page is managed by your endorsement operator listed above.</li>
                                 <li>Your Activity Requirements within Gander are assumed correct. Should your Certification Status be removed by your home division due to their policy, your access on Gander Oceanic will be removed within 24 Hours.</li>
                                 <li>You are authorised to open any EGGX_CTR, CZQO_CTR, NY_FSS or NAT_FSS Position while holding this endorsement.</li>
                                 <li>Any questions regarding Activity Requirements should be directed towards the <a href="{{ route('my.feedback.new.write', ['operations']) }}">Gander Oceanic Operations Staff Team</a> who will assist you with your query.</li>

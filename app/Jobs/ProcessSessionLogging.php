@@ -40,8 +40,7 @@ class ProcessSessionLogging implements ShouldQueue
      */
     public function handle()
     {
-        $ctp_events = CTPDates::where('oca_end', '>', Carbon::now())->get();
-
+        $ctp_events = CTPDates::where('oca_start', '<', Carbon::now())->where('oca_end', '>', Carbon::now())->get();
 
         //BEGIN CONTROLLER SESSION CHECK
         //Get monitored positions
@@ -76,6 +75,7 @@ class ProcessSessionLogging implements ShouldQueue
                 ], [
                         'session_start' => Carbon::now(),
                         'emails_sent' => 0,
+                        'is_ctp' => 0,
                         'monitored_position_id' => $position->id,
                         'roster_member_id' => RosterMember::where('cid', $controller->cid)->value('id') ?? null,
                     ]);
@@ -92,6 +92,10 @@ class ProcessSessionLogging implements ShouldQueue
                         $session->save();
                     }
 
+                    // Session During CTP
+                    if($ctp_events){
+                        $session->is_ctp = 1;
+                    }
 
 
                     // Controller Name for the Discord
@@ -152,8 +156,8 @@ class ProcessSessionLogging implements ShouldQueue
                 $log->duration = $log->session_start->floatDiffInMinutes(Carbon::now()) / 60;
                 $log->save();
 
-                // dd($log);
 
+                // Name if in DB, otherwise use CID
                 if($log->user){
                     $name = $log->user->fullName('FLC');
                 } else {

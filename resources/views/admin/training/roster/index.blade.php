@@ -16,9 +16,9 @@
     <thead>
         <th>CID</th>
         <th>Name</th>
-        <th>Status</th>
-        <th>Active</th>
         <th>Currency</th>
+        <th>Active</th>
+        <th>Status</th>
         <th>Action</th>
     </thead>
     <tbody>
