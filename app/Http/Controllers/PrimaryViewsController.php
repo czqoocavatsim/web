@@ -23,7 +23,11 @@ class PrimaryViewsController extends Controller
     public function home(Request $request)
     {
         //VATSIM online controllers
-        $controllers = SessionLog::whereNull('session_end')->get();
+        $controllers = SessionLog::whereNull('session_end')->orderBy('session_start', 'asc')->get();
+
+        // Controller Certifications
+        $externalController = ExternalController::all();
+        $ganderController = RosterMember::all();
 
         //News
         $news = News::where('visible', true)->get()->sortByDesc('published')->first();

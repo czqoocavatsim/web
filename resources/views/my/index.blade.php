@@ -353,7 +353,9 @@
                                 {{ $rosterProfile->activeLabelHtml() }}
                             </h3>
                         </div>
-                        <h3 class="font-weight-bold blue-text mt-4 pb-2">Your Hours</h3>
+
+                        <h3 class="font-weight-bold blue-text mt-4 pb-2">Currency Hours</h3>
+
                         @php
                             $currency = auth()->user()->rosterProfile->currency;
                             $class = $currency < 0.5 ? 'red' : ($currency < 6.0 ? 'blue' : 'green');
@@ -377,9 +379,27 @@
                                     </td>
                                 @endif
                             </span>
-                        </h3>                        
+                        </h3>   
 
-                        <p class="mt-2">In order to remain active, you require a minimum of six hours recorded during the calendar year.</p>
+                        {{-- Certified in Q3 - 3hrs Currency Requirements --}}
+                        @if(auth()->user()->rosterProfile->certified_in_q3 == 1)
+                        <div class="d-flex flex-row justify-content-left">
+                            <h5>
+                                <span style='font-weight: 400' class='badge rounded p-2 shadow-none blue text-white'><i class='fas fa-info mr-2'></i> As you were certified in Q3, you are only required to attain 3 hours currency for this year (6 hours next year).</span>
+                            </h5>
+                        </div>
+                        @endif
+
+                        {{-- Certified in Q4 - No Currency Requirements --}}
+                        @if(auth()->user()->rosterProfile->certified_in_q4 == 1)
+                            <div class="d-flex flex-row justify-content-left">
+                                <h5>
+                                    <span style='font-weight: 400' class='badge rounded p-2 shadow-none blue text-white'><i class='fas fa-info mr-2'></i> As you were certified in Q4, you do not have any currency requirements for this year (6 hours next year).</span>
+                                </h5>
+                            </div>
+                        @endif
+
+                        @if(auth()->user()->rosterProfile->certified_in_q4 !== 1 && auth()->user()->rosterProfile->certified_in_q3 !== 1)<p class="mt-2">In order to remain active, you require a minimum of six hours recorded during {{\Carbon\Carbon::now()->format('Y')}}.</p> @endif
 
                         <h3 class="font-weight-bold blue-text mt-4 pb-2">Your Connections</h3>
 
@@ -399,7 +419,7 @@
                                                 {{$s->callsign}}
                                                 @if($s->is_instructing == 1)<span class="badge bg-danger">Instructing</span>@endif
                                                 @if($s->is_student == 1)<span class="badge bg-warning">Training</span>@endif
-                                                @if($s->is_ctp)<span class="badge bg-primary">CTP</span>@endif
+                                                @if($s->is_ctp == 1)<span class="badge bg-primary">CTP</span>@endif
                                             </th>
                                             <th>{{\Carbon\Carbon::parse($s->session_start)->format('m/d/Y \a\t Hi\Z')}}</th>
                                             <th>
@@ -431,6 +451,7 @@
 
                             <h5 class="font-weight-bold blue-text mt-4 pb-2">Notes for Table</h5>
                             <li>Connections of less than 30 minutes will show with a <i style="color: red;" class="fas fa-times"></i> within the time collum.</li>
+                            <li>Connections conducted while a Student will appear with <span class="badge bg-warning">Training</span> and will not count towards your currency.
                         @else
                             <p class="mt-0">You have not recorded any hours so far this year. Connect to the network in order to record a session!</p>
                         @endif

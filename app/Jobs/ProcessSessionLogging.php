@@ -40,6 +40,7 @@ class ProcessSessionLogging implements ShouldQueue
      */
     public function handle()
     {
+
         $ctp_events = CTPDates::where('oca_start', '<', Carbon::now())->where('oca_end', '>', Carbon::now())->get();
 
         //BEGIN CONTROLLER SESSION CHECK
@@ -87,7 +88,7 @@ class ProcessSessionLogging implements ShouldQueue
                     }
 
                     // Student Training Session
-                    if($session->user->studentProfile){
+                    if($session->user->studentProfile->current == 1){
                         $session->is_student = 1;
                         $session->save();
                     }
