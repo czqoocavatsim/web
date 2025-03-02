@@ -922,12 +922,16 @@
     <!--End join guild modal-->
 
 
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.4/moment.min.js"></script>
+    <script src="https://cdn.datatables.net/plug-ins/1.13.6/sorting/datetime-moment.js"></script>    
     <script>
         $(document).ready(function() {
+            $.fn.dataTable.moment('MM/DD/YYYY [at] HHmm[Z]'); // Ensure correct date format parsing
+    
             $('#dataTable').DataTable({
-                "order": [[1, "asc"]],
+                "order": [[1, "desc"]] // Sort by the second column (Logon) in descending order
             });
-        } );
+        });
     </script>
 
 @stop
