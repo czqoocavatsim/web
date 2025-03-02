@@ -32,8 +32,6 @@
                             'hi' => 'Hi',
                             'hola' => 'Hola',
                             'howdy' => 'Howdy',
-                            'guten_tag' => 'Guten Tag',
-                            'grüß_dich' => 'Grüß Dich',
                         ];
 
                         //echo greeting
