@@ -41,7 +41,7 @@ class ProcessSessionLogging implements ShouldQueue
     public function handle()
     {
 
-        // $ctp_events = CTPDates::where('oca_start', '<', Carbon::now())->where('oca_end', '>', Carbon::now())->get();
+        $ctp_events = CTPDates::where('oca_start', '<', Carbon::now())->where('oca_end', '>', Carbon::now())->get();
 
         //BEGIN CONTROLLER SESSION CHECK
         //Get monitored positions
