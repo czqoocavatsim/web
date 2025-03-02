@@ -7,7 +7,7 @@
 @section('content')
 
 <div class="jarallax card card-image rounded-0"  data-jarallax data-speed="0.2">
-    <img class="jarallax-img" src="{{$article->image}}" alt="">
+    <img class="jarallax-img" @if($article->image !== null) src="{{$article->image}}" @else src="https://ganderoceanic.ca/assets/staff_uploads/news_article/default.png" style="position: relative; top: -200px;" @endif alt="">
     <div class="text-white text-left rgba-stylish-light py-3 pt-5 px-4">
         <div class="container">
             <div class="pt-5 pb-3">

@@ -161,7 +161,7 @@
                             <a href="{{route('about.core')}}" class="text-body fw-600">About</a>
                         </li>
                         <li>
-                            <a class="text-body fw-600" href="{{route('policies')}}#policyEmbed3">Privacy Policy</a>
+                            <a class="text-body fw-600" href="{{route('policies')}}">Privacy Policy</a>
                         </li>
                     </ul>
                     <div>
