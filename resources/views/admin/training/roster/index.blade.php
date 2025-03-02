@@ -16,9 +16,9 @@
     <thead>
         <th>CID</th>
         <th>Name</th>
-        <th>Currency</th>
         <th>Active</th>
         <th>Status</th>
+        <th>Currency</th>
         <th>Action</th>
     </thead>
     <tbody>
@@ -35,20 +35,6 @@
                         <i title="Not linked to a user account." class="fas fa-unlink"></i>
                     @endif
                 </td>
-
-                @if($r->currency < 6)
-                <td class="bg-danger text-dark">
-                    @if($r->currency < 1)
-                        {{ str_pad(round(($r->currency - floor($r->currency)) * 60), 2, '0', STR_PAD_LEFT) }}m
-                    @else
-                        {{ floor($r->currency) }}h {{ str_pad(round(($r->currency - floor($r->currency)) * 60), 2, '0', STR_PAD_LEFT) }}m
-                    @endif
-                </td>
-                @else
-                <td class="bg-success text-white">
-                    {{ floor($r->currency) }}h {{ str_pad(round(($r->currency - floor($r->currency)) * 60), 2, '0', STR_PAD_LEFT) }}m
-                </td>
-                @endif
 
                 @if ($r->certification == "certified")
                     <td class="bg-success text-white">
@@ -76,6 +62,20 @@
                     <td class="bg-danger text-white">
                         Inactive
                     </td>
+                @endif
+
+                @if($r->currency < 6)
+                <td class="bg-danger text-white">
+                    @if($r->currency < 1)
+                        {{ str_pad(round(($r->currency - floor($r->currency)) * 60), 2, '0', STR_PAD_LEFT) }}m
+                    @else
+                        {{ floor($r->currency) }}h {{ str_pad(round(($r->currency - floor($r->currency)) * 60), 2, '0', STR_PAD_LEFT) }}m
+                    @endif
+                </td>
+                @else
+                <td class="bg-success text-white">
+                    {{ floor($r->currency) }}h {{ str_pad(round(($r->currency - floor($r->currency)) * 60), 2, '0', STR_PAD_LEFT) }}m
+                </td>
                 @endif
 
                 <td>

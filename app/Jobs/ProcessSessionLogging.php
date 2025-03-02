@@ -41,7 +41,7 @@ class ProcessSessionLogging implements ShouldQueue
     public function handle()
     {
 
-        $ctp_events = CTPDates::where('oca_start', '<', Carbon::now())->where('oca_end', '>', Carbon::now())->get();
+        // $ctp_events = CTPDates::where('oca_start', '<', Carbon::now())->where('oca_end', '>', Carbon::now())->get();
 
         //BEGIN CONTROLLER SESSION CHECK
         //Get monitored positions
@@ -160,7 +160,7 @@ class ProcessSessionLogging implements ShouldQueue
 
                 // Name if in DB, otherwise use CID
                 if($log->user){
-                    $name = $log->user->fullName('FLC');
+                    $name = '<@'.$session->user->discord_user_id.'>';
                 } else {
                     $name = $log->cid;
                 }        
