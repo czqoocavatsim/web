@@ -502,6 +502,14 @@ class InstructingController extends Controller
         $rosterMember->certification = 'Certified';
         $rosterMember->active = 1;
         $rosterMember->remarks = 'Certified on NAT_FSS (Web Message)';
+        # Q3 Certified
+        if(Carbon::now()->format('F') == "July" || Carbon::now()->format('F') == "August" || Carbon::now()->format('F') == "September"){
+            $rosterMember->certified_in_q3 = 1;
+        }
+        # Q4 Certified
+        if(Carbon::now()->format('F') == "October" || Carbon::now()->format('F') == "November" || Carbon::now()->format('F') == "December"){
+            $rosterMember->certified_in_q4 = 1;
+        }
         $rosterMember->date_certified = Carbon::now();
 
         //User

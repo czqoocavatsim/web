@@ -55,36 +55,45 @@
                 </div>
                 <div class="col-md-6 mb-4">
                     <div class="d-flex flex-row-justify-content-between align-items-center">
-                        <h2 class="white-text font-weight-bold">Online Oceanic Controllers</h2>
+                        <h2 class="white-text font-weight-bold">Current Activity</h2>
                         <a href="{{ route('map') }}" class="float-right ml-auto mr-0 white-text"
-                            style="font-size: 1.2em;">View map&nbsp;&nbsp;<i class="fas fa-map"></i></a>
+                            style="font-size: 1.2em;">View airspace map&nbsp;&nbsp;<i class="fas fa-map"></i></a>
                     </div>
                     <ul class="list-unstyled ml-0 mt-3 p-0 onlineControllers">
                         @if (count($controllers) < 1)
                             <li class="mb-2">
                                 <div class="d-flex flex-row justify-content-between align-items-center mb-1">
-                                    <h4 class="m-0 white-text"><i class="fas fa-sad-tear" style="margin-right: 1rem;"></i>No controllers online</h4>
+                                    <h4 class="m-0 white-text"><i class="fas fa-times" style="margin-right: 1rem;"></i>No controllers currently connected to VATSIM.</h4>
                                 </div>
                             </li>
                         @else
-                        <table class="table table-hover" style="color: white;">
+                        <table class="table table-hover" style="color: white; text-align: center;">
                             <thead>
                             <tr>
                                 <th scope="col">Callsign</th>
-                                <th scope="col">Time Online</th>
                                 <th scope="col">Controller</th>
+                                <th scope="col">Time Online</th>
                             </tr>
                             </thead>
                             <tbody>
                             @foreach ($controllers as $controller)
                                 <tr>
-                                    <th scope="row"><b>{{$controller->callsign}}</b></th>
-                                    <td>{{$controller->user->fullName('FLC')}}</td>
+                                    <th scope="row"><b>{{$controller->callsign}}</b>
+                                        @if($controller->is_instructing == 1)<br><span class="badge bg-danger">Instructing</span>@endif
+                                        @if($controller->is_student == 1)<br><span class="badge bg-warning">Training</span>@endif
+                                        @if($controller->is_ctp == 1)<br><span class="badge bg-info">CTP Controller</span>@endif</th>
+                                    <td>
+                                        @if($controller->user)
+                                            {{$controller->user->fullName('FLC')}}
+                                        @else
+                                            {{$controller->cid}}
+                                        @endif
+                                    </td>
                                     <td>
                                         @if ($controller->session_start->diff(\Carbon\Carbon::now())->h > 0)
                                             {{ $controller->session_start->diff(\Carbon\Carbon::now())->h }}hr {{ $controller->session_start->diff(\Carbon\Carbon::now())->i }}min
                                         @else
-                                            {{ $controller->session_start->diff(\Carbon\Carbon::now())->i }}m
+                                            {{ $controller->session_start->diff(\Carbon\Carbon::now())->i }}min
                                         @endif
                                     </td>
                                 </tr>
@@ -289,7 +298,7 @@
                     </a>
                     <a class="border-0 list-group-item list-group-item-action waves-effect"
                         href="https://nattrak.vatsim.net/" style="text-decoration:none;">
-                        <span class="blue-text">NATTRAK Website</span>
+                        <span class="blue-text">natTrak Oceanic Clearance</span>
                         &nbsp;
                         <span class="blue-text">
                             <i class="fa fa-satellite-dish fa-2x" style="vertical-align:middle;"></i>

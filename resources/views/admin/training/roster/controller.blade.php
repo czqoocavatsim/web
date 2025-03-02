@@ -23,6 +23,30 @@
     </div>
     <div class="col-sm">
         <h5>Status</h5>
+        @php
+            $currency = $rosterMember->currency;
+            $class = $currency < 0.5 ? 'red' : ($currency < 6.0 ? 'blue' : 'green');
+        @endphp
+
+        <h3>
+            <span style='font-weight: 400'
+                class='badge rounded {{ $class }} text-white p-2 shadow-none'>
+
+                @if($currency == 0)
+                    <td class="bg-success text-white">
+                        0m Recorded
+                    </td>
+                @elseif($currency < 1)
+                    <td class="bg-success text-white">
+                        {{ str_pad(round(($currency - floor($currency)) * 60), 2, '0', STR_PAD_LEFT) }}m Recorded
+                    </td>
+                @else
+                    <td class="bg-success text-white">
+                        {{ floor($currency) }}h {{ str_pad(round(($currency - floor($currency)) * 60), 2, '0', STR_PAD_LEFT) }}m Recorded
+                    </td>
+                @endif
+            </span>
+        </h3> 
         <h3>
             {{$rosterMember->certificationLabelHtml()}}
         </h3>
@@ -36,8 +60,8 @@
     <h3 class="font-weight-bold blue-text mt-4 pb-2">Controller Connections</h3>
     <p class="mt-2">List of {{$rosterMember->user->fullName('F')}}'s connections over the last 12 Months.</p>
     {{-- <p class="mt-0">Connections less than 30 minutes are shown in red, and do not count towards Controller Currency.</p> --}}
-    <p class="mt-0">Connections less than 30 minutes are shown in red.</p>
-    <table class="table dt table-hover table-bordered">
+    <p class="mt-0">Connections of less than 30 minutes will show with a <i style="color: red;" class="fas fa-times"></i> within the time collum.</p>
+    <table id="dataTable" class="table table-hover">
         <thead>
             <th>Position</th>
             <th>Logon</th>
@@ -48,22 +72,28 @@
             @foreach ($sessions as $s)
                 <tr>
                     <th>{{$s->callsign}}</th>
-                    <th>{{\Carbon\Carbon::parse($s->session_start)->format('l, d F \a\t Hi\Z')}}</th>
+                    <th>{{\Carbon\Carbon::parse($s->session_start)->format('m/d/Y \a\t Hi\Z')}}</th>
                     <th>
                         @if($s->session_end === null)
                         Currently Connected
                         @else
-                        {{\Carbon\Carbon::parse($s->session_end)->format('l, d F \a\t Hi\Z')}}
+                        {{\Carbon\Carbon::parse($s->session_end)->format('m/d/Y \a\t Hi\Z')}}
                         @endif
                     </th>
                     @if($s->duration < 0.5)
-                        <td class="bg-danger text-white">
-                            {{$s->duration}}
+                        <td>
+                            {{ str_pad(round(($s->duration - floor($s->duration)) * 60), 2, '0', STR_PAD_LEFT) }}m <i style="color: red;" class="fas fa-times"></i>
                         </td>
                     @else
-                    <td class="bg-success text-white">
-                        {{$s->duration}}
-                    </td>
+                        @if($s->duration < 1)
+                            <td>
+                                {{ str_pad(round(($s->duration - floor($s->duration)) * 60), 2, '0', STR_PAD_LEFT) }}m
+                            </td>
+                        @else
+                            <td>
+                                {{ floor($s->duration) }}h {{ str_pad(round(($s->duration - floor($s->duration)) * 60), 2, '0', STR_PAD_LEFT) }}m
+                            </td>
+                        @endif
                     @endif
                 </tr>
             @endforeach
@@ -176,6 +206,12 @@
     </div>
 </div>
 <!--End edit roster member modal-->
+
+<script>
+    $(document).ready(function() {
+        $('#dataTable').DataTable();
+    } );
+</script>
 
 
 @endsection

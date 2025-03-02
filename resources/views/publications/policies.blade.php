@@ -4,13 +4,12 @@
 
 @section('content')
     <div class="card card-image blue rounded-0">
-        <div class="text-white text-left pb-2 pt-5 px-4">
+        <div class="text-white text-left rgba-stylish-strong py-3 pt-5 px-4">
             <div class="container">
                 <div class="py-5">
                     <h1 class="font-weight-bold" style="font-size: 3em;">Policies</h1>
-                    <p style="font-size: 1.2em;" class="mt-3 mb-0">
-                        Policies and guidelines for operations in Gander Oceanic. These policies may be updated from time to time.
-                    </p>
+                    <h4>Policies and guidelines for operations in Gander Oceanic..</h4>
+                    <p>Updates to these policies will be announced on the Gander Oceanic Website & Discord.</p>
                 </div>
             </div>
         </div>

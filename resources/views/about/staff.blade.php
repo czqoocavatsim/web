@@ -3,7 +3,17 @@
 @section('title', 'Staff - ')
 
 @section('content')
-@include('layouts.large-page-header-blue', ['title' => 'Staff'])
+<div class="card card-image blue rounded-0">
+    <div class="text-white text-left rgba-stylish-strong py-3 pt-5 px-4">
+        <div class="container">
+            <div class="py-5">
+                <h1 class="font-weight-bold" style="font-size: 3em;">Our Staff</h1>
+                <h4 class="font-weight-bold">List of the Staff for Gander Oceanic</h4>
+            </div>
+        </div>
+    </div>
+</div>
+
 <div class="container py-4">
     <div class="row">
         <div class="col-md-3 mb-3">
