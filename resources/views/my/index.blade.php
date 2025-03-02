@@ -924,7 +924,9 @@
 
     <script>
         $(document).ready(function() {
-            $('#dataTable').DataTable();
+            $('#dataTable').DataTable({
+                "order": [[1, "asc"]],
+            });
         } );
     </script>
 
