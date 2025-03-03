@@ -101,7 +101,7 @@ class ProcessSessionLogging implements ShouldQueue
 
                     // Controller Name for the Discord
                     if($session->user){
-                        $name = '<@'.$session->user->discord_user_id.'>';
+                        $name = $session->user->FullName('FLC');
                     } else {
                         $name = $controller->cid;
                     }        
@@ -160,7 +160,7 @@ class ProcessSessionLogging implements ShouldQueue
 
                 // Name if in DB, otherwise use CID
                 if($log->user){
-                    $name = '<@'.$session->user->discord_user_id.'>';
+                    $name = $session->user->FullName('FLC');
                 } else {
                     $name = $log->cid;
                 }        
