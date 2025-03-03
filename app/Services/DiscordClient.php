@@ -112,8 +112,8 @@ class DiscordClient
                             'title' => $callsign.' is currently online!',
                             'description' => 'There is currently ATC being provided over the Ocean!
     
-    **Controller:** '.$name.'
-    **Connected at:** <t:'.Carbon::now()->timestamp.':t>',
+**Controller:** '.$name.'
+**Connected at:** <t:'.Carbon::now()->timestamp.':t>',
                             'color' => hexdec('6EC40C'),
                         ]
                     ]
