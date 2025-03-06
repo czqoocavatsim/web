@@ -71,10 +71,10 @@ class ProcessMonthlyBreakdown implements ShouldQueue
 
         // Send the Announcement
         $discord = new DiscordClient();
-        $discord->sendMessageWithEmbed(env('DISCORD_ANNOUNCEMENTS'), 'Gander Oceanic | Operations Breakdown | '.Carbon::now()->subMonth()->format('F, Y'), $message);
+        $discord->sendMessageWithEmbed(env('DISCORD_COMMUNITY'), 'Gander Oceanic Operations | '.Carbon::now()->subMonth()->format('F, Y'), $message);
 
         foreach($roster_member as $roster){
-            $roster->monthly_hours = 0.0;
+            $roster->monthly_hours = 0;
             $roster->save();
         }
     }

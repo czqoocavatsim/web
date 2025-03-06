@@ -49,14 +49,6 @@ class ProcessSessionLogging implements ShouldQueue
 
         $vatsimData = new VATSIMClient();
 
-        $instructor_ids = [];
-        $users = User::all();
-        foreach($users as $u){
-            if($u->InstructorProfile){
-                $instructor_ids[] = $u->id;
-            }
-        }
-
         $czqoRoster = RosterMember::all()->pluck('user_id')->toArray();
         $eggxRoster = ExternalController::all()->pluck('id')->toArray();
         $allRoster = array_unique(array_merge($czqoRoster, $eggxRoster));
@@ -81,21 +73,30 @@ class ProcessSessionLogging implements ShouldQueue
                         'roster_member_id' => RosterMember::where('cid', $controller->cid)->value('id') ?? null,
                     ]);
 
-                    // Instructing Training Session
-                    if(str_contains($controller->callsign, '_I_') && $session->user->InstructorProfile){
-                        $session->is_instructing = 1;
-                        $session->save();
-                    }
+                    // Check if user entry exits
+                    if($session->user){
+                        // Instructing Training Session
+                        if(str_contains($controller->callsign, '_I_') && $session->user->InstructorProfile){
+                            $session->is_instructing = 1;
+                            $session->save();
+                        }
 
-                    // Student Training Session
-                    if($session->user->studentProfile->current == 1){
-                        $session->is_student = 1;
-                        $session->save();
+                        if($session->user->studentProfile){
+                            // Student Training Session
+                            if($session->user->studentProfile->current == 1){
+                                $session->is_student = 1;
+                                $session->save();
+                            }
+                        }
                     }
 
                     // Session During CTP
-                    if($ctp_events){
-                        $session->is_ctp = 1;
+                    if($session->is_ctp == null){
+                        if(!$ctp_events->isEmpty()){
+                            $session->is_ctp = 1;
+                        } else {
+                            $session->is_ctp = null;
+                        }
                     }
 
 
@@ -131,7 +132,7 @@ class ProcessSessionLogging implements ShouldQueue
                         }
                     } else {
                         // Controller is not authorised. Let Senior Team know.
-                        if($session->discord_id == null){
+                        if($session->discord_id == null && $ctp_events->isEmpty()){
                             // Send Discord Message
                             $discord = new DiscordClient();
                             $discord_id = $discord->sendMessageWithEmbed('482817715489341441', 'Controller Unauthorised to Control', '<@&482816721280040964>, '.$session->cid.' has just connected onto VATSIM as '.$session->callsign.' on <t:'.Carbon::now()->timestamp.':F>. 
@@ -160,7 +161,7 @@ class ProcessSessionLogging implements ShouldQueue
 
                 // Name if in DB, otherwise use CID
                 if($log->user){
-                    $name = $session->user->FullName('FLC');
+                    $name = $log->user->FullName('FLC');
                 } else {
                     $name = $log->cid;
                 }        

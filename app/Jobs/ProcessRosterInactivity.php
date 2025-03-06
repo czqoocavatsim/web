@@ -156,6 +156,8 @@ class ProcessRosterInactivity implements ShouldQueue
 
                 // Set Total Currency back to Zero (New Year Begins)
                 $currency = 0;
+                $roster->certified_in_q3 = 0;
+                $roster->certtfied_in_q4 = 0;
             }
 
             // Save Roster Information based of above if statements
