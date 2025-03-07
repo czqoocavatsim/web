@@ -4,17 +4,18 @@
 @section('description', 'Sector files and resources for Gander controllers')
 
 @section('content')
-<div class="jarallax card card-image blue rounded-0"  data-jarallax data-speed="0.2">
-    {{-- <img class="jarallax-img" src="" alt=""> --}}
+<div class="jarallax card card-image blue rounded-0"  data-jarallax data-speed="1">
+    <img class="jarallax-img" src="{{asset('assets/resources/media/img/website/euroscope_client.png')}}" alt="">
     <div class="text-white text-left rgba-stylish-strong py-3 pt-5 px-4">
         <div class="container">
             <div class="py-5">
                 <h1 class="font-weight-bold">ATC Resources</h1>
-                <h4>Official documents and files for use when controlling Gander Oceanic</h4>
+                <h4 class="font-weight-bold">Official documents and files for use when controlling Gander Oceanic</h4>
             </div>
         </div>
     </div>
 </div>
+
 <div class="container py-4">
     <div class="list-group mt-2">
         @foreach($resources as $resource)

@@ -54,6 +54,64 @@ class DiscordAccountCheck implements ShouldQueue
         $response = $discord->getClient()->get('guilds/'.env('DISCORD_GUILD_ID').'/members?limit=1000');
         $discord_members = json_decode($response->getBody(), true);
 
+        // Discord Notification Calculations (Figure out who needs these roles)
+        {
+            // Initialise Notification ID roles
+            $news_notify = [];
+            $event_notify = [];
+            $ctp_notify = [];
+            $controller_notify = [];
+            $pilot_notify = [];
+            $tech_notify = [];
+
+            // Get all the reactions for each type
+            $news_react = $discord->getReactions('1347194167725522985', '1347464850254725131', urlencode('📢'));
+            sleep(1);
+            $event_react = $discord->getReactions('1347194167725522985', '1347464850254725131', urlencode('📆'));
+            sleep(1);
+            $ctp_react = $discord->getReactions('1347194167725522985', '1347464850254725131', '%F0%9F%87%A8');
+            sleep(1);
+            $controller_react = $discord->getReactions('1347194167725522985', '1347464850254725131', urlencode('🛰️'));
+            sleep(1);
+            $pilot_react = $discord->getReactions('1347194167725522985', '1347464850254725131', urlencode('✈️'));
+            sleep(1);
+            $tech_react = $discord->getReactions('1347194167725522985', '1347464850254725131', urlencode('🛠️'));
+
+            // Lets now get some IDs
+            foreach($news_react as $nr){
+                if($nr['id'] !== "1118430230839840768"){
+                    $news_notify[] = $nr['id'];
+                }
+            }
+            foreach($event_react as $er){
+                if($er['id'] !== "1118430230839840768"){
+                    $event_notify[] = $er['id'];
+                }
+            }
+            foreach($ctp_react as $cr){
+                if($cr['id'] !== "1118430230839840768"){
+                    $ctp_notify[] = $cr['id'];
+                }
+            }
+            foreach($controller_react as $cor){
+                if($cor['id'] !== "1118430230839840768"){
+                    $controller_notify[] = $cor['id'];
+                }
+            }
+            foreach($pilot_react as $pr){
+                if($pr['id'] !== "1118430230839840768"){
+                    $pilot_notify[] = $pr['id'];
+                }
+            }
+            foreach($tech_react as $tr){
+                if($tr['id'] !== "1118430230839840768"){
+                    $tech_notify[] = $tr['id'];
+                }
+            }
+
+            // dd($tech_notify);
+        }
+
         // Loop through each Discord User and get some key information
         foreach($discord_members as $members){
             $discord_uids[] = $members['user']['id'];
@@ -127,7 +185,8 @@ class DiscordAccountCheck implements ShouldQueue
                             's3' => 1342640763183435807,
                             'c1' => 1342640783211233280,
                             'c3' => 1342640799837585468,
-                            'ins' => 1342640831043211344,
+                            'i1' => 1342640831043211344,
+                            'i3' => 1347454523676819516,
                             'sup' => 720502070683369563,
                             'adm' => 1342640950412967937,
                             'ppl' => 1342642295157297203,
@@ -136,6 +195,12 @@ class DiscordAccountCheck implements ShouldQueue
                             'atpl' => 1342642436408606851,
                             'fi' => 1342642438162088091,
                             'fe' => 1342642440846311556,
+                            'news_notify' => 1347476285542236160,
+                            'event_notify' => 1347476363472273418,
+                            'ctp_notify' => 1347476367574569020,
+                            'controller_notify' => 1347476371236192287,
+                            'pilot_notify' => 1347476375321182228,
+                            'tech_notify' => 1347476378915700777,
                         ];
 
                         //Add the Member role to each user
@@ -187,8 +252,11 @@ class DiscordAccountCheck implements ShouldQueue
                             if($user->rating_short == 'C3') {
                                 array_push($mainRoles, $discordRoleIds['c3']);
                             }
-                            if($user->rating_short == 'I1' || $user->rating_short == 'I3') {
-                                array_push($mainRoles, $discordRoleIds['ins']);
+                            if($user->rating_short == 'I1') {
+                                array_push($mainRoles, $discordRoleIds['i1']);
+                            }
+                            if($user->rating_short == 'I3') {
+                                array_push($mainRoles, $discordRoleIds['i3']);
                             }
                             if($user->rating_short == 'SUP') {
                                 array_push($mainRoles, $discordRoleIds['sup']);
@@ -216,6 +284,33 @@ class DiscordAccountCheck implements ShouldQueue
                             }
                             if($user->pilotrating_short == 'FE'){
                                 array_push($mainRoles, $discordRoleIds['fe']);
+                            }
+                        }
+
+                        // Discord Notification Role Assignment
+                        {
+                            if(in_array($user->discord_user_id, $news_notify)){
+                                array_push($mainRoles, $discordRoleIds['news_notify']);
+                            }
+
+                            if(in_array($user->discord_user_id, $event_notify)){
+                                array_push($mainRoles, $discordRoleIds['event_notify']);
+                            }
+
+                            if(in_array($user->discord_user_id, $ctp_notify)){
+                                array_push($mainRoles, $discordRoleIds['ctp_notify']);
+                            }
+
+                            if(in_array($user->discord_user_id, $controller_notify)){
+                                array_push($mainRoles, $discordRoleIds['controller_notify']);
+                            }
+
+                            if(in_array($user->discord_user_id, $pilot_notify)){
+                                array_push($mainRoles, $discordRoleIds['pilot_notify']);
+                            }
+
+                            if(in_array($user->discord_user_id, $tech_notify)){
+                                array_push($mainRoles, $discordRoleIds['tech_notify']);
                             }
                         }
 
@@ -409,31 +504,17 @@ class DiscordAccountCheck implements ShouldQueue
         // }
 
         if($user_updated > 0){
-        // Record Information for Discord
-        // Beginning
-        $update_content = "Updates were conducted for Discord.";
 
-        $update_content .= "\n\n **__Updated Users:__**";
-        foreach($in_discord_name as $name){
-            $update_content .= "\n- ".$name;
-        }
+        // $update_content .= "\n\n **__Updated Users:__**";
+        // foreach($in_discord_name as $name){
+        //     $update_content .= "\n- ".$name;
+        // }
+        // // Completion Time
+        // $end_time = Carbon::now();
+        // $update_content .= "\n\n**__Script Time:__**";
+        // $update_content .= "\n- Script Time: " . $start_time->diffForHumans($end_time, ['parts' => 2, 'short' => true, 'syntax' => Carbon::DIFF_ABSOLUTE]) . ".";
 
-        // $update_content .= "\n\n **__General Information:__**";
-
-        // // Users which are linked in Discord
-        // $update_content .= "\n- Accounts Linked in Core: ".$checked_users;
-        // $update_content .= "\n- Linked - in Discord: ".$in_discord;
-        // $update_content .= "\n- Linked - not in Discord: ".$not_in_discord;
-
-        // // Accounts not linked
-        // $update_content .= "\n- Not Linked - in Discord: ".$accounts_not_linked." (No Account Role Assigned)";
-
-        // Completion Time
-        $end_time = Carbon::now();
-        $update_content .= "\n\n**__Script Time:__**";
-        $update_content .= "\n- Script Time: " . $start_time->diffForHumans($end_time, ['parts' => 2, 'short' => true, 'syntax' => Carbon::DIFF_ABSOLUTE]) . ".";
-
-        $discord->sendMessageWithEmbed('482860026831175690', 'HOURLY: Discord User Update', $update_content);
+        $discord->sendMessage('482860026831175690', "DISCORD UPDATE: ".$user_updated." users updated.");
         }
     }
 

@@ -2,8 +2,8 @@
 @section('title', 'Events - ')
 @section('description', 'Check out events over the Northern Atlantic supported by CZQO')
 @section('content')
-<div class="jarallax card card-image rounded-0" data-jarallax data-speed="0.2">
-    <img class="jarallax-img" src="https://pbs.twimg.com/media/Dawqe5JX4AIx378.jpg" alt="">
+<div class="jarallax card card-image blue rounded-0"  data-jarallax data-speed="0.2">
+    {{-- <img class="jarallax-img" src="{{asset('assets/resources/media/img/website/euroscope_client.png')}}" alt=""> --}}
     <div class="text-white text-left pb-2 pt-5 px-4 mask rgba-stylish-strong">
         <div class="container">
             <div class="py-5">
