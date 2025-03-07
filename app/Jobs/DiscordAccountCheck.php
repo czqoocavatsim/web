@@ -323,6 +323,7 @@ class DiscordAccountCheck implements ShouldQueue
                             497359834010615809, //VATSIM Senior Staff
                             1300054143532138516, //VATSYS Beta Tester
                             1278868454606377040, //Currently Online
+                            695274344141815891, //Discord Nitro Role
                         ];
 
                         foreach ($roleIdsToCheck as $roleId) {
