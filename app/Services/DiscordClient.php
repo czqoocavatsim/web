@@ -39,6 +39,22 @@ class DiscordClient
         return $response->getStatusCode() == 200;
     }
 
+    public function addReaction($reaction)
+    {
+        $response = $this->client->put("channels/1347194167725522985/messages/1347464850254725131/reactions/".urlencode($reaction)."/@me");
+
+        return $response->getStatusCode() == 200;
+    }
+
+    public function getReactions($channel, $message, $emoji)
+    {
+        $response = $this->client->get("channels/{$channel}/messages/{$message}/reactions/{$emoji}");
+
+        $data = json_decode($response->getBody(), true);
+
+        return $data;
+    }
+
     public function sendDM($userId, $title, $message)
     {
         try{
@@ -63,6 +79,24 @@ class DiscordClient
     public function sendMessageWithEmbed($channelId, $title, $description)
     {
         $response = $this->client->post("channels/{$channelId}/messages", [
+            'json' => [
+                "tts" => false,
+                "embeds" => [
+                    [
+                        'title' => $title,
+                        'description' => $description,
+                        'color' => hexdec('0080C9'),
+                    ]
+                ]
+            ]
+        ]);
+
+        return $response;
+    }
+
+    public function editMessageWithEmbed($channelId, $messageId, $title, $description)
+    {
+        $response = $this->client->patch("channels/{$channelId}/messages/{$messageId}", [
             'json' => [
                 "tts" => false,
                 "embeds" => [

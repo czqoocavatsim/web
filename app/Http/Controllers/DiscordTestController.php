@@ -53,7 +53,7 @@ class DiscordTestController extends Controller
     public function Job2()
     {
         // Dispatch the job
-        $job = ProcessRosterInactivity::dispatch();
+        $job = DiscordAccountCheck::dispatch();
 
         // Call the handle method directly to get the result synchronously
         $result = $job->handle();
@@ -73,43 +73,76 @@ class DiscordTestController extends Controller
         Notification::send($user, new SevenDaysFromRemoval($user, $currency));
     }
 
+    public function addReaction()
+    {
+        $discord = new DiscordClient();
+
+        $discord->addReaction('🛠️');
+    }
+
+    public function getReactions()
+    {
+        $discord = new DiscordClient();
+
+        $data = $discord->getReactions('1347194167725522985', '1347464850254725131', urlencode('🛰️'));
+
+        dd($data);
+    }
+
     public function SendEmbed()
     {
      //New Applicant in Instructor Channel
      $discord = new DiscordClient();
 
-     $discord->sendMessageWithEmbed('1214345937871179777', '',
+     $discord->sendMessageWithEmbed('1347194167725522985', '',
                                     
-'## Gander Oceanic - Training Process
+'## Discord Notifications - Gander Oceanic
+Welcome to the Gander Oceanic Discord,
 
-Hello <@&482824058141016075>, welcome to Gander Oceanic!
+In order to reduce pings recieved by our controllers. Opt-In Notifications are being created for our member base. This will allow you to select only the notifications which you are interested in.
 
-The following is here to assist you in attaining your Oceanic Endorsement
+:loudspeaker: - News Announcements
+:calendar: - Event Announcement
+:regional_indicator_c: - Cross the Pond Announcements
+:satellite_orbital: - Controller Announcements
+:airplane: - Pilot Announcements
+:tools: - Tech Announcements
 
-### 1. Preparing for the Exam
-- A  Computer-Based Training (CBT) for OCA controlling can be found [here](https://vats.im/gandercbt).
-- Review [ATC Resources](https://ganderoceanic.ca/atc/resources) and the [Gander Oceanic Controller Knowledgebase](https://knowledgebase.ganderoceanic.ca/controller/) to begin gaining an understanding of our Operations and Policies.
-After reviewing the above, you will be required to take an exam consisting of 20 Questions in relation to Oceanic proceedings within Gander and Shanwick. This exam is open book, and the pass mark is 80%.
+In order to have these roles assigned, please react to this message. To remove the role, please remove your reaction.
 
-### 2. Taking the Exam
-In order for this exam to be assigned, you must visit the [VATCAN Website](https://vatcan.ca/) and log into the website.
-Once you do this, head to your training thread in <#1226234767138226338> and request the exam by tagging the <@&1214350179151650898>
+These roles will be updated hourly.
 
-### 3. Live Session
-You will be required to undertake a 90-minute training session with a Gander Oceanic Instructor on the Bandbox NAT_FSS.
+**Regards,**
+***Gander Oceanic Staff Team***
+');   
 
-> **Note:** *The session is a familiarisation session to ensure that you understand all the aspects within oceanic controlling, Euroscope profile, Plug-ins, CPDLC and Nattrak website.*
+    }
 
-Our Instructors are located around the world, and therefor within different timezones. Instructors will aim to find availability with each student as quickly as possible.
+    public function EditEmbed()
+    {
+     //New Applicant in Instructor Channel
+     $discord = new DiscordClient();
 
-Our system will automatically request you to provide new availability each fortnight. We kindly ask you follow the format sent within the message, and provide your times in Zulu Format.
+     $discord->editMessageWithEmbed('1347194167725522985', '1347464850254725131', '',
+                                    
+'## Discord Notifications - Gander Oceanic
+Welcome to the Gander Oceanic Discord,
 
-Please ensure that you have reviewed any recent ⁠announcements and have the latest controller pack available prior to your session. 
+In order to reduce pings recieved by our controllers. Opt-In Notifications are being created for our member base. This will allow you to select only the notifications which you are interested in.
 
-Good luck with your study!
+:loudspeaker: - News Announcements
+:calendar: - Event Announcement
+:regional_indicator_c: - Cross the Pond Announcements
+:satellite_orbital: - Controller Announcements
+:airplane: - Pilot Announcements
+:tools: - Tech Announcements
 
-**Regards,
-*Gander Oceanic Training Team***
+In order to have these roles assigned, please react to this message. To remove the role, please remove your reaction.
+
+These roles will be updated hourly when the general discord role updates are conducted.
+
+**Regards,**
+***Gander Oceanic Staff Team***
 ');   
 
     }
@@ -117,7 +150,25 @@ Good luck with your study!
     public function sendMessage()
     {
         $discord = new DiscordClient();
-        $discord->sendMessage('488265136696459292', '<@&482835389640343562>');
+        $discord->sendMessage('1347194167725522985', 
+'## Discord Notifications - Gander Oceanic
+Welcome to the Gander Oceanic Discord,
+
+In order to reduce pings recieved by our controllers. Opt-In Notifications are being created for our member base. This will allow you to select only the notifications which you are interested in.
+
+- :megaphone: - News Announcements
+- :calendar: - Event Announcement
+- :regional_indicator_c: - Cross the Pond Announcements
+- :satellite_orbital: - Operation Announcements
+- :airplane: - Pilot Information
+
+In order to have these roles assigned, please react to this message. To remove the role, please remove your reaction.
+
+These roles will be updated hourly.
+
+**Regards,**
+***Gander Oceanic Staff Team***
+');
     }
 
     public function DiscordRoles()

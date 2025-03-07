@@ -3,7 +3,8 @@
 @section('description', 'Policies and guidelines for operations in Gander Oceanic')
 
 @section('content')
-    <div class="card card-image blue rounded-0">
+    <div class="jarallax card card-image blue rounded-0"  data-jarallax data-speed="0.2">
+    {{-- <img class="jarallax-img" src="{{asset('assets/resources/media/img/website/euroscope_client.png')}}" alt=""> --}}
         <div class="text-white text-left rgba-stylish-strong py-3 pt-5 px-4">
             <div class="container">
                 <div class="py-5">

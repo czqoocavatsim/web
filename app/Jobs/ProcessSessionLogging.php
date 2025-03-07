@@ -99,7 +99,6 @@ class ProcessSessionLogging implements ShouldQueue
                         }
                     }
 
-
                     // Controller Name for the Discord
                     if($session->user){
                         $name = $session->user->FullName('FLC');
@@ -166,7 +165,7 @@ class ProcessSessionLogging implements ShouldQueue
                     $name = $log->cid;
                 }        
 
-                // Discord ID is not null (message has not yet been sent)
+                // Discord ID i not null (message has not yet been sent)
                 if($log->discord_id !== null){
                     // Update Disconnect Message
                         $discord = new DiscordClient();

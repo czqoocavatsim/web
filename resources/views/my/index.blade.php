@@ -5,8 +5,8 @@
         $user = auth()->user();
     @endphp
 
-    <div class="jarallax card card-image rounded-0 blue" data-jarallax data-speed="0.2">
-        <img class="jarallax-img" src="{{ $bannerImg->path ?? asset('') }}" alt="">
+    <div class="jarallax card card-image blue rounded-0"  data-jarallax data-speed="1">
+    {{-- <img class="jarallax-img" src="{{asset('assets/resources/media/img/website/euroscope_client.png')}}" alt=""> --}}
         <div class="text-white text-left rgba-stylish-strong py-3 pt-5 px-4">
             <div class="container">
                 <div class="py-5">
