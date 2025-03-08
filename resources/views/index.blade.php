@@ -193,7 +193,6 @@
                                 </p>
                             </div>
                         </li>
-                        @php $index++; @endphp
                     @endforeach
                     @if (count($topControllers) < 1)
                         No data available.
@@ -296,6 +295,7 @@
             <div class="col-lg-5 text-right">
                 <h2 class="font-weight-bold mb-3 blue-text">Quick Links</h2>
                 <div class="list-group mt-4 rounded list-group-flush" style="font-size: 1.3em;">
+                    @if(auth()->user()->member_of_czqo !== 1)
                     <a class="border-0 list-group-item list-group-item-action waves-effect" data-toggle="modal"
                         data-target="#discordTopModal" href="" style="text-decoration:none;">
                         <span class="blue-text">Join Our Discord Community</span>
@@ -304,6 +304,7 @@
                             <i class="fab fa-discord fa-2x" style="vertical-align:middle;"></i>
                         </span>
                     </a>
+                    @endif
                     {{-- <a class="border-0 list-group-item list-group-item-action waves-effect"
                         href="https://twitter.com/ganderocavatsim" style="text-decoration:none;">
                         <span class="blue-text">Twitter</span>
@@ -330,7 +331,7 @@
                     </a> --}}
                     <a class="border-0 list-group-item list-group-item-action waves-effect"
                         href="https://knowledgebase.ganderoceanic.ca" style="text-decoration:none;">
-                        <span class="blue-text">ZQO Knowledgebase</span>
+                        <span class="blue-text">ZQO Knowledge Base</span>
                         &nbsp;
                         <span class="blue-text">
                             <i class="fas fa-book fa-2x" style="vertical-align:middle;"></i>

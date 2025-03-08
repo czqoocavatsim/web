@@ -411,7 +411,18 @@
                                     <th>Time</th>
                                 </thead>
                                 <tbody>
+                                    <?php 
+                                        $isInstructor = false; 
+                                        $isStudent = false; 
+                                        $isCTP = false; 
+                                    ?>
                                     @foreach ($sessions as $s)
+                                        <?php
+                                            if ($s->is_instructing == 1) $isInstructor = true;
+                                            if ($s->is_student == 1) $isStudent = true;
+                                            if ($s->is_ctp == 1) $isCTP = true;
+                                        ?>
+
                                         <tr>
                                             <th>
                                                 {{$s->callsign}}
@@ -429,7 +440,7 @@
                                             </th>
                                             @if($s->duration < 0.5)
                                                 <td>
-                                                    {{ str_pad(round(($s->duration - floor($s->duration)) * 60), 2, '0', STR_PAD_LEFT) }}m <i style="color: red;" class="fas fa-times"></i>
+                                                    {{ str_pad(round(($s->duration - floor($s->duration)) * 60), 2, '0', STR_PAD_LEFT) }}m
                                                 </td>
                                             @else
                                                 @if($s->duration < 1)
@@ -448,8 +459,9 @@
                             </table>
 
                             <h5 class="font-weight-bold blue-text mt-4 pb-2">Notes for Table</h5>
-                            <li>Connections of less than 30 minutes will show with a <i style="color: red;" class="fas fa-times"></i> within the time collum.</li>
-                            <li>Connections conducted while a Student will appear with <span class="badge bg-warning">Training</span> and will not count towards your currency.
+                            @if($isStudent)<li>Connections conducted while a Student will appear with <span class="badge bg-warning">Training</span> and will not count towards your currency.@endif
+                            @if($isInstructor)<li>Connections conducted as an Instructor will appear with <span class="badge bg-danger">Instructing</span> and will count towards your currency.@endif
+                            @if($isCTP)<li>Connections conducted during Cross the Pond will show with <span class="badge bg-primary">CTP</span> and will count towards your currency.@endif
                         @else
                             <p class="mt-0">You have not recorded any hours so far this year. Connect to the network in order to record a session!</p>
                         @endif
@@ -469,13 +481,61 @@
                                 <span style='font-weight: 400' class='badge rounded p-2 green text-white shadow-none'>
                                     <i class="fas fa-check mr-2"></i>&nbsp;Active
                                 </span>
-                            </h3><br>
+                            </h3>
 
-                            <h3 class="font-weight-bold blue-text pb-2">Partnership Controllers, Please Note</h3>
+                            <h3 class="font-weight-bold blue-text mt-4">Partnership Controllers, Please Note</h3>
                                 <li>Your certification status on this page is managed by your endorsement operator listed above.</li>
-                                <li>Your Activity Requirements within Gander are assumed correct. Should your Certification Status be removed by your home division due to their policy, your access on Gander Oceanic will be removed within 24 Hours.</li>
+                                <li>Gander activity requirements do not apply to you. Should your Certification Status be removed by your home division due to their own policies, your status on Gander Oceanic will be updated within 24 Hours.</li>
                                 <li>You are authorised to open any EGGX_CTR, CZQO_CTR, NY_FSS or NAT_FSS Position while holding this endorsement.</li>
-                                <li>Any questions regarding Activity Requirements should be directed towards the <a href="{{ route('my.feedback.new.write', ['operations']) }}">Gander Oceanic Operations Staff Team</a> who will assist you with your query.</li>
+
+
+                            <h3 class="font-weight-bold blue-text mt-4 pb-2">Your Connections</h3>
+                            @if(!$sessions->isEmpty())
+                            <p class="mt-2">List of all your Gander Oceanic connections to VATSIM during {{\Carbon\Carbon::now()->format('Y')}}.</p>
+                            <table id="dataTable" class="table table-hover">
+                                <thead>
+                                    <th>Position</th>
+                                    <th>Logon</th>
+                                    <th>Logoff</th>
+                                    <th>Time</th>
+                                </thead>
+                                <tbody>
+                                    @foreach ($sessions as $s)
+                                        <tr>
+                                            <th>
+                                                {{$s->callsign}}
+                                            </th>
+                                            <th>{{\Carbon\Carbon::parse($s->session_start)->format('m/d/Y \a\t Hi\Z')}}</th>
+                                            <th>
+                                                @if($s->session_end === null)
+                                                Currently Connected
+                                                @else
+                                                {{\Carbon\Carbon::parse($s->session_end)->format('m/d/Y \a\t Hi\Z')}}
+                                                @endif
+                                            </th>
+                                            @if($s->duration < 0.5)
+                                                <td>
+                                                    {{ str_pad(round(($s->duration - floor($s->duration)) * 60), 2, '0', STR_PAD_LEFT) }}m
+                                                </td>
+                                            @else
+                                                @if($s->duration < 1)
+                                                    <td>
+                                                        {{ str_pad(round(($s->duration - floor($s->duration)) * 60), 2, '0', STR_PAD_LEFT) }}m
+                                                    </td>
+                                                @else
+                                                    <td>
+                                                        {{ floor($s->duration) }}h {{ str_pad(round(($s->duration - floor($s->duration)) * 60), 2, '0', STR_PAD_LEFT) }}m
+                                                    </td>
+                                                @endif
+                                            @endif
+                                        </tr>
+                                    @endforeach
+                                </tbody>
+                            </table>
+
+                            @else
+                            <p class="mt-0">You have not recorded any hours so far this year. Connect to the network in order to record a session!</p>
+                        @endif
 
                             @else
                             <h3>
