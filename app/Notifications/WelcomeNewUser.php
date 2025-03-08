@@ -45,10 +45,10 @@ class WelcomeNewUser extends Notification implements ShouldQueue
     {
         return (new MailMessage())
                     ->subject("Welcome to Gander Oceanic, {$this->user->fullName('FL')}!")
-                    ->from('chief@ganderoceanic.ca', 'Dieter Windels')
+                    ->from('chief@ganderoceanic.ca', 'Gary Thomas')
                     ->line("Welcome to Gander Oceanic, we're very excited that you're here!")
-                    ->line("On our site you can find various resources relating to Oceanic operations in the North Atlantic for both pilots and controllers. Please don't hesitate to contact me should you have any questions about us!")
-                    ->salutation(new HtmlString('Kind regards,<br>Dieter Windels<br>OCA Chief'));
+                    ->line("On our site you can find various resources relating to Oceanic operations in the North Atlantic for both pilots and controllers. We also have a Discord server which you can access via the myCZQO page on the website.")
+                    ->salutation(new HtmlString('Kind regards, <br>Gander Oceanic Control Area'));
     }
 
     /**

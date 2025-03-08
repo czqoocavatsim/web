@@ -3,7 +3,7 @@
 @section('to-line', 'Hi '. $application->user->fullName('F') . ',')
 
 @section('message-content')
-<p>Congratulations! Your application for Gander Oceanic has been accepted. The Chief Instructor will contact you via email to start your training.</p>
+<p>Congratulations! Your application for Gander Oceanic has been accepted. The Events & Training Director will contact you via email to start your training.</p>
 <hr>
 You can view your application <a href="{{route('training.applications.show', $application->reference_id)}}">here.</a>
 @endsection

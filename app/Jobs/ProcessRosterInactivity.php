@@ -7,6 +7,7 @@ use App\Models\Network\SessionLog;
 use Carbon\Carbon;
 use Illuminate\Bus\Queueable;
 use App\Models\Roster\RosterMember;
+use App\Models\Network\ExternalController;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
@@ -60,13 +61,41 @@ class ProcessRosterInactivity implements ShouldQueue
         $third_names = [];
         $termination_names = [];
         
-        $roster_controllers = RosterMember::all();
-        // dd($roster_controllers);
 
-        // Lets now go through each RosterMember (gotta update dem all)
+
+        ## External Controllers database check
+        $external_controllers = ExternalController::all();
+        foreach($external_controllers as $eroster){
+
+            // Get all sessions in the calendar year
+            $sessions = SessionLog::where('cid', $eroster->id)->where('created_at', '>=', Carbon::now()->startOfYear())->orderBy('created_at', 'asc')->get();
+
+            // Set some variables (default values)
+            $currency = 0; //Assume no connections
+            $month_hours = 0; //Assume no connections
+
+            // Go through each session to get some information
+            foreach($sessions as $s){
+
+                $currency += $s->duration; //add hours to total currency
+
+                if($s->created_at->isSameMonth(Carbon::now())){
+                    $month_hours += $s->duration; //add hours from this month to total currency
+                }
+            }
+
+            $eroster->currency = $currency;
+            $eroster->monthly_hours = $month_hours;            
+            $eroster->save();
+        }
+
+
+
+        ## Gander Controllers database check
+        $roster_controllers = RosterMember::all();
         foreach($roster_controllers as $roster){
 
-            // get sessions since start of year
+            // Get all sessions in the calendar year
             $sessions = SessionLog::where('cid', $roster->cid)->where('created_at', '>=', Carbon::now()->startOfYear())->orderBy('created_at', 'asc')->get();
 
             // Set Hours Required based of Certification Status
@@ -83,6 +112,7 @@ class ProcessRosterInactivity implements ShouldQueue
 
             // Set some variables (default values)
             $currency = 0; //Assume no connections
+            $month_hours = 0; //Assume no connections
             if($roster->active) { //Assume based off current set
                 $active_status = 1;
             } else {
@@ -94,6 +124,10 @@ class ProcessRosterInactivity implements ShouldQueue
                 // Count Sessions except Student
                 if($s->is_student !== 1){
                     $currency += $s->duration;
+
+                    if($s->created_at->isSameMonth(Carbon::now())){
+                        $month_hours += $s->duration; //add hours from this month to total currency
+                    }
                 }
             }
 
@@ -163,6 +197,7 @@ class ProcessRosterInactivity implements ShouldQueue
             // Save Roster Information based of above if statements
             $roster->active = $active_status;
             $roster->currency = $currency;
+            $roster->monthly_hours = $month_hours;
             $roster->save();
         }
 

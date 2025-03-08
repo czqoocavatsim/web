@@ -46,7 +46,7 @@ class RemovedAsStudent extends Notification implements ShouldQueue
                     ->greeting('Hello,')
                     ->subject('Removed as CZQO Student')
                     ->line('You have been **removed** as a Student at Gander Oceanic.')
-                    ->line('If you believe this is a mistake, please contact the Chief Instructor.')
+                    ->line('If you believe this is a mistake, please contact the Events & Training Director.')
                     ->salutation('Gander Oceanic OCA');
     }
 

@@ -52,7 +52,7 @@ class SoloCertExpiringUser extends Notification implements ShouldQueue
             ->line("Expiry: {$this->cert->expires->toFormattedDateString()}")
             ->line("Granted by: {$this->cert->instructor->fullName('FLC')}")
             ->line('Contact your instructor to request an extension or proceed to an OTS assessment.')
-            ->line('If you believe this is a mistake or have any questions, please email the Chief Instructor.')
+            ->line('If you believe this is a mistake or have any questions, please email the Events & Training Director.')
             ->line('*You were sent this email as your training status with Gander Oceanic is about to change.*')
             ->salutation('Gander Oceanic OCA');
     }
@@ -70,7 +70,7 @@ class SoloCertExpiringUser extends Notification implements ShouldQueue
 
         $message->embed([
             'title'       => 'Solo Certification Expiring',
-            'description' => 'Your solo certification is about to expire. Contact your instructor to request an extension or proceed to an OTS assessment. If you believe this is a mistake or have any questions, please email the Chief Instructor.',
+            'description' => 'Your solo certification is about to expire. Contact your instructor to request an extension or proceed to an OTS assessment. If you believe this is a mistake or have any questions, please email the Events & Training Director.',
             'color'       => 0x80c9,
             'timestamp'   => Carbon::now(),
             'footer'      => [

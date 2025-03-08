@@ -15,7 +15,7 @@
                 <tbody>
                     <tr>
                     <th scope="row">
-                        FIR Chief
+                        FIR Director
                     </th>
                     <td>
                         <input required type="text" value="{{$coreSettings->emailfirchief}}" name="emailfirchief" id="" class="form-control form-control-sm border">
@@ -23,7 +23,7 @@
                     </tr>
                     <tr>
                     <th scope="row">
-                        Deputy FIR Chief
+                        Operations Director
                     </th>
                     <td>
                         <input required type="text" value="{{$coreSettings->emaildepfirchief}}" name="emaildepfirchief" id="" class="form-control form-control-sm border">
@@ -31,7 +31,7 @@
                     </tr>
                     <tr>
                     <th scope="row">
-                        Chief Instructor
+                        Events & Training Director
                     </th>
                     <td>
                         <input required type="text" value="{{$coreSettings->emailcinstructor}}" name="emailcinstructor" id="" class="form-control form-control-sm border">
@@ -39,23 +39,7 @@
                     </tr>
                     <tr>
                     <th scope="row">
-                        Events and Marketing
-                    </th>
-                    <td>
-                        <input required type="text" value="{{$coreSettings->emaileventc}}" name="emaileventc" id="" class="form-control form-control-sm border">
-                    </td>
-                    </tr>
-                    <tr>
-                    <th scope="row">
-                        Operations
-                    </th>
-                    <td>
-                        <input required type="text" value="{{$coreSettings->emailfacilitye}}" name="emailfacilitye" id="" class="form-control form-control-sm border">
-                    </td>
-                    </tr>
-                    <tr>
-                    <th scope="row">
-                        Webmaster
+                        IT Director
                     </th>
                     <td>
                         <input required type="text" value="{{$coreSettings->emailwebmaster}}" name="emailwebmaster" id="" class="form-control form-control-sm border">
