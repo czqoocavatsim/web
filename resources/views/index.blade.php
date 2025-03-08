@@ -130,10 +130,12 @@
                                     </span>
                                     <p class="mb-0 ml-1">
                                         <span style="font-size: 1.4em;">
-                                            <img src="{{ $c->user->avatar() }}"
-                                                style="height: 35px; !important; width: 35px !important; margin-left: 10px; margin-right: 5px; margin-bottom: 3px; border-radius: 50%;">
+                                            @if($c->user)
+                                            <img src="{{ $c->user->avatar() }}" style="height: 35px; !important; width: 35px !important; margin-left: 10px; margin-right: 5px; margin-bottom: 3px; border-radius: 50%;">
                                             <div class="d-flex flex-column ml-2">
-                                                <h4 class="fw-400">{{ $c->user->fullName('FL') }}</h4>
+                                                <h4 class="fw-400">{{ $c->user->fullName('FL') }} 
+                                                    @if($c->visiting_origin == "zny")<span class="badge bg-secondary">KZNY</span>@elseif($c->visiting_origin == "eggx")<span class="badge bg-danger">EGGX</span>@else<span class="badge bg-primary">CZQO</span>@endif
+                                                </h4>
                                                 <p>
                                                     @if($c->monthly_hours < 1)
                                                         {{ str_pad(round(($c->monthly_hours - floor($c->monthly_hours)) * 60), 2, '0', STR_PAD_LEFT) }}m recorded this month
@@ -142,6 +144,21 @@
                                                     @endif
                                                 </p>
                                             </div>
+                                            @else
+                                            <img src="{{asset('assets/resources/media/img/brand/sqr/ZQO_SQ_TSPBLUE.png')}}" style="height: 35px; !important; width: 35px !important; margin-left: 10px; margin-right: 5px; margin-bottom: 3px; border-radius: 50%;">
+                                            <div class="d-flex flex-column ml-2">
+                                                <h4 class="fw-400">{{ $c->id }} 
+                                                    @if($c->visiting_origin == "zny")<span class="badge bg-secondary">KZNY</span>@elseif($c->visiting_origin == "eggx")<span class="badge bg-danger">EGGX</span>@endif
+                                                </h4>
+                                                <p>
+                                                    @if($c->monthly_hours < 1)
+                                                        {{ str_pad(round(($c->monthly_hours - floor($c->monthly_hours)) * 60), 2, '0', STR_PAD_LEFT) }}m recorded this month
+                                                    @else
+                                                        {{ floor($c->monthly_hours) }}h {{ str_pad(round(($c->monthly_hours - floor($c->monthly_hours)) * 60), 2, '0', STR_PAD_LEFT) }}m recorded this month
+                                                    @endif
+                                                </p>
+                                            </div>
+                                            @endif
                                         </span>
                                     </p>
                                 </div>
@@ -160,23 +177,28 @@
             {{-- new certifications --}}
             <div class="col-md-4 mb-4">
                 <h2 class="font-weight-bold blue-text mb-4">Our Newest Controllers</h2>
-                @if (count($certifications) > 0)
+                <ul class="list-unstyled">
                     @foreach ($certifications as $cert)
-                        <div class="d-flex flex-row mb-2">
-                            <img src="{{ $cert->controller->avatar() }}"
-                                style="height: 55px !important; width: 55px !important; margin-right: 10px; margin-bottom: 3px; border-radius: 50%;">
-                            <div class="d-flex flex-column">
-                                <h4 class="fw-400">{{ $cert->controller->fullName('FL') }}</h4>
-                                <p title="{{ $cert->timestamp->toDayDateTimeString() }}">
-                                    {{ $cert->timestamp->diffForHumans() }}</p>
+                        <li class="mb-1">
+                            <div class="d-flex flex-row">
+                                <p class="mb-0 ml-1">
+                                    <span style="font-size: 1.4em;">
+                                        <img src="{{ $cert->controller->avatar() }}" style="height: 35px !important; width: 35px !important; margin-right: 10px; margin-bottom: 3px; border-radius: 50%;">
+                                        <div class="d-flex flex-column ml-2">
+                                            <h4 class="fw-400">{{ $cert->controller->fullName('FL') }}</h4>
+                                            <p title="{{ $cert->timestamp->toDayDateTimeString() }}">
+                                                {{ $cert->timestamp->diffForHumans() }}</p>
+                                        </div>
+                                    </span>
+                                </p>
                             </div>
-                        </div>
+                        </li>
+                        @php $index++; @endphp
                     @endforeach
-                @elseif (!auth()->check())
-                    Login with VATSIM to view our newest controllers!
-                @else
-                    No data available.
-                @endif
+                    @if (count($topControllers) < 1)
+                        No data available.
+                    @endif
+                </ul>
             </div>
 
             {{-- Controller's of the Year --}}
@@ -201,10 +223,13 @@
                                     </span>
                                     <p class="mb-0 ml-1">
                                         <span style="font-size: 1.4em;">
-                                            <img src="{{ $c->user->avatar() }}"
-                                                style="height: 35px; !important; width: 35px !important; margin-left: 10px; margin-right: 5px; margin-bottom: 3px; border-radius: 50%;">
+                                            @if($c->user)
+                                            {{-- Gander Oceanic User Model Exists --}}
+                                            <img src="{{ $c->user->avatar() }}" style="height: 35px; !important; width: 35px !important; margin-left: 10px; margin-right: 5px; margin-bottom: 3px; border-radius: 50%;">
                                             <div class="d-flex flex-column ml-2">
-                                                <h4 class="fw-400">{{ $c->user->fullName('FL') }}</h4>
+                                                <h4 class="fw-400">{{ $c->user->fullName('FL') }}
+                                                    @if($c->visiting_origin == "zny")<span class="badge bg-secondary">KZNY</span>@elseif($c->visiting_origin == "eggx")<span class="badge bg-danger">EGGX</span>@else<span class="badge bg-primary">CZQO</span>@endif
+                                                </h4>
                                                 <p>
                                                     @if($c->currency < 1)
                                                         {{ str_pad(round(($c->currency - floor($c->currency)) * 60), 2, '0', STR_PAD_LEFT) }}m recorded in {{\Carbon\Carbon::now()->format('Y')}}
@@ -213,6 +238,22 @@
                                                     @endif
                                                 </p>
                                             </div>
+                                            @else
+                                            {{-- User Model does not Exist --}}
+                                            <img src="{{asset('assets/resources/media/img/brand/sqr/ZQO_SQ_TSPBLUE.png')}}" style="height: 35px; !important; width: 35px !important; margin-left: 10px; margin-right: 5px; margin-bottom: 3px; border-radius: 50%;">
+                                            <div class="d-flex flex-column ml-2">
+                                                <h4 class="fw-400">{{ $c->id }}
+                                                    @if($c->visiting_origin == "zny")<span class="badge bg-secondary">KZNY</span>@elseif($c->visiting_origin == "eggx")<span class="badge bg-danger">EGGX</span>@endif
+                                                </h4>
+                                                <p>
+                                                    @if($c->currency < 1)
+                                                        {{ str_pad(round(($c->currency - floor($c->currency)) * 60), 2, '0', STR_PAD_LEFT) }}m recorded in {{\Carbon\Carbon::now()->format('Y')}}
+                                                    @else
+                                                        {{ floor($c->currency) }}h {{ str_pad(round(($c->currency - floor($c->currency)) * 60), 2, '0', STR_PAD_LEFT) }}m recorded in {{\Carbon\Carbon::now()->format('Y')}}
+                                                    @endif
+                                                </p>
+                                            </div>
+                                            @endif
                                         </span>
                                     </p>
                                 </div>

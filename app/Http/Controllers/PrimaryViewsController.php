@@ -36,11 +36,15 @@ class PrimaryViewsController extends Controller
         //Next event
         $nextEvent = Event::where('start_timestamp', '>', Carbon::now())->get()->sortBy('start_timestamp')->first();
 
-        //Top controllers
-        $topControllers = RosterMember::where('monthly_hours', '>', 0)->get()->sortByDesc('monthly_hours')->take(5);
+        //Top Month Controllers
+        $rosterMembers = RosterMember::where('monthly_hours', '>', 0)->get();
+        $externalControllers = ExternalController::where('monthly_hours', '>', 0)->get();
+        $topControllers = $rosterMembers->merge($externalControllers)->sortByDesc('monthly_hours')->take(5);
 
         //Top controllers
-        $yearControllers = RosterMember::where('currency', '>', 0)->get()->sortByDesc('currency')->take(5);
+        $rosterMembers = RosterMember::where('currency', '>', 0)->get();
+        $externalControllers = ExternalController::where('currency', '>', 0)->get();
+        $yearControllers = $rosterMembers->merge($externalControllers)->sortByDesc('monthly_hours')->take(5);
 
         //CTP Mode?
         $ctpMode = false;
