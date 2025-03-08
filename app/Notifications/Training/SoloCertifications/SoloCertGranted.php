@@ -52,7 +52,7 @@ class SoloCertGranted extends Notification implements ShouldQueue
             ->line("Expiry: {$this->cert->expires->toFormattedDateString()}")
             ->line("Granted by: {$this->cert->instructor->fullName('FLC')}")
             ->line("Your use of this solo certification is bound to our policies and VATSIM's GRP. Your instructor will give you more information.")
-            ->line('If you believe this is a mistake or have any questions, please email the Chief Instructor.')
+            ->line('If you believe this is a mistake or have any questions, please email the Events & Training Director.')
             ->line('*You were sent this email as your training status with Gander Oceanic has been updated.*')
             ->salutation('Gander Oceanic OCA');
     }
@@ -70,7 +70,7 @@ class SoloCertGranted extends Notification implements ShouldQueue
 
         $message->embed([
             'title'       => 'Solo Certification Granted',
-            'description' => "You have been granted a solo certification. Your use of this solo certification is bound to our policies and VATSIM's GRP. Your instructor will give you more information. If you believe this is a mistake or have any questions, please email the Chief Instructor.",
+            'description' => "You have been granted a solo certification. Your use of this solo certification is bound to our policies and VATSIM's GRP. Your instructor will give you more information. If you believe this is a mistake or have any questions, please email the Events & Training Director.",
             'color'       => 0x80c9,
             'timestamp'   => Carbon::now(),
             'footer'      => [

@@ -47,14 +47,14 @@ class SessionAssignedToYou extends Notification implements ShouldQueue
             return (new MailMessage())
                 ->subject("You've Been Assigned To A Training Session")
                 ->line("You have been assigned to a training session with {$this->session->student->user->fullName('FLC')}, scheduled for {$this->session->scheduled_time->toDayDateTimeString()}.")
-                ->line('If you have any questions, please contact the Chief Instructor.')
+                ->line('If you have any questions, please contact the Events & Training Director.')
                 ->action('View Session', route('training.admin.instructing.training-sessions.view', $this->session))
                 ->salutation('Gander Oceanic OCA');
         } elseif ($this->type == 'ots') {
             return (new MailMessage())
                 ->subject("You've Been Assigned To A OTS Session")
                 ->line("You have been assigned to a OTS session with {$this->session->student->user->fullName('FLC')}, scheduled for {$this->session->scheduled_time->toDayDateTimeString()}.")
-                ->line('If you have any questions, please contact the Chief Instructor.')
+                ->line('If you have any questions, please contact the Events & Training Director.')
                 ->action('View Session', route('training.admin.instructing.training-sessions.view', $this->session))
                 ->salutation('Gander Oceanic OCA');
         }

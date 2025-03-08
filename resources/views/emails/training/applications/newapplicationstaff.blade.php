@@ -24,5 +24,5 @@ You can view their application <a href="{{route('training.admin.applications.vie
 @section('footer-to-line', '')
 
 @section('footer-reason-line')
-you are the OCA Chief / Deputy Chief.
+you are the FIR Director / Operations Director.
 @endsection

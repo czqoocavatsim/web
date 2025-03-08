@@ -10,7 +10,7 @@
             provided the aspect ratio remains unadjusted. Please aim to, wherever possible, use the
             blue logo versions (either white on blue or blue on white), and only use the plain white where it is not
             possible or practical to use the blue versions.
-            Please contact our Deputy OCA Chief with any queries: <a
+            Please contact our FIR Director with any queries: <a
                 href="mailto:deputy@ganderoceanic.ca">deputy@ganderoceanic.ca</a>
             <br><br>
             The hex colour codes used for our branding are <span class="font-weight-bold black-text">#0080C9

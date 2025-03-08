@@ -44,7 +44,7 @@ class AddedAsInstructor extends Notification implements ShouldQueue
         return (new MailMessage())
                     ->subject('Added as CZQO Instructor')
                     ->line('You have been added as an Instructor at Gander Oceanic. You now have access to the training administrative tools on our website.')
-                    ->line('If you believe this is a mistake, please contact the Chief Instructor immediately.')
+                    ->line('If you believe this is a mistake, please contact the Events & Training Director immediately.')
                     ->action('View Training Dashboard', route('training.admin.dashboard'))
                     ->salutation('Gander Oceanic OCA');
     }

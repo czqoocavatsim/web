@@ -61,7 +61,7 @@
         @role('Restricted')
             <div class="alert bg-czqo-blue-light mb-4">
                 Your account on Gander Oceanic is currently restricted. You cannot access pages that require an account, except
-                for "Manage your data". Contact the OCA Chief for more information.
+                for "Manage your data". Contact the FIR Director for more information.
             </div>
         @endrole
         <div class="row">

@@ -42,7 +42,7 @@ class ApplicationsController extends Controller
     public function apply(Request $request)
     {
         if (!auth()->user()->can('start applications')) {
-            abort(403, 'You cannot apply for Gander Oceanic at this time. If this is a mistake, please contact the Deputy OCA Chief.');
+            abort(403, 'You cannot apply for Gander Oceanic at this time. If this is a mistake, please contact the Events & Training Director.');
         }
 
         if ($pendingApp = Application::where('user_id', auth()->id())->where('status', 0)->first()) {
@@ -134,7 +134,7 @@ class ApplicationsController extends Controller
         $processingUpdate = new ApplicationUpdate([
             'application_id' => $application->id,
             'update_title'   => 'Sit tight! Your application is now pending',
-            'update_content' => 'If you do not see an update through email or Discord within 5 days, please contact the Deputy OCA Chief.',
+            'update_content' => 'If you do not see an update through email or Discord within 7 days, please contact the Events & Training Director.',
             'update_type'    => 'green',
         ]);
         $processingUpdate->save();

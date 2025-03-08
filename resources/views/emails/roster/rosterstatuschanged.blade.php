@@ -11,7 +11,7 @@
     </ul>
 </p>
 <p>
-    If you believe this is a mistake or have any questions, please email the <a href="{{route('staff')}}">Chief Instructor.</a>
+    If you believe this is a mistake or have any questions, please email the <a href="{{route('staff')}}">Events & Training Director.</a>
 </p>
 @endsection
 
