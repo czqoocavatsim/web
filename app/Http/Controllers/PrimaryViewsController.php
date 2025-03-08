@@ -44,7 +44,7 @@ class PrimaryViewsController extends Controller
         //Top controllers
         $rosterMembers = RosterMember::where('currency', '>', 0)->get();
         $externalControllers = ExternalController::where('currency', '>', 0)->get();
-        $yearControllers = $rosterMembers->merge($externalControllers)->sortByDesc('monthly_hours')->take(5);
+        $yearControllers = $rosterMembers->merge($externalControllers)->sortByDesc('currency')->take(5);
 
         //CTP Mode?
         $ctpMode = false;
