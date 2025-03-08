@@ -177,6 +177,7 @@
             {{-- new certifications --}}
             <div class="col-md-4 mb-4">
                 <h2 class="font-weight-bold blue-text mb-4">Our Newest Controllers</h2>
+                @if(auth()->check())
                 <ul class="list-unstyled">
                     @foreach ($certifications as $cert)
                         <li class="mb-1">
@@ -198,6 +199,9 @@
                         No data available.
                     @endif
                 </ul>
+                @else
+                    Login with VATSIM to see our most recent certified controllers.
+                @endif
             </div>
 
             {{-- Controller's of the Year --}}
