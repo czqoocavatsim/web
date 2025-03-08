@@ -133,9 +133,9 @@
                                             @if($c->user)
                                             <img src="{{ $c->user->avatar() }}" style="height: 35px; !important; width: 35px !important; margin-left: 10px; margin-right: 5px; margin-bottom: 3px; border-radius: 50%;">
                                             <div class="d-flex flex-column ml-2">
-                                                <h4 class="fw-400">{{ $c->user->fullName('FL') }} 
+                                                <h5 class="fw-400">{{ $c->user->fullName('FL') }} 
                                                     @if($c->visiting_origin == "zny")<span class="badge bg-secondary">KZNY</span>@elseif($c->visiting_origin == "eggx")<span class="badge bg-danger">EGGX</span>@else<span class="badge bg-primary">CZQO</span>@endif
-                                                </h4>
+                                                </h5>
                                                 <p>
                                                     @if($c->monthly_hours < 1)
                                                         {{ str_pad(round(($c->monthly_hours - floor($c->monthly_hours)) * 60), 2, '0', STR_PAD_LEFT) }}m recorded this month
@@ -147,9 +147,9 @@
                                             @else
                                             <img src="{{asset('assets/resources/media/img/brand/sqr/ZQO_SQ_TSPBLUE.png')}}" style="height: 35px; !important; width: 35px !important; margin-left: 10px; margin-right: 5px; margin-bottom: 3px; border-radius: 50%;">
                                             <div class="d-flex flex-column ml-2">
-                                                <h4 class="fw-400">{{ $c->id }} 
+                                                <h5 class="fw-400">{{ $c->id }} 
                                                     @if($c->visiting_origin == "zny")<span class="badge bg-secondary">KZNY</span>@elseif($c->visiting_origin == "eggx")<span class="badge bg-danger">EGGX</span>@endif
-                                                </h4>
+                                                </h5>
                                                 <p>
                                                     @if($c->monthly_hours < 1)
                                                         {{ str_pad(round(($c->monthly_hours - floor($c->monthly_hours)) * 60), 2, '0', STR_PAD_LEFT) }}m recorded this month
@@ -185,7 +185,7 @@
                                     <span style="font-size: 1.4em;">
                                         <img src="{{ $cert->controller->avatar() }}" style="height: 35px !important; width: 35px !important; margin-right: 10px; margin-bottom: 3px; border-radius: 50%;">
                                         <div class="d-flex flex-column ml-2">
-                                            <h4 class="fw-400">{{ $cert->controller->fullName('FL') }}</h4>
+                                            <h5 class="fw-400">{{ $cert->controller->fullName('FL') }}</h5>
                                             <p title="{{ $cert->timestamp->toDayDateTimeString() }}">
                                                 {{ $cert->timestamp->diffForHumans() }}</p>
                                         </div>
@@ -227,9 +227,9 @@
                                             {{-- Gander Oceanic User Model Exists --}}
                                             <img src="{{ $c->user->avatar() }}" style="height: 35px; !important; width: 35px !important; margin-left: 10px; margin-right: 5px; margin-bottom: 3px; border-radius: 50%;">
                                             <div class="d-flex flex-column ml-2">
-                                                <h4 class="fw-400">{{ $c->user->fullName('FL') }}
+                                                <h5 class="fw-400">{{ $c->user->fullName('FL') }}
                                                     @if($c->visiting_origin == "zny")<span class="badge bg-secondary">KZNY</span>@elseif($c->visiting_origin == "eggx")<span class="badge bg-danger">EGGX</span>@else<span class="badge bg-primary">CZQO</span>@endif
-                                                </h4>
+                                                </h5>
                                                 <p>
                                                     @if($c->currency < 1)
                                                         {{ str_pad(round(($c->currency - floor($c->currency)) * 60), 2, '0', STR_PAD_LEFT) }}m recorded in {{\Carbon\Carbon::now()->format('Y')}}
@@ -242,9 +242,9 @@
                                             {{-- User Model does not Exist --}}
                                             <img src="{{asset('assets/resources/media/img/brand/sqr/ZQO_SQ_TSPBLUE.png')}}" style="height: 35px; !important; width: 35px !important; margin-left: 10px; margin-right: 5px; margin-bottom: 3px; border-radius: 50%;">
                                             <div class="d-flex flex-column ml-2">
-                                                <h4 class="fw-400">{{ $c->id }}
+                                                <h5 class="fw-400">{{ $c->id }}
                                                     @if($c->visiting_origin == "zny")<span class="badge bg-secondary">KZNY</span>@elseif($c->visiting_origin == "eggx")<span class="badge bg-danger">EGGX</span>@endif
-                                                </h4>
+                                                </h5>
                                                 <p>
                                                     @if($c->currency < 1)
                                                         {{ str_pad(round(($c->currency - floor($c->currency)) * 60), 2, '0', STR_PAD_LEFT) }}m recorded in {{\Carbon\Carbon::now()->format('Y')}}
