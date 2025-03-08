@@ -9,6 +9,6 @@ class ExternalController extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['id', 'name', 'rating', 'division', 'division_name', 'region_code', 'region_name'];
+    protected $fillable = ['id', 'name', 'rating', 'division', 'division_name', 'region_code', 'region_name', 'currency', 'monthly_hours'];
         
 }

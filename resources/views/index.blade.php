@@ -125,7 +125,7 @@
                                         @elseif ($index == 3)
                                             <i class="fas fa-trophy brown-text fa-fw"></i>
                                         @else
-                                            {{ $index }}.
+                                            {{ $index }}<sup>th</sup>
                                         @endif
                                     </span>
                                     <p class="mb-0 ml-1">
@@ -153,7 +153,7 @@
                         @endif
                     </ul>
                 @else
-                    Login with VATSIM to check our top controllers!
+                    Login with VATSIM to check our {{\Carbon\Carbon::now()->format('F')}} top controllers!
                 @endif
             </div>
 
@@ -196,7 +196,7 @@
                                         @elseif ($index == 3)
                                             <i class="fas fa-trophy brown-text fa-fw"></i>
                                         @else
-                                            {{ $index }}.
+                                            {{ $index }}<sup>th</sup>
                                         @endif
                                     </span>
                                     <p class="mb-0 ml-1">
@@ -224,7 +224,7 @@
                         @endif
                     </ul>
                 @else
-                    Login with VATSIM to check our top controllers!
+                    Login with VATSIM to check our {{\Carbon\Carbon::now()->format('Y')}} top controllers!
                 @endif
             </div>
         </div>

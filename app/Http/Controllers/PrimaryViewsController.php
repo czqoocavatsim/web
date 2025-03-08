@@ -31,16 +31,16 @@ class PrimaryViewsController extends Controller
 
         //News
         $news = News::where('visible', true)->get()->sortByDesc('published')->first();
-        $certifications = HomeNewControllerCert::all()->sortByDesc('timestamp')->take(3);
+        $certifications = HomeNewControllerCert::all()->sortByDesc('timestamp')->take(5);
 
         //Next event
         $nextEvent = Event::where('start_timestamp', '>', Carbon::now())->get()->sortBy('start_timestamp')->first();
 
         //Top controllers
-        $topControllers = RosterMember::where('monthly_hours', '>', 0)->get()->sortByDesc('monthly_hours')->take(3);
+        $topControllers = RosterMember::where('monthly_hours', '>', 0)->get()->sortByDesc('monthly_hours')->take(5);
 
         //Top controllers
-        $yearControllers = RosterMember::where('currency', '>', 0)->get()->sortByDesc('currency')->take(3);
+        $yearControllers = RosterMember::where('currency', '>', 0)->get()->sortByDesc('currency')->take(5);
 
         //CTP Mode?
         $ctpMode = false;
