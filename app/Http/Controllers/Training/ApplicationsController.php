@@ -18,7 +18,7 @@ use App\Notifications\Training\Applications\ApplicationWithdrawnStaff;
 use App\Notifications\Training\Applications\NewApplicationStaff;
 use App\Notifications\Training\Applications\NewCommentApplicant;
 use App\Notifications\Training\Applications\NewCommentStaff;
-use App\Models\Network\ShanwickController;
+use App\Models\Network\ExternalController;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cache;
@@ -81,12 +81,12 @@ class ApplicationsController extends Controller
             return view('training.applications.apply', compact('hoursTotal'))->with('allowed', 'hours');
         }
 
-        // Check Shanwick Roster (DB)
-        $shanwickRoster = ShanwickController::all()->pluck('controller_cid');
+        // Check External Roster (DB)
+        $externalcontroller = ExternalController::all()->pluck('controller_cid');
 
-        foreach ($shanwickRoster as $member) {
+        foreach ($externalcontroller as $member) {
             if ($member == auth()->id()) {
-                return view('training.applications.apply')->with('allowed', 'shanwick');
+                return view('training.applications.apply')->with('allowed', 'externalcontroller');
             }
         }
 

@@ -115,19 +115,19 @@
 
 @break
 
-@case('shanwick')
+@case('externalcontroller')
 
     <div class="container py-4">
             <div class="col-md-5">
-                <h1 class="font-weight-bold blue-text">You are already certified to control through VATUK</h1>
+                <h1 class="font-weight-bold blue-text">You are already certified to control through VATSIM UK or New York ARTCC</h1>
                 <p style="font-size: 1.2em;" class="mt-3">
-                    Thank you for showing your interest in becoming a Gander Oceanic controller. As we have detected you are already endorsed to control Shanwick/Gander Oceanic through the VATUK Training Department, you do not require a Gander Oceanic endorsement.
+                    Thank you for showing your interest in becoming a Gander Oceanic controller. As we have detected you are already endorsed to control Shanwick/Gander Oceanic through the VATSIM UK or New York ARTCC Training Departments, you do not require a Gander Oceanic endorsement.
                 </p>
                 <p style="font-size: 1.2em;" class="mt-3">
-                    VATUK certified controllers can enjoy the same participation in Gander Oceanic's community and events as those certified here. If you are unable to access resources for certified controllers, please contact us.
+                    VATSIM UK & New York ARTCC certified controllers can enjoy the same participation in Gander Oceanic's community and events as those certified here. If you are unable to access resources for certified controllers, please contact us.
                 </p>
                 <p style="font-size: 1.2em;" class="mt-3">
-                    If you believe there has been an error, please contact us so that we can investigate.
+                    If you believe there has been an error, please contact the Events & Training Director so we can investigate
                 </p>
     </div>
 @break
