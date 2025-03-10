@@ -112,10 +112,10 @@ class DiscordClient
         return $response;
     }
 
-    public function ControllerConnection($callsign, $name)
+    public function ControllerConnection($callsign, $name, $isStudent, $isInstructor)
     {
         // Check if Callsign is an Instructor Callsign
-        if(str_contains($callsign, '_I_')) {
+        if($isInstructor) {
 
             // Yes - Instructor Callsign
             $response = $this->client->post("channels/1275443682992197692/messages", [
@@ -138,25 +138,48 @@ class DiscordClient
 
         } else {
             // No - Normal Callsign
-            $response = $this->client->post("channels/1275443682992197692/messages", [
-                'json' => [
-                    "tts" => false,
-                    "embeds" => [
-                        [
-                            'title' => $callsign.' is currently online!',
-                            'description' => 'There is currently ATC being provided over the Ocean!
-    
-**Controller:** '.$name.'
-**Connected at:** <t:'.Carbon::now()->timestamp.':t>',
-                            'color' => hexdec('6EC40C'),
+
+            if($isStudent){
+                // Student Connection
+                $response = $this->client->post("channels/1275443682992197692/messages", [
+                    'json' => [
+                        "tts" => false,
+                        "embeds" => [
+                            [
+                                'title' => $name.' is currently undergoing Training!',
+                                'description' => $name.' is currently connected and Under Instruction as '.$callsign,
+                                'color' => hexdec('569909'),
+                            ]
                         ]
                     ]
-                ]
-            ]);
-    
-            $responseData = json_decode($response->getBody(), true);
-    
-            return $responseData['id'];
+                ]);
+        
+                $responseData = json_decode($response->getBody(), true);
+        
+                return $responseData['id'];
+
+            } else {
+                // Normal Controller Connection
+                $response = $this->client->post("channels/1275443682992197692/messages", [
+                    'json' => [
+                        "tts" => false,
+                        "embeds" => [
+                            [
+                                'title' => $callsign.' is currently online!',
+                                'description' => 'There is currently ATC being provided over the Ocean!
+        
+**Controller:** '.$name.'
+**Connected at:** <t:'.Carbon::now()->timestamp.':t>',
+                                'color' => hexdec('6EC40C'),
+                            ]
+                        ]
+                    ]
+                ]);
+        
+                $responseData = json_decode($response->getBody(), true);
+        
+                return $responseData['id'];
+            }
         }
     }
 

@@ -110,10 +110,23 @@ class ProcessSessionLogging implements ShouldQueue
                     if (in_array($session->cid, $allRoster)) {
                         // Controller is authorised, send message if discord_id is not set
                         if($session->discord_id == null){
-                            // Discord Message
+
+                            $isStudent = false;
+                            if($session->user->studentProfile){
+                                if($session->user->studentProfile->current == 1){
+                                    $isStudent = true;
+                                }
+                            }
+
+                            $isInstructor = false;
+                            if(str_contains($controller->callsign, '_I_') && $session->user->InstructorProfile){
+                                $isInstructor = true;
+                            }
+
+                            // Try Sending Discord Message
                             try{
                                 $discord = new DiscordClient();
-                                $discord_id = $discord->ControllerConnection($controller->callsign, $name);
+                                $discord_id = $discord->ControllerConnection($controller->callsign, $name, $isStudent, $isInstructor);
 
                                 $session->discord_id = $discord_id;
                                 $session->save();
