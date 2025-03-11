@@ -492,7 +492,6 @@ class InstructingController extends Controller
             $discord->EditThreadTag('Completed', $student->user->id);
 
             // Close Training Thread Out & Send Completion Message
-            $discord = new DiscordClient();
             $discord->closeTrainingThread($student->user->fullName('FLC'), $student->user->discord_user_id, 'certify');
 
         // Update Roster with Certification Status
@@ -538,7 +537,7 @@ class InstructingController extends Controller
 
 
         } else {
-            Session::flash('info', 'Unable to add Discord permissions automatically.');
+            Session::flash('info', 'Unable to add Discord permissions automatically. User is not in the discord.');
         }
 
         //Notify

@@ -88,7 +88,7 @@
                     Thank you for showing your interest in becoming a Gander Oceanic controller. Unfortunately, you do not yet meet our application requirements.
                 </p>
                 <p style="font-size: 1.2em;" class="mt-3">
-                    To apply, you require <strong>50 hours</strong> on your <strong>C1+ rating controlling Enroute positions, 25 of which controlling a single Enroute position.</strong> You currently have {{$hoursTotal}} hours towards that requirement.
+                    To apply, you require <strong>50 hours</strong> on your <strong>C1+ rating as a controller.</strong> You currently have {{$hoursTotal}} hours towards that requirement.
                 </p>
                 <p style="font-size: 1.2em;" class="mt-3">
                     If you believe there has been an error, please contact us so that we can investigate.
@@ -106,7 +106,7 @@
                     Thank you for showing your interest in becoming a Gander Oceanic controller. Unfortunately, you do not yet meet our application requirements.
                 </p>
                 <p style="font-size: 1.2em;" class="mt-3">
-                    To be able to apply, you require a C1 rating or higher and at least 50 hours controlling Enroute positions, 25 of which controlling a single Enroute position.
+                    To be able to apply, you require a C1 rating or higher and at least 50 hours controlling.
                 </p>
                 <p style="font-size: 1.2em;" class="mt-3">
                     If you believe there has been an error, please contact us so that we can investigate.
