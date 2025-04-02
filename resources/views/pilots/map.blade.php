@@ -16,8 +16,21 @@
             <div class="modal-content">
                 <div class="modal-body p-4">
                     <div class="d-flex justify-content-center align-items-center">
-                        <p class="pt-3 pr-2">This map updates approx. every 1 minute with VATSIM network data, NAT tracks, and online sectors. It should not be taken as an up to date reflection of VATSIM.
-                        </p>
+                        <div class="col-md-12">
+                            <p class="pt-3 pr-2">
+                                <h3><b>VATSIM Live Map</b></h3>
+                                This map is updated every minute with data available from the VATSIM Network and shows Online Sectors and Active NAT Tracks.
+                            </p>
+                            <p class="pt-2 pr-2">
+                                This map does not show sector splits for Domestic or Oceanic Airspace. If a controller is logged onto the FIR Callsign, this map will highlight the FIR as online.
+                            </p>
+                            <p class="pt-2 pr-2">
+                                <b>Map Colours:</b><br>
+                                - Green Airspace: <i>Gander Oceanic (CZQO) Airspace</i><br>
+                                - Purple Airspace: <i>Shanwick (EGGX) & New York Oceanic (KZNY) Airspace</i><br>
+                                - Grey Airspace: <i>Bordering Domestic FIR Airspace</i>
+                            </p>
+                        </div>
                     </div>
                     <button type="button" class="btn btn-light" data-dismiss="modal">Close</button>
 
@@ -28,7 +41,7 @@
 
     <script>
         $("#modal").modal();
-        createMap(@php echo json_encode($planes); @endphp, {{json_encode($controllerOnline)}});
+        createMap(@php echo json_encode($planes); @endphp, {{json_encode($eggxOnline)}}, {{json_encode($czqoOnline)}}, {{json_encode($natOnline)}}, {{json_encode($nycOnline)}});
     </script>
 
 <style>
