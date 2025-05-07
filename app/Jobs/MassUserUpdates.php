@@ -14,6 +14,8 @@ use App\Models\Training\Instructing\Records\TrainingSession;
 use App\Models\Users\User;
 use App\Models\Roster\RosterMember;
 use App\Models\Network\ExternalController;
+use Illuminate\Support\Facades\Notification;
+use App\Notifications\Network\EnrouteRatingUpgrade;
 use App\Notifications\Training\Instructing\RemovedAsStudent;
 use App\Models\Training\Instructing\Students\StudentStatusLabel;
 use App\Models\Training\Instructing\Links\StudentStatusLabelLink;
@@ -43,7 +45,16 @@ class MassUserUpdates implements ShouldQueue
         $start_time = Carbon::now();
         $user_updated = 0;
         $user_not_updated = 0;
+        $vatsim_gdpr = 0;
+        $vatsim_c1_upgrade = 0;
         $vatsim_api_failed = 0;
+
+        $update_rating = 0;
+        $update_region = 0;
+        $update_division = 0;
+        $update_subdivision = 0;
+        $update_pilot = 0;
+        $update_military = 0;
 
         // VATSIM Region List
         $vatsim_region_pull = $guzzle->request('GET', 'https://api.vatsim.net/api/regions');
@@ -162,17 +173,47 @@ class MassUserUpdates implements ShouldQueue
                 "short" => "FE",
                 "long" => "Flight Examiner"
             ]
-        ];        
+        ];  
+        
+        $vatsim_mil_ratings = [
+            [
+                "id" => 0,
+                "short" => "M0",
+                "long" => "No Military Rating"
+            ],
+            [
+                "id" => 1,
+                "short" => "M1",
+                "long" => "Military Pilot License"
+            ],
+            [
+                "id" => 3,
+                "short" => "M2",
+                "long" => "Military Instrument Rating"
+            ],
+            [
+                "id" => 7,
+                "short" => "M3",
+                "long" => "Military Multi-Engine Rating"
+            ],
+            [
+                "id" => 15,
+                "short" => "M4",
+                "long" => "Military Mission Ready Pilot"
+            ]            
+        ];
 
         // Get full User list
         $user = User::all();
         $total_users = count($user);
         $users_counted = 0;
 
-        foreach($user as $u){
+        $discord = new DiscordClient();
+        $discord->sendMessage('1343024277225607208', '# System User Update Start - Week '.Carbon::now()->weekOfYear .', '.Carbon::now()->Format('Y'));
 
-            // Ignore the following IDs (not actually members)
-            if($u->id == 1 || $u->id == 2){
+        foreach($user as $u){
+            // Ignore the following IDs (not actually members) & Ignore VATSIM GDPR Accounts (Details have been updated already)
+            if($u->id == 1 || $u->id == 2 || $u->id == 4 || $u->vatsim_gdpr_account == 1 || str_contains($u->id, '100000')){
                 continue;
             }
 
@@ -200,26 +241,99 @@ class MassUserUpdates implements ShouldQueue
                     $pilot_rating = reset($pilot_rating) ?: null;
                     $pilotratingshortname = $pilot_rating['short'] ?? null;
                     $pilotratinglongname = $pilot_rating['long'] ?? null;
+
+                    $military_rating = array_filter($vatsim_mil_ratings, fn($mr) => $mr['id'] === $vatsim['militaryrating']);
+                    $military_rating = reset($military_rating) ?: null;
+                    $militaryratingshortname = $military_rating['short'] ?? null;
+                    $militaryratinglongname = $military_rating['long'] ?? null;
                 }
             
                 // Lets Update the User Data based off the API Return
                 $needsUpdate = false;
+                $changes = [];
 
-                // Compare each attribute
-                if ($u->rating_id != $vatsim['rating']) $needsUpdate = true;
-                if ($u->rating_short != $rating['short']) $needsUpdate = true;
-                if ($u->rating_long != $rating['long']) $needsUpdate = true;
-                if ($u->rating_GRP != $rating['long']) $needsUpdate = true;
-                if ($u->pilotrating_id != $vatsim['pilotrating']) $needsUpdate = true;
-                if ($u->pilotrating_short != $pilotratingshortname) $needsUpdate = true;
-                if ($u->pilotrating_long != $pilotratinglongname) $needsUpdate = true;
-                if ($u->reg_date != Carbon::parse($vatsim['reg_date'])->format('Y-m-d H:i:s')) $needsUpdate = true;
-                if ($u->region_code != $vatsim['region_id']) $needsUpdate = true;
-                if ($u->region_name != $region['name']) $needsUpdate = true;
-                if ($u->division_code != $vatsim['division_id']) $needsUpdate = true;
-                if ($u->division_name != $division['name']) $needsUpdate = true;
-                if ($u->subdivision_code != $vatsim['subdivision_id']) $needsUpdate = true;
-                if ($u->subdivision_name != $subdivisionFullname) $needsUpdate = true;
+                // Look at each individual section to cross check if any changes are required
+                {
+                    if ($u->rating_id != $vatsim['rating']) {
+                        $needsUpdate = true;
+                        $changes[] = "\n- rating_id ({$u->rating_id} > {$vatsim['rating']})";
+                        $update_rating++;
+                    }
+                    if ($u->rating_short != $rating['short']) {
+                        $needsUpdate = true;
+                        $changes[] = "\n- rating_short ({$u->rating_short} > {$rating['short']})";
+                    }
+                    if ($u->rating_long != $rating['long']) {
+                        $needsUpdate = true;
+                        $changes[] = "\n- rating_long ({$u->rating_long} > {$rating['long']})";
+                    }
+                    if ($u->rating_GRP != $rating['long']) {
+                        $needsUpdate = true;
+                        $changes[] = "\n- rating_GRP ({$u->rating_GRP} > {$rating['long']})";
+                    }
+                    if ($u->pilotrating_id != $vatsim['pilotrating']) {
+                        $needsUpdate = true;
+                        $changes[] = "\n- pilotrating_id ({$u->pilotrating_id} > {$vatsim['pilotrating']})";
+                        $update_pilot++;
+                    }
+                    if ($u->pilotrating_short != $pilotratingshortname) {
+                        $needsUpdate = true;
+                        $changes[] = "\n- pilotrating_short ({$u->pilotrating_short} > {$pilotratingshortname})";
+                    }
+                    if ($u->pilotrating_long != $pilotratinglongname) {
+                        $needsUpdate = true;
+                        $changes[] = "\n- pilotrating_long ({$u->pilotrating_long} > {$pilotratinglongname})";
+                    }
+                    if ($u->militaryrating_id != $vatsim['militaryrating']) {
+                        $needsUpdate = true;
+                        $changes[] = "\n- militaryrating_id ({$u->militaryrating_id} > {$vatsim['militaryrating']})";
+                        $update_military++;
+                    }
+                    if ($u->militaryrating_short != $militaryratingshortname) {
+                        $needsUpdate = true;
+                        $changes[] = "\n- militaryrating_short ({$u->militaryrating_short} > {$militaryratingshortname})";
+                    }
+                    if ($u->militaryrating_long != $militaryratinglongname) {
+                        $needsUpdate = true;
+                        $changes[] = "\n- militaryrating_long ({$u->militaryrating_long} > {$militaryratinglongname})";
+                    }
+                    if ($u->reg_date != Carbon::parse($vatsim['reg_date'])->format('Y-m-d H:i:s')) {
+                        $needsUpdate = true;
+                    }
+                    if ($u->region_code != $vatsim['region_id']) {
+                        $needsUpdate = true;
+                        $changes[] = "\n- region_code ({$u->region_code} > {$vatsim['region_id']})";
+                        $update_region++;
+                    }
+                    if ($u->region_name != $region['name']) {
+                        $needsUpdate = true;
+                        $changes[] = "\n- region_name ({$u->region_name} > {$region['name']})";
+                    }
+                    if ($u->division_code != $vatsim['division_id']) {
+                        $needsUpdate = true;
+                        $changes[] = "\n- division_code ({$u->division_code} > {$vatsim['division_id']})";
+                        $update_division++;
+                    }
+                    if ($u->division_name != $division['name']) {
+                        $needsUpdate = true;
+                        $changes[] = "\n- division_name ({$u->division_name} > {$division['name']})";
+                    }
+                    if ($u->subdivision_code != $vatsim['subdivision_id']) {
+                        $needsUpdate = true;
+                        $changes[] = "\n- subdivision_code ({$u->subdivision_code} > {$vatsim['subdivision_id']})";
+                        $update_subdivision++;
+                    }
+                    if ($u->subdivision_name != $subdivisionFullname) {
+                        $needsUpdate = true;
+                        $changes[] = "\n- subdivision_name ({$u->subdivision_name} > {$subdivisionFullname})";
+                    }
+                }
+
+                if($u->rating_short == "S3" && $rating['short'] == "C1"){
+                    $vatsim_c1_upgrade++;
+
+                    Notification::send($u, new EnrouteRatingUpgrade($u));
+                }
 
                 if ($needsUpdate) {
                     $u->rating_id = $vatsim['rating'];
@@ -229,6 +343,9 @@ class MassUserUpdates implements ShouldQueue
                     $u->pilotrating_id = $vatsim['pilotrating'];
                     $u->pilotrating_short = $pilotratingshortname;
                     $u->pilotrating_long = $pilotratinglongname;
+                    $u->militaryrating_id = $vatsim['militaryrating'];
+                    $u->militaryrating_short = $militaryratingshortname;
+                    $u->militaryrating_long = $militaryratinglongname;
                     $u->reg_date = Carbon::parse($vatsim['reg_date'])->format('Y-m-d H:i:s');
                     $u->region_code = $vatsim['region_id'];
                     $u->region_name = $region['name'];
@@ -240,23 +357,75 @@ class MassUserUpdates implements ShouldQueue
                     $u->save();
 
                     $user_updated++;
+
+                    // Format change message
+                    $changeSummary = implode('', $changes);
+                    $discordMessage = "### User Updated: {$u->FullName('FLC')}\n __Changes:__ {$changeSummary}";
+
+                    // Send to Discord
+                    $discord = new DiscordClient();
+                    $discord->sendMessage('1343024277225607208', $discordMessage);
+
                 } else {
                     $user_not_updated++;
                 }        
 
                 $users_counted++;
-                // $discord = new DiscordClient();
-                // $discord->sendMessage('1343024277225607208', 'UPDATE COMPLETED: '.$u->FullName('FLC').' ('.$users_counted.'/'. $total_users.' users).');
-              
-                sleep(7);
+                sleep(6.1);
             
             } catch (\GuzzleHttp\Exception\ClientException | \GuzzleHttp\Exception\ServerException $e) {
                 $users_counted++;
+                $statusCode = $e->getResponse()->getStatusCode();
+
+                // Account VATSIM GDPR'd - Lets Remove the VITAL information
+                if ($statusCode === 404) {
+                    // Handle 404 differently (e.g., update account details)
+                    // For example:
+                    $u->update([
+                        'fname' => 'VATSIM GDPR',
+                        'lname' => 'Acc. Deleted',
+                        'email' => 'deletedacc@ganderoceanic.ca',
+                        'rating_id' => '-1',
+                        'rating_short' => 'INAC',
+                        'rating_long' => 'Inactive (GDPR Del.)',
+                        'region_code' => null,
+                        'region_name' => null,
+                        'division_code' => null,
+                        'division_name' => null,
+                        'subdivision_code' => null,
+                        'subdivision_name' => null,
+                        'remember_token' => null,
+                        'display_cid_only' => 0,
+                        'display_fname' => 'VATSIM GDPR',
+                        'display_last_name' => 1,
+                        'discord_user_id' => null,
+                        'discord_dm_channel_id' => null,
+                        'avatar_mode' => 0,
+                        'discord_username' => null,
+                        'discord_avatar' => null,
+                        'pilotrating_id' => null,
+                        'pilotrating_short' => null,
+                        'pilotrating_long' => null,
+                        'militaryrating_id' => null,
+                        'militaryrating_short' => null,
+                        'militaryrating_long' => null,
+                        'vatsim_gdpr_account' => 1,
+                    ]);
+
+                    $discord = new DiscordClient();
+                    $discord->sendMessage('1343024277225607208', 'VATSIM ACCOUNT DELETED (404): '.$u->FullName('FLC').' ('.$users_counted.'/'. $total_users.' users).');
+
+                    $vatsim_gdpr++;
+                    sleep(6.1);
+                    continue;
+                }
+
+                // Otherwise, its a general error - lets log it
                 $discord = new DiscordClient();
                 $discord->sendMessage('1343024277225607208', 'UPDATE FAILED CLIENT/SERVER: '.$u->FullName('FLC').' ('.$users_counted.'/'. $total_users.' users).');
             
                 $vatsim_api_failed++;
-                sleep(7);
+                sleep(6.1);
                 continue;
             } catch (\Exception $e) {
                 $users_counted++;
@@ -264,7 +433,7 @@ class MassUserUpdates implements ShouldQueue
                 $discord->sendMessage('1343024277225607208', 'UPDATE FAILED EXCEPTION: '.$u->FullName('FLC').' ('.$users_counted.'/'. $total_users.' users).');
             
                 $vatsim_api_failed++;
-                sleep(7);
+                sleep(6.1);
                 continue;
             }
             
@@ -272,12 +441,38 @@ class MassUserUpdates implements ShouldQueue
 
         // Record Information for Discord
         // Beginning
-        $update_content = "Quarterly User Database Updates were just completed";
+        $update_content = "Weekly User DB Updates were just completed";
 
         $update_content .= "\n\n **__User Updates:__**";
-        $update_content .= "\n- No Update Required: ".$user_not_updated;
         $update_content .= "\n- Successful: ".$user_updated;
-        $update_content .= "\n- Failed: ".$vatsim_api_failed;
+        if($update_rating > 0 ){
+            $update_content .= "\n  - General Rating: ".$update_rating;
+        }
+        if($update_pilot > 0 ){
+            $update_content .= "\n  - Pilot Rating: ".$update_pilot;
+        }
+        if($update_military > 0 ){
+            $update_content .= "\n  - Mil. Rating: ".$update_military;
+        }
+        if($update_region > 0 ){
+            $update_content .= "\n  - Region: ".$update_region;
+        }
+        if($update_division > 0 ){
+            $update_content .= "\n  - Division: ".$update_division;
+        }
+        if($update_subdivision > 0 ){
+            $update_content .= "\n  - SubDivision: ".$update_subdivision;
+        }
+        if($vatsim_gdpr > 0){
+            $update_content .= "\n- VATSIM GDPR: ".$vatsim_gdpr;
+        }
+        if($vatsim_c1_upgrade > 0){
+            $update_content .= "\n- New C1 Email: ".$vatsim_c1_upgrade;
+        }
+        if($vatsim_api_failed > 0){
+            $update_content .= "\n- Failed: ".$vatsim_api_failed;
+        }
+        $update_content .= "\n- Not Required: ".$user_not_updated;
 
 
         // Completion Time
@@ -287,6 +482,9 @@ class MassUserUpdates implements ShouldQueue
 
         $discord = new DiscordClient();
         $discord->sendMessageWithEmbed('1297573259663118368', 'WEEKLY: Mass User Updates', $update_content);
+
+        $discord = new DiscordClient();
+        $discord->sendMessage('1343024277225607208', '# System User Update End - Week '.Carbon::now()->weekOfYear .', '.Carbon::now()->Format('Y'));
     }
 
 }

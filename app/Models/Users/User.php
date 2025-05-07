@@ -130,7 +130,7 @@ class User extends Authenticatable
         'reg_date', 'region_code', 'region_name', 'division_code', 'division_name',
         'subdivision_code', 'subdivision_name', 'permissions', 'init', 'gdpr_subscribed_emails', 'avatar', 
         'bio', 'display_cid_only', 'display_fname', 'display_last_name', 'discord_user_id', 'member_of_czqo',
-        'discord_username', 'discord_avatar', 'discord_dm_channel_id', 'avatar_mode', 'used_connect',
+        'discord_username', 'discord_avatar', 'discord_dm_channel_id', 'avatar_mode', 'used_connect', 'vatsim_gdpr_account',
     ];
 
     /**
