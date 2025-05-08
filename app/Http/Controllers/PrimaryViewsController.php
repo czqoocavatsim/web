@@ -31,7 +31,7 @@ class PrimaryViewsController extends Controller
 
         //News
         $news = News::where('visible', true)->get()->sortByDesc('published')->first();
-        $certifications = HomeNewControllerCert::all()->sortByDesc('timestamp')->take(5);
+        $certifications = HomeNewControllerCert::all()->sortByDesc('timestamp')->take(6);
 
         //Next event
         $nextEvent = Event::where('start_timestamp', '>', Carbon::now())->get()->sortBy('start_timestamp')->first();
@@ -39,12 +39,12 @@ class PrimaryViewsController extends Controller
         //Top Month Controllers
         $rosterMembers = RosterMember::where('monthly_hours', '>', 0)->get();
         $externalControllers = ExternalController::where('monthly_hours', '>', 0)->get();
-        $topControllers = $rosterMembers->merge($externalControllers)->sortByDesc('monthly_hours')->take(5);
+        $topControllers = $rosterMembers->merge($externalControllers)->sortByDesc('monthly_hours')->take(6);
 
         //Top controllers
         $rosterMembers = RosterMember::where('currency', '>', 0)->get();
         $externalControllers = ExternalController::where('currency', '>', 0)->get();
-        $yearControllers = $rosterMembers->merge($externalControllers)->sortByDesc('currency')->take(5);
+        $yearControllers = $rosterMembers->merge($externalControllers)->sortByDesc('currency')->take(6);
 
         //CTP Mode?
         $ctpMode = false;
