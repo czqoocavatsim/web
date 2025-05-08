@@ -251,7 +251,7 @@ class MassUserUpdates implements ShouldQueue
                 {
                     if ($u->rating_id != $vatsim['rating']) {
                         $needsUpdate = true;
-                        $changes[] = "\n- rating_id ({$u->rating_id} > {$vatsim['rating']})";
+                        // $changes[] = "\n- rating_id ({$u->rating_id} > {$vatsim['rating']})";
                         $update_rating++;
                     }
                     if ($u->rating_short != $rating['short']) {
@@ -260,15 +260,15 @@ class MassUserUpdates implements ShouldQueue
                     }
                     if ($u->rating_long != $rating['long']) {
                         $needsUpdate = true;
-                        $changes[] = "\n- rating_long ({$u->rating_long} > {$rating['long']})";
+                        // $changes[] = "\n- rating_long ({$u->rating_long} > {$rating['long']})";
                     }
                     if ($u->rating_GRP != $rating['long']) {
                         $needsUpdate = true;
-                        $changes[] = "\n- rating_GRP ({$u->rating_GRP} > {$rating['long']})";
+                        // $changes[] = "\n- rating_GRP ({$u->rating_GRP} > {$rating['long']})";
                     }
                     if ($u->pilotrating_id != $vatsim['pilotrating']) {
                         $needsUpdate = true;
-                        $changes[] = "\n- pilotrating_id ({$u->pilotrating_id} > {$vatsim['pilotrating']})";
+                        // $changes[] = "\n- pilotrating_id ({$u->pilotrating_id} > {$vatsim['pilotrating']})";
                         $update_pilot++;
                     }
                     if ($u->pilotrating_short != $pilotratingshortname) {
@@ -277,11 +277,11 @@ class MassUserUpdates implements ShouldQueue
                     }
                     if ($u->pilotrating_long != $pilotratinglongname) {
                         $needsUpdate = true;
-                        $changes[] = "\n- pilotrating_long ({$u->pilotrating_long} > {$pilotratinglongname})";
+                        // $changes[] = "\n- pilotrating_long ({$u->pilotrating_long} > {$pilotratinglongname})";
                     }
                     if ($u->militaryrating_id != $vatsim['militaryrating']) {
                         $needsUpdate = true;
-                        $changes[] = "\n- militaryrating_id ({$u->militaryrating_id} > {$vatsim['militaryrating']})";
+                        // $changes[] = "\n- militaryrating_id ({$u->militaryrating_id} > {$vatsim['militaryrating']})";
                         $update_military++;
                     }
                     if ($u->militaryrating_short != $militaryratingshortname) {
@@ -290,7 +290,7 @@ class MassUserUpdates implements ShouldQueue
                     }
                     if ($u->militaryrating_long != $militaryratinglongname) {
                         $needsUpdate = true;
-                        $changes[] = "\n- militaryrating_long ({$u->militaryrating_long} > {$militaryratinglongname})";
+                        // $changes[] = "\n- militaryrating_long ({$u->militaryrating_long} > {$militaryratinglongname})";
                     }
                     if ($u->reg_date != Carbon::parse($vatsim['reg_date'])->format('Y-m-d H:i:s')) {
                         $needsUpdate = true;
