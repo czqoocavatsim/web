@@ -139,7 +139,7 @@ class ProcessSessionLogging implements ShouldQueue
 **They are not authorised to open this position.**');
 
                             // Save ID so it doesnt keep spamming
-                            $session->discord_id = $discord_id;
+                            $session->discord_id = 0;
                             $session->save();
                         }
                     }

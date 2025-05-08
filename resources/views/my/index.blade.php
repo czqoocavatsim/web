@@ -192,14 +192,34 @@
                                     <h6 class="card-subtitle mb-2 text-muted fw-500">
                                         {{ $user->rating_GRP }} ({{ $user->rating_short }})
                                     </h6>
-                                    Region: {{ $user->region_name }}<br />
-                                    Division: {{ $user->division_name }}<br />
+                                    @if($user->pilotrating_short !== null)
+                                        <h6 class="card-subtitle mb-2 text-muted fw-500">
+                                            {{ $user->pilotrating_long }} ({{ $user->pilotrating_short }})
+                                        </h6>
+                                    @else
+                                        <h6 class="card-subtitle mb-2 text-muted fw-500">
+                                            No Pilot Rating (P0)
+                                        </h6>
+                                    @endif
+
+                                    @if($user->militaryrating_short !== null)
+                                    <h6 class="card-subtitle mb-2 text-muted fw-500">
+                                        {{ $user->militaryrating_long }} ({{ $user->militaryrating_short }})
+                                    </h6>
+                                    @else
+                                    <h6 class="card-subtitle mb-2 text-muted fw-500">
+                                        No Military Rating (P0)
+                                    </h6>
+                                    @endif
+
+                                    <b>Region:</b> {{ $user->region_name }}<br />
+                                    <b>Division:</b> {{ $user->division_name }}<br />
                                     @if ($user->subdivision_name)
                                         vACC/ARTCC: {{ $user->subdivision_name }}<br />
                                     @endif
-                                    Role: {{ $user->highestRole()->name }}<br />
+                                    <b>System Role:</b> {{ $user->highestRole()->name }}<br />
                                     @if ($user->staffProfile)
-                                        Staff Role: {{ $user->staffProfile->position }}
+                                        Senior Staff Position: {{ $user->staffProfile->position }}
                                     @endif
                                 </div>
                             </div>

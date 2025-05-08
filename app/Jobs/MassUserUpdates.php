@@ -177,11 +177,6 @@ class MassUserUpdates implements ShouldQueue
         
         $vatsim_mil_ratings = [
             [
-                "id" => 0,
-                "short" => "M0",
-                "long" => "No Military Rating"
-            ],
-            [
                 "id" => 1,
                 "short" => "M1",
                 "long" => "Military Pilot License"
