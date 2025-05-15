@@ -48,6 +48,7 @@ class DiscordAccountCheck implements ShouldQueue
         $discord_uids = [];
         $discord_member_contents = [];
         $in_discord_name = [];
+        $discord_not_in_system_ids = [];
 
         // Get List of Users in Discord
         $discord = new DiscordClient();
@@ -118,8 +119,31 @@ class DiscordAccountCheck implements ShouldQueue
             $discord_member_contents[] = $members;
         }
 
+        // Find which users are in the Discord, but not registered with us
+
         // Get a complete list of Gander Oceanic Users
         $users = User::whereNotNull('discord_user_id')->get();
+
+        // After the loop, find all Discord users who are not in your system
+        foreach ($discord_uids as $discord_uid) {
+            // Check if the Discord user ID exists in the users database
+            $user_exists = false;
+            foreach ($users as $user) {
+                if ($user->discord_user_id == $discord_uid) {
+                    $user_exists = true;
+                    break;
+                }
+            }
+
+            // If the user is not in the system, add the Discord user ID to the list
+            if (!$user_exists) {
+                $discord_not_in_system_ids[] = $discord_uid;
+
+                $discord->assignRole($discord_uid, '1372439231426990211');
+            }
+        }
+
+        // dd($discord_not_in_system_ids);
 
         // Loop through each DB User
         foreach($users as $user){
@@ -180,6 +204,7 @@ class DiscordAccountCheck implements ShouldQueue
                             'gander_certified'  => 1297507926222573568,
                             'shanwick_certified' => 1297508027280396349,
                             'zny_certified' => 1302030442916089866,
+
                             's1' => 1342639858027462769,
                             's2' => 1342640729012568145,
                             's3' => 1342640763183435807,
@@ -189,16 +214,19 @@ class DiscordAccountCheck implements ShouldQueue
                             'i3' => 1347454523676819516,
                             'sup' => 720502070683369563,
                             'adm' => 1342640950412967937,
+
                             'ppl' => 1342642295157297203,
                             'ir' => 1342642432147460281,
                             'cmel' => 1342642434299002961,
                             'atpl' => 1342642436408606851,
                             'fi' => 1342642438162088091,
                             'fe' => 1342642440846311556,
+
                             'm1' => 1369692686344523787,
                             'm2' => 1369692752656203927,
                             'm3' => 1369692872470822932,
                             'm4' => 1369692937478344704,
+                            
                             'news_notify' => 1347476285542236160,
                             'event_notify' => 1347476363472273418,
                             'ctp_notify' => 1347476367574569020,
@@ -337,6 +365,7 @@ class DiscordAccountCheck implements ShouldQueue
                             1300054143532138516, //VATSYS Beta Tester
                             1278868454606377040, //Currently Online
                             695274344141815891, //Discord Nitro Role
+                            1372439231426990211, //No Discord Account Registered
                         ];
 
                         foreach ($roleIdsToCheck as $roleId) {
