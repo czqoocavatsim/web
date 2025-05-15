@@ -53,7 +53,7 @@ class DiscordClient
             'json' => [
                 'name' => $name,
                 'auto_archive_duration' => 10080,
-                'type' => 10
+                'type' => 11
             ]
         ]);
 
