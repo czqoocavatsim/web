@@ -23,17 +23,28 @@ class PrimaryViewsController extends Controller
     public function home(Request $request)
     {
         //VATSIM online controllers
-        $controllers = SessionLog::whereNull('session_end')->get();
+        $controllers = SessionLog::whereNull('session_end')->orderBy('session_start', 'asc')->get();
+
+        // Controller Certifications
+        $externalController = ExternalController::all();
+        $ganderController = RosterMember::all();
 
         //News
         $news = News::where('visible', true)->get()->sortByDesc('published')->first();
-        $certifications = HomeNewControllerCert::all()->sortByDesc('timestamp')->take(3);
+        $certifications = HomeNewControllerCert::all()->sortByDesc('timestamp')->take(6);
 
         //Next event
         $nextEvent = Event::where('start_timestamp', '>', Carbon::now())->get()->sortBy('start_timestamp')->first();
 
+        //Top Month Controllers
+        $rosterMembers = RosterMember::where('monthly_hours', '>', 0)->get();
+        $externalControllers = ExternalController::where('monthly_hours', '>', 0)->get();
+        $topControllers = $rosterMembers->merge($externalControllers)->sortByDesc('monthly_hours')->take(6);
+
         //Top controllers
-        $topControllers = RosterMember::where('monthly_hours', '>', 0)->get()->sortByDesc('monthly_hours')->take(3);
+        $rosterMembers = RosterMember::where('currency', '>', 0)->get();
+        $externalControllers = ExternalController::where('currency', '>', 0)->get();
+        $yearControllers = $rosterMembers->merge($externalControllers)->sortByDesc('currency')->take(6);
 
         //CTP Mode?
         $ctpMode = false;
@@ -41,7 +52,7 @@ class PrimaryViewsController extends Controller
             $ctpMode = true;
         }
 
-        return view('index', compact('controllers', 'news', 'certifications', 'nextEvent', 'topControllers', 'ctpMode'));
+        return view('index', compact('controllers', 'news', 'certifications', 'nextEvent', 'topControllers', 'yearControllers', 'ctpMode'));
     }
 
     /*

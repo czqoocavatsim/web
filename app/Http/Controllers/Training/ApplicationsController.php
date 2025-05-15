@@ -18,7 +18,7 @@ use App\Notifications\Training\Applications\ApplicationWithdrawnStaff;
 use App\Notifications\Training\Applications\NewApplicationStaff;
 use App\Notifications\Training\Applications\NewCommentApplicant;
 use App\Notifications\Training\Applications\NewCommentStaff;
-use App\Models\Network\ShanwickController;
+use App\Models\Network\ExternalController;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cache;
@@ -42,7 +42,7 @@ class ApplicationsController extends Controller
     public function apply(Request $request)
     {
         if (!auth()->user()->can('start applications')) {
-            abort(403, 'You cannot apply for Gander Oceanic at this time. If this is a mistake, please contact the Deputy OCA Chief.');
+            abort(403, 'You cannot apply for Gander Oceanic at this time. If this is a mistake, please contact the Events & Training Director.');
         }
 
         if ($pendingApp = Application::where('user_id', auth()->id())->where('status', 0)->first()) {
@@ -81,12 +81,12 @@ class ApplicationsController extends Controller
             return view('training.applications.apply', compact('hoursTotal'))->with('allowed', 'hours');
         }
 
-        // Check Shanwick Roster (DB)
-        $shanwickRoster = ShanwickController::all()->pluck('controller_cid');
+        // Check External Roster (DB)
+        $externalcontroller = ExternalController::all()->pluck('controller_cid');
 
-        foreach ($shanwickRoster as $member) {
+        foreach ($externalcontroller as $member) {
             if ($member == auth()->id()) {
-                return view('training.applications.apply')->with('allowed', 'shanwick');
+                return view('training.applications.apply')->with('allowed', 'externalcontroller');
             }
         }
 
@@ -134,7 +134,7 @@ class ApplicationsController extends Controller
         $processingUpdate = new ApplicationUpdate([
             'application_id' => $application->id,
             'update_title'   => 'Sit tight! Your application is now pending',
-            'update_content' => 'If you do not see an update through email or Discord within 5 days, please contact the Deputy OCA Chief.',
+            'update_content' => 'If you do not see an update through email or Discord within 7 days, please contact the Events & Training Director.',
             'update_type'    => 'green',
         ]);
         $processingUpdate->save();

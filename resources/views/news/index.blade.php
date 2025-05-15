@@ -4,11 +4,13 @@
 @section('description', 'News from Gander Oceanic')
 
 @section('content')
-    <div class="card card-image blue rounded-0">
-        <div class="text-white text-left pb-2 pt-5 px-4">
+    <div class="jarallax card card-image blue rounded-0"  data-jarallax data-speed="0.2">
+    {{-- <img class="jarallax-img" src="{{asset('assets/resources/media/img/website/euroscope_client.png')}}" alt=""> --}}
+        <div class="text-white text-left rgba-stylish-strong py-3 pt-5 px-4">
             <div class="container">
                 <div class="py-5">
                     <h1 class="font-weight-bold" style="font-size: 3em;">News</h1>
+                    <h4>All news published by Gander Oceanic</h4>
                 </div>
             </div>
         </div>
@@ -17,7 +19,7 @@
         <div class="row">
             @foreach($news as $n)
                 <div class="col-md-6 mb-3">
-                    <div class="view" style="height: 250px !important; @if($n->image) background-image:url({{$n->image}}); background-size: cover; @else background: var(--czqo-blue); @endif">
+                    <div class="view" style="height: 250px; !important; @if($n->image) background-image:url({{$n->image}}); background-size: cover; @else background-image:url('https://ganderoceanic.ca/assets/staff_uploads/news_article/default.png'); background-size: cover; @endif">
                         <div class="mask rgba-stylish-light flex-left p-4 justify-content-end d-flex   flex-column h-100">
                             <div class="container">
                                 <h2 class="font-weight-bold white-text">

@@ -120,7 +120,7 @@
                             });
                         </script>
                     @elseif (Auth::check() && $event->userHasApplied())
-                        <p>You have already signed up. Contact the Events and Marketing Director to change times or cancel.</p>
+                        <p>You have already signed up. Contact the Events & Training Director to change times or cancel.</p>
                         <h6 class="font-weight-bold">Your Availability</h6>
                         <p>{{$app->start_availability_timestamp}} to {{$app->end_availability_timestamp}}</p>
                         <h6 class="font-weight-bold">Comments</h6>

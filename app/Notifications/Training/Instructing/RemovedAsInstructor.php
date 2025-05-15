@@ -46,7 +46,7 @@ class RemovedAsInstructor extends Notification implements ShouldQueue
                     ->greeting('Hello,')
                     ->subject('Removed as CZQO Instructor')
                     ->line('You have been **removed** as an Instructor at Gander Oceanic.')
-                    ->line('If you believe this is a mistake, or need an explanation as to why this has occurred, please contact the Chief Instructor.')
+                    ->line('If you believe this is a mistake, or need an explanation as to why this has occurred, please contact the Events & Training Director.')
                     ->salutation('Gander Oceanic OCA');
     }
 

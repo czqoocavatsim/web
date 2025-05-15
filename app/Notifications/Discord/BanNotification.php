@@ -43,7 +43,7 @@ class BanNotification extends Notification
     {
         return DiscordMessage::create(
             "
-            Hi {$this->user->fullName('FLC')},\n\nYou have been banned from the Gander Oceanic Discord server.\n\nReason:\n```{$this->ban->reason}```\nThe ban will expire on {$this->ban->end_time->toDayDateTimeString()}.\n\nTo appeal, email the FIR Chief.
+            Hi {$this->user->fullName('FLC')},\n\nYou have been banned from the Gander Oceanic Discord server.\n\nReason:\n```{$this->ban->reason}```\nThe ban will expire on {$this->ban->end_time->toDayDateTimeString()}.\n\nTo appeal, email the FIR Director.
             "
         );
     }

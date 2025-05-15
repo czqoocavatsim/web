@@ -22,6 +22,8 @@ class StaffListController extends Controller
         // Events & Marketing List
         $events = User::role('Events and Marketing Team')->get();
 
+        $operations = User::role('Operations Team')->get();
+
         // Instructor Staff List
         $instructors = Instructor::join('users', 'instructors.user_id', '=', 'users.id')
             ->where('instructors.current', true)
@@ -32,7 +34,7 @@ class StaffListController extends Controller
         
         $groups = StaffGroup::where('slug', 'seniorstaff')->get();
 
-        return view('about.staff', compact('leadership', 'web', 'events', 'groups', 'instructors'));
+        return view('about.staff', compact('leadership', 'web', 'events', 'groups', 'instructors', 'operations'));
     }
 
     public function editIndex()

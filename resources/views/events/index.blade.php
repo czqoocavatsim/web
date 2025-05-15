@@ -2,8 +2,8 @@
 @section('title', 'Events - ')
 @section('description', 'Check out events over the Northern Atlantic supported by CZQO')
 @section('content')
-<div class="jarallax card card-image rounded-0" data-jarallax data-speed="0.2">
-    <img class="jarallax-img" src="https://pbs.twimg.com/media/Dawqe5JX4AIx378.jpg" alt="">
+<div class="jarallax card card-image blue rounded-0"  data-jarallax data-speed="0.2">
+    {{-- <img class="jarallax-img" src="{{asset('assets/resources/media/img/website/euroscope_client.png')}}" alt=""> --}}
     <div class="text-white text-left pb-2 pt-5 px-4 mask rgba-stylish-strong">
         <div class="container">
             <div class="py-5">
@@ -80,15 +80,15 @@
             </div>
             <div class="modal-body">
                 <p>Gander Oceanic is happy to provide ATC coverage for your event crossing the North Atlantic.<br/>
-                    To request ATC for your event, contact the Events and Marketing Director via <a href="{{route('staff')}}">email.</a> If the position is vacant, instead contact the OCA Chief.</p>
+                    To request ATC for your event, contact the Training & Events Director via <a href="{{route('staff')}}">email.</a> In the event the position is vacant, contact the FIR Director.</p>
                 <br/>
                 <p>Section 2.5 of the General Policy applies.</p>
                 <blockquote style="font-size: 12px !important;">
                     <p  style="font-size: 12px !important;">2.5    Events<br/><br/>
 2.5.1    Gander Oceanic warmly welcomes events (including those organised by Virtual Airlines, streamers, etc) that pass through the Gander and Shanwick airspace, and we are very happy to provide our excellent, professional service for both sectors.<br/><br/>
 2.5.2    Gander Oceanic requires a notice of at least thirty (30) days from the event coordinator if Oceanic control is needed. This ensures that you can have the best oceanic experience throughout the duration of your event, as it takes time to compile a roster.<br/><br/>
-2.5.3    If thirty (30) days is not provided, then Gander Oceanic cannot guarantee coverage for your event. A roster will not be compiled for any event made aware to us less than thirty days before the event date, nor will the event be published on our event page. Your cooperation is appreciated in this regard.<br/><br/>
-2.5.4    Requests in accordance with 2.5.2 and 2.5.3 shall be made in writing via email to the Events and Marketing Director, copying in the FIR Chief. If the Events and Marketing Director position is vacant, than correspondence shall be directed straight to the FIR Chief. Email addresses can be found on the website, on the staff page.</p>
+2.5.3    If thirty (\) days is not provided, then Gander Oceanic cannot guarantee coverage for your event. A roster will not be compiled for any event made aware to us less than thirty days before the event date, nor will the event be published on our event page. Your cooperation is appreciated in this regard.<br/><br/>
+2.5.4    Requests in accordance with 2.5.2 and 2.5.3 shall be made in writing via email to the Events & Training Director, copying in the FIR Director. If the Events & Training Director position is vacant, than correspondence shall be directed straight to the FIR Director. Email addresses can be found on the website, on the staff page.</p>
                 </blockquote>
             </div>
         </div>

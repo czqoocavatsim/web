@@ -16,8 +16,8 @@
     <thead>
         <th>CID</th>
         <th>Name</th>
-        <th>Status</th>
         <th>Active</th>
+        <th>Status</th>
         <th>Currency</th>
         <th>Action</th>
     </thead>
@@ -35,6 +35,7 @@
                         <i title="Not linked to a user account." class="fas fa-unlink"></i>
                     @endif
                 </td>
+
                 @if ($r->certification == "certified")
                     <td class="bg-success text-white">
                         Certified
@@ -63,15 +64,20 @@
                     </td>
                 @endif
 
-                @if($r->currency < 1)
-                <td class="bg-danger text-dark">
-                    {{$r->currency}}
+                @if($r->currency < 6)
+                <td class="bg-danger text-white">
+                    @if($r->currency < 1)
+                        {{ str_pad(round(($r->currency - floor($r->currency)) * 60), 2, '0', STR_PAD_LEFT) }}m
+                    @else
+                        {{ floor($r->currency) }}h {{ str_pad(round(($r->currency - floor($r->currency)) * 60), 2, '0', STR_PAD_LEFT) }}m
+                    @endif
                 </td>
                 @else
                 <td class="bg-success text-white">
-                    {{$r->currency}}
+                    {{ floor($r->currency) }}h {{ str_pad(round(($r->currency - floor($r->currency)) * 60), 2, '0', STR_PAD_LEFT) }}m
                 </td>
                 @endif
+
                 <td>
                     <a href="{{route('training.admin.roster.viewcontroller', $r->cid)}}"><i class="fas fa-eye"></i>&nbsp;View</a>
                 </td>

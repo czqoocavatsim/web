@@ -3,14 +3,26 @@
 @section('title', 'Staff - ')
 
 @section('content')
-@include('layouts.large-page-header-blue', ['title' => 'Staff'])
+<div class="jarallax card card-image blue rounded-0"  data-jarallax data-speed="0.2">
+    {{-- <img class="jarallax-img" src="{{asset('assets/resources/media/img/website/euroscope_client.png')}}" alt=""> --}}
+    <div class="text-white text-left rgba-stylish-strong py-3 pt-5 px-4">
+        <div class="container">
+            <div class="py-5">
+                <h1 class="font-weight-bold" style="font-size: 3em;">Our Staff</h1>
+                <h4 class="font-weight-bold">List of the Staff for Gander Oceanic</h4>
+            </div>
+        </div>
+    </div>
+</div>
+
 <div class="container py-4">
     <div class="row">
         <div class="col-md-3 mb-3">
             <div class="list-group" style="position: sticky; top: 20px">
                 <a href="#leadership" class="list-group-item list-group-item-action">Senior Leadership Team</a>
                 <a href="#events" class="list-group-item list-group-item-action">Events & Marketing Team</a>
-                <a href="#it" class="list-group-item list-group-item-action">IT Team</a>
+                <a href="#tech" class="list-group-item list-group-item-action">IT Team</a>
+                <a href="#operations" class="list-group-item list-group-item-action">Operations Team</a>
                 <a href="#training" class="list-group-item list-group-item-action">Training Team</a>
             </div>
         </div>
@@ -40,7 +52,7 @@
                                             {{$member->user->fullname('FLC')}}
                                             @endif
                                         </h4>
-                                        <h5>{{$member->position}}</h5>
+                                        <h5>{{$member->position}} (ZQO{{$member->id}})</h5>
                                         <p>{{$member->description}}</p>
                                         <p class="mb-0">
                                             <a href="mailto:{{$member->email}}"><i class="fa fa-envelope"></i>&nbsp;Email</a>@if(!$member->vacant())&nbsp;&nbsp;•&nbsp;&nbsp;<a href=""  data-toggle="modal" data-target="#viewStaffBio{{$member->id}}"><i class="fas fa-user"></i>&nbsp;Biography</a>@endif
@@ -109,7 +121,7 @@
 
 
             {{-- IT Team --}}
-            <a id="it"><h3 class="mb-3 blue-text font-weight-bold">IT Team</h3></a>
+            <a id="tech"><h3 class="mb-3 blue-text font-weight-bold">IT Team</h3></a>
             <div class="row">
                 @foreach ($web as $weby)
                     <div class="col-md-6 mb-3">
@@ -129,6 +141,26 @@
             </div>
             <hr>
 
+            {{-- Operations Team --}}
+            <a id="operations"><h3 class="mb-3 blue-text font-weight-bold">Operations Team</h3></a>
+            <div class="row">
+                @foreach ($operations as $ops)
+                    <div class="col-md-6 mb-3">
+                        <div class="card shadow-none grey lighten-4 p-4" style="height: 100%;">
+                            <div class="d-flex flex-row">
+                                <img src="{{$ops->avatar()}}" style="height: 80px; width:80px;margin-right: 15px; border-radius: 50%;">
+                                <div class="d-flex flex-column">
+                                    <h4 class="font-weight-bold">
+                                        {{$ops->fullname('FLC')}}
+                                    </h4>
+                                    <p>Operations Staff</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                @endforeach
+            </div>
+            <hr>
 
             {{-- Training Team --}}
             <a id="training"><h3 class="mb-3 blue-text font-weight-bold">Training Team</h3></a>

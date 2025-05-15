@@ -22,13 +22,11 @@ aria-hidden="true">
                       <a class="dropdown-item {{ Request::is('about/staff') ? 'active white-text' : '' }}" href="{{url ('/about/staff')}}" aria-expanded="false">Staff</a>
                   </div>
               </li>
-              <li class="nav-item dropdown {{ Request::is('roster') || Request::is('roster/solo-certs') ? 'active' : ''}}">
-                  <a class="nav-link dropdown-toggle" style="cursor:pointer" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Roster</a>
-                  <div class="dropdown-menu" aria-labelledby="dropdown01">
-                      <a class="dropdown-item {{ Request::is('roster') ? 'active white-text' : '' }}" href="{{route('roster.public')}}" aria-expanded="false">Controller Roster</a>
-                      {{-- <a class="dropdown-item {{ Request::is('roster/solo-certs') ? 'active white-text' : '' }}" href="{{route('solocertifications.public')}}" aria-expanded="false">Solo Certifications</a> --}}
-                  </div>
-              </li>
+              <li class="nav-item {{ Request::is('roster') ? 'active white-text' : '' }}">
+                <a class="nav-link text-body" href="{{route('roster.public')}}">
+                    Roster
+                </a>
+            </li>
               <li class="nav-item {{ Request::is('news') ? 'active white-text' : '' }} {{ Request::is('news/*') ? 'active white-text' : '' }}">
                   <a class="nav-link text-body" href="{{route('news')}}">
                       News

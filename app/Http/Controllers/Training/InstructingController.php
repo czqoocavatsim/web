@@ -336,13 +336,6 @@ class InstructingController extends Controller
         $instructor->staff_email = $request->get('staff_email');
         $instructor->save();
 
-        //If assessor, give role, vice versa
-        if ($instructor->assessor) {
-            $instructor->user->assignRole('Assessor');
-        } else {
-            $instructor->user->removeRole('Assessor');
-        }
-
         //Return view
         return redirect()->route('training.admin.instructing.instructors.view', $instructor->user_id)->with('success', 'Edited!');
     }
@@ -362,7 +355,6 @@ class InstructingController extends Controller
 
         //Remove permissions
         $instructor->user->removeRole('Instructor');
-        $instructor->user->removeRole('Assessor');
 
         //Remove role on Discord if able
         try {
@@ -500,7 +492,6 @@ class InstructingController extends Controller
             $discord->EditThreadTag('Completed', $student->user->id);
 
             // Close Training Thread Out & Send Completion Message
-            $discord = new DiscordClient();
             $discord->closeTrainingThread($student->user->fullName('FLC'), $student->user->discord_user_id, 'certify');
 
         // Update Roster with Certification Status
@@ -510,6 +501,14 @@ class InstructingController extends Controller
         $rosterMember->certification = 'Certified';
         $rosterMember->active = 1;
         $rosterMember->remarks = 'Certified on NAT_FSS (Web Message)';
+        # Q3 Certified
+        if(Carbon::now()->format('F') == "July" || Carbon::now()->format('F') == "August" || Carbon::now()->format('F') == "September"){
+            $rosterMember->certified_in_q3 = 1;
+        }
+        # Q4 Certified
+        if(Carbon::now()->format('F') == "October" || Carbon::now()->format('F') == "November" || Carbon::now()->format('F') == "December"){
+            $rosterMember->certified_in_q4 = 1;
+        }
         $rosterMember->date_certified = Carbon::now();
 
         //User
@@ -538,7 +537,7 @@ class InstructingController extends Controller
 
 
         } else {
-            Session::flash('info', 'Unable to add Discord permissions automatically.');
+            Session::flash('info', 'Unable to add Discord permissions automatically. User is not in the discord.');
         }
 
         //Notify

@@ -20,8 +20,8 @@ class ProcessExternalControllers implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
-    // Can run for 20mins
-    public $timeout = 1200;
+    // Can run for 1hr
+    public $timeout = 3600;
 
     /**
      * Create a new job instance.
@@ -41,156 +41,19 @@ class ProcessExternalControllers implements ShouldQueue
     public function handle()
     {
             // Can run for 20mins
-            ini_set('max_execution_time', 1200);
+            ini_set('max_execution_time', 3600);
+
+            // Guzzle Client Initialization
+            $guzzle = new Client(['timeout' => 100, 'connect_timeout' => 55]);
 
             // VATSIM Region List
-            $vatsim_regions = [
-                    [
-                    "id" => "AMAS",
-                    "name" => "Americas",
-                    "director" => "1013441"
-                    ],
-                    [
-                    "id" => "APAC",
-                    "name" => "Asia Pacific",
-                    "director" => "901134"
-                    ],
-                    [
-                    "id" => "EMEA",
-                    "name" => "Europe, Middle East and Africa",
-                    "director" => "858680"
-                    ],
-                ];
+            $vatsim_region_pull = $guzzle->request('GET', 'https://api.vatsim.net/api/regions');
+            $vatsim_regions = json_decode($vatsim_region_pull->getBody(), true);
 
-                // VATSIM Division List
-            $vatsim_divisions = [
-                [
-                "id" => "BRZ",
-                "name" => "Brazil (VATBRZ)",
-                "parentregion" => "AMAS",
-                "subdivisionallowed" => 0
-                ],
-                [
-                "id" => "CAM",
-                "name" => "Central America",
-                "parentregion" => "AMAS",
-                "subdivisionallowed" => 0
-                ],
-                [
-                "id" => "CAN",
-                "name" => "Canada",
-                "parentregion" => "AMAS",
-                "subdivisionallowed" => 1
-                ],
-                [
-                "id" => "CAR",
-                "name" => "Caribbean",
-                "parentregion" => "AMAS",
-                "subdivisionallowed" => 1
-                ],
-                [
-                "id" => "EUD",
-                "name" => "Europe (except UK)",
-                "parentregion" => "EMEA",
-                "subdivisionallowed" => 1
-                ],
-                [
-                "id" => "GBR",
-                "name" => "United Kingdom",
-                "parentregion" => "EMEA",
-                "subdivisionallowed" => 0
-                ],
-                [
-                "id" => "IL",
-                "name" => "Israel (VATIL)",
-                "parentregion" => "EMEA",
-                "subdivisionallowed" => 0
-                ],
-                [
-                "id" => "JPN",
-                "name" => "Japan",
-                "parentregion" => "APAC",
-                "subdivisionallowed" => 0
-                ],
-                [
-                "id" => "KOR",
-                "name" => "Korea",
-                "parentregion" => "APAC",
-                "subdivisionallowed" => 0
-                ],
-                [
-                "id" => "MCO",
-                "name" => "Mexico",
-                "parentregion" => "AMAS",
-                "subdivisionallowed" => 0
-                ],
-                [
-                "id" => "MENA",
-                "name" => "Middle East and North Africa",
-                "parentregion" => "EMEA",
-                "subdivisionallowed" => 1
-                ],
-                [
-                "id" => "NZ",
-                "name" => "New Zealand (VATNZ)",
-                "parentregion" => "APAC",
-                "subdivisionallowed" => 0
-                ],
-                [
-                "id" => "PAC",
-                "name" => "Australia (VATPAC)",
-                "parentregion" => "APAC",
-                "subdivisionallowed" => 0
-                ],
-                [
-                "id" => "PRC",
-                "name" => "People's Republic of China",
-                "parentregion" => "APAC",
-                "subdivisionallowed" => 0
-                ],
-                [
-                "id" => "ROC",
-                "name" => "Republic of China (Taiwan)",
-                "parentregion" => "APAC",
-                "subdivisionallowed" => 0
-                ],
-                [
-                "id" => "RUS",
-                "name" => "Russia",
-                "parentregion" => "EMEA",
-                "subdivisionallowed" => 0
-                ],
-                [
-                "id" => "SAM",
-                "name" => "South America",
-                "parentregion" => "AMAS",
-                "subdivisionallowed" => 1
-                ],
-                [
-                "id" => "SEA",
-                "name" => "Southeast Asia (VATSEA)",
-                "parentregion" => "APAC",
-                "subdivisionallowed" => 1
-                ],
-                [
-                "id" => "SSA",
-                "name" => "Sub-Sahara Africa",
-                "parentregion" => "EMEA",
-                "subdivisionallowed" => 1
-                ],
-                [
-                "id" => "USA",
-                "name" => "United States",
-                "parentregion" => "AMAS",
-                "subdivisionallowed" => 0
-                ],
-                [
-                "id" => "WA",
-                "name" => "West Asia",
-                "parentregion" => "APAC",
-                "subdivisionallowed" => 1
-                ]
-            ];
+            // VATSIM Division List
+            $vatsim_division_pull = $guzzle->request('GET', 'https://api.vatsim.net/api/divisions');
+            $vatsim_divisions = json_decode($vatsim_division_pull->getBody(), true);
+
             $vatsim_ratings = [
                 [
                     "id" => -1,
@@ -268,7 +131,6 @@ class ProcessExternalControllers implements ShouldQueue
             $start_time = Carbon::now();
 
             // Get Shanwick API Data         
-            $guzzle = new Client(['timeout' => 1000, 'connect_timeout' => 1000]);
             $eggx_api = $guzzle->request('GET', "https://www.vatsim.uk/api/validations?position=EGGX_CTR");
             $eggx_api_json = json_decode($eggx_api->getBody(), true);
             $eggx_json = $eggx_api_json['validated_members'];

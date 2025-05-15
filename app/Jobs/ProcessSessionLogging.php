@@ -2,9 +2,11 @@
 
 namespace App\Jobs;
 
+use App\Models\Users\User;
 use App\Models\Network\MonitoredPosition;
 use App\Models\Network\SessionLog;
-use App\Models\Network\ShanwickController;
+use App\Models\Network\ExternalController;
+use App\Models\Network\CTPDates;
 use App\Models\Roster\RosterMember;
 use Carbon\Carbon;
 use Illuminate\Bus\Queueable;
@@ -38,15 +40,17 @@ class ProcessSessionLogging implements ShouldQueue
      */
     public function handle()
     {
-        //BEGIN CONTROLLER SESSION CHECK
 
+        $ctp_events = CTPDates::where('oca_start', '<', Carbon::now())->where('oca_end', '>', Carbon::now())->get();
+
+        //BEGIN CONTROLLER SESSION CHECK
         //Get monitored positions
         $monitoredPositions = MonitoredPosition::all();
 
         $vatsimData = new VATSIMClient();
 
         $czqoRoster = RosterMember::all()->pluck('user_id')->toArray();
-        $eggxRoster = ShanwickController::all()->pluck('controller_cid')->toArray();
+        $eggxRoster = ExternalController::all()->pluck('id')->toArray();
         $allRoster = array_unique(array_merge($czqoRoster, $eggxRoster));
 
         $positionsFound = [];
@@ -64,12 +68,40 @@ class ProcessSessionLogging implements ShouldQueue
                 ], [
                         'session_start' => Carbon::now(),
                         'emails_sent' => 0,
+                        'is_ctp' => 0,
                         'monitored_position_id' => $position->id,
                         'roster_member_id' => RosterMember::where('cid', $controller->cid)->value('id') ?? null,
                     ]);
 
+                    // Check if user entry exits
                     if($session->user){
-                        $name = $session->user->fullName('FLC');
+                        // Instructing Training Session
+                        if(str_contains($controller->callsign, '_I_') && $session->user->InstructorProfile){
+                            $session->is_instructing = 1;
+                            $session->save();
+                        }
+
+                        if($session->user->studentProfile){
+                            // Student Training Session
+                            if($session->user->studentProfile->current == 1){
+                                $session->is_student = 1;
+                                $session->save();
+                            }
+                        }
+                    }
+
+                    // Session During CTP
+                    if($session->is_ctp == null){
+                        if(!$ctp_events->isEmpty()){
+                            $session->is_ctp = 1;
+                        } else {
+                            $session->is_ctp = null;
+                        }
+                    }
+
+                    // Controller Name for the Discord
+                    if($session->user){
+                        $name = $session->user->FullName('FLC');
                     } else {
                         $name = $controller->cid;
                     }        
@@ -78,10 +110,23 @@ class ProcessSessionLogging implements ShouldQueue
                     if (in_array($session->cid, $allRoster)) {
                         // Controller is authorised, send message if discord_id is not set
                         if($session->discord_id == null){
-                            // Discord Message
+
+                            $isStudent = false;
+                            if($session->user->studentProfile){
+                                if($session->user->studentProfile->current == 1){
+                                    $isStudent = true;
+                                }
+                            }
+
+                            $isInstructor = false;
+                            if(str_contains($controller->callsign, '_I_') && $session->user->InstructorProfile){
+                                $isInstructor = true;
+                            }
+
+                            // Try Sending Discord Message
                             try{
                                 $discord = new DiscordClient();
-                                $discord_id = $discord->ControllerConnection($controller->callsign, $name);
+                                $discord_id = $discord->ControllerConnection($controller->callsign, $name, $isStudent, $isInstructor);
 
                                 $session->discord_id = $discord_id;
                                 $session->save();
@@ -99,7 +144,7 @@ class ProcessSessionLogging implements ShouldQueue
                         }
                     } else {
                         // Controller is not authorised. Let Senior Team know.
-                        if($session->discord_id == null){
+                        if($session->discord_id == null && $ctp_events->isEmpty()){
                             // Send Discord Message
                             $discord = new DiscordClient();
                             $discord_id = $discord->sendMessageWithEmbed('482817715489341441', 'Controller Unauthorised to Control', '<@&482816721280040964>, '.$session->cid.' has just connected onto VATSIM as '.$session->callsign.' on <t:'.Carbon::now()->timestamp.':F>. 
@@ -107,7 +152,7 @@ class ProcessSessionLogging implements ShouldQueue
 **They are not authorised to open this position.**');
 
                             // Save ID so it doesnt keep spamming
-                            $session->discord_id = $discord_id;
+                            $session->discord_id = 0;
                             $session->save();
                         }
                     }
@@ -125,15 +170,15 @@ class ProcessSessionLogging implements ShouldQueue
                 $log->duration = $log->session_start->floatDiffInMinutes(Carbon::now()) / 60;
                 $log->save();
 
-                // dd($log);
 
+                // Name if in DB, otherwise use CID
                 if($log->user){
-                    $name = $log->user->fullName('FLC');
+                    $name = $log->user->FullName('FLC');
                 } else {
                     $name = $log->cid;
                 }        
 
-                // Discord ID is not null (message has not yet been sent)
+                // Discord ID i not null (message has not yet been sent)
                 if($log->discord_id !== null){
                     // Update Disconnect Message
                         $discord = new DiscordClient();

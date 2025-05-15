@@ -5,8 +5,8 @@
         $user = auth()->user();
     @endphp
 
-    <div class="jarallax card card-image rounded-0 blue" data-jarallax data-speed="0.2">
-        <img class="jarallax-img" src="{{ $bannerImg->path ?? asset('') }}" alt="">
+    <div class="jarallax card card-image blue rounded-0"  data-jarallax data-speed="1">
+    {{-- <img class="jarallax-img" src="{{asset('assets/resources/media/img/website/euroscope_client.png')}}" alt=""> --}}
         <div class="text-white text-left rgba-stylish-strong py-3 pt-5 px-4">
             <div class="container">
                 <div class="py-5">
@@ -32,8 +32,6 @@
                             'hi' => 'Hi',
                             'hola' => 'Hola',
                             'howdy' => 'Howdy',
-                            'guten_tag' => 'Guten Tag',
-                            'grüß_dich' => 'Grüß Dich',
                         ];
 
                         //echo greeting
@@ -63,7 +61,7 @@
         @role('Restricted')
             <div class="alert bg-czqo-blue-light mb-4">
                 Your account on Gander Oceanic is currently restricted. You cannot access pages that require an account, except
-                for "Manage your data". Contact the OCA Chief for more information.
+                for "Manage your data". Contact the FIR Director for more information.
             </div>
         @endrole
         <div class="row">
@@ -194,14 +192,34 @@
                                     <h6 class="card-subtitle mb-2 text-muted fw-500">
                                         {{ $user->rating_GRP }} ({{ $user->rating_short }})
                                     </h6>
-                                    Region: {{ $user->region_name }}<br />
-                                    Division: {{ $user->division_name }}<br />
+                                    @if($user->pilotrating_short !== null)
+                                        <h6 class="card-subtitle mb-2 text-muted fw-500">
+                                            {{ $user->pilotrating_long }} ({{ $user->pilotrating_short }})
+                                        </h6>
+                                    @else
+                                        <h6 class="card-subtitle mb-2 text-muted fw-500">
+                                            No Pilot Rating (P0)
+                                        </h6>
+                                    @endif
+
+                                    @if($user->militaryrating_short !== null)
+                                    <h6 class="card-subtitle mb-2 text-muted fw-500">
+                                        {{ $user->militaryrating_long }} ({{ $user->militaryrating_short }})
+                                    </h6>
+                                    @else
+                                    <h6 class="card-subtitle mb-2 text-muted fw-500">
+                                        No Military Rating (P0)
+                                    </h6>
+                                    @endif
+
+                                    <b>Region:</b> {{ $user->region_name }}<br />
+                                    <b>Division:</b> {{ $user->division_name }}<br />
                                     @if ($user->subdivision_name)
                                         vACC/ARTCC: {{ $user->subdivision_name }}<br />
                                     @endif
-                                    Role: {{ $user->highestRole()->name }}<br />
+                                    <b>System Role:</b> {{ $user->highestRole()->name }}<br />
                                     @if ($user->staffProfile)
-                                        Staff Role: {{ $user->staffProfile->position }}
+                                        Senior Staff Position: {{ $user->staffProfile->position }}
                                     @endif
                                 </div>
                             </div>
@@ -362,58 +380,120 @@
                                 {{ $rosterProfile->activeLabelHtml() }}
                             </h3>
                         </div>
-                        <h3 class="font-weight-bold blue-text mt-4 pb-2">Activity</h3>
+
+                        <h3 class="font-weight-bold blue-text mt-4 pb-2">Currency Hours</h3>
+
                         @php
                             $currency = auth()->user()->rosterProfile->currency;
-                            $class = $currency < 0.1 ? 'red' : ($currency < 1.0 ? 'blue' : 'green');
+                            $class = $currency < 0.5 ? 'red' : ($currency < 6.0 ? 'blue' : 'green');
                         @endphp
 
                         <h3>
                             <span style='font-weight: 400'
                                 class='badge rounded {{ $class }} text-white p-2 shadow-none'>
-                                {{ $currency }} hours recorded
-                            </span>
-                        </h3>                        
 
-                        <p class="mt-2">To remain active, you require 60 minutes of connection during this calendar year.</p>
+                                @if($currency == 0)
+                                    <td class="bg-success text-white">
+                                        0m
+                                    </td>
+                                @elseif($currency < 1)
+                                    <td class="bg-success text-white">
+                                        {{ str_pad(round(($currency - floor($currency)) * 60), 2, '0', STR_PAD_LEFT) }}m
+                                    </td>
+                                @else
+                                    <td class="bg-success text-white">
+                                        {{ floor($currency) }}h {{ str_pad(round(($currency - floor($currency)) * 60), 2, '0', STR_PAD_LEFT) }}m
+                                    </td>
+                                @endif
+                            </span>
+                        </h3>   
+
+                        {{-- Certified in Q3 - 3hrs Currency Requirements --}}
+                        @if(auth()->user()->rosterProfile->certified_in_q3 == 1)
+                        <div class="d-flex flex-row justify-content-left">
+                            <h5>
+                                <span style='font-weight: 400' class='badge rounded p-2 shadow-none blue text-white'><i class='fas fa-info mr-2'></i> As you were certified in Q3, you are only required to attain 3 hours currency for this year (6 hours next year).</span>
+                            </h5>
+                        </div>
+                        @endif
+
+                        {{-- Certified in Q4 - No Currency Requirements --}}
+                        @if(auth()->user()->rosterProfile->certified_in_q4 == 1)
+                            <div class="d-flex flex-row justify-content-left">
+                                <h5>
+                                    <span style='font-weight: 400' class='badge rounded p-2 shadow-none blue text-white'><i class='fas fa-info mr-2'></i> As you were certified in Q4, you do not have any currency requirements for this year (6 hours next year).</span>
+                                </h5>
+                            </div>
+                        @endif
+
+                        @if(auth()->user()->rosterProfile->certified_in_q4 !== 1 && auth()->user()->rosterProfile->certified_in_q3 !== 1)<p class="mt-2">In order to remain active, you require a minimum of six hours recorded during {{\Carbon\Carbon::now()->format('Y')}}.</p> @endif
 
                         <h3 class="font-weight-bold blue-text mt-4 pb-2">Your Connections</h3>
-                        <p class="mt-2">List of all your Gander Oceanic connections to VATSIM during {{\Carbon\Carbon::now()->format('Y')}}.</p>
-                        {{-- <p class="mt-0">Connections less than 30 minutes are shown in red, and do not count towards Controller Currency.</p> --}}
-                        <p class="mt-0">Connections less than 30 minutes are shown in red.</p>
-                        <table class="table dt table-hover table-bordered">
-                            <thead>
-                                <th>Position</th>
-                                <th>Logon</th>
-                                <th>Logoff</th>
-                                <th>Time</th>
-                            </thead>
-                            <tbody>
-                                @foreach ($sessions as $s)
-                                    <tr>
-                                        <th>{{$s->callsign}}</th>
-                                        <th>{{\Carbon\Carbon::parse($s->session_start)->format('l, d F \a\t Hi\Z')}}</th>
-                                        <th>
-                                            @if($s->session_end === null)
-                                            Currently Connected
-                                            @else
-                                            {{\Carbon\Carbon::parse($s->session_end)->format('l, d F \a\t Hi\Z')}}
-                                            @endif
-                                        </th>
-                                        @if($s->duration < 0.5)
-                                            <td class="bg-danger text-white">
-                                                {{$s->duration}}
-                                            </td>
-                                        @else
-                                        <td class="bg-success text-white">
-                                            {{$s->duration}}
-                                        </td>
-                                        @endif
-                                    </tr>
-                                @endforeach
-                            </tbody>
-                        </table>
 
+                        @if(!$sessions->isEmpty())
+                            <p class="mt-2">List of all your Gander Oceanic connections to VATSIM during {{\Carbon\Carbon::now()->format('Y')}}.</p>
+                            <table id="dataTable" class="table table-hover">
+                                <thead>
+                                    <th>Position</th>
+                                    <th>Logon</th>
+                                    <th>Logoff</th>
+                                    <th>Time</th>
+                                </thead>
+                                <tbody>
+                                    <?php 
+                                        $isInstructor = false; 
+                                        $isStudent = false; 
+                                        $isCTP = false; 
+                                    ?>
+                                    @foreach ($sessions as $s)
+                                        <?php
+                                            if ($s->is_instructing == 1) $isInstructor = true;
+                                            if ($s->is_student == 1) $isStudent = true;
+                                            if ($s->is_ctp == 1) $isCTP = true;
+                                        ?>
+
+                                        <tr>
+                                            <th>
+                                                {{$s->callsign}}
+                                                @if($s->is_instructing == 1)<span class="badge bg-danger">Instructing</span>@endif
+                                                @if($s->is_student == 1)<span class="badge bg-warning">Training</span>@endif
+                                                @if($s->is_ctp == 1)<span class="badge bg-primary">CTP</span>@endif
+                                            </th>
+                                            <th>{{\Carbon\Carbon::parse($s->session_start)->format('m/d/Y \a\t Hi\Z')}}</th>
+                                            <th>
+                                                @if($s->session_end === null)
+                                                Currently Connected
+                                                @else
+                                                {{\Carbon\Carbon::parse($s->session_end)->format('m/d/Y \a\t Hi\Z')}}
+                                                @endif
+                                            </th>
+                                            @if($s->duration < 0.5)
+                                                <td>
+                                                    {{ str_pad(round(($s->duration - floor($s->duration)) * 60), 2, '0', STR_PAD_LEFT) }}m
+                                                </td>
+                                            @else
+                                                @if($s->duration < 1)
+                                                    <td>
+                                                        {{ str_pad(round(($s->duration - floor($s->duration)) * 60), 2, '0', STR_PAD_LEFT) }}m
+                                                    </td>
+                                                @else
+                                                    <td>
+                                                        {{ floor($s->duration) }}h {{ str_pad(round(($s->duration - floor($s->duration)) * 60), 2, '0', STR_PAD_LEFT) }}m
+                                                    </td>
+                                                @endif
+                                            @endif
+                                        </tr>
+                                    @endforeach
+                                </tbody>
+                            </table>
+
+                            <h5 class="font-weight-bold blue-text mt-4 pb-2">Notes for Table</h5>
+                            @if($isStudent)<li>Connections conducted while a Student will appear with <span class="badge bg-warning">Training</span> and will not count towards your currency.@endif
+                            @if($isInstructor)<li>Connections conducted as an Instructor will appear with <span class="badge bg-danger">Instructing</span> and will count towards your currency.@endif
+                            @if($isCTP)<li>Connections conducted during Cross the Pond will show with <span class="badge bg-primary">CTP</span> and will count towards your currency.@endif
+                        @else
+                            <p class="mt-0">You have not recorded any hours so far this year. Connect to the network in order to record a session!</p>
+                        @endif
                     @else
                     {{-- User is not in the RosterMember DB --}}
                         
@@ -430,13 +510,61 @@
                                 <span style='font-weight: 400' class='badge rounded p-2 green text-white shadow-none'>
                                     <i class="fas fa-check mr-2"></i>&nbsp;Active
                                 </span>
-                            </h3><br>
+                            </h3>
 
-                            <h3 class="font-weight-bold blue-text pb-2">Partnership Controllers, Please Note</h3>
-                                <li>Your certification status on this page is dictated by your endorsement operator listed above.</li>
-                                <li>Your Activity Requirements within Gander are assumed correct. Should your Certification Status be removed by your home division due to their policy, your access on Gander Oceanic will be removed within 24 Hours.</li>
+                            <h3 class="font-weight-bold blue-text mt-4">Partnership Controllers, Please Note</h3>
+                                <li>Your certification status on this page is managed by your endorsement operator listed above.</li>
+                                <li>Gander activity requirements do not apply to you. Should your Certification Status be removed by your home division due to their own policies, your status on Gander Oceanic will be updated within 24 Hours.</li>
                                 <li>You are authorised to open any EGGX_CTR, CZQO_CTR, NY_FSS or NAT_FSS Position while holding this endorsement.</li>
-                                <li>Any questions regarding Activity Requirements should be directed towards the <a href="{{ route('my.feedback.new.write', ['operations']) }}">Gander Oceanic Operations Staff Team</a> who will assist you with your query.</li>
+
+
+                            <h3 class="font-weight-bold blue-text mt-4 pb-2">Your Connections</h3>
+                            @if(!$sessions->isEmpty())
+                            <p class="mt-2">List of all your Gander Oceanic connections to VATSIM during {{\Carbon\Carbon::now()->format('Y')}}.</p>
+                            <table id="dataTable" class="table table-hover">
+                                <thead>
+                                    <th>Position</th>
+                                    <th>Logon</th>
+                                    <th>Logoff</th>
+                                    <th>Time</th>
+                                </thead>
+                                <tbody>
+                                    @foreach ($sessions as $s)
+                                        <tr>
+                                            <th>
+                                                {{$s->callsign}}
+                                            </th>
+                                            <th>{{\Carbon\Carbon::parse($s->session_start)->format('m/d/Y \a\t Hi\Z')}}</th>
+                                            <th>
+                                                @if($s->session_end === null)
+                                                Currently Connected
+                                                @else
+                                                {{\Carbon\Carbon::parse($s->session_end)->format('m/d/Y \a\t Hi\Z')}}
+                                                @endif
+                                            </th>
+                                            @if($s->duration < 0.5)
+                                                <td>
+                                                    {{ str_pad(round(($s->duration - floor($s->duration)) * 60), 2, '0', STR_PAD_LEFT) }}m
+                                                </td>
+                                            @else
+                                                @if($s->duration < 1)
+                                                    <td>
+                                                        {{ str_pad(round(($s->duration - floor($s->duration)) * 60), 2, '0', STR_PAD_LEFT) }}m
+                                                    </td>
+                                                @else
+                                                    <td>
+                                                        {{ floor($s->duration) }}h {{ str_pad(round(($s->duration - floor($s->duration)) * 60), 2, '0', STR_PAD_LEFT) }}m
+                                                    </td>
+                                                @endif
+                                            @endif
+                                        </tr>
+                                    @endforeach
+                                </tbody>
+                            </table>
+
+                            @else
+                            <p class="mt-0">You have not recorded any hours so far this year. Connect to the network in order to record a session!</p>
+                        @endif
 
                             @else
                             <h3>
@@ -886,5 +1014,18 @@
         </div>
     @endif
     <!--End join guild modal-->
+
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.4/moment.min.js"></script>
+    <script src="https://cdn.datatables.net/plug-ins/1.13.6/sorting/datetime-moment.js"></script>    
+    <script>
+        $(document).ready(function() {
+            $.fn.dataTable.moment('MM/DD/YYYY [at] HHmm[Z]'); // Ensure correct date format parsing
+    
+            $('#dataTable').DataTable({
+                "order": [[1, "desc"]] // Sort by the second column (Logon) in descending order
+            });
+        });
+    </script>
 
 @stop

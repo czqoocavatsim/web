@@ -18,7 +18,7 @@ class CheckIfRestricted
     public function handle($request, Closure $next)
     {
         if (Auth::check() && Auth::user()->hasRole('Restricted')) {
-            abort(403, 'You are currently restricted from accessing authenticated portions of the Gander Oceanic website. Contact the OCA Chief for more information.');
+            abort(403, 'You are currently restricted from accessing authenticated portions of the Gander Oceanic website. Contact the FIR Director for more information.');
         } else {
             return $next($request);
         }

@@ -6,11 +6,13 @@
 
 @section('content')
 
-<div class="card card-image blue rounded-0">
-    <div class="text-white text-left pb-2 pt-5 px-4">
+<div class="jarallax card card-image blue rounded-0"  data-jarallax data-speed="1">
+    <img class="jarallax-img" src="{{asset('assets/resources/media/img/website/euroscope_client.png')}}" alt="">
+    <div class="text-white text-left rgba-stylish-strong py-3 pt-5 px-4">
         <div class="container">
             <div class="py-5">
-                <h1 class="font-weight-bold" style="font-size: 3em;">Controller Roster</h1>
+                <h1 class="font-weight-bold">Controller Roster</h1>
+                <h4 class="font-weight-bold">List of Controllers from Gander, Shanwick and New York Oceanic Control Areas (OCA).</h4>
             </div>
         </div>
     </div>
