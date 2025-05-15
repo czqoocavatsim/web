@@ -291,7 +291,7 @@ class User extends Authenticatable
                 return $this->fname.' '.$this->lname;
             } elseif($this->display_last_name == 2){
                 return $this->fname.' '.substr($this->lname, 0, 1);
-            } else {
+            } elseif($this->display_last_name == 0) {
                 return $this->fname;
             }
         } elseif ($format === 'F') {
