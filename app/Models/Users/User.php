@@ -279,19 +279,23 @@ class User extends Authenticatable
         }
 
         if ($format == 'FLC') {
-            if ($this->display_last_name == true) {
-                return $this->display_fname.' '.$this->lname.' '.$this->id;
+            if ($this->display_last_name == 1) {
+                return $this->fname.' '.$this->lname.' - '.$this->id;
+            } elseif($this->display_last_name == 2){
+                return $this->fname.' '.substr($this->lname, 0, 1).' - '.$this->id;
             } else {
-                return $this->display_fname.' '.$this->id;
+                return $this->fname.' - '.$this->id;
             }
         } elseif ($format === 'FL') {
-            if ($this->display_last_name == true) {
-                return $this->display_fname.' '.$this->lname;
+            if ($this->display_last_name == 1) {
+                return $this->fname.' '.$this->lname;
+            } elseif($this->display_last_name == 2){
+                return $this->fname.' '.substr($this->lname, 0, 1);
             } else {
-                return $this->display_fname;
+                return $this->fname;
             }
         } elseif ($format === 'F') {
-            return $this->display_fname;
+            return $this->fname;
         }
 
         return null;

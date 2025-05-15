@@ -215,7 +215,6 @@ class MyCzqoController extends Controller
     {
         //Validate
         $this->validate($request, [
-            'display_fname' => 'required',
             'format'        => 'required',
         ]);
 
@@ -225,7 +224,10 @@ class MyCzqoController extends Controller
         //No swear words... give them the new name!
         $user->display_fname = $request->get('display_fname');
         if ($request->get('format') == 'showall') {
-            $user->display_last_name = true;
+            $user->display_last_name = 1;
+            $user->display_cid_only = false;
+        } elseif($request->get('format') == 'firstlastinitialcid') {
+            $user->display_last_name = 2;
             $user->display_cid_only = false;
         } elseif ($request->get('format') == 'showfirstcid') {
             $user->display_last_name = false;
