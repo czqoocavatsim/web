@@ -43,7 +43,7 @@ class DiscordClient
     {
         $this->client->delete("guilds/".env('DISCORD_GUILD_ID')."/members/{$discordID}");
 
-        $discord->sendMessageWithEmbed('482860026831175690', 'Member has been removed from the Guild', 
+        $this->sendMessageWithEmbed('482860026831175690', 'Member has been removed from the Guild', 
         '<@'.$discordID.'> has been removed (no linked account).');
     }
 
