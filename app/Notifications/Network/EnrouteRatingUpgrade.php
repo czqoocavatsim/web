@@ -42,10 +42,11 @@ class EnrouteRatingUpgrade extends Notification
      */
     public function toMail($notifiable)
     {
-        return (new MailMessage())->view(
-            'emails.network.newc1rating',
-            ['u' => $this->u]
-        )->subject('Congratulations on your new C1 Rating!');
+        return (new MailMessage())
+        ->view('emails.network.newc1rating', ['u' => $this->u])
+        ->subject($this->u->fname.', Congratulations on your new C1 Rating!')
+        ->cc('training@ganderoceanic.ca')
+        ->replyTo('training@ganderoceanic.ca');
     }
 
     /**

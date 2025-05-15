@@ -204,7 +204,9 @@ class MassUserUpdates implements ShouldQueue
         $users_counted = 0;
 
         $discord = new DiscordClient();
-        $discord->sendMessage('1343024277225607208', '# System User Update Start - Week '.Carbon::now()->weekOfYear .', '.Carbon::now()->Format('Y'));
+        $thread_id = $discord->createThread(env('DISCORD_SERVER_LOGS'), 'System User Updates - Week '.Carbon::now()->weekOfYear .', '.Carbon::now()->Format('Y'));
+
+        $discord->sendMessage($thread_id, '# System User Update Start');
 
         foreach($user as $u){
             // Ignore the following IDs (not actually members) & Ignore VATSIM GDPR Accounts (Details have been updated already)
@@ -359,7 +361,7 @@ class MassUserUpdates implements ShouldQueue
 
                     // Send to Discord
                     $discord = new DiscordClient();
-                    $discord->sendMessage('1343024277225607208', $discordMessage);
+                    $discord->sendMessage($thread_id, $discordMessage);
 
                 } else {
                     $user_not_updated++;
@@ -408,7 +410,7 @@ class MassUserUpdates implements ShouldQueue
                     ]);
 
                     $discord = new DiscordClient();
-                    $discord->sendMessage('1343024277225607208', 'VATSIM ACCOUNT DELETED (404): '.$u->FullName('FLC').' ('.$users_counted.'/'. $total_users.' users).');
+                    $discord->sendMessage($thread_id, 'VATSIM ACCOUNT DELETED (404): '.$u->FullName('FLC').' ('.$users_counted.'/'. $total_users.' users).');
 
                     $vatsim_gdpr++;
                     sleep(6.1);
@@ -417,7 +419,7 @@ class MassUserUpdates implements ShouldQueue
 
                 // Otherwise, its a general error - lets log it
                 $discord = new DiscordClient();
-                $discord->sendMessage('1343024277225607208', 'UPDATE FAILED CLIENT/SERVER: '.$u->FullName('FLC').' ('.$users_counted.'/'. $total_users.' users).');
+                $discord->sendMessage($thread_id, 'UPDATE FAILED CLIENT/SERVER: '.$u->FullName('FLC').' ('.$users_counted.'/'. $total_users.' users).');
             
                 $vatsim_api_failed++;
                 sleep(6.1);
@@ -425,7 +427,7 @@ class MassUserUpdates implements ShouldQueue
             } catch (\Exception $e) {
                 $users_counted++;
                 $discord = new DiscordClient();
-                $discord->sendMessage('1343024277225607208', 'UPDATE FAILED EXCEPTION: '.$u->FullName('FLC').' ('.$users_counted.'/'. $total_users.' users).');
+                $discord->sendMessage($thread_id, 'UPDATE FAILED EXCEPTION: '.$u->FullName('FLC').' ('.$users_counted.'/'. $total_users.' users).');
             
                 $vatsim_api_failed++;
                 sleep(6.1);
@@ -476,10 +478,10 @@ class MassUserUpdates implements ShouldQueue
         $update_content .= "\n- Script Time: " . $start_time->diffForHumans($end_time, ['parts' => 2, 'short' => true, 'syntax' => Carbon::DIFF_ABSOLUTE]) . ".";
 
         $discord = new DiscordClient();
-        $discord->sendMessageWithEmbed('1297573259663118368', 'WEEKLY: Mass User Updates', $update_content);
+        $discord->sendMessageWithEmbed(env('DISCORD_SERVER_LOGS'), 'WEEKLY: Mass User Updates', $update_content);
 
         $discord = new DiscordClient();
-        $discord->sendMessage('1343024277225607208', '# System User Update End - Week '.Carbon::now()->weekOfYear .', '.Carbon::now()->Format('Y'));
+        $discord->sendMessage($thread_id, '# System User Update End');
     }
 
 }
