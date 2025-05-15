@@ -126,6 +126,12 @@ class DiscordAccountCheck implements ShouldQueue
 
         // After the loop, find all Discord users who are not in your system
         foreach ($discord_uids as $discord_uid) {
+
+            // Ignore Gary & Gander Bot
+            if($discord_uid == 350995372627197954|| $discord_uid == 1118430230839840768){
+                break;
+            }
+
             // Check if the Discord user ID exists in the users database
             $user_exists = false;
             foreach ($users as $user) {
@@ -139,7 +145,9 @@ class DiscordAccountCheck implements ShouldQueue
             if (!$user_exists) {
                 $discord_not_in_system_ids[] = $discord_uid;
 
-                $discord->assignRole($discord_uid, '1372439231426990211');
+                $discord->kickMember($discord_uid);
+
+                // $discord->assignRole($discord_uid, '1372439231426990211');
             }
         }
 
@@ -170,7 +178,6 @@ class DiscordAccountCheck implements ShouldQueue
                             $discord_member = $discord_members2;
 
                             // dd($discord_uid);
-
                             break;
                         }
                     }
@@ -516,7 +523,7 @@ class DiscordAccountCheck implements ShouldQueue
         }
 
         if($user_updated > 0){
-            $discord->sendMessage('482860026831175690', "DISCORD UPDATE: ".$user_updated." users updated.");
+            // $discord->sendMessage('482860026831175690', "DISCORD UPDATE: ".$user_updated." users updated.");
         }
     }
 

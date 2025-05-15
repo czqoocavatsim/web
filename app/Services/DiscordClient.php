@@ -39,6 +39,29 @@ class DiscordClient
         return $response->getStatusCode() == 200;
     }
 
+    public function kickMember($discordID)
+    {
+        $this->client->delete("guilds/{$guildId}/members/{$userId}");
+
+        $discord->sendMessageWithEmbed('482860026831175690', 'Member has been removed from the Guild', 
+        '<@'.$discordID.'> has been removed (no linked account).');
+    }
+
+    public function createThread($channelId, $name)
+    {
+        $response = $this->client->post("channels/{$channelId}/threads", [
+            'json' => [
+                'name' => $name,
+                'auto_archive_duration' => 10080,
+                'type' => 10
+            ]
+        ]);
+
+        $channel = json_decode($response->getBody(), true);
+        $channelId = $channel['id'];
+        return $channelId;
+    }
+
     public function addReaction($reaction)
     {
         $response = $this->client->put("channels/1347194167725522985/messages/1347464850254725131/reactions/".urlencode($reaction)."/@me");
