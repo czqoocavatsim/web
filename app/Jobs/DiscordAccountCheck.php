@@ -385,7 +385,7 @@ class DiscordAccountCheck implements ShouldQueue
 
                         // Name Format for ZQO Members and Other Members
                         if($user->staffProfile && $user->staffProfile->group_id == 1){
-                            $name = $user->Fullname('FL')." ZQO".$user->staffProfile->id;
+                            $name = $user->Fullname('FL')." - ZQO".$user->staffProfile->id;
                         } else {
                             $name = $user->FullName('FLC');
                         }
