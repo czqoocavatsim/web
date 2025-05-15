@@ -219,7 +219,7 @@
                                     @endif
                                     <b>System Role:</b> {{ $user->highestRole()->name }}<br />
                                     @if ($user->staffProfile)
-                                        Senior Staff Position: {{ $user->staffProfile->position }}
+                                    <b>Senior Staff Position:</b> {{ $user->staffProfile->position }}
                                     @endif
                                 </div>
                             </div>
@@ -853,39 +853,23 @@
                 <form method="POST" action="{{ route('users.changedisplayname') }}">
                     <div class="modal-body">
                         @csrf
-                        <p>Your display name will display everywhere on Gander Oceanic, including the controller roster. It
-                            is advised to use the same display name that you would use on the VATSIM network. All display
-                            names must comply with section A4 of the VATSIM Code of Conduct.</p>
                         <div class="form-group">
-                            <div class="md-form">
-                                <input type="text" class="form-control" value="{{ $user->display_fname }}"
-                                    name="display_fname" id="input_display_fname">
-                                <label for="input_display_fname" class="active">Display first name</label>
+                            <div class="form-group">
+                                <label class="text-muted">Change how your name is shown on our services.</label>
+                                <select name="format" class="custom-select">
+                                    <option value="showall">{{ $user->fname }} {{ $user->lname }} - {{ Auth::id() }} (Full Name & CID)</option>
+                                    <option value="firstlastinitialcid">{{ $user->fname }} {{ substr($user->lname, 0,1) }} - {{ Auth::id() }} (First Name, Last Initial & CID)</option>
+                                    <option value="showfirstcid">{{ $user->fname }} - {{ Auth::id() }} (First Name and CID)</option>
+                                    <option value="showcid">{{ Auth::id() }} (CID Only)</option>
+                                </select>
+                                <label class="text-muted" style="text-padding: 10px;">Note: you can only select the below options. We no longer accept changes to your VATSIM Registered Name.</label>
                             </div>
-                            <a class="btn btn-light btn-sm" role="button" onclick="resetToCertFirstName()"><span
-                                    style="color: #000">Reset to your CERT first name</span></a>
-                            <script>
-                                function resetToCertFirstName() {
-                                    $("#input_display_fname").val("{{ $user->fname }}")
-                                }
-                            </script>
                         </div>
-                        <div class="form-group">
-                            <label class="text-muted">Format</label>
-                            <select name="format" class="custom-select">
-                                <option value="showall">First name, last name, and CID
-                                    ({{ $user->display_fname }} {{ $user->lname }} {{ Auth::id() }})
-                                </option>
-                                <option value="showfirstcid">First name and CID ({{ $user->display_fname }}
-                                    {{ Auth::id() }})</option>
-                                <option value="showcid">CID only ({{ Auth::id() }})</option>
-                            </select>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-light" data-dismiss="modal">Dismiss</button>
+                            <input type="submit" class="btn btn-success" value="Save Changes">
                         </div>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-light" data-dismiss="modal">Dismiss</button>
-                        <input type="submit" class="btn btn-success" value="Save Changes">
-                    </div>
+                </div>
                 </form>
             </div>
         </div>
