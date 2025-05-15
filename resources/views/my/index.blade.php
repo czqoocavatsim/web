@@ -71,7 +71,7 @@
                         <li class="w-100">
                             <div class="d-flex h-100 flex-row justify-content-left align-items-center">
                                 <i style="font-size: 1.6em; margin-right: 10px;" class="fas fa-user-circle fa-fw"></i>
-                                <span style="font-size: 1.1em;">{{ $user->fullName('F') }}</span>
+                                <span style="font-size: 1.1em;">{{ $user->fullName('FL') }}'s Profile</span>
                             </div>
                         </li>
                     </a>
@@ -342,21 +342,30 @@
                 </div>
                 <div id="supportTab" style="display:none;">
                     <h2 class="fw-700 blue-text pb-2">Support and Feedback</h2>
-                    <h3 class="mt-4 mb-3 fw-600" style="font-size: 1.3em;">General Support</h3>
+                    <h3 class="mt-4 mb-3 fw-600" style="font-size: 1.3em;">Submit A New Ticket</h3>
+                    <p>
+                        have a burning question, feedback about our operations, or our controllers? This is the best location to provide your feedback<br>
+                        A member of the Senior Staff Team will assist you with your enquiry as quickly as possible!
+                    </p>
+                    <p style="font-size: 1em;" class="mt-2">
+                        <a class="font-weight-bold text-body" href="{{ route('my.feedback.new') }}">Create a ticket
+                            &nbsp;&nbsp;<i class="fas fa-arrow-right blue-text"></i></a>
+                    </p>
+                    {{-- <h3 class="mt-4 mb-3 fw-600" style="font-size: 1.3em;">General Support</h3>
                     <p>We're always here to assist you. Feel free to contact the relevant staff member via email for
                         assistance with any enquries you may have.</p>
                     <p style="font-size: 1em;" class="mt-2">
                         <a class="font-weight-bold text-body" href="{{ route('staff') }}">Find their emails
                             &nbsp;&nbsp;<i class="fas fa-arrow-right blue-text"></i></a>
+                    </p> --}}
+
+                    <h3 class="mt-4 mb-3 fw-600" style="font-size: 1.3em;">Current Open Tickets</h3>
+                    <p>
+                        A list of all current tickets which are in progress.
                     </p>
-                    <h3 class="mt-4 mb-3 fw-600" style="font-size: 1.3em;">Feedback</h3>
-                    <p>We love feedback! Submit feedback on controllers or our operations here.</p>
+                    <h4>[PLACEHOLDER] - Non-Closed Tickets Appear HERE</h4>
                     <p style="font-size: 1em;" class="mt-2">
-                        <a class="font-weight-bold text-body" href="{{ route('my.feedback.new') }}">Submit feedback
-                            &nbsp;&nbsp;<i class="fas fa-arrow-right blue-text"></i></a>
-                    </p>
-                    <p style="font-size: 1em;" class="mt-2">
-                        <a class="font-weight-bold text-body" href="{{ route('my.feedback') }}">Your previous feedback
+                        <a class="font-weight-bold text-body" href="{{ route('my.feedback') }}">View all my past tickets
                             &nbsp;&nbsp;<i class="fas fa-arrow-right blue-text"></i></a>
                     </p>
                 </div>
@@ -668,7 +677,12 @@
                                     <div class="card mb-3 shadow-none">
                                         <h4 class="blue-text mb-3">Community</h4>
                                         <div class="list-group z-depth-1">
+                                            {{-- Tickets Page --}}
+                                                <a href="{{ route('community.tickets.all') }}"class="waves-effect list-group-item list-group-item-action">
+                                                    <i style="margin-right: 10px;" class="fas fa-envelope fa-fw"></i>Tickets
+                                                </a>
                                             @can('view users')
+                                                {{-- All Users --}}
                                                 <a href="{{ route('community.users.index') }}"
                                                     class="waves-effect list-group-item list-group-item-action">
                                                     <i style="margin-right: 10px;" class="fas fa-users fa-fw"></i>Users

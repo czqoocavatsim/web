@@ -23,6 +23,7 @@ use App\Http\Controllers\Settings\StaffController;
 use App\Http\Controllers\Community\UsersController;
 use App\Http\Controllers\Network\NetworkController;
 use App\Http\Controllers\Users\StaffListController;
+use App\Http\Controllers\Users\TicketController;
 use App\Http\Controllers\Community\MyCzqoController;
 use App\Http\Controllers\Training\RecordsController;
 use App\Http\Controllers\Community\DiscordController;
@@ -385,6 +386,14 @@ Route::group(['middleware' => 'auth'], function () {
                 Route::post('/users/{id}/assign/permission', [UsersController::class, 'assignUserPermission'])->name('community.users.assign.permission')->middleware('can:edit user data');
                 Route::delete('/users/{id}/remove/role', [UsersController::class, 'removeUserRole'])->name('community.users.remove.role')->middleware('can:edit user data');
                 Route::delete('/users/{id}/remove/permission', [UsersController::class, 'removeUserPermission'])->name('community.users.remove.permission')->middleware('can:edit user data');
+            });
+
+            Route::group(['middleware' => ['role:Administrator|Senior Staff'], 'prefix' => 'community/tickets'], function () {
+                Route::get('/all', [TicketController::class, 'adminViewAllTickets'])->name('community.tickets.all');
+                Route::get('/view/{slug}', [TicketController::class, 'adminViewTicket'])->name('community.tickets.view');
+                Route::get('/pickup/{slug}', [TicketController::class, 'adminPickupTicket'])->name('community.tickets.pickup');
+                Route::get('/drop/{slug}', [TicketController::class, 'adminDropTicket'])->name('community.tickets.drop');
+                Route::post('/add-comment/{slug}', [TicketController::class, 'adminAddTicketComment'])->name('community.tickets.comment.add');
             });
         });
     });
