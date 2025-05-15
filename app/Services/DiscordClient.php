@@ -48,7 +48,7 @@ class DiscordClient
 
     public function getReactions($channel, $message, $emoji)
     {
-        $response = $this->client->get("channels/{$channel}/messages/{$message}/reactions/{$emoji}");
+        $response = $this->client->get("channels/{$channel}/messages/{$message}/reactions/{$emoji}?limit=100");
 
         $data = json_decode($response->getBody(), true);
 
