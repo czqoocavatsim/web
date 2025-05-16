@@ -53,7 +53,7 @@ class DiscordClient
             'json' => [
                 'name' => $name,
                 'auto_archive_duration' => 10080,
-                'type' => 11, // Private thread
+                'type' => 11,
                 'invitable' => true,
                 'rate_limit_per_user' => 10
             ]
