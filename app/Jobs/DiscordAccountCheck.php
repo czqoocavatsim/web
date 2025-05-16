@@ -145,9 +145,7 @@ class DiscordAccountCheck implements ShouldQueue
             if (!$user_exists) {
                 $discord_not_in_system_ids[] = $discord_uid;
 
-                $discord->kickMember($discord_uid);
-
-                // $discord->assignRole($discord_uid, '1372439231426990211');
+                $discord->assignRole($discord_uid, '1372584622818332763');
             }
         }
 
@@ -523,7 +521,7 @@ class DiscordAccountCheck implements ShouldQueue
         }
 
         if($user_updated > 0){
-            // $discord->sendMessage('482860026831175690', "DISCORD UPDATE: ".$user_updated." users updated.");
+            $discord->sendMessage('482860026831175690', "DISCORD UPDATE: ".$in_discord_name." users updated.");
         }
     }
 

@@ -272,34 +272,34 @@ class User extends Authenticatable
      * @return string|null
      */
     public function fullName($format)
-    {
-        //display name check
-        if ($this->display_cid_only == true) {
-            return strval($this->id);
-        }
+{
+    // Log format to debug
+    \Log::info("FullName method called with format: $format");
 
-        if ($format == 'FLC') {
-            if ($this->display_last_name == 1) {
-                return $this->fname.' '.$this->lname.' - '.$this->id;
-            } elseif($this->display_last_name == 2){
-                return $this->fname.' '.substr($this->lname, 0, 1).' - '.$this->id;
-            } elseif($this->display_last_name == 0) {
-                return $this->fname.' - '.$this->id;
-            }
-        } elseif ($format === 'FL') {
-            if ($this->display_last_name == 1) {
-                return $this->fname.' '.$this->lname;
-            } elseif($this->display_last_name == 2){
-                return $this->fname.' '.substr($this->lname, 0, 1);
-            } elseif($this->display_last_name == 0) {
-                return $this->fname;
-            }
-        } elseif ($format === 'F') {
+    // existing logic...
+    if ($format == 'FLC') {
+        if($this->display_last_name == 0) {
+            return $this->fname.' - '.$this->id;
+        } elseif ($this->display_last_name == 1) {
+            return $this->fname.' '.$this->lname.' - '.$this->id;
+        } elseif($this->display_last_name == 2){
+            return $this->fname.' '.substr($this->lname, 0, 1).' - '.$this->id;
+        }
+    } elseif ($format === 'FL') {
+        if($this->display_last_name == 0) {
             return $this->fname;
+        } elseif ($this->display_last_name == 1) {
+            return $this->fname.' '.$this->lname;
+        } elseif($this->display_last_name == 2){
+            return $this->fname.' '.substr($this->lname, 0, 1);
         }
-
-        return null;
+    } elseif ($format === 'F') {
+        return $this->fname;
     }
+
+    return null;
+}
+
 
     /**
      * Is the user's avatar the default (initials) avatar?
