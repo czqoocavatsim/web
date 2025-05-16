@@ -521,7 +521,7 @@ class DiscordAccountCheck implements ShouldQueue
         }
 
         if($user_updated > 0){
-            $discord->sendMessage('482860026831175690', "DISCORD UPDATE: ".$in_discord_name." users updated.");
+            $discord->sendMessage('482860026831175690', "DISCORD UPDATE: ".$user_updated." users updated.");
         }
     }
 
