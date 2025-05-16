@@ -381,12 +381,40 @@ class DiscordAccountCheck implements ShouldQueue
 
                         $discord_roles = array_unique($mainRoles);
 
+
                         // Name Format for ZQO Members and Other Members
-                        if($user->staffProfile && $user->staffProfile->group_id == 1){
-                            $name = $user->Fullname('FL')." - ZQO".$user->staffProfile->id;
-                        } else {
-                            $name = $user->FullName('FLC');
+                        {
+                            if($user->staffProfile && $user->staffProfile->group_id == 1){
+                                $name = $user->Fullname('FL')." - ZQO".$user->staffProfile->id;
+                            } else {
+                                $name = $user->FullName('FLC');
+                            }
+    
+                            // Check to ensure User name is less than 32 characters. If not, step down progressivly to find name format
+                            # FNAME + LINITAL + CID
+                            if (strlen($name) > 32) {
+                                if ($user->staffProfile && $user->staffProfile->group_id == 1) {
+                                    $name = $user->fname." ".substr($user->lname, 0, 1)." - ".$user->staffProfile->id;
+                                } else {
+                                    $name = $user->fname." ".substr($user->lname, 0, 1)." - ".$user->id;
+                                }
+                            }
+
+                            # FNAME + CID
+                            if (strlen($name) > 32) {                          
+                                if ($user->staffProfile && $user->staffProfile->group_id == 1) {
+                                    $name = $user->fname." "." - ".$user->staffProfile->id;
+                                } else {
+                                    $name = $user->fname." - ".$user->id;
+                                }
+                            }
+    
+                            // If its still greater than 32, then just show the CID
+                            if (strlen($name) > 32) {
+                                $name = $user->id;
+                            }
                         }
+
 
                         // Full list of staff roles
                         $staffRoleIDs = [

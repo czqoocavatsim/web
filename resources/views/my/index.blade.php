@@ -856,13 +856,25 @@
                         <div class="form-group">
                             <div class="form-group">
                                 <label class="text-muted">Change how your name is shown on our services.</label>
+                                <label class="text-muted" style="text-padding: 10px;"><b>Note:</b> you can only select the below options. We no longer accept changes to your VATSIM Registered Name.</label>
                                 <select name="format" class="custom-select">
-                                    <option value="showall">{{ $user->fname }} {{ $user->lname }} - {{ Auth::id() }} (Full Name & CID)</option>
-                                    <option value="firstlastinitialcid">{{ $user->fname }} {{ substr($user->lname, 0,1) }} - {{ Auth::id() }} (First Name, Last Initial & CID)</option>
-                                    <option value="showfirstcid">{{ $user->fname }} - {{ Auth::id() }} (First Name and CID)</option>
-                                    <option value="showcid">{{ Auth::id() }} (CID Only)</option>
-                                </select>
-                                <label class="text-muted" style="text-padding: 10px;">Note: you can only select the below options. We no longer accept changes to your VATSIM Registered Name.</label>
+                                    <option value="showall">
+                                        {{ $user->fname }} {{ $user->lname }} - {{ Auth::id() }} (Full Name & CID)
+                                        @if(strlen($user->fname . ' ' . $user->lname . ' - ' . Auth::id()) > 32) ℹ️ @endif
+                                    </option>
+                                    <option value="firstlastinitialcid">
+                                        {{ $user->fname }} {{ substr($user->lname, 0,1) }} - {{ Auth::id() }} (First Name, Last Initial & CID)
+                                        @if(strlen($user->fname . ' ' . substr($user->lname, 0,1) . ' - ' . Auth::id()) > 32) ℹ️ @endif
+                                    </option>
+                                    <option value="showfirstcid">
+                                        {{ $user->fname }} - {{ Auth::id() }} (First Name and CID)
+                                        @if(strlen($user->fname . ' - ' . Auth::id()) > 32) ℹ️ @endif
+                                    </option>
+                                    <option value="showcid">
+                                        {{ Auth::id() }} (CID Only)
+                                    </option>
+                                </select><br>
+                                <label class="text-muted" style="padding-top: 20px;"><b>Additional Note:</b> Rows with a ℹ️ indicates that it is incompatable with Discords Username Character Limitations. You are welcome to select this option, and it will be used accross the Gander Oceanic Website, however the highest available option without ℹ️ will automatically be used for discord.</label>
                             </div>
                         </div>
                         <div class="modal-footer">
