@@ -41,11 +41,24 @@ class ProcessSessionLogging implements ShouldQueue
     public function handle()
     {
 
-        $ctp_events = CTPDates::where('oca_start', '<', Carbon::now())->where('oca_end', '>', Carbon::now())->get();
+        $ctp_events = CTPDates::where('oca_start', '<', Carbon::now())->where('oca_end', '>', Carbon::now())->first();
 
         //BEGIN CONTROLLER SESSION CHECK
-        //Get monitored positions
-        $monitoredPositions = MonitoredPosition::all();
+        //Get All Time Monitored Positions
+        $mainPositions = MonitoredPosition::where('ctp_only', null)->get();
+
+        // LPPO Positions
+        if($ctp_events->lppo_coverage == 1){
+            $lppoPositions = MonitoredPosition::where('ctp_only', 1)->where('identifier', 'like', 'LPPO_%')->get();
+        }
+
+        // LPPO Positions
+        if($ctp_events->bird_coverage == 1){
+            $birdPositions = MonitoredPosition::where('ctp_only', 1)->where('identifier', 'like', 'BIRD_%')->get();
+        }
+
+        // Combine Positions being Looked Into
+        $monitoredPositions = $mainPositions->merge($lppoPositions)->merge($birdPositions);
 
         $vatsimData = new VATSIMClient();
 

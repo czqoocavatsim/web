@@ -31,6 +31,11 @@ class DiscordAccountCheck implements ShouldQueue
      * @return void
      */
 
+     public function tags()
+    {
+        return ['job:discord_account_check'];
+    }
+
     public function handle()
     {
         // Timeout length (seconds)
