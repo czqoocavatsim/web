@@ -281,6 +281,10 @@ class DiscordController extends Controller
                     [
                         'headers' => ['Authorization' => 'Bot '.env('DISCORD_BOT_TOKEN')]
                     ]);
+
+                $discord = new DiscordClient();
+                $discord->sendMessageWithEmbed('482860026831175690', 'Member has left the Guild', 
+                '<@'.$user->discord_user_id.'> ('.$user->id.') has unlinked their account and left the guild.');
             } catch (ClientException $e) {
                 return redirect()->route('my.index')->with('error-modal', $e->getMessage());
             }

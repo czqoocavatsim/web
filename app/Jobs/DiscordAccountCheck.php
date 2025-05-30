@@ -23,13 +23,18 @@ class DiscordAccountCheck implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
-    public $timeout = 7200;
+    public $timeout = 60;
 
     /**
      * Execute the job.
      *
      * @return void
      */
+
+     public function tags()
+    {
+        return ['job:discord_account_check'];
+    }
 
     public function handle()
     {
@@ -48,6 +53,7 @@ class DiscordAccountCheck implements ShouldQueue
         $discord_uids = [];
         $discord_member_contents = [];
         $in_discord_name = [];
+        $discord_not_in_system_ids = [];
 
         // Get List of Users in Discord
         $discord = new DiscordClient();
@@ -118,8 +124,37 @@ class DiscordAccountCheck implements ShouldQueue
             $discord_member_contents[] = $members;
         }
 
+        // Find which users are in the Discord, but not registered with us
+
         // Get a complete list of Gander Oceanic Users
         $users = User::whereNotNull('discord_user_id')->get();
+
+        // After the loop, find all Discord users who are not in your system
+        foreach ($discord_uids as $discord_uid) {
+
+            // Ignore Gary & Gander Bot
+            if($discord_uid == 350995372627197954|| $discord_uid == 1118430230839840768){
+                break;
+            }
+
+            // Check if the Discord user ID exists in the users database
+            $user_exists = false;
+            foreach ($users as $user) {
+                if ($user->discord_user_id == $discord_uid) {
+                    $user_exists = true;
+                    break;
+                }
+            }
+
+            // If the user is not in the system, add the Discord user ID to the list
+            if (!$user_exists) {
+                $discord_not_in_system_ids[] = $discord_uid;
+
+                $discord->assignRole($discord_uid, '1372584622818332763');
+            }
+        }
+
+        // dd($discord_not_in_system_ids);
 
         // Loop through each DB User
         foreach($users as $user){
@@ -146,7 +181,6 @@ class DiscordAccountCheck implements ShouldQueue
                             $discord_member = $discord_members2;
 
                             // dd($discord_uid);
-
                             break;
                         }
                     }
@@ -180,6 +214,7 @@ class DiscordAccountCheck implements ShouldQueue
                             'gander_certified'  => 1297507926222573568,
                             'shanwick_certified' => 1297508027280396349,
                             'zny_certified' => 1302030442916089866,
+
                             's1' => 1342639858027462769,
                             's2' => 1342640729012568145,
                             's3' => 1342640763183435807,
@@ -189,12 +224,19 @@ class DiscordAccountCheck implements ShouldQueue
                             'i3' => 1347454523676819516,
                             'sup' => 720502070683369563,
                             'adm' => 1342640950412967937,
+
                             'ppl' => 1342642295157297203,
                             'ir' => 1342642432147460281,
                             'cmel' => 1342642434299002961,
                             'atpl' => 1342642436408606851,
                             'fi' => 1342642438162088091,
                             'fe' => 1342642440846311556,
+
+                            'm1' => 1369692686344523787,
+                            'm2' => 1369692752656203927,
+                            'm3' => 1369692872470822932,
+                            'm4' => 1369692937478344704,
+                            
                             'news_notify' => 1347476285542236160,
                             'event_notify' => 1347476363472273418,
                             'ctp_notify' => 1347476367574569020,
@@ -285,6 +327,20 @@ class DiscordAccountCheck implements ShouldQueue
                             if($user->pilotrating_short == 'FE'){
                                 array_push($mainRoles, $discordRoleIds['fe']);
                             }
+
+                            // Calculate Military Rating
+                            if($user->militaryrating_short == 'M1'){
+                                array_push($mainRoles, $discordRoleIds['m1']);
+                            }
+                            if($user->militaryrating_short == 'M2'){
+                                array_push($mainRoles, $discordRoleIds['m2']);
+                            }
+                            if($user->militaryrating_short == 'M3'){
+                                array_push($mainRoles, $discordRoleIds['m3']);
+                            }
+                            if($user->militaryrating_short == 'M4'){
+                                array_push($mainRoles, $discordRoleIds['m4']);
+                            }
                         }
 
                         // Discord Notification Role Assignment
@@ -292,23 +348,18 @@ class DiscordAccountCheck implements ShouldQueue
                             if(in_array($user->discord_user_id, $news_notify)){
                                 array_push($mainRoles, $discordRoleIds['news_notify']);
                             }
-
                             if(in_array($user->discord_user_id, $event_notify)){
                                 array_push($mainRoles, $discordRoleIds['event_notify']);
                             }
-
                             if(in_array($user->discord_user_id, $ctp_notify)){
                                 array_push($mainRoles, $discordRoleIds['ctp_notify']);
                             }
-
                             if(in_array($user->discord_user_id, $controller_notify)){
                                 array_push($mainRoles, $discordRoleIds['controller_notify']);
                             }
-
                             if(in_array($user->discord_user_id, $pilot_notify)){
                                 array_push($mainRoles, $discordRoleIds['pilot_notify']);
                             }
-
                             if(in_array($user->discord_user_id, $tech_notify)){
                                 array_push($mainRoles, $discordRoleIds['tech_notify']);
                             }
@@ -324,6 +375,7 @@ class DiscordAccountCheck implements ShouldQueue
                             1300054143532138516, //VATSYS Beta Tester
                             1278868454606377040, //Currently Online
                             695274344141815891, //Discord Nitro Role
+                            1372439231426990211, //No Discord Account Registered
                         ];
 
                         foreach ($roleIdsToCheck as $roleId) {
@@ -334,12 +386,40 @@ class DiscordAccountCheck implements ShouldQueue
 
                         $discord_roles = array_unique($mainRoles);
 
+
                         // Name Format for ZQO Members and Other Members
-                        if($user->staffProfile && $user->staffProfile->group_id == 1){
-                            $name = $user->Fullname('FL')." ZQO".$user->staffProfile->id;
-                        } else {
-                            $name = $user->FullName('FLC');
+                        {
+                            if($user->staffProfile && $user->staffProfile->group_id == 1){
+                                $name = $user->Fullname('FL')." - ZQO".$user->staffProfile->id;
+                            } else {
+                                $name = $user->FullName('FLC');
+                            }
+    
+                            // Check to ensure User name is less than 32 characters. If not, step down progressivly to find name format
+                            # FNAME + LINITAL + CID
+                            if (strlen($name) > 32) {
+                                if ($user->staffProfile && $user->staffProfile->group_id == 1) {
+                                    $name = $user->fname." ".substr($user->lname, 0, 1)." - ".$user->staffProfile->id;
+                                } else {
+                                    $name = $user->fname." ".substr($user->lname, 0, 1)." - ".$user->id;
+                                }
+                            }
+
+                            # FNAME + CID
+                            if (strlen($name) > 32) {                          
+                                if ($user->staffProfile && $user->staffProfile->group_id == 1) {
+                                    $name = $user->fname." "." - ".$user->staffProfile->id;
+                                } else {
+                                    $name = $user->fname." - ".$user->id;
+                                }
+                            }
+    
+                            // If its still greater than 32, then just show the CID
+                            if (strlen($name) > 32) {
+                                $name = $user->id;
+                            }
                         }
+
 
                         // Full list of staff roles
                         $staffRoleIDs = [
@@ -473,49 +553,8 @@ class DiscordAccountCheck implements ShouldQueue
 
         }
 
-        // Add Role to Users not Connected to Gander Oceanic
-        // foreach($discord_uids as $discord_uid){
-            
-        //     // Skip the Bot (Gander)
-        //     if($discord_uid == 1118430230839840768){
-        //         continue;
-        //     }
-
-        //     // Skip the Bot (QFA100)
-        //     if($discord_uid == 1133048493850771616){
-        //         continue;
-        //     }
-
-        //     // Skip Server Owner (Gary)
-        //     if($discord_uid == 350995372627197954){
-        //         continue;
-        //     }
-
-        //     $accounts_not_linked++; //records that Account Not Linked Role Assigned
-
-        //     sleep(1);
-
-        //     // // Update user with main roles - Will temp remove staff roles
-        //     $discord->getClient()->patch('guilds/'.env('DISCORD_GUILD_ID').'/members/'.$user->discord_user_id, [
-        //         'json' => [
-        //             'nick' => $user->discord_username,
-        //             'roles' => ['1297422968472997908'],
-        //         ]
-        //     ]);
-        // }
-
         if($user_updated > 0){
-
-        // $update_content .= "\n\n **__Updated Users:__**";
-        // foreach($in_discord_name as $name){
-        //     $update_content .= "\n- ".$name;
-        // }
-        // // Completion Time
-        // $end_time = Carbon::now();
-        // $update_content .= "\n\n**__Script Time:__**";
-        // $update_content .= "\n- Script Time: " . $start_time->diffForHumans($end_time, ['parts' => 2, 'short' => true, 'syntax' => Carbon::DIFF_ABSOLUTE]) . ".";
-
-        $discord->sendMessage('482860026831175690', "DISCORD UPDATE: ".$user_updated." users updated.");
+            $discord->sendMessage('482860026831175690', "DISCORD UPDATE: ".$user_updated." users updated.");
         }
     }
 

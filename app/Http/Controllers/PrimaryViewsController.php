@@ -15,6 +15,8 @@ use Illuminate\Support\Facades\Cache;
 use App\Models\Settings\RotationImage;
 use App\Models\Publications\AtcResource;
 use App\Models\News\HomeNewControllerCert;
+use App\Models\Network\CTPDates;
+use App\Models\Network\FIRInfo;
 use App\Services\VATSIMClient;
 
 class PrimaryViewsController extends Controller
@@ -31,7 +33,7 @@ class PrimaryViewsController extends Controller
 
         //News
         $news = News::where('visible', true)->get()->sortByDesc('published')->first();
-        $certifications = HomeNewControllerCert::all()->sortByDesc('timestamp')->take(5);
+        $certifications = HomeNewControllerCert::all()->sortByDesc('timestamp')->take(7);
 
         //Next event
         $nextEvent = Event::where('start_timestamp', '>', Carbon::now())->get()->sortBy('start_timestamp')->first();
@@ -39,20 +41,28 @@ class PrimaryViewsController extends Controller
         //Top Month Controllers
         $rosterMembers = RosterMember::where('monthly_hours', '>', 0)->get();
         $externalControllers = ExternalController::where('monthly_hours', '>', 0)->get();
-        $topControllers = $rosterMembers->merge($externalControllers)->sortByDesc('monthly_hours')->take(5);
+        $topControllers = $rosterMembers->merge($externalControllers)->sortByDesc('monthly_hours')->take(7);
 
         //Top controllers
         $rosterMembers = RosterMember::where('currency', '>', 0)->get();
         $externalControllers = ExternalController::where('currency', '>', 0)->get();
-        $yearControllers = $rosterMembers->merge($externalControllers)->sortByDesc('currency')->take(5);
+        $yearControllers = $rosterMembers->merge($externalControllers)->sortByDesc('currency')->take(7);
 
         //CTP Mode?
+        $ctpEvents = CTPDates::whereMonth('oca_start', Carbon::now()->month)->whereYear('oca_start', Carbon::now()->year)->first();
+        $ctpAircraft = FIRInfo::all()->first();
+
         $ctpMode = false;
-        if (config('app.ctp_home_page')) {
-            $ctpMode = true;
+
+        if($ctpEvents){
+            if (Carbon::now()->between($ctpEvents->oca_start, $ctpEvents->oca_end)) {
+                $ctpMode = 2;
+            } elseif($ctpEvents && Carbon::now() < $ctpEvents->oca_end) {
+                $ctpMode = 1;
+            }
         }
 
-        return view('index', compact('controllers', 'news', 'certifications', 'nextEvent', 'topControllers', 'yearControllers', 'ctpMode'));
+        return view('index', compact('controllers', 'news', 'certifications', 'nextEvent', 'topControllers', 'yearControllers', 'ctpMode', 'ctpEvents', 'ctpAircraft'));
     }
 
     /*

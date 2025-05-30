@@ -33,6 +33,12 @@ class ProcessExternalControllers implements ShouldQueue
         //
     }
 
+    //  Delay the job retry to 5 minutes.
+    public function backoff()
+    {
+        return [300];
+    }
+
     /**
      * Execute the job.
      *

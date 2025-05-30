@@ -192,14 +192,34 @@
                                     <h6 class="card-subtitle mb-2 text-muted fw-500">
                                         {{ $user->rating_GRP }} ({{ $user->rating_short }})
                                     </h6>
-                                    Region: {{ $user->region_name }}<br />
-                                    Division: {{ $user->division_name }}<br />
+                                    @if($user->pilotrating_short !== null)
+                                        <h6 class="card-subtitle mb-2 text-muted fw-500">
+                                            {{ $user->pilotrating_long }} ({{ $user->pilotrating_short }})
+                                        </h6>
+                                    @else
+                                        <h6 class="card-subtitle mb-2 text-muted fw-500">
+                                            No Pilot Rating (P0)
+                                        </h6>
+                                    @endif
+
+                                    @if($user->militaryrating_short !== null)
+                                    <h6 class="card-subtitle mb-2 text-muted fw-500">
+                                        {{ $user->militaryrating_long }} ({{ $user->militaryrating_short }})
+                                    </h6>
+                                    @else
+                                    <h6 class="card-subtitle mb-2 text-muted fw-500">
+                                        No Military Rating (P0)
+                                    </h6>
+                                    @endif
+
+                                    <b>Region:</b> {{ $user->region_name }}<br />
+                                    <b>Division:</b> {{ $user->division_name }}<br />
                                     @if ($user->subdivision_name)
                                         vACC/ARTCC: {{ $user->subdivision_name }}<br />
                                     @endif
-                                    Role: {{ $user->highestRole()->name }}<br />
+                                    <b>System Role:</b> {{ $user->highestRole()->name }}<br />
                                     @if ($user->staffProfile)
-                                        Staff Role: {{ $user->staffProfile->position }}
+                                    <b>Senior Staff Position:</b> {{ $user->staffProfile->position }}
                                     @endif
                                 </div>
                             </div>
@@ -685,9 +705,16 @@
                                     <div class="card mb-3 shadow-none">
                                         <h4 class="blue-text mb-3">Admin</h4>
                                         <div class="list-group z-depth-1">
+                                            {{-- Site Settings --}}
                                             <a href="{{ route('settings.index') }}"
                                                 class="waves-effect list-group-item list-group-item-action">
                                                 <i style="margin-right: 10px;" class="fas fa-cog fa-fw"></i>Site Settings
+                                            </a>
+
+                                            {{-- Horizon Scheduler --}}
+                                            <a href="admin/scheduler/dashboard"
+                                                class="waves-effect list-group-item list-group-item-action">
+                                                <i style="margin-right: 10px;" class="fas fa-network-wired fa-fw"></i>Horizon Scheduler
                                             </a>
                                         </div>
                                     </div>
@@ -833,39 +860,35 @@
                 <form method="POST" action="{{ route('users.changedisplayname') }}">
                     <div class="modal-body">
                         @csrf
-                        <p>Your display name will display everywhere on Gander Oceanic, including the controller roster. It
-                            is advised to use the same display name that you would use on the VATSIM network. All display
-                            names must comply with section A4 of the VATSIM Code of Conduct.</p>
                         <div class="form-group">
-                            <div class="md-form">
-                                <input type="text" class="form-control" value="{{ $user->display_fname }}"
-                                    name="display_fname" id="input_display_fname">
-                                <label for="input_display_fname" class="active">Display first name</label>
+                            <div class="form-group">
+                                <label class="text-muted">Change how your name is shown on our services.</label>
+                                <label class="text-muted" style="text-padding: 10px;"><b>Note:</b> you can only select the below options. We no longer accept changes to your VATSIM Registered Name.</label>
+                                <select name="format" class="custom-select">
+                                    <option value="showall">
+                                        {{ $user->fname }} {{ $user->lname }} - {{ Auth::id() }} (Full Name & CID)
+                                        @if(strlen($user->fname . ' ' . $user->lname . ' - ' . Auth::id()) > 32) ℹ️ @endif
+                                    </option>
+                                    <option value="firstlastinitialcid">
+                                        {{ $user->fname }} {{ substr($user->lname, 0,1) }} - {{ Auth::id() }} (First Name, Last Initial & CID)
+                                        @if(strlen($user->fname . ' ' . substr($user->lname, 0,1) . ' - ' . Auth::id()) > 32) ℹ️ @endif
+                                    </option>
+                                    <option value="showfirstcid">
+                                        {{ $user->fname }} - {{ Auth::id() }} (First Name and CID)
+                                        @if(strlen($user->fname . ' - ' . Auth::id()) > 32) ℹ️ @endif
+                                    </option>
+                                    <option value="showcid">
+                                        {{ Auth::id() }} (CID Only)
+                                    </option>
+                                </select><br>
+                                <label class="text-muted" style="padding-top: 20px;"><b>Additional Note:</b> Rows with a ℹ️ indicates that it is incompatable with Discords Username Character Limitations. You are welcome to select this option, and it will be used accross the Gander Oceanic Website, however the highest available option without ℹ️ will automatically be used for discord.</label>
                             </div>
-                            <a class="btn btn-light btn-sm" role="button" onclick="resetToCertFirstName()"><span
-                                    style="color: #000">Reset to your CERT first name</span></a>
-                            <script>
-                                function resetToCertFirstName() {
-                                    $("#input_display_fname").val("{{ $user->fname }}")
-                                }
-                            </script>
                         </div>
-                        <div class="form-group">
-                            <label class="text-muted">Format</label>
-                            <select name="format" class="custom-select">
-                                <option value="showall">First name, last name, and CID
-                                    ({{ $user->display_fname }} {{ $user->lname }} {{ Auth::id() }})
-                                </option>
-                                <option value="showfirstcid">First name and CID ({{ $user->display_fname }}
-                                    {{ Auth::id() }})</option>
-                                <option value="showcid">CID only ({{ Auth::id() }})</option>
-                            </select>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-light" data-dismiss="modal">Dismiss</button>
+                            <input type="submit" class="btn btn-success" value="Save Changes">
                         </div>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-light" data-dismiss="modal">Dismiss</button>
-                        <input type="submit" class="btn btn-success" value="Save Changes">
-                    </div>
+                </div>
                 </form>
             </div>
         </div>

@@ -130,7 +130,8 @@ class User extends Authenticatable
         'reg_date', 'region_code', 'region_name', 'division_code', 'division_name',
         'subdivision_code', 'subdivision_name', 'permissions', 'init', 'gdpr_subscribed_emails', 'avatar', 
         'bio', 'display_cid_only', 'display_fname', 'display_last_name', 'discord_user_id', 'member_of_czqo',
-        'discord_username', 'discord_avatar', 'discord_dm_channel_id', 'avatar_mode', 'used_connect',
+        'discord_username', 'discord_avatar', 'discord_dm_channel_id', 'avatar_mode', 'used_connect', 'vatsim_gdpr_account',
+        'pilotrating_id', 'pilotrating_short', 'pilotrating_long', 'militaryrating_id', 'militaryrating_short', 'militaryrating_long',
     ];
 
     /**
@@ -272,29 +273,29 @@ class User extends Authenticatable
      */
     public function fullName($format)
     {
-        //display name check
-        if ($this->display_cid_only == true) {
-            return strval($this->id);
-        }
-
         if ($format == 'FLC') {
-            if ($this->display_last_name == true) {
-                return $this->display_fname.' '.$this->lname.' '.$this->id;
-            } else {
-                return $this->display_fname.' '.$this->id;
+            if($this->display_last_name == 0) {
+                return $this->fname.' - '.$this->id;
+            } elseif ($this->display_last_name == 1) {
+                return $this->fname.' '.$this->lname.' - '.$this->id;
+            } elseif($this->display_last_name == 2){
+                return $this->fname.' '.substr($this->lname, 0, 1).' - '.$this->id;
             }
         } elseif ($format === 'FL') {
-            if ($this->display_last_name == true) {
-                return $this->display_fname.' '.$this->lname;
-            } else {
-                return $this->display_fname;
+            if($this->display_last_name == 0) {
+                return $this->fname;
+            } elseif ($this->display_last_name == 1) {
+                return $this->fname.' '.$this->lname;
+            } elseif($this->display_last_name == 2){
+                return $this->fname.' '.substr($this->lname, 0, 1);
             }
         } elseif ($format === 'F') {
-            return $this->display_fname;
+            return $this->fname;
         }
 
         return null;
     }
+
 
     /**
      * Is the user's avatar the default (initials) avatar?
