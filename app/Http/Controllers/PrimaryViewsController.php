@@ -71,12 +71,15 @@ class PrimaryViewsController extends Controller
     public function map()
     {
         //VATSIM online controllers
-        $controllerOnline = SessionLog::whereNull('session_end')->exists();
+        $czqoOnline = SessionLog::whereNull('session_end')->where('callsign', 'like', 'CZQO%')->exists();
+        $eggxOnline = SessionLog::whereNull('session_end')->where('callsign', 'like', 'EGGX%')->exists();
+        $natOnline = SessionLog::whereNull('session_end')->where('callsign', 'like', 'NAT%')->exists();
+        $nycOnline = SessionLog::whereNull('session_end')->where('callsign', 'like', 'NY%')->exists();
 
         $vatsim = new VATSIMClient();
         $planes = $vatsim->getPilots();
 
-        return view('pilots.map', compact('planes', 'controllerOnline'));
+        return view('pilots.map', compact('planes', 'czqoOnline', 'eggxOnline', 'natOnline', 'nycOnline'));
     }
 
     /*

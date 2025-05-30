@@ -22,7 +22,7 @@ class VATSIMClient
 
     public function searchCallsign($callsign, $precise)
     {
-        $data = Cache::remember('vatsimdata', 59, function () {
+        $data = Cache::remember('vatsimdata', 15, function () {
             return $this->getVATSIMData();
         });
 
@@ -43,7 +43,7 @@ class VATSIMClient
         }
 
         if ($precise) {
-            return false;
+            return null;
         }
 
         return $controllers;
@@ -51,10 +51,10 @@ class VATSIMClient
 
     public function getPilots()
     {
-        $data = Cache::remember('vatsimdatapilots', 60*60*1, function () {
-            return $this->getVATSIMData();
-        });
+    $data = Cache::remember('vatsimdatapilots', 15, function () {
+        return $this->getVATSIMData();
+    });
 
-        return $data->pilots;
+    return $data->pilots ?? []; // Ensures it always returns an array
     }
 }
