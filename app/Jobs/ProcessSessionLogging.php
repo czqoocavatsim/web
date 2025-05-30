@@ -48,14 +48,16 @@ class ProcessSessionLogging implements ShouldQueue
         //Get All Time Monitored Positions
         $mainPositions = MonitoredPosition::where('ctp_only', null)->get();
 
-        // LPPO Positions
-        if($ctp_events->lppo_coverage == 1){
-            $lppoPositions = MonitoredPosition::where('ctp_only', 1)->where('identifier', 'like', 'LPPO_%')->get();
-        }
+        if($ctp_events){
+            // LPPO Positions
+            if($ctp_events->lppo_coverage == 1){
+                $lppoPositions = MonitoredPosition::where('ctp_only', 1)->where('identifier', 'like', 'LPPO_%')->get();
+            }
 
-        // LPPO Positions
-        if($ctp_events->bird_coverage == 1){
-            $birdPositions = MonitoredPosition::where('ctp_only', 1)->where('identifier', 'like', 'BIRD_%')->get();
+            // LPPO Positions
+            if($ctp_events->bird_coverage == 1){
+                $birdPositions = MonitoredPosition::where('ctp_only', 1)->where('identifier', 'like', 'BIRD_%')->get();
+            }
         }
 
         // Combine Positions being Looked Into
