@@ -58,10 +58,12 @@ class ProcessSessionLogging implements ShouldQueue
             if($ctp_events->bird_coverage == 1){
                 $birdPositions = MonitoredPosition::where('ctp_only', 1)->where('identifier', 'like', 'BIRD_%')->get();
             }
-        }
 
-        // Combine Positions being Looked Into
-        $monitoredPositions = $mainPositions->merge($lppoPositions)->merge($birdPositions);
+            // Combine Positions being Looked Into
+            $monitoredPositions = $mainPositions->merge($lppoPositions)->merge($birdPositions);
+        } else {
+            $monitoredPositions = $mainPositions;
+        }
 
         $vatsimData = new VATSIMClient();
 

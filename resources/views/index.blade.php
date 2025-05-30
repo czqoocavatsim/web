@@ -454,48 +454,52 @@
         $(document).ready(function() {
             $('#dataTable').DataTable();
         } );
-
-
-        const eventDate = new Date("{{ \Carbon\Carbon::parse($ctpEvents->oca_start)->toIso8601String() }}").getTime();
-        const countdownElement = document.getElementById('countdown');
-
-        const updateCountdown = () => {
-            const now = new Date().getTime();
-            const distance = eventDate - now;
-
-            if (distance < 0) {
-                countdownElement.innerHTML = "<div class='box bg-success text-white p-3 rounded'>The event is currently underway!</div>";
-                clearInterval(timer);
-                return;
-            }
-
-            const days = Math.floor(distance / (1000 * 60 * 60 * 24));
-            const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-            const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
-            const seconds = Math.floor((distance % (1000 * 60)) / 1000);
-
-            countdownElement.innerHTML = `
-                <div class="box bg-primary text-white p-3 rounded" style="margin-right: 3px;">
-                    <div style="font-size: 2em;">${days}</div>
-                    <div>Days</div>
-                </div>
-                <div class="box bg-primary text-white p-3 rounded" style="margin-right: 3px;">
-                    <div style="font-size: 2em;">${hours}</div>
-                    <div>Hours</div>
-                </div>
-                <div class="box bg-primary text-white p-3 rounded" style="margin-right: 3px;">
-                    <div style="font-size: 2em;">${minutes}</div>
-                    <div>Minutes</div>
-                </div>
-                <div class="box bg-primary text-white p-3 rounded" style="margin-right: 3px;">
-                    <div style="font-size: 2em;">${seconds}</div>
-                    <div>Seconds</div>
-                </div>
-            `;
-        };
-
-        const timer = setInterval(updateCountdown, 1000);
-        updateCountdown();
     </script>
+
+    @if($ctpEvents !== null)
+        <script>
+            const eventDate = new Date("{{ \Carbon\Carbon::parse($ctpEvents->oca_start)->toIso8601String() }}").getTime();
+            const countdownElement = document.getElementById('countdown');
+
+            const updateCountdown = () => {
+                const now = new Date().getTime();
+                const distance = eventDate - now;
+
+                if (distance < 0) {
+                    countdownElement.innerHTML = "<div class='box bg-success text-white p-3 rounded'>The event is currently underway!</div>";
+                    clearInterval(timer);
+                    return;
+                }
+
+                const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+                const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+                const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+                const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+                countdownElement.innerHTML = `
+                    <div class="box bg-primary text-white p-3 rounded" style="margin-right: 3px;">
+                        <div style="font-size: 2em;">${days}</div>
+                        <div>Days</div>
+                    </div>
+                    <div class="box bg-primary text-white p-3 rounded" style="margin-right: 3px;">
+                        <div style="font-size: 2em;">${hours}</div>
+                        <div>Hours</div>
+                    </div>
+                    <div class="box bg-primary text-white p-3 rounded" style="margin-right: 3px;">
+                        <div style="font-size: 2em;">${minutes}</div>
+                        <div>Minutes</div>
+                    </div>
+                    <div class="box bg-primary text-white p-3 rounded" style="margin-right: 3px;">
+                        <div style="font-size: 2em;">${seconds}</div>
+                        <div>Seconds</div>
+                    </div>
+                `;
+            };
+
+            const timer = setInterval(updateCountdown, 1000);
+            updateCountdown();
+        </script>
+    @endif
+
 
 @endsection
