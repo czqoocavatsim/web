@@ -699,73 +699,73 @@ async function createNatTrackMap()
     const data = await response.json()
 
     //Go through each NAT Track
-    // data.forEach(track => {
-    //     //Create array of points latitudes/longitudes
-    //     let pointsLatLon = []
-    //     track.route.forEach(point => {
-    //         //Add point to array
-    //         pointsLatLon.push([point.latitude, point.longitude,])
-    //         //Create map marker
-    //         createMapTrackPointMarker(point, track, map)
-    //     })
+    data.forEach(track => {
+        //Create array of points latitudes/longitudes
+        let pointsLatLon = []
+        track.route.forEach(point => {
+            //Add point to array
+            pointsLatLon.push([point.latitude, point.longitude,])
+            //Create map marker
+            createMapTrackPointMarker(point, track, map)
+        })
 
-    //     //Get colour for the polyline depending on track direction
-    //     let colour = '#00000';
-    //     if (track.direction == 1) {
-    //         colour = 'rgba(28, 95, 201, 0.4)'; // #1c5fc9 with 40% opacity
-    //     } else {
-    //         colour = 'rgba(201, 45, 28, 0.4)'; // #c92d1c with 40% opacity
-    //     }
+        //Get colour for the polyline depending on track direction
+        let colour = '#00000';
+        if (track.direction == 1) {
+            colour = 'rgba(28, 95, 201, 0.4)'; // #1c5fc9 with 40% opacity
+        } else {
+            colour = 'rgba(201, 45, 28, 0.4)'; // #c92d1c with 40% opacity
+        }
 
-    //     //Create polylines
-    //     let line = new L.Polyline(pointsLatLon, {
-    //         color: colour,
-    //         weight: 2,
-    //         opacity: 1,
-    //         smoothFactor: 1
-    //     }).addTo(map)
+        //Create polylines
+        let line = new L.Polyline(pointsLatLon, {
+            color: colour,
+            weight: 2,
+            opacity: 1,
+            smoothFactor: 1
+        }).addTo(map)
 
-    //     //Create row
-    //     let row = $("<tr></tr>")
+        //Create row
+        let row = $("<tr></tr>")
 
-    //     //Add track id
-    //     let idCell = $("<td scope='row'></td>").text(track.id)
-    //     $(row).append(idCell)
+        //Add track id
+        let idCell = $("<td scope='row'></td>").text(track.id)
+        $(row).append(idCell)
 
-    //     //Add points
-    //     let pointsText = []
-    //     track.route.forEach(point => {
-    //         pointsText.push(" " + point.name)
-    //     })
-    //     let pointsCell = $("<td></td>").text(pointsText)
-    //     $(row).append(pointsCell)
+        //Add points
+        let pointsText = []
+        track.route.forEach(point => {
+            pointsText.push(" " + point.name)
+        })
+        let pointsCell = $("<td></td>").text(pointsText)
+        $(row).append(pointsCell)
 
-    //     //Add direction
-    //     let directionCell = $("<td></td>")
-    //     if (track.direction == 1) {
-    //         $(directionCell).text('Westbound')
-    //     } else {
-    //         $(directionCell).text('Eastbound')
-    //     }
-    //     $(row).append(directionCell)
+        //Add direction
+        let directionCell = $("<td></td>")
+        if (track.direction == 1) {
+            $(directionCell).text('Westbound')
+        } else {
+            $(directionCell).text('Eastbound')
+        }
+        $(row).append(directionCell)
 
-    //     //Add levels
-    //     let levelsText = []
-    //     track.flightLevels.forEach(level => {
-    //         levelsText.push(" " + level / 100)
-    //     })
-    //     let levelsCell = $("<td></td>").text(levelsText)
-    //     $(row).append(levelsCell)
+        //Add levels
+        let levelsText = []
+        track.flightLevels.forEach(level => {
+            levelsText.push(" " + level / 100)
+        })
+        let levelsCell = $("<td></td>").text(levelsText)
+        $(row).append(levelsCell)
 
-    //     //validity
-    //     let validityCell = $("<td></td>").text(
-    //         `${parseTimeStamp(track.validFrom)} to ${parseTimeStamp(track.validTo)}`
-    //     )
-    //     $(row).append(validityCell)
+        //validity
+        let validityCell = $("<td></td>").text(
+            `${parseTimeStamp(track.validFrom)} to ${parseTimeStamp(track.validTo)}`
+        )
+        $(row).append(validityCell)
 
-    //     //Add row to table
-    //     $(table).append(row)
-    // })
+        //Add row to table
+        $(table).append(row)
+    })
 
     //Add points and boundaries
     createMapPointsBoundaries(map)
@@ -801,73 +801,73 @@ async function createEventTrackMap()
     const data = await response.json()
 
     //Go through each NAT Track
-    // data.forEach(track => {
-    //     //Create array of points latitudes/longitudes
-    //     let pointsLatLon = []
-    //     track.route.forEach(point => {
-    //         //Add point to array
-    //         pointsLatLon.push([point.latitude, point.longitude])
-    //         //Create map marker
-    //         createMapTrackPointMarker(point, track, map)
-    //     })
+    data.forEach(track => {
+        //Create array of points latitudes/longitudes
+        let pointsLatLon = []
+        track.route.forEach(point => {
+            //Add point to array
+            pointsLatLon.push([point.latitude, point.longitude])
+            //Create map marker
+            createMapTrackPointMarker(point, track, map)
+        })
 
-    //     //Get colour for the polyline depending on track direction
-    //     let colour = '#00000';
-    //     if (track.direction == 1) {
-    //         colour = 'rgba(28, 95, 201, 0.4)'; // #1c5fc9 with 40% opacity
-    //     } else {
-    //         colour = 'rgba(201, 45, 28, 0.4)'; // #c92d1c with 40% opacity
-    //     }
+        //Get colour for the polyline depending on track direction
+        let colour = '#00000';
+        if (track.direction == 1) {
+            colour = 'rgba(28, 95, 201, 0.4)'; // #1c5fc9 with 40% opacity
+        } else {
+            colour = 'rgba(201, 45, 28, 0.4)'; // #c92d1c with 40% opacity
+        }
 
-    //     //Create polylines
-    //     let line = new L.Polyline(pointsLatLon, {
-    //         color: colour,
-    //         weight: 2,
-    //         opacity: 1,
-    //         smoothFactor: 1
-    //     }).addTo(map)
+        //Create polylines
+        let line = new L.Polyline(pointsLatLon, {
+            color: colour,
+            weight: 2,
+            opacity: 1,
+            smoothFactor: 1
+        }).addTo(map)
 
-    //     //Create row
-    //     let row = $("<tr></tr>")
+        //Create row
+        let row = $("<tr></tr>")
 
-    //     //Add track id
-    //     let idCell = $("<td scope='row'></td>").text(track.id)
-    //     $(row).append(idCell)
+        //Add track id
+        let idCell = $("<td scope='row'></td>").text(track.id)
+        $(row).append(idCell)
 
-    //     //Add points
-    //     let pointsText = []
-    //     track.route.forEach(point => {
-    //         pointsText.push(" " + point.name)
-    //     })
-    //     let pointsCell = $("<td></td>").text(pointsText)
-    //     $(row).append(pointsCell)
+        //Add points
+        let pointsText = []
+        track.route.forEach(point => {
+            pointsText.push(" " + point.name)
+        })
+        let pointsCell = $("<td></td>").text(pointsText)
+        $(row).append(pointsCell)
 
-    //     //Add direction
-    //     let directionCell = $("<td></td>")
-    //     if (track.direction == 1) {
-    //         $(directionCell).text('Westbound')
-    //     } else {
-    //         $(directionCell).text('Eastbound')
-    //     }
-    //     $(row).append(directionCell)
+        //Add direction
+        let directionCell = $("<td></td>")
+        if (track.direction == 1) {
+            $(directionCell).text('Westbound')
+        } else {
+            $(directionCell).text('Eastbound')
+        }
+        $(row).append(directionCell)
 
-    //     //Add levels
-    //     let levelsText = []
-    //     track.flightLevels.forEach(level => {
-    //         levelsText.push(" " + level / 100)
-    //     })
-    //     let levelsCell = $("<td></td>").text(levelsText)
-    //     $(row).append(levelsCell)
+        //Add levels
+        let levelsText = []
+        track.flightLevels.forEach(level => {
+            levelsText.push(" " + level / 100)
+        })
+        let levelsCell = $("<td></td>").text(levelsText)
+        $(row).append(levelsCell)
 
-    //     //validity
-    //     let validityCell = $("<td></td>").text(
-    //         `${parseTimeStamp(track.validFrom)} to ${parseTimeStamp(track.validTo)}`
-    //     )
-    //     $(row).append(validityCell)
+        //validity
+        let validityCell = $("<td></td>").text(
+            `${parseTimeStamp(track.validFrom)} to ${parseTimeStamp(track.validTo)}`
+        )
+        $(row).append(validityCell)
 
-    //     //Add row to table
-    //     $(table).append(row)
-    // })
+        //Add row to table
+        $(table).append(row)
+    })
 
     //Add points and boundaries
     createMapPointsBoundaries(map)
@@ -903,73 +903,73 @@ async function createConcordeTrackMap()
     const data = await response.json()
 
     //Go through each NAT Track
-    // data.forEach(track => {
-    //     //Create array of points latitudes/longitudes
-    //     let pointsLatLon = []
-    //     track.route.forEach(point => {
-    //         //Add point to array
-    //         pointsLatLon.push([point.latitude, point.longitude])
-    //         //Create map marker
-    //         createMapTrackPointMarker(point, track, map)
-    //     })
+    data.forEach(track => {
+        //Create array of points latitudes/longitudes
+        let pointsLatLon = []
+        track.route.forEach(point => {
+            //Add point to array
+            pointsLatLon.push([point.latitude, point.longitude])
+            //Create map marker
+            createMapTrackPointMarker(point, track, map)
+        })
 
-    //     //Get colour for the polyline depending on track direction
-    //     let colour = '#00000';
-    //     if (track.direction == 1) {
-    //         colour = 'rgba(28, 95, 201, 0.4)'; // #1c5fc9 with 40% opacity
-    //     } else {
-    //         colour = 'rgba(201, 45, 28, 0.4)'; // #c92d1c with 40% opacity
-    //     }
+        //Get colour for the polyline depending on track direction
+        let colour = '#00000';
+        if (track.direction == 1) {
+            colour = 'rgba(28, 95, 201, 0.4)'; // #1c5fc9 with 40% opacity
+        } else {
+            colour = 'rgba(201, 45, 28, 0.4)'; // #c92d1c with 40% opacity
+        }
 
-    //     //Create polylines
-    //     let line = new L.Polyline(pointsLatLon, {
-    //         color: colour,
-    //         weight: 2,
-    //         opacity: 1,
-    //         smoothFactor: 1
-    //     }).addTo(map)
+        //Create polylines
+        let line = new L.Polyline(pointsLatLon, {
+            color: colour,
+            weight: 2,
+            opacity: 1,
+            smoothFactor: 1
+        }).addTo(map)
 
-    //     //Create row
-    //     let row = $("<tr></tr>")
+        //Create row
+        let row = $("<tr></tr>")
 
-    //     //Add track id
-    //     let idCell = $("<td scope='row'></td>").text(track.id)
-    //     $(row).append(idCell)
+        //Add track id
+        let idCell = $("<td scope='row'></td>").text(track.id)
+        $(row).append(idCell)
 
-    //     //Add points
-    //     let pointsText = []
-    //     track.route.forEach(point => {
-    //         pointsText.push(" " + point.name + " (" + point.latitude + "N " + point.longitude + "W)")
-    //     })
-    //     let pointsCell = $("<td></td>").text(pointsText)
-    //     $(row).append(pointsCell)
+        //Add points
+        let pointsText = []
+        track.route.forEach(point => {
+            pointsText.push(" " + point.name + " (" + point.latitude + "N " + point.longitude + "W)")
+        })
+        let pointsCell = $("<td></td>").text(pointsText)
+        $(row).append(pointsCell)
 
-    //     //Add direction
-    //     let directionCell = $("<td></td>")
-    //     if (track.direction == 1) {
-    //         $(directionCell).text('Westbound')
-    //     } else {
-    //         $(directionCell).text('Eastbound')
-    //     }
-    //     $(row).append(directionCell)
+        //Add direction
+        let directionCell = $("<td></td>")
+        if (track.direction == 1) {
+            $(directionCell).text('Westbound')
+        } else {
+            $(directionCell).text('Eastbound')
+        }
+        $(row).append(directionCell)
 
-    //     //Add levels
-    //     let levelsText = []
-    //     track.flightLevels.forEach(level => {
-    //         levelsText.push(" " + level / 100)
-    //     })
-    //     let levelsCell = $("<td></td>").text(levelsText)
-    //     $(row).append(levelsCell)
+        //Add levels
+        let levelsText = []
+        track.flightLevels.forEach(level => {
+            levelsText.push(" " + level / 100)
+        })
+        let levelsCell = $("<td></td>").text(levelsText)
+        $(row).append(levelsCell)
 
-    //     //validity
-    //     let validityCell = $("<td></td>").text(
-    //         `${parseTimeStamp(track.validFrom)} to ${parseTimeStamp(track.validTo)}`
-    //     )
-    //     $(row).append(validityCell)
+        //validity
+        let validityCell = $("<td></td>").text(
+            `${parseTimeStamp(track.validFrom)} to ${parseTimeStamp(track.validTo)}`
+        )
+        $(row).append(validityCell)
 
-    //     //Add row to table
-    //     $(table).append(row)
-    // })
+        //Add row to table
+        $(table).append(row)
+    })
 
     //Add points and boundaries
     createMapPointsBoundaries(map)
@@ -999,7 +999,7 @@ async function createMap(planes, eggx, czqo, nat, kzny, lppo) {
        marker.bindPopup(`<h4>${plane['callsign']}</h4><br>${plane['name']} ${plane['cid']}<br>${plane['flight_plan'] ? plane['flight_plan']['departure'] : ''} to ${plane['flight_plan'] ? plane['flight_plan']['arrival'] : ''}<br>${plane['flight_plan'] ? plane['flight_plan']['aircraft'] : ''}`);
     });
 
-    //Add tracks
+    // Add tracks
     let endpoint = "https://nattrak.vatsim.net/api/tracks";
     const response = await fetch(endpoint);
     const data = await response.json();
@@ -1020,36 +1020,36 @@ async function createMap(planes, eggx, czqo, nat, kzny, lppo) {
     }
 
     // Process each NAT Track
-    data.forEach(track => {
-    let pointsLatLon = [];
-    let routePoints = track.last_routeing.split(" "); // Split by space
+//     data.forEach(track => {
+//     let pointsLatLon = [];
+//     let routePoints = track.last_routeing.split(" "); // Split by space
 
-    routePoints.forEach(point => {
-        if (point.includes("/")) { // Check if it's a lat/lon coordinate
-            let latLon = parseLatLon(point);  // Convert lat/lon to decimal
-            pointsLatLon.push(latLon);
-            createMapTrackPointMarker({ latitude: latLon[0], longitude: latLon[1] }, track, map);
-        } else {
-            // check pointsGander/pointsShanwick const variables to find
-        }
-    });
+//     routePoints.forEach(point => {
+//         if (point.includes("/")) { // Check if it's a lat/lon coordinate
+//             let latLon = parseLatLon(point);  // Convert lat/lon to decimal
+//             pointsLatLon.push(latLon);
+//             createMapTrackPointMarker({ latitude: latLon[0], longitude: latLon[1] }, track, map);
+//         } else {
+//             // check pointsGander/pointsShanwick const variables to find
+//         }
+//     });
 
-    // Determine polyline color based on track direction
-    let colour = '#000000'; // Default black
-    if (track.identifier < "M") {
-        colour = '#1c5fc9'; // Eastbound (A-M)
-    } else {
-        colour = '#c92d1c'; // Westbound (N-Z)
-    }
+//     // Determine polyline color based on track direction
+//     let colour = '#000000'; // Default black
+//     if (track.identifier < "M") {
+//         colour = '#1c5fc9'; // Eastbound (A-M)
+//     } else {
+//         colour = '#c92d1c'; // Westbound (N-Z)
+//     }
 
-    // Create and add polyline to map
-    let line = new L.Polyline(pointsLatLon, {
-        color: colour,
-        weight: 2,
-        opacity: 1,
-        smoothFactor: 1
-    }).addTo(map);
-});
+//     // Create and add polyline to map
+//     let line = new L.Polyline(pointsLatLon, {
+//         color: colour,
+//         weight: 2,
+//         opacity: 1,
+//         smoothFactor: 1
+//     }).addTo(map);
+// });
 
     //Add Gander Info if Online
     if (czqo || nat) {
