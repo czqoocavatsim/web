@@ -54,10 +54,12 @@ class PrimaryViewsController extends Controller
 
         $ctpMode = false;
 
-        if (Carbon::now()->between($ctpEvents->oca_start, $ctpEvents->oca_end)) {
-            $ctpMode = 2;
-        } elseif($ctpEvents && Carbon::now() < $ctpEvents->oca_end) {
-            $ctpMode = 1;
+        if($ctpEvents){
+            if (Carbon::now()->between($ctpEvents->oca_start, $ctpEvents->oca_end)) {
+                $ctpMode = 2;
+            } elseif($ctpEvents && Carbon::now() < $ctpEvents->oca_end) {
+                $ctpMode = 1;
+            }
         }
 
         return view('index', compact('controllers', 'news', 'certifications', 'nextEvent', 'topControllers', 'yearControllers', 'ctpMode', 'ctpEvents', 'ctpAircraft'));
