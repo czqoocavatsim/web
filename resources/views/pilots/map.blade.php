@@ -27,8 +27,8 @@
                             <p class="pt-2 pr-2">
                                 <b>Map Colours:</b><br>
                                 - Green Airspace: <i>Gander Oceanic (CZQO) Airspace</i><br>
-                                - Purple Airspace: <i>Shanwick (EGGX) & New York Oceanic (KZNY) Airspace</i><br>
-                                - Grey Airspace: <i>Bordering Domestic FIR Airspace</i>
+                                - Purple Airspace: <i>Shanwick (EGGX) & New York Oceanic (KZNY) Airspace (Partnership Positions)</i><br>
+                                - Grey Airspace: <i>Bordering Domestic/OCA FIR Airspace</i>
                             </p>
                         </div>
                     </div>

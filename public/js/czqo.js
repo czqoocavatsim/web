@@ -699,73 +699,73 @@ async function createNatTrackMap()
     const data = await response.json()
 
     //Go through each NAT Track
-    data.forEach(track => {
-        //Create array of points latitudes/longitudes
-        let pointsLatLon = []
-        track.route.forEach(point => {
-            //Add point to array
-            pointsLatLon.push([point.latitude, point.longitude,])
-            //Create map marker
-            createMapTrackPointMarker(point, track, map)
-        })
+    // data.forEach(track => {
+    //     //Create array of points latitudes/longitudes
+    //     let pointsLatLon = []
+    //     track.route.forEach(point => {
+    //         //Add point to array
+    //         pointsLatLon.push([point.latitude, point.longitude,])
+    //         //Create map marker
+    //         createMapTrackPointMarker(point, track, map)
+    //     })
 
-        //Get colour for the polyline depending on track direction
-        let colour = '#00000';
-        if (track.direction == 1) {
-            colour = '#1c5fc9'
-        } else {
-            colour = '#c92d1c'
-        }
+    //     //Get colour for the polyline depending on track direction
+    //     let colour = '#00000';
+    //     if (track.direction == 1) {
+    //         colour = 'rgba(28, 95, 201, 0.4)'; // #1c5fc9 with 40% opacity
+    //     } else {
+    //         colour = 'rgba(201, 45, 28, 0.4)'; // #c92d1c with 40% opacity
+    //     }
 
-        //Create polylines
-        let line = new L.Polyline(pointsLatLon, {
-            color: colour,
-            weight: 2,
-            opacity: 1,
-            smoothFactor: 1
-        }).addTo(map)
+    //     //Create polylines
+    //     let line = new L.Polyline(pointsLatLon, {
+    //         color: colour,
+    //         weight: 2,
+    //         opacity: 1,
+    //         smoothFactor: 1
+    //     }).addTo(map)
 
-        //Create row
-        let row = $("<tr></tr>")
+    //     //Create row
+    //     let row = $("<tr></tr>")
 
-        //Add track id
-        let idCell = $("<td scope='row'></td>").text(track.id)
-        $(row).append(idCell)
+    //     //Add track id
+    //     let idCell = $("<td scope='row'></td>").text(track.id)
+    //     $(row).append(idCell)
 
-        //Add points
-        let pointsText = []
-        track.route.forEach(point => {
-            pointsText.push(" " + point.name)
-        })
-        let pointsCell = $("<td></td>").text(pointsText)
-        $(row).append(pointsCell)
+    //     //Add points
+    //     let pointsText = []
+    //     track.route.forEach(point => {
+    //         pointsText.push(" " + point.name)
+    //     })
+    //     let pointsCell = $("<td></td>").text(pointsText)
+    //     $(row).append(pointsCell)
 
-        //Add direction
-        let directionCell = $("<td></td>")
-        if (track.direction == 1) {
-            $(directionCell).text('Westbound')
-        } else {
-            $(directionCell).text('Eastbound')
-        }
-        $(row).append(directionCell)
+    //     //Add direction
+    //     let directionCell = $("<td></td>")
+    //     if (track.direction == 1) {
+    //         $(directionCell).text('Westbound')
+    //     } else {
+    //         $(directionCell).text('Eastbound')
+    //     }
+    //     $(row).append(directionCell)
 
-        //Add levels
-        let levelsText = []
-        track.flightLevels.forEach(level => {
-            levelsText.push(" " + level / 100)
-        })
-        let levelsCell = $("<td></td>").text(levelsText)
-        $(row).append(levelsCell)
+    //     //Add levels
+    //     let levelsText = []
+    //     track.flightLevels.forEach(level => {
+    //         levelsText.push(" " + level / 100)
+    //     })
+    //     let levelsCell = $("<td></td>").text(levelsText)
+    //     $(row).append(levelsCell)
 
-        //validity
-        let validityCell = $("<td></td>").text(
-            `${parseTimeStamp(track.validFrom)} to ${parseTimeStamp(track.validTo)}`
-        )
-        $(row).append(validityCell)
+    //     //validity
+    //     let validityCell = $("<td></td>").text(
+    //         `${parseTimeStamp(track.validFrom)} to ${parseTimeStamp(track.validTo)}`
+    //     )
+    //     $(row).append(validityCell)
 
-        //Add row to table
-        $(table).append(row)
-    })
+    //     //Add row to table
+    //     $(table).append(row)
+    // })
 
     //Add points and boundaries
     createMapPointsBoundaries(map)
@@ -801,73 +801,73 @@ async function createEventTrackMap()
     const data = await response.json()
 
     //Go through each NAT Track
-    data.forEach(track => {
-        //Create array of points latitudes/longitudes
-        let pointsLatLon = []
-        track.route.forEach(point => {
-            //Add point to array
-            pointsLatLon.push([point.latitude, point.longitude])
-            //Create map marker
-            createMapTrackPointMarker(point, track, map)
-        })
+    // data.forEach(track => {
+    //     //Create array of points latitudes/longitudes
+    //     let pointsLatLon = []
+    //     track.route.forEach(point => {
+    //         //Add point to array
+    //         pointsLatLon.push([point.latitude, point.longitude])
+    //         //Create map marker
+    //         createMapTrackPointMarker(point, track, map)
+    //     })
 
-        //Get colour for the polyline depending on track direction
-        let colour = '#00000';
-        if (track.direction == 1) {
-            colour = '#1c5fc9'
-        } else {
-            colour = '#c92d1c'
-        }
+    //     //Get colour for the polyline depending on track direction
+    //     let colour = '#00000';
+    //     if (track.direction == 1) {
+    //         colour = 'rgba(28, 95, 201, 0.4)'; // #1c5fc9 with 40% opacity
+    //     } else {
+    //         colour = 'rgba(201, 45, 28, 0.4)'; // #c92d1c with 40% opacity
+    //     }
 
-        //Create polylines
-        let line = new L.Polyline(pointsLatLon, {
-            color: colour,
-            weight: 2,
-            opacity: 1,
-            smoothFactor: 1
-        }).addTo(map)
+    //     //Create polylines
+    //     let line = new L.Polyline(pointsLatLon, {
+    //         color: colour,
+    //         weight: 2,
+    //         opacity: 1,
+    //         smoothFactor: 1
+    //     }).addTo(map)
 
-        //Create row
-        let row = $("<tr></tr>")
+    //     //Create row
+    //     let row = $("<tr></tr>")
 
-        //Add track id
-        let idCell = $("<td scope='row'></td>").text(track.id)
-        $(row).append(idCell)
+    //     //Add track id
+    //     let idCell = $("<td scope='row'></td>").text(track.id)
+    //     $(row).append(idCell)
 
-        //Add points
-        let pointsText = []
-        track.route.forEach(point => {
-            pointsText.push(" " + point.name)
-        })
-        let pointsCell = $("<td></td>").text(pointsText)
-        $(row).append(pointsCell)
+    //     //Add points
+    //     let pointsText = []
+    //     track.route.forEach(point => {
+    //         pointsText.push(" " + point.name)
+    //     })
+    //     let pointsCell = $("<td></td>").text(pointsText)
+    //     $(row).append(pointsCell)
 
-        //Add direction
-        let directionCell = $("<td></td>")
-        if (track.direction == 1) {
-            $(directionCell).text('Westbound')
-        } else {
-            $(directionCell).text('Eastbound')
-        }
-        $(row).append(directionCell)
+    //     //Add direction
+    //     let directionCell = $("<td></td>")
+    //     if (track.direction == 1) {
+    //         $(directionCell).text('Westbound')
+    //     } else {
+    //         $(directionCell).text('Eastbound')
+    //     }
+    //     $(row).append(directionCell)
 
-        //Add levels
-        let levelsText = []
-        track.flightLevels.forEach(level => {
-            levelsText.push(" " + level / 100)
-        })
-        let levelsCell = $("<td></td>").text(levelsText)
-        $(row).append(levelsCell)
+    //     //Add levels
+    //     let levelsText = []
+    //     track.flightLevels.forEach(level => {
+    //         levelsText.push(" " + level / 100)
+    //     })
+    //     let levelsCell = $("<td></td>").text(levelsText)
+    //     $(row).append(levelsCell)
 
-        //validity
-        let validityCell = $("<td></td>").text(
-            `${parseTimeStamp(track.validFrom)} to ${parseTimeStamp(track.validTo)}`
-        )
-        $(row).append(validityCell)
+    //     //validity
+    //     let validityCell = $("<td></td>").text(
+    //         `${parseTimeStamp(track.validFrom)} to ${parseTimeStamp(track.validTo)}`
+    //     )
+    //     $(row).append(validityCell)
 
-        //Add row to table
-        $(table).append(row)
-    })
+    //     //Add row to table
+    //     $(table).append(row)
+    // })
 
     //Add points and boundaries
     createMapPointsBoundaries(map)
@@ -903,73 +903,73 @@ async function createConcordeTrackMap()
     const data = await response.json()
 
     //Go through each NAT Track
-    data.forEach(track => {
-        //Create array of points latitudes/longitudes
-        let pointsLatLon = []
-        track.route.forEach(point => {
-            //Add point to array
-            pointsLatLon.push([point.latitude, point.longitude])
-            //Create map marker
-            createMapTrackPointMarker(point, track, map)
-        })
+    // data.forEach(track => {
+    //     //Create array of points latitudes/longitudes
+    //     let pointsLatLon = []
+    //     track.route.forEach(point => {
+    //         //Add point to array
+    //         pointsLatLon.push([point.latitude, point.longitude])
+    //         //Create map marker
+    //         createMapTrackPointMarker(point, track, map)
+    //     })
 
-        //Get colour for the polyline depending on track direction
-        let colour = '#00000';
-        if (track.direction == 1) {
-            colour = '#1c5fc9'
-        } else {
-            colour = '#c92d1c'
-        }
+    //     //Get colour for the polyline depending on track direction
+    //     let colour = '#00000';
+    //     if (track.direction == 1) {
+    //         colour = 'rgba(28, 95, 201, 0.4)'; // #1c5fc9 with 40% opacity
+    //     } else {
+    //         colour = 'rgba(201, 45, 28, 0.4)'; // #c92d1c with 40% opacity
+    //     }
 
-        //Create polylines
-        let line = new L.Polyline(pointsLatLon, {
-            color: colour,
-            weight: 2,
-            opacity: 1,
-            smoothFactor: 1
-        }).addTo(map)
+    //     //Create polylines
+    //     let line = new L.Polyline(pointsLatLon, {
+    //         color: colour,
+    //         weight: 2,
+    //         opacity: 1,
+    //         smoothFactor: 1
+    //     }).addTo(map)
 
-        //Create row
-        let row = $("<tr></tr>")
+    //     //Create row
+    //     let row = $("<tr></tr>")
 
-        //Add track id
-        let idCell = $("<td scope='row'></td>").text(track.id)
-        $(row).append(idCell)
+    //     //Add track id
+    //     let idCell = $("<td scope='row'></td>").text(track.id)
+    //     $(row).append(idCell)
 
-        //Add points
-        let pointsText = []
-        track.route.forEach(point => {
-            pointsText.push(" " + point.name + " (" + point.latitude + "N " + point.longitude + "W)")
-        })
-        let pointsCell = $("<td></td>").text(pointsText)
-        $(row).append(pointsCell)
+    //     //Add points
+    //     let pointsText = []
+    //     track.route.forEach(point => {
+    //         pointsText.push(" " + point.name + " (" + point.latitude + "N " + point.longitude + "W)")
+    //     })
+    //     let pointsCell = $("<td></td>").text(pointsText)
+    //     $(row).append(pointsCell)
 
-        //Add direction
-        let directionCell = $("<td></td>")
-        if (track.direction == 1) {
-            $(directionCell).text('Westbound')
-        } else {
-            $(directionCell).text('Eastbound')
-        }
-        $(row).append(directionCell)
+    //     //Add direction
+    //     let directionCell = $("<td></td>")
+    //     if (track.direction == 1) {
+    //         $(directionCell).text('Westbound')
+    //     } else {
+    //         $(directionCell).text('Eastbound')
+    //     }
+    //     $(row).append(directionCell)
 
-        //Add levels
-        let levelsText = []
-        track.flightLevels.forEach(level => {
-            levelsText.push(" " + level / 100)
-        })
-        let levelsCell = $("<td></td>").text(levelsText)
-        $(row).append(levelsCell)
+    //     //Add levels
+    //     let levelsText = []
+    //     track.flightLevels.forEach(level => {
+    //         levelsText.push(" " + level / 100)
+    //     })
+    //     let levelsCell = $("<td></td>").text(levelsText)
+    //     $(row).append(levelsCell)
 
-        //validity
-        let validityCell = $("<td></td>").text(
-            `${parseTimeStamp(track.validFrom)} to ${parseTimeStamp(track.validTo)}`
-        )
-        $(row).append(validityCell)
+    //     //validity
+    //     let validityCell = $("<td></td>").text(
+    //         `${parseTimeStamp(track.validFrom)} to ${parseTimeStamp(track.validTo)}`
+    //     )
+    //     $(row).append(validityCell)
 
-        //Add row to table
-        $(table).append(row)
-    })
+    //     //Add row to table
+    //     $(table).append(row)
+    // })
 
     //Add points and boundaries
     createMapPointsBoundaries(map)
@@ -1165,887 +1165,887 @@ async function createMap(planes, eggx, czqo, nat, kzny, lppo) {
 
     // ALL THE DOMESTIC SECTORS TIME
     // BIRD FIR
-    if (kzny) {
-        var birdFIR = L.polygon([
-            [66.8, -30.0],
-            [66.9, -31.0],
-            [68.3, -40.0],
-            [70.3, -50.0],
-            [70.5, -64.0],
-            [65.0, -57.8],
-            [63.5, -55.7],
-            [63.5, -39.0],
-            [61.0, -30.0],
-            [61.0, -10.0],
-            [60.7, -10.0],
-            [61.0, -7.0],
-            [61.0, -5.5],
-            [61.0, 0.0],
-            [61.5, 0.0],
-            [63.0, 0.0],
-            [63.3, 0.0],
-            [65.8, 0.0],
-            [66.8, -10.0],
-            [66.8, -11.0],
-            [66.8, -15.2],
-            [66.8, -23.0],
-            [66.8, -26.0]
-        ], {
-            color: '#6b6b6b',
-            fillColor: '#6b6b6b',
-        }).addTo(map).bindPopup("Reykjavik Domestic Online (BIRD)");
-    }
+    // if (kzny) {
+    //     var birdFIR = L.polygon([
+    //         [66.8, -30.0],
+    //         [66.9, -31.0],
+    //         [68.3, -40.0],
+    //         [70.3, -50.0],
+    //         [70.5, -64.0],
+    //         [65.0, -57.8],
+    //         [63.5, -55.7],
+    //         [63.5, -39.0],
+    //         [61.0, -30.0],
+    //         [61.0, -10.0],
+    //         [60.7, -10.0],
+    //         [61.0, -7.0],
+    //         [61.0, -5.5],
+    //         [61.0, 0.0],
+    //         [61.5, 0.0],
+    //         [63.0, 0.0],
+    //         [63.3, 0.0],
+    //         [65.8, 0.0],
+    //         [66.8, -10.0],
+    //         [66.8, -11.0],
+    //         [66.8, -15.2],
+    //         [66.8, -23.0],
+    //         [66.8, -26.0]
+    //     ], {
+    //         color: '#6b6b6b',
+    //         fillColor: '#6b6b6b',
+    //     }).addTo(map).bindPopup("Reykjavik Domestic Online (BIRD)");
+    // }
 
-    // EGPX FIR
-    if (kzny) {
-        var egpxFIR = L.polygon([
-            [60.7, -10.0],
-            [61.0, -7.0],
-            [61.0, -5.5],
-            [61.0, -5.0],
-            [61.0, -4.0],
-            [61.0, 0.0],
-            [60.0, 0.0],
-            [59.1, 1.7],
-            [58.5, 2.6],
-            [58.4, 2.8],
-            [58.3, 3.0],
-            [57.6, 4.1],
-            [57.3, 4.5],
-            [56.6, 3.6],
-            [57.2, -1.9],
-            [57.4, -4.2],
-            [57.2, -4.5],
-            [57.3, -5.6],
-            [58.0, -6.5],
-            [58.9, -8.3],
-            [59.3, -10.0],
-            [60.7, -10.0],
-        ], {
-            color: '#6b6b6b',
-            fillColor: '#6b6b6b',
-        }).addTo(map).bindPopup("Scottish Domestic Online (EGPX)");
+    // // EGPX FIR
+    // if (kzny) {
+    //     var egpxFIR = L.polygon([
+    //         [60.7, -10.0],
+    //         [61.0, -7.0],
+    //         [61.0, -5.5],
+    //         [61.0, -5.0],
+    //         [61.0, -4.0],
+    //         [61.0, 0.0],
+    //         [60.0, 0.0],
+    //         [59.1, 1.7],
+    //         [58.5, 2.6],
+    //         [58.4, 2.8],
+    //         [58.3, 3.0],
+    //         [57.6, 4.1],
+    //         [57.3, 4.5],
+    //         [56.6, 3.6],
+    //         [57.2, -1.9],
+    //         [57.4, -4.2],
+    //         [57.2, -4.5],
+    //         [57.3, -5.6],
+    //         [58.0, -6.5],
+    //         [58.9, -8.3],
+    //         [59.3, -10.0],
+    //         [60.7, -10.0],
+    //     ], {
+    //         color: '#6b6b6b',
+    //         fillColor: '#6b6b6b',
+    //     }).addTo(map).bindPopup("Scottish Domestic Online (EGPX)");
 
-        var egpxFIR = L.polygon([
-            [54.5, -3.6],
-            [54.2, -4.3],
-            [54.2, -4.3],
-            [54.2, -4.3],
-            [54.2, -4.3],
-            [54.2, -4.3],
-            [54.2, -4.4],
-            [54.2, -4.4],
-            [54.2, -4.4],
-            [54.2, -4.4],
-            [54.2, -4.4],
-            [54.2, -4.8],
-            [54.3, -5.0],
-            [54.1, -5.2],
-            [54.1, -5.0],
-            [54.1, -5.0],
-            [54.1, -5.1],
-            [54.1, -5.1],
-            [54.0, -5.1],
-            [53.8, -5.2],
-            [53.8, -5.5],
-            [53.9, -5.5],
-            [54.1, -5.5],
-            [54.2, -5.6],
-            [54.4, -6.8],
-            [55.3, -6.9],
-            [55.4, -7.3],
-            [55.3, -8.3],
-            [54.8, -9.0],
-            [54.6, -10.0],
-            [56.6, -10.0],
-            [59.3, -10.0],
-            [58.9, -8.3],
-            [58.0, -6.5],
-            [57.3, -5.6],
-            [56.3, -5.1],
-            [55.9, -5.4],
-            [55.6, -5.7]
-        ], {
-            color: '#6b6b6b',
-            fillColor: '#6b6b6b',
-        }).addTo(map).bindPopup("Scottish Domestic Online (EGPX)");
-    }
+    //     var egpxFIR = L.polygon([
+    //         [54.5, -3.6],
+    //         [54.2, -4.3],
+    //         [54.2, -4.3],
+    //         [54.2, -4.3],
+    //         [54.2, -4.3],
+    //         [54.2, -4.3],
+    //         [54.2, -4.4],
+    //         [54.2, -4.4],
+    //         [54.2, -4.4],
+    //         [54.2, -4.4],
+    //         [54.2, -4.4],
+    //         [54.2, -4.8],
+    //         [54.3, -5.0],
+    //         [54.1, -5.2],
+    //         [54.1, -5.0],
+    //         [54.1, -5.0],
+    //         [54.1, -5.1],
+    //         [54.1, -5.1],
+    //         [54.0, -5.1],
+    //         [53.8, -5.2],
+    //         [53.8, -5.5],
+    //         [53.9, -5.5],
+    //         [54.1, -5.5],
+    //         [54.2, -5.6],
+    //         [54.4, -6.8],
+    //         [55.3, -6.9],
+    //         [55.4, -7.3],
+    //         [55.3, -8.3],
+    //         [54.8, -9.0],
+    //         [54.6, -10.0],
+    //         [56.6, -10.0],
+    //         [59.3, -10.0],
+    //         [58.9, -8.3],
+    //         [58.0, -6.5],
+    //         [57.3, -5.6],
+    //         [56.3, -5.1],
+    //         [55.9, -5.4],
+    //         [55.6, -5.7]
+    //     ], {
+    //         color: '#6b6b6b',
+    //         fillColor: '#6b6b6b',
+    //     }).addTo(map).bindPopup("Scottish Domestic Online (EGPX)");
+    // }
 
-    // EISN FIR
-    if (kzny) {
-        var eisnFIR = L.polygon([
-            [57.0, -15.0],
-            [57.0, -10.0],
-            [56.6, -10.0],
-            [54.6, -10.0],
-            [54.8, -9.0],
-            [55.3, -8.3],
-            [55.4, -7.8],
-            [55.4, -7.3],
-            [55.4, -7.1],
-            [55.3, -6.9],
-            [55.2, -7.1],
-            [55.1, -7.2],
-            [54.9, -7.5],
-            [54.9, -7.6],
-            [54.4, -8.2],
-            [54.2, -6.8],
-            [53.9, -5.5],
-            [52.3, -5.5],
-            [52.0, -6.1],
-            [51.4, -7.2],
-            [51.0, -8.0],
-            [48.5, -8.0],
-            [49.0, -15.0],
-        ], {
-            color: '#6b6b6b',
-            fillColor: '#6b6b6b',
-        }).addTo(map).bindPopup("Shannon Domestic Online (EISN)");
-    }
+    // // EISN FIR
+    // if (kzny) {
+    //     var eisnFIR = L.polygon([
+    //         [57.0, -15.0],
+    //         [57.0, -10.0],
+    //         [56.6, -10.0],
+    //         [54.6, -10.0],
+    //         [54.8, -9.0],
+    //         [55.3, -8.3],
+    //         [55.4, -7.8],
+    //         [55.4, -7.3],
+    //         [55.4, -7.1],
+    //         [55.3, -6.9],
+    //         [55.2, -7.1],
+    //         [55.1, -7.2],
+    //         [54.9, -7.5],
+    //         [54.9, -7.6],
+    //         [54.4, -8.2],
+    //         [54.2, -6.8],
+    //         [53.9, -5.5],
+    //         [52.3, -5.5],
+    //         [52.0, -6.1],
+    //         [51.4, -7.2],
+    //         [51.0, -8.0],
+    //         [48.5, -8.0],
+    //         [49.0, -15.0],
+    //     ], {
+    //         color: '#6b6b6b',
+    //         fillColor: '#6b6b6b',
+    //     }).addTo(map).bindPopup("Shannon Domestic Online (EISN)");
+    // }
 
-    // LFRR FIR
-    if (kzny) {
-        var lfrrFIR = L.polygon([
-            [47.2, -0.3],
-            [46.5, -0.3],
-            [46.5, -1.6],
-            [43.6, -1.8],
-            [44.3, -4.0],
-            [45.0, -8.0],
-            [48.8, -8.0],
-            [49.6, -8.0],
-            [49.6, -6.9],
-            [49.5, -4.9],
-            [49.6, -4.5],
-            [49.6, -4.2],
-            [49.8, -3.2],
-            [49.8, -3.0],
-            [49.9, -2.5],
-            [50.0, -2.0],
-            [50.0, -0.3],
-            [50.4, 0.8],
-            [50.0, 1.3],
-            [49.9, 1.4],
-            [49.4, 2.1],
-            [48.6, 3.0],
-            [48.1, 2.6],
-            [48.1, 1.8],
-            [47.6, 1.6],
-            [47.2, 1.5]
-        ], {
-            color: '#6b6b6b',
-            fillColor: '#6b6b6b',
-        }).addTo(map).bindPopup("Breast Domestic Control Online (LFRR)");
-    }
+    // // LFRR FIR
+    // if (kzny) {
+    //     var lfrrFIR = L.polygon([
+    //         [47.2, -0.3],
+    //         [46.5, -0.3],
+    //         [46.5, -1.6],
+    //         [43.6, -1.8],
+    //         [44.3, -4.0],
+    //         [45.0, -8.0],
+    //         [48.8, -8.0],
+    //         [49.6, -8.0],
+    //         [49.6, -6.9],
+    //         [49.5, -4.9],
+    //         [49.6, -4.5],
+    //         [49.6, -4.2],
+    //         [49.8, -3.2],
+    //         [49.8, -3.0],
+    //         [49.9, -2.5],
+    //         [50.0, -2.0],
+    //         [50.0, -0.3],
+    //         [50.4, 0.8],
+    //         [50.0, 1.3],
+    //         [49.9, 1.4],
+    //         [49.4, 2.1],
+    //         [48.6, 3.0],
+    //         [48.1, 2.6],
+    //         [48.1, 1.8],
+    //         [47.6, 1.6],
+    //         [47.2, 1.5]
+    //     ], {
+    //         color: '#6b6b6b',
+    //         fillColor: '#6b6b6b',
+    //     }).addTo(map).bindPopup("Breast Domestic Control Online (LFRR)");
+    // }
 
-    // LECM FIR
-    if (kzny) {
-        var lecmFIR = L.polygon([
-            [42.8, -0.6],
-            [43.0, -0.8],
-            [43.0, -0.9],
-            [43.1, -1.3],
-            [43.2, -1.3],
-            [43.1, -1.4],
-            [43.2, -1.4],
-            [43.3, -1.6],
-            [43.3, -1.7],
-            [43.4, -1.8],
-            [43.6, -1.8],
-            [44.3, -4.0],
-            [45.0, -8.0],
-            [45.0, -13.0],
-            [43.0, -13.0],
-            [42.0, -10.0],
-            [41.9, -8.9],
-            [41.9, -8.7],
-            [42.0, -8.7],
-            [42.1, -8.7],
-            [42.1, -8.6],
-            [42.1, -8.5],
-            [42.1, -8.3],
-            [42.1, -8.2],
-            [42.1, -8.1],
-            [42.0, -8.1],
-            [41.9, -8.2]
-        ], {
-            color: '#6b6b6b',
-            fillColor: '#6b6b6b',
-        }).addTo(map).bindPopup("Madrid Control Online (LECM)");
-    }
+    // // LECM FIR
+    // if (kzny) {
+    //     var lecmFIR = L.polygon([
+    //         [42.8, -0.6],
+    //         [43.0, -0.8],
+    //         [43.0, -0.9],
+    //         [43.1, -1.3],
+    //         [43.2, -1.3],
+    //         [43.1, -1.4],
+    //         [43.2, -1.4],
+    //         [43.3, -1.6],
+    //         [43.3, -1.7],
+    //         [43.4, -1.8],
+    //         [43.6, -1.8],
+    //         [44.3, -4.0],
+    //         [45.0, -8.0],
+    //         [45.0, -13.0],
+    //         [43.0, -13.0],
+    //         [42.0, -10.0],
+    //         [41.9, -8.9],
+    //         [41.9, -8.7],
+    //         [42.0, -8.7],
+    //         [42.1, -8.7],
+    //         [42.1, -8.6],
+    //         [42.1, -8.5],
+    //         [42.1, -8.3],
+    //         [42.1, -8.2],
+    //         [42.1, -8.1],
+    //         [42.0, -8.1],
+    //         [41.9, -8.2]
+    //     ], {
+    //         color: '#6b6b6b',
+    //         fillColor: '#6b6b6b',
+    //     }).addTo(map).bindPopup("Madrid Control Online (LECM)");
+    // }
 
-    // LPPO FIR
-    if (kzny) {
-        var lppoOca = L.polygon([
-            [45.0, -40.0],
-            [45.0, -13.0],
-            [43.0, -13.0],
-            [42.0, -15.0],
-            [36.5, -15.0],
-            [34.3, -17.8],
-            [34.0, -18.0],
-            [33.8, -18.1],
-            [33.6, -18.3],
-            [33.3, -18.3],
-            [33.1, -18.3],
-            [32.8, -18.3],
-            [32.6, -18.2],
-            [32.3, -18.1],
-            [32.1, -18.0],
-            [31.9, -17.8],
-            [31.7, -17.5],
-            [31.7, -17.4],
-            [30.0, -20.0],
-            [30.0, -20.4],
-            [30.0, -25.0],
-            [24.0, -25.0],
-            [17.0, -37.5],
-            [22.3, -40.0]
-        ], {
-            color: '#6b6b6b',
-            fillColor: '#6b6b6b',
-        }).addTo(map).bindPopup("Santa Maria OCA Online (LPPO Oceanic)");
-    }
+    // // LPPO FIR
+    // if (kzny) {
+    //     var lppoOca = L.polygon([
+    //         [45.0, -40.0],
+    //         [45.0, -13.0],
+    //         [43.0, -13.0],
+    //         [42.0, -15.0],
+    //         [36.5, -15.0],
+    //         [34.3, -17.8],
+    //         [34.0, -18.0],
+    //         [33.8, -18.1],
+    //         [33.6, -18.3],
+    //         [33.3, -18.3],
+    //         [33.1, -18.3],
+    //         [32.8, -18.3],
+    //         [32.6, -18.2],
+    //         [32.3, -18.1],
+    //         [32.1, -18.0],
+    //         [31.9, -17.8],
+    //         [31.7, -17.5],
+    //         [31.7, -17.4],
+    //         [30.0, -20.0],
+    //         [30.0, -20.4],
+    //         [30.0, -25.0],
+    //         [24.0, -25.0],
+    //         [17.0, -37.5],
+    //         [22.3, -40.0]
+    //     ], {
+    //         color: '#6b6b6b',
+    //         fillColor: '#6b6b6b',
+    //     }).addTo(map).bindPopup("Santa Maria OCA Online (LPPO Oceanic)");
+    // }
 
-    // TTZO FIR
-    if (kzny) {
-        var ttzoOca = L.polygon([
-            [22.3, -40.0],
-            [17.0, -37.5],
-            [13.5, -37.5],
-            [10.0, -48.0],
-            [9.3, -54.0],
-            [8.9, -57.0],
-            [18.0, -57.0],
-            [18.0, -45.0]
-        ], {
-            color: '#6b6b6b',
-            fillColor: '#6b6b6b',
-        }).addTo(map).bindPopup("Piarco OCA Online (TTZO Oceanic)");
-    }
+    // // TTZO FIR
+    // if (kzny) {
+    //     var ttzoOca = L.polygon([
+    //         [22.3, -40.0],
+    //         [17.0, -37.5],
+    //         [13.5, -37.5],
+    //         [10.0, -48.0],
+    //         [9.3, -54.0],
+    //         [8.9, -57.0],
+    //         [18.0, -57.0],
+    //         [18.0, -45.0]
+    //     ], {
+    //         color: '#6b6b6b',
+    //         fillColor: '#6b6b6b',
+    //     }).addTo(map).bindPopup("Piarco OCA Online (TTZO Oceanic)");
+    // }
 
-    // TTZP FIR
-    if (kzny) {
-        var ttzpFIR = L.polygon([
-            [15.0, -65.0],
-            [15.0, -63.3],
-            [15.3, -63.0],
-            [17.4, -63.0],
-            [18.0, -62.0],
-            [18.0, -57.0],
-            [8.9, -57.0],
-            [8.9, -59.9],
-            [10.0, -61.5],
-            [10.0, -61.9],
-            [10.1, -62.1],
-            [10.7, -61.8],
-            [11.0, -62.5]
-        ], {
-            color: '#6b6b6b',
-            fillColor: '#6b6b6b',
-        }).addTo(map).bindPopup("Piarco Domestic Online (TTZP)");
-    }
+    // // TTZP FIR
+    // if (kzny) {
+    //     var ttzpFIR = L.polygon([
+    //         [15.0, -65.0],
+    //         [15.0, -63.3],
+    //         [15.3, -63.0],
+    //         [17.4, -63.0],
+    //         [18.0, -62.0],
+    //         [18.0, -57.0],
+    //         [8.9, -57.0],
+    //         [8.9, -59.9],
+    //         [10.0, -61.5],
+    //         [10.0, -61.9],
+    //         [10.1, -62.1],
+    //         [10.7, -61.8],
+    //         [11.0, -62.5]
+    //     ], {
+    //         color: '#6b6b6b',
+    //         fillColor: '#6b6b6b',
+    //     }).addTo(map).bindPopup("Piarco Domestic Online (TTZP)");
+    // }
 
-    // TJZS FIR
-    if (kzny) {
-        var tjzsFIR = L.polygon([
-            [19.7, -69.2],
-            [20.5, -68.3],
-            [21.2, -67.7],
-            [22.0, -66.7],
-            [22.1, -65.1],
-            [22.0, -64.0],
-            [21.4, -63.4],
-            [20.0, -61.9],
-            [18.0, -61.5],
-            [18.0, -62.0],
-            [17.4, -63.0],
-            [15.3, -63.0],
-            [15.0, -63.3],
-            [15.0, -65.0],
-            [15.7, -67.1],
-            [16.0, -68.0],
-            [19.0, -68.0]
-        ], {
-            color: '#6b6b6b',
-            fillColor: '#6b6b6b',
-        }).addTo(map).bindPopup("San Juan Domestic Online (TJZS)");
-    }
+    // // TJZS FIR
+    // if (kzny) {
+    //     var tjzsFIR = L.polygon([
+    //         [19.7, -69.2],
+    //         [20.5, -68.3],
+    //         [21.2, -67.7],
+    //         [22.0, -66.7],
+    //         [22.1, -65.1],
+    //         [22.0, -64.0],
+    //         [21.4, -63.4],
+    //         [20.0, -61.9],
+    //         [18.0, -61.5],
+    //         [18.0, -62.0],
+    //         [17.4, -63.0],
+    //         [15.3, -63.0],
+    //         [15.0, -63.3],
+    //         [15.0, -65.0],
+    //         [15.7, -67.1],
+    //         [16.0, -68.0],
+    //         [19.0, -68.0]
+    //     ], {
+    //         color: '#6b6b6b',
+    //         fillColor: '#6b6b6b',
+    //     }).addTo(map).bindPopup("San Juan Domestic Online (TJZS)");
+    // }
 
-    // KZMO FIR
-    if (kzny) {
-        var kzmoOca = L.polygon([
-            [27.8, -74.8],
-            [25.0, -73.2],
-            [25.0, -72.6],
-            [25.0, -68.5],
-            [21.2, -67.7],
-            [21.1, -67.8],
-            [20.5, -68.3],
-            [19.7, -69.2],
-            [20.4, -70.5],
-            [20.4, -71.7],
-            [20.4, -71.7],
-            [20.4, -72.0],
-            [20.4, -73.0],
-            [20.0, -73.3],
-            [22.0, -75.2],
-            [22.6, -76.0],
-            [24.0, -78.0],
-            [24.1, -78.1],
-            [24.6, -77.9],
-            [24.8, -77.8],
-            [24.9, -77.7],
-            [25.1, -77.8],
-            [25.6, -77.8],
-            [26.0, -78.5],
-            [26.1, -78.6],
-            [26.5, -78.6],
-            [27.0, -78.3],
-            [27.5, -78.1],
-            [27.5, -77.0],
-            [28.2, -76.4],
-            [27.8, -76.3]
-        ], {
-            color: '#6b6b6b',
-            fillColor: '#6b6b6b',
-        }).addTo(map).bindPopup("Miami OCA Online (KZMO Oceanic)");
-    }
+    // // KZMO FIR
+    // if (kzny) {
+    //     var kzmoOca = L.polygon([
+    //         [27.8, -74.8],
+    //         [25.0, -73.2],
+    //         [25.0, -72.6],
+    //         [25.0, -68.5],
+    //         [21.2, -67.7],
+    //         [21.1, -67.8],
+    //         [20.5, -68.3],
+    //         [19.7, -69.2],
+    //         [20.4, -70.5],
+    //         [20.4, -71.7],
+    //         [20.4, -71.7],
+    //         [20.4, -72.0],
+    //         [20.4, -73.0],
+    //         [20.0, -73.3],
+    //         [22.0, -75.2],
+    //         [22.6, -76.0],
+    //         [24.0, -78.0],
+    //         [24.1, -78.1],
+    //         [24.6, -77.9],
+    //         [24.8, -77.8],
+    //         [24.9, -77.7],
+    //         [25.1, -77.8],
+    //         [25.6, -77.8],
+    //         [26.0, -78.5],
+    //         [26.1, -78.6],
+    //         [26.5, -78.6],
+    //         [27.0, -78.3],
+    //         [27.5, -78.1],
+    //         [27.5, -77.0],
+    //         [28.2, -76.4],
+    //         [27.8, -76.3]
+    //     ], {
+    //         color: '#6b6b6b',
+    //         fillColor: '#6b6b6b',
+    //     }).addTo(map).bindPopup("Miami OCA Online (KZMO Oceanic)");
+    // }
 
-    // KZMA FIR
-    if (kzny) {
-        var kzmaFIR = L.polygon([
-            [27.5, -78.1],
-            [27.0, -78.3],
-            [26.5, -78.6],
-            [26.1, -78.6],
-            [26.0, -78.5],
-            [25.6, -77.8],
-            [25.1, -77.8],
-            [24.9, -77.7],
-            [24.8, -77.8],
-            [24.6, -77.9],
-            [24.1, -78.1],
-            [24.0, -78.0],
-            [24.0, -80.0],
-            [24.0, -81.3],
-            [24.0, -85.0],
-            [25.0, -85.0],
-            [26.2, -85.1],
-            [26.6, -85.4],
-            [27.0, -86.0],
-            [27.5, -85.3],
-            [28.0, -85.0],
-            [28.1, -84.6],
-            [28.2, -84.5],
-            [28.6, -84.0],
-            [28.4, -83.5],
-            [28.2, -83.2],
-            [28.0, -82.9],
-            [28.0, -82.4],
-            [28.0, -82.2],
-            [28.2, -81.9],
-            [29.0, -81.7],
-            [28.3, -81.6],
-            [28.6, -81.0],
-            [28.7, -81.0],
-            [28.7, -81.0],
-            [29.0, -80.7],
-            [29.0, -80.2],
-            [29.7, -80.1],
-            [30.1, -79.3],
-            [30.2, -79.2],
-            [30.0, -77.0],
-            [29.8, -76.9],
-            [28.2, -76.4],
-            [27.5, -77.0],
-            [27.5, -78.1]
-        ], {
-            color: '#6b6b6b',
-            fillColor: '#6b6b6b',
-        }).addTo(map).bindPopup("Miami Domestic Online (KZMA)");
-    }
+    // // KZMA FIR
+    // if (kzny) {
+    //     var kzmaFIR = L.polygon([
+    //         [27.5, -78.1],
+    //         [27.0, -78.3],
+    //         [26.5, -78.6],
+    //         [26.1, -78.6],
+    //         [26.0, -78.5],
+    //         [25.6, -77.8],
+    //         [25.1, -77.8],
+    //         [24.9, -77.7],
+    //         [24.8, -77.8],
+    //         [24.6, -77.9],
+    //         [24.1, -78.1],
+    //         [24.0, -78.0],
+    //         [24.0, -80.0],
+    //         [24.0, -81.3],
+    //         [24.0, -85.0],
+    //         [25.0, -85.0],
+    //         [26.2, -85.1],
+    //         [26.6, -85.4],
+    //         [27.0, -86.0],
+    //         [27.5, -85.3],
+    //         [28.0, -85.0],
+    //         [28.1, -84.6],
+    //         [28.2, -84.5],
+    //         [28.6, -84.0],
+    //         [28.4, -83.5],
+    //         [28.2, -83.2],
+    //         [28.0, -82.9],
+    //         [28.0, -82.4],
+    //         [28.0, -82.2],
+    //         [28.2, -81.9],
+    //         [29.0, -81.7],
+    //         [28.3, -81.6],
+    //         [28.6, -81.0],
+    //         [28.7, -81.0],
+    //         [28.7, -81.0],
+    //         [29.0, -80.7],
+    //         [29.0, -80.2],
+    //         [29.7, -80.1],
+    //         [30.1, -79.3],
+    //         [30.2, -79.2],
+    //         [30.0, -77.0],
+    //         [29.8, -76.9],
+    //         [28.2, -76.4],
+    //         [27.5, -77.0],
+    //         [27.5, -78.1]
+    //     ], {
+    //         color: '#6b6b6b',
+    //         fillColor: '#6b6b6b',
+    //     }).addTo(map).bindPopup("Miami Domestic Online (KZMA)");
+    // }
 
-    // KZJX FIR
-    if (kzny) {
-        var kzjxFIR = L.polygon([
-            [29.0, -80.2],
-            [28.9, -80.7],
-            [28.7, -81.0],
-            [28.7, -81.0],
-            [28.6, -81.0],
-            [28.3, -81.6],
-            [29.0, -81.7],
-            [28.2, -81.9],
-            [28.0, -82.2],
-            [27.9, -82.4],
-            [27.9, -82.9],
-            [28.2, -83.2],
-            [28.4, -83.5],
-            [28.4, -83.5],
-            [28.6, -84.0],
-            [28.2, -84.5],
-            [28.1, -84.6],
-            [28.0, -85.0],
-            [27.5, -85.3],
-            [27.0, -86.0],
-            [27.5, -87.7],
-            [28.1, -88.0],
-            [30.2, -88.0],
-            [30.5, -87.9],
-            [30.6, -87.9],
-            [30.7, -87.8],
-            [30.7, -87.7],
-            [30.8, -87.7],
-            [30.9, -87.7],
-            [31.3, -87.4],
-            [31.5, -87.0],
-            [31.8, -85.6],
-            [31.5, -85.3],
-            [31.7, -84.2],
-            [31.7, -84.1],
-            [31.7, -83.1],
-            [32.2, -82.3],
-            [32.6, -81.9],
-            [32.7, -81.9],
-            [33.7, -81.6],
-            [34.4, -81.3],
-            [34.7, -80.5],
-            [34.9, -80.1],
-            [34.9, -79.9],
-            [34.4, -79.3],
-            [34.4, -78.8],
-            [33.0, -76.8],
-            [32.3, -77.0],
-            [30.0, -77.0],
-            [30.2, -79.2],
-            [30.1, -79.3],
-            [29.8, -79.9],
-            [29.7, -80.1],
-            [29.0, -80.2]
-        ], {
-            color: '#6b6b6b',
-            fillColor: '#6b6b6b',
-        }).addTo(map).bindPopup("Jacksonville Domestic Online (KZJX)");
-    }
+    // // KZJX FIR
+    // if (kzny) {
+    //     var kzjxFIR = L.polygon([
+    //         [29.0, -80.2],
+    //         [28.9, -80.7],
+    //         [28.7, -81.0],
+    //         [28.7, -81.0],
+    //         [28.6, -81.0],
+    //         [28.3, -81.6],
+    //         [29.0, -81.7],
+    //         [28.2, -81.9],
+    //         [28.0, -82.2],
+    //         [27.9, -82.4],
+    //         [27.9, -82.9],
+    //         [28.2, -83.2],
+    //         [28.4, -83.5],
+    //         [28.4, -83.5],
+    //         [28.6, -84.0],
+    //         [28.2, -84.5],
+    //         [28.1, -84.6],
+    //         [28.0, -85.0],
+    //         [27.5, -85.3],
+    //         [27.0, -86.0],
+    //         [27.5, -87.7],
+    //         [28.1, -88.0],
+    //         [30.2, -88.0],
+    //         [30.5, -87.9],
+    //         [30.6, -87.9],
+    //         [30.7, -87.8],
+    //         [30.7, -87.7],
+    //         [30.8, -87.7],
+    //         [30.9, -87.7],
+    //         [31.3, -87.4],
+    //         [31.5, -87.0],
+    //         [31.8, -85.6],
+    //         [31.5, -85.3],
+    //         [31.7, -84.2],
+    //         [31.7, -84.1],
+    //         [31.7, -83.1],
+    //         [32.2, -82.3],
+    //         [32.6, -81.9],
+    //         [32.7, -81.9],
+    //         [33.7, -81.6],
+    //         [34.4, -81.3],
+    //         [34.7, -80.5],
+    //         [34.9, -80.1],
+    //         [34.9, -79.9],
+    //         [34.4, -79.3],
+    //         [34.4, -78.8],
+    //         [33.0, -76.8],
+    //         [32.3, -77.0],
+    //         [30.0, -77.0],
+    //         [30.2, -79.2],
+    //         [30.1, -79.3],
+    //         [29.8, -79.9],
+    //         [29.7, -80.1],
+    //         [29.0, -80.2]
+    //     ], {
+    //         color: '#6b6b6b',
+    //         fillColor: '#6b6b6b',
+    //     }).addTo(map).bindPopup("Jacksonville Domestic Online (KZJX)");
+    // }
 
-    // KZDC FIR
-    if (kzny) {
-        var kzdcFIR = L.polygon([
-            [39.2, -80.4],
-            [39.2, -79.9],
-            [39.4, -79.5],
-            [39.9, -77.9],
-            [39.9, -77.8],
-            [39.8, -77.6],
-            [39.8, -77.4],
-            [39.7, -77.4],
-            [39.7, -77.4],
-            [39.7, -77.4],
-            [39.6, -77.2],
-            [39.6, -77.2],
-            [39.5, -77.2],
-            [39.5, -77.2],
-            [39.5, -77.2],
-            [39.5, -77.1],
-            [39.5, -77.1],
-            [39.4, -77.0],
-            [39.4, -76.9],
-            [39.4, -76.8],
-            [39.4, -76.7],
-            [39.4, -76.3],
-            [39.6, -76.0],
-            [39.6, -75.9],
-            [39.7, -75.9],
-            [39.8, -75.8],
-            [39.8, -75.7],
-            [39.9, -75.7],
-            [39.9, -75.7],
-            [40.0, -75.5],
-            [40.1, -75.3],
-            [40.1, -75.0],
-            [40.1, -74.9],
-            [40.1, -74.9],
-            [40.1, -74.8],
-            [40.1, -74.8],
-            [40.1, -74.8],
-            [40.1, -74.8],
-            [40.0, -74.7],
-            [39.9, -74.7],
-            [40.2, -74.0],
-            [40.2, -73.7],
-            [39.9, -73.7],
-            [39.7, -73.2],
-            [39.0, -73.7],
-            [38.7, -73.9],
-            [38.5, -74.0],
-            [37.1, -74.7],
-            [36.8, -74.6],
-            [35.5, -74.9],
-            [35.3, -75.2],
-            [34.6, -75.7],
-            [33.4, -76.5],
-            [33.0, -76.8],
-            [34.4, -78.8],
-            [34.4, -79.3],
-            [34.9, -79.9],
-            [34.9, -80.1],
-            [35.1, -80.0],
-            [35.4, -79.8],
-            [36.1, -79.7],
-            [36.2, -80.0],
-            [37.3, -80.6],
-            [37.3, -80.7],
-            [37.5, -80.8],
-            [38.0, -80.7],
-            [38.8, -80.6],
-            [39.2, -80.4]
-        ], {
-            color: '#6b6b6b',
-            fillColor: '#6b6b6b',
-        }).addTo(map).bindPopup("Washington DC Domestic Online (KZDC)");
-    }
+    // // KZDC FIR
+    // if (kzny) {
+    //     var kzdcFIR = L.polygon([
+    //         [39.2, -80.4],
+    //         [39.2, -79.9],
+    //         [39.4, -79.5],
+    //         [39.9, -77.9],
+    //         [39.9, -77.8],
+    //         [39.8, -77.6],
+    //         [39.8, -77.4],
+    //         [39.7, -77.4],
+    //         [39.7, -77.4],
+    //         [39.7, -77.4],
+    //         [39.6, -77.2],
+    //         [39.6, -77.2],
+    //         [39.5, -77.2],
+    //         [39.5, -77.2],
+    //         [39.5, -77.2],
+    //         [39.5, -77.1],
+    //         [39.5, -77.1],
+    //         [39.4, -77.0],
+    //         [39.4, -76.9],
+    //         [39.4, -76.8],
+    //         [39.4, -76.7],
+    //         [39.4, -76.3],
+    //         [39.6, -76.0],
+    //         [39.6, -75.9],
+    //         [39.7, -75.9],
+    //         [39.8, -75.8],
+    //         [39.8, -75.7],
+    //         [39.9, -75.7],
+    //         [39.9, -75.7],
+    //         [40.0, -75.5],
+    //         [40.1, -75.3],
+    //         [40.1, -75.0],
+    //         [40.1, -74.9],
+    //         [40.1, -74.9],
+    //         [40.1, -74.8],
+    //         [40.1, -74.8],
+    //         [40.1, -74.8],
+    //         [40.1, -74.8],
+    //         [40.0, -74.7],
+    //         [39.9, -74.7],
+    //         [40.2, -74.0],
+    //         [40.2, -73.7],
+    //         [39.9, -73.7],
+    //         [39.7, -73.2],
+    //         [39.0, -73.7],
+    //         [38.7, -73.9],
+    //         [38.5, -74.0],
+    //         [37.1, -74.7],
+    //         [36.8, -74.6],
+    //         [35.5, -74.9],
+    //         [35.3, -75.2],
+    //         [34.6, -75.7],
+    //         [33.4, -76.5],
+    //         [33.0, -76.8],
+    //         [34.4, -78.8],
+    //         [34.4, -79.3],
+    //         [34.9, -79.9],
+    //         [34.9, -80.1],
+    //         [35.1, -80.0],
+    //         [35.4, -79.8],
+    //         [36.1, -79.7],
+    //         [36.2, -80.0],
+    //         [37.3, -80.6],
+    //         [37.3, -80.7],
+    //         [37.5, -80.8],
+    //         [38.0, -80.7],
+    //         [38.8, -80.6],
+    //         [39.2, -80.4]
+    //     ], {
+    //         color: '#6b6b6b',
+    //         fillColor: '#6b6b6b',
+    //     }).addTo(map).bindPopup("Washington DC Domestic Online (KZDC)");
+    // }
 
-    // KZBW FIR
-    if (kzny) {
-        var kzbwFIR = L.polygon([
-            [43.6, -76.8],
-            [44.1, -76.4],
-            [44.2, -76.3],
-            [44.2, -76.3],
-            [44.2, -76.3],
-            [44.2, -76.2],
-            [44.2, -76.2],
-            [44.3, -76.2],
-            [44.3, -76.1],
-            [44.3, -76.1],
-            [44.3, -76.0],
-            [44.3, -75.9],
-            [44.4, -75.8],
-            [44.5, -75.8],
-            [44.7, -75.5],
-            [44.7, -75.7],
-            [44.8, -75.8],
-            [44.9, -74.9],
-            [45.1, -75.0],
-            [45.1, -74.8],
-            [45.2, -74.6],
-            [45.0, -74.3],
-            [45.0, -71.5],
-            [45.3, -71.3],
-            [45.3, -71.0],
-            [45.7, -70.5],
-            [45.9, -70.3],
-            [46.3, -70.2],
-            [46.4, -70.1],
-            [46.7, -70.0],
-            [47.5, -69.2],
-            [47.4, -69.0],
-            [47.3, -68.6],
-            [47.3, -68.5],
-            [47.4, -68.5],
-            [47.4, -68.4],
-            [47.4, -68.4],
-            [47.4, -68.4],
-            [47.4, -68.4],
-            [47.4, -68.3],
-            [47.5, -68.3],
-            [47.5, -68.2],
-            [47.5, -68.2],
-            [47.5, -68.1],
-            [47.5, -68.1],
-            [47.5, -68.1],
-            [47.5, -68.1],
-            [47.5, -68.0],
-            [47.5, -68.0],
-            [47.5, -68.0],
-            [47.5, -67.9],
-            [46.8, -67.1],
-            [46.8, -67.1],
-            [46.7, -67.1],
-            [46.7, -67.1],
-            [46.6, -67.2],
-            [46.6, -67.2],
-            [46.6, -67.2],
-            [46.6, -67.3],
-            [46.5, -67.3],
-            [46.2, -67.2],
-            [46.1, -67.2],
-            [45.8, -67.6],
-            [45.8, -67.8],
-            [45.6, -67.8],
-            [44.9, -67.0],
-            [41.6, -67.0],
-            [41.0, -69.0],
-            [40.9, -69.3],
-            [40.6, -70.9],
-            [40.1, -72.5],
-            [40.2, -72.8],
-            [39.99, -73.0],
-            [39.7, -73.2],
-            [39.7, -73.2],
-            [39.9, -73.7],
-            [40.2, -73.7],
-            [40.3, -73.6],
-            [40.5, -73.5],
-            [40.6, -73.4],
-            [40.8, -73.3],
-            [40.8, -73.4],
-            [40.9, -73.4],
-            [41.1, -73.6],
-            [41.0, -73.9],
-            [41.3, -73.9],
-            [41.3, -74.0],
-            [41.3, -74.1],
-            [41.4, -74.2],
-            [41.5, -74.3],
-            [41.5, -74.4],
-            [41.6, -74.7],
-            [41.7, -74.8],
-            [41.8, -74.8],
-            [41.8, -74.9],
-            [41.9, -75.1],
-            [41.9, -75.1],
-            [42.0, -75.3],
-            [42.1, -75.6],
-            [42.3, -76.0],
-            [42.4, -76.2],
-            [42.6, -76.8],
-            [42.7, -76.7],
-            [42.8, -76.7],
-            [42.9, -76.7],
-            [43.1, -76.8],
-            [43.6, -76.8]
-        ], {
-            color: '#6b6b6b',
-            fillColor: '#6b6b6b',
-        }).addTo(map).bindPopup("Boston Domestic Online (KZBW)");
-    }
+    // // KZBW FIR
+    // if (kzny) {
+    //     var kzbwFIR = L.polygon([
+    //         [43.6, -76.8],
+    //         [44.1, -76.4],
+    //         [44.2, -76.3],
+    //         [44.2, -76.3],
+    //         [44.2, -76.3],
+    //         [44.2, -76.2],
+    //         [44.2, -76.2],
+    //         [44.3, -76.2],
+    //         [44.3, -76.1],
+    //         [44.3, -76.1],
+    //         [44.3, -76.0],
+    //         [44.3, -75.9],
+    //         [44.4, -75.8],
+    //         [44.5, -75.8],
+    //         [44.7, -75.5],
+    //         [44.7, -75.7],
+    //         [44.8, -75.8],
+    //         [44.9, -74.9],
+    //         [45.1, -75.0],
+    //         [45.1, -74.8],
+    //         [45.2, -74.6],
+    //         [45.0, -74.3],
+    //         [45.0, -71.5],
+    //         [45.3, -71.3],
+    //         [45.3, -71.0],
+    //         [45.7, -70.5],
+    //         [45.9, -70.3],
+    //         [46.3, -70.2],
+    //         [46.4, -70.1],
+    //         [46.7, -70.0],
+    //         [47.5, -69.2],
+    //         [47.4, -69.0],
+    //         [47.3, -68.6],
+    //         [47.3, -68.5],
+    //         [47.4, -68.5],
+    //         [47.4, -68.4],
+    //         [47.4, -68.4],
+    //         [47.4, -68.4],
+    //         [47.4, -68.4],
+    //         [47.4, -68.3],
+    //         [47.5, -68.3],
+    //         [47.5, -68.2],
+    //         [47.5, -68.2],
+    //         [47.5, -68.1],
+    //         [47.5, -68.1],
+    //         [47.5, -68.1],
+    //         [47.5, -68.1],
+    //         [47.5, -68.0],
+    //         [47.5, -68.0],
+    //         [47.5, -68.0],
+    //         [47.5, -67.9],
+    //         [46.8, -67.1],
+    //         [46.8, -67.1],
+    //         [46.7, -67.1],
+    //         [46.7, -67.1],
+    //         [46.6, -67.2],
+    //         [46.6, -67.2],
+    //         [46.6, -67.2],
+    //         [46.6, -67.3],
+    //         [46.5, -67.3],
+    //         [46.2, -67.2],
+    //         [46.1, -67.2],
+    //         [45.8, -67.6],
+    //         [45.8, -67.8],
+    //         [45.6, -67.8],
+    //         [44.9, -67.0],
+    //         [41.6, -67.0],
+    //         [41.0, -69.0],
+    //         [40.9, -69.3],
+    //         [40.6, -70.9],
+    //         [40.1, -72.5],
+    //         [40.2, -72.8],
+    //         [39.99, -73.0],
+    //         [39.7, -73.2],
+    //         [39.7, -73.2],
+    //         [39.9, -73.7],
+    //         [40.2, -73.7],
+    //         [40.3, -73.6],
+    //         [40.5, -73.5],
+    //         [40.6, -73.4],
+    //         [40.8, -73.3],
+    //         [40.8, -73.4],
+    //         [40.9, -73.4],
+    //         [41.1, -73.6],
+    //         [41.0, -73.9],
+    //         [41.3, -73.9],
+    //         [41.3, -74.0],
+    //         [41.3, -74.1],
+    //         [41.4, -74.2],
+    //         [41.5, -74.3],
+    //         [41.5, -74.4],
+    //         [41.6, -74.7],
+    //         [41.7, -74.8],
+    //         [41.8, -74.8],
+    //         [41.8, -74.9],
+    //         [41.9, -75.1],
+    //         [41.9, -75.1],
+    //         [42.0, -75.3],
+    //         [42.1, -75.6],
+    //         [42.3, -76.0],
+    //         [42.4, -76.2],
+    //         [42.6, -76.8],
+    //         [42.7, -76.7],
+    //         [42.8, -76.7],
+    //         [42.9, -76.7],
+    //         [43.1, -76.8],
+    //         [43.6, -76.8]
+    //     ], {
+    //         color: '#6b6b6b',
+    //         fillColor: '#6b6b6b',
+    //     }).addTo(map).bindPopup("Boston Domestic Online (KZBW)");
+    // }
 
-    // CZQM FIR
-    if (kzny) {
-        var czqmFIR = L.polygon([
-            [43.6, -55.8],
-            [43.1, -57.9],
-            [42.4, -61.2],
-            [41.6, -67.0],
-            [44.9, -67.0],
-            [45.6, -67.8],
-            [45.8, -67.8],
-            [45.8, -67.6],
-            [46.1, -67.2],
-            [46.2, -67.2],
-            [46.5, -67.3],
-            [46.6, -67.2],
-            [46.6, -67.2],
-            [46.6, -67.2],
-            [46.7, -67.1],
-            [46.7, -67.1],
-            [46.7, -67.1],
-            [46.8, -67.1],
-            [46.8, -67.1],
-            [46.9, -67.0],
-            [46.9, -67.0],
-            [47.0, -67.0],
-            [47.0, -67.1],
-            [47.1, -67.1],
-            [47.1, -67.1],
-            [47.2, -67.1],
-            [47.2, -67.1],
-            [47.3, -67.2],
-            [47.3, -67.2],
-            [47.3, -67.2],
-            [47.4, -67.3],
-            [47.4, -67.3],
-            [47.4, -67.3],
-            [47.4, -67.3],
-            [47.5, -67.3],
-            [47.5, -67.4],
-            [47.5, -67.5],
-            [47.5, -67.5],
-            [47.5, -67.6],
-            [47.5, -67.6],
-            [47.5, -67.6],
-            [47.5, -67.7],
-            [47.5, -67.8],
-            [47.5, -67.9],
-            [47.5, -68.0],
-            [47.5, -68.1],
-            [47.5, -68.2],
-            [47.5, -68.3],
-            [47.5, -68.4],
-            [47.5, -68.5],
-            [47.6, -69.0],
-            [48.0, -69.0],
-            [48.2, -69.3],
-            [48.9, -69.5],
-            [49.2, -68.7],
-            [51.0, -68.7],
-            [52.2, -64.3],
-            [51.4, -64.0],
-            [50.8, -62.1],
-            [49.5, -61.0],
-            [49.3, -61.0],
-            [48.5, -62.0],
-            [45.6, -56.5],
-            [44.4, -56.1],
-            [43.6, -55.8]
-        ], {
-            color: '#6b6b6b',
-            fillColor: '#6b6b6b',
-        }).addTo(map).bindPopup("Gander Domestic Online (CZQM)");
-    }
+    // // CZQM FIR
+    // if (kzny) {
+    //     var czqmFIR = L.polygon([
+    //         [43.6, -55.8],
+    //         [43.1, -57.9],
+    //         [42.4, -61.2],
+    //         [41.6, -67.0],
+    //         [44.9, -67.0],
+    //         [45.6, -67.8],
+    //         [45.8, -67.8],
+    //         [45.8, -67.6],
+    //         [46.1, -67.2],
+    //         [46.2, -67.2],
+    //         [46.5, -67.3],
+    //         [46.6, -67.2],
+    //         [46.6, -67.2],
+    //         [46.6, -67.2],
+    //         [46.7, -67.1],
+    //         [46.7, -67.1],
+    //         [46.7, -67.1],
+    //         [46.8, -67.1],
+    //         [46.8, -67.1],
+    //         [46.9, -67.0],
+    //         [46.9, -67.0],
+    //         [47.0, -67.0],
+    //         [47.0, -67.1],
+    //         [47.1, -67.1],
+    //         [47.1, -67.1],
+    //         [47.2, -67.1],
+    //         [47.2, -67.1],
+    //         [47.3, -67.2],
+    //         [47.3, -67.2],
+    //         [47.3, -67.2],
+    //         [47.4, -67.3],
+    //         [47.4, -67.3],
+    //         [47.4, -67.3],
+    //         [47.4, -67.3],
+    //         [47.5, -67.3],
+    //         [47.5, -67.4],
+    //         [47.5, -67.5],
+    //         [47.5, -67.5],
+    //         [47.5, -67.6],
+    //         [47.5, -67.6],
+    //         [47.5, -67.6],
+    //         [47.5, -67.7],
+    //         [47.5, -67.8],
+    //         [47.5, -67.9],
+    //         [47.5, -68.0],
+    //         [47.5, -68.1],
+    //         [47.5, -68.2],
+    //         [47.5, -68.3],
+    //         [47.5, -68.4],
+    //         [47.5, -68.5],
+    //         [47.6, -69.0],
+    //         [48.0, -69.0],
+    //         [48.2, -69.3],
+    //         [48.9, -69.5],
+    //         [49.2, -68.7],
+    //         [51.0, -68.7],
+    //         [52.2, -64.3],
+    //         [51.4, -64.0],
+    //         [50.8, -62.1],
+    //         [49.5, -61.0],
+    //         [49.3, -61.0],
+    //         [48.5, -62.0],
+    //         [45.6, -56.5],
+    //         [44.4, -56.1],
+    //         [43.6, -55.8]
+    //     ], {
+    //         color: '#6b6b6b',
+    //         fillColor: '#6b6b6b',
+    //     }).addTo(map).bindPopup("Gander Domestic Online (CZQM)");
+    // }
 
-    // CZQX FIR
-    if (kzny) {
-        var czqxFIR = L.polygon([
-            [53.8, -55.0],
-            [53.0, -54.0],
-            [51.0, -50.0],
-            [44.5, -50.0],
-            [43.8, -54.9],
-            [43.6, -55.8],
-            [44.4, -56.1],
-            [45.6, -56.5],
-            [48.5, -62.0],
-            [49.3, -61.0],
-            [49.5, -61.0],
-            [50.8, -62.1],
-            [51.4, -64.0],
-            [52.2, -64.3],
-            [51.0, -68.7],
-            [53.5, -68.7],
-            [55.3, -66.7],
-            [56.6, -65.3],
-            [57.6, -64.0],
-            [58.5, -63.0],
-            [61.0, -63.0],
-            [57.0, -59.0],
+    // // CZQX FIR
+    // if (kzny) {
+    //     var czqxFIR = L.polygon([
+    //         [53.8, -55.0],
+    //         [53.0, -54.0],
+    //         [51.0, -50.0],
+    //         [44.5, -50.0],
+    //         [43.8, -54.9],
+    //         [43.6, -55.8],
+    //         [44.4, -56.1],
+    //         [45.6, -56.5],
+    //         [48.5, -62.0],
+    //         [49.3, -61.0],
+    //         [49.5, -61.0],
+    //         [50.8, -62.1],
+    //         [51.4, -64.0],
+    //         [52.2, -64.3],
+    //         [51.0, -68.7],
+    //         [53.5, -68.7],
+    //         [55.3, -66.7],
+    //         [56.6, -65.3],
+    //         [57.6, -64.0],
+    //         [58.5, -63.0],
+    //         [61.0, -63.0],
+    //         [57.0, -59.0],
             
-        ], {
-            color: '#6b6b6b',
-            fillColor: '#6b6b6b',
-        }).addTo(map).bindPopup("Gander Domestic Online (CZQX)");
-    }
+    //     ], {
+    //         color: '#6b6b6b',
+    //         fillColor: '#6b6b6b',
+    //     }).addTo(map).bindPopup("Gander Domestic Online (CZQX)");
+    // }
 
-    // CZUL FIR
-    if (kzny) {
-        var czulFIR = L.polygon([
-            [45.8, -76.3],
-            [46.0, -76.9],
-            [46.1, -77.2],
-            [46.9, -77.2],
-            [47.1, -77.5],
-            [47.8, -78.6],
-            [47.8, -78.6],
-            [47.8, -78.7],
-            [47.8, -78.8],
-            [47.8, -78.9],
-            [47.8, -79.0],
-            [47.8, -79.2],
-            [47.8, -79.3],
-            [47.9, -79.3],
-            [47.9, -79.4],
-            [48.0, -79.5],
-            [48.0, -79.5],
-            [48.1, -79.5],
-            [48.1, -79.6],
-            [48.2, -79.6],
-            [48.3, -79.5],
-            [48.3, -79.5],
-            [48.4, -79.5],
-            [48.4, -79.4],
-            [48.5, -79.4],
-            [48.5, -79.3],
-            [48.5, -79.2],
-            [48.6, -79.1],
-            [48.6, -79.1],
-            [48.6, -79.0],
-            [49.0, -79.0],
-            [53.5, -80.0],
-            [62.8, -80.0],
-            [65.0, -68.0],
-            [65.0, -60.0],
-            [64.0, -63.0],
-            [61.0, -63.0],
-            [58.5, -60.4],
-            [57.5, -64.0],
-            [55.4, -64.0],
-            [55.1, -65.1],
-            [54.4, -65.3],
-            [53.7, -64.9],
-            [52.2, -64.3],
-            [51.4, -64.0],
-            [50.8, -62.1],
-            [50.8, -60.0],
-            [51.3, -59.5],
-            [51.6, -59.5],
-            [52.2, -58.1],
-            [51.7, -57.0],
-            [51.3, -57.0],
-            [51.0, -58.0],
-            [49.5, -61.0],
-            [49.3, -61.0],
-            [48.5, -62.0],
-            [47.8, -64.6],
-            [48.0, -65.9],
-            [48.1, -66.0],
-            [48.2, -66.0],
-            [48.2, -66.0],
-            [48.3, -66.1],
-            [48.3, -66.2],
-            [48.3, -66.4],
-            [48.3, -66.5],
-            [48.3, -66.6],
-            [48.3, -66.8],
-            [48.2, -66.8],
-            [48.2, -66.9],
-            [48.1, -66.9],
-            [48.0, -66.9],
-            [47.9, -66.9],
-            [47.9, -66.9],
-            [47.7, -68.0],
-            [47.5, -68.0],
-            [47.5, -68.1],
-            [47.5, -68.2],
-            [47.5, -68.2],
-            [47.5, -68.3],
-            [47.4, -68.4],
-            [47.4, -68.4],
-            [47.4, -68.5],
-            [47.3, -68.5],
-            [47.3, -68.6],
-            [47.4, -69.0],
-            [47.5, -69.2],
-            [46.8, -70.0],
-            [46.4, -70.1],
-            [46.3, -70.2],
-            [45.9, -70.2],
-            [45.7, -70.5],
-            [45.3, -71.0],
-            [45.3, -71.3],
-            [45.0, -71.5],
-            [45.0, -74.2],
-            [45.2, -74.6],
-            [45.1, -74.8],
-            [45.1, -75.0],
-            [45.0, -74.9],
-            [44.8, -75.8],
-            [44.7, -75.7],
-            [44.7, -75.5],
-            [44.5, -75.8],
-            [44.4, -75.8],
-            [44.3, -76.0],
-            [44.4, -76.0],
-            [44.3, -76.1],
-            [44.3, -76.1],
-            [44.2, -76.2],
-            [45.8, -76.3],            
-        ], {
-            color: '#6b6b6b',
-            fillColor: '#6b6b6b',
-        }).addTo(map).bindPopup("Montreal Domestic Online (CZUL)");
-    }
+    // // CZUL FIR
+    // if (kzny) {
+    //     var czulFIR = L.polygon([
+    //         [45.8, -76.3],
+    //         [46.0, -76.9],
+    //         [46.1, -77.2],
+    //         [46.9, -77.2],
+    //         [47.1, -77.5],
+    //         [47.8, -78.6],
+    //         [47.8, -78.6],
+    //         [47.8, -78.7],
+    //         [47.8, -78.8],
+    //         [47.8, -78.9],
+    //         [47.8, -79.0],
+    //         [47.8, -79.2],
+    //         [47.8, -79.3],
+    //         [47.9, -79.3],
+    //         [47.9, -79.4],
+    //         [48.0, -79.5],
+    //         [48.0, -79.5],
+    //         [48.1, -79.5],
+    //         [48.1, -79.6],
+    //         [48.2, -79.6],
+    //         [48.3, -79.5],
+    //         [48.3, -79.5],
+    //         [48.4, -79.5],
+    //         [48.4, -79.4],
+    //         [48.5, -79.4],
+    //         [48.5, -79.3],
+    //         [48.5, -79.2],
+    //         [48.6, -79.1],
+    //         [48.6, -79.1],
+    //         [48.6, -79.0],
+    //         [49.0, -79.0],
+    //         [53.5, -80.0],
+    //         [62.8, -80.0],
+    //         [65.0, -68.0],
+    //         [65.0, -60.0],
+    //         [64.0, -63.0],
+    //         [61.0, -63.0],
+    //         [58.5, -60.4],
+    //         [57.5, -64.0],
+    //         [55.4, -64.0],
+    //         [55.1, -65.1],
+    //         [54.4, -65.3],
+    //         [53.7, -64.9],
+    //         [52.2, -64.3],
+    //         [51.4, -64.0],
+    //         [50.8, -62.1],
+    //         [50.8, -60.0],
+    //         [51.3, -59.5],
+    //         [51.6, -59.5],
+    //         [52.2, -58.1],
+    //         [51.7, -57.0],
+    //         [51.3, -57.0],
+    //         [51.0, -58.0],
+    //         [49.5, -61.0],
+    //         [49.3, -61.0],
+    //         [48.5, -62.0],
+    //         [47.8, -64.6],
+    //         [48.0, -65.9],
+    //         [48.1, -66.0],
+    //         [48.2, -66.0],
+    //         [48.2, -66.0],
+    //         [48.3, -66.1],
+    //         [48.3, -66.2],
+    //         [48.3, -66.4],
+    //         [48.3, -66.5],
+    //         [48.3, -66.6],
+    //         [48.3, -66.8],
+    //         [48.2, -66.8],
+    //         [48.2, -66.9],
+    //         [48.1, -66.9],
+    //         [48.0, -66.9],
+    //         [47.9, -66.9],
+    //         [47.9, -66.9],
+    //         [47.7, -68.0],
+    //         [47.5, -68.0],
+    //         [47.5, -68.1],
+    //         [47.5, -68.2],
+    //         [47.5, -68.2],
+    //         [47.5, -68.3],
+    //         [47.4, -68.4],
+    //         [47.4, -68.4],
+    //         [47.4, -68.5],
+    //         [47.3, -68.5],
+    //         [47.3, -68.6],
+    //         [47.4, -69.0],
+    //         [47.5, -69.2],
+    //         [46.8, -70.0],
+    //         [46.4, -70.1],
+    //         [46.3, -70.2],
+    //         [45.9, -70.2],
+    //         [45.7, -70.5],
+    //         [45.3, -71.0],
+    //         [45.3, -71.3],
+    //         [45.0, -71.5],
+    //         [45.0, -74.2],
+    //         [45.2, -74.6],
+    //         [45.1, -74.8],
+    //         [45.1, -75.0],
+    //         [45.0, -74.9],
+    //         [44.8, -75.8],
+    //         [44.7, -75.7],
+    //         [44.7, -75.5],
+    //         [44.5, -75.8],
+    //         [44.4, -75.8],
+    //         [44.3, -76.0],
+    //         [44.4, -76.0],
+    //         [44.3, -76.1],
+    //         [44.3, -76.1],
+    //         [44.2, -76.2],
+    //         [45.8, -76.3],            
+    //     ], {
+    //         color: '#6b6b6b',
+    //         fillColor: '#6b6b6b',
+    //     }).addTo(map).bindPopup("Montreal Domestic Online (CZUL)");
+    // }
 }
 
 //Create about page map
