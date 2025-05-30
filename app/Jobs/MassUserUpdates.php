@@ -25,13 +25,20 @@ class MassUserUpdates implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
-    public $timeout = 60000;
+    public $timeout = 79000;
 
     /**
      * Execute the job.
      *
      * @return void
      */
+
+    //  Delay the job retry to 5 minutes.
+    public function backoff()
+    {
+        return [300];
+    }
+
 
     public function handle()
     {

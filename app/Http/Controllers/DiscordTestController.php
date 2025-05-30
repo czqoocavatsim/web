@@ -39,7 +39,7 @@ class DiscordTestController extends Controller
     public function Job()
     {
         // Dispatch the job
-        $job = DiscordAccountCheck::dispatch();
+        $job = ProcessSessionLogging::dispatch();
 
         // Call the handle method directly to get the result synchronously
         $result = $job->handle();

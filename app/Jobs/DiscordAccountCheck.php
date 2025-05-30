@@ -23,13 +23,18 @@ class DiscordAccountCheck implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
-    public $timeout = 7200;
+    public $timeout = 60;
 
     /**
      * Execute the job.
      *
      * @return void
      */
+
+     public function tags()
+    {
+        return ['job:discord_account_check'];
+    }
 
     public function handle()
     {
