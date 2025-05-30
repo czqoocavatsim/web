@@ -28,6 +28,13 @@ class DiscordTrainingWeeklyUpdates implements ShouldQueue
      *
      * @return void
      */
+
+    //  Delay the job retry to 5 minutes.
+    public function backoff()
+    {
+        return [300];
+    }
+    
     public function handle()
     {
         

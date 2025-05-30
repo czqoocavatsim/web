@@ -705,9 +705,16 @@
                                     <div class="card mb-3 shadow-none">
                                         <h4 class="blue-text mb-3">Admin</h4>
                                         <div class="list-group z-depth-1">
+                                            {{-- Site Settings --}}
                                             <a href="{{ route('settings.index') }}"
                                                 class="waves-effect list-group-item list-group-item-action">
                                                 <i style="margin-right: 10px;" class="fas fa-cog fa-fw"></i>Site Settings
+                                            </a>
+
+                                            {{-- Horizon Scheduler --}}
+                                            <a href="admin/scheduler/dashboard"
+                                                class="waves-effect list-group-item list-group-item-action">
+                                                <i style="margin-right: 10px;" class="fas fa-network-wired fa-fw"></i>Horizon Scheduler
                                             </a>
                                         </div>
                                     </div>

@@ -44,7 +44,7 @@
                         <div class="col-md-3">Santa Maria OCA (LPPO)<br>
                             {{$ctpAircraft->lppo}} Aircraft in FIR
                         </div>
-                        <div class="col-md-3">Reykjavik OCA (BIRD)<br>
+                        <div class="col-md-3">Reykjavik FIR (BIRD)<br>
                             {{$ctpAircraft->bird}} Aircraft in FIR
                         </div>
                     </div>
@@ -151,6 +151,19 @@
                         <a href="{{ route('map') }}" class="float-right ml-auto mr-0 white-text"
                             style="font-size: 1.2em;">View airspace map&nbsp;&nbsp;<i class="fas fa-map"></i></a>
                     </div>
+                    <p style="font-size: 1.8em; margin-top: 15px;" class="mb-0">
+                    <div class="row white-text" style="text-align: left; text-color: white; text-align: center;" >
+                        <div class="col-md-4"><u>Gander OCA (CZQO)</u><br>
+                            {{$ctpAircraft->czqo}} Aircraft in FIR
+                        </div>
+                        <div class="col-md-4"><u>Shanwick OCA (EGGX)</u><br>
+                            {{$ctpAircraft->eggx}} Aircraft in FIR
+                        </div>
+                        <div class="col-md-4"><u>New York OCA (KZNY)</u><br>
+                            {{$ctpAircraft->kzny}} Aircraft in FIR
+                        </div>
+                    </div>
+                </p>
                     <ul class="list-unstyled ml-0 mt-3 p-0 onlineControllers">
                         @if (count($controllers) < 1)
                             <li class="mb-2">

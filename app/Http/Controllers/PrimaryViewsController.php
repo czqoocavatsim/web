@@ -56,7 +56,7 @@ class PrimaryViewsController extends Controller
 
         if (Carbon::now()->between($ctpEvents->oca_start, $ctpEvents->oca_end)) {
             $ctpMode = 2;
-        } elseif($ctpEvents) {
+        } elseif($ctpEvents && Carbon::now() < $ctpEvents->oca_end) {
             $ctpMode = 1;
         }
 
