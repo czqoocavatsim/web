@@ -17,6 +17,7 @@ use App\Models\Publications\AtcResource;
 use App\Models\News\HomeNewControllerCert;
 use App\Models\Network\CTPDates;
 use App\Models\Network\FIRInfo;
+use App\Models\Network\FIRPilots;
 use App\Services\VATSIMClient;
 
 class PrimaryViewsController extends Controller
@@ -33,7 +34,7 @@ class PrimaryViewsController extends Controller
 
         //News
         $news = News::where('visible', true)->get()->sortByDesc('published')->first();
-        $certifications = HomeNewControllerCert::all()->sortByDesc('timestamp')->take(7);
+        $certifications = HomeNewControllerCert::all()->sortByDesc('timestamp')->take(5);
 
         //Next event
         $nextEvent = Event::where('start_timestamp', '>', Carbon::now())->get()->sortBy('start_timestamp')->first();
@@ -41,12 +42,16 @@ class PrimaryViewsController extends Controller
         //Top Month Controllers
         $rosterMembers = RosterMember::where('monthly_hours', '>', 0)->get();
         $externalControllers = ExternalController::where('monthly_hours', '>', 0)->get();
-        $topControllers = $rosterMembers->merge($externalControllers)->sortByDesc('monthly_hours')->take(7);
+        $topControllers = $rosterMembers->merge($externalControllers)->sortByDesc('monthly_hours')->take(5);
 
         //Top controllers
         $rosterMembers = RosterMember::where('currency', '>', 0)->get();
         $externalControllers = ExternalController::where('currency', '>', 0)->get();
-        $yearControllers = $rosterMembers->merge($externalControllers)->sortByDesc('currency')->take(7);
+        $yearControllers = $rosterMembers->merge($externalControllers)->sortByDesc('currency')->take(5);
+
+        // Pilot Statistics
+        $monthPilots = FIRPilots::all()->sortByDesc('month_stats')->take(5);
+        $yearPilots = FIRPilots::all()->sortByDesc('year_stats')->take(5);
 
         //CTP Mode?
         $ctpEvents = CTPDates::whereMonth('oca_start', Carbon::now()->month)->whereYear('oca_start', Carbon::now()->year)->first();
@@ -62,7 +67,7 @@ class PrimaryViewsController extends Controller
             }
         }
 
-        return view('index', compact('controllers', 'news', 'certifications', 'nextEvent', 'topControllers', 'yearControllers', 'ctpMode', 'ctpEvents', 'ctpAircraft'));
+        return view('index', compact('controllers', 'news', 'certifications', 'nextEvent', 'topControllers', 'yearControllers', 'ctpMode', 'ctpEvents', 'ctpAircraft', 'monthPilots', 'yearPilots'));
     }
 
     /*
