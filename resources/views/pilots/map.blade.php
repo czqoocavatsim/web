@@ -41,7 +41,7 @@
 
     <script>
         $("#modal").modal();
-        createMap(@php echo json_encode($planes); @endphp, {{json_encode($eggxOnline)}}, {{json_encode($czqoOnline)}}, {{json_encode($natOnline)}}, {{json_encode($nycOnline)}});
+        createMap(@php echo json_encode($planes); @endphp, {!! json_encode($ControllerOnline) !!});
     </script>
 
 <style>

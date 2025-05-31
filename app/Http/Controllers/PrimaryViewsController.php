@@ -79,7 +79,50 @@ class PrimaryViewsController extends Controller
         $vatsim = new VATSIMClient();
         $planes = $vatsim->getPilots();
 
-        return view('pilots.map', compact('planes', 'czqoOnline', 'eggxOnline', 'natOnline', 'nycOnline'));
+        // Scower the VATSIM Datafeed and check callsigns
+        $bird = $vatsim->searchCallsign("BIRD_CTR", false); if($bird) $bird=1; else $bird=0;
+        $egpx = $vatsim->searchCallsign("EGPX_CTR", false); if($egpx) $egpx=1; else $egpx=0;
+        $eisn = $vatsim->searchCallsign("EISN_CTR", false); if($eisn) $eisn=1; else $eisn=0;
+        $lfrr = $vatsim->searchCallsign("LFRR_CTR", false); if($lfrr) $lfrr=1; else $lfrr=0;
+        $lecm = $vatsim->searchCallsign("LECM_CTR", false); if($lecm) $lecm=1; else $lecm=0;
+        $lppo = $vatsim->searchCallsign("LPPO_FSS", false); if($lppo) $lppo=1; else $lppo=0;
+        $ttzo = $vatsim->searchCallsign("TTZO_FSS", false); if($ttzo) $ttzo=1; else $ttzo=0;
+        $ttzp = $vatsim->searchCallsign("TTZP_CTR", false); if($ttzp) $ttzp=1; else $ttzp=0;
+        $tjzs = $vatsim->searchCallsign("SJU_CTR", false); if($tjzs) $tjzs=1; else $tjzs=0;
+        $kzmo = $vatsim->searchCallsign("ZMO_CTR", false); if($kzmo) $kzmo=1; else $kzmo=0;
+        $kzma = $vatsim->searchCallsign("MIA_CTR", false); if($kzma) $kzma=1; else $kzma=0;
+        $kzjx = $vatsim->searchCallsign("ZJX_CTR", false); if($kzmo) $kzmo=1; else $kzmo=0;
+        $dc = $vatsim->searchCallsign("DC_CTR", false); if($dc) $dc=1; else $dc=0;
+        $kzbw = $vatsim->searchCallsign("BOS_CTR", false); if($kzbw) $kzbw=1; else $kzbw=0;
+        $czqm = $vatsim->searchCallsign("CZQM_CTR", false); if($czqm) $czqm=1; else $czqm=0;
+        $czqx = $vatsim->searchCallsign("CZQX_CTR", false); if($czqx) $czqx=1; else $czqx=0;
+        $czul = $vatsim->searchCallsign("MTL_CTR", false); if($czul) $czul=1; else $czul=0;
+
+        $ControllerOnline = [
+            'eggx' => $eggxOnline,
+            'czqo' => $czqoOnline,
+            'nat' => $natOnline,
+            'nyc' => $nycOnline,
+            'bird' => $bird,
+            'egpx' => $egpx,
+            'eisn' => $eisn,
+            'lfrr' => $lfrr,
+            'lecm' => $lecm,
+            'lppo' => $lppo,
+            'ttzo' => $ttzo,
+            'ttzp' => $ttzp,
+            'tjzs' => $tjzs,
+            'kzmo' => $kzmo,
+            'kzma' => $kzma,
+            'kzjx' => $kzjx,
+            'kzdc' => $dc,
+            'kzbw' => $kzbw,
+            'czqm' => $czqm,
+            'czqx' => $czqx,
+            'czul' => $czul,
+        ];
+
+        return view('pilots.map', compact('planes', 'ControllerOnline'));
     }
 
     /*

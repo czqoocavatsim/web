@@ -292,10 +292,12 @@ class ProcessSessionLogging implements ShouldQueue
 
                     // Session During CTP
                     if($session->is_ctp == null){
-                        if(!$ctp_events->isEmpty()){
-                            $session->is_ctp = 1;
-                        } else {
-                            $session->is_ctp = null;
+                        if($ctp_events){
+                            if(!$ctp_events->isEmpty()){
+                                $session->is_ctp = 1;
+                            } else {
+                                $session->is_ctp = null;
+                            }
                         }
                     }
 
