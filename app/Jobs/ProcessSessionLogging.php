@@ -12,6 +12,8 @@ use Carbon\Carbon;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use App\Models\Network\FIRInfo;
+use App\Models\Network\FIRPilots;
+use App\Models\Network\FIRAircraft;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
@@ -213,21 +215,27 @@ class ProcessSessionLogging implements ShouldQueue
 
         // Loop through the Pilots
         $pilots = $vatsimData->getPilots();
+        $pilotInfo = [];
 
         foreach($pilots as $pilot){
+            $inOCA = 0;
+
             $lat = $pilot->latitude;
             $lon = $pilot->longitude;
 
             if ($this->isPointInPolygon($lat, $lon, $ganderFir)) {
                 $czqoPilots++;
+                $inOCA = 1;
             }
             
             if ($this->isPointInPolygon($lat, $lon, $shanwickFir)) {
                 $eggxPilots++;
+                $inOCA = 1;
             }
 
             if ($this->isPointInPolygon($lat, $lon, $nyFir)) {
                 $kznyPilots++;
+                $inOCA = 1;
             }
 
             if ($this->isPointInPolygon($lat, $lon, $lppoFir)) {
@@ -237,6 +245,70 @@ class ProcessSessionLogging implements ShouldQueue
             if ($this->isPointInPolygon($lat, $lon, $birdFir)) {
                 $birdPilots++;
             }
+
+            // If inside the OCA, Store Details to be used for later
+            if($inOCA){
+                $pilotInfo[] = [
+                    'cid' => $pilot->cid,
+                    'cs' => $pilot->callsign,
+                ];
+            }
+        }
+
+        // Reset Still Inside Markers
+        $allAircraft = FIRAircraft::all();
+        foreach($allAircraft as $ac){
+            $ac->update([
+                'still_inside' => null,
+            ]);
+        }
+        
+        // Check all Aircraft inside OCAs
+        foreach($pilotInfo as $ac){
+            FIRAircraft::UpdateorCreate(['cid' => $ac['cid'], 'callsign' => $ac['cs']],[
+                'still_inside' => 1,
+                'exited_oca' => null,
+            ]);
+        }
+
+        // Mark those not inside OCA as exited - Will retain in the DB for 5 hours incase the aircraft goes EGGX > NYC via LPPO or EGGX > CZQO via BIRD
+        $exitAircraft = FIRAircraft::where('still_inside', null)->where('exited_oca', null)->get();
+        foreach($exitAircraft as $ea){
+            $ea->update([
+                'exited_oca' => Carbon::now(),
+            ]);
+        }
+
+        // If Difference between Entry & Exit is over 30 Minutes, lets set points_recorded as 1 and add a point to the pilots table
+        $addPoints = FIRAircraft::whereNull('point_recorded')->where('still_inside', 1)->where('created_at', '<=', Carbon::now()->subMinutes(30))->get();
+
+        foreach($addPoints as $ap){
+
+            $existingPilot = FIRPilots::find($ap->id);
+
+            $monthStats = $existingPilot && $existingPilot->month_stats !== null
+                ? $existingPilot->month_stats + 1
+                : 1;
+
+            $yearStats = $existingPilot && $existingPilot->year_stats !== null
+                ? $existingPilot->year_stats + 1
+                : 1;
+
+            $FIRPilots = FIRPilots::updateOrCreate(
+                ['id' => $ap->id],
+                ['month_stats' => $monthStats,
+                'year_stats' => $yearStats],
+            );
+
+            $ap->update([
+                'point_recorded' => 1,
+            ]);
+        }
+
+        // Delete ID row if exited_oca time is more than 4 hours in the past
+        $deleteAircraft = FIRAircraft::where('exited_oca', '<=', Carbon::now()->subMinutes(240))->get();
+        foreach($deleteAircraft as $da){
+            $da->delete();
         }
 
         $ganwickPilots = $eggxPilots + $czqoPilots;
