@@ -252,7 +252,7 @@
                                             @else
                                             <img src="{{asset('assets/resources/media/img/brand/sqr/ZQO_SQ_TSPBLUE.png')}}" style="height: 35px; !important; width: 35px !important; margin-left: 10px; margin-right: 5px; margin-bottom: 3px; border-radius: 50%;">
                                             <div class="d-flex flex-column ml-2">
-                                                <h5 class="fw-400">{{ $tp->id }}</h5>
+                                                <h5 class="fw-400">{{ $tp->cid }}</h5>
                                                 <p>{{$tp->month_stats}} @if($tp->year_stats == 1)flight @else flight's @endif recorded this month</p>
                                             </div>
                                             @endif
@@ -301,7 +301,7 @@
                                             @else
                                             <img src="{{asset('assets/resources/media/img/brand/sqr/ZQO_SQ_TSPBLUE.png')}}" style="height: 35px; !important; width: 35px !important; margin-left: 10px; margin-right: 5px; margin-bottom: 3px; border-radius: 50%;">
                                             <div class="d-flex flex-column ml-2">
-                                                <h5 class="fw-400">{{ $tp->id }}</h5>
+                                                <h5 class="fw-400">{{ $tp->cid }}</h5>
                                                 <p>{{$yp->year_stats}} @if($yp->year_stats == 1)flight @else flight's @endif over Oceanic Airspace</p>
                                             </div>
                                             @endif
