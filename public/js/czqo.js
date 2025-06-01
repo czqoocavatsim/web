@@ -978,7 +978,7 @@ async function createConcordeTrackMap()
 //Create big map
 async function createMap(planes, online) {
     //Create map and layer
-    const map = L.map('map', { minZoom: 4, maxZoom: 7 }).setView([55, -30], 4.5);
+    const map = L.map('map', {minZoom: 4, maxZoom: 7, zoomSnap: 0.02 }).setView([55, -30], 4.48);
     var OpenStreetMap_Mapnik = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
         maxZoom: 19,
         attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
@@ -1050,118 +1050,6 @@ async function createMap(planes, online) {
 //         smoothFactor: 1
 //     }).addTo(map);
 // });
-
-    //Add Gander Info if Online
-    if (online.czqo || online.nat) {
-        var ganderOca = L.polygon([
-            [45.0, -30.0],
-            [45.0, -40.0],
-            [44.5, -40.0],
-            [44.5, -50.0],
-            [51.0, -50.0],
-            [53.0, -54.0],
-            [53.8, -55.0],
-            [57.0, -59.0],
-            [58.5, -60.4],
-            [61.0, -63.0],
-            [64.0, -63.0],
-            [65.0, -60.0],
-            [65.0, -57.8],
-            [63.5, -55.7],
-            [63.5, -39.0],
-            [61.0, -30.0],
-        ], {
-            color: '#288a3a',
-            fillColor: '#288a3a',
-        }).addTo(map).bindPopup("Gander OCA online")
-        
-
-        const Gander = [
-        ];
-        L.polyline(Gander, { color: '#777', weight: 0.5 }).addTo(map);
-    }
-
-    //Add Shanwick Info if Online
-    if (online.eggx || online.nat) {
-        var shanwichOca = L.polygon([
-            [45.0, -30.0],
-            [61.0, -30.0],
-            [61.0, -10.0],
-            [57.0, -10.0],
-            [57.0, -15.0],
-            [49.0, -15.0],
-            [48.5, -8.0],
-            [45.0, -8.0]
-        ], {
-            color: '#9752ff',
-            fillColor: '#9752ff',
-        }).addTo(map).bindPopup("Shanwick OCA online (Partnership Position)")
-        
-
-        const Shanwick = [
-        ];
-        L.polyline(Shanwick, { color: '#777', weight: 0.5 }).addTo(map);
-    }
-
-    //Add New York Info if Online
-    if (online.nyc) {
-        var nycOca = L.polygon([
-            [41.6, -67.0],
-            [42.4, -61.2],
-            [43.1, -57.9],
-            [43.6, -55.8],
-            [43.8, -54.9],
-            [44.5, -50.0],
-            [44.5, -40.0],
-            [22.3, -40.0],
-            [18.0, -45.0],
-            [18.0, -61.5],
-            [20.0, -61.9],
-            [21.4, -63.4],
-            [22.0, -64.0],
-            [22.1, -65.1],
-            [22.0, -66.7],
-            [21.2, -67.7],
-            [25.0, -68.5],
-            [25.0, -73.2],
-            [27.8, -74.8],
-            [27.8, -76.3],
-            [28.2, -76.4],
-            [29.8, -76.9],
-            [30.0, -77.0],
-            [31.6, -77.0],
-            [32.0, -77.0],
-            [32.3, -77.0],
-            [33.0, -76.8],
-            [33.4, -76.5],
-            [34.6, -75.7],
-            [35.3, -75.2],
-            [35.5, -74.9],
-            [36.8, -74.6],
-            [37.1, -74.7],
-            [38.5, -74.0],
-            [38.7, -73.9],
-            [39.0, -73.7],
-            [39.7, -73.2],
-            [39.7, -73.2],
-            [39.9, -73.0],
-            [40.2, -72.8],
-            [40.1, -72.5],
-            [40.6, -70.9],
-            [40.9, -69.3],
-            [41.0, -69.0]
-        ], {
-            color: '#9752ff',
-            fillColor: '#9752ff',
-        }).addTo(map).bindPopup("New York OCA online (Partnership Postion)");
-        
-
-        const NewYork = [
-        ];
-        L.polyline(NewYork, { color: 'red', weight: 0.5 }).addTo(map);
-    }
-
-
 
     // ALL THE DOMESTIC SECTORS TIME
     // BIRD FIR
@@ -2045,6 +1933,208 @@ async function createMap(planes, online) {
             color: '#6b6b6b',
             fillColor: '#6b6b6b',
         }).addTo(map).bindPopup("Montreal Domestic Online (CZUL)");
+    }
+
+    //Add Shanwick Info if Online
+    if (online.eggx || online.nat) {
+        // Show Shanwick Airspace as Online
+        var shanwichOca = L.polygon([
+            [45.0, -30.0],
+            [61.0, -30.0],
+            [61.0, -10.0],
+            [57.0, -10.0],
+            [57.0, -15.0],
+            [49.0, -15.0],
+            [48.5, -8.0],
+            [45.0, -8.0]
+        ], {
+            color: '#9752ff',
+            fillColor: '#9752ff',
+        }).addTo(map).bindPopup("Shanwick OCA online (Partnership Position)")
+        
+
+        const Shanwick = [
+        ];
+        L.polyline(Shanwick, { color: '#777', weight: 0.5 }).addTo(map);
+    } else {
+        // Show FIR Border for ease of identification on map
+        var shanwichOca = L.polygon([
+            [45.0, -30.0],
+            [61.0, -30.0],
+            [61.0, -10.0],
+            [57.0, -10.0],
+            [57.0, -15.0],
+            [49.0, -15.0],
+            [48.5, -8.0],
+            [45.0, -8.0]
+        ], {
+            color: '#454545',
+            fill: false,
+        }).addTo(map)
+    }
+
+    //Add New York Info if Online
+    if (online.nyc) {
+        // Show New York Airspace as Online
+        var nycOca = L.polygon([
+            [41.6, -67.0],
+            [42.4, -61.2],
+            [43.1, -57.9],
+            [43.6, -55.8],
+            [43.8, -54.9],
+            [44.5, -50.0],
+            [44.5, -40.0],
+            [22.3, -40.0],
+            [18.0, -45.0],
+            [18.0, -61.5],
+            [20.0, -61.9],
+            [21.4, -63.4],
+            [22.0, -64.0],
+            [22.1, -65.1],
+            [22.0, -66.7],
+            [21.2, -67.7],
+            [25.0, -68.5],
+            [25.0, -73.2],
+            [27.8, -74.8],
+            [27.8, -76.3],
+            [28.2, -76.4],
+            [29.8, -76.9],
+            [30.0, -77.0],
+            [31.6, -77.0],
+            [32.0, -77.0],
+            [32.3, -77.0],
+            [33.0, -76.8],
+            [33.4, -76.5],
+            [34.6, -75.7],
+            [35.3, -75.2],
+            [35.5, -74.9],
+            [36.8, -74.6],
+            [37.1, -74.7],
+            [38.5, -74.0],
+            [38.7, -73.9],
+            [39.0, -73.7],
+            [39.7, -73.2],
+            [39.7, -73.2],
+            [39.9, -73.0],
+            [40.2, -72.8],
+            [40.1, -72.5],
+            [40.6, -70.9],
+            [40.9, -69.3],
+            [41.0, -69.0]
+        ], {
+            color: '#9752ff',
+            fillColor: '#9752ff',
+        }).addTo(map).bindPopup("New York OCA online (Partnership Postion)");
+        
+
+        const NewYork = [
+        ];
+        L.polyline(NewYork, { color: 'red', weight: 0.5 }).addTo(map);
+    } else {
+        // Show FIR Border for ease of identification on map
+        var nycOca = L.polygon([
+            [41.6, -67.0],
+            [42.4, -61.2],
+            [43.1, -57.9],
+            [43.6, -55.8],
+            [43.8, -54.9],
+            [44.5, -50.0],
+            [44.5, -40.0],
+            [22.3, -40.0],
+            [18.0, -45.0],
+            [18.0, -61.5],
+            [20.0, -61.9],
+            [21.4, -63.4],
+            [22.0, -64.0],
+            [22.1, -65.1],
+            [22.0, -66.7],
+            [21.2, -67.7],
+            [25.0, -68.5],
+            [25.0, -73.2],
+            [27.8, -74.8],
+            [27.8, -76.3],
+            [28.2, -76.4],
+            [29.8, -76.9],
+            [30.0, -77.0],
+            [31.6, -77.0],
+            [32.0, -77.0],
+            [32.3, -77.0],
+            [33.0, -76.8],
+            [33.4, -76.5],
+            [34.6, -75.7],
+            [35.3, -75.2],
+            [35.5, -74.9],
+            [36.8, -74.6],
+            [37.1, -74.7],
+            [38.5, -74.0],
+            [38.7, -73.9],
+            [39.0, -73.7],
+            [39.7, -73.2],
+            [39.7, -73.2],
+            [39.9, -73.0],
+            [40.2, -72.8],
+            [40.1, -72.5],
+            [40.6, -70.9],
+            [40.9, -69.3],
+            [41.0, -69.0]
+        ], {
+            color: '#454545',
+            fill: false,
+        }).addTo(map)
+    }
+
+    //Add Gander Info if Online
+    if (online.czqo || online.nat) {
+        // Show Gander Airspace as Online
+        var ganderOca = L.polygon([
+            [45.0, -30.0],
+            [45.0, -40.0],
+            [44.5, -40.0],
+            [44.5, -50.0],
+            [51.0, -50.0],
+            [53.0, -54.0],
+            [53.8, -55.0],
+            [57.0, -59.0],
+            [58.5, -60.4],
+            [61.0, -63.0],
+            [64.0, -63.0],
+            [65.0, -60.0],
+            [65.0, -57.8],
+            [63.5, -55.7],
+            [63.5, -39.0],
+            [61.0, -30.0],
+        ], {
+            color: '#288a3a',
+            fillColor: '#288a3a',
+        }).addTo(map).bindPopup("Gander OCA online")
+        
+
+        const Gander = [
+        ];
+        L.polyline(Gander, { color: '#777', weight: 0.5 }).addTo(map);
+    } else {
+        // Show FIR Border for ease of identification on map
+        var ganderOca = L.polygon([
+            [45.0, -30.0],
+            [45.0, -40.0],
+            [44.5, -40.0],
+            [44.5, -50.0],
+            [51.0, -50.0],
+            [53.0, -54.0],
+            [53.8, -55.0],
+            [57.0, -59.0],
+            [58.5, -60.4],
+            [61.0, -63.0],
+            [64.0, -63.0],
+            [65.0, -60.0],
+            [65.0, -57.8],
+            [63.5, -55.7],
+            [63.5, -39.0],
+            [61.0, -30.0],
+        ], {
+            color: '#454545',
+            fill: false,
+        }).addTo(map);
     }
 }
 

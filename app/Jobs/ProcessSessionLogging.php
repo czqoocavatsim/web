@@ -418,7 +418,7 @@ class ProcessSessionLogging implements ShouldQueue
                         }
                     } else {
                         // Controller is not authorised. Let Senior Team know.
-                        if($session->discord_id == null && $ctp_events->isEmpty()){
+                        if($session->discord_id == null && !$ctp_events){
                             // Send Discord Message
                             $discord = new DiscordClient();
                             $discord_id = $discord->sendMessageWithEmbed('482817715489341441', 'Controller Unauthorised to Control', '<@&482816721280040964>, '.$session->cid.' has just connected onto VATSIM as '.$session->callsign.' on <t:'.Carbon::now()->timestamp.':F>. 
