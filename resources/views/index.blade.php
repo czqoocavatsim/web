@@ -344,9 +344,6 @@
                             </div>
                         </li>
                     @endforeach
-                    @if (count($topControllers) < 1)
-                        No data available.
-                    @endif
                 </ul>
                 @else
                 <h2 class="font-weight-bold blue-text mb-1">Newest Controllers</h2>

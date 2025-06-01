@@ -15,6 +15,7 @@ return new class extends Migration
     {
         Schema::create('fir_pilot_stats', function (Blueprint $table) {
             $table->id();
+            $table->integer('cid');
             $table->string('month_stats');
             $table->string('year_stats');
             $table->timestamps();

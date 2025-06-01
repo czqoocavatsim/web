@@ -15,7 +15,7 @@ class FIRPilots extends Model
 
     public function user()
     {
-        return $this->hasOne(User::class, 'id', 'id');
+        return $this->hasOne(User::class, 'id', 'cid');
     }
         
 }

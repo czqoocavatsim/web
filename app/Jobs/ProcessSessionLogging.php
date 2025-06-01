@@ -284,7 +284,7 @@ class ProcessSessionLogging implements ShouldQueue
 
         foreach($addPoints as $ap){
 
-            $existingPilot = FIRPilots::find($ap->id);
+            $existingPilot = FIRPilots::find($ap->cid);
 
             $monthStats = $existingPilot && $existingPilot->month_stats !== null
                 ? $existingPilot->month_stats + 1
@@ -295,7 +295,7 @@ class ProcessSessionLogging implements ShouldQueue
                 : 1;
 
             $FIRPilots = FIRPilots::updateOrCreate(
-                ['id' => $ap->id],
+                ['cid' => $ap->cid],
                 ['month_stats' => $monthStats,
                 'year_stats' => $yearStats],
             );
