@@ -411,7 +411,7 @@
                             @php $index++; @endphp
                         @endforeach
                         @if (count($topControllers) < 1)
-                            No data available.
+                            <p style="margin-top: -20px;">No data available.</p>
                         @endif
                     </ul>
                 @else
@@ -478,7 +478,7 @@
                             @php $index++; @endphp
                         @endforeach
                         @if (count($yearControllers) < 1)
-                            No data available.
+                            <p style="margin-top: -20px;">No data available.</p>
                         @endif
                     </ul>
                 @else

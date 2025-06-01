@@ -11,7 +11,7 @@ class FIRPilots extends Model
     use HasFactory;
 
     protected $table = "fir_pilot_stats";
-    protected $fillable = ['id', 'month_stats', 'year_stats', 'updated_at'];
+    protected $fillable = ['id', 'cid', 'month_stats', 'year_stats', 'updated_at'];
 
     public function user()
     {
