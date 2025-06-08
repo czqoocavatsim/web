@@ -1032,24 +1032,24 @@ async function createMap(planes, online) {
     });
 
     // Add tracks
-    let endpoint = "https://nattrak.vatsim.net/api/tracks";
-    const response = await fetch(endpoint);
-    const data = await response.json();
+    // let endpoint = "https://nattrak.vatsim.net/api/tracks";
+    // const response = await fetch(endpoint);
+    // const data = await response.json();
 
-    // Function to convert lat/lon (e.g., "59/20") to decimal
-    function parseLatLon(coord) {
-        let [lat, lon] = coord.split("/").map(Number);
+    // // Function to convert lat/lon (e.g., "59/20") to decimal
+    // function parseLatLon(coord) {
+    //     let [lat, lon] = coord.split("/").map(Number);
     
-        // Check if the longitude is west, and if so, make it negative
-        if (lon < 0) {
-            lon = -lon;  // Make sure it's negative
-        } else if (lon > 180) {
-            lon -= 360;  // Correct for longitudes over 180
-        }
+    //     // Check if the longitude is west, and if so, make it negative
+    //     if (lon < 0) {
+    //         lon = -lon;  // Make sure it's negative
+    //     } else if (lon > 180) {
+    //         lon -= 360;  // Correct for longitudes over 180
+    //     }
     
-        // If the longitude value appears to be incorrectly positive, correct it
-        return [lat, -lon];
-    }
+    //     // If the longitude value appears to be incorrectly positive, correct it
+    //     return [lat, -lon];
+    // }
 
     // Process each NAT Track
 //     data.forEach(track => {
