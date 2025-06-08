@@ -280,7 +280,7 @@ class ProcessSessionLogging implements ShouldQueue
         }
 
         // If Difference between Entry & Exit is over 30 Minutes, lets set points_recorded as 1 and add a point to the pilots table
-        $addPoints = FIRAircraft::whereNull('point_recorded')->where('still_inside', 1)->where('created_at', '<=', Carbon::now()->subMinutes(30))->get();
+        $addPoints = FIRAircraft::whereNull('point_recorded')->where('still_inside', 1)->where('created_at', '<=', Carbon::now()->subMinutes(12))->get();
 
         foreach($addPoints as $ap){
 

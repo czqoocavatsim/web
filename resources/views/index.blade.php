@@ -5,7 +5,7 @@
 @section('content')
     {{-- Top Introduction --}}
     <div style="height: calc(100vh - 74px); z-index: -1" class="z-depth-0 jarallax">
-        <img src="{{asset('assets/resources/media/img/website/home_banner.png')}}" alt="" class="jarallax-img">
+        <img src="{{asset('assets/resources/media/img/website/787.png')}}" alt="" class="jarallax-img">
         <div class="flex-center mask rgba-black-light flex-column">
             <div class="container d-none d-sm-block">
                 <h1 class="display-2 fw-700 white-text">Cool. Calm. Collected.</h1>
@@ -24,32 +24,31 @@
         @if ($ctpEvents)
             <div class="container px-5 py-3 mb-2 blue darken-2 white-text" style="position: relative;">
                 <p style="font-size: 2.5em;" class="font-weight-bold mb-0">{{$ctpEvents->name}} is underway!</p>
-                <p style="font-size: 1.4em;" class="mb-0">Cross the Pond is currently underway, with <b>{{$ctpAircraft->ganwick}}</b> aircraft currently inside the Gander (CZQO) and Shanwick (EGGX) FIRs on their way towards their destinations!</p>
-
+                <p style="font-size: 1.4em;" class="mb-0">Cross the Pond is currently underway, with <b><x id="ganwick-count">{{$ctpAircraft->ganwick}}</x></b> aircraft currently inside the Gander (CZQO) and Shanwick (EGGX) FIRs on their way towards their destinations!</p>
+                
                 <div id="countdown" class="d-flex gap-2 flex-wrap text-center"
                     style="position: absolute; top: 10px; right: 10px; z-index: 10;">
                 </div>
 
                 <p style="font-size: 1.8em; margin-top: 15px;" class="mb-0">
                     <div class="row" style="text-align: left">
-                        <div class="col-md-2">Gander OCA (CZQO)<br>
-                            {{$ctpAircraft->czqo}} Aircraft in FIR
+                        <div class="col-md-2"><u>Gander OCA (CZQO)</u><br>
+                            <div id="czqo-count">{{$ctpAircraft->czqo}} Aircraft in FIR</div>
                         </div>
-                        <div class="col-md-2">Shanwick OCA (EGGX)<br>
-                            {{$ctpAircraft->eggx}} Aircraft in FIR
+                        <div class="col-md-2"><u>Shanwick OCA (EGGX)</u><br>
+                            <div id="eggx-count">{{$ctpAircraft->eggx}} Aircraft in FIR</div>
                         </div>
-                        <div class="col-md-2">New York OCA (KZNY)<br>
-                            {{$ctpAircraft->kzny}} Aircraft in FIR
+                        <div class="col-md-2"><u>New York OCA (KZNY)</u><br>
+                            <div id="kzny-count">{{$ctpAircraft->kzny}} Aircraft in FIR</div>
                         </div>
-                        <div class="col-md-3">Santa Maria OCA (LPPO)<br>
-                            {{$ctpAircraft->lppo}} Aircraft in FIR
+                        <div class="col-md-2"><u>Reykjavik FIR (BIRD)</u><br>
+                            <div id="bird-count">{{$ctpAircraft->bird}} Aircraft in FIR</div>
                         </div>
-                        <div class="col-md-3">Reykjavik FIR (BIRD)<br>
-                            {{$ctpAircraft->bird}} Aircraft in FIR
+                        <div class="col-md-4"><u>Santa Maria OCA (LPPO)</u><br>
+                            <div id="lppo-count">{{$ctpAircraft->lppo}} Aircraft in FIR</div>
                         </div>
                     </div>
                 </p>
-
             </div>
         @endif
         <div class="container blue z-depth-2 px-5 pt-5 pb-3 mb-5">
@@ -60,36 +59,13 @@
                         <a href="{{ route('map') }}" class="float-right ml-auto mr-0 white-text"
                             style="font-size: 1.2em;">View airspace map&nbsp;&nbsp;<i class="fas fa-map"></i></a>
                     </div>
+
+                    <p style="font-size: 1.1em; margin-top: -0px;" class="mb-0 white-text"><b>Last Updated:</b> <x id="timer-info">{{ \Carbon\Carbon::now('UTC')->format('Hi') }}Z</x><p>
+
                     <ul class="list-unstyled ml-0 mt-3 p-0 onlineControllers">
-                        @if (count($controllers) < 1)
-                            <li class="mb-2">
-                                <div class="d-flex flex-row justify-content-between align-items-center mb-1">
-                                    <h4 class="m-0 white-text"><i class="fas fa-times" style="margin-right: 1rem;"></i>Hmmmm, weird... There doesn't seem to be any controllers currently connected.</h4>
-                                </div>
-                            </li>
-                        @else
-                            <div class="row">
-                                @foreach($controllers as $controller)
-                                    <div class="col-md-3 white-text">
-                                        <p style="margin-bottom: 0px; font-size: 1.6em; text-color: white;">{{$controller->callsign}}</p>
-                                        <p style="margin-bottom: 0px; font-size: 1.1em; text-color: white;">
-                                            @if ($controller->session_start->diff(\Carbon\Carbon::now())->h > 0)
-                                                {{ $controller->session_start->diff(\Carbon\Carbon::now())->h }}hr {{ $controller->session_start->diff(\Carbon\Carbon::now())->i }}min
-                                            @else
-                                                {{ $controller->session_start->diff(\Carbon\Carbon::now())->i }}min
-                                            @endif
-                                        </p>
-                                        <p style="margin-bottom: 15px; font-size: 0.9em; text-color: white;"><i class="fas fa-user"></i>
-                                            @if($controller->user)
-                                                {{$controller->user->fullName('FLC')}}
-                                            @else
-                                                {{$controller->cid}}
-                                            @endif
-                                        </p>
-                                    </div>
-                                @endforeach
-                            </div>
-                        @endif
+                        <x id="controller-info">
+                            @include('partials.homepage.ctp-controllers');
+                        </x>
                     </ul>
                 </div>
             </div>
@@ -151,61 +127,27 @@
                         <a href="{{ route('map') }}" class="float-right ml-auto mr-0 white-text"
                             style="font-size: 1.2em;">View airspace map&nbsp;&nbsp;<i class="fas fa-map"></i></a>
                     </div>
+                    
+                    <p style="font-size: 1.1em; margin-top: 0px;" class="mb-1 white-text"><b>Last Updated:</b> <x id="timer-info">{{ \Carbon\Carbon::now('UTC')->format('Hi') }}Z</x><p>
+
                     <p style="font-size: 1.8em; margin-top: 15px;" class="mb-0">
                     <div class="row white-text" style="text-align: left; text-color: white; text-align: center;" >
-                        <div class="col-md-4"><u>Gander OCA (CZQO)</u><br>
-                            {{$ctpAircraft->czqo}} Aircraft in FIR
+                        <div class="col-md-4 col-sm-4"><u>Gander OCA (CZQO)</u><br>
+                            <div id="czqo-count">{{$ctpAircraft->czqo}} Aircraft in FIR</div>
                         </div>
-                        <div class="col-md-4"><u>Shanwick OCA (EGGX)</u><br>
-                            {{$ctpAircraft->eggx}} Aircraft in FIR
+                        <div class="col-md-4 col-sm-4"><u>Shanwick OCA (EGGX)</u><br>
+                            <div id="eggx-count">{{$ctpAircraft->eggx}} Aircraft in FIR</div>
                         </div>
-                        <div class="col-md-4"><u>New York OCA (KZNY)</u><br>
-                            {{$ctpAircraft->kzny}} Aircraft in FIR
+                        <div class="col-md-4 col-sm-4"><u>New York OCA (KZNY)</u><br>
+                            <div id="kzny-count">{{$ctpAircraft->kzny}} Aircraft in FIR</div>
                         </div>
                     </div>
                 </p>
                     <ul class="list-unstyled ml-0 mt-3 p-0 onlineControllers">
-                        @if (count($controllers) < 1)
-                            <li class="mb-2">
-                                <div class="d-flex flex-row justify-content-between align-items-center mb-1">
-                                    <h4 class="m-0 white-text"><i class="fas fa-times" style="margin-right: 1rem;"></i>No controllers currently connected to VATSIM.</h4>
-                                </div>
-                            </li>
-                        @else
-                        <table class="table table-hover" style="color: white; text-align: center;">
-                            <thead>
-                            <tr>
-                                <th scope="col">Callsign</th>
-                                <th scope="col">Controller</th>
-                                <th scope="col">Time Online</th>
-                            </tr>
-                            </thead>
-                            <tbody>
-                            @foreach ($controllers as $controller)
-                                <tr>
-                                    <th scope="row"><b>{{$controller->callsign}}</b>
-                                        @if($controller->is_instructing == 1)<br><span class="badge bg-danger">Instructing</span>@endif
-                                        @if($controller->is_student == 1)<br><span class="badge bg-warning">Training</span>@endif
-                                        @if($controller->is_ctp == 1)<br><span class="badge bg-info">CTP Controller</span>@endif</th>
-                                    <td>
-                                        @if($controller->user)
-                                            {{$controller->user->fullName('FLC')}}
-                                        @else
-                                            {{$controller->cid}}
-                                        @endif
-                                    </td>
-                                    <td>
-                                        @if ($controller->session_start->diff(\Carbon\Carbon::now())->h > 0)
-                                            {{ $controller->session_start->diff(\Carbon\Carbon::now())->h }}hr {{ $controller->session_start->diff(\Carbon\Carbon::now())->i }}min
-                                        @else
-                                            {{ $controller->session_start->diff(\Carbon\Carbon::now())->i }}min
-                                        @endif
-                                    </td>
-                                </tr>
-                            @endforeach
-                            </tbody>
-                        </table>
-                        @endif
+                        {{-- Updated every minute. Rendered by JS from Partials Folder --}}
+                        <x id="controller-info">
+                            @include('partials.homepage.general-controllers');
+                        </x>
                     </ul>
                 </div>
             </div>
@@ -551,6 +493,7 @@
             </div>
         </div>
     </div>
+    {{-- Script that runs at any time --}}
     <script>
         $('.jarallax').jarallax({
             speed: 0.2,
@@ -562,6 +505,7 @@
         } );
     </script>
 
+    {{-- Countdown Timer for the CTP Events --}}
     @if($ctpEvents !== null)
         <script>
             const eventDate = new Date("{{ \Carbon\Carbon::parse($ctpEvents->oca_start)->toIso8601String() }}").getTime();
@@ -572,7 +516,6 @@
                 const distance = eventDate - now;
 
                 if (distance < 0) {
-                    countdownElement.innerHTML = "<div class='box bg-success text-white p-3 rounded'>The event is currently underway!</div>";
                     clearInterval(timer);
                     return;
                 }
@@ -606,6 +549,76 @@
             updateCountdown();
         </script>
     @endif
+
+@if($ctpMode == false)
+<script>
+    setInterval(() => {
+    fetch('/api/update-homepage/general')
+        .then(res => res.json())
+        .then(data => {
+            document.getElementById('czqo-count').innerText = data.czqo + ' Aircraft in FIR';
+            document.getElementById('eggx-count').innerText = data.eggx + ' Aircraft in FIR';
+            document.getElementById('kzny-count').innerText = data.kzny + ' Aircraft in FIR';
+            document.getElementById('timer-info').innerText = new Date().toISOString().slice(11,16).replace(':','') + 'Z';
+        });
+    }, 60000);
+
+    setInterval(() => {
+        fetch('/api/update-homepage/controllers/1')
+            .then(res => res.text())
+            .then(html => {
+                document.getElementById('controller-info').innerHTML = html;
+            });
+    }, 60000);
+
+</script>
+@elseif($ctpMode == 1)
+<script>
+    setInterval(() => {
+    fetch('/api/update-homepage/general')
+        .then(res => res.json())
+        .then(data => {
+            document.getElementById('czqo-count').innerText = data.czqo + ' Aircraft in FIR';
+            document.getElementById('eggx-count').innerText = data.eggx + ' Aircraft in FIR';
+            document.getElementById('kzny-count').innerText = data.kzny + ' Aircraft in FIR';
+            document.getElementById('timer-info').innerText = new Date().toISOString().slice(11,16).replace(':','') + 'Z';
+        });
+    }, 60000);
+
+    setInterval(() => {
+        fetch('/api/update-homepage/controllers/1')
+            .then(res => res.text())
+            .then(html => {
+                document.getElementById('controller-info').innerHTML = html;
+            });
+    }, 60000);
+</script>
+@elseif($ctpMode == 2)
+<script>
+    setInterval(() => {
+    fetch('/api/update-homepage/general')
+        .then(res => res.json())
+        .then(data => {
+            document.getElementById('ganwick-count').innerText = data.ganwick + ' Aircraft in FIR';
+            document.getElementById('czqo-count').innerText = data.czqo + ' Aircraft in FIR';
+            document.getElementById('eggx-count').innerText = data.eggx + ' Aircraft in FIR';
+            document.getElementById('lppo-count').innerText = data.lppo + ' Aircraft in FIR';
+            document.getElementById('bird-count').innerText = data.bird + ' Aircraft in FIR';
+            document.getElementById('kzny-count').innerText = data.kzny + ' Aircraft in FIR';
+            document.getElementById('timer-info').innerText = new Date().toISOString().slice(11,16).replace(':','') + 'Z';
+
+        });
+    }, 60000);
+
+    setInterval(() => {
+        fetch('/api/update-homepage/controllers/2')
+            .then(res => res.text())
+            .then(html => {
+                document.getElementById('controller-info').innerHTML = html;
+            });
+    }, 60000);
+</script>
+@endif
 
 
 @endsection
