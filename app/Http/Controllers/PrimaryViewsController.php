@@ -54,7 +54,7 @@ class PrimaryViewsController extends Controller
         $yearPilots = FIRPilots::all()->sortByDesc('year_stats')->take(5);
 
         //CTP Mode?
-        $ctpEvents = CTPDates::whereMonth('oca_start', Carbon::now()->month)->whereYear('oca_start', Carbon::now()->year)->first();
+        $ctpEvents = CTPDates::whereBetween('oca_end', [Carbon::now(),Carbon::now()->addDays(60)])->first();
         $ctpAircraft = FIRInfo::all()->first();
 
         $ctpMode = false;
@@ -68,6 +68,35 @@ class PrimaryViewsController extends Controller
         }
 
         return view('index', compact('controllers', 'news', 'certifications', 'nextEvent', 'topControllers', 'yearControllers', 'ctpMode', 'ctpEvents', 'ctpAircraft', 'monthPilots', 'yearPilots'));
+    }
+
+    // General Homepage API Update
+    public function homeUpdate()
+    {
+        $ctpAircraft = FIRInfo::all()->first();
+
+        return response()->json([
+            'czqo' => $ctpAircraft->czqo,
+            'eggx' => $ctpAircraft->eggx,
+            'ganwick' => $ctpAircraft->ganwick,
+            'kzny' => $ctpAircraft->kzny,
+            'lppo' => $ctpAircraft->lppo,
+            'bird' => $ctpAircraft->bird,
+        ]);
+    }
+
+    // Controller API Update
+    public function updateControllers($status)
+    {
+        $controllers = SessionLog::whereNull('session_end')->orderBy('session_start', 'asc')->get();
+
+        if($status == 1){
+            return view('partials.homepage.general-controllers', compact('controllers'))->render();
+        }
+        // CTP Controller Rendering
+        if($status == 2){
+            return view('partials.homepage.ctp-controllers', compact('controllers'))->render();
+        }
     }
 
     /*
@@ -86,7 +115,7 @@ class PrimaryViewsController extends Controller
 
         // Scower the VATSIM Datafeed and check callsigns
         $bird = $vatsim->searchCallsign("BIRD_CTR", false); if($bird) $bird=1; else $bird=0;
-        $egpx = $vatsim->searchCallsign("EGPX_CTR", false); if($egpx) $egpx=1; else $egpx=0;
+        $egpx = $vatsim->searchCallsign("SCO_CTR", false); if($egpx) $egpx=1; else $egpx=0;
         $eisn = $vatsim->searchCallsign("EISN_CTR", false); if($eisn) $eisn=1; else $eisn=0;
         $lfrr = $vatsim->searchCallsign("LFRR_CTR", false); if($lfrr) $lfrr=1; else $lfrr=0;
         $lecm = $vatsim->searchCallsign("LECM_CTR", false); if($lecm) $lecm=1; else $lecm=0;

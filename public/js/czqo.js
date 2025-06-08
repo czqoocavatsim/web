@@ -987,16 +987,48 @@ async function createMap(planes, online) {
     //Create boundaries and points
     createMapPointsBoundaries(map)
 
+    // Draw Aircraft Only within these Map Coordinates
+    const AircraftBoundary = {
+    south: 10.0,
+    west: -90.0,
+    north: 72.0,
+    east: 0.0
+};
+
     //Create plane markers and controllers
     planes.forEach(function (plane) {
+    const altitude = plane.altitude;
+    const lat = plane.latitude;
+    const lon = plane.longitude;
 
-        let markerIcon = L.icon({
-            iconUrl: '/img/planes/base.png',
-            iconSize: [30, 30],
-            iconAnchor: [0,0]
-        });
-       var marker = L.marker([plane.latitude, plane.longitude], {rotationAngle: plane.heading, icon:markerIcon}).addTo(map);
-       marker.bindPopup(`<h4>${plane['callsign']}</h4><br>${plane['name']} ${plane['cid']}<br>${plane['flight_plan'] ? plane['flight_plan']['departure'] : ''} to ${plane['flight_plan'] ? plane['flight_plan']['arrival'] : ''}<br>${plane['flight_plan'] ? plane['flight_plan']['aircraft'] : ''}`);
+    // Altitude and boundary checks
+    const inBounds = (
+        altitude > 5500 &&
+        lat >= AircraftBoundary.south &&
+        lat <= AircraftBoundary.north &&
+        lon >= AircraftBoundary.west &&
+        lon <= AircraftBoundary.east
+    );
+
+    if (!inBounds) return; // Skip if not within constraints
+
+    let markerIcon = L.icon({
+        iconUrl: '/img/planes/base.png',
+        iconSize: [30, 30],
+        iconAnchor: [15, 15]
+    });
+
+    const marker = L.marker([lat, lon], {
+        rotationAngle: plane.heading,
+        icon: markerIcon
+    }).addTo(map);
+
+    marker.bindPopup(`
+        <h4>${plane['callsign']}</h4><br>
+        ${plane['name']} - ${plane['cid']}<br>
+        ${plane['altitude'] }ft | ${plane['flight_plan'] ? plane['flight_plan']['aircraft'].substring(0, 6) : ''}<br>
+        ${plane['flight_plan'] ? plane['flight_plan']['departure'] : ''} to ${plane['flight_plan'] ? plane['flight_plan']['arrival'] : ''}
+    `);
     });
 
     // Add tracks

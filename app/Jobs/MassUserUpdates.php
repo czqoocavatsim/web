@@ -269,11 +269,11 @@ class MassUserUpdates implements ShouldQueue
                     }
                     if ($u->rating_long != $rating['long']) {
                         $needsUpdate = true;
-                        // $changes[] = "\n- rating_long ({$u->rating_long} > {$rating['long']})";
+                        $changes[] = "\n- rating_long ({$u->rating_long} > {$rating['long']})";
                     }
                     if ($u->rating_GRP != $rating['long']) {
                         $needsUpdate = true;
-                        // $changes[] = "\n- rating_GRP ({$u->rating_GRP} > {$rating['long']})";
+                        $changes[] = "\n- rating_GRP ({$u->rating_GRP} > {$rating['long']})";
                     }
                     if ($u->pilotrating_id != $vatsim['pilotrating']) {
                         $needsUpdate = true;
@@ -286,7 +286,7 @@ class MassUserUpdates implements ShouldQueue
                     }
                     if ($u->pilotrating_long != $pilotratinglongname) {
                         $needsUpdate = true;
-                        // $changes[] = "\n- pilotrating_long ({$u->pilotrating_long} > {$pilotratinglongname})";
+                        $changes[] = "\n- pilotrating_long ({$u->pilotrating_long} > {$pilotratinglongname})";
                     }
                     if ($u->militaryrating_id != $vatsim['militaryrating']) {
                         $needsUpdate = true;
@@ -299,7 +299,7 @@ class MassUserUpdates implements ShouldQueue
                     }
                     if ($u->militaryrating_long != $militaryratinglongname) {
                         $needsUpdate = true;
-                        // $changes[] = "\n- militaryrating_long ({$u->militaryrating_long} > {$militaryratinglongname})";
+                        $changes[] = "\n- militaryrating_long ({$u->militaryrating_long} > {$militaryratinglongname})";
                     }
                     if ($u->reg_date != Carbon::parse($vatsim['reg_date'])->format('Y-m-d H:i:s')) {
                         $needsUpdate = true;
