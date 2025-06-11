@@ -42,7 +42,7 @@ class PrimaryViewsController extends Controller
         //Top Month Controllers
         $rosterMembers = RosterMember::where('monthly_hours', '>', 0)->get();
         $externalControllers = ExternalController::where('monthly_hours', '>', 0)->get();
-        $topControllers = $rosterMembers->merge($externalControllers)->sortByDesc('monthly_hours')->take(5);
+        $topControllers = $rosterMembers->merge($externalControllers)->sortByDesc('monthly_hours')->take(10);
 
         //Top controllers
         $rosterMembers = RosterMember::where('currency', '>', 0)->get();

@@ -1024,10 +1024,10 @@ async function createMap(planes, online) {
     }).addTo(map);
 
     marker.bindPopup(`
-        <h4>${plane['callsign']}</h4><br>
+        <x style="font-size: 1.5em;">${plane['callsign']}</x><br>
         ${plane['name']} - ${plane['cid']}<br>
-        ${plane['altitude'] }ft | ${plane['flight_plan'] ? plane['flight_plan']['aircraft'].substring(0, 6) : ''}<br>
-        ${plane['flight_plan'] ? plane['flight_plan']['departure'] : ''} to ${plane['flight_plan'] ? plane['flight_plan']['arrival'] : ''}
+        ${plane['altitude'] }ft | ${plane['flight_plan'] ? plane['flight_plan']['aircraft'].substring(0, 6) : 'No FlightPlan'}<br>
+        ${plane['flight_plan'] ? plane['flight_plan']['departure'] : ''} - ${plane['flight_plan'] ? plane['flight_plan']['arrival'] : ''}
     `);
     });
 
