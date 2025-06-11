@@ -265,37 +265,6 @@
 
             {{-- Middle Row --}}
             <div class="col-md-4 mb-4">
-
-                {{-- New Certifications --}}
-                @if(auth()->check())
-                <h2 class="font-weight-bold blue-text mb-4">Newest Controllers</h2>
-                <ul class="list-unstyled">
-                    @foreach ($certifications as $cert)
-                        <li class="mb-1">
-                            <div class="d-flex flex-row">
-                                <p class="mb-0 ml-1">
-                                    <span style="font-size: 1.4em;">
-                                        <img src="{{ $cert->controller->avatar() }}" style="height: 35px !important; width: 35px !important; margin-right: 10px; margin-bottom: 3px; border-radius: 50%;">
-                                        <div class="d-flex flex-column ml-2">
-                                            <h5 class="fw-400">{{ $cert->controller->fullName('FL') }}</h5>
-                                            <p title="{{ $cert->timestamp->toDayDateTimeString() }}">
-                                                {{ $cert->timestamp->diffForHumans() }}</p>
-                                        </div>
-                                    </span>
-                                </p>
-                            </div>
-                        </li>
-                    @endforeach
-                </ul>
-                @else
-                <h2 class="font-weight-bold blue-text mb-1">Newest Controllers</h2>
-                    Login with VATSIM to see our most recent certified controllers.
-                @endif
-            </div>
-
-            {{-- Right Collum --}}
-            <div class="col-md-4 mb-4">
-
                 {{-- Month Stats --}}
                 @if (auth()->check())
                 <h2 class="font-weight-bold blue-text mb-4">{{\Carbon\Carbon::now()->format('F')}} Top Controllers</h2>
@@ -360,6 +329,10 @@
                     <h2 class="font-weight-bold blue-text mb-1">{{\Carbon\Carbon::now()->format('F')}} Top Controllers</h2>
                     <p class="mb-3">Login with VATSIM to check our {{\Carbon\Carbon::now()->format('F')}} top controllers!</p>
                 @endif
+            </div>
+
+            {{-- Right Collum --}}
+            <div class="col-md-4 mb-4">
 
                 {{-- Year Stats --}}
                 @if (auth()->check())
@@ -426,6 +399,32 @@
                 @else
                     <h2 class="font-weight-bold blue-text mb-1">{{\Carbon\Carbon::now()->format('Y')}} Top Controllers</h2>
                     Login with VATSIM to check our {{\Carbon\Carbon::now()->format('Y')}} top controllers!
+                @endif
+
+                {{-- New Certifications --}}
+                @if(auth()->check())
+                <h2 class="font-weight-bold blue-text mb-4">Newest Controllers</h2>
+                <ul class="list-unstyled">
+                    @foreach ($certifications as $cert)
+                        <li class="mb-1">
+                            <div class="d-flex flex-row">
+                                <p class="mb-0 ml-1">
+                                    <span style="font-size: 1.4em;">
+                                        <img src="{{ $cert->controller->avatar() }}" style="height: 35px !important; width: 35px !important; margin-right: 10px; margin-bottom: 3px; border-radius: 50%;">
+                                        <div class="d-flex flex-column ml-2">
+                                            <h5 class="fw-400">{{ $cert->controller->fullName('FL') }}</h5>
+                                            <p title="{{ $cert->timestamp->toDayDateTimeString() }}">
+                                                {{ $cert->timestamp->diffForHumans() }}</p>
+                                        </div>
+                                    </span>
+                                </p>
+                            </div>
+                        </li>
+                    @endforeach
+                </ul>
+                @else
+                <h2 class="font-weight-bold blue-text mb-1">Newest Controllers</h2>
+                    Login with VATSIM to see our most recent certified controllers.
                 @endif
             </div>
         </div>

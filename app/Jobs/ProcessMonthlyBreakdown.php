@@ -12,6 +12,8 @@ use GuzzleHttp\Client;
 use App\Services\DiscordClient;
 use App\Models\Training\Instructing\Records\TrainingSession;
 use App\Models\Users\User;
+use App\Models\Network\FIRAircraft;
+use App\Models\Network\FIRPilots;
 use App\Models\Roster\RosterMember;
 use App\Models\News\HomeNewControllerCert;
 use App\Models\Network\ExternalController;
@@ -43,6 +45,8 @@ class ProcessMonthlyBreakdown implements ShouldQueue
         $top_3 = RosterMember::all()->sortByDesc(function ($member) {return (float) $member->monthly_hours;})->take(3);
         $new_controllers = HomeNewControllerCert::where('timestamp', '>=', Carbon::now()->subMonths(1))->get();
         $external_controllers = ExternalController::where('currency', '>', 0)->get();
+        $pilots = FIRPilots::all();
+        $current_pilots = FIRAircraft::where('point_recorded', 1)->whereNull('exited_oca')->get();
 
         // Set Variables
         $total_hours = 0;
@@ -81,14 +85,32 @@ class ProcessMonthlyBreakdown implements ShouldQueue
         $discord = new DiscordClient();
         $discord->sendMessageWithEmbed(env('DISCORD_COMMUNITY'), 'Gander Oceanic Operations | '.Carbon::now()->subMonth()->format('F, Y'), $message);
 
+        // Gander Certified Controllers time set to 0
         foreach($roster_member as $roster){
             $roster->monthly_hours = 0;
             $roster->save();
         }
 
+        // External Certified Controllers time set to 0
         foreach($external_controllers as $member){
             $member->monthly_hours = 0;
             $member->save();
+        }
+
+        print($pilots);
+
+        // Pilot Month Entry set to 0
+        foreach($pilots as $pilot){
+            $pilot->month_stats = 0;
+            $pilot->save();
+        }
+
+        // Pilots Currently In OCA but Given Point already should retain that point for this month.
+        foreach($current_pilots as $cp){
+            $FIRPilots = FIRPilots::updateOrCreate(
+                ['cid' => $cp->cid],
+                ['month_stats' => 1]
+            );
         }
     }
 
