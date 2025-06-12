@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\Http;
 use App\Jobs\ProcessRosterInactivity;
 use App\Jobs\DiscordTrainingWeeklyUpdates;
 use App\Jobs\ProcessShanwickControllers;
+use App\Jobs\ProcessMonthlyBreakdown;
 use App\Jobs\ProcessSessionLogging;
 use App\Jobs\MassUserUpdates;
 use App\Jobs\DiscordAccountCheck;
@@ -39,7 +40,7 @@ class DiscordTestController extends Controller
     public function Job()
     {
         // Dispatch the job
-        $job = DiscordAccountCheck::dispatch();
+        $job = ProcessMonthlyBreakdown::dispatch();
 
         // Call the handle method directly to get the result synchronously
         $result = $job->handle();
@@ -53,7 +54,7 @@ class DiscordTestController extends Controller
     public function Job2()
     {
         // Dispatch the job
-        $job = MassUserUpdates::dispatch();
+        $job = ProcessSessionLogging::dispatch();
 
         // Call the handle method directly to get the result synchronously
         $result = $job->handle();

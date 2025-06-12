@@ -1,6 +1,7 @@
 <?php
 
 use App\Models\Roster\SoloCertification;
+use App\Http\Controllers\PrimaryViewsController;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 
@@ -28,7 +29,7 @@ Route::get('news', function (Request $request) {
 
 Route::get('roster', function (Request $request) {
     $array = \App\Models\Roster\RosterMember::all();
-    $array->makeHidden(['id', 'user_id', 'created_at', 'updated_at', 'remarks', 'date_certified']);
+    $array->makeHidden(['id', 'user_id', 'certified_in_q3', 'certified_in_q4', 'created_at', 'updated_at', 'remarks', 'date_certified']);
 
     return response()->json($array);
 });
@@ -39,3 +40,6 @@ Route::get('roster/solocertifications', function (Request $request) {
 
     return response()->json($array);
 });
+
+Route::get('update-homepage/general', [PrimaryViewsController::class, 'homeUpdate']);
+Route::get('update-homepage/controllers/{status}', [PrimaryViewsController::class, 'updateControllers']);

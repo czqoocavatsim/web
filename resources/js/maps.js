@@ -517,7 +517,7 @@ async function createNatTrackMap()
     }
 
     //Get tracks
-    let endpoint = "https://tracks.ganderoceanic.ca/data"
+    let endpoint = "https://nattrak.vatsim.net/api/tracks"
     const response = await fetch(endpoint)
 
     //Create data object
@@ -825,7 +825,7 @@ async function createMap(planes, controllerOnline) {
 
     //Add tracks
     //Get tracks
-    let endpoint = "https://tracks.ganderoceanic.ca/data"
+    let endpoint = "https://nattrak.vatsim.net/api/tracks"
     const response = await fetch(endpoint)
 
     //Create data object
@@ -835,7 +835,7 @@ async function createMap(planes, controllerOnline) {
     data.forEach(track => {
         //Create array of points latitudes/longitudes
         let pointsLatLon = []
-        track.route.forEach(point => {
+        track.last_routeing.forEach(point => {
             //Add point to array
             pointsLatLon.push([point.latitude, point.longitude])
             //Create map marker

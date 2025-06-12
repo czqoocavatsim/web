@@ -3,8 +3,9 @@
 @section('description', 'Cool, calm and collected oceanic control services in the North Atlantic on VATSIM.')
 
 @section('content')
+    {{-- Top Introduction --}}
     <div style="height: calc(100vh - 74px); z-index: -1" class="z-depth-0 jarallax">
-        <img src="{{asset('assets/resources/media/img/website/home_banner.png')}}" alt="" class="jarallax-img">
+        <img src="{{asset('assets/resources/media/img/website/787.png')}}" alt="" class="jarallax-img">
         <div class="flex-center mask rgba-black-light flex-column">
             <div class="container d-none d-sm-block">
                 <h1 class="display-2 fw-700 white-text">Cool. Calm. Collected.</h1>
@@ -16,19 +17,87 @@
             </div>
         </div>
     </div>
-    <div class="jumbtron" style="margin-top: -100px; z-index: 999;">
-        @if ($nextEvent)
-            <div class="container px-5 py-3 mb-0 blue darken-2 white-text">
-                <p style="font-size: 1.4em;" class="font-weight-bold mb-0">
-                    <a href="{{ route('events.view', $nextEvent->slug) }}" class="white-text">
-                        <i class="fa fa-calendar"></i>&nbsp;&nbsp;Upcoming: {{ $nextEvent->name }}
-                    </a>
-                    <span class="fw-400">
-                        {{ $nextEvent->start_timestamp_pretty() }}
-                    </span>
+
+    {{-- CTP Specific - Event Upcoming --}}
+    @if($ctpMode == 2)
+        <div class="jumbtron" style="margin-top: -100px; z-index: 999;">
+        @if ($ctpEvents)
+            <div class="container px-5 py-3 mb-2 blue darken-2 white-text" style="position: relative;">
+                <p style="font-size: 2.5em;" class="font-weight-bold mb-0">{{$ctpEvents->name}} is underway!</p>
+                <p style="font-size: 1.4em;" class="mb-0">Cross the Pond is currently underway, with <b><x id="ganwick-count">{{$ctpAircraft->ganwick}}</x></b> aircraft currently inside the Gander (CZQO) and Shanwick (EGGX) FIRs on their way towards their destinations!</p>
+                
+                <div id="countdown" class="d-flex gap-2 flex-wrap text-center"
+                    style="position: absolute; top: 10px; right: 10px; z-index: 10;">
+                </div>
+
+                <p style="font-size: 1.8em; margin-top: 15px;" class="mb-0">
+                    <div class="row" style="text-align: left">
+                        <div class="col-md-2"><u>Gander OCA (CZQO)</u><br>
+                            <div id="czqo-count">{{$ctpAircraft->czqo}} Aircraft in FIR</div>
+                        </div>
+                        <div class="col-md-2"><u>Shanwick OCA (EGGX)</u><br>
+                            <div id="eggx-count">{{$ctpAircraft->eggx}} Aircraft in FIR</div>
+                        </div>
+                        <div class="col-md-2"><u>New York OCA (KZNY)</u><br>
+                            <div id="kzny-count">{{$ctpAircraft->kzny}} Aircraft in FIR</div>
+                        </div>
+                        <div class="col-md-2"><u>Reykjavik FIR (BIRD)</u><br>
+                            <div id="bird-count">{{$ctpAircraft->bird}} Aircraft in FIR</div>
+                        </div>
+                        <div class="col-md-4"><u>Santa Maria OCA (LPPO)</u><br>
+                            <div id="lppo-count">{{$ctpAircraft->lppo}} Aircraft in FIR</div>
+                        </div>
+                    </div>
                 </p>
             </div>
         @endif
+        <div class="container blue z-depth-2 px-5 pt-5 pb-3 mb-5">
+            <div class="row">
+                <div class="col-md-12 mb-4">
+                    <div class="d-flex flex-row-justify-content-between align-items-center">
+                        <h2 class="white-text font-weight-bold"><u>Cross the Pond Controllers</u></h2>
+                        <a href="{{ route('map') }}" class="float-right ml-auto mr-0 white-text"
+                            style="font-size: 1.2em;">View airspace map&nbsp;&nbsp;<i class="fas fa-map"></i></a>
+                    </div>
+
+                    <p style="font-size: 1.1em; margin-top: -0px;" class="mb-0 white-text"><b>Last Updated:</b> <x id="timer-info">{{ \Carbon\Carbon::now('UTC')->format('Hi') }}Z</x><p>
+
+                    <ul class="list-unstyled ml-0 mt-3 p-0 onlineControllers">
+                        <x id="controller-info">
+                            @include('partials.homepage.ctp-controllers');
+                        </x>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+    @endif
+
+    {{-- General Information - Online Controllers & News - Hidden during CTP Event--}}
+    @if($ctpMode == false || $ctpMode == 1)
+    <div class="jumbtron" style="margin-top: -100px; z-index: 999;">
+
+        {{-- CTP Event is occuring this Month --}}
+        @if ($ctpMode == 1)
+            <div class="container px-5 py-3 mb-2 blue darken-2 white-text" style="position: relative;">
+                <p style="font-size: 2.5em;" class="font-weight-bold mb-0">{{$ctpEvents->name}} is on its way!</p>
+                <p style="font-size: 1.4em;" class="mb-0">Cross the Pond takes flight on {{\Carbon\Carbon::parse($ctpEvents->oca_start)->format('l, jS \\of F Y')}}</p>
+
+                <p style="font-size: 1.4em;" class="mb-0">
+                    <div class="row" style="text-align: left">
+                        <div class="col-md-3"><a href="https://ctp.vatsim.net/" target="_blank" style="color: white; text-decoration: underline; font-size: 1.4em;">CTP Website</a></div>
+                        @if($ctpEvents->app !== null) @hasanyrole('Certified Controller')<div class="col-md-3"><a href="{{$ctpEvents->app}}" target="_blank" style="color: white; text-decoration: underline; font-size: 1.4em;">Apply to Control</a></div>@endhasanyrole @endif
+                        {{-- <div class="col-md-3"><a href="1" target="_blank" style="color: white; text-decoration: underline; font-size: 1.4em;">Test</a></div> --}}
+                    </div>
+                </p>
+
+                <div id="countdown" class="d-flex gap-2 flex-wrap text-center"
+                    style="position: absolute; top: 10px; right: 10px; z-index: 10;">
+                </div>
+
+            </div>
+        @endif
+
         <div class="container blue z-depth-2 px-5 pt-5 pb-3 mb-5">
             <div class="row">
                 <div class="col-md-6 mb-4">
@@ -58,60 +127,147 @@
                         <a href="{{ route('map') }}" class="float-right ml-auto mr-0 white-text"
                             style="font-size: 1.2em;">View airspace map&nbsp;&nbsp;<i class="fas fa-map"></i></a>
                     </div>
+                    
+                    <p style="font-size: 1.1em; margin-top: 0px;" class="mb-1 white-text"><b>Last Updated:</b> <x id="timer-info">{{ \Carbon\Carbon::now('UTC')->format('Hi') }}Z</x><p>
+
+                    <p style="font-size: 1.8em; margin-top: 15px;" class="mb-0">
+                    <div class="row white-text" style="text-align: left; text-color: white; text-align: center;" >
+                        <div class="col-md-4 col-sm-4"><u>Gander OCA (CZQO)</u><br>
+                            <div id="czqo-count">{{$ctpAircraft->czqo}} Aircraft in FIR</div>
+                        </div>
+                        <div class="col-md-4 col-sm-4"><u>Shanwick OCA (EGGX)</u><br>
+                            <div id="eggx-count">{{$ctpAircraft->eggx}} Aircraft in FIR</div>
+                        </div>
+                        <div class="col-md-4 col-sm-4"><u>New York OCA (KZNY)</u><br>
+                            <div id="kzny-count">{{$ctpAircraft->kzny}} Aircraft in FIR</div>
+                        </div>
+                    </div>
+                </p>
                     <ul class="list-unstyled ml-0 mt-3 p-0 onlineControllers">
-                        @if (count($controllers) < 1)
-                            <li class="mb-2">
-                                <div class="d-flex flex-row justify-content-between align-items-center mb-1">
-                                    <h4 class="m-0 white-text"><i class="fas fa-times" style="margin-right: 1rem;"></i>No controllers currently connected to VATSIM.</h4>
-                                </div>
-                            </li>
-                        @else
-                        <table class="table table-hover" style="color: white; text-align: center;">
-                            <thead>
-                            <tr>
-                                <th scope="col">Callsign</th>
-                                <th scope="col">Controller</th>
-                                <th scope="col">Time Online</th>
-                            </tr>
-                            </thead>
-                            <tbody>
-                            @foreach ($controllers as $controller)
-                                <tr>
-                                    <th scope="row"><b>{{$controller->callsign}}</b>
-                                        @if($controller->is_instructing == 1)<br><span class="badge bg-danger">Instructing</span>@endif
-                                        @if($controller->is_student == 1)<br><span class="badge bg-warning">Training</span>@endif
-                                        @if($controller->is_ctp == 1)<br><span class="badge bg-info">CTP Controller</span>@endif</th>
-                                    <td>
-                                        @if($controller->user)
-                                            {{$controller->user->fullName('FLC')}}
-                                        @else
-                                            {{$controller->cid}}
-                                        @endif
-                                    </td>
-                                    <td>
-                                        @if ($controller->session_start->diff(\Carbon\Carbon::now())->h > 0)
-                                            {{ $controller->session_start->diff(\Carbon\Carbon::now())->h }}hr {{ $controller->session_start->diff(\Carbon\Carbon::now())->i }}min
-                                        @else
-                                            {{ $controller->session_start->diff(\Carbon\Carbon::now())->i }}min
-                                        @endif
-                                    </td>
-                                </tr>
-                            @endforeach
-                            </tbody>
-                        </table>
-                        @endif
+                        {{-- Updated every minute. Rendered by JS from Partials Folder --}}
+                        <x id="controller-info">
+                            @include('partials.homepage.general-controllers');
+                        </x>
                     </ul>
                 </div>
             </div>
         </div>
     </div>
+    @endif
+
+
+
+    {{-- Statistics --}}
     <div class="container my-5">
         <div class="row">
-            
 
+            {{-- Left Row --}}
             <div class="col-md-4 mb-4">
-                <h2 class="font-weight-bold blue-text mb-4">{{\Carbon\Carbon::now()->format('F')}} Top Controllers</h2>
+
+                {{-- Month Pilot Stats --}}
                 @if (auth()->check())
+                <h2 class="font-weight-bold blue-text mb-4">{{\Carbon\Carbon::now()->format('F')}} Top Pilots</h2>
+                    <ul class="list-unstyled">
+                        @php $index = 1; @endphp
+                        @foreach ($monthPilots as $tp)
+                            <li class="mb-1">
+                                <div class="d-flex flex-row">
+                                    <span class="font-weight-bold blue-text" style="font-size: 1.9em;">
+                                        @if ($index == 1)
+                                            <i class="fas fa-trophy amber-text fa-fw"></i>
+                                        @elseif ($index == 2)
+                                            <i class="fas fa-trophy blue-grey-text fa-fw"></i>
+                                        @elseif ($index == 3)
+                                            <i class="fas fa-trophy brown-text fa-fw"></i>
+                                        @else
+                                            {{ $index }}<sup>th</sup>
+                                        @endif
+                                    </span>
+                                    <p class="mb-0 ml-1">
+                                        <span style="font-size: 1.4em;">
+                                            @if($tp->user)
+                                            <img src="{{ $tp->user->avatar() }}" style="height: 35px; !important; width: 35px !important; margin-left: 10px; margin-right: 5px; margin-bottom: 3px; border-radius: 50%;">
+                                            <div class="d-flex flex-column ml-2">
+                                                <h5 class="fw-400">{{ $tp->user->fullName('FL') }}</h5>
+                                                <p>{{$tp->month_stats}} flight's recorded this month</p>
+                                            </div>
+                                            @else
+                                            <img src="{{asset('assets/resources/media/img/brand/sqr/ZQO_SQ_TSPBLUE.png')}}" style="height: 35px; !important; width: 35px !important; margin-left: 10px; margin-right: 5px; margin-bottom: 3px; border-radius: 50%;">
+                                            <div class="d-flex flex-column ml-2">
+                                                <h5 class="fw-400">{{ $tp->cid }}</h5>
+                                                <p>{{$tp->month_stats}} @if($tp->year_stats == 1)flight @else flight's @endif recorded this month</p>
+                                            </div>
+                                            @endif
+                                        </span>
+                                    </p>
+                                </div>
+                            </li>
+                            @php $index++; @endphp
+                        @endforeach
+                        @if (count($monthPilots) < 1)
+                            <p style="margin-top: -20px;">No data available.</p>
+                        @endif
+                    </ul>
+                @else
+                    <h2 class="font-weight-bold blue-text mb-1">{{\Carbon\Carbon::now()->format('F')}} Top Pilots</h2>
+                    <p class="mb-3">Login with VATSIM to check our {{\Carbon\Carbon::now()->format('F')}} top pilots!</p>
+                @endif
+                
+                {{-- Year Pilot Stats --}}
+                @if (auth()->check())
+                <h2 class="font-weight-bold blue-text mb-4">{{\Carbon\Carbon::now()->format('Y')}} Top Pilots</h2>
+                    <ul class="list-unstyled">
+                        @php $index = 1; @endphp
+                        @foreach ($yearPilots as $yp)
+                            <li class="mb-1">
+                                <div class="d-flex flex-row">
+                                    <span class="font-weight-bold blue-text" style="font-size: 1.9em;">
+                                        @if ($index == 1)
+                                            <i class="fas fa-trophy amber-text fa-fw"></i>
+                                        @elseif ($index == 2)
+                                            <i class="fas fa-trophy blue-grey-text fa-fw"></i>
+                                        @elseif ($index == 3)
+                                            <i class="fas fa-trophy brown-text fa-fw"></i>
+                                        @else
+                                            {{ $index }}<sup>th</sup>
+                                        @endif
+                                    </span>
+                                    <p class="mb-0 ml-1">
+                                        <span style="font-size: 1.4em;">
+                                            @if($yp->user)
+                                            <img src="{{ $yp->user->avatar() }}" style="height: 35px; !important; width: 35px !important; margin-left: 10px; margin-right: 5px; margin-bottom: 3px; border-radius: 50%;">
+                                            <div class="d-flex flex-column ml-2">
+                                                <h5 class="fw-400">{{ $yp->user->fullName('FL') }}</h5>
+                                                <p>{{$yp->year_stats}} flight's over Oceanic Airspace</p>
+                                            </div>
+                                            @else
+                                            <img src="{{asset('assets/resources/media/img/brand/sqr/ZQO_SQ_TSPBLUE.png')}}" style="height: 35px; !important; width: 35px !important; margin-left: 10px; margin-right: 5px; margin-bottom: 3px; border-radius: 50%;">
+                                            <div class="d-flex flex-column ml-2">
+                                                <h5 class="fw-400">{{ $yp->cid }}</h5>
+                                                <p>{{$yp->year_stats}} @if($yp->year_stats == 1)flight @else flight's @endif over Oceanic Airspace</p>
+                                            </div>
+                                            @endif
+                                        </span>
+                                    </p>
+                                </div>
+                            </li>
+                            @php $index++; @endphp
+                        @endforeach
+                        @if (count($yearPilots) < 1)
+                            <p style="margin-top: -20px;">No data available.</p>
+                        @endif
+                    </ul>
+                @else
+                    <h2 class="font-weight-bold blue-text mb-1">{{\Carbon\Carbon::now()->format('Y')}} Top Pilots</h2>
+                    <p>Login with VATSIM to check our {{\Carbon\Carbon::now()->format('Y')}} top pilots!</p>
+                @endif
+            </div>
+
+            {{-- Middle Row --}}
+            <div class="col-md-4 mb-4">
+                {{-- Month Stats --}}
+                @if (auth()->check())
+                <h2 class="font-weight-bold blue-text mb-4">{{\Carbon\Carbon::now()->format('F')}} Top Controllers</h2>
                     <ul class="list-unstyled">
                         @php $index = 1; @endphp
                         @foreach ($topControllers as $c)
@@ -166,48 +322,21 @@
                             @php $index++; @endphp
                         @endforeach
                         @if (count($topControllers) < 1)
-                            No data available.
+                            <p style="margin-top: -20px;">No controller connections recorded.</p>
                         @endif
                     </ul>
                 @else
-                    Login with VATSIM to check our {{\Carbon\Carbon::now()->format('F')}} top controllers!
+                    <h2 class="font-weight-bold blue-text mb-1">{{\Carbon\Carbon::now()->format('F')}} Top Controllers</h2>
+                    <p class="mb-3">Login with VATSIM to check our {{\Carbon\Carbon::now()->format('F')}} top controllers!</p>
                 @endif
             </div>
 
-            {{-- new certifications --}}
+            {{-- Right Collum --}}
             <div class="col-md-4 mb-4">
-                <h2 class="font-weight-bold blue-text mb-4">Our Newest Controllers</h2>
-                @if(auth()->check())
-                <ul class="list-unstyled">
-                    @foreach ($certifications as $cert)
-                        <li class="mb-1">
-                            <div class="d-flex flex-row">
-                                <p class="mb-0 ml-1">
-                                    <span style="font-size: 1.4em;">
-                                        <img src="{{ $cert->controller->avatar() }}" style="height: 35px !important; width: 35px !important; margin-right: 10px; margin-bottom: 3px; border-radius: 50%;">
-                                        <div class="d-flex flex-column ml-2">
-                                            <h5 class="fw-400">{{ $cert->controller->fullName('FL') }}</h5>
-                                            <p title="{{ $cert->timestamp->toDayDateTimeString() }}">
-                                                {{ $cert->timestamp->diffForHumans() }}</p>
-                                        </div>
-                                    </span>
-                                </p>
-                            </div>
-                        </li>
-                    @endforeach
-                    @if (count($topControllers) < 1)
-                        No data available.
-                    @endif
-                </ul>
-                @else
-                    Login with VATSIM to see our most recent certified controllers.
-                @endif
-            </div>
 
-            {{-- Controller's of the Year --}}
-            <div class="col-md-4 mb-4">
-                <h2 class="font-weight-bold blue-text mb-4">{{\Carbon\Carbon::now()->format('Y')}} Top Controllers</h2>
+                {{-- Year Stats --}}
                 @if (auth()->check())
+                <h2 class="font-weight-bold blue-text mb-4">{{\Carbon\Carbon::now()->format('Y')}} Top Controllers</h2>
                     <ul class="list-unstyled">
                         @php $index = 1; @endphp
                         @foreach ($yearControllers as $c)
@@ -264,15 +393,47 @@
                             @php $index++; @endphp
                         @endforeach
                         @if (count($yearControllers) < 1)
-                            No data available.
+                            <p style="margin-top: -20px;">No data available.</p>
                         @endif
                     </ul>
                 @else
+                    <h2 class="font-weight-bold blue-text mb-1">{{\Carbon\Carbon::now()->format('Y')}} Top Controllers</h2>
                     Login with VATSIM to check our {{\Carbon\Carbon::now()->format('Y')}} top controllers!
+                @endif
+
+                {{-- New Certifications --}}
+                @if(auth()->check())
+                <h2 class="font-weight-bold blue-text mb-4">Newest Controllers</h2>
+                <ul class="list-unstyled">
+                    @foreach ($certifications as $cert)
+                        <li class="mb-1">
+                            <div class="d-flex flex-row">
+                                <p class="mb-0 ml-1">
+                                    <span style="font-size: 1.4em;">
+                                        <img src="{{ $cert->controller->avatar() }}" style="height: 35px !important; width: 35px !important; margin-right: 10px; margin-bottom: 3px; border-radius: 50%;">
+                                        <div class="d-flex flex-column ml-2">
+                                            <h5 class="fw-400">{{ $cert->controller->fullName('FL') }}</h5>
+                                            <p title="{{ $cert->timestamp->toDayDateTimeString() }}">
+                                                {{ $cert->timestamp->diffForHumans() }}</p>
+                                        </div>
+                                    </span>
+                                </p>
+                            </div>
+                        </li>
+                    @endforeach
+                </ul>
+                @else
+                <h2 class="font-weight-bold blue-text mb-1">Newest Controllers</h2>
+                    Login with VATSIM to see our most recent certified controllers.
                 @endif
             </div>
         </div>
     </div>
+
+
+
+
+    {{-- Bottom Section --}}
     <div class="container pb-5">
         <div class="row">
             <div class="col-lg-7 mb-4">
@@ -311,30 +472,6 @@
                             </a>
                         @endif
                     @endif
-                    {{-- <a class="border-0 list-group-item list-group-item-action waves-effect"
-                        href="https://twitter.com/ganderocavatsim" style="text-decoration:none;">
-                        <span class="blue-text">Twitter</span>
-                        &nbsp;
-                        <span class="blue-text">
-                            <i class="fab fa-twitter fa-2x" style="vertical-align:middle;"></i>
-                        </span>
-                    </a> --}}
-                    {{-- <a class="border-0 list-group-item list-group-item-action waves-effect"
-                        href="https://www.facebook.com/ganderocavatsim" style="text-decoration:none;">
-                        <span class="blue-text">Facebook</span>
-                        &nbsp;
-                        <span class="blue-text">
-                            <i class="fab fa-facebook fa-2x" style="vertical-align:middle;"></i>
-                        </span>
-                    </a> --}}
-                    {{-- <a class="border-0 list-group-item list-group-item-action waves-effect"
-                        href="https://www.youtube.com/channel/UC3norFpW3Cw4ryGR7ourjcA" style="text-decoration:none;">
-                        <span class="blue-text">YouTube Channel</span>
-                        &nbsp;
-                        <span class="blue-text">
-                            <i class="fab fa-youtube fa-2x" style="vertical-align:middle;"></i>
-                        </span>
-                    </a> --}}
                     <a class="border-0 list-group-item list-group-item-action waves-effect"
                         href="https://knowledgebase.ganderoceanic.ca" style="text-decoration:none;">
                         <span class="blue-text">ZQO Knowledge Base</span>
@@ -355,14 +492,8 @@
             </div>
         </div>
     </div>
+    {{-- Script that runs at any time --}}
     <script>
-        /*
-            jarallax(document.querySelectorAll('.jarallax'), {
-                speed: 0.5,
-                videoSrc: 'mp4:https://cdn.ganderoceanic.ca/resources/media/video/ZQO_SITE_TIMELAPSE.mp4',
-                videoLoop: true,
-                zIndex: 5
-            }); */
         $('.jarallax').jarallax({
             speed: 0.2,
             zIndex: -1
@@ -372,5 +503,121 @@
             $('#dataTable').DataTable();
         } );
     </script>
+
+    {{-- Countdown Timer for the CTP Events --}}
+    @if($ctpEvents !== null)
+        <script>
+            const eventDate = new Date("{{ \Carbon\Carbon::parse($ctpEvents->oca_start)->toIso8601String() }}").getTime();
+            const countdownElement = document.getElementById('countdown');
+
+            const updateCountdown = () => {
+                const now = new Date().getTime();
+                const distance = eventDate - now;
+
+                if (distance < 0) {
+                    clearInterval(timer);
+                    return;
+                }
+
+                const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+                const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+                const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+                const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+                countdownElement.innerHTML = `
+                    <div class="box bg-primary text-white p-3 rounded" style="margin-right: 3px;">
+                        <div style="font-size: 2em;">${days}</div>
+                        <div>Days</div>
+                    </div>
+                    <div class="box bg-primary text-white p-3 rounded" style="margin-right: 3px;">
+                        <div style="font-size: 2em;">${hours}</div>
+                        <div>Hours</div>
+                    </div>
+                    <div class="box bg-primary text-white p-3 rounded" style="margin-right: 3px;">
+                        <div style="font-size: 2em;">${minutes}</div>
+                        <div>Minutes</div>
+                    </div>
+                    <div class="box bg-primary text-white p-3 rounded" style="margin-right: 3px;">
+                        <div style="font-size: 2em;">${seconds}</div>
+                        <div>Seconds</div>
+                    </div>
+                `;
+            };
+
+            const timer = setInterval(updateCountdown, 1000);
+            updateCountdown();
+        </script>
+    @endif
+
+@if($ctpMode == false)
+<script>
+    setInterval(() => {
+    fetch('/api/update-homepage/general')
+        .then(res => res.json())
+        .then(data => {
+            document.getElementById('czqo-count').innerText = data.czqo + ' Aircraft in FIR';
+            document.getElementById('eggx-count').innerText = data.eggx + ' Aircraft in FIR';
+            document.getElementById('kzny-count').innerText = data.kzny + ' Aircraft in FIR';
+            document.getElementById('timer-info').innerText = new Date().toISOString().slice(11,16).replace(':','') + 'Z';
+        });
+    }, 60000);
+
+    setInterval(() => {
+        fetch('/api/update-homepage/controllers/1')
+            .then(res => res.text())
+            .then(html => {
+                document.getElementById('controller-info').innerHTML = html;
+            });
+    }, 60000);
+
+</script>
+@elseif($ctpMode == 1)
+<script>
+    setInterval(() => {
+    fetch('/api/update-homepage/general')
+        .then(res => res.json())
+        .then(data => {
+            document.getElementById('czqo-count').innerText = data.czqo + ' Aircraft in FIR';
+            document.getElementById('eggx-count').innerText = data.eggx + ' Aircraft in FIR';
+            document.getElementById('kzny-count').innerText = data.kzny + ' Aircraft in FIR';
+            document.getElementById('timer-info').innerText = new Date().toISOString().slice(11,16).replace(':','') + 'Z';
+        });
+    }, 60000);
+
+    setInterval(() => {
+        fetch('/api/update-homepage/controllers/1')
+            .then(res => res.text())
+            .then(html => {
+                document.getElementById('controller-info').innerHTML = html;
+            });
+    }, 60000);
+</script>
+@elseif($ctpMode == 2)
+<script>
+    setInterval(() => {
+    fetch('/api/update-homepage/general')
+        .then(res => res.json())
+        .then(data => {
+            document.getElementById('ganwick-count').innerText = data.ganwick + ' Aircraft in FIR';
+            document.getElementById('czqo-count').innerText = data.czqo + ' Aircraft in FIR';
+            document.getElementById('eggx-count').innerText = data.eggx + ' Aircraft in FIR';
+            document.getElementById('lppo-count').innerText = data.lppo + ' Aircraft in FIR';
+            document.getElementById('bird-count').innerText = data.bird + ' Aircraft in FIR';
+            document.getElementById('kzny-count').innerText = data.kzny + ' Aircraft in FIR';
+            document.getElementById('timer-info').innerText = new Date().toISOString().slice(11,16).replace(':','') + 'Z';
+
+        });
+    }, 60000);
+
+    setInterval(() => {
+        fetch('/api/update-homepage/controllers/2')
+            .then(res => res.text())
+            .then(html => {
+                document.getElementById('controller-info').innerHTML = html;
+            });
+    }, 60000);
+</script>
+@endif
+
 
 @endsection

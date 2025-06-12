@@ -23,13 +23,18 @@ class DiscordAccountCheck implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
-    public $timeout = 7200;
+    public $timeout = 60;
 
     /**
      * Execute the job.
      *
      * @return void
      */
+
+     public function tags()
+    {
+        return ['job:discord_account_check'];
+    }
 
     public function handle()
     {
@@ -145,9 +150,7 @@ class DiscordAccountCheck implements ShouldQueue
             if (!$user_exists) {
                 $discord_not_in_system_ids[] = $discord_uid;
 
-                $discord->kickMember($discord_uid);
-
-                // $discord->assignRole($discord_uid, '1372439231426990211');
+                $discord->assignRole($discord_uid, '1372584622818332763');
             }
         }
 
@@ -383,12 +386,40 @@ class DiscordAccountCheck implements ShouldQueue
 
                         $discord_roles = array_unique($mainRoles);
 
+
                         // Name Format for ZQO Members and Other Members
-                        if($user->staffProfile && $user->staffProfile->group_id == 1){
-                            $name = $user->Fullname('FL')." ZQO".$user->staffProfile->id;
-                        } else {
-                            $name = $user->FullName('FLC');
+                        {
+                            if($user->staffProfile && $user->staffProfile->group_id == 1){
+                                $name = $user->Fullname('FL')." - ZQO".$user->staffProfile->id;
+                            } else {
+                                $name = $user->FullName('FLC');
+                            }
+    
+                            // Check to ensure User name is less than 32 characters. If not, step down progressivly to find name format
+                            # FNAME + LINITAL + CID
+                            if (strlen($name) > 32) {
+                                if ($user->staffProfile && $user->staffProfile->group_id == 1) {
+                                    $name = $user->fname." ".substr($user->lname, 0, 1)." - ".$user->staffProfile->id;
+                                } else {
+                                    $name = $user->fname." ".substr($user->lname, 0, 1)." - ".$user->id;
+                                }
+                            }
+
+                            # FNAME + CID
+                            if (strlen($name) > 32) {                          
+                                if ($user->staffProfile && $user->staffProfile->group_id == 1) {
+                                    $name = $user->fname." "." - ".$user->staffProfile->id;
+                                } else {
+                                    $name = $user->fname." - ".$user->id;
+                                }
+                            }
+    
+                            // If its still greater than 32, then just show the CID
+                            if (strlen($name) > 32) {
+                                $name = $user->id;
+                            }
                         }
+
 
                         // Full list of staff roles
                         $staffRoleIDs = [
@@ -523,7 +554,7 @@ class DiscordAccountCheck implements ShouldQueue
         }
 
         if($user_updated > 0){
-            // $discord->sendMessage('482860026831175690', "DISCORD UPDATE: ".$user_updated." users updated.");
+            $discord->sendMessage('482860026831175690', "DISCORD UPDATE: ".$user_updated." users updated.");
         }
     }
 
