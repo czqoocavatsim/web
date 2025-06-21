@@ -13,17 +13,12 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('flights_log', function (Blueprint $table) {
+        Schema::create('flight_airport', function (Blueprint $table) {
             $table->id();
-            $table->integer('cid');
-            $table->string('callsign');
-            $table->string('airline');
-            $table->string('dep');
-            $table->string('arr');
-            $table->string('aircraft');
-            $table->string('direction');
-            $table->integer('still_inside')->nullable();
-            $table->integer('save_details')->nullable();
+            $table->string('icao');
+            $table->string('name');
+            $table->string('lat');
+            $table->string('lon');
             $table->timestamps();
         });
     }

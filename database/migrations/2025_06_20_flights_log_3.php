@@ -13,11 +13,18 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('statistics_controller_last', function (Blueprint $table) {
+        Schema::create('flights_log', function (Blueprint $table) {
             $table->id();
             $table->integer('cid');
-            $table->string('hours');
-            $table->string('visiting_origin')->nullable();
+            $table->string('callsign');
+            $table->string('airline')->nullable();
+            $table->string('dep');
+            $table->string('arr');
+            $table->string('aircraft');
+            $table->integer('fl');
+            $table->string('direction')->nullable();
+            $table->integer('still_inside')->nullable();
+            $table->integer('save_details')->nullable();
             $table->timestamps();
         });
     }

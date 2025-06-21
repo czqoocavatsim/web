@@ -13,11 +13,11 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('statistics_controller_last', function (Blueprint $table) {
+        Schema::create('flight_airlines', function (Blueprint $table) {
             $table->id();
-            $table->integer('cid');
-            $table->string('hours');
-            $table->string('visiting_origin')->nullable();
+            $table->string('iata');
+            $table->string('icao');
+            $table->string('name');
             $table->timestamps();
         });
     }
