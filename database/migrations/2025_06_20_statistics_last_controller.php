@@ -13,11 +13,12 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('fir_pilot_stats', function (Blueprint $table) {
+        Schema::create('statistics_controller_last', function (Blueprint $table) {
             $table->id();
             $table->integer('cid');
-            $table->string('month_stats');
-            $table->string('year_stats');
+            $table->string('hours');
+            $table->string('hours');
+            $table->string('visiting_origin')->nullable();
             $table->timestamps();
         });
     }
