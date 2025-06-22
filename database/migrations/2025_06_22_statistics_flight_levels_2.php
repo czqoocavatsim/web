@@ -13,11 +13,11 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('statistics_aircraft', function (Blueprint $table) {
+        Schema::create('statistics_levels', function (Blueprint $table) {
             $table->id();
-            $table->string('code');
-            $table->string('name')->nullable();
+            $table->string('level');
             $table->string('current')->nullable();
+            $table->string('last_month')->nullable();
             $table->string('year')->nullable();
             $table->timestamps();
         });

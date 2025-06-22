@@ -9,7 +9,7 @@ class FlightAirports extends Model
 {
     use HasFactory;
 
-    protected $table = "flight_airport";
+    protected $table = "flight_airports";
     protected $fillable = ['id', 'icao', 'iata', 'name'];
         
 }

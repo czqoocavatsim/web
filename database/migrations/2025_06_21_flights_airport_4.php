@@ -13,13 +13,14 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('statistics_airline', function (Blueprint $table) {
+        Schema::create('flight_airports', function (Blueprint $table) {
             $table->id();
-            $table->string('icao')->nullable();;
-            $table->string('iata')->nullable();;
+            $table->string('icao')->nullable();
+            $table->string('iata')->nullable();
             $table->string('name')->nullable();
-            $table->string('current')->nullable();
-            $table->string('year')->nullable();
+            $table->string('name_short')->nullable();
+            $table->string('lat')->nullable();
+            $table->string('lon')->nullable();
             $table->timestamps();
         });
     }

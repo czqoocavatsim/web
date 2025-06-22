@@ -59,6 +59,7 @@ class ProcessAirports implements ShouldQueue
 
         $record = [
             'name' => $data[1] !== '\n' || $data[1] !== '' ? $data[1] : null,
+            'name_short' => $data[2] !== '\n' || $data[2] !== '' || $data[3] !== '\n' || $data[3] !== '' ? $data[2].', '.$data[3] : null,
             'iata' => $data[4] !== '\n' || $data[4] !== '' ? $data[4] : null,
             'icao' => $data[5] !== '\n' || $data[5] !== '' ? $data[5] : null,
             // 'lat' => $data[5] !== '\n' || $data[5] !== '' ? $data[5] : null,
