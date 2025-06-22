@@ -12,6 +12,9 @@ use App\Jobs\ProcessMonthlyBreakdown;
 use App\Jobs\ProcessSessionLogging;
 use App\Jobs\MassUserUpdates;
 use App\Jobs\DiscordAccountCheck;
+use App\Jobs\ProcessAirlines;
+use App\Jobs\ProcessAirports;
+use App\Jobs\ProcessAircraft;
 
 use App\Models\Users\User;
 use Illuminate\Support\Facades\Notification;
@@ -40,7 +43,7 @@ class DiscordTestController extends Controller
     public function Job()
     {
         // Dispatch the job
-        $job = ProcessMonthlyBreakdown::dispatch();
+        $job = ProcessAircraft::dispatch();
 
         // Call the handle method directly to get the result synchronously
         $result = $job->handle();

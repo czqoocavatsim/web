@@ -16,7 +16,8 @@
         </div>
 
         <div class="col-md-10 mb-3">
-            <h1 class="font-weight-bold blue-text mb-4">Statistics Hub - Gander Oceanic</h1>
+            <h1 class="font-weight-bold blue-text mb-1">Statistics Hub - Gander Oceanic</h1>
+            <p style="margin-top: 5px; margin-bottom: 10px;" class="mb-3">All statistics are caclulated once hourly.</p>
 
             {{-- This Month Statistics --}}
             <a id="1"><h2 class="font-weight-bold blue-text mb-1">This Month Statistics</h2></a>
@@ -34,7 +35,7 @@
 
             {{-- All Controller Statistics --}}
             <a id="2"><h2 class="font-weight-bold blue-text mt-2">Controller Statistics</h2></a>
-            <p style="margin-top: 5px; margin-bottom: 10px;">See Controller statistics for this Month, Last Month and This Year. Statistics are calculated when page is loaded.</p>
+            <p style="margin-top: 5px; margin-bottom: 10px;">See Controller statistics for this Month, Last Month and this year.</p>
                 <div class="row">
                     {{-- Month Stats --}}
                     @include('partials.statistics.controller-month')
@@ -48,7 +49,7 @@
 
             {{-- All Pilot Statistics --}}
             <a id="3"><h2 class="font-weight-bold blue-text mt-2">Pilot Statistics</h2></a>
-            <p style="margin-top: 5px; margin-bottom: 10px;">All </p>
+            <p style="margin-top: 5px; margin-bottom: 10px;">See top pilot flights for this month, last month and the entire year.</p>
             <div class="row">
                 {{-- Airline Month Stats --}}
                 @include('partials.statistics.pilot-month')

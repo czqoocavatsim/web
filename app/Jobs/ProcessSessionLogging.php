@@ -12,7 +12,7 @@ use Carbon\Carbon;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use App\Models\Network\FIRInfo;
-use App\Models\Network\FlightLog;
+use App\Models\Statistics\FlightLog;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;

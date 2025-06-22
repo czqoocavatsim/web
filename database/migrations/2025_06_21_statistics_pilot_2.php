@@ -13,10 +13,12 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('statistics_pilot_last', function (Blueprint $table) {
+        Schema::create('statistics_pilot', function (Blueprint $table) {
             $table->id();
             $table->integer('cid');
-            $table->string('flights');
+            $table->string('current')->nullable();
+            $table->string('last_month')->nullable();;
+            $table->string('year')->nullable();;
             $table->timestamps();
         });
     }

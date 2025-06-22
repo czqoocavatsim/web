@@ -26,10 +26,10 @@
                                             @if($c->visiting_origin == "zny")<span class="badge bg-secondary">KZNY</span>@elseif($c->visiting_origin == "eggx")<span class="badge bg-danger">EGGX</span>@else<span class="badge bg-primary">CZQO</span>@endif
                                         </h5>
                                         <p>
-                                            @if($c->currency < 1)
-                                                {{ str_pad(round(($c->currency - floor($c->currency)) * 60), 2, '0', STR_PAD_LEFT) }}m recorded in {{\Carbon\Carbon::now()->format('Y')}}
+                                            @if($c->year < 1)
+                                                {{ str_pad(round(($c->year - floor($c->year)) * 60), 2, '0', STR_PAD_LEFT) }}m recorded in {{\Carbon\Carbon::now()->format('Y')}}
                                             @else
-                                                {{ floor($c->currency) }}h {{ str_pad(round(($c->currency - floor($c->currency)) * 60), 2, '0', STR_PAD_LEFT) }}m recorded in {{\Carbon\Carbon::now()->format('Y')}}
+                                                {{ floor($c->year) }}h {{ str_pad(round(($c->year - floor($c->year)) * 60), 2, '0', STR_PAD_LEFT) }}m recorded in {{\Carbon\Carbon::now()->format('Y')}}
                                             @endif
                                         </p>
                                     </div>
@@ -37,14 +37,14 @@
                                 {{-- User Model does not Exist --}}
                                 <img src="{{asset('assets/resources/media/img/brand/sqr/ZQO_SQ_TSPBLUE.png')}}" style="height: 35px; !important; width: 35px !important; margin-left: 10px; margin-right: 5px; margin-bottom: 3px; border-radius: 50%;">
                                 <div class="d-flex flex-column ml-2">
-                                    <h5 class="fw-400">{{ $c->id }}
+                                    <h5 class="fw-400">{{ $c->cid }}
                                         @if($c->visiting_origin == "zny")<span class="badge bg-secondary">KZNY</span>@elseif($c->visiting_origin == "eggx")<span class="badge bg-danger">EGGX</span>@endif
                                     </h5>
                                     <p>
-                                        @if($c->currency < 1)
-                                            {{ str_pad(round(($c->currency - floor($c->currency)) * 60), 2, '0', STR_PAD_LEFT) }}m recorded in {{\Carbon\Carbon::now()->format('Y')}}
+                                        @if($c->year < 1)
+                                            {{ str_pad(round(($c->year - floor($c->year)) * 60), 2, '0', STR_PAD_LEFT) }}m recorded in {{\Carbon\Carbon::now()->format('Y')}}
                                         @else
-                                            {{ floor($c->currency) }}h {{ str_pad(round(($c->currency - floor($c->currency)) * 60), 2, '0', STR_PAD_LEFT) }}m recorded in {{\Carbon\Carbon::now()->format('Y')}}
+                                            {{ floor($c->year) }}h {{ str_pad(round(($c->year - floor($c->year)) * 60), 2, '0', STR_PAD_LEFT) }}m recorded in {{\Carbon\Carbon::now()->format('Y')}}
                                         @endif
                                     </p>
                                 </div>

@@ -25,24 +25,24 @@
                                                 @if($c->visiting_origin == "zny")<span class="badge bg-secondary">KZNY</span>@elseif($c->visiting_origin == "eggx")<span class="badge bg-danger">EGGX</span>@else<span class="badge bg-primary">CZQO</span>@endif
                                             </h5>
                                             <p>
-                                                @if($c->monthly_hours < 1)
-                                                    {{ str_pad(round(($c->monthly_hours - floor($c->monthly_hours)) * 60), 2, '0', STR_PAD_LEFT) }}m recorded this month
+                                                @if($c->current < 1)
+                                                    {{ str_pad(round(($c->current - floor($c->current)) * 60), 2, '0', STR_PAD_LEFT) }}m recorded in {{\Carbon\Carbon::now()->format('F')}}
                                                 @else
-                                                    {{ floor($c->monthly_hours) }}h {{ str_pad(round(($c->monthly_hours - floor($c->monthly_hours)) * 60), 2, '0', STR_PAD_LEFT) }}m recorded this month
+                                                    {{ floor($c->current) }}h {{ str_pad(round(($c->current - floor($c->current)) * 60), 2, '0', STR_PAD_LEFT) }}m recorded in {{\Carbon\Carbon::now()->format('F')}}
                                                 @endif
                                             </p>
                                         </div>
                                 @else
                                 <img src="{{asset('assets/resources/media/img/brand/sqr/ZQO_SQ_TSPBLUE.png')}}" style="height: 35px; !important; width: 35px !important; margin-left: 10px; margin-right: 5px; margin-bottom: 3px; border-radius: 50%;">
                                 <div class="d-flex flex-column ml-2">
-                                    <h5 class="fw-400">{{ $c->id }} 
+                                    <h5 class="fw-400">{{ $c->cid }} 
                                         @if($c->visiting_origin == "zny")<span class="badge bg-secondary">KZNY</span>@elseif($c->visiting_origin == "eggx")<span class="badge bg-danger">EGGX</span>@endif
                                     </h5>
                                     <p>
-                                        @if($c->monthly_hours < 1)
-                                            {{ str_pad(round(($c->monthly_hours - floor($c->monthly_hours)) * 60), 2, '0', STR_PAD_LEFT) }}m recorded this month
+                                        @if($c->current < 1)
+                                            {{ str_pad(round(($c->current - floor($c->current)) * 60), 2, '0', STR_PAD_LEFT) }}m recorded in {{\Carbon\Carbon::now()->format('F')}}
                                         @else
-                                            {{ floor($c->monthly_hours) }}h {{ str_pad(round(($c->monthly_hours - floor($c->monthly_hours)) * 60), 2, '0', STR_PAD_LEFT) }}m recorded this month
+                                            {{ floor($c->current) }}h {{ str_pad(round(($c->current - floor($c->current)) * 60), 2, '0', STR_PAD_LEFT) }}m recorded in {{\Carbon\Carbon::now()->format('F')}}
                                         @endif
                                     </p>
                                 </div>

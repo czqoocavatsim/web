@@ -25,10 +25,10 @@
                                                 @if($c->visiting_origin == "zny")<span class="badge bg-secondary">KZNY</span>@elseif($c->visiting_origin == "eggx")<span class="badge bg-danger">EGGX</span>@else<span class="badge bg-primary">CZQO</span>@endif
                                             </h5>
                                             <p>
-                                                @if($c->hours < 1)
-                                                    {{ str_pad(round(($c->hours - floor($c->hours)) * 60), 2, '0', STR_PAD_LEFT) }}m recorded this month
+                                                @if($c->last_month < 1)
+                                                    {{ str_pad(round(($c->last_month - floor($c->last_month)) * 60), 2, '0', STR_PAD_LEFT) }}m recorded in {{\Carbon\Carbon::now()->subMonth()->format('F')}}
                                                 @else
-                                                    {{ floor($c->hours) }}h {{ str_pad(round(($c->hours - floor($c->hours)) * 60), 2, '0', STR_PAD_LEFT) }}m recorded this month
+                                                    {{ floor($c->last_month) }}h {{ str_pad(round(($c->last_month - floor($c->last_month)) * 60), 2, '0', STR_PAD_LEFT) }}m recorded in {{\Carbon\Carbon::now()->subMonth()->format('F')}}
                                                 @endif
                                             </p>
                                         </div>
@@ -39,10 +39,10 @@
                                         @if($c->visiting_origin == "zny")<span class="badge bg-secondary">KZNY</span>@elseif($c->visiting_origin == "eggx")<span class="badge bg-danger">EGGX</span>@endif
                                     </h5>
                                     <p>
-                                        @if($c->hours < 1)
-                                            {{ str_pad(round(($c->hours - floor($c->hours)) * 60), 2, '0', STR_PAD_LEFT) }}m recorded this month
+                                        @if($c->last_month < 1)
+                                            {{ str_pad(round(($c->last_month - floor($c->last_month)) * 60), 2, '0', STR_PAD_LEFT) }}m recorded in {{\Carbon\Carbon::now()->subMonth()->format('F')}}
                                         @else
-                                            {{ floor($c->hours) }}h {{ str_pad(round(($c->hours - floor($c->hours)) * 60), 2, '0', STR_PAD_LEFT) }}m recorded this month
+                                            {{ floor($c->last_month) }}h {{ str_pad(round(($c->last_month - floor($c->last_month)) * 60), 2, '0', STR_PAD_LEFT) }}m recorded in {{\Carbon\Carbon::now()->subMonth()->format('F')}}
                                         @endif
                                     </p>
                                 </div>

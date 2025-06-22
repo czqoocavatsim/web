@@ -12,6 +12,9 @@ use App\Jobs\ProcessMonthlyBreakdown;
 use App\Jobs\UpdateDiscordUserRoles;
 use App\Jobs\DiscordAccountCheck;
 use App\Jobs\MassUserUpdates;
+use App\Jobs\ProcessAirlines;
+use App\Jobs\ProcessAirports;
+use App\Jobs\ProcessAircraft;
 use App\Models\Roster\RosterMember;
 use App\Notifications\Network\OneWeekInactivityReminder;
 use App\Notifications\Network\TwoWeekInactivityReminder;
@@ -60,8 +63,12 @@ class Kernel extends ConsoleKernel
         // Check Training Threads Status (Saturday)
         $schedule->job(new DiscordTrainingWeeklyUpdates())->weeklyOn(6, '00:01');
 
-        // Mass User (Wednesday)
+        
+        // Weekly Updates
         $schedule->job((new MassUserUpdates())->onQueue('long'))->weeklyOn(6, '13:10');
+        $schedule->job((new ProcessAirlines())->onQueue('long'))->weeklyOn(4, '12:00');
+        $schedule->job((new ProcessAirports())->onQueue('long'))->weeklyOn(4, '12:10');
+        $schedule->job((new ProcessAircraft())->onQueue('long'))->weeklyOn(4, '12:20');
 
 
         // Monthly Statistics Breakdown

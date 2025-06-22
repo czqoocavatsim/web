@@ -6,7 +6,8 @@ use App\Http\Controllers\Controller;
 use App\Models\Network\MonitoredPosition;
 use App\Models\Network\SessionLog;
 use App\Models\Network\ExternalController;
-use App\Models\Network\ControllerStats;
+use App\Models\Statistics\ControllerStats;
+use App\Models\Statistics\PilotStats;
 use App\Models\Roster\RosterMember;
 use Carbon\Carbon;
 use Carbon\CarbonPeriod;
@@ -17,20 +18,16 @@ class StatisticsController extends Controller
 {
     public function index()
     {
-        //Top Month Controllers
-        $rosterMembers = RosterMember::where('monthly_hours', '>', 0)->get();
-        $externalControllers = ExternalController::where('monthly_hours', '>', 0)->get();
-        $topControllers = $rosterMembers->merge($externalControllers)->sortByDesc('monthly_hours')->take(5);
+        ### CONTROLLER STATISTICS
+        $topControllers = ControllerStats::where('current', '>', 0)->orderByDesc('current')->take(5)->get();
+        $lastControllers = ControllerStats::where('last_month', '>', 0)->orderByDesc('last_month')->take(5)->get();
+        $yearControllers = ControllerStats::where('year', '>', 0)->orderByDesc('year')->take(5)->get();
 
-        //Top controllers
-        $rosterMembers = RosterMember::where('currency', '>', 0)->get();
-        $externalControllers = ExternalController::where('currency', '>', 0)->get();
-        $yearControllers = $rosterMembers->merge($externalControllers)->sortByDesc('currency')->take(5);
+        ### PILOT STATISTICS
+        $topPilot = PilotStats::where('current', '>', 0)->orderByDesc('current')->take(5)->get();
+        $lastPilot = PilotStats::where('last_month', '>', 0)->orderByDesc('last_month')->take(5)->get();
+        $yearPilot = PilotStats::where('year', '>', 0)->orderByDesc('year')->take(5)->get();
 
-        $lastControllers = ControllerStats::all()->sortByDesc('monthly_hours')->take(5);
-
-        // return $lastControllers;
-
-        return view('stats.index', compact('topControllers', 'lastControllers', 'yearControllers'));
+        return view('stats.index', compact('topControllers', 'lastControllers', 'yearControllers', 'topPilot', 'lastPilot', 'yearPilot'));
     }
 }

@@ -13,10 +13,12 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('statistics_controller_last', function (Blueprint $table) {
+        Schema::create('statistics_controller', function (Blueprint $table) {
             $table->id();
             $table->integer('cid');
-            $table->string('hours');
+            $table->string('current')->nullable();
+            $table->string('last_month')->nullable();
+            $table->string('year')->nullable();
             $table->string('visiting_origin')->nullable();
             $table->timestamps();
         });
