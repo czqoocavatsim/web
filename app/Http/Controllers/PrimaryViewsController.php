@@ -41,7 +41,7 @@ class PrimaryViewsController extends Controller
         $topPilot = PilotStats::where('current', '>', 0)->orderByDesc('current')->take(5)->get();
         $yearAircraft = AircraftStats::where('year', '>', 0)->orderByDesc('year')->take(5)->get();
         $topControllers = ControllerStats::where('current', '>', 0)->orderByDesc('current')->take(5)->get();
-        $yearAirlines = AirlineStats::where('year', '>', 0)->orderByDesc('year')->take(5)->get();
+        $topAirlines  = AirlineStats::where('current', '>', 0)->orderByDesc('current')->take(5)->get();
         $topPairAirports  = AirportPairStats::where('current', '>', 0)->orderByDesc('current')->take(5)->get();
         $yearControllers = ControllerStats::where('year', '>', 0)->orderByDesc('year')->take(5)->get();
 
@@ -62,7 +62,7 @@ class PrimaryViewsController extends Controller
             }
         }
 
-        return view('index', compact('controllers', 'news', 'certifications', 'topPilot', 'yearControllers', 'yearAircraft', 'topControllers', 'yearAirlines', 'topPairAirports', 'nextEvent', 'ctpEvents', 'ctpAircraft', 'ctpMode'));
+        return view('index', compact('controllers', 'news', 'certifications', 'topPilot', 'yearControllers', 'yearAircraft', 'topControllers', 'topAirlines', 'topPairAirports', 'nextEvent', 'ctpEvents', 'ctpAircraft', 'ctpMode'));
     }
 
     // General Homepage API Update

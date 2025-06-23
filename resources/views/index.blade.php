@@ -172,7 +172,7 @@
 
             {{-- New Certifications --}}
             @if(auth()->check())
-                @include('partials.statistics.certifications')
+                @include('partials.statistics.aircraft-airline')
             @else
                 <h4 class="font-weight-bold blue-text mb-1">Newest Controllers</h4>
                 Login with VATSIM to see this data
@@ -196,7 +196,7 @@
 
             {{-- New Certifications --}}
             @if(auth()->check())
-                @include('partials.statistics.aircraft-airline-year')
+                @include('partials.statistics.certifications')
             @else
                 <h4 class="font-weight-bold blue-text mb-1">{{\Carbon\Carbon::now()->format('Y')}} Top Airlines</h4>
                 Login with VATSIM to see this data

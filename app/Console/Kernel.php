@@ -57,14 +57,14 @@ class Kernel extends ConsoleKernel
 
         //Daily Updates
         $schedule->job(new ProcessRosterInactivity())->dailyAt('23:55');
-        $schedule->job(new ProcessSessionReminders())->daily();
+        $schedule->job(new ProcessSessionReminders())->dailyAt('00:05');
         
         // Weekly Updates
-        $schedule->job((new DiscordTrainingWeeklyUpdates())->onQueue('long'))->weeklyOn(6, '00:01');
+        $schedule->job((new DiscordTrainingWeeklyUpdates())->onQueue('long'))->weeklyOn(6, '00:05');
         $schedule->job((new MassUserUpdates())->onQueue('long'))->weeklyOn(6, '13:10');
-        $schedule->job((new ProcessAirlines())->onQueue('long'))->weeklyOn(4, '12:00');
-        $schedule->job((new ProcessAirports())->onQueue('long'))->weeklyOn(4, '12:10');
-        $schedule->job((new ProcessAircraft())->onQueue('long'))->weeklyOn(4, '12:20');
+        $schedule->job((new ProcessAirlines())->onQueue('long'))->weeklyOn(2, '18:20');
+        $schedule->job((new ProcessAirports())->onQueue('long'))->weeklyOn(2, '18:21');
+        $schedule->job((new ProcessAircraft())->onQueue('long'))->weeklyOn(2, '18:22');
 
 
         // Monthly Statistics Breakdown
