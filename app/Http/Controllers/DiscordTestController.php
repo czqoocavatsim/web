@@ -15,6 +15,7 @@ use App\Jobs\DiscordAccountCheck;
 use App\Jobs\ProcessAirlines;
 use App\Jobs\ProcessAirports;
 use App\Jobs\ProcessAircraft;
+use App\Jobs\ProcessStatistics;
 
 use App\Models\Users\User;
 use Illuminate\Support\Facades\Notification;
@@ -43,7 +44,7 @@ class DiscordTestController extends Controller
     public function Job()
     {
         // Dispatch the job
-        $job = ProcessAirports::dispatch();
+        $job = ProcessStatistics::dispatch();
 
         // Call the handle method directly to get the result synchronously
         $result = $job->handle();

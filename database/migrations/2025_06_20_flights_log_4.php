@@ -23,6 +23,7 @@ return new class extends Migration
             $table->string('aircraft');
             $table->integer('fl');
             $table->string('direction')->nullable();
+            $table->datetime('exited_oca')->nullable();
             $table->integer('still_inside')->nullable();
             $table->integer('save_details')->nullable();
             $table->timestamps();

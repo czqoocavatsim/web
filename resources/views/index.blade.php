@@ -160,7 +160,7 @@
     {{-- Statistics --}}
     <div class="container my-5">
         <h1 class="font-weight-bold blue-text mb-1"><u>Gander OCA Statistics</u></h1>
-        
+        <a href="/stats"><p style="font-size: 1.2em;" class="mb-3">Access the Full Statistics Page</p></a>
         <div class="row">
             {{-- Month Pilot Stats --}}
             @if (auth()->check())

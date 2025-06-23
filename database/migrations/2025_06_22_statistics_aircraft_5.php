@@ -15,10 +15,10 @@ return new class extends Migration
     {
         Schema::create('statistics_aircraft', function (Blueprint $table) {
             $table->id();
-            $table->string('aircraft');
-            $table->string('current')->nullable();
-            $table->string('last_month')->nullable();
-            $table->string('year')->nullable();
+            $table->string('code');
+            $table->float('current')->nullable();
+            $table->float('last_month')->nullable();
+            $table->float('year')->nullable();
             $table->timestamps();
         });
     }

@@ -13,13 +13,13 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('statistics_airport_pairs', function (Blueprint $table) {
+        Schema::create('statistics_controller', function (Blueprint $table) {
             $table->id();
-            $table->string('airport1');
-            $table->string('airport2');
-            $table->string('current')->nullable();
-            $table->string('last_month')->nullable();
-            $table->string('year')->nullable();
+            $table->integer('cid');
+            $table->float('current')->nullable();
+            $table->float('last_month')->nullable();
+            $table->float('year')->nullable();
+            $table->string('visiting_origin')->nullable();
             $table->timestamps();
         });
     }

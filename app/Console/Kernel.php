@@ -15,6 +15,8 @@ use App\Jobs\MassUserUpdates;
 use App\Jobs\ProcessAirlines;
 use App\Jobs\ProcessAirports;
 use App\Jobs\ProcessAircraft;
+use App\Jobs\ProcessStatistics;
+
 use App\Models\Roster\RosterMember;
 use App\Notifications\Network\OneWeekInactivityReminder;
 use App\Notifications\Network\TwoWeekInactivityReminder;
@@ -45,26 +47,20 @@ class Kernel extends ConsoleKernel
     protected function schedule(Schedule $schedule)
     {
         # PRIMARY WORKER
-        // Active Network Sessions
+        // Minute by Minute Updates
         $schedule->job(new ProcessSessionLogging())->everyMinute();
 
-        //Discord Update
-        $schedule->job(new DiscordAccountCheck())->cron('5,20,35,50 * * * *'); //Updated Hourly
+        // Hourly Updates
+        $schedule->job(new DiscordAccountCheck())->cron('5,20,35,50 * * * *');
+        $schedule->job(new ProcessExternalControllers())->cron('7 * * * *');
+        $schedule->job(new ProcessStatistics())->cron('01 * * * *');
 
-        // External Controllers
-        $schedule->job(new ProcessExternalControllers())->cron('7 * * * *'); //Updated Hourly
-
-        //Roster Inactivity checks
+        //Daily Updates
         $schedule->job(new ProcessRosterInactivity())->dailyAt('23:55');
-
-        //Training/OTS session reminders
         $schedule->job(new ProcessSessionReminders())->daily();
-
-        // Check Training Threads Status (Saturday)
-        $schedule->job(new DiscordTrainingWeeklyUpdates())->weeklyOn(6, '00:01');
-
         
         // Weekly Updates
+        $schedule->job((new DiscordTrainingWeeklyUpdates())->onQueue('long'))->weeklyOn(6, '00:01');
         $schedule->job((new MassUserUpdates())->onQueue('long'))->weeklyOn(6, '13:10');
         $schedule->job((new ProcessAirlines())->onQueue('long'))->weeklyOn(4, '12:00');
         $schedule->job((new ProcessAirports())->onQueue('long'))->weeklyOn(4, '12:10');

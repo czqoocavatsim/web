@@ -120,7 +120,7 @@ class PrimaryViewsController extends Controller
         $tjzs = $vatsim->searchCallsign("SJU_CTR", false); if($tjzs) $tjzs=1; else $tjzs=0;
         $kzmo = $vatsim->searchCallsign("ZMO_CTR", false); if($kzmo) $kzmo=1; else $kzmo=0;
         $kzma = $vatsim->searchCallsign("MIA_CTR", false); if($kzma) $kzma=1; else $kzma=0;
-        $kzjx = $vatsim->searchCallsign("ZJX_CTR", false); if($kzmo) $kzmo=1; else $kzmo=0;
+        $kzjx = $vatsim->searchCallsign("ZJX_CTR", false); if($kzjx) $kzjx=1; else $kzjx=0;
         $dc = $vatsim->searchCallsign("DC_CTR", false); if($dc) $dc=1; else $dc=0;
         $kzbw = $vatsim->searchCallsign("BOS_CTR", false); if($kzbw) $kzbw=1; else $kzbw=0;
         $czqm = $vatsim->searchCallsign("CZQM_CTR", false); if($czqm) $czqm=1; else $czqm=0;

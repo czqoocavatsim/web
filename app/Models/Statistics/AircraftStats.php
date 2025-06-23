@@ -11,10 +11,10 @@ class AircraftStats extends Model
     use HasFactory;
 
     protected $table = "statistics_aircraft";
-    protected $fillable = ['id', 'aircraft', 'current', 'last_month', 'year'];
+    protected $fillable = ['id', 'code', 'current', 'last_month', 'year'];
        
     public function info()
     {
-        return $this->hasOne(FlightAircraft::class, 'id', 'aircraft');
+        return $this->hasOne(FlightAircraft::class, 'code', 'code');
     }
 }

@@ -11,5 +11,5 @@ class LevelStats extends Model
     use HasFactory;
 
     protected $table = "statistics_levels";
-    protected $fillable = ['id', 'aircraft', 'current', 'last_month', 'year'];
+    protected $fillable = ['id', 'level', 'current', 'last_month', 'year'];
 }

@@ -13,6 +13,7 @@ use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use App\Models\Network\FIRInfo;
 use App\Models\Statistics\FlightLog;
+use App\Models\Statistics\FlightAirlines;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
@@ -247,7 +248,7 @@ class ProcessSessionLogging implements ShouldQueue
 
             // If inside the OCA, Store Details to be used for later
             if($inOCA){
-                if (!$pilot->flight_plan) {
+                if (!$pilot->flight_plan || $pilot->altitude < 3499) {
                     continue; // skip this pilot and move to the next
                 }
 
@@ -257,7 +258,7 @@ class ProcessSessionLogging implements ShouldQueue
                     'ac' => $pilot->flight_plan->aircraft_short,
                     'dep' => $pilot->flight_plan->departure,
                     'arr' => $pilot->flight_plan->arrival,
-                    'fl' => round($pilot->altitude / 1000) * 1000,
+                    'fl' => round($pilot->altitude / 1000) * 10,
                 ];
             }
         }
@@ -284,6 +285,14 @@ class ProcessSessionLogging implements ShouldQueue
             ]);
         }
 
+        // Mark those not inside OCA as exited - Will retain in the DB for 5 hours incase the aircraft goes EGGX > NYC via LPPO or EGGX > CZQO via BIRD
+        $exitAircraft = FlightLog::where('still_inside', null)->where('exited_oca', null)->get();
+        foreach($exitAircraft as $ea){
+            $ea->update([
+                'exited_oca' => Carbon::now(),
+            ]);
+        }
+
         // If Difference between Entry & Exit is over 15 Minutes, set the flight details to be saved
         $saveFlight = FlightLog::whereNull('save_details')->where('still_inside', 1)->where('created_at', '<=', Carbon::now()->subMinutes(15))->get();
         foreach($saveFlight as $sf){
@@ -292,16 +301,29 @@ class ProcessSessionLogging implements ShouldQueue
                 'save_details' => 1,
             ]);
 
-            // Get Airline Details & Link to flight_airline DB
+            // Extract the leading letters (up to 3)
+            preg_match('/^([A-Z]{2,3})/', $sf->callsign, $matches);
 
+            $airlineCode = $matches[1] ?? null;
 
-            // Get Departure/Arrival Fields and Link to flight_airport DB
+            if ($airlineCode) {
+                if (strlen($airlineCode) === 3) {
+                    $airline = FlightAirlines::where('icao', $airlineCode)->first();
+                } elseif (strlen($airlineCode) === 2) {
+                    $airline = FlightAirlines::where('iata', $airlineCode)->first();
+                }
+            }
 
+            if($airline){
+                $sf->update([
+                    'airline' => $airline->id,
+                ]);
+            }
 
         }
 
         // Delete ID row if exited_oca time is more than 7 hours in the past
-        $deleteAircraft = FlightLog::whereNull('save_details')->where('created_at', '<=', Carbon::now()->subMinutes(420))->get();
+        $deleteAircraft = FlightLog::whereNull('save_details')->where('exited_oca', '<=', Carbon::now()->subMinutes(240))->get();
         foreach($deleteAircraft as $da){
             $da->delete();
         }

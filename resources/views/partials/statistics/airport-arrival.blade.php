@@ -20,7 +20,7 @@
                         <span style="font-size: 1.4em;">
                                 <div class="d-flex flex-column ml-2">
                                     <h5 class="fw-400">{{ $tp->info->icao }} | {{ $tp->info->name }}</h5>
-                                    <p>{{$tp->current_arr}} flight's departed in {{ \Carbon\Carbon::now()->format('F') }}</p>
+                                    <p>{{$tp->current_arr}} flight's arrived in {{ \Carbon\Carbon::now()->format('F') }}</p>
                                 </div>
                         </span>
                     </p>

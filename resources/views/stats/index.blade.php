@@ -17,7 +17,10 @@
 
         <div class="col-md-10 mb-3">
             <h1 class="font-weight-bold blue-text mb-1">Statistics Hub - Gander Oceanic</h1>
-            <p style="margin-top: 5px; margin-bottom: 10px;" class="mb-3">All statistics are caclulated once hourly.</p>
+            <p style="margin-top: 5px; margin-bottom: 10px;" class="mb-3">
+                All statistics are caclulated once hourly. Aircraft Statistics are only counted once Aircraft have exited the OCA.<br>
+                2025 Year Statistics are only from July onwards. Future Years will be the entirity of the year.
+            </p>
 
             {{-- This Month Statistics --}}
             <a id="1"><h2 class="font-weight-bold blue-text mb-1">This Month Statistics</h2></a>
@@ -30,7 +33,7 @@
                     @include('partials.statistics.pilot-month')
 
                     {{-- Airport Pair Stats --}}
-                    @include('partials.statistics.airport-pairs')
+                    @include('partials.statistics.aircraft-airline')
                 </div>
 
             {{-- All Controller Statistics --}}

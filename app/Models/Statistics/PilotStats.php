@@ -11,11 +11,11 @@ class PilotStats extends Model
     use HasFactory;
 
     protected $table = "statistics_pilot";
-    protected $fillable = ['id', 'cid', 'hours'];
+    protected $fillable = ['id', 'cid', 'current', 'last_month', 'year'];
 
     public function user()
     {
-        return $this->hasOne(User::class, 'id', 'cid', 'current', 'last_month', 'year');
+        return $this->hasOne(User::class, 'id', 'cid');
     }
         
 }

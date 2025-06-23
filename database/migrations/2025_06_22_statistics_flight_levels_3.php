@@ -13,13 +13,12 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('statistics_controller', function (Blueprint $table) {
+        Schema::create('statistics_levels', function (Blueprint $table) {
             $table->id();
-            $table->integer('cid');
-            $table->string('current')->nullable();
-            $table->string('last_month')->nullable();
-            $table->string('year')->nullable();
-            $table->string('visiting_origin')->nullable();
+            $table->string('level');
+            $table->float('current')->nullable();
+            $table->float('last_month')->nullable();
+            $table->float('year')->nullable();
             $table->timestamps();
         });
     }

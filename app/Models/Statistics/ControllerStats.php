@@ -11,7 +11,7 @@ class ControllerStats extends Model
     use HasFactory;
 
     protected $table = "statistics_controller";
-    protected $fillable = ['id', 'cid', 'current', 'last_month', 'year'];
+    protected $fillable = ['id', 'cid', 'current', 'last_month', 'year', 'visiting_origin'];
 
     public function user()
     {

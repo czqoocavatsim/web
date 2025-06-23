@@ -15,11 +15,10 @@ return new class extends Migration
     {
         Schema::create('statistics_airline', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('airline');
-            $table->foreign('airline')->references('id')->on('flight_airlines');
-            $table->string('current')->nullable();
-            $table->string('last_month')->nullable();
-            $table->string('year')->nullable();
+            $table->unsignedBigInteger('code');
+            $table->float('current')->nullable();
+            $table->float('last_month')->nullable();
+            $table->float('year')->nullable();
             $table->timestamps();
         });
     }
