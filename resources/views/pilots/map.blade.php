@@ -17,14 +17,17 @@
                 <div class="modal-body p-4">
                     <div class="d-flex justify-content-center align-items-center">
                         <div class="col-md-12">
-                            <p class="pt-3 pr-2">
-                                <h3><b>VATSIM Live Map</b></h3>
-                                This map is updated every minute with data available from the VATSIM Network and shows Online Sectors and Active NAT Tracks.
-                            </p>
                             <p class="pt-2 pr-2">
+                                <h3><b>VATSIM Live Map</b></h3>
+                                This map is updated every minute with data available from the VATSIM Network and shows Online Sectors. Currently, the map is a snapshot in time, and requires a refresh in order to update pilot's location.
+                            </p>
+                            <p class="pt-1 pr-2">
+                                Icons have been sourced from the VATSIM Radar Project whist custom icons are generated. All rights are the property of <a href="https://vatsim-radar.com/">VATSIM Radar</a>.
+                            </p>
+                            <p class="pt-1 pr-2">
                                 This map does not show sector splits for Domestic or Oceanic Airspace. If a controller is logged onto the FIR Callsign, this map will highlight the FIR as online.
                             </p>
-                            <p class="pt-2 pr-2">
+                            <p class="pt-1 pr-2">
                                 <b>Map Colours:</b><br>
                                 - Green Airspace: <i>Gander Oceanic (CZQO) Airspace</i><br>
                                 - Purple Airspace: <i>Shanwick (EGGX) & New York Oceanic (KZNY) Airspace (Partnership Positions)</i><br>

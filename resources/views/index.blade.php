@@ -159,274 +159,56 @@
 
     {{-- Statistics --}}
     <div class="container my-5">
+        <h1 class="font-weight-bold blue-text mb-1"><u>Gander OCA Statistics</u></h1>
+        <a href="/stats"><p style="font-size: 1.2em;" class="mb-3">Access the Full Statistics Page</p></a>
         <div class="row">
+            {{-- Month Pilot Stats --}}
+            @if (auth()->check())
+                @include('partials.statistics.pilot-month')
+            @else
+                <h4 class="font-weight-bold blue-text mb-1">{{\Carbon\Carbon::now()->format('F')}} Top Pilots</h4>
+                Login with VATSIM to see this data
+            @endif
 
-            {{-- Left Row --}}
-            <div class="col-md-4 mb-4">
+            {{-- New Certifications --}}
+            @if(auth()->check())
+                @include('partials.statistics.aircraft-airline')
+            @else
+                <h4 class="font-weight-bold blue-text mb-1">Newest Controllers</h4>
+                Login with VATSIM to see this data
+            @endif
 
-                {{-- Month Pilot Stats --}}
-                @if (auth()->check())
-                <h2 class="font-weight-bold blue-text mb-4">{{\Carbon\Carbon::now()->format('F')}} Top Pilots</h2>
-                    <ul class="list-unstyled">
-                        @php $index = 1; @endphp
-                        @foreach ($monthPilots as $tp)
-                            <li class="mb-1">
-                                <div class="d-flex flex-row">
-                                    <span class="font-weight-bold blue-text" style="font-size: 1.9em;">
-                                        @if ($index == 1)
-                                            <i class="fas fa-trophy amber-text fa-fw"></i>
-                                        @elseif ($index == 2)
-                                            <i class="fas fa-trophy blue-grey-text fa-fw"></i>
-                                        @elseif ($index == 3)
-                                            <i class="fas fa-trophy brown-text fa-fw"></i>
-                                        @else
-                                            {{ $index }}<sup>th</sup>
-                                        @endif
-                                    </span>
-                                    <p class="mb-0 ml-1">
-                                        <span style="font-size: 1.4em;">
-                                            @if($tp->user)
-                                            <img src="{{ $tp->user->avatar() }}" style="height: 35px; !important; width: 35px !important; margin-left: 10px; margin-right: 5px; margin-bottom: 3px; border-radius: 50%;">
-                                            <div class="d-flex flex-column ml-2">
-                                                <h5 class="fw-400">{{ $tp->user->fullName('FL') }}</h5>
-                                                <p>{{$tp->month_stats}} flight's recorded this month</p>
-                                            </div>
-                                            @else
-                                            <img src="{{asset('assets/resources/media/img/brand/sqr/ZQO_SQ_TSPBLUE.png')}}" style="height: 35px; !important; width: 35px !important; margin-left: 10px; margin-right: 5px; margin-bottom: 3px; border-radius: 50%;">
-                                            <div class="d-flex flex-column ml-2">
-                                                <h5 class="fw-400">{{ $tp->cid }}</h5>
-                                                <p>{{$tp->month_stats}} @if($tp->year_stats == 1)flight @else flight's @endif recorded this month</p>
-                                            </div>
-                                            @endif
-                                        </span>
-                                    </p>
-                                </div>
-                            </li>
-                            @php $index++; @endphp
-                        @endforeach
-                        @if (count($monthPilots) < 1)
-                            <p style="margin-top: -20px;">No data available.</p>
-                        @endif
-                    </ul>
-                @else
-                    <h2 class="font-weight-bold blue-text mb-1">{{\Carbon\Carbon::now()->format('F')}} Top Pilots</h2>
-                    <p class="mb-3">Login with VATSIM to check our {{\Carbon\Carbon::now()->format('F')}} top pilots!</p>
-                @endif
-                
-                {{-- Year Pilot Stats --}}
-                @if (auth()->check())
-                <h2 class="font-weight-bold blue-text mb-4">{{\Carbon\Carbon::now()->format('Y')}} Top Pilots</h2>
-                    <ul class="list-unstyled">
-                        @php $index = 1; @endphp
-                        @foreach ($yearPilots as $yp)
-                            <li class="mb-1">
-                                <div class="d-flex flex-row">
-                                    <span class="font-weight-bold blue-text" style="font-size: 1.9em;">
-                                        @if ($index == 1)
-                                            <i class="fas fa-trophy amber-text fa-fw"></i>
-                                        @elseif ($index == 2)
-                                            <i class="fas fa-trophy blue-grey-text fa-fw"></i>
-                                        @elseif ($index == 3)
-                                            <i class="fas fa-trophy brown-text fa-fw"></i>
-                                        @else
-                                            {{ $index }}<sup>th</sup>
-                                        @endif
-                                    </span>
-                                    <p class="mb-0 ml-1">
-                                        <span style="font-size: 1.4em;">
-                                            @if($yp->user)
-                                            <img src="{{ $yp->user->avatar() }}" style="height: 35px; !important; width: 35px !important; margin-left: 10px; margin-right: 5px; margin-bottom: 3px; border-radius: 50%;">
-                                            <div class="d-flex flex-column ml-2">
-                                                <h5 class="fw-400">{{ $yp->user->fullName('FL') }}</h5>
-                                                <p>{{$yp->year_stats}} flight's over Oceanic Airspace</p>
-                                            </div>
-                                            @else
-                                            <img src="{{asset('assets/resources/media/img/brand/sqr/ZQO_SQ_TSPBLUE.png')}}" style="height: 35px; !important; width: 35px !important; margin-left: 10px; margin-right: 5px; margin-bottom: 3px; border-radius: 50%;">
-                                            <div class="d-flex flex-column ml-2">
-                                                <h5 class="fw-400">{{ $yp->cid }}</h5>
-                                                <p>{{$yp->year_stats}} @if($yp->year_stats == 1)flight @else flight's @endif over Oceanic Airspace</p>
-                                            </div>
-                                            @endif
-                                        </span>
-                                    </p>
-                                </div>
-                            </li>
-                            @php $index++; @endphp
-                        @endforeach
-                        @if (count($yearPilots) < 1)
-                            <p style="margin-top: -20px;">No data available.</p>
-                        @endif
-                    </ul>
-                @else
-                    <h2 class="font-weight-bold blue-text mb-1">{{\Carbon\Carbon::now()->format('Y')}} Top Pilots</h2>
-                    <p>Login with VATSIM to check our {{\Carbon\Carbon::now()->format('Y')}} top pilots!</p>
-                @endif
-            </div>
+            {{-- New Certifications --}}
+            @if(auth()->check())
+                @include('partials.statistics.controller-month')
+            @else
+                <h4 class="font-weight-bold blue-text mb-1">{{\Carbon\Carbon::now()->format('F')}} Top Controllers</h4>
+                Login with VATSIM to see this data
+            @endif
 
-            {{-- Middle Row --}}
-            <div class="col-md-4 mb-4">
-                {{-- Month Stats --}}
-                @if (auth()->check())
-                <h2 class="font-weight-bold blue-text mb-4">{{\Carbon\Carbon::now()->format('F')}} Top Controllers</h2>
-                    <ul class="list-unstyled">
-                        @php $index = 1; @endphp
-                        @foreach ($topControllers as $c)
-                            <li class="mb-1">
-                                <div class="d-flex flex-row">
-                                    <span class="font-weight-bold blue-text" style="font-size: 1.9em;">
-                                        @if ($index == 1)
-                                            <i class="fas fa-trophy amber-text fa-fw"></i>
-                                        @elseif ($index == 2)
-                                            <i class="fas fa-trophy blue-grey-text fa-fw"></i>
-                                        @elseif ($index == 3)
-                                            <i class="fas fa-trophy brown-text fa-fw"></i>
-                                        @else
-                                            {{ $index }}<sup>th</sup>
-                                        @endif
-                                    </span>
-                                    <p class="mb-0 ml-1">
-                                        <span style="font-size: 1.4em;">
-                                            @if($c->user)
-                                            <img src="{{ $c->user->avatar() }}" style="height: 35px; !important; width: 35px !important; margin-left: 10px; margin-right: 5px; margin-bottom: 3px; border-radius: 50%;">
-                                            <div class="d-flex flex-column ml-2">
-                                                <h5 class="fw-400">{{ $c->user->fullName('FL') }} 
-                                                    @if($c->visiting_origin == "zny")<span class="badge bg-secondary">KZNY</span>@elseif($c->visiting_origin == "eggx")<span class="badge bg-danger">EGGX</span>@else<span class="badge bg-primary">CZQO</span>@endif
-                                                </h5>
-                                                <p>
-                                                    @if($c->monthly_hours < 1)
-                                                        {{ str_pad(round(($c->monthly_hours - floor($c->monthly_hours)) * 60), 2, '0', STR_PAD_LEFT) }}m recorded this month
-                                                    @else
-                                                        {{ floor($c->monthly_hours) }}h {{ str_pad(round(($c->monthly_hours - floor($c->monthly_hours)) * 60), 2, '0', STR_PAD_LEFT) }}m recorded this month
-                                                    @endif
-                                                </p>
-                                            </div>
-                                            @else
-                                            <img src="{{asset('assets/resources/media/img/brand/sqr/ZQO_SQ_TSPBLUE.png')}}" style="height: 35px; !important; width: 35px !important; margin-left: 10px; margin-right: 5px; margin-bottom: 3px; border-radius: 50%;">
-                                            <div class="d-flex flex-column ml-2">
-                                                <h5 class="fw-400">{{ $c->id }} 
-                                                    @if($c->visiting_origin == "zny")<span class="badge bg-secondary">KZNY</span>@elseif($c->visiting_origin == "eggx")<span class="badge bg-danger">EGGX</span>@endif
-                                                </h5>
-                                                <p>
-                                                    @if($c->monthly_hours < 1)
-                                                        {{ str_pad(round(($c->monthly_hours - floor($c->monthly_hours)) * 60), 2, '0', STR_PAD_LEFT) }}m recorded this month
-                                                    @else
-                                                        {{ floor($c->monthly_hours) }}h {{ str_pad(round(($c->monthly_hours - floor($c->monthly_hours)) * 60), 2, '0', STR_PAD_LEFT) }}m recorded this month
-                                                    @endif
-                                                </p>
-                                            </div>
-                                            @endif
-                                        </span>
-                                    </p>
-                                </div>
-                            </li>
-                            @php $index++; @endphp
-                        @endforeach
-                        @if (count($topControllers) < 1)
-                            <p style="margin-top: -20px;">No controller connections recorded.</p>
-                        @endif
-                    </ul>
-                @else
-                    <h2 class="font-weight-bold blue-text mb-1">{{\Carbon\Carbon::now()->format('F')}} Top Controllers</h2>
-                    <p class="mb-3">Login with VATSIM to check our {{\Carbon\Carbon::now()->format('F')}} top controllers!</p>
-                @endif
-            </div>
+            {{-- Aircraft Type Stats --}}
+            @if (auth()->check())
+                @include('partials.statistics.aircraft-type-year')
+            @else
+                <h2 class="font-weight-bold blue-text mb-1">{{\Carbon\Carbon::now()->format('F')}} Top Aircraft Types</h2>
+                Login with VATSIM to see this data
+            @endif
 
-            {{-- Right Collum --}}
-            <div class="col-md-4 mb-4">
+            {{-- New Certifications --}}
+            @if(auth()->check())
+                @include('partials.statistics.certifications')
+            @else
+                <h4 class="font-weight-bold blue-text mb-1">{{\Carbon\Carbon::now()->format('Y')}} Top Airlines</h4>
+                Login with VATSIM to see this data
+            @endif
 
-                {{-- Year Stats --}}
-                @if (auth()->check())
-                <h2 class="font-weight-bold blue-text mb-4">{{\Carbon\Carbon::now()->format('Y')}} Top Controllers</h2>
-                    <ul class="list-unstyled">
-                        @php $index = 1; @endphp
-                        @foreach ($yearControllers as $c)
-                            <li class="mb-1">
-                                <div class="d-flex flex-row">
-                                    <span class="font-weight-bold blue-text" style="font-size: 1.9em;">
-                                        @if ($index == 1)
-                                            <i class="fas fa-trophy amber-text fa-fw"></i>
-                                        @elseif ($index == 2)
-                                            <i class="fas fa-trophy blue-grey-text fa-fw"></i>
-                                        @elseif ($index == 3)
-                                            <i class="fas fa-trophy brown-text fa-fw"></i>
-                                        @else
-                                            {{ $index }}<sup>th</sup>
-                                        @endif
-                                    </span>
-                                    <p class="mb-0 ml-1">
-                                        <span style="font-size: 1.4em;">
-                                            @if($c->user)
-                                            {{-- Gander Oceanic User Model Exists --}}
-                                            <img src="{{ $c->user->avatar() }}" style="height: 35px; !important; width: 35px !important; margin-left: 10px; margin-right: 5px; margin-bottom: 3px; border-radius: 50%;">
-                                            <div class="d-flex flex-column ml-2">
-                                                <h5 class="fw-400">{{ $c->user->fullName('FL') }}
-                                                    @if($c->visiting_origin == "zny")<span class="badge bg-secondary">KZNY</span>@elseif($c->visiting_origin == "eggx")<span class="badge bg-danger">EGGX</span>@else<span class="badge bg-primary">CZQO</span>@endif
-                                                </h5>
-                                                <p>
-                                                    @if($c->currency < 1)
-                                                        {{ str_pad(round(($c->currency - floor($c->currency)) * 60), 2, '0', STR_PAD_LEFT) }}m recorded in {{\Carbon\Carbon::now()->format('Y')}}
-                                                    @else
-                                                        {{ floor($c->currency) }}h {{ str_pad(round(($c->currency - floor($c->currency)) * 60), 2, '0', STR_PAD_LEFT) }}m recorded in {{\Carbon\Carbon::now()->format('Y')}}
-                                                    @endif
-                                                </p>
-                                            </div>
-                                            @else
-                                            {{-- User Model does not Exist --}}
-                                            <img src="{{asset('assets/resources/media/img/brand/sqr/ZQO_SQ_TSPBLUE.png')}}" style="height: 35px; !important; width: 35px !important; margin-left: 10px; margin-right: 5px; margin-bottom: 3px; border-radius: 50%;">
-                                            <div class="d-flex flex-column ml-2">
-                                                <h5 class="fw-400">{{ $c->id }}
-                                                    @if($c->visiting_origin == "zny")<span class="badge bg-secondary">KZNY</span>@elseif($c->visiting_origin == "eggx")<span class="badge bg-danger">EGGX</span>@endif
-                                                </h5>
-                                                <p>
-                                                    @if($c->currency < 1)
-                                                        {{ str_pad(round(($c->currency - floor($c->currency)) * 60), 2, '0', STR_PAD_LEFT) }}m recorded in {{\Carbon\Carbon::now()->format('Y')}}
-                                                    @else
-                                                        {{ floor($c->currency) }}h {{ str_pad(round(($c->currency - floor($c->currency)) * 60), 2, '0', STR_PAD_LEFT) }}m recorded in {{\Carbon\Carbon::now()->format('Y')}}
-                                                    @endif
-                                                </p>
-                                            </div>
-                                            @endif
-                                        </span>
-                                    </p>
-                                </div>
-                            </li>
-                            @php $index++; @endphp
-                        @endforeach
-                        @if (count($yearControllers) < 1)
-                            <p style="margin-top: -20px;">No data available.</p>
-                        @endif
-                    </ul>
-                @else
-                    <h2 class="font-weight-bold blue-text mb-1">{{\Carbon\Carbon::now()->format('Y')}} Top Controllers</h2>
-                    Login with VATSIM to check our {{\Carbon\Carbon::now()->format('Y')}} top controllers!
-                @endif
-
-                {{-- New Certifications --}}
-                @if(auth()->check())
-                <h2 class="font-weight-bold blue-text mb-4">Newest Controllers</h2>
-                <ul class="list-unstyled">
-                    @foreach ($certifications as $cert)
-                        <li class="mb-1">
-                            <div class="d-flex flex-row">
-                                <p class="mb-0 ml-1">
-                                    <span style="font-size: 1.4em;">
-                                        <img src="{{ $cert->controller->avatar() }}" style="height: 35px !important; width: 35px !important; margin-right: 10px; margin-bottom: 3px; border-radius: 50%;">
-                                        <div class="d-flex flex-column ml-2">
-                                            <h5 class="fw-400">{{ $cert->controller->fullName('FL') }}</h5>
-                                            <p title="{{ $cert->timestamp->toDayDateTimeString() }}">
-                                                {{ $cert->timestamp->diffForHumans() }}</p>
-                                        </div>
-                                    </span>
-                                </p>
-                            </div>
-                        </li>
-                    @endforeach
-                </ul>
-                @else
-                <h2 class="font-weight-bold blue-text mb-1">Newest Controllers</h2>
-                    Login with VATSIM to see our most recent certified controllers.
-                @endif
-            </div>
+            {{-- New Certifications --}}
+            @if(auth()->check())
+                @include('partials.statistics.controller-year')
+            @else
+                <h4 class="font-weight-bold blue-text mb-1">{{\Carbon\Carbon::now()->format('Y')}} Top Controllers</h4>
+                Login with VATSIM to see this data
+            @endif
         </div>
     </div>
 

@@ -981,7 +981,7 @@ async function createMap(planes, online) {
     const map = L.map('map', {minZoom: 4, maxZoom: 7, zoomSnap: 0.02 }).setView([55, -30], 4.48);
     var OpenStreetMap_Mapnik = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
         maxZoom: 19,
-        attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+        attribution: 'Icons from VATSIM Radar'
     }).addTo(map);
 
     //Create boundaries and points
@@ -997,6 +997,7 @@ async function createMap(planes, online) {
 
     //Create plane markers and controllers
     planes.forEach(function (plane) {
+    const type = plane.aircraft;
     const altitude = plane.altitude;
     const lat = plane.latitude;
     const lon = plane.longitude;
@@ -1012,10 +1013,46 @@ async function createMap(planes, online) {
 
     if (!inBounds) return; // Skip if not within constraints
 
+    // Example constantType string (you'll have your own source for this)
+    let constantType = plane.flight_plan ? plane.flight_plan.aircraft || '' : '';
+
+    // Get the 5th letter (index 4)
+    let weightClass = constantType.split('/')[1]?.charAt(0).toUpperCase();
+
+    // Define sizes based on weight class
+    let iconSize;
+    switch (weightClass) {
+        case 'L':
+            iconLock = [10, 10];
+            iconSize = [20, 20];
+            iconAircraft = 'c172.svg';
+            break;
+        case 'M':
+            iconLock = [12.5, 12.5];
+            iconSize = [25, 25];
+            iconAircraft = 'b38m.svg';
+            break;
+        case 'H':
+            iconLock = [15, 15];
+            iconSize = [30, 30];
+            iconAircraft = 'b744.svg';
+            break;
+        case 'J':
+            iconLock = [16, 16];
+            iconSize = [32, 32];
+            iconAircraft = 'a388.svg';
+            break;
+        default:
+            iconLock = [12.5, 12.5];
+            iconSize = [25, 25];
+            iconAircraft = 'b38m.svg';
+            break;
+    }
+
     let markerIcon = L.icon({
-        iconUrl: '/img/planes/base.png',
-        iconSize: [30, 30],
-        iconAnchor: [15, 15]
+        iconUrl: '/img/planes/'+iconAircraft,
+        iconSize: iconSize,
+        iconAnchor: iconLock,
     });
 
     const marker = L.marker([lat, lon], {

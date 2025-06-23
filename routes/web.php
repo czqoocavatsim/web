@@ -22,6 +22,7 @@ use App\Http\Controllers\Roster\RosterController;
 use App\Http\Controllers\Settings\StaffController;
 use App\Http\Controllers\Community\UsersController;
 use App\Http\Controllers\Network\NetworkController;
+use App\Http\Controllers\Network\StatisticsController;
 use App\Http\Controllers\Users\StaffListController;
 use App\Http\Controllers\Community\MyCzqoController;
 use App\Http\Controllers\Training\RecordsController;
@@ -42,6 +43,7 @@ use App\Jobs\ProcessExternalControllers;
 
 Route::get('/', [PrimaryViewsController::class, 'home'])->name('index');
 Route::get('/map', [PrimaryViewsController::class, 'map'])->name('map');
+Route::get('/stats', [StatisticsController::class, 'index'])->name('stats');
 Route::get('/roster', [RosterController::class, 'publicRoster'])->middleware('auth')->name('roster.public');
 Route::get('/roster/solo-certs', [SoloCertificationsController::class, 'public'])->middleware('auth')->name('solocertifications.public');
 Route::get('/staff', fn() => redirect(route('staff'), 301));

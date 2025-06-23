@@ -15,6 +15,11 @@ use Illuminate\Support\Facades\Cache;
 use App\Models\Settings\RotationImage;
 use App\Models\Publications\AtcResource;
 use App\Models\News\HomeNewControllerCert;
+use App\Models\Statistics\PilotStats;
+use App\Models\Statistics\AircraftStats;
+use App\Models\Statistics\ControllerStats;
+use App\Models\Statistics\AirlineStats;
+use App\Models\Statistics\AirportPairStats;
 use App\Models\Network\CTPDates;
 use App\Models\Network\FIRInfo;
 use App\Models\Network\FIRPilots;
@@ -28,30 +33,20 @@ class PrimaryViewsController extends Controller
         //VATSIM online controllers
         $controllers = SessionLog::whereNull('session_end')->orderBy('session_start', 'asc')->get();
 
-        // Controller Certifications
-        $externalController = ExternalController::all();
-        $ganderController = RosterMember::all();
-
         //News
         $news = News::where('visible', true)->get()->sortByDesc('published')->first();
+
+        // Statistics
         $certifications = HomeNewControllerCert::all()->sortByDesc('timestamp')->take(5);
+        $topPilot = PilotStats::where('current', '>', 0)->orderByDesc('current')->take(5)->get();
+        $yearAircraft = AircraftStats::where('year', '>', 0)->orderByDesc('year')->take(5)->get();
+        $topControllers = ControllerStats::where('current', '>', 0)->orderByDesc('current')->take(5)->get();
+        $topAirlines  = AirlineStats::where('current', '>', 0)->orderByDesc('current')->take(5)->get();
+        $topPairAirports  = AirportPairStats::where('current', '>', 0)->orderByDesc('current')->take(5)->get();
+        $yearControllers = ControllerStats::where('year', '>', 0)->orderByDesc('year')->take(5)->get();
 
         //Next event
         $nextEvent = Event::where('start_timestamp', '>', Carbon::now())->get()->sortBy('start_timestamp')->first();
-
-        //Top Month Controllers
-        $rosterMembers = RosterMember::where('monthly_hours', '>', 0)->get();
-        $externalControllers = ExternalController::where('monthly_hours', '>', 0)->get();
-        $topControllers = $rosterMembers->merge($externalControllers)->sortByDesc('monthly_hours')->take(10);
-
-        //Top controllers
-        $rosterMembers = RosterMember::where('currency', '>', 0)->get();
-        $externalControllers = ExternalController::where('currency', '>', 0)->get();
-        $yearControllers = $rosterMembers->merge($externalControllers)->sortByDesc('currency')->take(5);
-
-        // Pilot Statistics
-        $monthPilots = FIRPilots::all()->sortByDesc('month_stats')->take(5);
-        $yearPilots = FIRPilots::all()->sortByDesc('year_stats')->take(5);
 
         //CTP Mode?
         $ctpEvents = CTPDates::whereBetween('oca_end', [Carbon::now(),Carbon::now()->addDays(60)])->first();
@@ -67,7 +62,7 @@ class PrimaryViewsController extends Controller
             }
         }
 
-        return view('index', compact('controllers', 'news', 'certifications', 'nextEvent', 'topControllers', 'yearControllers', 'ctpMode', 'ctpEvents', 'ctpAircraft', 'monthPilots', 'yearPilots'));
+        return view('index', compact('controllers', 'news', 'certifications', 'topPilot', 'yearControllers', 'yearAircraft', 'topControllers', 'topAirlines', 'topPairAirports', 'nextEvent', 'ctpEvents', 'ctpAircraft', 'ctpMode'));
     }
 
     // General Homepage API Update
@@ -125,7 +120,7 @@ class PrimaryViewsController extends Controller
         $tjzs = $vatsim->searchCallsign("SJU_CTR", false); if($tjzs) $tjzs=1; else $tjzs=0;
         $kzmo = $vatsim->searchCallsign("ZMO_CTR", false); if($kzmo) $kzmo=1; else $kzmo=0;
         $kzma = $vatsim->searchCallsign("MIA_CTR", false); if($kzma) $kzma=1; else $kzma=0;
-        $kzjx = $vatsim->searchCallsign("ZJX_CTR", false); if($kzmo) $kzmo=1; else $kzmo=0;
+        $kzjx = $vatsim->searchCallsign("ZJX_CTR", false); if($kzjx) $kzjx=1; else $kzjx=0;
         $dc = $vatsim->searchCallsign("DC_CTR", false); if($dc) $dc=1; else $dc=0;
         $kzbw = $vatsim->searchCallsign("BOS_CTR", false); if($kzbw) $kzbw=1; else $kzbw=0;
         $czqm = $vatsim->searchCallsign("CZQM_CTR", false); if($czqm) $czqm=1; else $czqm=0;

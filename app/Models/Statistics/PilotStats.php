@@ -1,17 +1,17 @@
 <?php
 
-namespace App\Models\Network;
+namespace App\Models\Statistics;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use App\Models\Users\User;
 
-class FIRPilots extends Model
+class PilotStats extends Model
 {
     use HasFactory;
 
-    protected $table = "fir_pilot_stats";
-    protected $fillable = ['id', 'cid', 'month_stats', 'year_stats', 'updated_at'];
+    protected $table = "statistics_pilot";
+    protected $fillable = ['id', 'cid', 'current', 'last_month', 'year'];
 
     public function user()
     {
