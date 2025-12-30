@@ -16,7 +16,7 @@ jobs:
       with:
         HOST: ${{ secrets.HOST }}
         USERNAME: ${{ secrets.USER }}
-        KEY: ${{ secrets.PASS }}
+        KEY: ${{ secrets.PASSWORD }}
         PORT: 22
         source: ./
         target: /var/www/ganderoceanic.ca/
@@ -26,7 +26,7 @@ jobs:
       with:
         HOST: ${{ secrets.HOST }}
         USERNAME: ${{ secrets.USER }}
-        KEY: ${{ secrets.PASS }}
+        KEY: ${{ secrets.PASSWORD }}
         PORT: 22
         script: |
           cd /var/www/czqoprod/
