@@ -19,7 +19,7 @@ jobs:
         KEY: ${{ secrets.PASS }}
         PORT: 22
         source: ./
-        target: /var/www/czqoprod/
+        target: /var/www/ganderoceanic.ca/
 
     - name: Set permissions
       uses: appleboy/ssh-action@master

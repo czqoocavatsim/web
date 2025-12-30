@@ -430,6 +430,7 @@ class DiscordAccountCheck implements ShouldQueue
                             'events_marketing_director' =>783558227174227979 ,
                             'fir_sector_manager' => 783558276334747678,
                             'it_director' => 783558309717868544,
+                            'advisor' => 1455519576803774695,
                             'senior_staff' => 482816721280040964,
 
                             'staff_instructor' => 482816758185590787,
