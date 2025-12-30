@@ -474,7 +474,7 @@ class DiscordAccountCheck implements ShouldQueue
                                     array_push($staffRoles, $staffRoleIDs['operations_director']);
                                     array_push($staffRoles, $staffRoleIDs['senior_staff']);
                                     break;
-                                case 'Training & Events Director':
+                                case 'Training Director':
                                     array_push($staffRoles, $staffRoleIDs['training_events_director']);
                                     array_push($staffRoles, $staffRoleIDs['senior_staff']);
                                     break;
@@ -485,6 +485,11 @@ class DiscordAccountCheck implements ShouldQueue
                                 
                                 case 'IT Director':
                                     array_push($staffRoles, $staffRoleIDs['it_director']);
+                                    array_push($staffRoles, $staffRoleIDs['senior_staff']);
+                                    break;
+
+                                case 'Oceanic Tactical Advisor':
+                                    array_push($staffRoles, $staffRoleIDs['advisor']);
                                     array_push($staffRoles, $staffRoleIDs['senior_staff']);
                                     break;
                             }
