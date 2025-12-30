@@ -16,7 +16,7 @@ jobs:
       with:
         HOST: ${{ secrets.HOST }}
         USERNAME: ${{ secrets.USER }}
-        KEY: ${{ secrets.PASSWORD }}
+        PASSWORD: ${{ secrets.PASS }}
         PORT: 22
         source: ./
         target: /var/www/ganderoceanic.ca/
@@ -26,10 +26,10 @@ jobs:
       with:
         HOST: ${{ secrets.HOST }}
         USERNAME: ${{ secrets.USER }}
-        KEY: ${{ secrets.PASSWORD }}
+        PASSWORD: ${{ secrets.PASS }}
         PORT: 22
         script: |
-          cd /var/www/czqoprod/
+          cd /var/www/ganderoceanic.ca/
           sudo chown -R gander:www-data .
           sudo find . -type f -exec chmod 664 {} \;
           sudo find . -type d -exec chmod 775 {} \;
