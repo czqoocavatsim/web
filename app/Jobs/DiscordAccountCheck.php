@@ -557,6 +557,30 @@ class DiscordAccountCheck implements ShouldQueue
                     $user->save();
                 }
 
+        // Add Role to Users not Connected to Gander Oceanic
+        foreach($discord_uids as $discord_uid){
+            
+            // Skip the Bot (Gander)
+            if($discord_uid == 1118430230839840768){
+                continue;
+            }
+
+            // Skip Server Owner (Gary)
+            if($discord_uid == 350995372627197954){
+                continue;
+            }
+
+            sleep(1);
+
+            // // Update user with main roles - Will temp remove staff roles
+            $discord->getClient()->patch('guilds/'.env('DISCORD_GUILD_ID').'/members/'.$user->discord_user_id, [
+                'json' => [
+                    'nick' => $user->discord_username,
+                    'roles' => ['1372584622818332763'],
+                ]
+            ]);
+        }
+
         }
 
         if($user_updated > 0){
