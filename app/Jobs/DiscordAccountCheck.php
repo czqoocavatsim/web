@@ -575,7 +575,7 @@ class DiscordAccountCheck implements ShouldQueue
             // // Update user with main roles - Will temp remove staff roles
             $discord->getClient()->patch('guilds/'.env('DISCORD_GUILD_ID').'/members/'.$user->discord_user_id, [
                 'json' => [
-                    'nick' => $user->discord_username,
+                    'nick' => 'Unlinked Account',
                     'roles' => ['1372584622818332763'],
                 ]
             ]);
