@@ -150,7 +150,7 @@ class DiscordAccountCheck implements ShouldQueue
             if (!$user_exists) {
                 $discord_not_in_system_ids[] = $discord_uid;
 
-                $discord->assignRole($discord_uid, '1372584622818332763');
+                // $discord->assignRole($discord_uid, '1372584622818332763');
             }
         }
 
