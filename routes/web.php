@@ -59,6 +59,7 @@ Route::get('/privacy', fn() => redirect(route('policies'), 301))->name('privacy'
 Route::get('/events', [EventController::class, 'index'])->name('events.index');
 Route::get('/events/{slug}', [EventController::class, 'viewEvent'])->name('events.view');
 Route::view('/branding', 'about.branding')->name('branding');
+Route::view('/fdd', 'fdd.index')->name('fdd.index');
 
 
 // About
