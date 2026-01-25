@@ -582,6 +582,13 @@
     </div>
 
     <script>
+        function setLoadingVisible(visible) {
+            const loading = document.getElementById('loading');
+
+            if (!loading) return;
+            loading.style.display = visible ? 'block' : 'none';
+        }
+
         // =====================================================================
         // Gander Oceanic Flight Data Display
         // Version 1.0 - January 2026
@@ -1076,7 +1083,7 @@
 
         function renderFDD() {
             const panel = document.getElementById('fdd-panel');
-            document.getElementById('loading').style.display = 'none';
+            setLoadingVisible(false);
 
             const filters = {
                 east: document.getElementById('filter-east').checked,
@@ -1332,12 +1339,14 @@
         }
 
         async function refreshAll() {
-            document.getElementById('loading').style.display = 'block';
+            setLoadingVisible(true);
             refreshCountdown = 30;
+
             await fetchTracks();
             await fetchClearances();
             await fetchVatsimPilots();
-            document.getElementById('loading').style.display = 'none';
+
+            setLoadingVisible(false);
         }
 
         // =====================================================================
