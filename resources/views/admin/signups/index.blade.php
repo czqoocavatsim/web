@@ -68,7 +68,7 @@
                     <?php foreach ($event->signups as $signup): ?>
                         <div class="border rounded p-3 mb-3">
                             <div class="d-flex flex-wrap justify-content-between"><div><strong><?php echo e($signup->full_name); ?></strong> <span class="text-muted">CID <?php echo e($signup->cid); ?> · Prefers <?php echo e($signup->preferred_position); ?></span></div></div>
-                            <p class="small text-muted mb-2">Available: <?php if (!empty($signup->availability_windows)): ?> <?php foreach ($signup->availability_windows as $window): ?><?php echo e(\Carbon\Carbon::parse($window['starts_at'])->format('D H:i')); ?>–<?php echo e(\Carbon\Carbon::parse($window['ends_at'])->format('H:i')); ?>Z<?php if (!$loop->last): ?>, <?php endif; ?> <?php endforeach; ?> <?php else: ?> No availability window recorded <?php endif; ?></p>
+                            <p class="small text-muted mb-2">Available: <?php if (!empty($signup->availability_windows)): ?> <?php foreach ($signup->availability_windows as $availabilityIndex => $window): ?><?php echo e(\Carbon\Carbon::parse($window['starts_at'])->format('D H:i')); ?>–<?php echo e(\Carbon\Carbon::parse($window['ends_at'])->format('H:i')); ?>Z<?php if ($availabilityIndex < count($signup->availability_windows) - 1): ?>, <?php endif; ?> <?php endforeach; ?> <?php else: ?> No availability window recorded <?php endif; ?></p>
                             <?php foreach ($signup->assignments as $assignment): ?>
                                 <?php
                                     $windowForShift = collect($signup->availability_windows ?? [])->first(function ($window) use ($assignment) {
