@@ -50,6 +50,11 @@
                 </a>
             </li>
             @endhasanyrole
+            @hasanyrole('Administrator')
+            <li class="nav-item mr-2 {{ request()->routeIs('signups.admin*') ? 'active' : ''}}">
+                <a class="nav-link" href="{{ route('signups.admin.index') }}">Event Sign-ups</a>
+            </li>
+            @endhasanyrole
             <li class="nav-item mr-4">
                 <a class="nav-link" href="{{route('my.index')}}">
                     myCZQO
