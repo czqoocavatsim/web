@@ -4,8 +4,8 @@
 @section('content')
 <div class="container py-5">
     <div class="d-flex flex-wrap justify-content-between align-items-center mb-4"><div><h1 class="font-weight-bold">Event Sign-ups & Rosters</h1><p class="text-muted mb-0">Collect availability, set hourly staffing needs, arrange shifts, then publish when ready.</p></div><a href="{{ route('signups.show') }}" class="btn btn-outline-primary">View signup page</a></div>
-    @if(session('success'))<div class="alert alert-success">{{ session('success') }}</div>@endif
-    @if($errors->any())<div class="alert alert-danger">{{ $errors->first() }}</div>@endif
+    <?php if (session('success')): ?><div class="alert alert-success">{{ session('success') }}</div><?php endif; ?>
+    <?php if ($errors->any()): ?><div class="alert alert-danger">{{ $errors->first() }}</div><?php endif; ?>
 
     <div class="card shadow-sm mb-4"><div class="card-header font-weight-bold">Add an event</div><div class="card-body">
         <form method="POST" action="{{ route('signups.admin.events.create') }}">@csrf
@@ -19,13 +19,13 @@
     </div></div>
 
     <h2 class="h4 mb-3">Events and roster planner</h2>
-    @if($events->isNotEmpty())
+    <?php if ($events->isNotEmpty()): ?>
     <?php foreach ($events as $event): ?>
         <div class="card shadow-sm mb-4">
             <div class="card-header d-flex flex-wrap justify-content-between align-items-center">
-                <div><strong>{{ $event->name }}</strong>@if($event->event_date)<span class="text-muted ml-2">{{ $event->event_date->format('D j M Y') }}</span>@endif <span class="badge {{ $event->is_open ? 'badge-success' : 'badge-secondary' }} ml-2">{{ $event->is_open ? 'Signup open' : 'Signup closed' }}</span></div>
+                <div><strong>{{ $event->name }}</strong><?php if ($event->event_date): ?><span class="text-muted ml-2">{{ $event->event_date->format('D j M Y') }}</span><?php endif; ?> <span class="badge {{ $event->is_open ? 'badge-success' : 'badge-secondary' }} ml-2">{{ $event->is_open ? 'Signup open' : 'Signup closed' }}</span></div>
                 <div class="d-flex flex-wrap">
-                    @if($event->roster_published)<a class="btn btn-sm btn-outline-primary mr-2" href="{{ route('signups.roster', $event) }}" target="_blank">View published roster</a>@endif
+                    <?php if ($event->roster_published): ?><a class="btn btn-sm btn-outline-primary mr-2" href="{{ route('signups.roster', $event) }}" target="_blank">View published roster</a><?php endif; ?>
                     <form method="POST" action="{{ route('signups.admin.events.toggle', $event) }}">@csrf<button class="btn btn-sm btn-outline-primary">{{ $event->is_open ? 'Close signups' : 'Reopen signups' }}</button></form>
                 </div>
             </div>
@@ -43,7 +43,7 @@
                                 <?php endforeach; ?>
                             </tbody></table></div><button class="btn btn-primary btn-sm" {{ $event->planner_hours->isEmpty() ? 'disabled' : '' }}>Save staffing needs</button>
                     </form>
-                    @if($event->planner_hours->isEmpty())<p class="text-muted mb-0 mt-2">Set event start and finish times to create the hourly staffing table.</p>@endif
+                    <?php if ($event->planner_hours->isEmpty()): ?><p class="text-muted mb-0 mt-2">Set event start and finish times to create the hourly staffing table.</p><?php endif; ?>
                 </div></div>
 
                 <div class="card mb-4"><div class="card-header font-weight-bold">Roster positions (callsigns)</div><div class="card-body">
@@ -53,22 +53,22 @@
                         <div class="form-group col-md-3"><button class="btn btn-outline-primary btn-block">Add position</button></div>
                     </form>
                     <div class="d-flex flex-wrap">
-                        @if($event->positions->isNotEmpty())
+                        <?php if ($event->positions->isNotEmpty()): ?>
                         <?php foreach ($event->positions as $position): ?>
                             <form method="POST" action="{{ route('signups.admin.positions.toggle', $position) }}" class="mr-2 mb-2">@csrf<button class="btn btn-sm {{ $position->is_open ? 'btn-outline-success' : 'btn-outline-secondary' }}">{{ $position->sector }} · {{ $position->callsign }} {{ $position->is_open ? '(open)' : '(closed)' }}</button></form>
                         <?php endforeach; ?>
-                    @else
+                    <?php else: ?>
                         <p class="text-muted mb-0">Add positions for each sector before assigning controllers.</p>
-                    @endif
+                    <?php endif; ?>
                     </div>
                 </div></div>
 
                 <div class="card mb-4"><div class="card-header font-weight-bold">Controller availability and shift assignment ({{ $event->signups->count() }})</div><div class="card-body">
-                    @if($event->signups->isNotEmpty())
+                    <?php if ($event->signups->isNotEmpty()): ?>
                     <?php foreach ($event->signups as $signup): ?>
                         <div class="border rounded p-3 mb-3">
                             <div class="d-flex flex-wrap justify-content-between"><div><strong>{{ $signup->full_name }}</strong> <span class="text-muted">CID {{ $signup->cid }} · Prefers {{ $signup->preferred_position }}</span></div></div>
-                            <p class="small text-muted mb-2">Available: @if(!empty($signup->availability_windows)) <?php foreach ($signup->availability_windows as $window): ?>{{ \Carbon\Carbon::parse($window['starts_at'])->format('D H:i') }}–{{ \Carbon\Carbon::parse($window['ends_at'])->format('H:i') }}Z@if(!$loop->last), @endif <?php endforeach; ?> @else No availability window recorded @endif</p>
+                            <p class="small text-muted mb-2">Available: <?php if (!empty($signup->availability_windows)): ?> <?php foreach ($signup->availability_windows as $window): ?>{{ \Carbon\Carbon::parse($window['starts_at'])->format('D H:i') }}–{{ \Carbon\Carbon::parse($window['ends_at'])->format('H:i') }}Z<?php if (!$loop->last): ?>, <?php endif; ?> <?php endforeach; ?> <?php else: ?> No availability window recorded <?php endif; ?></p>
                             <?php foreach ($signup->assignments as $assignment): ?>
                                 @php
                                     $windowForShift = collect($signup->availability_windows ?? [])->first(function ($window) use ($assignment) {
@@ -91,7 +91,7 @@
                                 </form>
                                 <form id="delete-assignment-{{ $assignment->id }}" method="POST" action="{{ route('signups.admin.assignments.delete', $assignment) }}">@csrf @method('DELETE')</form>
                             <?php endforeach; ?>
-                            @if($event->positions->where('is_open', true)->isNotEmpty())
+                            <?php if ($event->positions->where('is_open', true)->isNotEmpty()): ?>
                                 <?php foreach ($signup->availability_windows ?? [] as $windowIndex => $availableWindow): ?>
                                     <form method="POST" action="{{ route('signups.admin.assignments.save') }}" class="form-row align-items-end mt-2">@csrf
                                         <input type="hidden" name="event_id" value="{{ $event->id }}"><input type="hidden" name="signup_id" value="{{ $signup->id }}">
@@ -101,12 +101,12 @@
                                         <div class="form-group col-md-3"><button class="btn btn-sm btn-outline-primary btn-block">Add shift</button></div>
                                     </form>
                                 <?php endforeach; ?>
-                            @endif
+                            <?php endif; ?>
                         </div>
                     <?php endforeach; ?>
-                    @else
+                    <?php else: ?>
                         <p class="text-muted mb-0">No controllers have signed up for this event yet.</p>
-                    @endif
+                    <?php endif; ?>
                 </div></div>
 
                 <div class="d-flex flex-wrap justify-content-between align-items-center">
@@ -116,16 +116,16 @@
             </div>
         </div>
     <?php endforeach; ?>
-    @else
+    <?php else: ?>
         <div class="alert alert-info">No events yet. Add an event above to start planning.</div>
-    @endif
+    <?php endif; ?>
 
     <div class="card shadow-sm mt-4"><div class="card-header font-weight-bold">Previous controller responses ({{ $signups->whereNull('event_id')->count() }})</div><div class="table-responsive"><table class="table table-hover mb-0"><thead><tr><th>Name</th><th>CID</th><th>Preferred position</th><th>Submitted</th></tr></thead><tbody>
-        @if($signups->whereNull('event_id')->isNotEmpty())
+        <?php if ($signups->whereNull('event_id')->isNotEmpty()): ?>
             <?php foreach ($signups->whereNull('event_id') as $signup): ?><tr><td>{{ $signup->full_name }}</td><td>{{ $signup->cid }}</td><td>{{ $signup->preferred_position }}</td><td>{{ $signup->submitted_at->format('Y-m-d H:i') }}Z</td></tr><?php endforeach; ?>
-        @else
+        <?php else: ?>
             <tr><td colspan="4" class="text-center text-muted py-3">No previous responses.</td></tr>
-        @endif
+        <?php endif; ?>
     </tbody></table></div></div>
 </div>
 <style>
