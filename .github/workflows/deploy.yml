@@ -36,3 +36,4 @@ jobs:
           sudo chgrp -R www-data storage bootstrap/cache
           sudo chmod -R ug+rwx storage bootstrap/cache
           sudo -u gander php artisan migrate --force
+          sudo -u gander php artisan view:clear
