@@ -20,7 +20,7 @@
 
     <h2 class="h4 mb-3">Events and roster planner</h2>
     @if($events->isNotEmpty())
-    @foreach($events as $event)
+    <?php foreach ($events as $event): ?>
         <div class="card shadow-sm mb-4">
             <div class="card-header d-flex flex-wrap justify-content-between align-items-center">
                 <div><strong>{{ $event->name }}</strong>@if($event->event_date)<span class="text-muted ml-2">{{ $event->event_date->format('D j M Y') }}</span>@endif <span class="badge {{ $event->is_open ? 'badge-success' : 'badge-secondary' }} ml-2">{{ $event->is_open ? 'Signup open' : 'Signup closed' }}</span></div>
@@ -35,12 +35,12 @@
                 <div class="card mb-4"><div class="card-header font-weight-bold">Controllers needed each hour</div><div class="card-body">
                     <form method="POST" action="{{ route('signups.admin.events.requirements', $event) }}">@csrf
                             <div class="table-responsive"><table class="table table-sm table-bordered"><thead><tr><th>Hour (UTC)</th><th>Gander controllers</th><th>Shanwick controllers</th></tr></thead><tbody>
-                                @foreach($event->planner_hours as $index => $hour)
+                                <?php foreach ($event->planner_hours as $index => $hour): ?>
                                     @php($target = $event->staffing_requirements[$hour->toDateTimeString()] ?? [])
                                     @php($ganderAssigned = $event->assignments->filter(function ($assignment) use ($hour) { return $assignment->position && $assignment->position->sector === 'Gander' && $assignment->starts_at->lt($hour->copy()->addHour()) && $assignment->ends_at->gt($hour); })->count())
                                     @php($shanwickAssigned = $event->assignments->filter(function ($assignment) use ($hour) { return $assignment->position && $assignment->position->sector === 'Shanwick' && $assignment->starts_at->lt($hour->copy()->addHour()) && $assignment->ends_at->gt($hour); })->count())
                                     <tr><th>{{ $hour->format('D H:i') }}–{{ $hour->copy()->addHour()->format('H:i') }}Z</th><td><div class="d-flex align-items-center"><input type="number" min="0" max="20" name="requirements[{{ $index }}][gander]" class="form-control form-control-sm mr-2" value="{{ $target['Gander'] ?? 0 }}" aria-label="Gander controllers required"><span class="small text-muted text-nowrap">Assigned: {{ $ganderAssigned }}</span></div></td><td><div class="d-flex align-items-center"><input type="number" min="0" max="20" name="requirements[{{ $index }}][shanwick]" class="form-control form-control-sm mr-2" value="{{ $target['Shanwick'] ?? 0 }}" aria-label="Shanwick controllers required"><span class="small text-muted text-nowrap">Assigned: {{ $shanwickAssigned }}</span></div></td></tr>
-                                @endforeach
+                                <?php endforeach; ?>
                             </tbody></table></div><button class="btn btn-primary btn-sm" {{ $event->planner_hours->isEmpty() ? 'disabled' : '' }}>Save staffing needs</button>
                     </form>
                     @if($event->planner_hours->isEmpty())<p class="text-muted mb-0 mt-2">Set event start and finish times to create the hourly staffing table.</p>@endif
@@ -54,9 +54,9 @@
                     </form>
                     <div class="d-flex flex-wrap">
                         @if($event->positions->isNotEmpty())
-                        @foreach($event->positions as $position)
+                        <?php foreach ($event->positions as $position): ?>
                             <form method="POST" action="{{ route('signups.admin.positions.toggle', $position) }}" class="mr-2 mb-2">@csrf<button class="btn btn-sm {{ $position->is_open ? 'btn-outline-success' : 'btn-outline-secondary' }}">{{ $position->sector }} · {{ $position->callsign }} {{ $position->is_open ? '(open)' : '(closed)' }}</button></form>
-                        @endforeach
+                        <?php endforeach; ?>
                     @else
                         <p class="text-muted mb-0">Add positions for each sector before assigning controllers.</p>
                     @endif
@@ -65,11 +65,11 @@
 
                 <div class="card mb-4"><div class="card-header font-weight-bold">Controller availability and shift assignment ({{ $event->signups->count() }})</div><div class="card-body">
                     @if($event->signups->isNotEmpty())
-                    @foreach($event->signups as $signup)
+                    <?php foreach ($event->signups as $signup): ?>
                         <div class="border rounded p-3 mb-3">
                             <div class="d-flex flex-wrap justify-content-between"><div><strong>{{ $signup->full_name }}</strong> <span class="text-muted">CID {{ $signup->cid }} · Prefers {{ $signup->preferred_position }}</span></div></div>
-                            <p class="small text-muted mb-2">Available: @if(!empty($signup->availability_windows)) @foreach($signup->availability_windows as $window){{ \Carbon\Carbon::parse($window['starts_at'])->format('D H:i') }}–{{ \Carbon\Carbon::parse($window['ends_at'])->format('H:i') }}Z@if(!$loop->last), @endif @endforeach @else No availability window recorded @endif</p>
-                            @foreach($signup->assignments as $assignment)
+                            <p class="small text-muted mb-2">Available: @if(!empty($signup->availability_windows)) <?php foreach ($signup->availability_windows as $window): ?>{{ \Carbon\Carbon::parse($window['starts_at'])->format('D H:i') }}–{{ \Carbon\Carbon::parse($window['ends_at'])->format('H:i') }}Z@if(!$loop->last), @endif <?php endforeach; ?> @else No availability window recorded @endif</p>
+                            <?php foreach ($signup->assignments as $assignment): ?>
                                 @php
                                     $windowForShift = collect($signup->availability_windows ?? [])->first(function ($window) use ($assignment) {
                                         return $assignment->starts_at->gte(\Carbon\Carbon::parse($window['starts_at'])) && $assignment->ends_at->lte(\Carbon\Carbon::parse($window['ends_at']));
@@ -82,7 +82,7 @@
                                 @endphp
                                 <form method="POST" action="{{ route('signups.admin.assignments.save') }}" class="form-row align-items-end bg-light rounded p-2 mb-2">@csrf
                                     <input type="hidden" name="event_id" value="{{ $event->id }}"><input type="hidden" name="signup_id" value="{{ $signup->id }}"><input type="hidden" name="assignment_id" value="{{ $assignment->id }}">
-                                    <div class="form-group col-md-3"><label>Position</label><select name="position_id" class="form-control form-control-sm" required>@foreach($event->positions as $position)<option value="{{ $position->id }}" {{ $assignment->position_id === $position->id ? 'selected' : '' }}>{{ $position->sector }} · {{ $position->callsign }}</option>@endforeach</select></div>
+                                    <div class="form-group col-md-3"><label>Position</label><select name="position_id" class="form-control form-control-sm" required><?php foreach ($event->positions as $position): ?><option value="{{ $position->id }}" {{ $assignment->position_id === $position->id ? 'selected' : '' }}>{{ $position->sector }} · {{ $position->callsign }}</option><?php endforeach; ?></select></div>
                                     <div class="form-group col-md-3"><label>Shift starts (UTC)</label><input id="assignment-start-{{ $assignment->id }}" type="datetime-local" step="3600" name="starts_at" class="form-control form-control-sm" value="{{ $assignment->starts_at->format('Y-m-d\\TH:i') }}" required></div>
                                     <div class="form-group col-md-3"><label>Shift ends (UTC)</label><input id="assignment-end-{{ $assignment->id }}" type="datetime-local" step="3600" name="ends_at" class="form-control form-control-sm" value="{{ $assignment->ends_at->format('Y-m-d\\TH:i') }}" required></div>
                                     <div class="form-group col-md-2"><button class="btn btn-sm btn-primary btn-block">Save shift</button></div>
@@ -90,20 +90,20 @@
                                     <div class="col-12"><div class="shift-timeline" data-min="{{ $windowStart->format('Y-m-d\\TH:i') }}" data-max="{{ $windowEnd->format('Y-m-d\\TH:i') }}" data-start-input="assignment-start-{{ $assignment->id }}" data-end-input="assignment-end-{{ $assignment->id }}"><div class="shift-availability"></div><div class="shift-strip" style="left: {{ $stripLeft }}%; width: {{ $stripWidth }}%;"><button type="button" class="shift-handle shift-handle-start" aria-label="Resize shift start"></button><span>{{ $assignment->position->callsign }}</span><button type="button" class="shift-handle shift-handle-end" aria-label="Resize shift end"></button></div></div><div class="small text-muted">Drag the strip to move the shift or drag either end to resize it within this controller’s availability. Click Save shift to keep the change.</div></div>
                                 </form>
                                 <form id="delete-assignment-{{ $assignment->id }}" method="POST" action="{{ route('signups.admin.assignments.delete', $assignment) }}">@csrf @method('DELETE')</form>
-                            @endforeach
+                            <?php endforeach; ?>
                             @if($event->positions->where('is_open', true)->isNotEmpty())
-                                @foreach($signup->availability_windows ?? [] as $windowIndex => $availableWindow)
+                                <?php foreach ($signup->availability_windows ?? [] as $windowIndex => $availableWindow): ?>
                                     <form method="POST" action="{{ route('signups.admin.assignments.save') }}" class="form-row align-items-end mt-2">@csrf
                                         <input type="hidden" name="event_id" value="{{ $event->id }}"><input type="hidden" name="signup_id" value="{{ $signup->id }}">
-                                        <div class="form-group col-md-3"><label>Assign to position</label><select name="position_id" class="form-control form-control-sm" required>@foreach($event->positions->where('is_open', true) as $position)<option value="{{ $position->id }}" {{ ($signup->preferred_position === 'Either position/NAT' || $signup->preferred_position === $position->sector) ? '' : 'disabled' }}>{{ $position->sector }} · {{ $position->callsign }}</option>@endforeach</select></div>
+                                        <div class="form-group col-md-3"><label>Assign to position</label><select name="position_id" class="form-control form-control-sm" required><?php foreach ($event->positions->where('is_open', true) as $position): ?><option value="{{ $position->id }}" {{ ($signup->preferred_position === 'Either position/NAT' || $signup->preferred_position === $position->sector) ? '' : 'disabled' }}>{{ $position->sector }} · {{ $position->callsign }}</option><?php endforeach; ?></select></div>
                                         <div class="form-group col-md-3"><label>Shift starts (UTC)</label><input type="datetime-local" step="3600" name="starts_at" class="form-control form-control-sm" min="{{ \Carbon\Carbon::parse($availableWindow['starts_at'])->format('Y-m-d\\TH:i') }}" max="{{ \Carbon\Carbon::parse($availableWindow['ends_at'])->format('Y-m-d\\TH:i') }}" value="{{ \Carbon\Carbon::parse($availableWindow['starts_at'])->format('Y-m-d\\TH:i') }}" required></div>
                                         <div class="form-group col-md-3"><label>Shift ends (UTC)</label><input type="datetime-local" step="3600" name="ends_at" class="form-control form-control-sm" min="{{ \Carbon\Carbon::parse($availableWindow['starts_at'])->format('Y-m-d\\TH:i') }}" max="{{ \Carbon\Carbon::parse($availableWindow['ends_at'])->format('Y-m-d\\TH:i') }}" value="{{ \Carbon\Carbon::parse($availableWindow['starts_at'])->addHours(2)->min(\Carbon\Carbon::parse($availableWindow['ends_at']))->format('Y-m-d\\TH:i') }}" required></div>
                                         <div class="form-group col-md-3"><button class="btn btn-sm btn-outline-primary btn-block">Add shift</button></div>
                                     </form>
-                                @endforeach
+                                <?php endforeach; ?>
                             @endif
                         </div>
-                    @endforeach
+                    <?php endforeach; ?>
                     @else
                         <p class="text-muted mb-0">No controllers have signed up for this event yet.</p>
                     @endif
@@ -115,14 +115,14 @@
                 </div>
             </div>
         </div>
-    @endforeach
+    <?php endforeach; ?>
     @else
         <div class="alert alert-info">No events yet. Add an event above to start planning.</div>
     @endif
 
     <div class="card shadow-sm mt-4"><div class="card-header font-weight-bold">Previous controller responses ({{ $signups->whereNull('event_id')->count() }})</div><div class="table-responsive"><table class="table table-hover mb-0"><thead><tr><th>Name</th><th>CID</th><th>Preferred position</th><th>Submitted</th></tr></thead><tbody>
         @if($signups->whereNull('event_id')->isNotEmpty())
-            @foreach($signups->whereNull('event_id') as $signup)<tr><td>{{ $signup->full_name }}</td><td>{{ $signup->cid }}</td><td>{{ $signup->preferred_position }}</td><td>{{ $signup->submitted_at->format('Y-m-d H:i') }}Z</td></tr>@endforeach
+            <?php foreach ($signups->whereNull('event_id') as $signup): ?><tr><td>{{ $signup->full_name }}</td><td>{{ $signup->cid }}</td><td>{{ $signup->preferred_position }}</td><td>{{ $signup->submitted_at->format('Y-m-d H:i') }}Z</td></tr><?php endforeach; ?>
         @else
             <tr><td colspan="4" class="text-center text-muted py-3">No previous responses.</td></tr>
         @endif
