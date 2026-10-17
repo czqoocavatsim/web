@@ -19,7 +19,8 @@
     </div></div>
 
     <h2 class="h4 mb-3">Events and roster planner</h2>
-    @forelse($events as $event)
+    @if($events->isNotEmpty())
+    @foreach($events as $event)
         <div class="card shadow-sm mb-4">
             <div class="card-header d-flex flex-wrap justify-content-between align-items-center">
                 <div><strong>{{ $event->name }}</strong>@if($event->event_date)<span class="text-muted ml-2">{{ $event->event_date->format('D j M Y') }}</span>@endif <span class="badge {{ $event->is_open ? 'badge-success' : 'badge-secondary' }} ml-2">{{ $event->is_open ? 'Signup open' : 'Signup closed' }}</span></div>
@@ -52,17 +53,22 @@
                         <div class="form-group col-md-3"><button class="btn btn-outline-primary btn-block">Add position</button></div>
                     </form>
                     <div class="d-flex flex-wrap">
-                        @forelse($event->positions as $position)
+                        @if($event->positions->isNotEmpty())
+                        @foreach($event->positions as $position)
                             <form method="POST" action="{{ route('signups.admin.positions.toggle', $position) }}" class="mr-2 mb-2">@csrf<button class="btn btn-sm {{ $position->is_open ? 'btn-outline-success' : 'btn-outline-secondary' }}">{{ $position->sector }} · {{ $position->callsign }} {{ $position->is_open ? '(open)' : '(closed)' }}</button></form>
-                        @empty<p class="text-muted mb-0">Add positions for each sector before assigning controllers.</p>@endforelse
+                        @endforeach
+                    @else
+                        <p class="text-muted mb-0">Add positions for each sector before assigning controllers.</p>
+                    @endif
                     </div>
                 </div></div>
 
                 <div class="card mb-4"><div class="card-header font-weight-bold">Controller availability and shift assignment ({{ $event->signups->count() }})</div><div class="card-body">
-                    @forelse($event->signups as $signup)
+                    @if($event->signups->isNotEmpty())
+                    @foreach($event->signups as $signup)
                         <div class="border rounded p-3 mb-3">
                             <div class="d-flex flex-wrap justify-content-between"><div><strong>{{ $signup->full_name }}</strong> <span class="text-muted">CID {{ $signup->cid }} · Prefers {{ $signup->preferred_position }}</span></div></div>
-                            <p class="small text-muted mb-2">Available: @forelse($signup->availability_windows ?? [] as $window){{ \Carbon\Carbon::parse($window['starts_at'])->format('D H:i') }}–{{ \Carbon\Carbon::parse($window['ends_at'])->format('H:i') }}Z@if(!$loop->last), @endif @empty No availability window recorded @endforelse</p>
+                            <p class="small text-muted mb-2">Available: @if(!empty($signup->availability_windows)) @foreach($signup->availability_windows as $window){{ \Carbon\Carbon::parse($window['starts_at'])->format('D H:i') }}–{{ \Carbon\Carbon::parse($window['ends_at'])->format('H:i') }}Z@if(!$loop->last), @endif @endforeach @else No availability window recorded @endif</p>
                             @foreach($signup->assignments as $assignment)
                                 @php
                                     $windowForShift = collect($signup->availability_windows ?? [])->first(function ($window) use ($assignment) {
@@ -97,7 +103,10 @@
                                 @endforeach
                             @endif
                         </div>
-                    @empty<p class="text-muted mb-0">No controllers have signed up for this event yet.</p>@endforelse
+                    @endforeach
+                    @else
+                        <p class="text-muted mb-0">No controllers have signed up for this event yet.</p>
+                    @endif
                 </div></div>
 
                 <div class="d-flex flex-wrap justify-content-between align-items-center">
@@ -106,10 +115,17 @@
                 </div>
             </div>
         </div>
-    @empty<div class="alert alert-info">No events yet. Add an event above to start planning.</div>@endforelse
+    @endforeach
+    @else
+        <div class="alert alert-info">No events yet. Add an event above to start planning.</div>
+    @endif
 
     <div class="card shadow-sm mt-4"><div class="card-header font-weight-bold">Previous controller responses ({{ $signups->whereNull('event_id')->count() }})</div><div class="table-responsive"><table class="table table-hover mb-0"><thead><tr><th>Name</th><th>CID</th><th>Preferred position</th><th>Submitted</th></tr></thead><tbody>
-        @forelse($signups->whereNull('event_id') as $signup)<tr><td>{{ $signup->full_name }}</td><td>{{ $signup->cid }}</td><td>{{ $signup->preferred_position }}</td><td>{{ $signup->submitted_at->format('Y-m-d H:i') }}Z</td></tr>@empty<tr><td colspan="4" class="text-center text-muted py-3">No previous responses.</td></tr>@endforelse
+        @if($signups->whereNull('event_id')->isNotEmpty())
+            @foreach($signups->whereNull('event_id') as $signup)<tr><td>{{ $signup->full_name }}</td><td>{{ $signup->cid }}</td><td>{{ $signup->preferred_position }}</td><td>{{ $signup->submitted_at->format('Y-m-d H:i') }}Z</td></tr>@endforeach
+        @else
+            <tr><td colspan="4" class="text-center text-muted py-3">No previous responses.</td></tr>
+        @endif
     </tbody></table></div></div>
 </div>
 <style>
