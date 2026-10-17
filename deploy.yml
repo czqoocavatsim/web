@@ -1,0 +1,39 @@
+name: Deploy
+
+on:
+  push:
+    branches: [ main ]
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v2
+
+    - name: Copy repository contents via scp
+      uses: appleboy/scp-action@master
+      with:
+        HOST: ${{ secrets.HOST }}
+        USERNAME: ${{ secrets.USER }}
+        PASSWORD: ${{ secrets.PASS }}
+        PORT: 22
+        source: ./
+        target: /var/www/ganderoceanic.ca/
+
+    - name: Set permissions
+      uses: appleboy/ssh-action@master
+      with:
+        HOST: ${{ secrets.HOST }}
+        USERNAME: ${{ secrets.USER }}
+        PASSWORD: ${{ secrets.PASS }}
+        PORT: 22
+        script: |
+          cd /var/www/ganderoceanic.ca/
+          sudo chown -R gander:www-data .
+          sudo find . -type f -exec chmod 664 {} \;
+          sudo find . -type d -exec chmod 775 {} \;
+          sudo chgrp -R www-data storage bootstrap/cache
+          sudo chmod -R ug+rwx storage bootstrap/cache
+          sudo -u gander php artisan migrate --force
+          sudo -u gander php artisan view:clear
