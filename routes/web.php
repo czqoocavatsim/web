@@ -40,6 +40,7 @@ use App\Http\Controllers\TrainingCalendar\TrainingController;
 use App\Http\Controllers\Training\SoloCertificationsController;
 use App\Http\Controllers\DiscordTestController;
 use App\Jobs\ProcessExternalControllers;
+use App\Http\Controllers\EventSignupsController;
 
 Route::get('/', [PrimaryViewsController::class, 'home'])->name('index');
 Route::get('/map', [PrimaryViewsController::class, 'map'])->name('map');
@@ -60,6 +61,16 @@ Route::get('/events', [EventController::class, 'index'])->name('events.index');
 Route::get('/events/{slug}', [EventController::class, 'viewEvent'])->name('events.view');
 Route::view('/branding', 'about.branding')->name('branding');
 Route::view('/fdd', 'fdd.index')->name('fdd.index');
+
+// Event controller signups (kept out of public navigation)
+Route::get('/signups', [EventSignupsController::class, 'show'])->name('signups.show');
+Route::post('/signups', [EventSignupsController::class, 'submit'])->name('signups.submit');
+Route::prefix('admin/signups')->name('signups.admin.')->middleware(['auth', 'role:Administrator'])->group(function () {
+    Route::get('/', [EventSignupsController::class, 'admin'])->name('index');
+    Route::post('/slots', [EventSignupsController::class, 'createSlot'])->name('slots.create');
+    Route::post('/slots/{slot}/toggle', [EventSignupsController::class, 'toggleSlot'])->name('slots.toggle');
+    Route::delete('/slots/{slot}', [EventSignupsController::class, 'deleteSlot'])->name('slots.delete');
+});
 
 
 // About
