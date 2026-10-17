@@ -32,8 +32,7 @@
                 <p class="text-muted">{{ $event->starts_at ? $event->starts_at->format('D j M H:i') : 'Hours not set' }}–{{ $event->ends_at ? $event->ends_at->format('H:i') : '' }}Z</p>
 
                 <div class="card mb-4"><div class="card-header font-weight-bold">Controllers needed each hour</div><div class="card-body">
-                    @if($event->planner_hours->isNotEmpty())
-                        <form method="POST" action="{{ route('signups.admin.events.requirements', $event) }}">@csrf
+                    <form method="POST" action="{{ route('signups.admin.events.requirements', $event) }}">@csrf
                             <div class="table-responsive"><table class="table table-sm table-bordered"><thead><tr><th>Hour (UTC)</th><th>Gander controllers</th><th>Shanwick controllers</th></tr></thead><tbody>
                                 @foreach($event->planner_hours as $index => $hour)
                                     @php($target = $event->staffing_requirements[$hour->toDateTimeString()] ?? [])
@@ -41,11 +40,9 @@
                                     @php($shanwickAssigned = $event->assignments->filter(function ($assignment) use ($hour) { return $assignment->position && $assignment->position->sector === 'Shanwick' && $assignment->starts_at->lt($hour->copy()->addHour()) && $assignment->ends_at->gt($hour); })->count())
                                     <tr><th>{{ $hour->format('D H:i') }}–{{ $hour->copy()->addHour()->format('H:i') }}Z</th><td><div class="d-flex align-items-center"><input type="number" min="0" max="20" name="requirements[{{ $index }}][gander]" class="form-control form-control-sm mr-2" value="{{ $target['Gander'] ?? 0 }}" aria-label="Gander controllers required"><span class="small text-muted text-nowrap">Assigned: {{ $ganderAssigned }}</span></div></td><td><div class="d-flex align-items-center"><input type="number" min="0" max="20" name="requirements[{{ $index }}][shanwick]" class="form-control form-control-sm mr-2" value="{{ $target['Shanwick'] ?? 0 }}" aria-label="Shanwick controllers required"><span class="small text-muted text-nowrap">Assigned: {{ $shanwickAssigned }}</span></div></td></tr>
                                 @endforeach
-                            </tbody></table></div><button class="btn btn-primary btn-sm">Save staffing needs</button>
-                        </form>
-                    @else
-                        <p class="text-muted mb-0">Set event start and finish times to create the hourly staffing table.</p>
-                    @endif
+                            </tbody></table></div><button class="btn btn-primary btn-sm" {{ $event->planner_hours->isEmpty() ? 'disabled' : '' }}>Save staffing needs</button>
+                    </form>
+                    @if($event->planner_hours->isEmpty())<p class="text-muted mb-0 mt-2">Set event start and finish times to create the hourly staffing table.</p>@endif
                 </div></div>
 
                 <div class="card mb-4"><div class="card-header font-weight-bold">Roster positions (callsigns)</div><div class="card-body">
