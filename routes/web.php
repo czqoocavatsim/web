@@ -65,8 +65,17 @@ Route::view('/fdd', 'fdd.index')->name('fdd.index');
 // Event controller signups (kept out of public navigation)
 Route::get('/signups', [EventSignupsController::class, 'show'])->name('signups.show');
 Route::post('/signups', [EventSignupsController::class, 'submit'])->name('signups.submit');
+Route::get('/signups/{event}/roster', [EventSignupsController::class, 'publicRoster'])->name('signups.roster');
 Route::prefix('admin/signups')->name('signups.admin.')->middleware(['auth', 'role:Administrator'])->group(function () {
-    Route::get('/', [EventSignupsController::class, 'admin'])->name('index');    Route::post('/events', [EventSignupsController::class, 'createEvent'])->name('events.create');    Route::post('/events/{event}/toggle', [EventSignupsController::class, 'toggleEvent'])->name('events.toggle');
+    Route::get('/', [EventSignupsController::class, 'admin'])->name('index');
+    Route::post('/events', [EventSignupsController::class, 'createEvent'])->name('events.create');
+    Route::post('/events/{event}/toggle', [EventSignupsController::class, 'toggleEvent'])->name('events.toggle');
+    Route::post('/events/{event}/requirements', [EventSignupsController::class, 'saveRequirements'])->name('events.requirements');
+    Route::post('/events/{event}/positions', [EventSignupsController::class, 'createPosition'])->name('events.positions.create');
+    Route::post('/positions/{position}/toggle', [EventSignupsController::class, 'togglePosition'])->name('positions.toggle');
+    Route::post('/assignments', [EventSignupsController::class, 'saveAssignment'])->name('assignments.save');
+    Route::delete('/assignments/{assignment}', [EventSignupsController::class, 'deleteAssignment'])->name('assignments.delete');
+    Route::post('/events/{event}/publish', [EventSignupsController::class, 'togglePublished'])->name('events.publish');
     Route::post('/slots', [EventSignupsController::class, 'createSlot'])->name('slots.create');
     Route::post('/slots/{slot}/toggle', [EventSignupsController::class, 'toggleSlot'])->name('slots.toggle');
     Route::delete('/slots/{slot}', [EventSignupsController::class, 'deleteSlot'])->name('slots.delete');
