@@ -161,6 +161,8 @@ Route::group(['middleware' => 'auth'], function () {
         Route::get('/my/discord/link', [DiscordController::class, 'linkRedirectDiscord'])->name('me.discord.link');
         Route::get('/my/discord/server/join', [DiscordController::class, 'joinRedirectDiscord'])->name('me.discord.join');
         Route::get('/my/discord/server/join/callback', [DiscordController::class, 'joinCallbackDiscord']);
+        Route::get('/my/vnaaats', [\App\Http\Controllers\Users\VnaaatsKeyController::class, 'show'])->name('my.vnaaats');
+        Route::post('/my/vnaaats', [\App\Http\Controllers\Users\VnaaatsKeyController::class, 'issue'])->name('my.vnaaats.issue');
         Route::get('/my/preferences', [MyCzqoController::class, 'preferences'])->name('my.preferences');
         Route::post('/my/preferences', [MyCzqoController::class, 'preferencesPost'])->name('my.preferences.post');
 
