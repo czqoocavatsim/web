@@ -16,7 +16,7 @@ class VnaaatsKeyController extends Controller
     {
         $roster = $user->rosterProfile;
 
-        return $roster && $roster->certification === 'certified' && (int) $roster->active === 1;
+         return $roster && $roster->certification === 'certified';
     }
 
     private function call(string $what, array $body)
