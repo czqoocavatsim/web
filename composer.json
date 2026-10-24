@@ -27,6 +27,7 @@
         "marvinlabs/laravel-discord-logger": "^1.4",
         "misterphilip/maintenance-mode": "~2.0",
         "mofodojodino/profanity-filter": "^1.3",
+        "mtdowling/jmespath.php": "2.9.1",
         "sentry/sentry-laravel": "^3.4",
         "spatie/laravel-activitylog": "^4.7",
         "spatie/laravel-cookie-consent": "^3.2",
