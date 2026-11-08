@@ -62,10 +62,25 @@ class PrimaryViewsController extends Controller
             }
         }
 
-        $last24 = \App\Services\OceanicStats::last24h();
-        $forecast = \App\Services\OceanicStats::forecast(6);
+        [$last24, $forecast, $statsError] = $this->homeStats();
 
-        return view('index', compact('last24', 'forecast', 'controllers', 'news', 'certifications', 'topPilot', 'yearControllers', 'yearAircraft', 'topControllers', 'topAirlines', 'topPairAirports', 'nextEvent', 'ctpEvents', 'ctpAircraft', 'ctpMode'));
+        return view('index', compact('last24', 'forecast', 'statsError', 'controllers', 'news', 'certifications', 'topPilot', 'yearControllers', 'yearAircraft', 'topControllers', 'topAirlines', 'topPairAirports', 'nextEvent', 'ctpEvents', 'ctpAircraft', 'ctpMode'));
+    }
+
+    // The 24 hour and forecast numbers must never take the homepage down
+    private function homeStats(): array
+    {
+        $last24 = null;
+        $forecast = ['departing' => null, 'approaching' => null, 'total' => null];
+        $error = null;
+        try {
+            $last24 = \App\Services\OceanicStats::last24h();
+            $forecast = \App\Services\OceanicStats::forecast(6);
+        } catch (\Throwable $e) {
+            $error = get_class($e) . ': ' . $e->getMessage() . ' @ ' . basename($e->getFile()) . ':' . $e->getLine();
+            \Log::error('Homepage stats failed: ' . $error);
+        }
+        return [$last24, $forecast, $error];
     }
 
     // General Homepage API Update
@@ -80,8 +95,8 @@ class PrimaryViewsController extends Controller
             'kzny' => $ctpAircraft->kzny,
             'lppo' => $ctpAircraft->lppo,
             'bird' => $ctpAircraft->bird,
-            'last24' => \App\Services\OceanicStats::last24h(),
-            'forecast' => \App\Services\OceanicStats::forecast(6),
+            'last24' => $this->homeStats()[0],
+            'forecast' => $this->homeStats()[1],
         ]);
     }
 

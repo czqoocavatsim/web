@@ -106,6 +106,7 @@ body.zh-body .page-footer .text-muted{color:#b4b9c4!important}
                 @endif
             </div>
         </div>
+        @if(!empty($statsError))@hasanyrole('Administrator|Senior Staff|Web Team')<!-- stats error: {{ $statsError }} -->@endhasanyrole@endif
         <div class="zh-strip">
             <span class="zh-live"><i></i>LIVE</span>
             <span class="zh-grp" title="Aircraft currently inside each oceanic area"><i class="fas fa-plane zh-ic"></i><span class="zh-mut">Aircraft</span></span>
@@ -113,8 +114,10 @@ body.zh-body .page-footer .text-muted{color:#b4b9c4!important}
             <span><b class="js-eggx">{{ $ctpAircraft->eggx }}</b> <span class="zh-mut">Shanwick</span></span>
             <span><b class="js-kzny">{{ $ctpAircraft->kzny }}</b> <span class="zh-mut">New York</span></span>
             <span class="zh-mut" title="Controllers online now"><i class="fas fa-headset zh-ic"></i>Online now: <b id="online-now" style="color:#f2f3f5;font-size:15px;">{{ $controllers->count() ? $controllers->pluck('callsign')->implode(', ') : 'no controllers' }}</b></span>
+            @if($last24)
             <span class="zh-break"></span>
             <span class="zh-mut" title="Flights that spent 15 minutes or more in Gander, Shanwick or New York oceanic airspace, and controller time on oceanic positions, over the last 24 hours"><i class="fas fa-history zh-ic"></i>Last 24h: <b class="js-mov">{{ $last24['movements'] }}</b> movements &middot; <b class="js-atc">{{ $last24['atc_hours'] }}</b> h of ATC <span class="zh-mut">(<span class="js-pos">{{ $last24['positions'] }}</span> positions)</span></span>
+            @endif
             @if($forecast['total'] !== null)
                 <span class="zh-mut" title="Estimate from filed flight plans on the VATSIM data feed using an oceanic route: flights due to depart in the next 6 hours, plus flights already airborne and heading for oceanic airspace. Pilots who connect late or never fly are not predicted."><i class="fas fa-hourglass-half zh-ic"></i>Expected next 6h: <b class="js-exp">~{{ $forecast['total'] }}</b> flights <span class="zh-mut">(<span class="js-dep">{{ $forecast['departing'] }}</span> departing, <span class="js-app">{{ $forecast['approaching'] }}</span> en route)</span></span>
             @endif
