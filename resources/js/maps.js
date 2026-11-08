@@ -516,6 +516,36 @@ async function addNatBaseMap(map) {
     }
 }
 
+//Put the track letter on the map, staggered along the track so neighbouring letters do not overlap
+function addNatTrackLabels(track, map) {
+    if (!track.route || track.route.length < 2) return
+    const colour = track.direction == 1 ? '#1c5fc9' : '#c92d1c'
+    map._natLabelCount = map._natLabelCount || {1: 0, 0: 0}
+    const slot = map._natLabelCount[track.direction == 1 ? 1 : 0]++
+    //Choose a longitude for this label (west of 10W, stepping 5 degrees per track), then find the track's latitude there
+    const lons = track.route.map(p => p.longitude)
+    const lo = Math.min(...lons), hi = Math.max(...lons)
+    const targetLon = Math.min(hi - 4, Math.max(lo + 4, -16 - 5 * (slot % 8)))
+    let lat = track.route[0].latitude
+    for (let i = 0; i < track.route.length - 1; i++) {
+        const a = track.route[i], b = track.route[i + 1]
+        const l1 = Math.min(a.longitude, b.longitude), l2 = Math.max(a.longitude, b.longitude)
+        if (targetLon >= l1 && targetLon <= l2 && l2 > l1) {
+            lat = a.latitude + (b.latitude - a.latitude) * ((targetLon - a.longitude) / (b.longitude - a.longitude))
+            break
+        }
+    }
+    const icon = L.divIcon({
+        className: '',
+        html: '<div style="width:20px;height:20px;border-radius:50%;background:' + colour +
+            ';color:#fff;font:700 12px/16px sans-serif;text-align:center;border:2px solid #fff;box-shadow:0 1px 3px rgba(0,0,0,.5)">' +
+            String(track.id).replace(/[<>&]/g, '') + '</div>',
+        iconSize: [20, 20],
+        iconAnchor: [10, 10]
+    })
+    L.marker([lat, targetLon], {icon: icon, interactive: false, keyboard: false, zIndexOffset: 1000}).addTo(map)
+}
+
 //NAT track fix coordinates (named fixes that appear in NAT routes)
 const NAT_FIX_COORDS = {
     ADARA: [51.5, -15.0],
@@ -700,6 +730,7 @@ async function createNatTrackMap()
             opacity: 1,
             smoothFactor: 1
         }).addTo(map)
+        addNatTrackLabels(track, map)
 
         //Create row
         let row = $("<tr></tr>")
@@ -797,6 +828,7 @@ async function createEventTrackMap()
             opacity: 1,
             smoothFactor: 1
         }).addTo(map)
+        addNatTrackLabels(track, map)
 
         //Create row
         let row = $("<tr></tr>")
@@ -898,6 +930,7 @@ async function createConcordeTrackMap()
             opacity: 1,
             smoothFactor: 1
         }).addTo(map)
+        addNatTrackLabels(track, map)
 
         //Create row
         let row = $("<tr></tr>")
