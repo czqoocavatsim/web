@@ -23,7 +23,6 @@
                 </tbody>
             </table>
 
-            <p class="mt-3 text-muted">Special thank you to Christian Kovanen 1379372 for the boundaries and fixes.</p>
         </div>
         <script>
             createEventTrackMap();
