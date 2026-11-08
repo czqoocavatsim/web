@@ -176,7 +176,7 @@
     <footer class="page-footer text-dark font-small py-4" style="bottom:0">
         <div class="container">
             <p style="font-size: 0.9em;">For Flight Simulation Use Only - Not To Be Used For Real World Navigation. Any and all proprietary content available on this website may not be shared, copied, reproduced or used in any way without providing credit to the Gander Oceanic OCA.</p>
-            <p style="font-size: 0.9em;">Copyright © {{App\Models\Settings\CoreSettings::where('id', 1)->firstOrFail()->copyright_year}} Gander Oceanic OCA - All Rights Reserved.</p>
+            <p style="font-size: 0.9em;">Copyright © 2018-2027 Gander Oceanic OCA - All Rights Reserved.</p>
             <div class="flex-left mt-3">
                 <a href="{{route('my.feedback.new')}}" class="font-weight-bold black-text">Feedback</a>
                 &nbsp;
