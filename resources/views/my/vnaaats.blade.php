@@ -13,8 +13,8 @@
             <strong>Copy these now. They are shown once and cannot be shown again.</strong>
         </div>
         <h5 class="font-weight-bold blue-text">Plugin key</h5>
-        <p>In <code>vnaaats.cfg</code> (next to VatsimNAAATS.dll) put this on the <code>key=</code> line, then restart EuroScope:</p>
-        <pre class="p-3 border rounded" style="user-select: all;">key={{ $n['key'] }}</pre>
+        <p>Copy the key below. In <code>vnaaats.cfg</code> (next to VatsimNAAATS.dll) it goes after <code>key=</code> on the key line, then restart EuroScope. In FDD for Windows paste it into the key box as it is. The key is only the code below, with no <code>key=</code> in front.</p>
+        <pre class="p-3 border rounded" style="user-select: all;">{{ $n['key'] }}</pre>
         <h5 class="font-weight-bold blue-text mt-4">Flight Data Display sign-in</h5>
         <p>At <a href="https://vnaaats.com/fdd" target="_blank">vnaaats.com/fdd</a> use your name or CID <strong>{{ $n['cid'] }}</strong> and this password:</p>
         <pre class="p-3 border rounded" style="user-select: all;">{{ $n['password'] }}</pre>
