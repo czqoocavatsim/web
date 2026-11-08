@@ -495,6 +495,140 @@ function createMapTrackPointMarker(point, track, map) {
 }
 
 //Create Current NAT Tracks map
+//NAT track fix coordinates (named fixes that appear in NAT routes)
+const NAT_FIX_COORDS = {
+    ADARA: [51.5, -15.0],
+    ADODO: [58.5, -10.0],
+    AGORI: [57.0, -13.0],
+    ALLRY: [50.5, -52.0],
+    ATSIX: [60.0, -10.0],
+    ATSUR: [50, -14],
+    AVPUT: [65.0333, -60.0],
+    AVUTI: [57.4667, -58.0],
+    BALIX: [59.0, -10.0],
+    BEDRA: [49.0, -15.0],
+    BEGAS: [45.0, -9.0],
+    BERUX: [45.0, -11.0],
+    BILTO: [56.5, -15.0],
+    BOBTU: [44.1172, -52.8222],
+    BOKTO: [56.9667, -58.0],
+    BUDAR: [50.0, -52.0],
+    BUNAV: [46.5, -8.75],
+    CLAVY: [64.2333, -59.0],
+    CUDDY: [56.7, -57.0],
+    DINIM: [51.0, -15.0],
+    DIVAT: [45.0, -9.4697],
+    DIXIS: [45.0, -10.0],
+    DOGAL: [54.0, -15.0],
+    DORYY: [56.0333, -57.0],
+    ELSIR: [49.5, -52.0],
+    ELSOX: [51, -14],
+    EMBOK: [63.4667, -58.0],
+    ENNSO: [55.5333, -57.0],
+    EPUNA: [50.5, -14],
+    ERAKA: [58.0, -10.0],
+    ETARI: [55.5, -15.0],
+    ETIKI: [48.0, -8.75],
+    ETILO: [57.5, -10.0],
+    GELPO: [48.6442, -9.5025],
+    GISTI: [53, -14],
+    GOMUP: [57.0, -10.0],
+    GONAN: [45.0, -14.0],
+    HOIST: [55.0333, -57.0],
+    IBERG: [49.0, -52.0],
+    IRLOK: [54.5333, -57.0],
+    JANJO: [54.0333, -57.0],
+    JAROM: [44.1667, -54.8833],
+    JOOPY: [48.5, -52.0],
+    KETLA: [62.4667, -58.0],
+    KODIK: [53.4667, -57.2],
+    KOGAD: [49.5, -15.0],
+    LASNO: [48.5983, -9.0],
+    LEKVA: [51.5, -14],
+    LIBOR: [61.9667, -58.0],
+    LIMRI: [52.0, -15.0],
+    LOMSI: [53.1, -56.7833],
+    LUSEN: [60.5, -10.0],
+    MALOT: [53.0, -15.0],
+    MAXAR: [61.4667, -58.0],
+    MELDI: [52.7333, -56.35],
+    MUSAK: [48.0, -52.0],
+    NASBA: [49.0, -13.0],
+    NEBIN: [53.5, -15.0],
+    NEEKO: [52.4, -55.8333],
+    NERTU: [49.0, -14.0],
+    NICSO: [47.5, -52.0],
+    NIFTY: [60.9667, -58.0],
+    NILAV: [45.0, -13.4167],
+    OMOKO: [48.8389, -12.0],
+    OMSAT: [47.0, -52.0],
+    ORTAV: [59.5, -10.0],
+    PASAS: [45.0, -13.0],
+    PELTU: [52.1, -55.1667],
+    PIDSO: [60.4667, -58.0],
+    PIKIL: [56.0, -15.0],
+    PITAX: [45.0, -12.0],
+    PORTI: [46.5, -52.0],
+    RADUN: [59.9667, -58.0],
+    RAFIN: [44.8833, -51.8047],
+    RATSU: [61.0, -10.0],
+    RELIC: [46.0, -52.0],
+    RESNO: [55.0, -15.0],
+    RIKAL: [51.8, -54.5333],
+    RILED: [52.5, -14],
+    RODEL: [50.5, -15.0],
+    SAVRY: [59.4667, -58.0],
+    SAXAN: [51.4833, -53.85],
+    SEPAL: [47.0, -8.75],
+    SIVIR: [46.0, -8.75],
+    SOMAX: [50.0, -15.0],
+    SUNOT: [57.0, -15.0],
+    SUPRY: [45.5, -52.0],
+    TAMEL: [48.7286, -10.4972],
+    TOBOR: [52.5, -15.0],
+    TOXIT: [58.9667, -58.0],
+    TUDEP: [51.1667, -53.2333],
+    UMESI: [50.8333, -52.6],
+    UMLER: [47.5, -8.75],
+    URTAK: [58.4667, -58.0],
+    VENER: [54.5, -15.0],
+    VESMI: [57.9667, -58.0],
+    XETBO: [52, -14]
+};
+
+//Turn a route point like 5930/20 or 60/30 (degrees[minutes] north / degrees west) into [lat, lon]
+function natLatLonFromToken(token) {
+    const m = /^(\d{2})(\d{2})?\/(\d{2,3})$/.exec(token)
+    if (!m) return null
+    return [parseInt(m[1], 10) + (m[2] ? parseInt(m[2], 10) / 60 : 0), -parseInt(m[3], 10)]
+}
+
+//Convert a track from the nattrak API into the shape the map and table use
+function natTrackFromApi(t) {
+    const route = []
+    String(t.last_routeing || '').trim().split(/\s+/).forEach(token => {
+        const ll = NAT_FIX_COORDS[token] || natLatLonFromToken(token)
+        if (!ll) { console.warn('NAT track ' + t.identifier + ': unknown point ' + token); return }
+        route.push({name: token, latitude: ll[0], longitude: ll[1]})
+    })
+    return {
+        id: t.identifier,
+        route: route,
+        direction: t.direction === 'west' ? 1 : 0,
+        flightLevels: t.flight_levels || [],
+        validFrom: t.valid_from,
+        validTo: t.valid_to
+    }
+}
+
+//Format an ISO timestamp as "2026-11-08 11:30Z"
+function formatNatValidity(iso) {
+    const d = new Date(iso)
+    if (isNaN(d)) return String(iso)
+    const p = n => String(n).padStart(2, '0')
+    return d.getUTCFullYear() + '-' + p(d.getUTCMonth() + 1) + '-' + p(d.getUTCDate()) + ' ' + p(d.getUTCHours()) + ':' + p(d.getUTCMinutes()) + 'Z'
+}
+
 async function createNatTrackMap()
 {
     //Create map
@@ -505,7 +639,7 @@ async function createNatTrackMap()
 
     //Create OSM Layer
     if ($('body').data('theme') === 'dark') {
-        var OpenStreetMap_Mapnik = L.tileLayer('https://cartodb-basemaps-{s}.global.ssl.fastly.net/dark_all/{z}/{x}/{y}.png', {
+        var OpenStreetMap_Mapnik = L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
             maxZoom: 19,
             attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
         }).addTo(map);
@@ -518,10 +652,16 @@ async function createNatTrackMap()
 
     //Get tracks
     let endpoint = "https://nattrak.vatsim.net/api/tracks"
-    const response = await fetch(endpoint)
-
-    //Create data object
-    const data = await response.json()
+    let data = []
+    try {
+        const response = await fetch(endpoint)
+        if (!response.ok) throw new Error('HTTP ' + response.status)
+        const apiTracks = await response.json()
+        data = apiTracks.filter(t => t.active !== false && !t.concorde).map(natTrackFromApi).filter(t => t.route.length)
+    } catch (e) {
+        console.error('Could not load NAT tracks', e)
+        $(table).append($("<tr></tr>").append($("<td colspan='5'></td>").text('NAT tracks could not be loaded right now. Please try again shortly.')))
+    }
 
     //Go through each NAT Track
     data.forEach(track => {
@@ -584,7 +724,7 @@ async function createNatTrackMap()
 
         //validity
         let validityCell = $("<td></td>").text(
-            `${parseTimeStamp(track.validFrom)} to ${parseTimeStamp(track.validTo)}`
+            `${formatNatValidity(track.validFrom)} to ${formatNatValidity(track.validTo)}`
         )
         $(row).append(validityCell)
 
@@ -607,7 +747,7 @@ async function createEventTrackMap()
 
     //Create OSM Layer
     if ($('body').data('theme') === 'dark') {
-        var OpenStreetMap_Mapnik = L.tileLayer('https://cartodb-basemaps-{s}.global.ssl.fastly.net/dark_all/{z}/{x}/{y}.png', {
+        var OpenStreetMap_Mapnik = L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
             maxZoom: 19,
             attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
         }).addTo(map);
@@ -620,10 +760,15 @@ async function createEventTrackMap()
 
     //Get tracks
     let endpoint = "https://tracks.ganderoceanic.ca/event"
-    const response = await fetch(endpoint)
-
-    //Create data object
-    const data = await response.json()
+    let data = []
+    try {
+        const response = await fetch(endpoint)
+        if (!response.ok) throw new Error('HTTP ' + response.status)
+        data = await response.json()
+    } catch (e) {
+        console.error('Could not load event tracks', e)
+        $(table).append($("<tr></tr>").append($("<td colspan='5'></td>").text('Event tracks are not available right now. Please try again later.')))
+    }
 
     //Go through each NAT Track
     data.forEach(track => {
@@ -709,7 +854,7 @@ async function createConcordeTrackMap()
 
     //Create OSM Layer
     if ($('body').data('theme') === 'dark') {
-        var OpenStreetMap_Mapnik = L.tileLayer('https://cartodb-basemaps-{s}.global.ssl.fastly.net/dark_all/{z}/{x}/{y}.png', {
+        var OpenStreetMap_Mapnik = L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
             maxZoom: 19,
             attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
         }).addTo(map);
@@ -721,11 +866,20 @@ async function createConcordeTrackMap()
     }
 
     //Get tracks
-    let endpoint = "https://tracks.ganderoceanic.ca/concorde"
-    const response = await fetch(endpoint)
-
-    //Create data object
-    const data = await response.json()
+    let endpoint = "https://nattrak.vatsim.net/api/tracks"
+    let data = []
+    try {
+        const response = await fetch(endpoint)
+        if (!response.ok) throw new Error('HTTP ' + response.status)
+        const apiTracks = await response.json()
+        data = apiTracks.filter(t => t.active !== false && t.concorde).map(natTrackFromApi).filter(t => t.route.length)
+        if (data.length === 0) {
+            $(table).append($("<tr></tr>").append($("<td colspan='5'></td>").text('No Concorde tracks are active right now.')))
+        }
+    } catch (e) {
+        console.error('Could not load Concorde tracks', e)
+        $(table).append($("<tr></tr>").append($("<td colspan='5'></td>").text('Concorde tracks could not be loaded right now. Please try again shortly.')))
+    }
 
     //Go through each NAT Track
     data.forEach(track => {
@@ -788,7 +942,7 @@ async function createConcordeTrackMap()
 
         //validity
         let validityCell = $("<td></td>").text(
-            `${parseTimeStamp(track.validFrom)} to ${parseTimeStamp(track.validTo)}`
+            `${formatNatValidity(track.validFrom)} to ${formatNatValidity(track.validTo)}`
         )
         $(row).append(validityCell)
 
