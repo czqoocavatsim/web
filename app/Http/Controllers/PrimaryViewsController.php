@@ -62,7 +62,10 @@ class PrimaryViewsController extends Controller
             }
         }
 
-        return view('index', compact('controllers', 'news', 'certifications', 'topPilot', 'yearControllers', 'yearAircraft', 'topControllers', 'topAirlines', 'topPairAirports', 'nextEvent', 'ctpEvents', 'ctpAircraft', 'ctpMode'));
+        $last24 = \App\Services\OceanicStats::last24h();
+        $forecast = \App\Services\OceanicStats::forecast(6);
+
+        return view('index', compact('last24', 'forecast', 'controllers', 'news', 'certifications', 'topPilot', 'yearControllers', 'yearAircraft', 'topControllers', 'topAirlines', 'topPairAirports', 'nextEvent', 'ctpEvents', 'ctpAircraft', 'ctpMode'));
     }
 
     // General Homepage API Update
@@ -77,6 +80,8 @@ class PrimaryViewsController extends Controller
             'kzny' => $ctpAircraft->kzny,
             'lppo' => $ctpAircraft->lppo,
             'bird' => $ctpAircraft->bird,
+            'last24' => \App\Services\OceanicStats::last24h(),
+            'forecast' => \App\Services\OceanicStats::forecast(6),
         ]);
     }
 

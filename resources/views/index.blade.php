@@ -34,7 +34,7 @@ body.zh-body main{background:#23252b}
 .zh-live{display:inline-flex;align-items:center;gap:8px;font-weight:800;letter-spacing:.08em;color:#7fe0a2}
 .zh-live i{width:9px;height:9px;border-radius:50%;background:#7fe0a2;display:inline-block}
 .zh-strip b{font-size:18px}
-.zh-ic{color:#f39c37;margin-right:8px}.zh-grp{font-weight:700}.zh-grp .zh-mut{color:#dfe3ea}.zh-mut{color:#b4b9c4}
+.zh-ic{color:#f39c37;margin-right:8px}.zh-break{flex-basis:100%;height:0;margin:-4px 0}.zh-grp{font-weight:700}.zh-grp .zh-mut{color:#dfe3ea}.zh-mut{color:#b4b9c4}
 .zh-strip .zh-map{margin-left:auto;font-weight:700}
 /* cards */
 .zh-row{display:flex;flex-wrap:wrap;gap:28px;padding:20px 64px 8px}
@@ -113,6 +113,11 @@ body.zh-body .page-footer .text-muted{color:#b4b9c4!important}
             <span><b class="js-eggx">{{ $ctpAircraft->eggx }}</b> <span class="zh-mut">Shanwick</span></span>
             <span><b class="js-kzny">{{ $ctpAircraft->kzny }}</b> <span class="zh-mut">New York</span></span>
             <span class="zh-mut" title="Controllers online now"><i class="fas fa-headset zh-ic"></i>Online now: <b id="online-now" style="color:#f2f3f5;font-size:15px;">{{ $controllers->count() ? $controllers->pluck('callsign')->implode(', ') : 'no controllers' }}</b></span>
+            <span class="zh-break"></span>
+            <span class="zh-mut" title="Flights that spent 15 minutes or more in Gander, Shanwick or New York oceanic airspace, and controller time on oceanic positions, over the last 24 hours"><i class="fas fa-history zh-ic"></i>Last 24h: <b class="js-mov">{{ $last24['movements'] }}</b> movements &middot; <b class="js-atc">{{ $last24['atc_hours'] }}</b> h of ATC <span class="zh-mut">(<span class="js-pos">{{ $last24['positions'] }}</span> positions)</span></span>
+            @if($forecast['total'] !== null)
+                <span class="zh-mut" title="Estimate from filed flight plans on the VATSIM data feed using an oceanic route: flights due to depart in the next 6 hours, plus flights already airborne and heading for oceanic airspace. Pilots who connect late or never fly are not predicted."><i class="fas fa-hourglass-half zh-ic"></i>Expected next 6h: <b class="js-exp">~{{ $forecast['total'] }}</b> flights <span class="zh-mut">(<span class="js-dep">{{ $forecast['departing'] }}</span> departing, <span class="js-app">{{ $forecast['approaching'] }}</span> en route)</span></span>
+            @endif
             <a class="zh-map" href="{{ route('map') }}">View airspace map &rarr;</a>
         </div>
     </section>
@@ -346,6 +351,8 @@ body.zh-body .page-footer .text-muted{color:#b4b9c4!important}
     function refreshCounts() {
         fetch('/api/update-homepage/general').then(function (r) { return r.json(); }).then(function (d) {
             setAll('.js-czqo', d.czqo); setAll('.js-eggx', d.eggx); setAll('.js-kzny', d.kzny);
+            if (d.last24) { setAll('.js-mov', d.last24.movements); setAll('.js-atc', d.last24.atc_hours); setAll('.js-pos', d.last24.positions); }
+            if (d.forecast && d.forecast.total !== null) { setAll('.js-exp', '~' + d.forecast.total); setAll('.js-dep', d.forecast.departing); setAll('.js-app', d.forecast.approaching); }
             @if($ctpMode == 2)
             ['ganwick','czqo','eggx','lppo','bird','kzny'].forEach(function (k) {
                 var e = document.getElementById(k + '-count'); if (e) e.innerText = d[k] + (k === 'ganwick' ? '' : ' Aircraft in FIR');
