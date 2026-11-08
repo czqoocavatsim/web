@@ -497,6 +497,15 @@ class ProcessSessionLogging implements ShouldQueue
                 }
             }
         }
+
+        // Refresh the homepage traffic forecast every 5 minutes (a failure here must not affect session logging)
+        if ((int) Carbon::now()->format('i') % 5 === 0) {
+            try {
+                \App\Services\OceanicStats::refreshForecast(6);
+            } catch (\Throwable $e) {
+                \Log::error('Forecast refresh failed: ' . $e->getMessage());
+            }
+        }
     }
 
     function isPointInPolygon($lat, $lon, $polygon) {

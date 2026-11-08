@@ -48,21 +48,24 @@ class OceanicStats
         });
     }
 
-    /** Rough forecast for the next $hours hours from filed flight plans. */
+    /** Rough forecast, as last worked out by refreshForecast() (the web page only reads it, it never loads the data feed). */
     public static function forecast(int $hours = 6): array
     {
-        return Cache::remember('home_forecast_' . $hours, 300, function () use ($hours) {
-            try {
-                $data = Cache::remember('vatsimdata', 15, function () {
-                    return (new VATSIMClient())->getVATSIMData();
-                });
-                $crossed = FlightLog::whereNotNull('exited_oca')->get(['cid', 'callsign'])
-                    ->map(function ($f) { return $f->cid . '|' . $f->callsign; })->all();
-                return self::analyse($data->pilots ?? [], $data->prefiles ?? [], Carbon::now('UTC'), $crossed, $hours);
-            } catch (\Throwable $e) {
-                return ['departing' => null, 'approaching' => null, 'total' => null];
-            }
-        });
+        return Cache::get('home_forecast_' . $hours, ['departing' => null, 'approaching' => null, 'total' => null]);
+    }
+
+    /** Heavy part: reads the VATSIM data feed. Called from the scheduled session logging job, never from a web request. */
+    public static function refreshForecast(int $hours = 6): void
+    {
+        try {
+            $data = (new VATSIMClient())->getVATSIMData();
+            $crossed = FlightLog::whereNotNull('exited_oca')->get(['cid', 'callsign'])
+                ->map(function ($f) { return $f->cid . '|' . $f->callsign; })->all();
+            $result = self::analyse($data->pilots ?? [], $data->prefiles ?? [], Carbon::now('UTC'), $crossed, $hours);
+            Cache::put('home_forecast_' . $hours, $result, 900);
+        } catch (\Throwable $e) {
+            \Log::error('Oceanic forecast failed: ' . $e->getMessage());
+        }
     }
 
     /** Does this route use an oceanic entry/exit fix, a NAT track or a lat/long oceanic point? */
