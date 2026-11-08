@@ -1,35 +1,123 @@
-@extends('layouts.primary', ['solidNavBar' => true])
+@extends('layouts.primary', ['solidNavBar' => true, 'homeNav' => true])
 @section('title', 'Home - ')
 @section('description', 'Cool, calm and collected oceanic control services in the North Atlantic on VATSIM.')
-
+@push('styles')
+<style>
+body.zh-body{background:#23252b;color:#f2f3f5;font-family:'Mulish',system-ui,-apple-system,'Segoe UI',sans-serif}
+body.zh-body main{background:#23252b}
+.zh a{color:#f39c37;text-decoration:none}.zh a:hover{color:#ffc27a;text-decoration:none}
+.zh h1,.zh h2,.zh h3{color:#f2f3f5;margin:0}
+.zh-wrap{padding-left:64px;padding-right:64px}
+/* nav */
+.zh-nav{display:flex;align-items:center;gap:16px 32px;padding:0 64px;min-height:76px;background:#1b1d22;border-bottom:1px solid #383c45;position:relative;z-index:1000;font-family:'Mulish',system-ui,sans-serif}
+.zh-brand img{height:44px;width:auto;display:block}
+.zh-links{display:flex;gap:6px 26px;margin:0 0 0 auto;padding:0;list-style:none;font-size:15px;font-weight:600}
+.zh-links a,.zh-account a{color:#f2f3f5;text-decoration:none}.zh-links a:hover{color:#f39c37}
+.zh-links .dropdown-toggle::after{margin-left:6px}
+.zh-nav .dropdown-menu{background:#2f3239;border:1px solid #383c45;border-radius:8px;margin-top:10px}
+.zh-nav .dropdown-item{color:#f2f3f5;font-weight:600;font-size:14px}.zh-nav .dropdown-item:hover{background:#383c45;color:#f39c37}
+.zh-account{display:flex;align-items:center;gap:14px;padding-left:24px;border-left:1px solid #383c45;font-size:15px;font-weight:700}
+.zh-user{display:inline-flex;align-items:center;gap:10px;color:#f39c37}
+.zh-user img{width:34px;height:34px;border-radius:50%}
+.zh-login{color:#f39c37!important}
+.zh-burger{display:none;margin-left:auto;width:44px;height:44px;align-items:center;justify-content:center;background:none;color:#f2f3f5;border:1px solid #4a4f5a;border-radius:6px}
+/* hero */
+.zh-hero{position:relative;min-height:600px;display:flex;flex-direction:column;justify-content:flex-end;background-image:linear-gradient(180deg,rgba(20,24,34,.55) 0%,rgba(20,24,34,.35) 40%,rgba(35,37,43,1) 100%),url('{{ asset("assets/resources/media/img/website/hero-radar.jpg") }}');background-size:cover;background-position:center 30%}
+.zh-hero-text{padding:0 64px 36px;max-width:1100px}
+.zh-hero h1{font-size:68px;line-height:1.05;font-weight:800;letter-spacing:-.01em}
+.zh-hero p{margin:20px 0 0;font-size:22px;font-weight:600;color:#dfe3ea}
+.zh-cta{display:flex;flex-wrap:wrap;gap:14px;margin-top:30px}
+.zh .zh-btn{display:inline-block;padding:14px 26px;background:#f39c37;color:#1b1d22;font-weight:800;font-size:16px;border-radius:6px;border:2px solid #f39c37}
+.zh .zh-btn:hover{background:#ffc27a;border-color:#ffc27a;color:#1b1d22}
+.zh .zh-btn-o{background:transparent;color:#f39c37}.zh .zh-btn-o:hover{background:rgba(243,156,55,.12);color:#ffc27a}
+.zh-strip{display:flex;flex-wrap:wrap;align-items:center;gap:10px 32px;margin:0 64px 40px;padding:14px 22px;background:rgba(27,29,34,.92);border:1px solid #383c45;border-radius:8px;font-size:15px}
+.zh-live{display:inline-flex;align-items:center;gap:8px;font-weight:800;letter-spacing:.08em;color:#7fe0a2}
+.zh-live i{width:9px;height:9px;border-radius:50%;background:#7fe0a2;display:inline-block}
+.zh-strip b{font-size:18px}.zh-mut{color:#b4b9c4}
+.zh-strip .zh-map{margin-left:auto;font-weight:700}
+/* cards */
+.zh-row{display:flex;flex-wrap:wrap;gap:28px;padding:20px 64px 8px}
+.zh-row.r2{padding-top:28px}
+.zh-card{flex:1 1 420px;min-width:0;padding:28px 30px;background:#2f3239;border:1px solid #383c45;border-radius:10px}
+.zh-news{flex:1.2 1 460px;min-height:340px;display:flex;flex-direction:column;justify-content:flex-end;padding:32px;background:#1d2b47;border:1px solid #2e4468;border-radius:10px;background-size:cover;background-position:center}
+.zh-kicker{font-size:13px;font-weight:800;letter-spacing:.1em;color:#f39c37}
+.zh-news h2{margin:8px 0 10px!important;font-size:34px;line-height:1.15;font-weight:800}
+.zh-news h2 a{color:#f2f3f5!important}
+.zh-news p{margin:0 0 18px;font-size:17px;line-height:1.5;color:#dfe3ea}
+.zh-more{font-weight:800}
+.zh-card h2{font-size:24px;font-weight:800}
+.zh-card .zh-sub{font-size:13px;color:#b4b9c4}
+.zh-tiles{display:flex;gap:10px;margin:18px 0}
+.zh-tile{flex:1;padding:12px;background:#383c45;border-radius:6px;text-align:center}
+.zh-tile b{display:block;font-size:26px;font-weight:800}.zh-tile span{font-size:13px;color:#b4b9c4}
+.zh-table{font-size:15px}.zh-tr{display:flex;padding:11px 4px;border-top:1px solid #424651}
+.zh-th{font-size:13px;color:#b4b9c4;font-weight:700;border-top:0;border-bottom:1px solid #4a4f5a;padding:8px 4px}
+.zh-tr .c1{flex:1.2}.zh-tr .c2{flex:1.4}.zh-tr .c3{flex:.8;text-align:right;color:#b4b9c4}.zh-th .c3{color:#b4b9c4}
+.zh-badge{font-style:normal;font-size:11px;font-weight:800;padding:1px 7px;border-radius:10px;margin-left:6px;color:#1b1d22}
+.zh-b-red{background:#ff8a80}.zh-b-amber{background:#f39c37}.zh-b-blue{background:#4aa8e8}
+.zh-empty{padding:14px 4px;color:#b4b9c4}
+.zh-card .zh-kicker.p{color:#4aa8e8}
+.zh-card h2.t{margin:6px 0 14px;font-size:28px}
+.zh-list{margin:0 0 18px;padding:0;list-style:none;font-size:16px}
+.zh-list li{padding:11px 0;border-bottom:1px solid #424651}.zh-list li:last-child{border-bottom:0}
+.zh-list a{font-weight:700}
+/* stats */
+.zh-stats{padding:36px 64px 8px}
+.zh-stats-h{display:flex;align-items:baseline;gap:16px;margin-bottom:18px}
+.zh-stats-h h2{font-size:30px;font-weight:800}.zh-stats-h a{font-weight:700}
+.zh-stat-grid{display:flex;flex-wrap:wrap;gap:24px}
+.zh-stat{flex:1 1 300px;min-width:0;padding:22px 24px;background:#2f3239;border:1px solid #383c45;border-radius:10px}
+.zh-stat h3{margin:0 0 12px!important;font-size:16px;color:#f39c37!important;font-weight:800}
+.zh-stat .row-i{display:flex;justify-content:space-between;gap:12px;padding:8px 0;border-bottom:1px solid #424651}
+.zh-stat .row-i:last-child{border-bottom:0}.zh-stat .row-i b{white-space:nowrap}
+.zh-note{margin:14px 0 0;font-size:13px;color:#b4b9c4}
+.zh-login-box{font-size:15px;color:#dfe3ea}
+.zh-login-box a.zh-btn{margin-top:12px;padding:10px 18px;font-size:14px}
+/* mission */
+.zh-mission{padding:48px 64px 56px}.zh-mission>div{max-width:820px}
+.zh-mission h2{font-size:34px;line-height:1.15;font-weight:800;color:#f39c37!important;margin-bottom:14px!important}
+.zh-mission p{margin:0 0 20px;font-size:18px;line-height:1.6;color:#dfe3ea}
+/* dark footer on the homepage */
+body.zh-body .page-footer{background:#16181c!important;border-top:1px solid #2c2f36;color:#b4b9c4!important}
+body.zh-body .page-footer a.black-text,body.zh-body .page-footer .text-body{color:#f2f3f5!important}
+body.zh-body .page-footer .text-muted{color:#b4b9c4!important}
+@media (max-width:991px){
+ .zh-nav{padding:0 16px;min-height:64px}.zh-links,.zh-account{display:none}.zh-burger{display:inline-flex}.zh-brand img{height:36px}
+ .zh-hero{min-height:520px}.zh-hero-text{padding:0 16px 24px}.zh-hero h1{font-size:38px;line-height:1.08}.zh-hero p{font-size:17px;margin-top:14px}
+ .zh-cta{flex-direction:column;gap:10px}.zh .zh-btn{text-align:center;padding:13px}
+ .zh-strip{margin:0 16px 24px;padding:12px 14px;font-size:14px;gap:8px 18px}.zh-strip .zh-map{margin-left:0;width:100%}
+ .zh-row,.zh-row.r2{padding:12px 16px 0;gap:16px}.zh-card,.zh-news{padding:22px;flex-basis:100%}.zh-news{min-height:260px}.zh-news h2{font-size:24px}
+ .zh-stats{padding:24px 16px 0}.zh-stats-h h2{font-size:24px}.zh-stat-grid{gap:16px}
+ .zh-mission{padding:28px 16px 36px}.zh-mission h2{font-size:26px}.zh-mission p{font-size:16px}
+}
+</style>
+@endpush
 @section('content')
-    {{-- Top Introduction --}}
-    <div style="height: min(78vh, 680px); min-height: 480px; z-index: -1" class="z-depth-0 jarallax">
-        <img src="{{asset('assets/resources/media/img/website/hero-radar.jpg')}}" alt="" class="jarallax-img">
-        <div class="flex-center mask rgba-black-light flex-column">
-            <div class="container d-none d-sm-block">
-                <h1 class="display-2 fw-700 white-text">Your gateway across the North Atlantic.</h1>
-                <h2 style="font-size:3em;" class="fw-500 mt-4 white-text">Welcome to Gander Oceanic.</h2>
-                <div class="mt-4 d-flex flex-wrap" style="gap: 12px;">
-                    <a href="/pilots" role="button" class="btn bg-czqo-blue-light m-0">Fly the North Atlantic</a>
-                    @if (!Auth::check() || Auth::user()->can('start-application'))
-                        <a href="{{ route('training.applications.apply') }}" role="button" class="btn btn-outline-white m-0">Become a controller</a>
-                    @endif
-                </div>
-            </div>
-            <div class="container d-sm-none">
-                <h1 class="display-2 fw-700 white-text" style="font-size: 3em;">Your gateway across the North Atlantic.</h1>
-                <h2 style="font-size:2em;" class="fw-500 mt-4 white-text">Welcome to Gander Oceanic.</h2>
-                <div class="mt-4 d-flex flex-wrap" style="gap: 12px;">
-                    <a href="/pilots" role="button" class="btn bg-czqo-blue-light m-0">Fly the North Atlantic</a>
-                    @if (!Auth::check() || Auth::user()->can('start-application'))
-                        <a href="{{ route('training.applications.apply') }}" role="button" class="btn btn-outline-white m-0">Become a controller</a>
-                    @endif
-                </div>
+<div class="zh">
+    <section class="zh-hero">
+        <div class="zh-hero-text">
+            <h1>Your gateway across the North Atlantic.</h1>
+            <p>Welcome to Gander Oceanic. Oceanic control for the Gander and Shanwick areas on VATSIM.</p>
+            <div class="zh-cta">
+                <a href="/pilots" class="zh-btn">Fly the North Atlantic</a>
+                @if (!Auth::check() || Auth::user()->can('start-application'))
+                    <a href="{{ route('training.applications.apply') }}" class="zh-btn zh-btn-o">Become a controller</a>
+                @endif
             </div>
         </div>
-    </div>
+        <div class="zh-strip">
+            <span class="zh-live"><i></i>LIVE</span>
+            <span><b class="js-czqo">{{ $ctpAircraft->czqo }}</b> <span class="zh-mut">Gander</span></span>
+            <span><b class="js-eggx">{{ $ctpAircraft->eggx }}</b> <span class="zh-mut">Shanwick</span></span>
+            <span><b class="js-kzny">{{ $ctpAircraft->kzny }}</b> <span class="zh-mut">New York</span></span>
+            <span class="zh-mut">Online now: <b id="online-now" style="color:#f2f3f5;font-size:15px;">{{ $controllers->count() ? $controllers->pluck('callsign')->implode(', ') : 'no controllers' }}</b></span>
+            <a class="zh-map" href="{{ route('map') }}">View airspace map &rarr;</a>
+        </div>
+    </section>
 
+    {{-- CTP: event underway --}}
+    @if($ctpMode == 2)
+    <div class="zh-wrap" style="padding-top:20px">
     {{-- CTP Specific - Event Upcoming --}}
     @if($ctpMode == 2)
         <div class="jumbtron" style="margin-top: -100px; z-index: 999;">
@@ -84,12 +172,12 @@
         </div>
     </div>
     @endif
+    </div>
+    @endif
 
-    {{-- General Information - Online Controllers & News - Hidden during CTP Event--}}
     @if($ctpMode == false || $ctpMode == 1)
-    <div class="jumbtron" style="margin-top: -100px; z-index: 999;">
-
-        {{-- CTP Event is occuring this Month --}}
+    @if ($ctpMode == 1)
+    <div class="zh-wrap" style="padding-top:20px">
         @if ($ctpMode == 1)
             <div class="container px-5 py-3 mb-2 blue darken-2 white-text" style="position: relative;">
                 <p style="font-size: 2.5em;" class="font-weight-bold mb-0">{{$ctpEvents->name}} is on its way!</p>
@@ -109,202 +197,101 @@
 
             </div>
         @endif
-
-        <div class="container blue z-depth-2 px-5 pt-5 pb-3 mb-5">
-            <div class="row">
-                <div class="col-md-6 mb-4">
-                    @if ($news)
-                        <div class="view"
-                            style="height: 330px !important; @if ($news->image) background-image:url({{ $news->image }}); background-size: cover; background-position-x: center; @else background-image:url('https://ganderoceanic.ca/assets/staff_uploads/news_article/default.png'); background-size: cover; background-position-x: center; @endif">
-                            <div class="mask rgba-stylish-light flex-left p-4 justify-content-end d-flex flex-column h-100">
-                                <div class="container">
-                                    <h1 class="font-weight-bold white-text">
-                                        <a href="{{ route('news.articlepublic', $news->slug) }}" class="white-text">
-                                            {{ $news->title }}
-                                        </a>
-                                    </h1>
-                                    <p class="white-text" style="font-size: 1.3em;">
-                                        {{ $news->summary }}
-                                    </p>
-                                    <a href="{{ route('news') }}" class="white-text" style="font-size: 1.2em;">All Articles
-                                        <i class="fas fa-arrow-right"></i> </a>
-                                </div>
-                            </div>
-                        </div>
-                    @endif
-                </div>
-                <div class="col-md-6 mb-4">
-                    <div class="d-flex flex-row-justify-content-between align-items-center">
-                        <h2 class="white-text font-weight-bold">Current Activity</h2>
-                        <a href="{{ route('map') }}" class="float-right ml-auto mr-0 white-text"
-                            style="font-size: 1.2em;">View airspace map&nbsp;&nbsp;<i class="fas fa-map"></i></a>
-                    </div>
-                    
-                    <p style="font-size: 1.1em; margin-top: 0px;" class="mb-1 white-text"><b>Last Updated:</b> <x id="timer-info">{{ \Carbon\Carbon::now('UTC')->format('Hi') }}Z</x><p>
-
-                    <p style="font-size: 1.8em; margin-top: 15px;" class="mb-0">
-                    <div class="row white-text" style="text-align: left; text-color: white; text-align: center;" >
-                        <div class="col-md-4 col-sm-4"><u>Gander OCA (CZQO)</u><br>
-                            <div id="czqo-count">{{$ctpAircraft->czqo}} Aircraft in FIR</div>
-                        </div>
-                        <div class="col-md-4 col-sm-4"><u>Shanwick OCA (EGGX)</u><br>
-                            <div id="eggx-count">{{$ctpAircraft->eggx}} Aircraft in FIR</div>
-                        </div>
-                        <div class="col-md-4 col-sm-4"><u>New York OCA (KZNY)</u><br>
-                            <div id="kzny-count">{{$ctpAircraft->kzny}} Aircraft in FIR</div>
-                        </div>
-                    </div>
-                </p>
-                    <ul class="list-unstyled ml-0 mt-3 p-0 onlineControllers">
-                        {{-- Updated every minute. Rendered by JS from Partials Folder --}}
-                        <x id="controller-info">
-                            @include('partials.homepage.general-controllers')
-                        </x>
-                    </ul>
-                </div>
-            </div>
-        </div>
     </div>
     @endif
 
-
-
-    {{-- Statistics --}}
-    <div class="container my-5">
-        <h1 class="font-weight-bold blue-text mb-1"><u>Gander OCA Statistics</u></h1>
-        <a href="/stats"><p style="font-size: 1.2em;" class="mb-3">Access the Full Statistics Page</p></a>
-        @guest
-            <div class="p-4 mb-3 border rounded" style="font-size: 1.2em;">
-                Monthly and yearly statistics (top pilots, airlines, aircraft types and controllers) are shown to signed-in members.
-                <a href="{{ route('auth.connect.login') }}" role="button" class="btn bg-czqo-blue-light ml-md-3 mt-3 mt-md-0">Log in with VATSIM</a>
+    <section class="zh-row">
+        @if ($news)
+            <article class="zh-news" style="background-image:linear-gradient(180deg,rgba(20,24,34,.15),rgba(20,24,34,.88)),url('{{ $news->image ?: 'https://ganderoceanic.ca/assets/staff_uploads/news_article/default.png' }}')">
+                <div class="zh-kicker">NEWS</div>
+                <h2><a href="{{ route('news.articlepublic', $news->slug) }}">{{ $news->title }}</a></h2>
+                <p>{{ $news->summary }}</p>
+                <a class="zh-more" href="{{ route('news.articlepublic', $news->slug) }}">Read the article &rarr;</a>
+            </article>
+        @endif
+        <div class="zh-card">
+            <div style="display:flex;align-items:baseline;gap:12px;flex-wrap:wrap"><h2>Current activity</h2><span class="zh-sub">Updated <span id="timer-info">{{ \Carbon\Carbon::now('UTC')->format('Hi') }}Z</span></span></div>
+            <div class="zh-tiles">
+                <div class="zh-tile"><b class="js-czqo">{{ $ctpAircraft->czqo }}</b><span>Gander OCA</span></div>
+                <div class="zh-tile"><b class="js-eggx">{{ $ctpAircraft->eggx }}</b><span>Shanwick OCA</span></div>
+                <div class="zh-tile"><b class="js-kzny">{{ $ctpAircraft->kzny }}</b><span>New York OCA</span></div>
             </div>
-        @endguest
-        @auth
-        <div class="row">
-            {{-- Month Pilot Stats --}}
-            @if (auth()->check())
-                @include('partials.statistics.pilot-month')
-            @else
-                <h4 class="font-weight-bold blue-text mb-1">{{\Carbon\Carbon::now()->format('F')}} Top Pilots</h4>
-                Login with VATSIM to see this data
-            @endif
+            <div id="controller-info">@include('partials.homepage.general-controllers')</div>
+        </div>
+    </section>
+    @endif
 
-            {{-- New Certifications --}}
-            @if(auth()->check())
-                @include('partials.statistics.aircraft-airline')
-            @else
-                <h4 class="font-weight-bold blue-text mb-1">Newest Controllers</h4>
-                Login with VATSIM to see this data
-            @endif
-
-            {{-- New Certifications --}}
-            @if(auth()->check())
-                @include('partials.statistics.controller-month')
-            @else
-                <h4 class="font-weight-bold blue-text mb-1">{{\Carbon\Carbon::now()->format('F')}} Top Controllers</h4>
-                Login with VATSIM to see this data
-            @endif
-
-            {{-- Aircraft Type Stats --}}
-            @if (auth()->check())
-                @include('partials.statistics.aircraft-type-year')
-            @else
-                <h2 class="font-weight-bold blue-text mb-1">{{\Carbon\Carbon::now()->format('F')}} Top Aircraft Types</h2>
-                Login with VATSIM to see this data
-            @endif
-
-            {{-- New Certifications --}}
-            @if(auth()->check())
-                @include('partials.statistics.certifications')
-            @else
-                <h4 class="font-weight-bold blue-text mb-1">{{\Carbon\Carbon::now()->format('Y')}} Top Airlines</h4>
-                Login with VATSIM to see this data
-            @endif
-
-            {{-- New Certifications --}}
-            @if(auth()->check())
-                @include('partials.statistics.controller-year')
-            @else
-                <h4 class="font-weight-bold blue-text mb-1">{{\Carbon\Carbon::now()->format('Y')}} Top Controllers</h4>
-                Login with VATSIM to see this data
+    <section class="zh-row r2">
+        <div class="zh-card">
+            <div class="zh-kicker p">FOR PILOTS</div>
+            <h2 class="t">Crossing the Atlantic?</h2>
+            <ul class="zh-list">
+                <li><a href="https://nattrak.vatsim.net/">Get your oceanic clearance</a> <span class="zh-mut">with natTrak</span></li>
+                <li><a href="{{ url('/pilots/tracks') }}">Today's NAT tracks</a></li>
+                <li><a href="{{ url('/pilots/position-report') }}">Position report generator</a></li>
+                <li><a href="/pilots">All pilot resources</a></li>
+            </ul>
+        </div>
+        <div class="zh-card">
+            <div class="zh-kicker">FOR CONTROLLERS</div>
+            <h2 class="t">Want to control oceanic?</h2>
+            <ul class="zh-list">
+                <li><a href="{{ (!Auth::check() || Auth::user()->can('start-application')) ? route('training.applications.apply') : route('about.who-we-are') }}">How to join the team</a></li>
+                <li><a href="{{ route('trainingcalendar.index') }}">Training calendar</a></li>
+                <li><a href="https://knowledgebase.ganderoceanic.ca">ZQO knowledge base</a></li>
+                @if(Auth::check() && Auth::user()->member_of_czqo !== 1)
+                    <li><a href="" data-toggle="modal" data-target="#discordTopModal">Join our Discord community</a></li>
+                @endif
+            </ul>
+            @if (!Auth::check() || Auth::user()->can('start-application'))
+                <a href="{{ route('training.applications.apply') }}" class="zh-btn" style="padding:12px 24px">Apply now</a>
             @endif
         </div>
-        @endauth
-    </div>
+    </section>
 
-
-
-
-    {{-- Bottom Section --}}
-    <div class="container pb-5">
-        <div class="row">
-            <div class="col-lg-7 mb-4">
-                <h1 class="font-weight-bold blue-text">We control the skies over the North Atlantic on VATSIM.</h1>
-                <p style="font-size: 1.2em;" class="mt-3">
-                    Gander Oceanic is VATSIM's coolest, calmest and most collected provider of Oceanic control. With our
-                    worldwide team of skilled Oceanic controllers, we pride ourselves on our expert, high-quality service to
-                    pilots flying across the North Atlantic. Our incredible community of pilots and controllers extend their
-                    warmest welcome and wish you all the best for your oceanic crossings!
-                </p>
-                <p style="font-size: 1.2em;" class="mt-3">
-                    <a class="font-weight-bold text-body" href="{{ route('about.who-we-are') }}">Who we are
-                        &nbsp;&nbsp;<i class="fas fa-arrow-right blue-text"></i></a>
-                </p>
-                <div class="d-flex flex-row">
-                    @if (!Auth::check() || Auth::user()->can('start-application'))
-                        <a href="{{ route('training.applications.apply') }}" role="button"
-                            class="btn bg-czqo-blue-light">Apply Now</a>
-                    @endif
-                    <a href="/pilots" class="btn bg-czqo-blue-light" role="button">Pilot Resources</a>
-                </div>
+    <section class="zh-stats">
+        <div class="zh-stats-h"><h2>Gander OCA statistics</h2><a href="/stats">Full statistics &rarr;</a></div>
+        <div class="zh-stat-grid">
+            <div class="zh-stat">
+                <h3>{{ \Carbon\Carbon::now()->format('F') }} top airlines</h3>
+                @forelse ($topAirlines->take(3) as $a)
+                    <div class="row-i"><span>{{ $a->info->icao }} {{ $a->info->name }}</span><b>{{ $a->current }}</b></div>
+                @empty
+                    <div class="zh-mut">No data available.</div>
+                @endforelse
             </div>
-
-            <div class="col-lg-5 text-right">
-                <h2 class="font-weight-bold mb-3 blue-text">Quick Links</h2>
-                <div class="list-group mt-4 rounded list-group-flush" style="font-size: 1.3em;">
-                    @if(Auth::check())
-                        @if(Auth::user()->member_of_czqo !== 1)
-                            <a class="border-0 list-group-item list-group-item-action waves-effect" data-toggle="modal"
-                                data-target="#discordTopModal" href="" style="text-decoration:none;">
-                                <span class="blue-text">Join Our Discord Community</span>
-                                &nbsp;
-                                <span class="blue-text">
-                                    <i class="fab fa-discord fa-2x" style="vertical-align:middle;"></i>
-                                </span>
-                            </a>
-                        @endif
-                    @endif
-                    <a class="border-0 list-group-item list-group-item-action waves-effect"
-                        href="https://knowledgebase.ganderoceanic.ca" style="text-decoration:none;">
-                        <span class="blue-text">ZQO Knowledge Base</span>
-                        &nbsp;
-                        <span class="blue-text">
-                            <i class="fas fa-book fa-2x" style="vertical-align:middle;"></i>
-                        </span>
-                    </a>
-                    <a class="border-0 list-group-item list-group-item-action waves-effect"
-                        href="https://nattrak.vatsim.net/" style="text-decoration:none;">
-                        <span class="blue-text">natTrak Oceanic Clearance</span>
-                        &nbsp;
-                        <span class="blue-text">
-                            <i class="fa fa-satellite-dish fa-2x" style="vertical-align:middle;"></i>
-                        </span>
-                    </a>
-                </div>
+            <div class="zh-stat">
+                <h3>{{ \Carbon\Carbon::now()->format('Y') }} top aircraft types</h3>
+                @forelse ($yearAircraft->take(3) as $a)
+                    <div class="row-i"><span>{{ $a->info->code }} {{ $a->info->name }}</span><b>{{ $a->year }}</b></div>
+                @empty
+                    <div class="zh-mut">No data available.</div>
+                @endforelse
+            </div>
+            <div class="zh-stat">
+                <h3>{{ \Carbon\Carbon::now()->format('F') }} top controllers</h3>
+                @auth
+                    @forelse ($topControllers->take(3) as $c)
+                        @php $h = floor($c->current); $m = str_pad(round(($c->current - $h) * 60), 2, '0', STR_PAD_LEFT); @endphp
+                        <div class="row-i"><span>{{ $c->user ? $c->user->fullName('FL') : $c->cid }}</span><b>{{ $h > 0 ? $h.'h ' : '' }}{{ $m }}m</b></div>
+                    @empty
+                        <div class="zh-mut">No controller connections recorded.</div>
+                    @endforelse
+                @else
+                    <div class="zh-login-box">Controller names are shown to signed-in members.<br><a href="{{ route('auth.connect.login') }}" class="zh-btn">Log in with VATSIM</a></div>
+                @endauth
             </div>
         </div>
-    </div>
-    {{-- Script that runs at any time --}}
-    <script>
-        $('.jarallax').jarallax({
-            speed: 0.2,
-            zIndex: -1
-        });
+    </section>
 
-        $(document).ready(function() {
-            $('#dataTable').DataTable();
-        } );
-    </script>
+    <section class="zh-mission">
+        <div>
+            <h2>We control the skies over the North Atlantic on VATSIM.</h2>
+            <p>Gander Oceanic is VATSIM's coolest, calmest and most collected provider of oceanic control. Our worldwide team of skilled controllers gives pilots flying across the North Atlantic an expert, high-quality service. Our community of pilots and controllers extends its warmest welcome and wishes you all the best for your oceanic crossings.</p>
+            <a class="zh-more" href="{{ route('about.who-we-are') }}">Who we are &rarr;</a>
+        </div>
+    </section>
+</div>
 
     {{-- Countdown Timer for the CTP Events --}}
     @if($ctpEvents !== null)
@@ -351,75 +338,32 @@
         </script>
     @endif
 
-@if($ctpMode == false)
 <script>
-    setInterval(() => {
-    fetch('/api/update-homepage/general')
-        .then(res => res.json())
-        .then(data => {
-            document.getElementById('czqo-count').innerText = data.czqo + ' Aircraft in FIR';
-            document.getElementById('eggx-count').innerText = data.eggx + ' Aircraft in FIR';
-            document.getElementById('kzny-count').innerText = data.kzny + ' Aircraft in FIR';
-            document.getElementById('timer-info').innerText = new Date().toISOString().slice(11,16).replace(':','') + 'Z';
-        });
-    }, 60000);
-
-    setInterval(() => {
-        fetch('/api/update-homepage/controllers/1')
-            .then(res => res.text())
-            .then(html => {
-                document.getElementById('controller-info').innerHTML = html;
+(function () {
+    function setAll(sel, v) { document.querySelectorAll(sel).forEach(function (e) { e.textContent = v; }); }
+    function refreshCounts() {
+        fetch('/api/update-homepage/general').then(function (r) { return r.json(); }).then(function (d) {
+            setAll('.js-czqo', d.czqo); setAll('.js-eggx', d.eggx); setAll('.js-kzny', d.kzny);
+            @if($ctpMode == 2)
+            ['ganwick','czqo','eggx','lppo','bird','kzny'].forEach(function (k) {
+                var e = document.getElementById(k + '-count'); if (e) e.innerText = d[k] + (k === 'ganwick' ? '' : ' Aircraft in FIR');
             });
-    }, 60000);
-
-</script>
-@elseif($ctpMode == 1)
-<script>
-    setInterval(() => {
-    fetch('/api/update-homepage/general')
-        .then(res => res.json())
-        .then(data => {
-            document.getElementById('czqo-count').innerText = data.czqo + ' Aircraft in FIR';
-            document.getElementById('eggx-count').innerText = data.eggx + ' Aircraft in FIR';
-            document.getElementById('kzny-count').innerText = data.kzny + ' Aircraft in FIR';
-            document.getElementById('timer-info').innerText = new Date().toISOString().slice(11,16).replace(':','') + 'Z';
+            @endif
+            var t = document.getElementById('timer-info');
+            if (t) t.innerText = new Date().toISOString().slice(11, 16).replace(':', '') + 'Z';
         });
-    }, 60000);
-
-    setInterval(() => {
-        fetch('/api/update-homepage/controllers/1')
-            .then(res => res.text())
-            .then(html => {
-                document.getElementById('controller-info').innerHTML = html;
-            });
-    }, 60000);
-</script>
-@elseif($ctpMode == 2)
-<script>
-    setInterval(() => {
-    fetch('/api/update-homepage/general')
-        .then(res => res.json())
-        .then(data => {
-            document.getElementById('ganwick-count').innerText = data.ganwick + ' Aircraft in FIR';
-            document.getElementById('czqo-count').innerText = data.czqo + ' Aircraft in FIR';
-            document.getElementById('eggx-count').innerText = data.eggx + ' Aircraft in FIR';
-            document.getElementById('lppo-count').innerText = data.lppo + ' Aircraft in FIR';
-            document.getElementById('bird-count').innerText = data.bird + ' Aircraft in FIR';
-            document.getElementById('kzny-count').innerText = data.kzny + ' Aircraft in FIR';
-            document.getElementById('timer-info').innerText = new Date().toISOString().slice(11,16).replace(':','') + 'Z';
-
+    }
+    function refreshControllers() {
+        fetch('/api/update-homepage/controllers/{{ $ctpMode == 2 ? 2 : 1 }}').then(function (r) { return r.text(); }).then(function (html) {
+            var box = document.getElementById('controller-info');
+            if (box) box.innerHTML = html;
+            var tmp = document.createElement('div'); tmp.innerHTML = html;
+            var d = tmp.querySelector('[data-online-callsigns]'), on = document.getElementById('online-now');
+            if (d && on) on.textContent = d.getAttribute('data-online-callsigns') || 'no controllers';
         });
-    }, 60000);
-
-    setInterval(() => {
-        fetch('/api/update-homepage/controllers/2')
-            .then(res => res.text())
-            .then(html => {
-                document.getElementById('controller-info').innerHTML = html;
-            });
-    }, 60000);
+    }
+    setInterval(refreshCounts, 60000);
+    setInterval(refreshControllers, 60000);
+})();
 </script>
-@endif
-
-
 @endsection
