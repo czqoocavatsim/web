@@ -1,6 +1,7 @@
 <!DOCTYPE HTML>
 @php if (!isset($solidNavBar)) $solidNavBar = true @endphp
 @php if (!isset($adminNavBar)) $adminNavBar = false @endphp
+@php if (!isset($homeNav)) $homeNav = false @endphp
 <html lang="en">
 
     <head>
@@ -67,10 +68,12 @@
         @stack('styles')
     </head>
 
-    <body class="d-flex flex-column min-vh-100" @if(Auth::check() && Auth::user()->preferences) @if(Auth::user()->preferences->accent_colour) data-accent="{{Auth::user()->preferences->accent_colour}}" @endif data-theme="{{Auth::user()->preferences->ui_mode}}" @else data-theme="light" @endif>
+    <body class="d-flex flex-column min-vh-100 @if($homeNav) zh-body @endif" @if(Auth::check() && Auth::user()->preferences) @if(Auth::user()->preferences->accent_colour) data-accent="{{Auth::user()->preferences->accent_colour}}" @endif data-theme="{{Auth::user()->preferences->ui_mode}}" @else data-theme="light" @endif>
         @include('cookie-consent::index')
         <header>
-            @if($adminNavBar)
+            @if($homeNav)
+                @include('layouts.home-nav')
+            @elseif($adminNavBar)
                 <!--Admin nav bar-->
                 <nav id="czqoHeaderLight" class="navbar navbar-expand-xl navbar-light transparent shadow-none p-0" style="min-height:59px; z-index:999;">
                     @include('layouts.navbar-admin')
