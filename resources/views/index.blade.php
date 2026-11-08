@@ -4,16 +4,28 @@
 
 @section('content')
     {{-- Top Introduction --}}
-    <div style="height: calc(100vh - 74px); z-index: -1" class="z-depth-0 jarallax">
+    <div style="height: min(78vh, 680px); min-height: 480px; z-index: -1" class="z-depth-0 jarallax">
         <img src="{{asset('assets/resources/media/img/website/hero-radar.jpg')}}" alt="" class="jarallax-img">
         <div class="flex-center mask rgba-black-light flex-column">
             <div class="container d-none d-sm-block">
                 <h1 class="display-2 fw-700 white-text">Your gateway across the North Atlantic.</h1>
                 <h2 style="font-size:3em;" class="fw-500 mt-4 white-text">Welcome to Gander Oceanic.</h2>
+                <div class="mt-4 d-flex flex-wrap" style="gap: 12px;">
+                    <a href="/pilots" role="button" class="btn bg-czqo-blue-light m-0">Fly the North Atlantic</a>
+                    @if (!Auth::check() || Auth::user()->can('start-application'))
+                        <a href="{{ route('training.applications.apply') }}" role="button" class="btn btn-outline-white m-0">Become a controller</a>
+                    @endif
+                </div>
             </div>
             <div class="container d-sm-none">
                 <h1 class="display-2 fw-700 white-text" style="font-size: 3em;">Your gateway across the North Atlantic.</h1>
                 <h2 style="font-size:2em;" class="fw-500 mt-4 white-text">Welcome to Gander Oceanic.</h2>
+                <div class="mt-4 d-flex flex-wrap" style="gap: 12px;">
+                    <a href="/pilots" role="button" class="btn bg-czqo-blue-light m-0">Fly the North Atlantic</a>
+                    @if (!Auth::check() || Auth::user()->can('start-application'))
+                        <a href="{{ route('training.applications.apply') }}" role="button" class="btn btn-outline-white m-0">Become a controller</a>
+                    @endif
+                </div>
             </div>
         </div>
     </div>
@@ -64,7 +76,7 @@
 
                     <ul class="list-unstyled ml-0 mt-3 p-0 onlineControllers">
                         <x id="controller-info">
-                            @include('partials.homepage.ctp-controllers');
+                            @include('partials.homepage.ctp-controllers')
                         </x>
                     </ul>
                 </div>
@@ -146,7 +158,7 @@
                     <ul class="list-unstyled ml-0 mt-3 p-0 onlineControllers">
                         {{-- Updated every minute. Rendered by JS from Partials Folder --}}
                         <x id="controller-info">
-                            @include('partials.homepage.general-controllers');
+                            @include('partials.homepage.general-controllers')
                         </x>
                     </ul>
                 </div>
@@ -161,6 +173,13 @@
     <div class="container my-5">
         <h1 class="font-weight-bold blue-text mb-1"><u>Gander OCA Statistics</u></h1>
         <a href="/stats"><p style="font-size: 1.2em;" class="mb-3">Access the Full Statistics Page</p></a>
+        @guest
+            <div class="p-4 mb-3 border rounded" style="font-size: 1.2em;">
+                Monthly and yearly statistics (top pilots, airlines, aircraft types and controllers) are shown to signed-in members.
+                <a href="{{ route('auth.connect.login') }}" role="button" class="btn bg-czqo-blue-light ml-md-3 mt-3 mt-md-0">Log in with VATSIM</a>
+            </div>
+        @endguest
+        @auth
         <div class="row">
             {{-- Month Pilot Stats --}}
             @if (auth()->check())
@@ -210,6 +229,7 @@
                 Login with VATSIM to see this data
             @endif
         </div>
+        @endauth
     </div>
 
 
