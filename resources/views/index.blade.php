@@ -5,7 +5,7 @@
 @section('content')
     {{-- Top Introduction --}}
     <div style="height: calc(100vh - 74px); z-index: -1" class="z-depth-0 jarallax">
-        <img src="{{asset('assets/resources/media/img/website/787.png')}}" alt="" class="jarallax-img">
+        <img src="{{asset('assets/resources/media/img/website/hero-radar.jpg')}}" alt="" class="jarallax-img">
         <div class="flex-center mask rgba-black-light flex-column">
             <div class="container d-none d-sm-block">
                 <h1 class="display-2 fw-700 white-text">Cool. Calm. Collected.</h1>
