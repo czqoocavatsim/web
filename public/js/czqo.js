@@ -670,6 +670,27 @@ function createMapTrackPointMarker(point, track, map) {
 }
 
 //Create Current NAT Tracks map
+//Draw the base map ourselves from a local coastline file (no outside map provider)
+async function addNatBaseMap(map) {
+    const dark = $('body').data('theme') === 'dark'
+    map.getContainer().style.background = dark ? '#1c2230' : '#cfe3f1'
+    map.setMaxBounds([[15, -125], [85, 45]])
+    try {
+        const land = await fetch('/data/north-atlantic-land.json').then(r => r.json())
+        L.geoJSON(land, {
+            interactive: false,
+            style: {
+                color: dark ? '#4b5365' : '#a9b4c0',
+                weight: 0.8,
+                fillColor: dark ? '#2f3646' : '#f2efe9',
+                fillOpacity: 1
+            }
+        }).addTo(map).bringToBack()
+    } catch (e) {
+        console.error('Could not load the coastline file', e)
+    }
+}
+
 //NAT track fix coordinates (named fixes that appear in NAT routes)
 const NAT_FIX_COORDS = {
     ADARA: [51.5, -15.0],
@@ -812,18 +833,8 @@ async function createNatTrackMap()
     //Define table
     let table = $("#natTrackTable")
 
-    //Create OSM Layer
-    if ($('body').data('theme') === 'dark') {
-        var OpenStreetMap_Mapnik = L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
-            maxZoom: 19,
-            attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-        }).addTo(map);
-    } else {
-        var OpenStreetMap_Mapnik = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-            maxZoom: 19,
-            attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-        }).addTo(map);
-    }
+    //Draw the base map
+    addNatBaseMap(map)
 
     //Get tracks
     let endpoint = "https://nattrak.vatsim.net/api/tracks"
@@ -920,18 +931,8 @@ async function createEventTrackMap()
     //Define table
     let table = $("#natTrackTable")
 
-    //Create OSM Layer
-    if ($('body').data('theme') === 'dark') {
-        var OpenStreetMap_Mapnik = L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
-            maxZoom: 19,
-            attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-        }).addTo(map);
-    } else {
-        var OpenStreetMap_Mapnik = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-            maxZoom: 19,
-            attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-        }).addTo(map);
-    }
+    //Draw the base map
+    addNatBaseMap(map)
 
     //Get tracks
     let endpoint = "https://tracks.ganderoceanic.ca/event"
@@ -1027,18 +1028,8 @@ async function createConcordeTrackMap()
     //Define table
     let table = $("#natTrackTable")
 
-    //Create OSM Layer
-    if ($('body').data('theme') === 'dark') {
-        var OpenStreetMap_Mapnik = L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
-            maxZoom: 19,
-            attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-        }).addTo(map);
-    } else {
-        var OpenStreetMap_Mapnik = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-            maxZoom: 19,
-            attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-        }).addTo(map);
-    }
+    //Draw the base map
+    addNatBaseMap(map)
 
     //Get tracks
     let endpoint = "https://nattrak.vatsim.net/api/tracks"
