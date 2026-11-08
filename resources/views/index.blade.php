@@ -8,11 +8,11 @@
         <img src="{{asset('assets/resources/media/img/website/hero-radar.jpg')}}" alt="" class="jarallax-img">
         <div class="flex-center mask rgba-black-light flex-column">
             <div class="container d-none d-sm-block">
-                <h1 class="display-2 fw-700 white-text">Cool. Calm. Collected.</h1>
+                <h1 class="display-2 fw-700 white-text">Your gateway across the North Atlantic.</h1>
                 <h2 style="font-size:3em;" class="fw-500 mt-4 white-text">Welcome to Gander Oceanic.</h2>
             </div>
             <div class="container d-sm-none">
-                <h1 class="display-2 fw-700 white-text" style="font-size: 4.5em;">Cool. Calm. Collected.</h1>
+                <h1 class="display-2 fw-700 white-text" style="font-size: 3em;">Your gateway across the North Atlantic.</h1>
                 <h2 style="font-size:2em;" class="fw-500 mt-4 white-text">Welcome to Gander Oceanic.</h2>
             </div>
         </div>
