@@ -21,7 +21,6 @@
                 </tbody>
             </table>
             <p>For more information about Concorde tracks, check out this page: https://www.heritageconcorde.com/air-traffic-control-of-concorde-</p>
-            <p class="mt-3 text-muted">Special thank you to Christian Kovanen 1379372 for the boundaries and fixes.</p>
         <script>
             createConcordeTrackMap();
         </script>
