@@ -33,7 +33,8 @@ body.zh-body main{background:#23252b}
 .zh-strip{display:flex;flex-wrap:wrap;align-items:center;gap:10px 32px;margin:0 64px 40px;padding:14px 22px;background:rgba(27,29,34,.92);border:1px solid #383c45;border-radius:8px;font-size:15px}
 .zh-live{display:inline-flex;align-items:center;gap:8px;font-weight:800;letter-spacing:.08em;color:#7fe0a2}
 .zh-live i{width:9px;height:9px;border-radius:50%;background:#7fe0a2;display:inline-block}
-.zh-strip b{font-size:18px}.zh-mut{color:#b4b9c4}
+.zh-strip b{font-size:18px}
+.zh-ic{color:#f39c37;margin-right:8px}.zh-grp{font-weight:700}.zh-grp .zh-mut{color:#dfe3ea}.zh-mut{color:#b4b9c4}
 .zh-strip .zh-map{margin-left:auto;font-weight:700}
 /* cards */
 .zh-row{display:flex;flex-wrap:wrap;gap:28px;padding:20px 64px 8px}
@@ -107,10 +108,11 @@ body.zh-body .page-footer .text-muted{color:#b4b9c4!important}
         </div>
         <div class="zh-strip">
             <span class="zh-live"><i></i>LIVE</span>
+            <span class="zh-grp" title="Aircraft currently inside each oceanic area"><i class="fas fa-plane zh-ic"></i><span class="zh-mut">Aircraft</span></span>
             <span><b class="js-czqo">{{ $ctpAircraft->czqo }}</b> <span class="zh-mut">Gander</span></span>
             <span><b class="js-eggx">{{ $ctpAircraft->eggx }}</b> <span class="zh-mut">Shanwick</span></span>
             <span><b class="js-kzny">{{ $ctpAircraft->kzny }}</b> <span class="zh-mut">New York</span></span>
-            <span class="zh-mut">Online now: <b id="online-now" style="color:#f2f3f5;font-size:15px;">{{ $controllers->count() ? $controllers->pluck('callsign')->implode(', ') : 'no controllers' }}</b></span>
+            <span class="zh-mut" title="Controllers online now"><i class="fas fa-headset zh-ic"></i>Online now: <b id="online-now" style="color:#f2f3f5;font-size:15px;">{{ $controllers->count() ? $controllers->pluck('callsign')->implode(', ') : 'no controllers' }}</b></span>
             <a class="zh-map" href="{{ route('map') }}">View airspace map &rarr;</a>
         </div>
     </section>
@@ -212,9 +214,9 @@ body.zh-body .page-footer .text-muted{color:#b4b9c4!important}
         <div class="zh-card">
             <div style="display:flex;align-items:baseline;gap:12px;flex-wrap:wrap"><h2>Current activity</h2><span class="zh-sub">Updated <span id="timer-info">{{ \Carbon\Carbon::now('UTC')->format('Hi') }}Z</span></span></div>
             <div class="zh-tiles">
-                <div class="zh-tile"><b class="js-czqo">{{ $ctpAircraft->czqo }}</b><span>Gander OCA</span></div>
-                <div class="zh-tile"><b class="js-eggx">{{ $ctpAircraft->eggx }}</b><span>Shanwick OCA</span></div>
-                <div class="zh-tile"><b class="js-kzny">{{ $ctpAircraft->kzny }}</b><span>New York OCA</span></div>
+                <div class="zh-tile"><b class="js-czqo">{{ $ctpAircraft->czqo }}</b><span>Gander OCA aircraft</span></div>
+                <div class="zh-tile"><b class="js-eggx">{{ $ctpAircraft->eggx }}</b><span>Shanwick OCA aircraft</span></div>
+                <div class="zh-tile"><b class="js-kzny">{{ $ctpAircraft->kzny }}</b><span>New York OCA aircraft</span></div>
             </div>
             <div id="controller-info">@include('partials.homepage.general-controllers')</div>
         </div>
