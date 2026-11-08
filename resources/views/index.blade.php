@@ -106,7 +106,11 @@ body.zh-body .page-footer .text-muted{color:#b4b9c4!important}
                 @endif
             </div>
         </div>
-        @if(!empty($statsError))@hasanyrole('Administrator|Senior Staff|Web Team')<!-- stats error: {{ $statsError }} -->@endhasanyrole@endif
+        @if(!empty($statsError))
+        @hasanyrole('Administrator|Senior Staff|Web Team')
+        <!-- stats error: {{ $statsError }} -->
+        @endhasanyrole
+        @endif
         <div class="zh-strip">
             <span class="zh-live"><i></i>LIVE</span>
             <span class="zh-grp" title="Aircraft currently inside each oceanic area"><i class="fas fa-plane zh-ic"></i><span class="zh-mut">Aircraft</span></span>
