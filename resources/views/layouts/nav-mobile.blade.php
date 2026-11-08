@@ -63,7 +63,7 @@ aria-hidden="true">
                   </div>
               </li>
               <li class="nav-item  {{ Request::is('feedback') ? 'active' : '' }}">
-                  <a class="nav-link text-body" href="{{route('index')}}" aria-expanded="false">Feedback</a>
+                  <a class="nav-link text-body" href="{{route('my.feedback.new')}}" aria-expanded="false">Feedback</a>
               </li>
           </ul>
           <hr>
