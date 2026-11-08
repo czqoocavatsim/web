@@ -935,10 +935,15 @@ async function createEventTrackMap()
 
     //Get tracks
     let endpoint = "https://tracks.ganderoceanic.ca/event"
-    const response = await fetch(endpoint)
-
-    //Create data object
-    const data = await response.json()
+    let data = []
+    try {
+        const response = await fetch(endpoint)
+        if (!response.ok) throw new Error('HTTP ' + response.status)
+        data = await response.json()
+    } catch (e) {
+        console.error('Could not load event tracks', e)
+        $(table).append($("<tr></tr>").append($("<td colspan='5'></td>").text('Event tracks are not available right now. Please try again later.')))
+    }
 
     //Go through each NAT Track
     data.forEach(track => {
@@ -1036,11 +1041,20 @@ async function createConcordeTrackMap()
     }
 
     //Get tracks
-    let endpoint = "https://tracks.ganderoceanic.ca/concorde"
-    const response = await fetch(endpoint)
-
-    //Create data object
-    const data = await response.json()
+    let endpoint = "https://nattrak.vatsim.net/api/tracks"
+    let data = []
+    try {
+        const response = await fetch(endpoint)
+        if (!response.ok) throw new Error('HTTP ' + response.status)
+        const apiTracks = await response.json()
+        data = apiTracks.filter(t => t.active !== false && t.concorde).map(natTrackFromApi).filter(t => t.route.length)
+        if (data.length === 0) {
+            $(table).append($("<tr></tr>").append($("<td colspan='5'></td>").text('No Concorde tracks are active right now.')))
+        }
+    } catch (e) {
+        console.error('Could not load Concorde tracks', e)
+        $(table).append($("<tr></tr>").append($("<td colspan='5'></td>").text('Concorde tracks could not be loaded right now. Please try again shortly.')))
+    }
 
     //Go through each NAT Track
     data.forEach(track => {
@@ -1103,7 +1117,7 @@ async function createConcordeTrackMap()
 
         //validity
         let validityCell = $("<td></td>").text(
-            `${parseTimeStamp(track.validFrom)} to ${parseTimeStamp(track.validTo)}`
+            `${formatNatValidity(track.validFrom)} to ${formatNatValidity(track.validTo)}`
         )
         $(row).append(validityCell)
 
