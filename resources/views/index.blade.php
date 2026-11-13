@@ -142,10 +142,10 @@ body.zh-body .page-footer .text-muted{color:#b4b9c4!important}
         </div>
     </section>
 
-    {{-- NAT tracks in force now, or the next to come into force (read from natTrak in the browser) --}}
+    {{-- NAT tracks in use now, or the next to come into use (read from natTrak in the browser) --}}
     <section class="zh-tracks" id="zh-tracks" hidden>
         <div class="zh-tracks-h"><h2>NAT tracks</h2><a href="{{ url('/pilots/tracks') }}">Full track details &rarr;</a></div>
-        <p class="zh-tracks-sub">The tracks in force now, or the next to come into force. Times are Zulu.</p>
+        <p class="zh-tracks-sub">The tracks in use now, or the next to come into use. Times are Zulu.</p>
         <div class="zh-stat-grid" id="zh-tracks-grid"></div>
     </section>
 
@@ -392,7 +392,7 @@ body.zh-body .page-footer .text-muted{color:#b4b9c4!important}
         });
     });
     renderPeriod();
-    // NAT tracks card: the tracks in force now, or the next ones to come into force
+    // NAT tracks card: the tracks in use now, or the next to come into use
     (function () {
         function hhmm(t) { var d = new Date(t * 1000); return String(d.getUTCHours()).padStart(2, '0') + String(d.getUTCMinutes()).padStart(2, '0') + 'z'; }
         function day(t) { return new Date(t * 1000).toLocaleDateString('en-GB', { weekday: 'short', day: 'numeric', month: 'short', timeZone: 'UTC' }); }
@@ -410,7 +410,7 @@ body.zh-body .page-footer .text-muted{color:#b4b9c4!important}
                 var cur = list.filter(function (w) { return w[0] <= now && now < w[1]; })[0];
                 var pick = cur || list[0], later = list.filter(function (w) { return w[0] > pick[0]; })[0];
                 var card = el('div', 'zh-trk' + (cur ? '' : ' next'));
-                var h = el('div', 'zh-trk-h'); h.appendChild(el('h3', '', dir === 'west' ? 'Westbound' : 'Eastbound')); h.appendChild(el('span', 'zh-trk-badge', cur ? 'In force now' : 'Upcoming')); card.appendChild(h);
+                var h = el('div', 'zh-trk-h'); h.appendChild(el('h3', '', dir === 'west' ? 'Westbound' : 'Eastbound')); h.appendChild(el('span', 'zh-trk-badge', cur ? 'In use now' : 'Upcoming')); card.appendChild(h);
                 card.appendChild(el('div', 'zh-trk-when', win(pick[0], pick[1]) + (cur ? '' : ', ' + day(pick[0]))));
                 mine.filter(function (t) { return t.from === pick[0] && t.to === pick[1]; }).sort(function (a, b) { return a.id < b.id ? -1 : 1; }).forEach(function (t) {
                     var row = el('div', 'zh-trk-row'); row.title = t.route.join(' ');
