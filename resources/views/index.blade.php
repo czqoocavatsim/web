@@ -36,6 +36,7 @@ body.zh-body main{background:#23252b}
 .zh-strip b{font-size:18px}
 .zh-ic{color:#f39c37;margin-right:8px}.zh-break{flex-basis:100%;height:0;margin:-4px 0}.zh-grp{font-weight:700}.zh-grp .zh-mut{color:#dfe3ea}.zh-mut{color:#b4b9c4}
 .zh-strip .zh-map{margin-left:auto;font-weight:700}
+.zh-seg{display:inline-flex;border:1px solid #4a4f5a;border-radius:6px;overflow:hidden;margin-right:6px;vertical-align:middle}.zh-seg button{background:transparent;border:0;color:#b4b9c4;font:inherit;font-size:13px;padding:2px 9px;cursor:pointer}.zh-seg button.on{background:#f39c37;color:#1b1d22;font-weight:700}.zh-seg button:focus-visible{outline:2px solid #f39c37;outline-offset:-2px}
 /* cards */
 .zh-row{display:flex;flex-wrap:wrap;gap:28px;padding:20px 64px 8px}
 .zh-row.r2{padding-top:28px}
@@ -120,7 +121,7 @@ body.zh-body .page-footer .text-muted{color:#b4b9c4!important}
             <span class="zh-mut" title="Controllers online now"><i class="fas fa-headset zh-ic"></i>Online now: <b id="online-now" style="color:#f2f3f5;font-size:15px;">{{ $controllers->count() ? $controllers->pluck('callsign')->implode(', ') : 'no controllers' }}</b></span>
             @if($last24)
             <span class="zh-break"></span>
-            <span class="zh-mut" title="Flights that spent 15 minutes or more in Gander, Shanwick or New York oceanic airspace, and controller time on oceanic positions, over the last 24 hours"><i class="fas fa-history zh-ic"></i>Last 24h: <b class="js-mov">{{ $last24['movements'] }}</b> movements &middot; <b class="js-atc">{{ $last24['atc_hours'] }}</b> h of ATC <span class="zh-mut">(<span class="js-pos">{{ $last24['positions'] }}</span> positions)</span></span>
+            <span class="zh-mut" id="zh-period-box" title="Flights that spent 15 minutes or more in Gander, Shanwick or New York oceanic airspace, and controller time on oceanic positions. Switch between the last 24 hours and this month so far (from 00:00 Zulu on the 1st)."><i class="fas fa-history zh-ic"></i><span class="zh-seg" role="group" aria-label="Statistics period"><button type="button" class="on" data-period="day">Last 24h</button>@if($month)<button type="button" data-period="month">This month</button>@endif</span>: <b class="js-mov">{{ $last24['movements'] }}</b> movements &middot; <b class="js-atc">{{ $last24['atc_hours'] }}</b> h of ATC <span class="zh-mut">(<span class="js-pos">{{ $last24['positions'] }}</span> positions)</span></span>
             @endif
             @if($forecast['total'] !== null)
                 <span class="zh-mut" title="Estimate from filed flight plans on the VATSIM data feed using an oceanic route: flights due to depart in the next 6 hours, plus flights already airborne and heading for oceanic airspace. Pilots who connect late or never fly are not predicted."><i class="fas fa-hourglass-half zh-ic"></i>Expected next 6h: <b class="js-exp">~{{ $forecast['total'] }}</b> flights <span class="zh-mut">(<span class="js-dep">{{ $forecast['departing'] }}</span> departing, <span class="js-app">{{ $forecast['approaching'] }}</span> en route)</span></span>
@@ -355,10 +356,29 @@ body.zh-body .page-footer .text-muted{color:#b4b9c4!important}
 <script>
 (function () {
     function setAll(sel, v) { document.querySelectorAll(sel).forEach(function (e) { e.textContent = v; }); }
+    var zhStats = { day: @json($last24), month: @json($month) };
+    var zhPeriod = 'day';
+    try { var saved = localStorage.getItem('zhStatsPeriod'); if (saved === 'month' && zhStats.month) zhPeriod = 'month'; } catch (e) { /* storage can be blocked */ }
+    function renderPeriod() {
+        var d = zhStats[zhPeriod] || zhStats.day;
+        if (!d) return;
+        setAll('.js-mov', d.movements); setAll('.js-atc', d.atc_hours); setAll('.js-pos', d.positions);
+        document.querySelectorAll('#zh-period-box [data-period]').forEach(function (b) { b.classList.toggle('on', b.getAttribute('data-period') === zhPeriod); b.setAttribute('aria-pressed', b.getAttribute('data-period') === zhPeriod ? 'true' : 'false'); });
+    }
+    document.querySelectorAll('#zh-period-box [data-period]').forEach(function (b) {
+        b.addEventListener('click', function () {
+            zhPeriod = b.getAttribute('data-period');
+            try { localStorage.setItem('zhStatsPeriod', zhPeriod); } catch (e) { /* ignore */ }
+            renderPeriod();
+        });
+    });
+    renderPeriod();
     function refreshCounts() {
         fetch('/api/update-homepage/general').then(function (r) { return r.json(); }).then(function (d) {
             setAll('.js-czqo', d.czqo); setAll('.js-eggx', d.eggx); setAll('.js-kzny', d.kzny);
-            if (d.last24) { setAll('.js-mov', d.last24.movements); setAll('.js-atc', d.last24.atc_hours); setAll('.js-pos', d.last24.positions); }
+            if (d.last24) { zhStats.day = d.last24; }
+            if (d.month) { zhStats.month = d.month; }
+            renderPeriod();
             if (d.forecast && d.forecast.total !== null) { setAll('.js-exp', '~' + d.forecast.total); setAll('.js-dep', d.forecast.departing); setAll('.js-app', d.forecast.approaching); }
             @if($ctpMode == 2)
             ['ganwick','czqo','eggx','lppo','bird','kzny'].forEach(function (k) {
