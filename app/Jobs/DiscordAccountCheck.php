@@ -194,7 +194,7 @@ class DiscordAccountCheck implements ShouldQueue
                     // Update DB information
                     $user->member_of_czqo = true;
                     $user->discord_username = $discord_member['user']['username'];
-                    $user->discord_avatar = $user->avatar ? 'https://cdn.discordapp.com/avatars/'.$user->discord_user_id.'/'.$discord_member['user']['avatar'].'.png' : null;
+                    $user->discord_avatar = User::discordAvatarUrl($user->discord_user_id, $discord_member['user']['avatar'] ?? null);
                     $user->save();
 
                     // Skip Gary (Discord Owner)
