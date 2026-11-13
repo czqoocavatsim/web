@@ -36,6 +36,7 @@ body.zh-body main{background:#23252b}
 .zh-strip b{font-size:18px}
 .zh-ic{color:#f39c37;margin-right:8px}.zh-break{flex-basis:100%;height:0;margin:-4px 0}.zh-grp{font-weight:700}.zh-grp .zh-mut{color:#dfe3ea}.zh-mut{color:#b4b9c4}
 .zh-strip .zh-map{margin-left:auto;font-weight:700}
+.zh-seg{display:inline-flex;border:1px solid #4a4f5a;border-radius:6px;overflow:hidden;margin-right:6px;vertical-align:middle}.zh-seg button{background:transparent;border:0;color:#b4b9c4;font:inherit;font-size:13px;padding:2px 9px;cursor:pointer}.zh-seg button.on{background:#f39c37;color:#1b1d22;font-weight:700}.zh-seg button:focus-visible{outline:2px solid #f39c37;outline-offset:-2px}
 /* cards */
 .zh-row{display:flex;flex-wrap:wrap;gap:28px;padding:20px 64px 8px}
 .zh-row.r2{padding-top:28px}
@@ -62,6 +63,18 @@ body.zh-body main{background:#23252b}
 .zh-list{margin:0 0 18px;padding:0;list-style:none;font-size:16px}
 .zh-list li{padding:11px 0;border-bottom:1px solid #424651}.zh-list li:last-child{border-bottom:0}
 .zh-list a{font-weight:700}
+/* NAT tracks */
+.zh-tracks{padding:30px 64px 0}.zh-tracks[hidden]{display:none}
+.zh-tracks-h{display:flex;align-items:baseline;gap:16px;margin-bottom:6px}.zh-tracks-h h2{font-size:30px;font-weight:800}.zh-tracks-h a{font-weight:700}
+.zh-tracks-sub{margin:0 0 18px;color:#b4b9c4;font-size:15px}
+.zh-trk{flex:1 1 300px;min-width:0;padding:20px 24px;background:#2f3239;border:1px solid #383c45;border-top:3px solid #7fe0a2;border-radius:10px}
+.zh-trk.next{border-top-color:#f39c37}
+.zh-trk-h{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-bottom:4px}.zh-trk-h h3{margin:0!important;font-size:18px;font-weight:800;color:#f2f3f5!important}
+.zh-trk-badge{font-size:12px;font-weight:800;padding:2px 10px;border-radius:999px;border:1px solid #7fe0a2;color:#7fe0a2}.zh-trk.next .zh-trk-badge{border-color:#f39c37;color:#f39c37}
+.zh-trk-when{font-size:13px;color:#b4b9c4;margin-bottom:10px}
+.zh-trk-row{display:flex;gap:14px;align-items:baseline;padding:7px 0;border-bottom:1px solid #424651}.zh-trk-row:last-of-type{border-bottom:0}
+.zh-trk-id{font-weight:800;font-size:18px;width:26px;flex:none}.zh-trk-fix b{font-weight:700}.zh-trk-fl{display:block;font-size:13px;color:#b4b9c4}
+.zh-trk-next{margin-top:10px;padding-top:10px;border-top:1px solid #424651;font-size:13px;color:#b4b9c4}
 /* stats */
 .zh-stats{padding:36px 64px 8px}
 .zh-stats-h{display:flex;align-items:baseline;gap:16px;margin-bottom:18px}
@@ -88,7 +101,7 @@ body.zh-body .page-footer .text-muted{color:#b4b9c4!important}
  .zh-cta{flex-direction:column;gap:10px}.zh .zh-btn{text-align:center;padding:13px}
  .zh-strip{margin:0 16px 24px;padding:12px 14px;font-size:14px;gap:8px 18px}.zh-strip .zh-map{margin-left:0;width:100%}
  .zh-row,.zh-row.r2{padding:12px 16px 0;gap:16px}.zh-card,.zh-news{padding:22px;flex-basis:100%}.zh-news{min-height:260px}.zh-news h2{font-size:24px}
- .zh-stats{padding:24px 16px 0}.zh-stats-h h2{font-size:24px}.zh-stat-grid{gap:16px}
+ .zh-stats{padding:24px 16px 0}.zh-tracks{padding:24px 16px 0}.zh-stats-h h2{font-size:24px}.zh-stat-grid{gap:16px}
  .zh-mission{padding:28px 16px 36px}.zh-mission h2{font-size:26px}.zh-mission p{font-size:16px}
 }
 </style>
@@ -120,13 +133,20 @@ body.zh-body .page-footer .text-muted{color:#b4b9c4!important}
             <span class="zh-mut" title="Controllers online now"><i class="fas fa-headset zh-ic"></i>Online now: <b id="online-now" style="color:#f2f3f5;font-size:15px;">{{ $controllers->count() ? $controllers->pluck('callsign')->implode(', ') : 'no controllers' }}</b></span>
             @if($last24)
             <span class="zh-break"></span>
-            <span class="zh-mut" title="Flights that spent 15 minutes or more in Gander, Shanwick or New York oceanic airspace, and controller time on oceanic positions, over the last 24 hours"><i class="fas fa-history zh-ic"></i>Last 24h: <b class="js-mov">{{ $last24['movements'] }}</b> movements &middot; <b class="js-atc">{{ $last24['atc_hours'] }}</b> h of ATC <span class="zh-mut">(<span class="js-pos">{{ $last24['positions'] }}</span> positions)</span></span>
+            <span class="zh-mut" id="zh-period-box" title="Flights that spent 15 minutes or more in Gander, Shanwick or New York oceanic airspace, and controller time on oceanic positions. Switch between the last 24 hours and this month so far (from 00:00 Zulu on the 1st)."><i class="fas fa-history zh-ic"></i><span class="zh-seg" role="group" aria-label="Statistics period"><button type="button" class="on" data-period="day">Last 24h</button>@if($month)<button type="button" data-period="month">This month</button>@endif</span> <b class="js-mov">{{ $last24['movements'] }}</b> movements &middot; <b class="js-atc">{{ $last24['atc_hours'] }}</b> h of ATC <span class="zh-mut">(<span class="js-pos">{{ $last24['positions'] }}</span> positions)</span></span>
             @endif
             @if($forecast['total'] !== null)
                 <span class="zh-mut" title="Estimate from filed flight plans on the VATSIM data feed using an oceanic route: flights due to depart in the next 6 hours, plus flights already airborne and heading for oceanic airspace. Pilots who connect late or never fly are not predicted."><i class="fas fa-hourglass-half zh-ic"></i>Expected next 6h: <b class="js-exp">~{{ $forecast['total'] }}</b> flights <span class="zh-mut">(<span class="js-dep">{{ $forecast['departing'] }}</span> departing, <span class="js-app">{{ $forecast['approaching'] }}</span> en route)</span></span>
             @endif
             <a class="zh-map" href="{{ route('map') }}">View airspace map &rarr;</a>
         </div>
+    </section>
+
+    {{-- NAT tracks in use now, or the next to come into use (read from natTrak in the browser) --}}
+    <section class="zh-tracks" id="zh-tracks" hidden>
+        <div class="zh-tracks-h"><h2>NAT tracks</h2><a href="{{ url('/pilots/tracks') }}">Full track details &rarr;</a></div>
+        <p class="zh-tracks-sub">The tracks in use now, or the next to come into use. Times are Zulu.</p>
+        <div class="zh-stat-grid" id="zh-tracks-grid"></div>
     </section>
 
     {{-- CTP: event underway --}}
@@ -355,10 +375,62 @@ body.zh-body .page-footer .text-muted{color:#b4b9c4!important}
 <script>
 (function () {
     function setAll(sel, v) { document.querySelectorAll(sel).forEach(function (e) { e.textContent = v; }); }
+    var zhStats = { day: @json($last24), month: @json($month) };
+    var zhPeriod = 'day';
+    try { var saved = localStorage.getItem('zhStatsPeriod'); if (saved === 'month' && zhStats.month) zhPeriod = 'month'; } catch (e) { /* storage can be blocked */ }
+    function renderPeriod() {
+        var d = zhStats[zhPeriod] || zhStats.day;
+        if (!d) return;
+        setAll('.js-mov', d.movements); setAll('.js-atc', d.atc_hours); setAll('.js-pos', d.positions);
+        document.querySelectorAll('#zh-period-box [data-period]').forEach(function (b) { b.classList.toggle('on', b.getAttribute('data-period') === zhPeriod); b.setAttribute('aria-pressed', b.getAttribute('data-period') === zhPeriod ? 'true' : 'false'); });
+    }
+    document.querySelectorAll('#zh-period-box [data-period]').forEach(function (b) {
+        b.addEventListener('click', function () {
+            zhPeriod = b.getAttribute('data-period');
+            try { localStorage.setItem('zhStatsPeriod', zhPeriod); } catch (e) { /* ignore */ }
+            renderPeriod();
+        });
+    });
+    renderPeriod();
+    // NAT tracks card: the tracks in use now, or the next to come into use
+    (function () {
+        function hhmm(t) { var d = new Date(t * 1000); return String(d.getUTCHours()).padStart(2, '0') + String(d.getUTCMinutes()).padStart(2, '0') + 'z'; }
+        function day(t) { return new Date(t * 1000).toLocaleDateString('en-GB', { weekday: 'short', day: 'numeric', month: 'short', timeZone: 'UTC' }); }
+        function win(a, b) { return hhmm(a) + '-' + hhmm(b); }
+        function el(tag, cls, text) { var e = document.createElement(tag); if (cls) e.className = cls; if (text !== undefined) e.textContent = text; return e; }
+        fetch('https://nattrak.vatsim.net/api/tracks').then(function (r) { if (!r.ok) throw new Error(r.status); return r.json(); }).then(function (data) {
+            var now = Date.now() / 1000, grid = document.getElementById('zh-tracks-grid'), shown = 0;
+            ['west', 'east'].forEach(function (dir) {
+                var mine = data.filter(function (t) { return t.active !== false && !t.concorde && t.direction === dir && t.valid_from && t.valid_to; }).map(function (t) {
+                    return { id: t.identifier, route: String(t.last_routeing || '').trim().split(/\s+/), levels: t.flight_levels || [], from: Date.parse(t.valid_from) / 1000, to: Date.parse(t.valid_to) / 1000 };
+                }).filter(function (t) { return t.to > now && t.route.length > 1; });
+                if (!mine.length) return;
+                var wins = {}; mine.forEach(function (t) { wins[t.from + '-' + t.to] = [t.from, t.to]; });
+                var list = Object.keys(wins).map(function (k) { return wins[k]; }).sort(function (a, b) { return a[0] - b[0]; });
+                var cur = list.filter(function (w) { return w[0] <= now && now < w[1]; })[0];
+                var pick = cur || list[0], later = list.filter(function (w) { return w[0] > pick[0]; })[0];
+                var card = el('div', 'zh-trk' + (cur ? '' : ' next'));
+                var h = el('div', 'zh-trk-h'); h.appendChild(el('h3', '', dir === 'west' ? 'Westbound' : 'Eastbound')); h.appendChild(el('span', 'zh-trk-badge', cur ? 'In use now' : 'Upcoming')); card.appendChild(h);
+                card.appendChild(el('div', 'zh-trk-when', win(pick[0], pick[1]) + (cur ? '' : ', ' + day(pick[0]))));
+                mine.filter(function (t) { return t.from === pick[0] && t.to === pick[1]; }).sort(function (a, b) { return a.id < b.id ? -1 : 1; }).forEach(function (t) {
+                    var row = el('div', 'zh-trk-row'); row.title = t.route.join(' ');
+                    row.appendChild(el('span', 'zh-trk-id', t.id));
+                    var fix = el('span', 'zh-trk-fix'); fix.appendChild(el('b', '', t.route[0])); fix.appendChild(document.createTextNode(' \u2192 ')); fix.appendChild(el('b', '', t.route[t.route.length - 1]));
+                    fix.appendChild(el('span', 'zh-trk-fl', 'FL ' + t.levels.map(function (l) { return Math.round(l / 100); }).sort(function (a, b) { return a - b; }).join(' ')));
+                    row.appendChild(fix); card.appendChild(row);
+                });
+                if (later) card.appendChild(el('div', 'zh-trk-next', 'Next: ' + win(later[0], later[1]) + ', ' + day(later[0])));
+                grid.appendChild(card); shown++;
+            });
+            if (shown) document.getElementById('zh-tracks').hidden = false;
+        }).catch(function () { /* the card just stays hidden */ });
+    })();
     function refreshCounts() {
         fetch('/api/update-homepage/general').then(function (r) { return r.json(); }).then(function (d) {
             setAll('.js-czqo', d.czqo); setAll('.js-eggx', d.eggx); setAll('.js-kzny', d.kzny);
-            if (d.last24) { setAll('.js-mov', d.last24.movements); setAll('.js-atc', d.last24.atc_hours); setAll('.js-pos', d.last24.positions); }
+            if (d.last24) { zhStats.day = d.last24; }
+            if (d.month) { zhStats.month = d.month; }
+            renderPeriod();
             if (d.forecast && d.forecast.total !== null) { setAll('.js-exp', '~' + d.forecast.total); setAll('.js-dep', d.forecast.departing); setAll('.js-app', d.forecast.approaching); }
             @if($ctpMode == 2)
             ['ganwick','czqo','eggx','lppo','bird','kzny'].forEach(function (k) {

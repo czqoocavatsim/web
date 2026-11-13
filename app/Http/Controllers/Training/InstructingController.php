@@ -498,7 +498,7 @@ class InstructingController extends Controller
         $rosterMember = RosterMember::where('cid', $cid)->firstOrFail();
 
         //Assign values
-        $rosterMember->certification = 'Certified';
+        $rosterMember->certification = 'certified';
         $rosterMember->active = 1;
         $rosterMember->remarks = 'Certified on NAT_FSS (Web Message)';
         # Q3 Certified

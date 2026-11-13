@@ -249,7 +249,6 @@
                 <div class="modal-body">
                     To contact us, please do one of the following:
                     <ol>
-                        <li>Login and open a <a href="TODO: TicketURL">support ticket.</a></li>
                         <li>Head to the <a href="{{route('staff')}}">staff page</a> and email the relevant staff member.</li>
                         <li>Join our <a href="https://discord.gg/MvPVAHP">Discord server</a> and ask in the #westons-at-the-airport channel.</li>
                     </ol>
@@ -413,7 +412,6 @@
                             <a class="dropdown-item {{ Request::is('pilots/oceanic-clearance') ? 'active white-text' : '' }}" href="{{url('/pilots/oceanic-clearance')}}">Oceanic Clearance Generator</a>
                             <a class="dropdown-item {{ Request::is('pilots/position-report') ? 'active white-text' : '' }}" href="{{url('/pilots/position-report')}}">Position Report Generator</a>
                             <a class="dropdown-item {{ Request::is('pilots/tracks') ? 'active white-text' : ''}}" href="{{url('/pilots/tracks')}}">Current NAT Tracks</a>
-                            <a class="dropdown-item {{ Request::is('pilots/tracks/event') ? 'active white-text' : ''}}" href="{{url('/pilots/tracks/event')}}">Event NAT Tracks</a>
                             <a class="dropdown-item" href="https://www.vatsim.net/pilots/resources" target="_blank">VATSIM Resources</a>
                             <a class="dropdown-item" href="https://nattrak.vatsim.net" target="_blank">natTRAK</a>
                             <a class="dropdown-item" href="{{url('/map')}}">Map</a>
