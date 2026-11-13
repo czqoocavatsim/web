@@ -63,6 +63,18 @@ body.zh-body main{background:#23252b}
 .zh-list{margin:0 0 18px;padding:0;list-style:none;font-size:16px}
 .zh-list li{padding:11px 0;border-bottom:1px solid #424651}.zh-list li:last-child{border-bottom:0}
 .zh-list a{font-weight:700}
+/* NAT tracks */
+.zh-tracks{padding:30px 64px 0}.zh-tracks[hidden]{display:none}
+.zh-tracks-h{display:flex;align-items:baseline;gap:16px;margin-bottom:6px}.zh-tracks-h h2{font-size:30px;font-weight:800}.zh-tracks-h a{font-weight:700}
+.zh-tracks-sub{margin:0 0 18px;color:#b4b9c4;font-size:15px}
+.zh-trk{flex:1 1 300px;min-width:0;padding:20px 24px;background:#2f3239;border:1px solid #383c45;border-top:3px solid #7fe0a2;border-radius:10px}
+.zh-trk.next{border-top-color:#f39c37}
+.zh-trk-h{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-bottom:4px}.zh-trk-h h3{margin:0!important;font-size:18px;font-weight:800;color:#f2f3f5!important}
+.zh-trk-badge{font-size:12px;font-weight:800;padding:2px 10px;border-radius:999px;border:1px solid #7fe0a2;color:#7fe0a2}.zh-trk.next .zh-trk-badge{border-color:#f39c37;color:#f39c37}
+.zh-trk-when{font-size:13px;color:#b4b9c4;margin-bottom:10px}
+.zh-trk-row{display:flex;gap:14px;align-items:baseline;padding:7px 0;border-bottom:1px solid #424651}.zh-trk-row:last-of-type{border-bottom:0}
+.zh-trk-id{font-weight:800;font-size:18px;width:26px;flex:none}.zh-trk-fix b{font-weight:700}.zh-trk-fl{display:block;font-size:13px;color:#b4b9c4}
+.zh-trk-next{margin-top:10px;padding-top:10px;border-top:1px solid #424651;font-size:13px;color:#b4b9c4}
 /* stats */
 .zh-stats{padding:36px 64px 8px}
 .zh-stats-h{display:flex;align-items:baseline;gap:16px;margin-bottom:18px}
@@ -89,7 +101,7 @@ body.zh-body .page-footer .text-muted{color:#b4b9c4!important}
  .zh-cta{flex-direction:column;gap:10px}.zh .zh-btn{text-align:center;padding:13px}
  .zh-strip{margin:0 16px 24px;padding:12px 14px;font-size:14px;gap:8px 18px}.zh-strip .zh-map{margin-left:0;width:100%}
  .zh-row,.zh-row.r2{padding:12px 16px 0;gap:16px}.zh-card,.zh-news{padding:22px;flex-basis:100%}.zh-news{min-height:260px}.zh-news h2{font-size:24px}
- .zh-stats{padding:24px 16px 0}.zh-stats-h h2{font-size:24px}.zh-stat-grid{gap:16px}
+ .zh-stats{padding:24px 16px 0}.zh-tracks{padding:24px 16px 0}.zh-stats-h h2{font-size:24px}.zh-stat-grid{gap:16px}
  .zh-mission{padding:28px 16px 36px}.zh-mission h2{font-size:26px}.zh-mission p{font-size:16px}
 }
 </style>
@@ -128,6 +140,13 @@ body.zh-body .page-footer .text-muted{color:#b4b9c4!important}
             @endif
             <a class="zh-map" href="{{ route('map') }}">View airspace map &rarr;</a>
         </div>
+    </section>
+
+    {{-- NAT tracks in force now, or the next to come into force (read from natTrak in the browser) --}}
+    <section class="zh-tracks" id="zh-tracks" hidden>
+        <div class="zh-tracks-h"><h2>NAT tracks</h2><a href="{{ url('/pilots/tracks') }}">Full track details &rarr;</a></div>
+        <p class="zh-tracks-sub">The tracks in force now, or the next to come into force. Times are Zulu.</p>
+        <div class="zh-stat-grid" id="zh-tracks-grid"></div>
     </section>
 
     {{-- CTP: event underway --}}
@@ -373,6 +392,39 @@ body.zh-body .page-footer .text-muted{color:#b4b9c4!important}
         });
     });
     renderPeriod();
+    // NAT tracks card: the tracks in force now, or the next ones to come into force
+    (function () {
+        function hhmm(t) { var d = new Date(t * 1000); return String(d.getUTCHours()).padStart(2, '0') + String(d.getUTCMinutes()).padStart(2, '0') + 'z'; }
+        function day(t) { return new Date(t * 1000).toLocaleDateString('en-GB', { weekday: 'short', day: 'numeric', month: 'short', timeZone: 'UTC' }); }
+        function win(a, b) { return hhmm(a) + '-' + hhmm(b); }
+        function el(tag, cls, text) { var e = document.createElement(tag); if (cls) e.className = cls; if (text !== undefined) e.textContent = text; return e; }
+        fetch('https://nattrak.vatsim.net/api/tracks').then(function (r) { if (!r.ok) throw new Error(r.status); return r.json(); }).then(function (data) {
+            var now = Date.now() / 1000, grid = document.getElementById('zh-tracks-grid'), shown = 0;
+            ['west', 'east'].forEach(function (dir) {
+                var mine = data.filter(function (t) { return t.active !== false && !t.concorde && t.direction === dir && t.valid_from && t.valid_to; }).map(function (t) {
+                    return { id: t.identifier, route: String(t.last_routeing || '').trim().split(/\s+/), levels: t.flight_levels || [], from: Date.parse(t.valid_from) / 1000, to: Date.parse(t.valid_to) / 1000 };
+                }).filter(function (t) { return t.to > now && t.route.length > 1; });
+                if (!mine.length) return;
+                var wins = {}; mine.forEach(function (t) { wins[t.from + '-' + t.to] = [t.from, t.to]; });
+                var list = Object.keys(wins).map(function (k) { return wins[k]; }).sort(function (a, b) { return a[0] - b[0]; });
+                var cur = list.filter(function (w) { return w[0] <= now && now < w[1]; })[0];
+                var pick = cur || list[0], later = list.filter(function (w) { return w[0] > pick[0]; })[0];
+                var card = el('div', 'zh-trk' + (cur ? '' : ' next'));
+                var h = el('div', 'zh-trk-h'); h.appendChild(el('h3', '', dir === 'west' ? 'Westbound' : 'Eastbound')); h.appendChild(el('span', 'zh-trk-badge', cur ? 'In force now' : 'Upcoming')); card.appendChild(h);
+                card.appendChild(el('div', 'zh-trk-when', win(pick[0], pick[1]) + (cur ? '' : ', ' + day(pick[0]))));
+                mine.filter(function (t) { return t.from === pick[0] && t.to === pick[1]; }).sort(function (a, b) { return a.id < b.id ? -1 : 1; }).forEach(function (t) {
+                    var row = el('div', 'zh-trk-row'); row.title = t.route.join(' ');
+                    row.appendChild(el('span', 'zh-trk-id', t.id));
+                    var fix = el('span', 'zh-trk-fix'); fix.appendChild(el('b', '', t.route[0])); fix.appendChild(document.createTextNode(' \u2192 ')); fix.appendChild(el('b', '', t.route[t.route.length - 1]));
+                    fix.appendChild(el('span', 'zh-trk-fl', 'FL ' + t.levels.map(function (l) { return Math.round(l / 100); }).sort(function (a, b) { return a - b; }).join(' ')));
+                    row.appendChild(fix); card.appendChild(row);
+                });
+                if (later) card.appendChild(el('div', 'zh-trk-next', 'Next: ' + win(later[0], later[1]) + ', ' + day(later[0])));
+                grid.appendChild(card); shown++;
+            });
+            if (shown) document.getElementById('zh-tracks').hidden = false;
+        }).catch(function () { /* the card just stays hidden */ });
+    })();
     function refreshCounts() {
         fetch('/api/update-homepage/general').then(function (r) { return r.json(); }).then(function (d) {
             setAll('.js-czqo', d.czqo); setAll('.js-eggx', d.eggx); setAll('.js-kzny', d.kzny);
