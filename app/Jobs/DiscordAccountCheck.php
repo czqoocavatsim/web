@@ -18,6 +18,7 @@ use App\Notifications\Training\Instructing\RemovedAsStudent;
 use App\Models\Training\Instructing\Students\StudentStatusLabel;
 use App\Models\Training\Instructing\Links\StudentStatusLabelLink;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\Cache;
 
 class DiscordAccountCheck implements ShouldQueue
 {
@@ -57,8 +58,15 @@ class DiscordAccountCheck implements ShouldQueue
 
         // Get List of Users in Discord
         $discord = new DiscordClient();
-        $response = $discord->getClient()->get('guilds/'.env('DISCORD_GUILD_ID').'/members?limit=1000');
-        $discord_members = json_decode($response->getBody(), true);
+        // Discord returns at most 1000 members per request, so read every page (members come back in ID order)
+        $discord_members = [];
+        $after = 0;
+        do {
+            $response = $discord->getClient()->get('guilds/'.env('DISCORD_GUILD_ID').'/members?limit=1000&after='.$after);
+            $page = json_decode($response->getBody(), true) ?: [];
+            $discord_members = array_merge($discord_members, $page);
+            $after = $page ? end($page)['user']['id'] : 0;
+        } while (count($page) === 1000);
 
         // Discord Notification Calculations (Figure out who needs these roles)
         {
@@ -134,7 +142,7 @@ class DiscordAccountCheck implements ShouldQueue
 
             // Ignore Gary & Gander Bot
             if($discord_uid == 350995372627197954|| $discord_uid == 1118430230839840768){
-                break;
+                continue;
             }
 
             // Check if the Discord user ID exists in the users database
@@ -156,8 +164,27 @@ class DiscordAccountCheck implements ShouldQueue
 
         // dd($discord_not_in_system_ids);
 
+        // The job is stopped after about a minute, and every role change costs a second or more, so only work for a
+        // limited time and carry on from where we stopped on the next run (otherwise the same users are always checked first).
+        $time_budget = 40;
+        $finished = true;
+        $all_users = $users->all();
+        $offset = (int) Cache::get('discord_check_offset', 0);
+        if ($offset < 0 || $offset >= count($all_users)) {
+            $offset = 0;
+        }
+        $ordered_users = array_merge(array_slice($all_users, $offset), array_slice($all_users, 0, $offset));
+        $done = 0;
+
         // Loop through each DB User
-        foreach($users as $user){
+        foreach($ordered_users as $user){
+
+            if (Carbon::now()->diffInSeconds($start_time) > $time_budget) {
+                Cache::put('discord_check_offset', ($offset + $done) % max(count($all_users), 1), 3600);
+                $finished = false;
+                break;
+            }
+            $done++;
 
             // Skip is discord_user_id is null
             if($user->discord_user_id == null){
@@ -252,7 +279,7 @@ class DiscordAccountCheck implements ShouldQueue
                         if (RosterMember::where('user_id', $user->id)->exists()) {
                             //What status do they have?
                             $rosterProfile = RosterMember::where('user_id', $user->id)->first();
-                            switch ($rosterProfile->certification) {
+                            switch (strtolower((string) $rosterProfile->certification)) {
                                 case 'certified':
                                     array_push($mainRoles, $discordRoleIds['certified']);
                                     array_push($mainRoles, $discordRoleIds['gander_certified']);
@@ -557,30 +584,48 @@ class DiscordAccountCheck implements ShouldQueue
                     $user->save();
                 }
 
-        // Add Role to Users not Connected to Gander Oceanic
-        foreach($discord_uids as $discord_uid){
-            
-            // Skip the Bot (Gander)
-            if($discord_uid == 1118430230839840768){
-                continue;
-            }
-
-            // Skip Server Owner (Gary)
-            if($discord_uid == 350995372627197954){
-                continue;
-            }
-
-            sleep(1);
-
-            // // Update user with main roles - Will temp remove staff roles
-            $discord->getClient()->patch('guilds/'.env('DISCORD_GUILD_ID').'/members/'.$user->discord_user_id, [
-                'json' => [
-                    'nick' => 'Unlinked Account',
-                    'roles' => ['1372584622818332763'],
-                ]
-            ]);
         }
 
+        if ($finished) {
+            Cache::forget('discord_check_offset');
+
+            // Members who have joined the Discord but have not linked their account get the "Unlinked Account" role.
+            // Anyone who already has other roles (staff, bots, ...) is left alone.
+            $unlinked_role = '1372584622818332763';
+            $unlinked_done = 0;
+            foreach($discord_uids as $discord_uid){
+
+                // Skip the Bot (Gander) and Server Owner (Gary)
+                if($discord_uid == 1118430230839840768 || $discord_uid == 350995372627197954){
+                    continue;
+                }
+
+                $unlinked_member = null;
+                foreach($discord_member_contents as $m){
+                    if ($m['user']['id'] == $discord_uid) { $unlinked_member = $m; break; }
+                }
+                if (empty($unlinked_member) || !empty($unlinked_member['user']['bot'])) {
+                    continue;
+                }
+
+                $has_other_roles = array_diff($unlinked_member['roles'] ?? [], [$unlinked_role]);
+                if ($has_other_roles || (($unlinked_member['nick'] ?? null) === 'Unlinked Account' && in_array($unlinked_role, $unlinked_member['roles'] ?? []))) {
+                    continue;
+                }
+
+                if ($unlinked_done >= 10 || Carbon::now()->diffInSeconds($start_time) > 55) {
+                    break;
+                }
+                $unlinked_done++;
+                sleep(1);
+
+                $discord->getClient()->patch('guilds/'.env('DISCORD_GUILD_ID').'/members/'.$discord_uid, [
+                    'json' => [
+                        'nick' => 'Unlinked Account',
+                        'roles' => [$unlinked_role],
+                    ]
+                ]);
+            }
         }
 
         if($user_updated > 0){
