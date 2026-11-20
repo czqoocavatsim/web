@@ -41,10 +41,46 @@ class AtcResource extends Model
     use LogsActivity;
 
     protected $fillable = [
-        'user_id', 'title', 'description', 'url', 'atc_only',
+        'user_id', 'title', 'description', 'url', 'atc_only', 'sort_order',
     ];
 
     protected $hidden = ['id'];
+
+    /** All resources in display order (lowest sort_order first, oldest first on a tie). */
+    public static function ordered()
+    {
+        return static::orderBy('sort_order')->orderBy('id')->get();
+    }
+
+    /** Sort order for a new resource: after everything that exists. */
+    public static function nextSortOrder(): int
+    {
+        return ((int) static::max('sort_order')) + 10;
+    }
+
+    /**
+     * Move one place up or down. The list is renumbered 10, 20, 30... first so
+     * ties can never stop a move, then the two neighbours swap places.
+     */
+    public static function move(int $id, string $direction): void
+    {
+        $list = static::ordered()->values();
+        foreach ($list as $i => $r) {
+            $r->sort_order = ($i + 1) * 10;
+        }
+        $at = $list->search(fn ($r) => $r->id === $id);
+        if ($at !== false) {
+            $to = $direction === 'up' ? $at - 1 : $at + 1;
+            if (isset($list[$to])) {
+                [$list[$at]->sort_order, $list[$to]->sort_order] = [$list[$to]->sort_order, $list[$at]->sort_order];
+            }
+        }
+        foreach ($list as $r) {
+            if ($r->isDirty('sort_order')) {
+                $r->save();
+            }
+        }
+    }
 
     public function html()
     {

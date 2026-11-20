@@ -14,7 +14,7 @@ class PublicationsController extends Controller
 {
     public function atcResources()
     {
-        $resources = AtcResource::all();
+        $resources = AtcResource::ordered();
 
         return view('publications.atcresources', compact('resources'));
     }
@@ -127,7 +127,7 @@ class PublicationsController extends Controller
     public function adminAtcResources()
     {
         //Find ATC Resources
-        $atcResources = AtcResource::all()->sortBy('id');
+        $atcResources = AtcResource::ordered();
 
         //Return view
         return view('admin.publications.atc-resources.index', compact('atcResources'));
@@ -164,6 +164,7 @@ class PublicationsController extends Controller
             'description' => $request->get('description'),
             'atc_only'    => $request->get('visibility'),
             'url'         => $request->get('url'),
+            'sort_order'  => AtcResource::nextSortOrder(),
         ]);
 
         //Save it
@@ -211,6 +212,15 @@ class PublicationsController extends Controller
 
         //Redirect
         return redirect()->route('publications.atc-resources')->with('success', 'ATC resource edited!');
+    }
+
+    public function moveAtcResource($id, $direction)
+    {
+        abort_unless(in_array($direction, ['up', 'down'], true), 404);
+        AtcResource::whereId($id)->firstOrFail();
+        AtcResource::move((int) $id, $direction);
+
+        return redirect()->route('publications.atc-resources');
     }
 
     public function deleteAtcResource($id)
