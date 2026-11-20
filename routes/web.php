@@ -380,6 +380,7 @@ Route::group(['middleware' => 'auth'], function () {
                     Route::get('/atc-resources', [PublicationsController::class, 'adminAtcResources'])->name('publications.atc-resources');
                     Route::post('/atc-resources/create', [PublicationsController::class, 'createAtcResourcePost'])->name('publications.atc-resources.create.post')->middleware('can:edit atc resources');
                     Route::post('/atc-resources/{id}/edit', [PublicationsController::class, 'editAtcResourcePost'])->name('publications.atc-resources.edit.post')->middleware('can:edit atc resources');
+                    Route::post('/atc-resources/{id}/move/{direction}', [PublicationsController::class, 'moveAtcResource'])->name('publications.atc-resources.move')->middleware('can:edit atc resources');
                     Route::get('/atc-resources/{id}/delete', [PublicationsController::class, 'deleteAtcResource'])->name('publications.atc-resources.delete')->middleware('can:edit atc resources');
                 });
 

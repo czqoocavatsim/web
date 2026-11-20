@@ -18,7 +18,13 @@
                     <div class="list-group-item">
                         <div class="d-flex w-100 flex-row">
                             <h4 class="mr-auto">{{$resource->title}}</h4>
-                            <div>
+                            <div class="d-flex align-items-center">
+                                @foreach(['up' => 'fa-arrow-up', 'down' => 'fa-arrow-down'] as $dir => $icon)
+                                    <form action="{{route('publications.atc-resources.move', ['id' => $resource->id, 'direction' => $dir])}}" method="POST" class="d-inline">
+                                        @csrf
+                                        <button type="submit" class="btn btn-link blue-text p-0 mr-2" title="Move {{$dir}}" {{($dir == 'up' && $loop->parent->first) || ($dir == 'down' && $loop->parent->last) ? 'disabled' : ''}}><i class="fas {{$icon}}"></i></button>
+                                    </form>
+                                @endforeach
                                 <a href="" data-toggle="modal" data-target="#editAtcResource{{$resource->id}}Modal" class="blue-text"><i class="fas fa-pen"></i>   Edit</button></a>
                                 &nbsp;
                                 <a href="" class="red-text" data-toggle="modal" data-target="#deleteAtcResource{{$resource->id}}Modal"><i class="fa fa-times"></i>   Delete</button></a>
