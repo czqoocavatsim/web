@@ -113,4 +113,15 @@ class ExamServiceTest extends TestCase
         $this->assertEquals('2026-12-01 12:00:01', $this->service->nextAttemptAt($this->user, $this->exam)->toDateTimeString());
         Carbon::setTestNow();
     }
+
+    public function test_exam_is_seeded_with_a_60_minute_limit_and_expires_after_it()
+    {
+        $this->assertSame(60, (int) $this->exam->time_limit_minutes);
+        $this->exam->update(['active' => true]);
+        $attempt = $this->service->start($this->user, $this->exam);
+        $this->assertFalse($this->service->hasExpired($attempt));
+        $attempt->started_at = Carbon::now()->subMinutes(61);
+        $attempt->save();
+        $this->assertTrue($this->service->hasExpired($attempt->fresh()));
+    }
 }

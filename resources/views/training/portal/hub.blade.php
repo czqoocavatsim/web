@@ -31,7 +31,7 @@
 
     <h4 class="blue-text mb-3">Study material</h4>
     <div class="row mb-4">
-        @foreach ([['sop', 'SOP', 'fa-clipboard-list', 'Standard operating procedures for Gander Oceanic.'], ['manual', 'Training Manual', 'fa-book-open', 'What you will be taught and assessed on.'], ['knowledgebase', 'Knowledge Base', 'fa-book', 'Guides and reference pages.']] as [$k, $t, $ic, $d])
+        @foreach ([['sop', 'SOP', 'fa-clipboard-list', 'Standard operating procedures for the Gander and Shanwick OCAs.'], ['training_policy', 'Training Policy', 'fa-book-open', 'How training works and what you are assessed on.'], ['phraseology', 'Phraseology Sheet', 'fa-comments', 'Standard Gander Oceanic phraseology.'], ['currency_policy', 'Currency Policy', 'fa-calendar-check', 'Hours needed to stay current.'], ['knowledgebase', 'Knowledge Base', 'fa-book', 'Guides and reference pages.']] as [$k, $t, $ic, $d])
             <div class="col-md-4 mb-3">
                 <div class="list-group-item rounded p-3 h-100 z-depth-1 shadow-none">
                     <h5 class="fw-600"><i class="fas {{ $ic }} blue-text mr-2"></i>{{ $t }}</h5>

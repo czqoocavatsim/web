@@ -10,16 +10,18 @@ return [
     'discord_invite' => env('TRAINING_DISCORD_INVITE', 'https://discord.gg/nQKAFpf98J'),
 
     'links' => [
-        'sop' => env('TRAINING_SOP_URL'),
-        'manual' => env('TRAINING_MANUAL_URL'),
+        'sop' => env('TRAINING_SOP_URL', 'https://ganderoceanic.ca/assets/resources/files/atc/ShanwickEGGXGanderCZQOOceanicControlProcedures.pdf'),
+        'training_policy' => env('TRAINING_POLICY_URL', 'https://ganderoceanic.ca/assets/resources/files/policies/CZQOP2_Training_v3.1.pdf'),
+        'phraseology' => env('TRAINING_PHRASEOLOGY_URL', 'https://ganderoceanic.ca/assets/resources/files/atc/Gander_Oceanic_Phraseology_Sheet_1.1.pdf'),
+        'currency_policy' => env('TRAINING_CURRENCY_URL', 'https://ganderoceanic.ca/assets/resources/files/policies/CZQOP4_Currency_v1.5.pdf'),
         'knowledgebase' => env('TRAINING_KB_URL', 'https://knowledgebase.ganderoceanic.ca'),
     ],
 
+    // Set each video's url (mp4) and captions (.vtt) in .env once the files are hosted.
     'videos' => [
-        ['title' => 'Welcome: your path to the Oceanic endorsement', 'minutes' => 1.5, 'url' => env('TRAINING_VIDEO_1_URL'), 'captions' => env('TRAINING_VIDEO_1_CAPTIONS')],
-        ['title' => 'Application, exam and your live session', 'minutes' => 1.5, 'url' => env('TRAINING_VIDEO_2_URL'), 'captions' => env('TRAINING_VIDEO_2_CAPTIONS')],
-        ['title' => 'Oceanic basics: tracks, levels and clearances', 'minutes' => 3, 'url' => env('TRAINING_VIDEO_3_URL'), 'captions' => env('TRAINING_VIDEO_3_CAPTIONS')],
-        ['title' => 'What to expect in your live session', 'minutes' => 1.5, 'url' => env('TRAINING_VIDEO_4_URL'), 'captions' => env('TRAINING_VIDEO_4_CAPTIONS')],
-        ['title' => 'vNAAATS: the tool you will control with', 'minutes' => 2.5, 'url' => env('TRAINING_VIDEO_5_URL'), 'captions' => env('TRAINING_VIDEO_5_CAPTIONS')],
+        ['title' => 'Getting started and the airspace', 'minutes' => 8, 'url' => env('TRAINING_VIDEO_1_URL'), 'captions' => env('TRAINING_VIDEO_1_CAPTIONS')],
+        ['title' => 'Procedures', 'minutes' => 8, 'url' => env('TRAINING_VIDEO_2_URL'), 'captions' => env('TRAINING_VIDEO_2_CAPTIONS')],
+        ['title' => 'Communications and tools', 'minutes' => 7.5, 'url' => env('TRAINING_VIDEO_3_URL'), 'captions' => env('TRAINING_VIDEO_3_CAPTIONS')],
+        ['title' => 'The entrance exam: what to expect', 'minutes' => 1.5, 'url' => env('TRAINING_VIDEO_4_URL'), 'captions' => env('TRAINING_VIDEO_4_CAPTIONS')],
     ],
 ];

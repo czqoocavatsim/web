@@ -77,6 +77,7 @@ class CreateExamCentreTables extends Migration
             'questions_to_ask' => 20,
             'initial_retake_days' => 1,
             'subsequent_retake_days' => 7,
+            'time_limit_minutes' => 60,
             'created_at' => now(),
             'updated_at' => now(),
         ]);

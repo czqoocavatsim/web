@@ -204,7 +204,7 @@ Thank you!');
                 $discord->sendEmbedInTrainingThread($cid, "Exam Not Requested", 
 'Our records indicate that you have not requested, or completed your exam within a month of your Application being approved.
                 
-Please read the above message in order to understand how to request the exam.
+Please take the entrance exam in the exam centre, which you can reach from the Training Hub on the Gander Oceanic website.
                 
 Should you not request, and pass the exam within 60 days of your application being accepted, your training will be automatically terminated, and you will need to reapply to begin your training once more.
                 
