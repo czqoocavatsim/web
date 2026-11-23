@@ -187,6 +187,7 @@ Route::group(['middleware' => 'auth'], function () {
         Route::prefix('training')->group(function () {
 
             // Training hub
+            Route::get('me', [\App\Http\Controllers\Training\StudentPageController::class, 'show'])->name('training.me');
             Route::get('hub', [\App\Http\Controllers\Training\TrainingHubController::class, 'index'])->name('training.hub');
 
             // Entrance exam

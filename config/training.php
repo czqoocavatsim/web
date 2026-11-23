@@ -6,6 +6,9 @@
 | For a video, set 'url' (mp4 or other direct video file) and 'captions' (a .vtt file) once it has been produced.
 */
 return [
+    // Discord server where students talk with their instructor and each other.
+    'discord_invite' => env('TRAINING_DISCORD_INVITE', 'https://discord.gg/nQKAFpf98J'),
+
     'links' => [
         'sop' => env('TRAINING_SOP_URL'),
         'manual' => env('TRAINING_MANUAL_URL'),
