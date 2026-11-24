@@ -186,6 +186,17 @@ Route::group(['middleware' => 'auth'], function () {
         //Training
         Route::prefix('training')->group(function () {
 
+            // Training hub
+            Route::get('me', [\App\Http\Controllers\Training\StudentPageController::class, 'show'])->name('training.me');
+            Route::get('hub', [\App\Http\Controllers\Training\TrainingHubController::class, 'index'])->name('training.hub');
+
+            // Entrance exam
+            Route::get('exam', [\App\Http\Controllers\Training\ExamController::class, 'show'])->name('training.exam.show');
+            Route::post('exam/start', [\App\Http\Controllers\Training\ExamController::class, 'start'])->name('training.exam.start');
+            Route::get('exam/attempt/{attempt}', [\App\Http\Controllers\Training\ExamController::class, 'take'])->name('training.exam.take');
+            Route::post('exam/attempt/{attempt}', [\App\Http\Controllers\Training\ExamController::class, 'submit'])->name('training.exam.submit');
+            Route::get('exam/attempt/{attempt}/result', [\App\Http\Controllers\Training\ExamController::class, 'result'])->name('training.exam.result');
+
             // Applications
             Route::get('applications', [ApplicationsController::class, 'showAll'])->name('training.applications.showall');
             Route::get('applications/apply', [ApplicationsController::class, 'apply'])->name('training.applications.apply');
@@ -278,6 +289,16 @@ Route::group(['middleware' => 'auth'], function () {
                     Route::get('/solocertifications', [SoloCertificationsController::class, 'admin'])->name('solocertifications')->middleware('can:view roster admin');
                     Route::post('/solocertifications/add', [SoloCertificationsController::class, 'addSoloCertificationPost'])->name('solocertifications.add')->middleware('can:edit roster');
                     Route::get('/solocertifications/{cert_id}/revoke', [SoloCertificationsController::class, 'revokeSoloCert'])->name('solocertifications.revoke')->middleware('can:edit roster');
+
+                    //Exam centre
+                    Route::get('/exam', [\App\Http\Controllers\Training\ExamAdminController::class, 'index'])->name('exam')->middleware('can:view instructing admin');
+                    Route::group(['middleware' => 'role:Senior Staff|Administrator'], function () {
+                        Route::post('/exam/settings', [\App\Http\Controllers\Training\ExamAdminController::class, 'updateSettings'])->name('exam.settings');
+                        Route::post('/exam/questions', [\App\Http\Controllers\Training\ExamAdminController::class, 'storeQuestion'])->name('exam.questions.store');
+                        Route::post('/exam/questions/import', [\App\Http\Controllers\Training\ExamAdminController::class, 'import'])->name('exam.questions.import');
+                        Route::post('/exam/questions/{question}/toggle', [\App\Http\Controllers\Training\ExamAdminController::class, 'toggleQuestion'])->name('exam.questions.toggle');
+                        Route::post('/exam/questions/{question}/delete', [\App\Http\Controllers\Training\ExamAdminController::class, 'deleteQuestion'])->name('exam.questions.delete');
+                    });
 
                     //Controller Acknowledgements
                     Route::view('/acknowledgements', 'admin.training.acknowledgements.index')->name('acknowledgements');

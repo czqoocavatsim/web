@@ -114,6 +114,16 @@
                         </div>
                     </li>
                 </a> --}}
+                @can('view instructing admin')
+                <a class="myczqo-tab {{Request::is('admin/training/exam*') ? 'active' : ''}} no-click" data-myczqo-tab="none" href="{{route('training.admin.exam')}}">
+                    <li class="w-100">
+                        <div class="d-flex h-100 flex-row justify-content-left align-items-center">
+                            <i style="font-size: 1.6em; margin-right: 10px;" class="fas fa-file-signature fa-fw"></i>
+                            <span style="font-size: 1.1em;">Exam Centre</span>
+                        </div>
+                    </li>
+                </a>
+                @endcan
                 <a class="myczqo-tab {{Request::is('admin/training/acknowledgement*') ? 'active' : ''}} no-click" data-myczqo-tab="none" href="{{route('training.admin.acknowledgements')}}">
                     <li class="w-100">
                         <div class="d-flex h-100 flex-row justify-content-left align-items-center">

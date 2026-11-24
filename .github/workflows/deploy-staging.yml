@@ -1,0 +1,41 @@
+name: Deploy to staging
+
+# Deploys the `staging` branch to a separate copy of the site, never to production.
+# Needs these repository secrets (separate from the production ones): STAGING_HOST, STAGING_USER, STAGING_PASS
+on:
+  push:
+    branches: [ staging ]
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v2
+
+    - name: Copy repository contents via scp
+      uses: appleboy/scp-action@master
+      with:
+        HOST: ${{ secrets.STAGING_HOST }}
+        USERNAME: ${{ secrets.STAGING_USER }}
+        PASSWORD: ${{ secrets.STAGING_PASS }}
+        PORT: 22
+        source: ./
+        target: /var/www/staging.ganderoceanic.ca/
+
+    - name: Set permissions and migrate the STAGING database
+      uses: appleboy/ssh-action@master
+      with:
+        HOST: ${{ secrets.STAGING_HOST }}
+        USERNAME: ${{ secrets.STAGING_USER }}
+        PASSWORD: ${{ secrets.STAGING_PASS }}
+        PORT: 22
+        script: |
+          cd /var/www/staging.ganderoceanic.ca/
+          sudo chown -R gander:www-data .
+          sudo find . -type f -exec chmod 664 {} \;
+          sudo find . -type d -exec chmod 775 {} \;
+          sudo chgrp -R www-data storage bootstrap/cache
+          sudo chmod -R ug+rwx storage bootstrap/cache
+          sudo -u gander php artisan migrate --force
+          sudo -u gander php artisan view:clear

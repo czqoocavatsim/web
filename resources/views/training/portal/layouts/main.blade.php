@@ -22,6 +22,22 @@
                         </div>
                     </li>
                 </a>
+                <a class="myczqo-tab {{Request::is('training/me') ? 'active' : ''}} no-click" data-myczqo-tab="none" href="{{route('training.me')}}">
+                    <li class="w-100">
+                        <div class="d-flex h-100 flex-row justify-content-left align-items-center">
+                            <i style="font-size: 1.6em; margin-right: 10px;" class="fas fa-id-card fa-fw"></i>
+                            <span style="font-size: 1.1em;">My Student Page</span>
+                        </div>
+                    </li>
+                </a>
+                <a class="myczqo-tab {{Request::is('training/hub') ? 'active' : ''}} no-click" data-myczqo-tab="none" href="{{route('training.hub')}}">
+                    <li class="w-100">
+                        <div class="d-flex h-100 flex-row justify-content-left align-items-center">
+                            <i style="font-size: 1.6em; margin-right: 10px;" class="fas fa-route fa-fw"></i>
+                            <span style="font-size: 1.1em;">Training Hub</span>
+                        </div>
+                    </li>
+                </a>
                 <a class="myczqo-tab {{Request::is('training/portal') ? 'active' : ''}} no-click" data-myczqo-tab="none" href="{{route('training.portal.index')}}">
                     <li class="w-100">
                         <div class="d-flex h-100 flex-row justify-content-left align-items-center">
@@ -139,6 +155,14 @@
                     </li>
                 </a>
                 @if(Auth::user()->studentProfile && Auth::user()->studentProfile->current)
+                <a class="myczqo-tab {{Request::is('training/exam*') ? 'active' : ''}} no-click" data-myczqo-tab="none" href="{{route('training.exam.show')}}">
+                    <li class="w-100">
+                        <div class="d-flex h-100 flex-row justify-content-left align-items-center">
+                            <i style="font-size: 1.6em; margin-right: 10px;" class="fas fa-file-signature fa-fw"></i>
+                            <span style="font-size: 1.1em;">Entrance Exam</span>
+                        </div>
+                    </li>
+                </a>
                 <a class="myczqo-tab {{Request::is('training/portal/actions') ? 'active' : ''}} no-click" data-myczqo-tab="none" href="{{route('training.portal.actions')}}">
                     <li class="w-100">
                         <div class="d-flex h-100 flex-row justify-content-left align-items-center">
