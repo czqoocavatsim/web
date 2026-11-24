@@ -117,284 +117,278 @@ Oceanic controllers never assign NARs.
 00:02:09.391 --> 00:02:11.600
 They're for your information only.
 
-00:02:12.900 --> 00:02:16.522
+00:02:12.900 --> 00:02:16.617
 Every aircraft entering the OCA needs an oceanic clearance.
 
-00:02:16.522 --> 00:02:21.311
+00:02:16.617 --> 00:02:21.531
 Pilots must request it at least thirty minutes before the oceanic entry point.
 
-00:02:21.311 --> 00:02:25.855
-They can ask on HF, on VHF if they're in range, or on the natTRAK website.
+00:02:21.531 --> 00:02:24.518
+They can ask on HF, on VHF if they're in range,
 
-00:02:25.855 --> 00:02:30.214
+00:02:24.518 --> 00:02:28.713
+on the natTRAK website, or by CPDLC to a controller using vNAAATS.
+
+00:02:28.713 --> 00:02:31.611
+We'll cover the CPDLC route in the last video.
+
+00:02:31.611 --> 00:02:36.084
 At some airfields near the NAT, a clearance is needed before departure.
 
-00:02:30.214 --> 00:02:34.512
+00:02:36.084 --> 00:02:40.494
 The SOP lists them, and VHF coverage is guaranteed at those airfields.
 
-00:02:34.512 --> 00:02:37.922
+00:02:40.494 --> 00:02:43.993
 And when an aircraft enters the Gander or Shanwick OCA,
 
-00:02:37.922 --> 00:02:40.713
+00:02:43.993 --> 00:02:46.857
 it squawks 2000, whatever code it had before.
 
-00:02:42.013 --> 00:02:46.446
-The request is called an RCL, and it arrives in your pending clearances table.
+00:02:48.157 --> 00:02:51.790
+The request is called an RCL, which stands for request for clearance,
 
-00:02:46.446 --> 00:02:49.345
+00:02:51.790 --> 00:02:54.739
+although most people just call it the oceanic clearance.
+
+00:02:54.739 --> 00:02:57.038
+It arrives in your pending clearances table.
+
+00:02:57.038 --> 00:02:59.703
 You can filter the table by track or by target OCA.
 
-00:02:49.345 --> 00:02:53.178
+00:02:59.703 --> 00:03:03.226
 The request shows the callsign, destination, track or random route,
 
-00:02:53.178 --> 00:02:57.927
+00:03:03.226 --> 00:03:07.591
 entry fix and time, requested level and Mach, and which station the pilot selected.
 
-00:02:59.227 --> 00:03:01.854
+00:03:08.891 --> 00:03:11.518
 Since December 2024, natTRAK sends the pilot an
 
-00:03:01.854 --> 00:03:04.258
+00:03:11.518 --> 00:03:13.922
 automatic acknowledgement of their request.
 
-00:03:04.258 --> 00:03:07.549
+00:03:13.922 --> 00:03:17.213
 That means you only issue a reclearance when there's a real
 
-00:03:07.549 --> 00:03:10.449
+00:03:17.213 --> 00:03:20.113
 conflict and you need to change what they asked for.
 
-00:03:10.449 --> 00:03:16.958
+00:03:20.113 --> 00:03:26.622
 When you do, you can change the level and Mach, add an entry time restriction such as pass the fix not before a time,
 
-00:03:16.958 --> 00:03:19.184
+00:03:26.622 --> 00:03:28.848
 or change the track or the random route.
 
-00:03:19.184 --> 00:03:22.476
+00:03:28.848 --> 00:03:32.140
 The conflict detection tool checks for lateral and vertical
 
-00:03:22.476 --> 00:03:25.099
+00:03:32.140 --> 00:03:34.763
 conflicts for ten minutes from the entry point.
 
-00:03:26.399 --> 00:03:29.007
+00:03:36.063 --> 00:03:38.671
 After every check, press Move to Processed List.
 
-00:03:29.007 --> 00:03:33.028
+00:03:38.671 --> 00:03:42.692
 This is what lets the conflict tool see that aircraft when others request.
 
-00:03:33.028 --> 00:03:35.962
+00:03:42.692 --> 00:03:45.626
 Then transmit the reclearance if you changed anything.
 
-00:03:35.962 --> 00:03:40.799
+00:03:45.626 --> 00:03:50.463
 Use Delete only if the pilot has disconnected or entered a wrong request and will refile.
 
-00:03:42.099 --> 00:03:46.787
+00:03:51.763 --> 00:03:56.451
 Pilots who are within fifteen minutes of their entry point can't request on the website.
 
-00:03:46.787 --> 00:03:51.032
+00:03:56.451 --> 00:04:00.696
 They ask by voice, and you enter their clearance into natTRAK manually as well,
 
-00:03:51.032 --> 00:03:53.020
+00:04:00.696 --> 00:04:02.684
 so the conflict tool still sees them.
 
-00:03:53.020 --> 00:03:56.558
+00:04:02.684 --> 00:04:06.222
 The form needs the callsign, destination, level in the format 360,
 
-00:03:56.558 --> 00:04:01.597
+00:04:06.222 --> 00:04:11.261
 Mach in the format 081, the track or random route, the entry fix and its ETA, and today's TMI.
 
-00:04:02.897 --> 00:04:03.673
+00:04:12.561 --> 00:04:13.465
 Now separation.
 
-00:04:03.673 --> 00:04:05.536
+00:04:13.465 --> 00:04:15.634
 On VATSIM, separation is simplified.
 
-00:04:05.536 --> 00:04:09.663
+00:04:15.634 --> 00:04:20.439
 Between every pair of aircraft in Class A you need at least one form: vertical,
 
-00:04:09.663 --> 00:04:10.916
+00:04:20.439 --> 00:04:21.899
 longitudinal or lateral.
 
-00:04:10.916 --> 00:04:12.779
+00:04:21.899 --> 00:04:24.067
 And the numbers depend on equipment.
 
-00:04:12.779 --> 00:04:15.986
+00:04:24.067 --> 00:04:27.802
 If both aircraft are ADS-B equipped, you use the ADS-B minima.
 
-00:04:15.986 --> 00:04:18.366
+00:04:27.802 --> 00:04:30.573
 If either one isn't, you use the other column.
 
-00:04:18.366 --> 00:04:20.350
+00:04:30.573 --> 00:04:33.557
+vNAAATS shows which category each aircraft is in,
+
+00:04:33.557 --> 00:04:36.236
+using the equipment code in its flight plan.
+
+00:04:36.236 --> 00:04:38.547
 ADS-B doesn't let you assign headings,
 
-00:04:20.350 --> 00:04:23.953
+00:04:38.547 --> 00:04:42.742
 so the practical tool to stop a late conflict is vertical separation.
 
-00:04:25.253 --> 00:04:26.051
+00:04:44.042 --> 00:04:44.840
 Vertical first.
 
-00:04:26.051 --> 00:04:28.975
+00:04:44.840 --> 00:04:47.764
 Up to flight level two-nine-zero, it's a thousand feet.
 
-00:04:28.975 --> 00:04:36.185
+00:04:47.764 --> 00:04:54.974
 Above it, it's two thousand, except a thousand feet can be used between flight level two-nine-zero and four-one-zero for RVSM aircraft,
 
-00:04:36.185 --> 00:04:41.099
+00:04:54.974 --> 00:04:59.888
 and on VATSIM all aircraft above flight level two-nine-zero are assumed to be RVSM approved.
 
-00:04:41.099 --> 00:04:42.978
+00:04:59.888 --> 00:05:01.767
 In a cruise climb or a level block,
 
-00:04:42.978 --> 00:04:46.523
+00:05:01.767 --> 00:05:05.311
 the aircraft is treated as occupying every level in the clearance.
 
-00:04:47.823 --> 00:04:48.243
+00:05:06.611 --> 00:05:07.031
 Lateral.
 
-00:04:48.243 --> 00:04:54.421
+00:05:07.031 --> 00:05:13.209
 Parallel or non-intersecting tracks are separated if they are at least nineteen nautical miles apart for ADS-B pairs,
 
-00:04:54.421 --> 00:04:56.955
+00:05:13.209 --> 00:05:15.744
 and sixty miles, or one degree, for other pairs.
 
-00:04:56.955 --> 00:05:00.551
+00:05:15.744 --> 00:05:19.340
 For the one-degree rule, there are gentle slope rules that limit how
 
-00:05:00.551 --> 00:05:04.041
+00:05:19.340 --> 00:05:22.829
 much the tracks can change latitude over ten degrees of longitude.
 
-00:05:04.041 --> 00:05:06.980
+00:05:22.829 --> 00:05:25.769
 They matter only when one aircraft isn't ADS-B equipped.
 
-00:05:08.280 --> 00:05:11.698
+00:05:27.069 --> 00:05:30.487
 Tracks published in a NAT Track Message that go in the same
 
-00:05:11.698 --> 00:05:14.595
+00:05:30.487 --> 00:05:33.384
 direction are laterally separated for ADS-B pairs.
 
-00:05:14.595 --> 00:05:18.179
+00:05:33.384 --> 00:05:36.967
 Tracks flown under PBCS are closer together, at half a degree,
 
-00:05:18.179 --> 00:05:23.092
+00:05:36.967 --> 00:05:41.880
 and non-ADS-B aircraft on adjacent PBCS tracks aren't considered laterally separated.
 
-00:05:23.092 --> 00:05:26.479
+00:05:41.880 --> 00:05:45.268
 You may also hear about the strategic lateral offset, SLOP.
 
-00:05:26.479 --> 00:05:29.694
+00:05:45.268 --> 00:05:48.482
 Pilots may offset up to two miles to the right of track.
 
-00:05:29.694 --> 00:05:32.997
+00:05:48.482 --> 00:05:51.786
 They don't need a clearance, they don't need to tell you,
 
-00:05:32.997 --> 00:05:35.837
+00:05:51.786 --> 00:05:54.625
 and you don't have to consider it for separation.
 
-00:05:37.137 --> 00:05:37.839
+00:05:55.925 --> 00:05:56.628
 Longitudinal.
 
-00:05:37.839 --> 00:05:41.755
+00:05:56.628 --> 00:06:00.543
 For aircraft on the same or crossing tracks at less than ninety degrees,
 
-00:05:41.755 --> 00:05:46.758
+00:06:00.543 --> 00:06:05.546
 the minimum for ADS-B pairs is four minutes at the entry point and fifteen miles after that.
 
-00:05:46.758 --> 00:05:51.622
+00:06:05.546 --> 00:06:10.411
 For other pairs it's ten minutes on the same track and fifteen minutes on crossing tracks.
 
-00:05:52.922 --> 00:05:56.417
+00:06:11.711 --> 00:06:15.205
 The ten minutes can be reduced with the Mach number technique,
 
-00:05:56.417 --> 00:05:58.446
+00:06:15.205 --> 00:06:17.234
 if the following aircraft is slower.
 
-00:05:58.446 --> 00:06:01.713
+00:06:17.234 --> 00:06:20.501
 The gap shrinks by a minute for every point-zero-one Mach,
 
-00:06:01.713 --> 00:06:04.360
+00:06:20.501 --> 00:06:23.149
 down to five minutes at point-zero-six or more.
 
-00:06:04.360 --> 00:06:07.429
+00:06:23.149 --> 00:06:26.217
 It only matters when one aircraft isn't ADS-B equipped.
 
-00:06:08.729 --> 00:06:13.484
+00:06:27.517 --> 00:06:32.272
 On opposite-direction tracks, you can't establish longitudinal separation throughout.
 
-00:06:13.484 --> 00:06:18.127
+00:06:32.272 --> 00:06:36.916
 So establish vertical separation at least fifteen minutes before the aircraft meet.
 
-00:06:18.127 --> 00:06:22.813
+00:06:36.916 --> 00:06:41.601
 It's no longer needed once they've passed each other by five miles for ADS-B pairs,
 
-00:06:22.813 --> 00:06:24.281
+00:06:41.601 --> 00:06:43.069
 or ten minutes for others.
 
-00:06:25.581 --> 00:06:26.217
+00:06:44.369 --> 00:06:45.005
 Last, speed.
 
-00:06:26.217 --> 00:06:28.708
+00:06:45.005 --> 00:06:47.497
 Every oceanic clearance includes a Mach number.
 
-00:06:28.708 --> 00:06:32.136
+00:06:47.497 --> 00:06:50.925
 After oceanic entry you can tell a pilot to resume normal speed,
 
-00:06:32.136 --> 00:06:33.850
+00:06:50.925 --> 00:06:52.639
 so they fly their economy speed.
 
-00:06:33.850 --> 00:06:37.614
+00:06:52.639 --> 00:06:56.402
 They must tell you if the speed changes by point-zero-two Mach or more.
 
-00:06:37.614 --> 00:06:42.420
+00:06:56.402 --> 00:07:01.209
 It's best to do this only when the planned longitudinal separation is sixty miles or more,
 
-00:06:42.420 --> 00:06:44.717
+00:07:01.209 --> 00:07:03.505
 and you can always give a fixed Mach again.
 
-00:06:46.017 --> 00:06:48.126
+00:07:04.805 --> 00:07:06.915
 In oceanic airspace, any change to level,
 
-00:06:48.126 --> 00:06:52.654
+00:07:06.915 --> 00:07:11.443
 speed or route is a change to the oceanic clearance, so it must be issued as a revision.
 
-00:06:52.654 --> 00:06:55.207
+00:07:11.443 --> 00:07:13.995
 It can be a pilot request or your own instruction.
 
-00:06:55.207 --> 00:06:59.835
+00:07:13.995 --> 00:07:18.624
 A revision can come with a restriction, such as a level to be reached at or before a time,
 
-00:06:59.835 --> 00:07:02.303
+00:07:18.624 --> 00:07:21.092
 or a speed to cross a point at or before a time.
 
-00:07:02.303 --> 00:07:05.622
+00:07:21.092 --> 00:07:24.411
 You'll often ask the pilot to report leaving and report reaching.
 
-00:07:06.922 --> 00:07:08.185
-Finally, contingencies.
-
-00:07:08.185 --> 00:07:11.755
-A pilot needs a clearance to leave their route, even for weather.
-
-00:07:11.755 --> 00:07:15.675
-If they can't get one in time, they'll turn away from the track system,
-
-00:07:15.675 --> 00:07:22.024
-broadcast on one two one point five, and use a three-hundred-foot level change when more than five miles off track.
-
-00:07:22.024 --> 00:07:24.129
-If they can't keep to their clearance,
-
-00:07:24.129 --> 00:07:28.615
-they'll turn thirty degrees and fly an offset of five miles, and may squawk 7700.
-
-00:07:28.615 --> 00:07:31.608
-Keep the frequency clear, give them what help you can,
-
-00:07:31.608 --> 00:07:34.436
-and protect everyone else with vertical separation.
-
-00:07:35.736 --> 00:07:36.988
+00:07:25.711 --> 00:07:26.963
 That's procedures.
 
-00:07:36.988 --> 00:07:41.273
+00:07:26.963 --> 00:07:31.248
 In the final video, we'll cover communications and tools: HF,
 
-00:07:41.273 --> 00:07:44.013
+00:07:31.248 --> 00:07:33.988
 SELCAL, phraseology, CPDLC and vNAAATS.
