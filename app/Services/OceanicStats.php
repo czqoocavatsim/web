@@ -21,31 +21,45 @@ class OceanicStats
     {
         return Cache::remember('home_last24h', 120, function () {
             $now = Carbon::now();
-            $from = $now->copy()->subHours(24);
-
-            $movements = FlightLog::whereNotNull('save_details')->where('created_at', '>=', $from)->count();
-
-            $minutes = 0;
-            $positions = [];
-            $sessions = SessionLog::where('session_start', '<=', $now)
-                ->where(function ($q) use ($from) {
-                    $q->whereNull('session_end')->orWhere('session_end', '>=', $from);
-                })->get();
-            foreach ($sessions as $s) {
-                $start = $s->session_start->greaterThan($from) ? $s->session_start : $from;
-                $end = $s->session_end && $s->session_end->lessThan($now) ? $s->session_end : $now;
-                if ($end->greaterThan($start)) {
-                    $minutes += $start->diffInMinutes($end);
-                    $positions[$s->callsign] = true;
-                }
-            }
-
-            return [
-                'movements' => $movements,
-                'atc_hours' => round($minutes / 60, 1),
-                'positions' => count($positions),
-            ];
+            return self::between($now->copy()->subHours(24), $now);
         });
+    }
+
+    /** This calendar month so far: from 00:00 UTC on the 1st. */
+    public static function thisMonth(): array
+    {
+        return Cache::remember('home_thismonth', 300, function () {
+            $now = Carbon::now('UTC');
+            $from = $now->copy()->startOfMonth();
+            return self::between($from, $now) + ['since' => $from->format('j M')];
+        });
+    }
+
+    /** Movements, controller hours and distinct positions between two moments. */
+    private static function between(Carbon $from, Carbon $now): array
+    {
+        $movements = FlightLog::whereNotNull('save_details')->where('created_at', '>=', $from)->count();
+
+        $minutes = 0;
+        $positions = [];
+        $sessions = SessionLog::where('session_start', '<=', $now)
+            ->where(function ($q) use ($from) {
+                $q->whereNull('session_end')->orWhere('session_end', '>=', $from);
+            })->cursor();
+        foreach ($sessions as $s) {
+            $start = $s->session_start->greaterThan($from) ? $s->session_start : $from;
+            $end = $s->session_end && $s->session_end->lessThan($now) ? $s->session_end : $now;
+            if ($end->greaterThan($start)) {
+                $minutes += $start->diffInMinutes($end);
+                $positions[$s->callsign] = true;
+            }
+        }
+
+        return [
+            'movements' => $movements,
+            'atc_hours' => round($minutes / 60, 1),
+            'positions' => count($positions),
+        ];
     }
 
     /** Rough forecast, as last worked out by refreshForecast() (the web page only reads it, it never loads the data feed). */

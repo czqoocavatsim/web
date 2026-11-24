@@ -53,7 +53,7 @@ Route::view('/pilots', 'pilots.index');
 Route::view('/pilots/oceanic-clearance', 'pilots.oceanic-clearance')->name('pilots.oceanic-clearance');
 Route::view('/pilots/position-report', 'pilots.position-report')->name('pilots.position-report');
 Route::view('/pilots/tracks', 'pilots.tracks')->name('pilots.tracks');
-Route::view('/pilots/tracks/event', 'pilots.event-tracks')->name('pilots.event-tracks');
+Route::redirect('/pilots/tracks/event', '/pilots/tracks'); // the Event Tracks page was removed
 Route::view('/pilots/tracks/concorde', 'pilots.concorde-tracks')->name('pilots.concorde-tracks');
 Route::get('/policies', [PublicationsController::class, 'policies'])->name('policies');
 Route::get('/privacy', fn() => redirect(route('policies'), 301))->name('privacy');

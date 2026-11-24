@@ -62,31 +62,34 @@ class PrimaryViewsController extends Controller
             }
         }
 
-        [$last24, $forecast, $statsError] = $this->homeStats();
+        [$last24, $forecast, $statsError, $month] = $this->homeStats();
 
-        return view('index', compact('last24', 'forecast', 'statsError', 'controllers', 'news', 'certifications', 'topPilot', 'yearControllers', 'yearAircraft', 'topControllers', 'topAirlines', 'topPairAirports', 'nextEvent', 'ctpEvents', 'ctpAircraft', 'ctpMode'));
+        return view('index', compact('last24', 'month', 'forecast', 'statsError', 'controllers', 'news', 'certifications', 'topPilot', 'yearControllers', 'yearAircraft', 'topControllers', 'topAirlines', 'topPairAirports', 'nextEvent', 'ctpEvents', 'ctpAircraft', 'ctpMode'));
     }
 
     // The 24 hour and forecast numbers must never take the homepage down
     private function homeStats(): array
     {
         $last24 = null;
+        $month = null;
         $forecast = ['departing' => null, 'approaching' => null, 'total' => null];
         $error = null;
         try {
             $last24 = \App\Services\OceanicStats::last24h();
             $forecast = \App\Services\OceanicStats::forecast(6);
+            $month = \App\Services\OceanicStats::thisMonth();
         } catch (\Throwable $e) {
             $error = get_class($e) . ': ' . $e->getMessage() . ' @ ' . basename($e->getFile()) . ':' . $e->getLine();
             \Log::error('Homepage stats failed: ' . $error);
         }
-        return [$last24, $forecast, $error];
+        return [$last24, $forecast, $error, $month];
     }
 
     // General Homepage API Update
     public function homeUpdate()
     {
         $ctpAircraft = FIRInfo::all()->first();
+        $stats = $this->homeStats();
 
         return response()->json([
             'czqo' => $ctpAircraft->czqo,
@@ -95,8 +98,9 @@ class PrimaryViewsController extends Controller
             'kzny' => $ctpAircraft->kzny,
             'lppo' => $ctpAircraft->lppo,
             'bird' => $ctpAircraft->bird,
-            'last24' => $this->homeStats()[0],
-            'forecast' => $this->homeStats()[1],
+            'last24' => $stats[0],
+            'month' => $stats[3],
+            'forecast' => $stats[1],
         ]);
     }
 

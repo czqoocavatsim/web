@@ -152,7 +152,7 @@ class DiscordController extends Controller
         //Edit user
         $user->discord_user_id = $discord_user['id'];
         $user->discord_username = $discord_user['username'];
-        $user->discord_avatar = $discord_user['avatar'] ? 'https://cdn.discordapp.com/avatars/'.$discord_user['id'].'/'.$discord_user['avatar'].'.png' : null;
+        $user->discord_avatar = User::discordAvatarUrl($discord_user['id'], $discord_user['avatar'] ?? null);
         $user->save();
 
         return redirect()->route('my.index')->with('success', 'Linked with account '.$discord_user['username'].'! Please join our Discord!');

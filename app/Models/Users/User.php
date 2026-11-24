@@ -342,7 +342,26 @@ class User extends Authenticatable
      */
     public function getDiscordAvatar()
     {
-        return $this->discord_avatar;
+        // (older saved values ending in "/.png" came from a bug that stored an empty avatar hash)
+        if ($this->discord_avatar && substr($this->discord_avatar, -5) !== '/.png') {
+            return $this->discord_avatar;
+        }
+
+        // Discord users who never set a picture still have a default one
+        return $this->discord_user_id ? self::discordAvatarUrl($this->discord_user_id, null) : null;
+    }
+
+    /**
+     * Builds a Discord CDN avatar URL from a Discord user ID and avatar hash.
+     * With no avatar hash it returns Discord's default avatar for that user.
+     */
+    public static function discordAvatarUrl($discordId, $avatarHash = null): string
+    {
+        if ($avatarHash) {
+            return 'https://cdn.discordapp.com/avatars/'.$discordId.'/'.$avatarHash.'.png?size=128';
+        }
+
+        return 'https://cdn.discordapp.com/embed/avatars/'.(((int) $discordId >> 22) % 6).'.png';
     }
 
     public function genInitialAvatar()

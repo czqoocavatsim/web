@@ -46,7 +46,7 @@ class AddedAsStudent extends Notification implements ShouldQueue
                     ->subject('Added as CZQO Student')
                     ->line('You have been added as a Student at Gander Oceanic. You can now communicate with Instructors via Discord and schedule training sessions on our website.')
                     ->line('If you believe this is a mistake, please contact the Events & Training Director.')
-                    ->action('View Training Dashboard', 'TODO: url')
+                    ->action('View Training Dashboard', route('training.portal.index'))
                     ->salutation('Gander Oceanic OCA');
     }
 
