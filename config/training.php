@@ -17,11 +17,11 @@ return [
         'knowledgebase' => env('TRAINING_KB_URL', 'https://knowledgebase.ganderoceanic.ca'),
     ],
 
-    // Set each video's url (mp4) and captions (.vtt) in .env once the files are hosted.
+    // Videos and captions live in public/assets/resources/media/training/. Set the .env values only to host them elsewhere.
     'videos' => [
-        ['title' => 'Getting started and the airspace', 'minutes' => 8, 'url' => env('TRAINING_VIDEO_1_URL'), 'captions' => env('TRAINING_VIDEO_1_CAPTIONS')],
-        ['title' => 'Procedures', 'minutes' => 8, 'url' => env('TRAINING_VIDEO_2_URL'), 'captions' => env('TRAINING_VIDEO_2_CAPTIONS')],
-        ['title' => 'Communications and tools', 'minutes' => 7.5, 'url' => env('TRAINING_VIDEO_3_URL'), 'captions' => env('TRAINING_VIDEO_3_CAPTIONS')],
-        ['title' => 'The entrance exam: what to expect', 'minutes' => 1.5, 'url' => env('TRAINING_VIDEO_4_URL'), 'captions' => env('TRAINING_VIDEO_4_CAPTIONS')],
+        ['title' => 'Getting started and the airspace', 'minutes' => 8, 'url' => env('TRAINING_VIDEO_1_URL', '/assets/resources/media/training/1-getting-started-and-the-airspace.mp4'), 'captions' => env('TRAINING_VIDEO_1_CAPTIONS', '/assets/resources/media/training/1-getting-started-and-the-airspace.vtt')],
+        ['title' => 'Procedures', 'minutes' => 8, 'url' => env('TRAINING_VIDEO_2_URL', '/assets/resources/media/training/2-procedures.mp4'), 'captions' => env('TRAINING_VIDEO_2_CAPTIONS', '/assets/resources/media/training/2-procedures.vtt')],
+        ['title' => 'Communications and tools', 'minutes' => 7.5, 'url' => env('TRAINING_VIDEO_3_URL', '/assets/resources/media/training/3-communications-and-tools.mp4'), 'captions' => env('TRAINING_VIDEO_3_CAPTIONS', '/assets/resources/media/training/3-communications-and-tools.vtt')],
+        ['title' => 'The entrance exam: what to expect', 'minutes' => 1.5, 'url' => env('TRAINING_VIDEO_4_URL', '/assets/resources/media/training/4-entrance-exam.mp4'), 'captions' => env('TRAINING_VIDEO_4_CAPTIONS', '/assets/resources/media/training/4-entrance-exam.vtt')],
     ],
 ];
