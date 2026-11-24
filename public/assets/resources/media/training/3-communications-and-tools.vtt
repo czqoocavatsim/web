@@ -237,167 +237,194 @@ And at the boundary, use the right word: call for a radio station,
 00:04:15.958 --> 00:04:18.103
 contact for radar, monitor for UNICOM.
 
-00:04:19.403 --> 00:04:20.153
+00:04:19.403 --> 00:04:20.122
 Next, CPDLC.
 
-00:04:20.153 --> 00:04:23.214
+00:04:20.122 --> 00:04:23.059
 It's text messaging between pilot and controller.
 
-00:04:23.214 --> 00:04:26.462
+00:04:23.059 --> 00:04:24.816
+On VATSIM it isn't mandatory,
+
+00:04:24.816 --> 00:04:28.511
+but ADS-B equipped aircraft are assumed to be able to use it.
+
+00:04:28.511 --> 00:04:31.627
 On the network it runs over the Hoppie ACARS system.
 
-00:04:26.462 --> 00:04:30.710
+00:04:31.627 --> 00:04:35.702
 You need your own Hoppie logon code, which you get at hoppie dot nl.
 
-00:04:32.010 --> 00:04:38.889
+00:04:37.002 --> 00:04:43.881
 In vNAAATS, open the CPDLC drawer, enter your code, and the station is chosen from your position: CZQX for Gander,
 
-00:04:38.889 --> 00:04:41.543
+00:04:43.881 --> 00:04:46.535
 EGGX for Shanwick, and NATX for the bandbox.
 
-00:04:41.543 --> 00:04:44.002
+00:04:46.535 --> 00:04:48.994
 Only one controller can use each station.
 
-00:04:44.002 --> 00:04:46.239
+00:04:48.994 --> 00:04:51.231
 If you use the Topsky plugin instead,
 
-00:04:46.239 --> 00:04:51.317
+00:04:51.231 --> 00:04:56.309
 turn Auto-accept logon off, so no aircraft logs on before you've made voice contact.
 
-00:04:52.617 --> 00:04:57.284
+00:04:57.609 --> 00:05:02.276
 The rule is simple: voice contact and a SELCAL check first, then accept the logon.
 
-00:04:57.284 --> 00:05:00.187
+00:05:02.276 --> 00:05:05.179
 A new logon plays a sound and flashes the callsign.
 
-00:05:00.187 --> 00:05:04.001
+00:05:05.179 --> 00:05:08.993
 A logged-on aircraft has solid square brackets around its callsign.
 
-00:05:04.001 --> 00:05:08.270
+00:05:08.993 --> 00:05:13.262
 From then on, the level and Mach you change are sent to the pilot by CPDLC.
 
-00:05:08.270 --> 00:05:11.685
+00:05:13.262 --> 00:05:16.677
 Brackets show on the new data until the pilot answers WILCO.
 
-00:05:11.685 --> 00:05:13.905
+00:05:16.677 --> 00:05:18.897
 If they say UNABLE, the change reverts.
 
-00:05:13.905 --> 00:05:16.837
+00:05:18.897 --> 00:05:21.829
 If you've already agreed a change on the frequency,
 
-00:05:16.837 --> 00:05:19.768
+00:05:21.829 --> 00:05:24.760
 choose the voice option so you don't send it twice.
 
-00:05:21.068 --> 00:05:24.865
+00:05:26.060 --> 00:05:29.857
 You can reply with quick buttons, such as unable, standby and roger.
 
-00:05:24.865 --> 00:05:29.499
+00:05:29.857 --> 00:05:34.491
 To hand off, choose the next controller, and the pilot is sent the contact message.
 
-00:05:29.499 --> 00:05:31.751
+00:05:34.491 --> 00:05:36.743
 When no further controller is available,
 
-00:05:31.751 --> 00:05:36.535
+00:05:36.743 --> 00:05:41.527
 use the UNICOM message, and let the pilot answer before you end the CPDLC connection.
 
-00:05:37.835 --> 00:05:40.403
+00:05:42.827 --> 00:05:46.251
+Pilots can also request their oceanic clearance by CPDLC.
+
+00:05:46.251 --> 00:05:49.767
+Only controllers using vNAAATS can receive these requests,
+
+00:05:49.767 --> 00:05:52.920
+and you can use them instead of the natTRAK website.
+
+00:05:52.920 --> 00:05:57.636
+The request arrives by CPDLC, and you then write it into natTRAK from vNAAATS,
+
+00:05:57.636 --> 00:06:02.472
+so the conflict tool still sees the aircraft, and issue the clearance as normal.
+
+00:06:02.472 --> 00:06:06.772
+If you are taking requests this way, put it in your controller details,
+
+00:06:06.772 --> 00:06:10.042
+so pilots know: Oceanic Clearance via CPDLC available.
+
+00:06:11.342 --> 00:06:13.910
 Now vNAAATS, the toolset you'll use to control.
 
-00:05:40.403 --> 00:05:44.699
+00:06:13.910 --> 00:06:18.207
 It has three parts that share one set of flight data: the Flight Data Display,
 
-00:05:44.699 --> 00:05:47.068
+00:06:18.207 --> 00:06:20.576
 a EuroScope plugin, and the vNAAATS server.
 
-00:05:47.068 --> 00:05:50.051
+00:06:20.576 --> 00:06:23.558
 Because of that, every controller sees the same level,
 
-00:05:50.051 --> 00:05:52.149
+00:06:23.558 --> 00:06:25.657
 Mach, track and SELCAL within seconds.
 
-00:05:53.449 --> 00:05:56.282
+00:06:26.957 --> 00:06:29.789
 The Flight Data Display, the FDD, is where you work.
 
-00:05:56.282 --> 00:05:59.713
+00:06:29.789 --> 00:06:33.220
 Every oceanic flight is a strip, grouped by track or entry fix.
 
-00:05:59.713 --> 00:06:04.615
+00:06:33.220 --> 00:06:38.122
 You can change flight data, track and transfer aircraft, send SELCAL checks and run CPDLC.
 
-00:06:04.615 --> 00:06:06.739
+00:06:38.122 --> 00:06:40.246
 Click a callsign for the aircraft menu.
 
-00:06:06.739 --> 00:06:09.190
+00:06:40.246 --> 00:06:42.697
 The display doesn't check separation for you.
 
-00:06:09.190 --> 00:06:10.388
+00:06:42.697 --> 00:06:43.895
 That's still your job.
 
-00:06:11.688 --> 00:06:15.943
+00:06:45.195 --> 00:06:49.451
 To get started, get your personal key at vnaaats dot com slash get-key.
 
-00:06:15.943 --> 00:06:20.558
+00:06:49.451 --> 00:06:54.066
 Gander controllers can also take it from their profile on the Gander website.
 
-00:06:20.558 --> 00:06:21.817
+00:06:54.066 --> 00:06:55.324
 It lasts ninety days.
 
-00:06:21.817 --> 00:06:24.841
+00:06:55.324 --> 00:06:58.348
 Install FDD for Windows, which sets up the plugin,
 
-00:06:24.841 --> 00:06:28.410
+00:06:58.348 --> 00:07:01.917
 the airline list and the font, and opens EuroScope for you.
 
-00:06:28.410 --> 00:06:32.006
+00:07:01.917 --> 00:07:05.513
 Follow the setup screen, and it takes about fifteen minutes.
 
-00:06:32.006 --> 00:06:37.204
+00:07:05.513 --> 00:07:10.711
 Then each day, open the app, connect to VATSIM as an oceanic position such as NAT_FSS,
 
-00:06:37.204 --> 00:06:39.138
+00:07:10.711 --> 00:07:12.645
 and the display opens by itself.
 
-00:06:40.438 --> 00:06:44.771
+00:07:13.945 --> 00:07:18.279
 The natTRAK boxes show pending and cleared requests, with a sound for new requests.
 
-00:06:44.771 --> 00:06:49.504
+00:07:18.279 --> 00:07:23.012
 The display can also send the pilot an automatic reminder to request clearance on natTRAK,
 
-00:06:49.504 --> 00:06:51.976
+00:07:23.012 --> 00:07:25.483
 at least thirty minutes before the entry point.
 
-00:06:51.976 --> 00:06:55.709
+00:07:25.483 --> 00:07:29.217
 If something goes wrong, check the problems page in the Knowledge Base,
 
-00:06:55.709 --> 00:06:59.233
+00:07:29.217 --> 00:07:32.740
 and the full manual and videos are at vnaaats dot com slash manual.
 
-00:07:00.533 --> 00:07:01.499
+00:07:34.040 --> 00:07:35.007
 That's everything.
 
-00:07:01.499 --> 00:07:04.155
+00:07:35.007 --> 00:07:37.662
 When you pass the exam, submit your availability,
 
-00:07:04.155 --> 00:07:07.461
+00:07:37.662 --> 00:07:40.968
 and an instructor will book your live session on the network.
 
-00:07:07.461 --> 00:07:12.056
+00:07:40.968 --> 00:07:45.564
 Under a shared agreement with VATSIM UK, you're trained for both Gander and Shanwick,
 
-00:07:12.056 --> 00:07:15.463
+00:07:45.564 --> 00:07:48.970
 so your live session is taken on NAT_FSS and covers both sides.
 
-00:07:15.463 --> 00:07:17.635
+00:07:48.970 --> 00:07:51.142
 Bring what you've learned: the airspace,
 
-00:07:17.635 --> 00:07:20.404
+00:07:51.142 --> 00:07:53.911
 the routes, separation, phraseology and your tools.
 
-00:07:20.404 --> 00:07:23.059
+00:07:53.911 --> 00:07:56.567
 The instructor will guide you, and when you pass,
 
-00:07:23.059 --> 00:07:26.311
+00:07:56.567 --> 00:07:59.819
 you're given your Oceanic endorsement and your Discord role.
 
-00:07:26.311 --> 00:07:27.385
+00:07:59.819 --> 00:08:00.893
 Welcome to the team.
