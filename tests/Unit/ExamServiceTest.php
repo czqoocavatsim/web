@@ -124,4 +124,20 @@ class ExamServiceTest extends TestCase
         $attempt->save();
         $this->assertTrue($this->service->hasExpired($attempt->fresh()));
     }
+
+    public function test_staff_notification_never_breaks_a_result()
+    {
+        // No recipients set: nothing happens
+        $this->exam->update(['active' => true, 'notify_cids' => null]);
+        $a = $this->service->start($this->user, $this->exam);
+        $done = $this->service->submit($a, []);
+        $this->assertSame('failed', $done->status);
+
+        // Recipients set but no Discord token/linked accounts: still returns the result, no exception
+        $this->exam->update(['notify_cids' => '1000001,1000002']);
+        Carbon::setTestNow(Carbon::now()->addDays(2));
+        $b = $this->service->start($this->user, $this->exam);
+        $this->assertSame('failed', $this->service->submit($b, [])->status);
+        Carbon::setTestNow();
+    }
 }

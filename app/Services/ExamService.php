@@ -134,8 +134,35 @@ class ExamService
         if ($attempt->status === 'passed') {
             $this->afterPass($attempt);
         }
+        $this->notifyStaff($attempt);
 
         return $attempt;
+    }
+
+    /** Discord DM to the staff listed in the exam settings (e.g. the Training Manager) for every result. Never affects the result. */
+    public function notifyStaff(ExamAttempt $attempt): void
+    {
+        try {
+            $exam = $attempt->exam;
+            $cids = array_filter(array_map('intval', explode(',', (string) $exam->notify_cids)));
+            if (! $cids) {
+                return;
+            }
+            $user = $attempt->user;
+            $passed = $attempt->status === 'passed';
+            $number = ExamAttempt::where('exam_id', $exam->id)->where('user_id', $attempt->user_id)->where('id', '<=', $attempt->id)->count();
+            $mins = $attempt->started_at && $attempt->submitted_at ? max(1, (int) round($attempt->started_at->diffInSeconds($attempt->submitted_at) / 60)) : null;
+            $title = 'Entrance exam '.($passed ? 'PASSED' : 'FAILED').': '.$user->fullName('FLC');
+            $body = 'Score: '.rtrim(rtrim(number_format($attempt->score_percent, 2), '0'), '.').'% ('.$attempt->correct_count.'/'.$attempt->total_questions.', pass mark '.$attempt->pass_percentage.'%)'
+                ."\nAttempt: ".$number.($mins ? "\nTime taken: ".$mins.' min' : '')
+                .($passed ? "\nStatus moved to Ready For Pick-Up." : "\nThey can retake from ".optional($this->nextAttemptAt($user, $exam))->format('j M Y').'.');
+            $discord = new DiscordClient();
+            foreach (User::whereIn('id', $cids)->whereNotNull('discord_user_id')->get() as $staff) {
+                $discord->sendDM($staff->discord_user_id, $title, $body);
+            }
+        } catch (\Throwable $e) {
+            Log::warning('Exam result: staff Discord notification failed: '.$e->getMessage());
+        }
     }
 
     /** Awaiting Exam -> Ready For Pick-Up, then tell Discord. Failures here never undo the result. */

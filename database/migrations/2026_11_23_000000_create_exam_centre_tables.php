@@ -19,6 +19,7 @@ class CreateExamCentreTables extends Migration
             $table->unsignedSmallInteger('initial_retake_days')->default(1);
             $table->unsignedSmallInteger('subsequent_retake_days')->default(7);
             $table->unsignedSmallInteger('time_limit_minutes')->nullable(); // null = untimed
+            $table->string('notify_cids')->nullable(); // staff CIDs (comma separated) who get a Discord DM for every result
             $table->timestamps();
         });
 

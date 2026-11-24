@@ -8,7 +8,7 @@ class Exam extends Model
 {
     protected $fillable = [
         'name', 'slug', 'active', 'pass_percentage', 'questions_to_ask',
-        'initial_retake_days', 'subsequent_retake_days', 'time_limit_minutes',
+        'initial_retake_days', 'subsequent_retake_days', 'time_limit_minutes', 'notify_cids',
     ];
 
     protected $casts = ['active' => 'boolean'];
