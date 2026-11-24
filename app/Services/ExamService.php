@@ -145,7 +145,8 @@ class ExamService
         try {
             $exam = $attempt->exam;
             $cids = array_filter(array_map('intval', explode(',', (string) $exam->notify_cids)));
-            if (! $cids) {
+            $channel = preg_replace('/\D/', '', (string) $exam->notify_channel_id);
+            if (! $cids && ! $channel) {
                 return;
             }
             $user = $attempt->user;
@@ -157,6 +158,13 @@ class ExamService
                 ."\nAttempt: ".$number.($mins ? "\nTime taken: ".$mins.' min' : '')
                 .($passed ? "\nStatus moved to Ready For Pick-Up." : "\nThey can retake from ".optional($this->nextAttemptAt($user, $exam))->format('j M Y').'.');
             $discord = new DiscordClient();
+            if ($channel) {
+                try {
+                    $discord->sendMessageWithEmbed($channel, $title, $body);
+                } catch (\Throwable $e) {
+                    Log::warning('Exam result: could not post to the results channel: '.$e->getMessage());
+                }
+            }
             foreach (User::whereIn('id', $cids)->whereNotNull('discord_user_id')->get() as $staff) {
                 $discord->sendDM($staff->discord_user_id, $title, $body);
             }

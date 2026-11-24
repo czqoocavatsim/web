@@ -34,10 +34,12 @@ class ExamAdminController extends Controller
             'initial_retake_days' => 'required|integer|min:0|max:365',
             'subsequent_retake_days' => 'required|integer|min:0|max:365',
             'time_limit_minutes' => 'nullable|integer|min:1|max:1440',
+            'notify_channel_id' => ['nullable', 'string', 'max:32', 'regex:/^[0-9]*$/'],
             'notify_cids' => ['nullable', 'string', 'max:255', 'regex:/^[0-9,\s]*$/'],
         ]);
         // Keep only the CIDs, comma separated
         $data['notify_cids'] = implode(',', array_unique(preg_split('/[^0-9]+/', (string) ($data['notify_cids'] ?? ''), -1, PREG_SPLIT_NO_EMPTY))) ?: null;
+        $data['notify_channel_id'] = ($data['notify_channel_id'] ?? '') !== '' ? $data['notify_channel_id'] : null;
         $exam = $this->exam();
         $exam->update($data + ['active' => $request->boolean('active')]);
 
