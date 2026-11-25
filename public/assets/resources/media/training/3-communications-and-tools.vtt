@@ -1,430 +1,538 @@
 WEBVTT
 
-00:00:04.300 --> 00:00:05.882
+00:00:04.300 --> 00:00:05.836
 Welcome to the last video.
 
-00:00:05.882 --> 00:00:08.925
+00:00:05.836 --> 00:00:08.789
 It covers communications and the tools you'll use.
 
-00:00:08.925 --> 00:00:09.899
+00:00:08.789 --> 00:00:09.735
 First, HF radio.
 
-00:00:09.899 --> 00:00:15.011
+00:00:09.735 --> 00:00:14.697
 VHF is clear, but it works only in line of sight, about two hundred and fifty miles.
 
-00:00:15.011 --> 00:00:17.347
+00:00:14.697 --> 00:00:16.964
 Over the ocean, aircraft use HF radio,
 
-00:00:17.347 --> 00:00:21.158
+00:00:16.964 --> 00:00:20.663
 which bounces off the ionosphere and carries over the horizon.
 
-00:00:21.158 --> 00:00:22.376
+00:00:20.663 --> 00:00:21.844
 The price is static.
 
-00:00:22.376 --> 00:00:24.775
-On VATSIM, many aircraft can't tune HF,
+00:00:21.844 --> 00:00:23.262
+HF isn't used on VATSIM.
 
-00:00:24.775 --> 00:00:27.975
-so every oceanic position has a VHF alias frequency.
+00:00:23.262 --> 00:00:26.785
+Instead, every oceanic position has an alias VHF frequency,
 
-00:00:27.975 --> 00:00:32.296
-Pilots tune that, and the audio software treats it as the HF frequency.
+00:00:26.785 --> 00:00:28.756
+which pilots tune in place of HF.
 
-00:00:32.296 --> 00:00:34.609
-You'll see both in the position table.
+00:00:28.756 --> 00:00:33.222
+Gander is one-three-one-point-seven, Shanwick is one-three-one-point-eight,
 
-00:00:35.909 --> 00:00:40.053
+00:00:33.222 --> 00:00:36.081
+and the NAT bandbox is one-three-one-point-nine.
+
+00:00:36.081 --> 00:00:38.385
+You'll find them in the position table.
+
+00:00:39.685 --> 00:00:43.891
 Even pilots who plan to use CPDLC must first check in with you by voice.
 
-00:00:40.053 --> 00:00:42.010
+00:00:43.891 --> 00:00:45.877
 That call includes a SELCAL check.
 
-00:00:42.010 --> 00:00:46.442
+00:00:45.877 --> 00:00:50.376
 SELCAL tells a pilot you want to speak to them, so they can turn the HF down.
 
-00:00:46.442 --> 00:00:51.565
+00:00:50.376 --> 00:00:55.575
 In the real world, you trigger four tones, and the aircraft with that code gets an alert.
 
-00:00:51.565 --> 00:00:54.009
+00:00:55.575 --> 00:00:57.328
+Here is what that sounds like.
+
+00:00:57.328 --> 00:01:02.527
+[SELCAL tones.] Two pairs of tones, standing for the four letters of the aircraft's code.
+
+00:01:02.527 --> 00:01:05.008
 On VATSIM, the pilot client does that job,
 
-00:00:54.009 --> 00:00:56.860
+00:01:05.008 --> 00:01:07.902
 using the code the pilot entered when logging in.
 
-00:00:56.860 --> 00:01:00.256
+00:01:07.902 --> 00:01:11.349
 Check SELCAL on first contact with each oceanic controller.
 
-00:01:00.256 --> 00:01:05.379
+00:01:11.349 --> 00:01:16.548
 In EuroScope, type dot selcal followed by the code, or dot selcal and click the aircraft.
 
-00:01:05.379 --> 00:01:08.372
+00:01:16.548 --> 00:01:19.586
 In vNAAATS, use the SELCAL tab in the aircraft menu.
 
-00:01:09.672 --> 00:01:13.236
+00:01:20.886 --> 00:01:24.450
 Now phraseology, using the Gander Oceanic phraseology sheet.
 
-00:01:13.236 --> 00:01:17.216
+00:01:24.450 --> 00:01:28.430
 Oceanic phraseology differs from domestic in small, important ways.
 
-00:01:17.216 --> 00:01:19.135
+00:01:28.430 --> 00:01:30.349
 Say numbers one digit at a time,
 
-00:01:19.135 --> 00:01:23.573
+00:01:30.349 --> 00:01:34.787
 and letters from the phonetic alphabet, like Speedbird one-two-four Romeo.
 
-00:01:23.573 --> 00:01:25.652
+00:01:34.787 --> 00:01:36.866
 Say Mach as Mach decimal eight-six.
 
-00:01:25.652 --> 00:01:28.978
+00:01:36.866 --> 00:01:40.192
 Say the NAT track with its phonetic letter, track alpha.
 
-00:01:28.978 --> 00:01:31.915
+00:01:40.192 --> 00:01:43.129
 Say latitudes as two digits, like five-one north,
 
-00:01:31.915 --> 00:01:35.810
+00:01:43.129 --> 00:01:47.024
 and longitudes as two or three digits, like zero-three-zero west.
 
-00:01:35.810 --> 00:01:39.255
+00:01:47.024 --> 00:01:50.469
 Never use the words super or heavy in Gander and Shanwick.
 
-00:01:40.555 --> 00:01:43.373
+00:01:51.769 --> 00:01:54.587
 When you hand an aircraft over, the word matters.
 
-00:01:43.373 --> 00:01:45.348
+00:01:54.587 --> 00:01:56.562
 For another oceanic radio station,
 
-00:01:45.348 --> 00:01:49.124
+00:01:56.562 --> 00:02:00.338
 say call, as in call Shanwick Radio on one-three-one-point-eight.
 
-00:01:49.124 --> 00:01:54.070
+00:02:00.338 --> 00:02:05.284
 For a radar controller, say contact, as in contact Moncton on one-three-two-point-two.
 
-00:01:54.070 --> 00:01:55.681
+00:02:05.284 --> 00:02:06.895
 And for UNICOM, say monitor.
 
-00:01:56.981 --> 00:01:59.994
+00:02:08.195 --> 00:02:11.627
 Here is the clearance request, from the Gander sheet.
 
-00:01:59.994 --> 00:02:03.861
-The pilot calls: Gander Radio, ACA489, requesting oceanic clearance.
+00:02:11.627 --> 00:02:14.282
+Listen to how it sounds on the frequency.
 
-00:02:03.861 --> 00:02:05.567
-You answer: pass your message.
+00:02:14.282 --> 00:02:19.333
+Pilot: Gander Radio, Air Canada four-eight-nine, requesting oceanic clearance.
 
-00:02:05.567 --> 00:02:07.404
-The pilot gives the destination,
+00:02:19.333 --> 00:02:23.995
+Controller: Air Canada four-eight-nine, Gander Radio, pass your message.
 
-00:02:07.404 --> 00:02:11.537
-the track, the entry fix and estimate, and the level and Mach they want.
+00:02:23.995 --> 00:02:30.892
+Pilot: Gander Radio, Air Canada four-eight-nine, requests oceanic clearance to Boston via Nat Track alpha,
 
-00:02:11.537 --> 00:02:16.029
-You say: Gander Radio, oceanic clearance, and the pilot replies: ready to copy.
+00:02:30.892 --> 00:02:37.659
+estimating DOGAL at one-four-four-five, request flight level three-nine-zero and Mach decimal eight-six.
 
-00:02:16.029 --> 00:02:18.588
+00:02:37.659 --> 00:02:42.322
+Controller: Air Canada four-eight-nine, Gander Radio, oceanic clearance.
+
+00:02:42.322 --> 00:02:45.495
+Pilot: Ready to copy, Air Canada four-eight-nine.
+
+00:02:45.495 --> 00:02:48.409
 A short delay to check for conflicts is fine.
 
-00:02:18.588 --> 00:02:21.056
+00:02:48.409 --> 00:02:51.219
 If the clearance isn't what they asked for,
 
-00:02:21.056 --> 00:02:24.729
-say so first, for example oceanic clearance with a level change.
+00:02:51.219 --> 00:02:55.467
+say so first, for example, oceanic clearance with a level change.
 
-00:02:26.029 --> 00:02:29.515
-Then you issue it: Gander Radio clears ACA489 to Boston via DOGAL,
+00:02:56.767 --> 00:02:59.787
+Then you issue it, and the pilot reads it back.
 
-00:02:29.515 --> 00:02:34.057
-track alpha, from DOGAL maintain flight level three-nine-zero, Mach decimal eight-six.
+00:02:59.787 --> 00:03:06.697
+Controller: Air Canada four-eight-nine, Gander Radio clears Air Canada four-eight-nine to Boston via DOGAL,
 
-00:02:34.057 --> 00:02:37.363
-The pilot reads it back, and the readback must include the TMI.
+00:03:06.697 --> 00:03:12.251
+Track alpha, from DOGAL maintain flight level three-nine-zero, Mach decimal eight-six.
 
-00:02:37.363 --> 00:02:38.727
+00:03:12.251 --> 00:03:18.584
+Pilot: Cleared to Boston via DOGAL, Track alpha, from DOGAL maintain flight level three-nine-zero,
+
+00:03:18.584 --> 00:03:23.108
+Mach decimal eight-six, TMI one-five-zero, Air Canada four-eight-nine.
+
+00:03:23.108 --> 00:03:26.861
+Controller: Air Canada four-eight-nine, TMI one-five-zero,
+
+00:03:26.861 --> 00:03:32.360
+read back correct, return to previous frequency and call Gander Radio overhead DOGAL.
+
+00:03:32.360 --> 00:03:34.544
+The readback must include the TMI.
+
+00:03:34.544 --> 00:03:36.215
 If it doesn't, ask for it.
 
-00:02:38.727 --> 00:02:40.406
+00:03:36.215 --> 00:03:38.271
 You don't give the TMI yourself.
 
-00:02:40.406 --> 00:02:42.630
-When it's correct, say: read back correct,
-
-00:02:42.630 --> 00:02:46.125
-return to previous frequency and call Gander Radio overhead DOGAL.
-
-00:02:47.425 --> 00:02:52.199
+00:03:39.571 --> 00:03:44.344
 Random routes don't need a TMI, but you read out every waypoint in latitude and longitude,
 
-00:02:52.199 --> 00:02:54.002
+00:03:44.344 --> 00:03:46.147
 and the pilot reads them all back.
 
-00:02:54.002 --> 00:02:57.086
+00:03:46.147 --> 00:03:49.231
 For a Tango route, you clear the aircraft via Tango Route,
 
-00:02:57.086 --> 00:02:59.053
+00:03:49.231 --> 00:03:51.198
 routing, for example, LASNO to BEGAS.
 
-00:02:59.053 --> 00:03:02.659
+00:03:51.198 --> 00:03:54.805
 Time restrictions are added only when they're needed for separation,
 
-00:03:02.659 --> 00:03:05.735
+00:03:54.805 --> 00:03:57.881
 as in: cross MALOT not before time one-zero-zero-two Zulu.
 
-00:03:05.735 --> 00:03:06.945
+00:03:57.881 --> 00:03:59.091
 They must be read back.
 
-00:03:08.245 --> 00:03:10.235
+00:04:00.391 --> 00:04:02.993
 Now the first call on your frequency.
 
-00:03:10.235 --> 00:03:12.728
-An ADS-B equipped aircraft says: Gander Radio,
+00:04:02.993 --> 00:04:07.213
+An ADS-B equipped aircraft reports overhead its entry point.
 
-00:03:12.728 --> 00:03:16.902
-ACA489, overhead MALOT, flight level three-five-zero, Mach decimal eight-two.
-
-00:03:16.902 --> 00:03:19.699
+00:04:07.213 --> 00:04:10.870
 Check that the level and Mach match their clearance.
 
-00:03:19.699 --> 00:03:21.384
-Then reply with their position,
+00:04:10.870 --> 00:04:14.275
+Pilot: Gander Radio, Air Canada four-eight-nine,
 
-00:03:21.384 --> 00:03:24.645
-level and Mach, and tell them to standby for a SELCAL check.
+00:04:14.275 --> 00:04:19.169
+overhead MALOT, flight level three-five-zero, Mach decimal eight-two.
 
-00:03:24.645 --> 00:03:29.216
-After the check, say: roger, remain on SELCAL watch and no position reports required.
+00:04:19.169 --> 00:04:22.922
+Controller: Air Canada four-eight-nine, Gander Radio,
 
-00:03:30.516 --> 00:03:33.721
+00:04:22.922 --> 00:04:29.648
+position MALOT, flight level three-five-zero, Mach decimal eight-two, standby for SELCAL check.
+
+00:04:29.648 --> 00:04:34.501
+[SELCAL tones.] Pilot: SELCAL check okay, Air Canada four-eight-nine.
+
+00:04:34.501 --> 00:04:37.272
+Controller: Air Canada four-eight-nine,
+
+00:04:37.272 --> 00:04:41.534
+roger, remain on SELCAL watch, no position reports required.
+
+00:04:41.534 --> 00:04:43.433
+CPDLC is available at CZQX.
+
+00:04:43.433 --> 00:04:47.695
+After the SELCAL check, tell them to remain on SELCAL watch,
+
+00:04:47.695 --> 00:04:50.607
+and give them the station code for CPDLC.
+
+00:04:50.607 --> 00:04:55.671
+That's CZQX for Gander, EGGX for Shanwick, and NATX for the NAT bandbox.
+
+00:04:56.971 --> 00:05:00.526
 Aircraft that aren't ADS-B equipped check in the same way,
 
-00:03:33.721 --> 00:03:36.097
+00:05:00.526 --> 00:05:03.162
 but you ask them to pass a position report.
 
-00:03:36.097 --> 00:03:37.590
+00:05:03.162 --> 00:05:04.819
 They give the fix and time,
 
-00:03:37.590 --> 00:03:41.240
+00:05:04.819 --> 00:05:08.868
 the level, the next fix with its estimate, and the fix after that.
 
-00:03:41.240 --> 00:03:43.156
-You read it back, and they confirm.
+00:05:08.868 --> 00:05:14.149
+Controller: Air Canada four-eight-nine, Gander Radio, please pass your position report.
 
-00:03:43.156 --> 00:03:45.638
-Then they repeat the report at each waypoint,
+00:05:14.149 --> 00:05:18.908
+Pilot: Passing DINIM at time one-nine-five-nine, flight level three-five-zero,
 
-00:03:45.638 --> 00:03:49.831
+00:05:18.908 --> 00:05:26.229
+estimating five-one north zero-two-zero west at time two-zero-two-seven, five-two north zero-three-zero west thereafter.
+
+00:05:26.229 --> 00:05:32.445
+Controller: Air Canada four-eight-nine, Gander Radio copies position DINIM at time one-nine-five-nine,
+
+00:05:32.445 --> 00:05:41.587
+flight level three-five-zero, estimating five-one north zero-two-zero west at time two-zero-two-seven, five-two north zero-three-zero west thereafter.
+
+00:05:41.587 --> 00:05:44.036
+They repeat the report at each waypoint,
+
+00:05:44.036 --> 00:05:48.689
 and you give the next sector's details after their last report in your area.
 
-00:03:49.831 --> 00:03:52.375
+00:05:48.689 --> 00:05:51.511
 On VATSIM, voice position reports are optional
 
-00:03:52.375 --> 00:03:54.920
+00:05:51.511 --> 00:05:54.334
 for ADS-B aircraft and mandatory for the rest.
 
-00:03:54.920 --> 00:03:58.969
+00:05:54.334 --> 00:05:58.826
 A pilot can also call with a revised estimate, and you read that back too.
 
-00:04:00.269 --> 00:04:05.273
+00:06:00.126 --> 00:06:05.131
 For a level change, an ADS-B aircraft that asks to climb to flight level three-seven-zero
 
-00:04:05.273 --> 00:04:09.941
+00:06:05.131 --> 00:06:09.798
 hears: Gander Radio clears you to climb and maintain flight level three-seven-zero.
 
-00:04:09.941 --> 00:04:12.233
+00:06:09.798 --> 00:06:12.090
 For other aircraft, add: report reaching.
 
-00:04:12.233 --> 00:04:15.958
+00:06:12.090 --> 00:06:15.816
 And at the boundary, use the right word: call for a radio station,
 
-00:04:15.958 --> 00:04:18.103
+00:06:15.816 --> 00:06:17.961
 contact for radar, monitor for UNICOM.
 
-00:04:19.403 --> 00:04:20.122
+00:06:19.261 --> 00:06:19.984
 Next, CPDLC.
 
-00:04:20.122 --> 00:04:23.059
+00:06:19.984 --> 00:06:22.940
 It's text messaging between pilot and controller.
 
-00:04:23.059 --> 00:04:24.816
+00:06:22.940 --> 00:06:24.708
 On VATSIM it isn't mandatory,
 
-00:04:24.816 --> 00:04:28.511
+00:06:24.708 --> 00:06:28.428
 but ADS-B equipped aircraft are assumed to be able to use it.
 
-00:04:28.511 --> 00:04:31.627
+00:06:28.428 --> 00:06:31.565
 On the network it runs over the Hoppie ACARS system.
 
-00:04:31.627 --> 00:04:35.702
+00:06:31.565 --> 00:06:35.666
 You need your own Hoppie logon code, which you get at hoppie dot nl.
 
-00:04:37.002 --> 00:04:43.881
+00:06:36.966 --> 00:06:43.845
 In vNAAATS, open the CPDLC drawer, enter your code, and the station is chosen from your position: CZQX for Gander,
 
-00:04:43.881 --> 00:04:46.535
+00:06:43.845 --> 00:06:46.499
 EGGX for Shanwick, and NATX for the bandbox.
 
-00:04:46.535 --> 00:04:48.994
+00:06:46.499 --> 00:06:48.958
 Only one controller can use each station.
 
-00:04:48.994 --> 00:04:51.231
+00:06:48.958 --> 00:06:51.195
 If you use the Topsky plugin instead,
 
-00:04:51.231 --> 00:04:56.309
+00:06:51.195 --> 00:06:56.273
 turn Auto-accept logon off, so no aircraft logs on before you've made voice contact.
 
-00:04:57.609 --> 00:05:02.276
+00:06:57.573 --> 00:07:02.240
 The rule is simple: voice contact and a SELCAL check first, then accept the logon.
 
-00:05:02.276 --> 00:05:05.179
+00:07:02.240 --> 00:07:05.143
 A new logon plays a sound and flashes the callsign.
 
-00:05:05.179 --> 00:05:08.993
+00:07:05.143 --> 00:07:08.957
 A logged-on aircraft has solid square brackets around its callsign.
 
-00:05:08.993 --> 00:05:13.262
+00:07:08.957 --> 00:07:13.226
 From then on, the level and Mach you change are sent to the pilot by CPDLC.
 
-00:05:13.262 --> 00:05:16.677
+00:07:13.226 --> 00:07:16.641
 Brackets show on the new data until the pilot answers WILCO.
 
-00:05:16.677 --> 00:05:18.897
+00:07:16.641 --> 00:07:18.861
 If they say UNABLE, the change reverts.
 
-00:05:18.897 --> 00:05:21.829
+00:07:18.861 --> 00:07:21.793
 If you've already agreed a change on the frequency,
 
-00:05:21.829 --> 00:05:24.760
+00:07:21.793 --> 00:07:24.724
 choose the voice option so you don't send it twice.
 
-00:05:26.060 --> 00:05:29.857
+00:07:26.024 --> 00:07:29.821
 You can reply with quick buttons, such as unable, standby and roger.
 
-00:05:29.857 --> 00:05:34.491
+00:07:29.821 --> 00:07:34.455
 To hand off, choose the next controller, and the pilot is sent the contact message.
 
-00:05:34.491 --> 00:05:36.743
+00:07:34.455 --> 00:07:36.707
 When no further controller is available,
 
-00:05:36.743 --> 00:05:41.527
+00:07:36.707 --> 00:07:41.491
 use the UNICOM message, and let the pilot answer before you end the CPDLC connection.
 
-00:05:42.827 --> 00:05:46.251
+00:07:42.791 --> 00:07:46.215
 Pilots can also request their oceanic clearance by CPDLC.
 
-00:05:46.251 --> 00:05:49.767
+00:07:46.215 --> 00:07:49.731
 Only controllers using vNAAATS can receive these requests,
 
-00:05:49.767 --> 00:05:52.920
+00:07:49.731 --> 00:07:52.884
 and you can use them instead of the natTRAK website.
 
-00:05:52.920 --> 00:05:57.636
+00:07:52.884 --> 00:07:57.600
 The request arrives by CPDLC, and you then write it into natTRAK from vNAAATS,
 
-00:05:57.636 --> 00:06:02.472
+00:07:57.600 --> 00:08:02.436
 so the conflict tool still sees the aircraft, and issue the clearance as normal.
 
-00:06:02.472 --> 00:06:06.772
+00:08:02.436 --> 00:08:06.736
 If you are taking requests this way, put it in your controller details,
 
-00:06:06.772 --> 00:06:10.042
+00:08:06.736 --> 00:08:10.006
 so pilots know: Oceanic Clearance via CPDLC available.
 
-00:06:11.342 --> 00:06:13.910
+00:08:11.306 --> 00:08:13.874
 Now vNAAATS, the toolset you'll use to control.
 
-00:06:13.910 --> 00:06:18.207
+00:08:13.874 --> 00:08:18.171
 It has three parts that share one set of flight data: the Flight Data Display,
 
-00:06:18.207 --> 00:06:20.576
+00:08:18.171 --> 00:08:20.540
 a EuroScope plugin, and the vNAAATS server.
 
-00:06:20.576 --> 00:06:23.558
+00:08:20.540 --> 00:08:23.522
 Because of that, every controller sees the same level,
 
-00:06:23.558 --> 00:06:25.657
+00:08:23.522 --> 00:08:25.621
 Mach, track and SELCAL within seconds.
 
-00:06:26.957 --> 00:06:29.789
+00:08:26.921 --> 00:08:29.753
 The Flight Data Display, the FDD, is where you work.
 
-00:06:29.789 --> 00:06:33.220
+00:08:29.753 --> 00:08:33.184
 Every oceanic flight is a strip, grouped by track or entry fix.
 
-00:06:33.220 --> 00:06:38.122
+00:08:33.184 --> 00:08:38.086
 You can change flight data, track and transfer aircraft, send SELCAL checks and run CPDLC.
 
-00:06:38.122 --> 00:06:40.246
+00:08:38.086 --> 00:08:40.210
 Click a callsign for the aircraft menu.
 
-00:06:40.246 --> 00:06:42.697
+00:08:40.210 --> 00:08:42.661
 The display doesn't check separation for you.
 
-00:06:42.697 --> 00:06:43.895
+00:08:42.661 --> 00:08:43.859
 That's still your job.
 
-00:06:45.195 --> 00:06:49.451
+00:08:45.159 --> 00:08:48.895
 To get started, get your personal key at vnaaats dot com slash get-key.
 
-00:06:49.451 --> 00:06:54.066
+00:08:48.895 --> 00:08:52.946
 Gander controllers can also take it from their profile on the Gander website.
 
-00:06:54.066 --> 00:06:55.324
+00:08:52.946 --> 00:08:54.050
 It lasts ninety days.
 
-00:06:55.324 --> 00:06:58.348
+00:08:54.050 --> 00:08:56.705
 Install FDD for Windows, which sets up the plugin,
 
-00:06:58.348 --> 00:07:01.917
+00:08:56.705 --> 00:08:59.837
 the airline list and the font, and opens EuroScope for you.
 
-00:07:01.917 --> 00:07:05.513
+00:08:59.837 --> 00:09:02.994
 Follow the setup screen, and it takes about fifteen minutes.
 
-00:07:05.513 --> 00:07:10.711
-Then each day, open the app, connect to VATSIM as an oceanic position such as NAT_FSS,
+00:09:04.294 --> 00:09:05.771
+Keeping up to date is easy.
 
-00:07:10.711 --> 00:07:12.645
-and the display opens by itself.
+00:09:05.771 --> 00:09:08.423
+The latest updates are posted as messages in the
 
-00:07:13.945 --> 00:07:18.279
+00:09:08.423 --> 00:09:10.966
+vNAAATS section of the Gander Oceanic Discord.
+
+00:09:10.966 --> 00:09:14.575
+And with FDD for Windows, it will prompt you if there's an update.
+
+00:09:14.575 --> 00:09:17.692
+Confirm it, and it installs automatically within seconds.
+
+00:09:17.692 --> 00:09:21.555
+Once you have set up your EuroScope profile to use the vNAAATS plugin,
+
+00:09:21.555 --> 00:09:23.707
+make sure you save the profile on exit.
+
+00:09:25.007 --> 00:09:28.390
+We know that some controllers come from a domestic background,
+
+00:09:28.390 --> 00:09:31.008
+where EuroScope is the native controller client.
+
+00:09:31.008 --> 00:09:32.900
+vNAAATS is built with this in mind.
+
+00:09:32.900 --> 00:09:37.171
+EuroScope is only used as your connection to VATSIM, and as a visual reference.
+
+00:09:37.171 --> 00:09:39.549
+All the work is done from the strips in FDD.
+
+00:09:39.549 --> 00:09:42.335
+Your instructor will also show you some of the more
+
+00:09:42.335 --> 00:09:44.847
+technical features of FDD during your session.
+
+00:09:46.147 --> 00:09:49.516
+Please set up your EuroScope profile before your live session.
+
+00:09:49.516 --> 00:09:53.536
+You won't be able to test the connection until you're with the instructor.
+
+00:09:53.536 --> 00:09:59.395
+If your FDD shows awaiting a connection, and EuroScope shows the blue bar and a visual map of the NAT area,
+
+00:09:59.395 --> 00:10:00.654
+then you're good to go.
+
+00:10:01.954 --> 00:10:06.287
 The natTRAK boxes show pending and cleared requests, with a sound for new requests.
 
-00:07:18.279 --> 00:07:23.012
+00:10:06.287 --> 00:10:11.020
 The display can also send the pilot an automatic reminder to request clearance on natTRAK,
 
-00:07:23.012 --> 00:07:25.483
+00:10:11.020 --> 00:10:13.492
 at least thirty minutes before the entry point.
 
-00:07:25.483 --> 00:07:29.217
+00:10:13.492 --> 00:10:17.225
 If something goes wrong, check the problems page in the Knowledge Base,
 
-00:07:29.217 --> 00:07:32.740
+00:10:17.225 --> 00:10:20.749
 and the full manual and videos are at vnaaats dot com slash manual.
 
-00:07:34.040 --> 00:07:35.007
+00:10:22.049 --> 00:10:23.015
 That's everything.
 
-00:07:35.007 --> 00:07:37.662
+00:10:23.015 --> 00:10:25.671
 When you pass the exam, submit your availability,
 
-00:07:37.662 --> 00:07:40.968
+00:10:25.671 --> 00:10:28.977
 and an instructor will book your live session on the network.
 
-00:07:40.968 --> 00:07:45.564
+00:10:28.977 --> 00:10:33.572
 Under a shared agreement with VATSIM UK, you're trained for both Gander and Shanwick,
 
-00:07:45.564 --> 00:07:48.970
+00:10:33.572 --> 00:10:36.979
 so your live session is taken on NAT_FSS and covers both sides.
 
-00:07:48.970 --> 00:07:51.142
+00:10:36.979 --> 00:10:39.151
 Bring what you've learned: the airspace,
 
-00:07:51.142 --> 00:07:53.911
+00:10:39.151 --> 00:10:41.920
 the routes, separation, phraseology and your tools.
 
-00:07:53.911 --> 00:07:56.567
+00:10:41.920 --> 00:10:44.575
 The instructor will guide you, and when you pass,
 
-00:07:56.567 --> 00:07:59.819
+00:10:44.575 --> 00:10:47.827
 you're given your Oceanic endorsement and your Discord role.
 
-00:07:59.819 --> 00:08:00.893
+00:10:47.827 --> 00:10:48.901
 Welcome to the team.
