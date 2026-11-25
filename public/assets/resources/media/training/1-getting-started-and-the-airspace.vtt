@@ -183,377 +183,368 @@ Today in the real world, flights between flight level two-nine-zero
 00:03:27.186 --> 00:03:30.522
 and four-one-zero across most of the NAT must use datalink.
 
-00:03:31.822 --> 00:03:34.681
+00:03:31.822 --> 00:03:34.650
 The next big step came on the twenty-seventh of March,
 
-00:03:34.681 --> 00:03:39.711
+00:03:34.650 --> 00:03:39.626
 twenty nineteen, when Gander and Shanwick both began using space-based ADS-B in the real world.
 
-00:03:39.711 --> 00:03:45.628
+00:03:39.626 --> 00:03:45.479
 Satellites pick up the signal from each aircraft, which gives controllers real-time surveillance over the ocean,
 
-00:03:45.628 --> 00:03:51.598
+00:03:45.479 --> 00:03:51.385
 and lets them use separation of as little as fourteen to seventeen nautical miles for suitably equipped aircraft.
 
-00:03:52.898 --> 00:03:54.599
+00:03:52.685 --> 00:03:54.574
 So what does that mean on VATSIM?
 
-00:03:54.599 --> 00:03:59.237
+00:03:54.574 --> 00:03:59.726
 Datalink and CPDLC are not mandatory to cross the NAT here, as they are in the real world.
 
-00:03:59.237 --> 00:04:02.514
+00:03:59.726 --> 00:04:03.368
 Aircraft that aren't ADS-B equipped are welcome to fly the NAT,
 
-00:04:02.514 --> 00:04:04.648
+00:04:03.368 --> 00:04:05.737
 and they give you voice position reports.
 
-00:04:04.648 --> 00:04:09.255
+00:04:05.737 --> 00:04:10.856
 The simulation treats ADS-B equipped aircraft as if they had the real-world surveillance,
 
-00:04:09.255 --> 00:04:15.676
+00:04:10.856 --> 00:04:17.988
 datalink and electronic position reports, so their voice position reports are optional and the reduced separation can apply.
 
-00:04:15.676 --> 00:04:18.635
+00:04:17.988 --> 00:04:21.277
 The vNAAATS plugin shows you which type each aircraft is,
 
-00:04:18.635 --> 00:04:22.478
+00:04:21.277 --> 00:04:25.545
 using the equipment code in its flight plan, and a pilot may tell you too.
 
-00:04:22.478 --> 00:04:24.848
+00:04:25.545 --> 00:04:28.179
 Video two covers exactly how separation works.
 
-00:04:24.848 --> 00:04:29.332
+00:04:28.179 --> 00:04:33.159
 Position reports, estimates and procedures are still the foundation of oceanic control.
 
-00:04:29.332 --> 00:04:30.929
+00:04:33.159 --> 00:04:34.934
 Now let's go through the areas.
 
-00:04:32.229 --> 00:04:34.208
+00:04:36.234 --> 00:04:38.212
 Now the areas, starting with Gander.
 
-00:04:34.208 --> 00:04:37.835
+00:04:38.212 --> 00:04:41.839
 The Gander Oceanic FIR borders Shanwick along thirty degrees west.
 
-00:04:37.835 --> 00:04:42.368
+00:04:41.839 --> 00:04:46.373
 It borders Santa Maria at forty-five north, between thirty and forty degrees west,
 
-00:04:42.368 --> 00:04:46.957
+00:04:46.373 --> 00:04:50.962
 and New York Oceanic at forty-five north, between forty and fifty-one degrees west.
 
-00:04:46.957 --> 00:04:51.024
+00:04:50.962 --> 00:04:55.029
 On the land side, it borders Gander Domestic, Montreal, Edmonton and Nuuk.
 
-00:04:52.324 --> 00:04:57.470
+00:04:56.329 --> 00:05:01.475
 All the airspace in the FIR from flight level fifty-five up to unlimited is Class A.
 
-00:04:57.470 --> 00:05:00.411
+00:05:01.475 --> 00:05:04.415
 That's the Gander OCA, the Oceanic Control Area.
 
-00:05:00.411 --> 00:05:03.780
+00:05:04.415 --> 00:05:07.785
 Below flight level fifty-five, the airspace is Class G.
 
-00:05:05.080 --> 00:05:09.019
+00:05:09.085 --> 00:05:13.024
 One more area matters: the Gander Oceanic Transition Area, or GOTA.
 
-00:05:09.019 --> 00:05:12.930
+00:05:13.024 --> 00:05:16.935
 This is airspace that Gander Oceanic delegates to Gander Domestic,
 
-00:05:12.930 --> 00:05:16.485
+00:05:16.935 --> 00:05:20.490
 so the domestic radar controller handles it rather than you.
 
-00:05:16.485 --> 00:05:18.543
+00:05:20.490 --> 00:05:22.548
 Also remember the transition level.
 
-00:05:18.543 --> 00:05:22.893
+00:05:22.548 --> 00:05:26.898
 In the North Atlantic oceanic control areas it is flight level fifty-five.
 
-00:05:24.193 --> 00:05:25.375
+00:05:28.198 --> 00:05:29.379
 Now the Shanwick side.
 
-00:05:25.375 --> 00:05:28.352
+00:05:29.379 --> 00:05:32.357
 The Shanwick FIR borders Gander at thirty degrees west,
 
-00:05:28.352 --> 00:05:31.926
+00:05:32.357 --> 00:05:35.930
 Santa Maria at forty-five north, and Reykjavik at sixty-one north.
 
-00:05:31.926 --> 00:05:35.451
+00:05:35.930 --> 00:05:39.456
 On the eastern side it borders the domestic airspace of Scottish,
 
-00:05:35.451 --> 00:05:37.295
+00:05:39.456 --> 00:05:41.300
 Shannon, London, Brest and Madrid.
 
-00:05:37.295 --> 00:05:41.308
+00:05:41.300 --> 00:05:45.313
 As in Gander, the airspace from flight level fifty-five upward is Class A,
 
-00:05:41.308 --> 00:05:42.826
+00:05:45.313 --> 00:05:46.831
 and that's the Shanwick OCA.
 
-00:05:42.826 --> 00:05:44.652
+00:05:46.831 --> 00:05:48.657
 Below it, the airspace is Class G.
 
-00:05:45.952 --> 00:05:48.620
+00:05:49.957 --> 00:05:52.624
 Shanwick also delegates three transition areas,
 
-00:05:48.620 --> 00:05:51.798
+00:05:52.624 --> 00:05:55.803
 all above flight level fifty-five, to radar controllers.
 
-00:05:51.798 --> 00:05:53.898
+00:05:55.803 --> 00:05:57.903
 The Northern Oceanic Transition Area,
 
-00:05:53.898 --> 00:05:57.701
+00:05:57.903 --> 00:06:01.706
 NOTA, and the Shannon Oceanic Transition Area, SOTA, go to Shannon.
 
-00:05:57.701 --> 00:06:00.793
+00:06:01.706 --> 00:06:04.798
 The Brest Oceanic Transition Area, BOTA, goes to Brest.
 
-00:06:00.793 --> 00:06:02.952
+00:06:04.798 --> 00:06:06.956
 Just like the GOTA on the Gander side,
 
-00:06:02.952 --> 00:06:06.133
+00:06:06.956 --> 00:06:10.138
 these areas belong to the radar controllers, not to you.
 
-00:06:07.433 --> 00:06:11.826
+00:06:11.438 --> 00:06:15.831
 Gander Oceanic Control manages the en-route traffic in the Gander OCA.
 
-00:06:11.826 --> 00:06:16.910
+00:06:15.831 --> 00:06:20.915
 The main position is CZQO_FSS, and on the radio, Gander is known as Gander Radio.
 
-00:06:16.910 --> 00:06:19.065
+00:06:20.915 --> 00:06:23.070
 Shanwick follows the same pattern,
 
-00:06:19.065 --> 00:06:23.311
+00:06:23.070 --> 00:06:27.316
 with EGGX_CTR as its main position and the callsign Shanwick Radio.
 
-00:06:23.311 --> 00:06:27.809
+00:06:27.316 --> 00:06:31.814
 Each position has its own VHF alias frequency and its own HF frequency,
 
-00:06:27.809 --> 00:06:30.089
+00:06:31.814 --> 00:06:34.094
 and you'll find them all in the SOP.
 
-00:06:31.389 --> 00:06:34.792
+00:06:35.394 --> 00:06:38.797
 On major events, extra positions open on both sides: Alpha,
 
-00:06:34.792 --> 00:06:40.157
+00:06:38.797 --> 00:06:44.161
 Bravo, Charlie, Delta and Foxtrot, plus the Delivery positions that issue oceanic clearances.
 
-00:06:40.157 --> 00:06:44.397
+00:06:44.161 --> 00:06:48.402
 We'll only skim over these, because you'll rarely see them outside events.
 
-00:06:44.397 --> 00:06:45.715
+00:06:48.402 --> 00:06:49.720
 The SOP lists them all.
 
-00:06:45.715 --> 00:06:49.096
+00:06:49.720 --> 00:06:53.101
 Every Gander position uses the same callsign: Gander Radio.
 
-00:06:50.396 --> 00:06:51.767
+00:06:54.401 --> 00:06:55.771
 Two things to remember.
 
-00:06:51.767 --> 00:06:55.794
+00:06:55.771 --> 00:06:59.799
 CZQO_FSS must be staffed before any other Gander position can open,
 
-00:06:55.794 --> 00:06:58.620
+00:06:59.799 --> 00:07:02.624
 and on the Shanwick side, EGGX_CTR comes first.
 
-00:06:58.620 --> 00:07:01.301
+00:07:02.624 --> 00:07:05.306
 Then there's NAT_FSS, called the NAT Bandbox.
 
-00:07:01.301 --> 00:07:05.567
+00:07:05.306 --> 00:07:09.572
 When local controllers are offline, it covers both Shanwick and Gander,
 
-00:07:05.567 --> 00:07:08.691
+00:07:09.572 --> 00:07:12.695
 using whichever callsign fits where the aircraft is.
 
-00:07:08.691 --> 00:07:12.028
+00:07:12.695 --> 00:07:16.033
 It's also the position you'll use for your live session.
 
-00:07:13.328 --> 00:07:15.206
+00:07:17.333 --> 00:07:19.211
 Because NAT routes change every day,
 
-00:07:15.206 --> 00:07:18.389
+00:07:19.211 --> 00:07:22.393
 there are no published sector boundaries between controllers.
 
-00:07:18.389 --> 00:07:23.019
+00:07:22.393 --> 00:07:27.023
 If you split the airspace north and south, you agree the split with the other controller,
 
-00:07:23.019 --> 00:07:25.360
+00:07:27.023 --> 00:07:29.364
 then coordinate it with the adjacent sectors.
 
-00:07:25.360 --> 00:07:28.923
+00:07:29.364 --> 00:07:32.927
 It's also common to add a clearance controller or a track controller.
 
-00:07:30.223 --> 00:07:33.078
+00:07:34.227 --> 00:07:37.083
 Now the handoff points, starting on the Gander side.
 
-00:07:33.078 --> 00:07:35.220
+00:07:37.083 --> 00:07:39.225
 You'll hand traffic to five neighbours.
 
-00:07:35.220 --> 00:07:39.668
+00:07:39.225 --> 00:07:43.673
 To the north is Reykjavik, callsign Reykjavik Control, run by VATSIM Scandinavia.
 
-00:07:39.668 --> 00:07:43.832
+00:07:43.673 --> 00:07:47.837
 The minimum is ten nautical miles at and above flight level two-seven-zero,
 
-00:07:43.832 --> 00:07:44.665
+00:07:47.837 --> 00:07:48.670
 and five below.
 
-00:07:45.965 --> 00:07:48.235
+00:07:49.970 --> 00:07:52.239
 To the south-west is New York Oceanic,
 
-00:07:48.235 --> 00:07:51.997
+00:07:52.239 --> 00:07:56.002
 callsign New York Radio, run by New York ARTCC, part of VATUSA.
 
-00:07:51.997 --> 00:07:53.180
+00:07:56.002 --> 00:07:57.185
 They simulate ADS-C.
 
-00:07:53.180 --> 00:07:59.848
+00:07:57.185 --> 00:08:03.853
 You hand off to its Mercury sector, and New York delegates a block of airspace north of forty-five thirty north,
 
-00:07:59.848 --> 00:08:02.051
+00:08:03.853 --> 00:08:06.055
 between forty and fifty west, to you.
 
-00:08:03.351 --> 00:08:08.455
+00:08:07.355 --> 00:08:12.967
 To the south is Santa Maria, callsign Santa Maria Radio, run by the Portugal vACC.
 
-00:08:08.455 --> 00:08:13.933
-The lateral minimum is fifty nautical miles and the longitudinal minimum is ten minutes.
+00:08:12.967 --> 00:08:17.894
+You hand off to its non-radar sector, using our normal ADS-C separation.
 
-00:08:13.933 --> 00:08:16.236
-You hand off to its non-radar sector.
-
-00:08:17.536 --> 00:08:20.917
+00:08:19.194 --> 00:08:22.575
 On the land side is Montreal, a radar service run by VATCAN.
 
-00:08:20.917 --> 00:08:23.651
+00:08:22.575 --> 00:08:25.309
 Its sectors split at flight level two-nine-zero,
 
-00:08:23.651 --> 00:08:26.100
+00:08:25.309 --> 00:08:27.758
 and the lower ones sit underneath the GOTA.
 
-00:08:26.100 --> 00:08:27.903
+00:08:27.758 --> 00:08:29.561
 The minimum there is five miles.
 
-00:08:27.903 --> 00:08:31.791
+00:08:29.561 --> 00:08:33.449
 Last is Gander Domestic, also VATCAN radar, with a five-mile minimum.
 
-00:08:31.791 --> 00:08:36.693
+00:08:33.449 --> 00:08:38.351
 When Gander Domestic is offline, Moncton Center covers its airspace from top to bottom.
 
-00:08:37.993 --> 00:08:39.187
+00:08:39.651 --> 00:08:40.885
 Now the Shanwick side.
 
-00:08:39.187 --> 00:08:43.225
-Reykjavik and Santa Maria also border Shanwick, run by the same divisions,
+00:08:40.885 --> 00:08:45.036
+Reykjavik and Santa Maria also border Shanwick, run by the same divisions.
 
-00:08:43.225 --> 00:08:48.682
-with the same minima you've just heard, and you hand off to Santa Maria's non-radar sector here too.
+00:08:45.036 --> 00:08:50.085
+You hand off to Santa Maria's non-radar sector here too, with our normal ADS-C separation.
 
-00:08:48.682 --> 00:08:51.033
+00:08:50.085 --> 00:08:52.516
 Reykjavik also controls the RATSU triangle,
 
-00:08:51.033 --> 00:08:55.572
+00:08:52.516 --> 00:08:57.209
 which Scottish delegates to it at the junction of Reykjavik, Scottish and Shanwick.
 
-00:08:56.872 --> 00:09:01.564
+00:08:58.509 --> 00:09:03.201
 On the eastern edge, first is Scottish Control, a radar service run by VATSIM UK.
 
-00:09:01.564 --> 00:09:05.734
+00:09:03.201 --> 00:09:07.371
 It borders Shanwick at ten degrees west, between Reykjavik and the NOTA.
 
-00:09:05.734 --> 00:09:09.993
+00:09:07.371 --> 00:09:11.629
 The minimum is seven nautical miles laterally for aircraft on ATS routes,
 
-00:09:09.993 --> 00:09:14.076
+00:09:11.629 --> 00:09:15.712
 and fifteen miles longitudinally, dropping to five with speed control.
 
-00:09:14.076 --> 00:09:18.825
+00:09:15.712 --> 00:09:20.462
 Shanwick coordinates east and westbound traffic at GOMUP, on the edge of the NOTA.
 
-00:09:18.825 --> 00:09:23.575
+00:09:20.462 --> 00:09:25.212
 If westbound traffic is going to Shannon rather than Shanwick, tell Scottish West.
 
-00:09:24.875 --> 00:09:28.883
+00:09:26.512 --> 00:09:30.520
 Next is Shannon Control, also radar, run by VATéir, the Irish division.
 
-00:09:28.883 --> 00:09:33.041
+00:09:30.520 --> 00:09:34.678
 It borders Shanwick from GOMUP counter-clockwise around its FIR to TULTA,
 
-00:09:33.041 --> 00:09:35.205
+00:09:34.678 --> 00:09:36.842
 and it controls the NOTA and the SOTA.
 
-00:09:35.205 --> 00:09:36.673
+00:09:36.842 --> 00:09:38.310
 The minimum is five miles.
 
-00:09:36.673 --> 00:09:38.874
+00:09:38.310 --> 00:09:40.511
 There's one special transfer condition.
 
-00:09:38.874 --> 00:09:41.547
+00:09:40.511 --> 00:09:43.183
 For eastbound aircraft between SUNOT and BEDRA,
 
-00:09:41.547 --> 00:09:46.721
+00:09:43.183 --> 00:09:48.357
 control transfers at the sector boundary, and communications transfer one degree before it.
 
-00:09:48.021 --> 00:09:51.542
+00:09:49.657 --> 00:09:53.178
 Last are Brest and Madrid, both radar with a five-mile minimum.
 
-00:09:51.542 --> 00:09:55.789
+00:09:53.178 --> 00:09:57.426
 Brest is run by the French vACC, and Madrid by VATSPA, the Spanish division.
 
-00:09:55.789 --> 00:09:57.370
+00:09:57.426 --> 00:09:59.006
 Brest Control runs the BOTA,
 
-00:09:57.370 --> 00:10:01.378
+00:09:59.006 --> 00:10:03.014
 and its main sector covers everything below flight level two-five-five.
 
-00:10:01.378 --> 00:10:05.324
+00:10:03.014 --> 00:10:06.961
 Madrid, callsign Madrid Radar, takes every handoff on its West sector,
 
-00:10:05.324 --> 00:10:07.861
+00:10:06.961 --> 00:10:09.497
 which is split at flight level two-four-five.
 
-00:10:09.161 --> 00:10:12.202
+00:10:10.797 --> 00:10:13.839
 Most traffic is deemed coordinated, which means you don't call.
 
-00:10:12.202 --> 00:10:20.689
+00:10:13.839 --> 00:10:22.326
 An aircraft entering your OCA is deemed coordinated if it's at its cleared level, will cross the entry point within three minutes of the last estimate or the time restriction,
 
-00:10:20.689 --> 00:10:22.872
+00:10:22.326 --> 00:10:24.508
 and the receiving controller hasn't objected.
 
-00:10:22.872 --> 00:10:26.078
+00:10:24.508 --> 00:10:27.715
 Leaving the OCA, the aircraft must be at its flight-planned level,
 
-00:10:26.078 --> 00:10:30.451
+00:10:27.715 --> 00:10:32.088
 with no level change in the last five minutes before the exit point and no known conflict.
 
-00:10:31.751 --> 00:10:33.541
+00:10:33.388 --> 00:10:35.178
 There are two ways to transfer a tag.
 
-00:10:33.541 --> 00:10:37.144
+00:10:35.178 --> 00:10:38.781
 With the silent method, you transfer communications together with the tag,
 
-00:10:37.144 --> 00:10:41.185
+00:10:38.781 --> 00:10:42.822
 and the receiving controller accepts the tag only once the aircraft has checked in.
 
-00:10:41.185 --> 00:10:44.959
+00:10:42.822 --> 00:10:46.596
 This is used between oceanic sectors, and between Shanwick and its neighbours.
 
-00:10:44.959 --> 00:10:48.371
+00:10:46.596 --> 00:10:50.007
 With the confirmed method, you start the tag transfer and wait for the
 
-00:10:48.371 --> 00:10:51.587
+00:10:50.007 --> 00:10:53.224
 receiving controller to accept before transferring communications.
 
-00:10:51.587 --> 00:10:54.151
+00:10:53.224 --> 00:10:55.788
 This is used between Gander and the domestic sectors.
 
-00:10:55.451 --> 00:10:59.201
-If you give a direct route that crosses a boundary, coordinate it,
-
-00:10:59.201 --> 00:11:04.938
-for example with the COPX function in EuroScope, and retype the direct into the datablock afterwards.
-
-00:11:04.938 --> 00:11:06.068
+00:10:57.088 --> 00:10:58.191
 That's the airspace.
 
-00:11:06.068 --> 00:11:09.851
+00:10:58.191 --> 00:11:01.888
 In the next video, we'll look at routes, clearances and separation.
