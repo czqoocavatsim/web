@@ -21,7 +21,7 @@ return [
     'videos' => [
         ['title' => 'Getting started and the airspace', 'minutes' => 11, 'url' => env('TRAINING_VIDEO_1_URL', '/assets/resources/media/training/1-getting-started-and-the-airspace.mp4'), 'captions' => env('TRAINING_VIDEO_1_CAPTIONS', '/assets/resources/media/training/1-getting-started-and-the-airspace.vtt')],
         ['title' => 'Procedures', 'minutes' => 10.5, 'url' => env('TRAINING_VIDEO_2_URL', '/assets/resources/media/training/2-procedures.mp4'), 'captions' => env('TRAINING_VIDEO_2_CAPTIONS', '/assets/resources/media/training/2-procedures.vtt')],
-        ['title' => 'Communications and tools', 'minutes' => 11, 'url' => env('TRAINING_VIDEO_3_URL', '/assets/resources/media/training/3-communications-and-tools.mp4'), 'captions' => env('TRAINING_VIDEO_3_CAPTIONS', '/assets/resources/media/training/3-communications-and-tools.vtt')],
+        ['title' => 'Communications and tools', 'minutes' => 12, 'url' => env('TRAINING_VIDEO_3_URL', '/assets/resources/media/training/3-communications-and-tools.mp4'), 'captions' => env('TRAINING_VIDEO_3_CAPTIONS', '/assets/resources/media/training/3-communications-and-tools.vtt')],
         ['title' => 'The entrance exam: what to expect', 'minutes' => 1.5, 'url' => env('TRAINING_VIDEO_4_URL', '/assets/resources/media/training/4-entrance-exam.mp4'), 'captions' => env('TRAINING_VIDEO_4_CAPTIONS', '/assets/resources/media/training/4-entrance-exam.vtt')],
     ],
 ];
